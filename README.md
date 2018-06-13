@@ -1,1 +1,1 @@
-# Hope
+# HOPE - Ethereum Wallet

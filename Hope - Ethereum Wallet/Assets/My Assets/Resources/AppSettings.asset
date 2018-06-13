@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba5f71360239f54a959a2aab8da6c3f, type: 3}
+  m_Name: AppSettings
+  m_EditorClassIdentifier: 
+  debugSettings:
+    displayNethereumDebugStatements: 0
+  walletSettings:
+    safePassword: {fileID: 11400000, guid: 367ae1604d87d234592558310e21cd12, type: 2}
+    safePasswordCharLookups:
+    - 47Vp)gZGRjQf3SNIHUO9^8X&2@ihBLAym*KnM-svok0xJqP=dFCEw$+l5z#!61ra_%tDTb(YWuec
+    - )6SaVx2I_ouh*5G8vEe^Ks-qtU&4wmL%O9#J!cjr=fYlRyD@n(C$BN0bQAgPT1dpHWZiF7+kzXM3
+    - F-oG9&)TCsZd_P5rW8SIO4ia!2*Kvph7kebtgnz1@+HB3yj^UJE%$Rm6YMN(AlQwDfq=X#cuxL0V
+    - NWOpL1fotyKeMaEmAR&IYD+(k=Q@*7Cr-xqH%_iF!U2S)B#gV6sn8jwdZ45^u9T$JvhX3GbcPzl0
+    - 1ko05m(AREnzWpg=qxV#CHvb_ID!@S$l7+P9Jas)%3Zi2fUYjtTL6BXFwyGc^Nu*4K&h-OerMQd8
+    - _dkA#zb@se3GqwPT6rofELgxW5MnIH1Sa&iZO8VDu4p!tK7cBlN9*-2=)C(vhU^$0QFmy%YJ+RjX
+    - w)C=v1_uZShb6YLfMNXj!nKIr4qB^lt$P@Jap3gc%57W+V#(UeA-*yDxHG9T&2RimOsod0zQFE8k
+    - sE8cz0AHmUIvt#F(nQPBN@*yf2K$DgqiOYrR=ST+o)X9bZC^3-&14xVd!MLuajJkel7pG56Wh%w_
+    - $_XwlcNx^pCIuYGUm51!8gA#fi4+Jd@oQhW-q*)2&jEM0nazsZtFDH(7OrL%6bev=TSyRK9B3kPV
+    - Vl1ORpA@JLZ+&K=hm-U#(GB)YoI3$seHbv*0xcC^6g7TMDNw4f!QW_%jFdakSr5qu8PXzE2yi9nt
+  tokenContractSettings:
+    tokenPrefName: Token_
+  ethereumNetworkSettings:
+    networkType: 1
+  uiSettings:
+    uiPrefabs:
+      buttons:
+        assetButton: {fileID: 1109739147363926, guid: cb7ec06f7e72a774b8e0c4e0e2a5f429,
+          type: 2}
+        transactionButton: {fileID: 1955460749561040, guid: f38cb307de02d104e804b157fa034910,
+          type: 2}
+      popups:
+        addTokenPopup: {fileID: 1643188915786944, guid: 5aa72b1feab2208499177ee7baa29dd2,
+          type: 2}
+        confirmHideAssetPopup: {fileID: 1566284343427046, guid: b9a83c3b7d485c8499d9133fbb7ac799,
+          type: 2}
+        hideAssetPopup: {fileID: 1040657794818106, guid: fa9b4dbeb39f96d4693e3458b5f85d1e,
+          type: 2}
+        loadingPopup: {fileID: 1128578837488706, guid: cdb367b2d23872447aac795b278433d4,
+          type: 2}
+        receiveAssetPopup: {fileID: 1419036711245744, guid: ac7a32faeef32fd48b625a30f54c17ca,
+          type: 2}
+        sendAssetPopup: {fileID: 1843064404113374, guid: de630ed6f87c48d4c976ec39c572be95,
+          type: 2}
+        sendAssetConfirmationPopup: {fileID: 1603937347990144, guid: 2a6fa11d7dc4f3d459cb7ea39dba9fc8,
+          type: 2}
+        transactionInfoPopup: {fileID: 1419036711245744, guid: d1c3af1a50a5ea0498acc93aecb769e5,
+          type: 2}
+      menus:
+        importOrCreateMenu: {fileID: 1793149076540006, guid: 172180245dc33a240816082088775976,
+          type: 2}
+        createPasswordMenu: {fileID: 1658405409982434, guid: 554c1d2cfcc834740a7932342aa32926,
+          type: 2}
+        walletCreateMenu: {fileID: 1330923478747104, guid: 4d22d6cc9c4a67e45baba52039bb0c7d,
+          type: 2}
+        walletImportMenu: {fileID: 1308043470078398, guid: 0d8be80e7f6a6de4eb495dc7bc166cdc,
+          type: 2}
+        walletUnlockMenu: {fileID: 1601749721023802, guid: ad69db877fe1bfa4f8ad092ec0224f45,
+          type: 2}
+        openedWalletMenu: {fileID: 1045064942600250, guid: 21240baac3256a149bb87e1da69b71fa,
+          type: 2}

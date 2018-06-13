@@ -1,0 +1,49 @@
+###
+# Unity folders and files
+###
+[Aa]ssets/AssetStoreTools*
+[Bb]uild/
+[Ll]ibrary/
+[Ll]ocal[Cc]ache/
+[Oo]bj/
+[Tt]emp/
+[Uu]nityGenerated/
+# file on crash reports
+sysinfo.txt
+# Unity3D generated meta files
+*.pidb.meta
+
+###
+# VS/MD solution and project files
+###
+[Ee]xportedObj/
+*.booproj
+*.csproj
+*.sln
+*.suo
+*.svd
+*.unityproj
+*.user
+*.userprefs
+*.pidb
+*.json
+.DS_Store
+
+###
+# OS generated
+###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.json
+Crypto Wallet-Exchange/Assets/WalletStorage.json
+Crypto Wallet-Exchange/Assets/StreamingAssets/build_info.txt
+Crypto Wallet-Exchange/Assets/StreamingAssets/build_info.txt.meta
+*.ide
+*.ide-shm
+*.ide-wal

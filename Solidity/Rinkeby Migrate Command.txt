@@ -1,0 +1,2 @@
+Git bash -> solidity-project
+truffle migrate --network rinkeby
