@@ -59,6 +59,9 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         AssignTransactionInfo();
     }
 
+    /// <summary>
+    /// Assigns the on click callbacks for the buttons.
+    /// </summary>
     private void AssignButtonCallbacks()
     {
         copyTxHashButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.TxHash));
@@ -68,6 +71,9 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         lessInfoButton.onClick.AddListener(() => SwitchDetailedOptions(false));
     }
 
+    /// <summary>
+    /// Assigns the transaction info to all elements in this popup.
+    /// </summary>
     private void AssignTransactionInfo()
     {
         var sendTransaction = transactionInfo.Type == TransactionInfo.TransactionType.Send;
@@ -76,21 +82,25 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
         tradableAssetImageManager.LoadImage(tradableAsset.AssetSymbol, img => assetImage.sprite = img);
 
+        valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
+
         transactionInfoText.text = tradableAsset.AssetSymbol + " Transaction Info";
         txHashText.text = transactionInfo.TxHash.LimitEnd(46, "...");
         valueText.text = valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals) + " " + tradableAsset.AssetSymbol;
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
+        gasUsedText.text = transactionInfo.GasUsed + "";
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp) + "";
         gasPriceText.text = UnitConversion.Convert.FromWei(transactionInfo.GasPrice, UnitConversion.EthUnit.Gwei) + " Gwei";
-        gasUsedText.text = transactionInfo.GasUsed + "";
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
-
-        valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx => gasLimitText.text = tx.Gas.Value + "");
     }
 
+    /// <summary>
+    /// Switches the detailed transaction info to active or inactive.
+    /// </summary>
+    /// <param name="active"> The new state of the detailed transaction options. </param>
     private void SwitchDetailedOptions(bool active)
     {
         gasLimitText.transform.parent.gameObject.SetActive(active);
