@@ -22,7 +22,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     public Button copyTxHashButton,
                   copyFromAddressButton,
                   copyToAddressButton,
-                  moreInfoButton;
+                  moreInfoButton,
+                  lessInfoButton;
 
     public Image assetImage;
 
@@ -63,6 +64,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         copyTxHashButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.TxHash));
         copyFromAddressButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.From));
         copyToAddressButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.To));
+        moreInfoButton.onClick.AddListener(() => SwitchDetailedOptions(true));
+        lessInfoButton.onClick.AddListener(() => SwitchDetailedOptions(false));
     }
 
     private void AssignTransactionInfo()
@@ -79,19 +82,23 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp) + "";
+        gasPriceText.text = UnitConversion.Convert.FromWei(transactionInfo.GasPrice, UnitConversion.EthUnit.Gwei) + " Gwei";
+        gasUsedText.text = transactionInfo.GasUsed + "";
+        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
 
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
-        //UnityEngine.Debug.Log("TxHash: " + transactionInfo.TxHash);
-        //UnityEngine.Debug.Log("Value: " + transactionInfo.Value);
-        //UnityEngine.Debug.Log("From: " + transactionInfo.From);
-        //UnityEngine.Debug.Log("To: " + transactionInfo.To);
-        //UnityEngine.Debug.Log("Time: " + transactionInfo.TimeStamp);
-        //UnityEngine.Debug.Log("Gas Price: " + transactionInfo.GasPrice);
-        //UnityEngine.Debug.Log("Gas Used: " + transactionInfo.GasUsed);
-        //TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
-        //{
-        //    UnityEngine.Debug.Log("Gas Limit: " + tx.Gas.Value);
-        //    UnityEngine.Debug.Log("Actual Tx Cost/Fee: " + (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed));
-        //});
+
+        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx => gasLimitText.text = tx.Gas.Value + "");
     }
+
+    private void SwitchDetailedOptions(bool active)
+    {
+        gasLimitText.transform.parent.gameObject.SetActive(active);
+        gasPriceText.transform.parent.gameObject.SetActive(active);
+        gasUsedText.transform.parent.gameObject.SetActive(active);
+        txCostText.transform.parent.gameObject.SetActive(active);
+        moreInfoButton.gameObject.SetActive(!active);
+        lessInfoButton.gameObject.SetActive(active);
+    }
+
 }
