@@ -92,6 +92,9 @@ public class EthereumTransactionButtonManager
     /// <param name="transactionList"> The list of transactions to use to update the text. </param>
     private void UpdateText(List<TransactionInfo> transactionList)
     {
+        if (settings.loadingText == null)
+            return;
+
         settings.loadingText.text = transactionList == null ? "Loading transactions..." : transactionList.Count == 0 ? "No transactions found." : "";
         settings.loadingText.gameObject.SetActive(transactionList == null || transactionList.Count == 0);
     }

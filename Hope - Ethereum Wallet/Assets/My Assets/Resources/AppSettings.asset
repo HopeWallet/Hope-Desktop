@@ -29,7 +29,7 @@ MonoBehaviour:
   tokenContractSettings:
     tokenPrefName: Token_
   ethereumNetworkSettings:
-    networkType: 1
+    networkType: 0
   uiSettings:
     uiPrefabs:
       buttons:

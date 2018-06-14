@@ -25,7 +25,7 @@ public class TransactionSimplifier
                                          EtherAsset.ETHER_ADDRESS,
                                          transaction.hash,
                                          value,
-                                         BigInteger.Parse(transaction.gasPrice),
+                                         string.IsNullOrEmpty(transaction.gasPrice) ? new BigInteger(0) : BigInteger.Parse(transaction.gasPrice),
                                          transaction.gasUsed,
                                          transaction.timeStamp);
     }

@@ -47,3 +47,4 @@ Crypto Wallet-Exchange/Assets/StreamingAssets/build_info.txt.meta
 *.ide
 *.ide-shm
 *.ide-wal
+*.lock

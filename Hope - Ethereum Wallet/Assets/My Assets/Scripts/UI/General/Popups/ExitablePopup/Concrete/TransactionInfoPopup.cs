@@ -74,7 +74,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         tradableAssetImageManager.LoadImage(tradableAsset.AssetSymbol, img => assetImage.sprite = img);
 
         transactionInfoText.text = tradableAsset.AssetSymbol + " Transaction Info";
-        txHashText.text = transactionInfo.TxHash.LimitEnd(54, "...");
+        txHashText.text = transactionInfo.TxHash.LimitEnd(46, "...");
         valueText.text = valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals) + " " + tradableAsset.AssetSymbol;
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
