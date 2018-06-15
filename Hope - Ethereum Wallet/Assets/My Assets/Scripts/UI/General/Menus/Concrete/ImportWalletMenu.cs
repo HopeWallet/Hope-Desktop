@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -66,8 +67,8 @@ public class ImportWalletMenu : WalletLoaderBase<ImportWalletMenu>, IEnterButton
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (SelectionUtils.GetActiveInputField() == seedInput && importButton.interactable && clickType == ClickType.Down)
-            LoadWallet();
+        if (InputFieldUtils.GetActiveInputField() == seedInput && importButton.interactable && clickType == ClickType.Down)
+            importButton.Press();
     }
 
     /// <summary>

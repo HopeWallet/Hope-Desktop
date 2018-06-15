@@ -28,8 +28,6 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
     public Image assetImage;
 
-    private RectTransform rectTransform;
-
     private TransactionInfo transactionInfo;
 
     private TradableAssetManager tradableAssetManager;
@@ -97,7 +95,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         gasPriceText.text = UnitConversion.Convert.FromWei(transactionInfo.GasPrice, UnitConversion.EthUnit.Gwei) + " Gwei";
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
 
-        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx => gasLimitText.text = tx.Gas.Value + "");
+        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx => gasLimitText.SetText(tx.Gas.Value + ""));
     }
 
     /// <summary>

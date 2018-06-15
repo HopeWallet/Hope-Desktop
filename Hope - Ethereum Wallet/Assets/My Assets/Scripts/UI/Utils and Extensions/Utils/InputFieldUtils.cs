@@ -3,9 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Class which contains a series of utility methods relating to ui selectables.
+/// Class which contains a series of utility methods relating to input fields.
 /// </summary>
-public static class SelectionUtils
+public static class InputFieldUtils
 {
 
     /// <summary>

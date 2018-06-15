@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -65,8 +66,9 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (SelectionUtils.GetActiveInputField() == passwordField && clickType == ClickType.Down)
-            LoadWallet();
+        if (InputFieldUtils.GetActiveInputField() == passwordField && clickType == ClickType.Down)
+            unlockButton.Press();
+
     }
 
     public override void OnBackPressed()

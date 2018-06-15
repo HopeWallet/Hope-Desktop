@@ -32,8 +32,9 @@ public class CreateWalletMenu : WalletLoaderBase<CreateWalletMenu>
     /// </summary>
     public override void LoadWallet() => userWalletManager.CreateWallet(mnemonic);
 
-    public override void OnBackPressed()
-    {
-        uiManager.CloseMenu();
-    }
+    /// <summary>
+    /// Closes this menu when the back button is pressed.
+    /// </summary>
+    public override void OnBackPressed() => uiManager.CloseMenu();
+
 }

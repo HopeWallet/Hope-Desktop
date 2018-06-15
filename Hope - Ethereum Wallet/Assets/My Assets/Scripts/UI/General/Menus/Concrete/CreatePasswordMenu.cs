@@ -91,7 +91,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, 
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (SelectionUtils.GetActiveInputField() == passwordFields[0])
+        if (InputFieldUtils.GetActiveInputField() == passwordFields[0])
             SwitchField(clickType);
         else if (createPasswordButton.interactable && clickType == ClickType.Down)
             SetPassword();
