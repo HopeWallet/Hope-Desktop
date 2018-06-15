@@ -1,4 +1,5 @@
 ﻿using Nethereum.Util;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -26,6 +27,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
                   lessInfoButton;
 
     public Image assetImage;
+
+    private RectTransform rectTransform;
 
     private TransactionInfo transactionInfo;
 
@@ -109,6 +112,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         txCostText.transform.parent.gameObject.SetActive(active);
         moreInfoButton.gameObject.SetActive(!active);
         lessInfoButton.gameObject.SetActive(active);
+        (transform as RectTransform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, active ? 300f : 225f);
     }
 
 }
