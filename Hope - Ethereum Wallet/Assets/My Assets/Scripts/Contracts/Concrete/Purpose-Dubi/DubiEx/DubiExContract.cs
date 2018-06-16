@@ -26,7 +26,7 @@ public class DubiExContract : ContractBase
     /// Initializes all DubiEx functions.
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
-    protected override void InitializeContract(Action<ContractBase, string> onContractInitialized)
+    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
         takeOrder = contract.GetFunction("takeOrder");
         makeOrder = contract.GetFunction("makeOrder");

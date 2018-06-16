@@ -21,10 +21,10 @@ public class MintableTokenContract : TokenContract
     /// Initializes the MintableTokenContract by calling the base contract initialization and setting up the mint function.
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been fully initialized. </param>
-    protected override void InitializeContract(Action<ContractBase, string> onContractInitialized)
+    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
         AddFunction("mint");
-        base.InitializeContract(onContractInitialized);
+        base.InitializeExtra(onContractInitialized);
     }
 
     /// <summary>

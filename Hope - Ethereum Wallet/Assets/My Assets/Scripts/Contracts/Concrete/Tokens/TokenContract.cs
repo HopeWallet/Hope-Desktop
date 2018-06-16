@@ -31,6 +31,11 @@ public class TokenContract : ContractBase
     public int TokenDecimals { get; private set; }
 
     /// <summary>
+    /// The function names of this token contract.
+    /// </summary>
+    protected override string[] FunctionNames => new string[] { FUNC_TRANSFER, FUNC_BALANCEOF, FUNC_TOTALSUPPLY, FUNC_NAME, FUNC_SYMBOL, FUNC_DECIMALS };
+
+    /// <summary>
     /// Initializes the Contract in ContractBase with the address and abi.
     /// </summary>
     /// <param name="contractAddress"> The address of the contract. </param>
@@ -81,9 +86,8 @@ public class TokenContract : ContractBase
     /// Initializes all token contract info.
     /// </summary>
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
-    protected override void InitializeContract(Action<ContractBase, string> onContractInitialized)
+    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
-        AddFunctions(FUNC_TRANSFER, FUNC_BALANCEOF, FUNC_TOTALSUPPLY, FUNC_NAME, FUNC_DECIMALS, FUNC_SYMBOL);
         InitializeTokenInfo(onContractInitialized);
     }
 

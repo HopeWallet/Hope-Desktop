@@ -64,7 +64,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
         optionsDropdownButton.dropdownButtons = uiDropdowns.extraOptionsDropdowns
                                                            .Where(dropdown => dropdown.assetAddresses.ContainsIgnoreCase(tradableAsset.AssetAddress, true))
-                                                           .ToArray().Concat(uiDropdowns.optionsDropdowns).ToArray();
+                                                           .Concat(uiDropdowns.optionsDropdowns)
+                                                           .ToArray();
 
         assetText.text = StringUtils.LimitEnd(tradableAsset.AssetName, MAX_ASSET_NAME_LENGTH, "...");
         balanceText.text = StringUtils.LimitEnd(assetBalance, MAX_ASSET_BALANCE_LENGTH, "...");

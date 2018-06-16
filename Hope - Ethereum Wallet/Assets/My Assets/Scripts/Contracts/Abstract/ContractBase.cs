@@ -29,6 +29,11 @@ public abstract class ContractBase
     public Function this[string functionName] => functions.ContainsKey(functionName) ? functions[functionName] : null;
 
     /// <summary>
+    /// The array of function names to initialize for this contract.
+    /// </summary>
+    protected abstract string[] FunctionNames { get; }
+
+    /// <summary>
     /// Initializes the contract with the address and abi.
     /// </summary>
     /// <param name="contractAddress"> The address of the contract. </param>
@@ -36,30 +41,45 @@ public abstract class ContractBase
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
     public ContractBase(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized)
     {
-        if (abi == null)
-            GetContractABI(contractAddress, onContractInitialized);
-        else
-            FullContractInitialization(contractAddress, abi, onContractInitialized);
+        StartContractInitialization(contractAddress, abi, onContractInitialized);
     }
 
     /// <summary>
-    /// Adds a function to the dictionary given its name.
+    /// Initializes the contract with the address and abi but without any callback when it is finished.
     /// </summary>
-    /// <param name="functionName"> The name of the function. </param>
-    protected void AddFunction(string functionName) => functions.Add(functionName, contract.GetFunction(functionName));
+    /// <param name="contractAddress"> The address of the contract. </param>
+    /// <param name="abi"> The abi of the contract. </param>
+    public ContractBase(string contractAddress, string abi)
+    {
+        StartContractInitialization(contractAddress, abi);
+    }
+
+    /// <summary>
+    /// Initializes the contract with the address and abi.
+    /// </summary>
+    /// <param name="contractAddress"> The address of the contract. </param>
+    /// <param name="abi"> The abi of the contract. </param>
+    /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
+    private void StartContractInitialization(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized = null)
+    {
+        if (abi == null)
+            GetContractABI(contractAddress, onContractInitialized);
+        else
+            Initialize(contractAddress, abi, onContractInitialized);
+    }
 
     /// <summary>
     /// Adds an array of function names to the dictionary.
     /// </summary>
     /// <param name="functionNames"> The array of functions names to add. </param>
-    protected void AddFunctions(params string[] functionNames) => functionNames.ForEach(name => AddFunction(name));
+    protected void AddFunctions(params string[] functionNames) => functionNames.ForEach(name => functions.Add(name, contract.GetFunction(name)));
 
     /// <summary>
     /// Retrieves the abi for this contract from the WebClientService.
     /// </summary>
     /// <param name="contractAddress"> The contract address to get the abi for. </param>
     /// <param name="onContractInitialized"> Action to call once the contract gets intialized. </param>
-    private void GetContractABI(string contractAddress, Action<ContractBase, string> onContractInitialized) 
+    private void GetContractABI(string contractAddress, Action<ContractBase, string> onContractInitialized = null) 
         => WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), (abi) 
             => TryContractSetup(contractAddress, abi, onContractInitialized));
 
@@ -73,7 +93,7 @@ public abstract class ContractBase
     {
         try
         {
-            FullContractInitialization(contractAddress, abi, onContractInitialized);
+            Initialize(contractAddress, abi, onContractInitialized);
         }
         catch
         {
@@ -88,10 +108,10 @@ public abstract class ContractBase
     /// <param name="contractAddress"> The address of the contract to initialize. </param>
     /// <param name="abi"> The abi for the contract. </param>
     /// <param name="onContractInitialized"> Called when the contract has fully finished initializing. </param>
-    private void FullContractInitialization(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized)
+    private void Initialize(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized = null)
     {
         InitializeBaseContract(contractAddress, abi);
-        InitializeContract(onContractInitialized);
+        InitializeExtra(onContractInitialized);
     }
 
     /// <summary>
@@ -103,14 +123,17 @@ public abstract class ContractBase
     {
         functions = new Dictionary<string, Function>();
         contract = new Contract(null, abi, contractAddress);
+
         ContractAddress = contractAddress;
         ContractABI = abi;
+
+        AddFunctions(FunctionNames);
     }
 
     /// <summary>
     /// Method to override which initializes all needed contract functions.
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
-    protected abstract void InitializeContract(Action<ContractBase, string> onContractInitialized);
+    protected abstract void InitializeExtra(Action<ContractBase, string> onContractInitialized);
 
 }

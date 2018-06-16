@@ -81,5 +81,5 @@ MonoBehaviour:
           type: 2}
         walletUnlockMenu: {fileID: 1601749721023802, guid: ad69db877fe1bfa4f8ad092ec0224f45,
           type: 2}
-        openedWalletMenu: {fileID: 1045064942600250, guid: 21240baac3256a149bb87e1da69b71fa,
+        openedWalletMenu: {fileID: 1372091662740014, guid: 21240baac3256a149bb87e1da69b71fa,
           type: 2}
