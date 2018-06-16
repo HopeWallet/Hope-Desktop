@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Zenject;
 
@@ -11,29 +9,23 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
     public Text text;
     public DropdownButtonInfo[] dropdownButtons;
 
-    private List<Button> buttonList;
+    private List<Button> buttonList = new List<Button>();
     private GameObject mainButtonObj;
 
     private MouseClickObserver mouseClickObserver;
 
     [Inject]
-    public void Construct(MouseClickObserver mouseClickObserver)
-    {
-        this.mouseClickObserver = mouseClickObserver;
-    }
+    public void Construct(MouseClickObserver mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
 
     protected override void OnAwake()
     {
         mainButtonObj = gameObject;
-        buttonList = new List<Button>();
         Button.onClick.AddListener(ChangeButtonDropdown);
-
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         Button.onClick.RemoveAllListeners();
-
     }
 
     private void ChangeButtonDropdown()
@@ -44,9 +36,8 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
             OpenButtonDropdown();
     }
 
-    private void CloseButtonDropdown()
+    public void CloseButtonDropdown()
     {
-        UnityEngine.Debug.Log("DELETING");
         buttonList.SafeForEach(button => Destroy(button.gameObject));
         buttonList.Clear();
 
@@ -56,9 +47,10 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
 
     private void OpenButtonDropdown()
     {
+        var buttonToInstantiate = mainButtonObj;
         foreach (DropdownButtonInfo button in dropdownButtons)
         {
-            var newButton = Instantiate(mainButtonObj, transform);
+            var newButton = Instantiate(buttonToInstantiate, transform);
             var rectTransform = newButton.GetComponent<RectTransform>();
             var dropdownComponent = newButton.GetComponent<DropdownButton>();
             dropdownComponent.buttonImage.sprite = button.buttonImage;
@@ -67,17 +59,15 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.localPosition = new Vector3(0f, (buttonList.Count + 1) * -rectTransform.rect.size.y, 0f);
 
-            var childButtons = newButton.GetComponentsInChildren<DropdownButton>();
-            for (int i = 1; i < childButtons.Length; i++)
-                Destroy(childButtons[i].gameObject);
-
             Destroy(dropdownComponent);
 
             var buttonComponent = newButton.GetComponent<Button>();
-            //buttonComponent.onClick.AddListener(button.onClickAction);
+            if (button.onClickAction != null)
+                buttonComponent.onClick.AddListener(button.onClickAction);
             buttonComponent.onClick.AddListener(CloseButtonDropdown);
 
             buttonList.Add(buttonComponent);
+            buttonToInstantiate = newButton;
         }
 
         mouseClickObserver.AddLeftClickObserver(this);
@@ -106,12 +96,4 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
             CloseButtonDropdown();
     }
 
-}
-
-[Serializable]
-public class DropdownButtonInfo
-{
-    public UnityAction onClickAction;
-    public Sprite buttonImage;
-    public string buttonText;
 }
