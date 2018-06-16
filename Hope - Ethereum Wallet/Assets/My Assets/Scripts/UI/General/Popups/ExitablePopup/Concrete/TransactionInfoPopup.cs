@@ -90,12 +90,15 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.text = valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals) + " " + tradableAsset.AssetSymbol;
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
-        gasUsedText.text = transactionInfo.GasUsed + "";
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp) + "";
-        gasPriceText.text = UnitConversion.Convert.FromWei(transactionInfo.GasPrice, UnitConversion.EthUnit.Gwei) + " Gwei";
+        gasUsedText.text = transactionInfo.GasUsed + "";
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
 
-        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx => gasLimitText.SetText(tx.Gas.Value + ""));
+        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
+        {
+            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + " Gwei");
+            gasLimitText.SetText(tx.Gas.Value + "");
+        });
     }
 
     /// <summary>
@@ -104,10 +107,14 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     /// <param name="active"> The new state of the detailed transaction options. </param>
     private void SwitchDetailedOptions(bool active)
     {
+        if (transactionInfo.GasUsed > 0)
+        {
+            gasUsedText.transform.parent.gameObject.SetActive(active);
+            txCostText.transform.parent.gameObject.SetActive(active);
+        }
+
         gasLimitText.transform.parent.gameObject.SetActive(active);
         gasPriceText.transform.parent.gameObject.SetActive(active);
-        gasUsedText.transform.parent.gameObject.SetActive(active);
-        txCostText.transform.parent.gameObject.SetActive(active);
         moreInfoButton.gameObject.SetActive(!active);
         lessInfoButton.gameObject.SetActive(active);
         (transform as RectTransform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, active ? 300f : 225f);

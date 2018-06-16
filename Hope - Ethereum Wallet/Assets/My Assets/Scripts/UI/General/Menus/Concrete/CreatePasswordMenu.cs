@@ -94,7 +94,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, 
         if (InputFieldUtils.GetActiveInputField() == passwordFields[0])
             SwitchField(clickType);
         else if (createPasswordButton.interactable && clickType == ClickType.Down)
-            SetPassword();
+            createPasswordButton.Press();
     }
 
     /// <summary>
