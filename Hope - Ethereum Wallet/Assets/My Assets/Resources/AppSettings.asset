@@ -31,6 +31,22 @@ MonoBehaviour:
   ethereumNetworkSettings:
     networkType: 0
   uiSettings:
+    generalSettings:
+      dropdowns:
+        optionsDropdowns:
+        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
+            type: 3}
+          buttonText: Settings
+        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
+            type: 3}
+          buttonText: Logout
+        extraOptionsDropdowns:
+        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
+            type: 3}
+          buttonText: Hodl PRPS
+          assetAddresses:
+          - 0x7641b2Ca9DDD58adDf6e3381c1F994Aac5f1A32f
+          - 0xd94F2778e2B3913C53637Ae60647598bE588c570
     uiPrefabs:
       buttons:
         assetButton: {fileID: 1109739147363926, guid: cb7ec06f7e72a774b8e0c4e0e2a5f429,

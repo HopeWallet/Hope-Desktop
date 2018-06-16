@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 /// <summary>
@@ -12,8 +13,10 @@ public static class StringUtils
     /// </summary>
     /// <param name="str1"> The first string to compare. </param>
     /// <param name="str2"> The second string to compare. </param>
+    /// <param name="trimEmptyChars"> Trims the empty spaces and characters when comparing the strings. </param>
     /// <returns> Whether the two strings are equal. </returns>
-    public static bool EqualsIgnoreCase(this string str1, string str2) => string.Equals(str1, str2, StringComparison.OrdinalIgnoreCase);
+    public static bool EqualsIgnoreCase(this string str1, string str2, bool trimEmptyChars = false) 
+        => string.Equals(trimEmptyChars ? str1.Trim() : str1, trimEmptyChars ? str2.Trim() : str2, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Trims the end of a string if it is past a certain length, and adds a certain string to the end if it was over the length.
@@ -23,6 +26,22 @@ public static class StringUtils
     /// <param name="endCharacters"> The characters to add to the end of the string if it is over the maximum length. </param>
     /// <returns> The trimmed string if it was over the maximum length, otherwise the same string. </returns>
     public static string LimitEnd(this string str, int maxLength, string endCharacters = "") => str.Length <= maxLength ? str : str.Substring(0, maxLength) + endCharacters;
+
+    /// <summary>
+    /// Checks if there is a string in a collection that matches with another string, ignoring case sensitivity.
+    /// </summary>
+    /// <param name="stringCollection"> The string collection to check through. </param>
+    /// <param name="str"> The string to check for. </param>
+    /// <param name="trimEmptyChars"> Trims the empty spaces and characters when comparing the strings. </param>
+    /// <returns> Whether the string collection contains the string. </returns>
+    public static bool ContainsIgnoreCase(this IEnumerable<string> stringCollection, string str, bool trimEmptyChars = false)
+    {
+        foreach (string s in stringCollection)
+            if (str.EqualsIgnoreCase(s, trimEmptyChars))
+                return true;
+
+        return false;
+    }
 
     /// <summary>
     /// Iterates through each element of the string and performs an action with each character.

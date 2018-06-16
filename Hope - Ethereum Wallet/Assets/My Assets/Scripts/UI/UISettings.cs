@@ -10,7 +10,7 @@ namespace UISettings
     [Serializable]
     public class GeneralSettings
     {
-        // todo
+        public Dropdowns dropdowns;
     }
 
     /// <summary>
@@ -22,6 +22,16 @@ namespace UISettings
         public Buttons buttons;
         public Popups popups;
         public Menus menus;
+    }
+
+    /// <summary>
+    /// Class which contains all dropdowns.
+    /// </summary>
+    [Serializable]
+    public class Dropdowns
+    {
+        public DropdownButtonInfo[] optionsDropdowns;
+        public AssetDropdownButtonInfo[] extraOptionsDropdowns;
     }
 
     /// <summary>

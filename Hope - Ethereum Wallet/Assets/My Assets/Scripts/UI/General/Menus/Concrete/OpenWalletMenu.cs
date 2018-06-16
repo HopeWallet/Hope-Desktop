@@ -1,4 +1,6 @@
-﻿using UnityEngine.UI;
+﻿using System.Linq;
+using UISettings;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -15,8 +17,11 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     public Image assetImage,
                  smallAssetImage;
 
+    public DropdownButton optionsDropdownButton;
+
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
+    private Dropdowns uiDropdowns;
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 50;
@@ -27,11 +32,13 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     /// </summary>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="uiSettings"> The ui settings. </param>
     [Inject]
-    public void Construct(TokenContractManager tokenContractManager, TradableAssetManager tradableAssetManager)
+    public void Construct(TokenContractManager tokenContractManager, TradableAssetManager tradableAssetManager, UIManager.Settings uiSettings)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
+        uiDropdowns = uiSettings.generalSettings.dropdowns;
     }
 
     /// <summary>
@@ -54,6 +61,10 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
             return;
 
         var assetBalance = "" + tradableAsset.AssetBalance;
+
+        optionsDropdownButton.dropdownButtons = uiDropdowns.extraOptionsDropdowns
+                                                           .Where(dropdown => dropdown.assetAddresses.ContainsIgnoreCase(tradableAsset.AssetAddress, true))
+                                                           .ToArray().Concat(uiDropdowns.optionsDropdowns).ToArray();
 
         assetText.text = StringUtils.LimitEnd(tradableAsset.AssetName, MAX_ASSET_NAME_LENGTH, "...");
         balanceText.text = StringUtils.LimitEnd(assetBalance, MAX_ASSET_BALANCE_LENGTH, "...");
