@@ -7,12 +7,17 @@ using System;
 public class DubiExContract : ContractBase
 {
 
-    private Function takeOrder,
-                     makeOrder,
-                     cancelOrder,
-                     takeOrders,
-                     makeOrders,
-                     cancelOrders;
+    private const string FUNC_TAKEORDER = "takeOrder";
+    private const string FUNC_MAKEORDER = "makeOrder";
+    private const string FUNC_CANCELORDER = "cancelOrder";
+    private const string FUNC_TAKEORDERS = "takeOrders";
+    private const string FUNC_MAKEORDERS = "makeOrders";
+    private const string FUNC_CANCELORDERS = "cancelOrders";
+
+    /// <summary>
+    /// The function names of the DubiEx contract.
+    /// </summary>
+    protected override string[] FunctionNames => new string[] { FUNC_TAKEORDER, FUNC_MAKEORDER, FUNC_CANCELORDER, FUNC_TAKEORDERS, FUNC_MAKEORDERS, FUNC_CANCELORDERS };
 
     /// <summary>
     /// Initializes the DubiEx contract.
@@ -22,17 +27,4 @@ public class DubiExContract : ContractBase
     /// <param name="onContractInitialized"> Action to call when the contract has been intialized. </param>
     public DubiExContract(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized = null) : base(contractAddress, abi, onContractInitialized) { }
 
-    /// <summary>
-    /// Initializes all DubiEx functions.
-    /// </summary>
-    /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
-    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
-    {
-        takeOrder = contract.GetFunction("takeOrder");
-        makeOrder = contract.GetFunction("makeOrder");
-        cancelOrder = contract.GetFunction("cancelOrder");
-        takeOrders = contract.GetFunction("takeOrders");
-        makeOrders = contract.GetFunction("makeOrders");
-        cancelOrders = contract.GetFunction("cancelOrders");
-    }
 }

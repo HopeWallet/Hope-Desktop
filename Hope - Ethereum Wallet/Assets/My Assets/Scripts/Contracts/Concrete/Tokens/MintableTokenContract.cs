@@ -15,7 +15,9 @@ public class MintableTokenContract : TokenContract
     /// <param name="contractAddress"> The address of the contract. </param>
     /// <param name="abi"> The abi of the contract. </param>
     /// <param name="onContractInitialized"> Action to call when the contract has been fully initialized. </param>
-    public MintableTokenContract(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized = null) : base(contractAddress, abi, onContractInitialized) { }
+    public MintableTokenContract(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized = null) : base(contractAddress, abi, onContractInitialized)
+    {
+    }
 
     /// <summary>
     /// Initializes the MintableTokenContract by calling the base contract initialization and setting up the mint function.
@@ -23,7 +25,7 @@ public class MintableTokenContract : TokenContract
     /// <param name="onContractInitialized"> Action to call when the contract has been fully initialized. </param>
     protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
-        AddFunction("mint");
+        AddFunctions("mint");
         base.InitializeExtra(onContractInitialized);
     }
 

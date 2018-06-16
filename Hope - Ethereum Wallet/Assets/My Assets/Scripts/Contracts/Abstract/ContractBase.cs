@@ -134,6 +134,6 @@ public abstract class ContractBase
     /// Method to override which initializes all needed contract functions.
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
-    protected abstract void InitializeExtra(Action<ContractBase, string> onContractInitialized);
+    protected virtual void InitializeExtra(Action<ContractBase, string> onContractInitialized) { }
 
 }
