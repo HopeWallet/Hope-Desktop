@@ -22,11 +22,6 @@ public class UserWallet
     private string password;
 
     /// <summary>
-    /// The class used for signing transactions.
-    /// </summary>
-    public WalletTransactionSigner TransactionSigner { get; private set; }
-
-    /// <summary>
     /// The user's public address.
     /// </summary>
     public string Address => account.Address;
