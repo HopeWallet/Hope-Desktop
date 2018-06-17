@@ -22,6 +22,11 @@ public class UserWallet
     private string password;
 
     /// <summary>
+    /// The class used for signing transactions.
+    /// </summary>
+    public WalletTransactionSigner TransactionSigner { get; private set; }
+
+    /// <summary>
     /// The user's public address.
     /// </summary>
     public string Address => account.Address;
@@ -76,11 +81,6 @@ public class UserWallet
     }
 
     /// <summary>
-    /// Closes the wallet by reseting data and restoring certain aspects of the password encryption.
-    /// </summary>
-    public void Close() => account = null;
-
-    /// <summary>
     /// Checks whether a wallet currently exists or not.
     /// </summary>
     /// <param name="safePassword"> SafePassword object to use to check if the PlayerPrefs are active. </param>
@@ -93,26 +93,7 @@ public class UserWallet
     /// <param name="startingText"> The starting text to display on the loading popup. </param>
     private void StartLoadingPopup(string startingText) => popupManager.GetPopup<LoadingPopup>().SetLoadingText("wallet", startingText: startingText);
 
-    /// <summary>
-    /// Signs an asset transfer request from this wallet to another wallet.
-    /// </summary>
-    /// <param name="gasLimit"> The gas limit to use for the transaction. </param>
-    /// <param name="gasPrice"> The gas price to use for the transaction. </param>
-    /// <param name="receivingAddress"> The receiving address of the transfer request. </param>
-    /// <param name="assetAddress"> The address of the asset which will be transfer. </param>
-    /// <param name="amount"> The amount that will be transfered. </param>
-    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
-    public void SignTransferRequest(HexBigInteger gasLimit, HexBigInteger gasPrice, 
-        string receivingAddress, string assetAddress, decimal amount, Action<TransactionSignedUnityRequest> onTransactionSigned)
-    {
-        popupManager.GetPopup<ConfirmSendAssetPopup>()
-                    .SetSendAssetValues(receivingAddress, 
-                                        assetAddress, 
-                                        amount, 
-                                        gasPrice, 
-                                        gasLimit, 
-                                        () => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)));
-    }
+    #region Try Open/Create Methods
 
     /// <summary>
     /// Attempts to unlock the wallet with the given password.
@@ -160,4 +141,32 @@ public class UserWallet
             OnWalletLoadUnsuccessful?.Invoke();
         }
     }
+
+    #endregion
+
+    #region Transaction Signature Methods
+
+    /// <summary>
+    /// Signs an asset transfer request from this wallet to another wallet.
+    /// </summary>
+    /// <param name="gasLimit"> The gas limit to use for the transaction. </param>
+    /// <param name="gasPrice"> The gas price to use for the transaction. </param>
+    /// <param name="receivingAddress"> The receiving address of the transfer request. </param>
+    /// <param name="assetAddress"> The address of the asset which will be transfer. </param>
+    /// <param name="amount"> The amount that will be transfered. </param>
+    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
+    public void SignTransferRequest(HexBigInteger gasLimit, HexBigInteger gasPrice,
+        string receivingAddress, string assetAddress, decimal amount, Action<TransactionSignedUnityRequest> onTransactionSigned)
+    {
+        popupManager.GetPopup<ConfirmSendAssetPopup>()
+                    .SetSendAssetValues(receivingAddress,
+                                        assetAddress,
+                                        amount,
+                                        gasPrice,
+                                        gasLimit,
+                                        () => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)));
+    }
+
+    #endregion
+
 }

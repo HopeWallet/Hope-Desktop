@@ -15,4 +15,6 @@ public class HodlerContract : ContractBase
     {
     }
 
+    //public void Hodl(UserWallet userWallet, )
+
 }
