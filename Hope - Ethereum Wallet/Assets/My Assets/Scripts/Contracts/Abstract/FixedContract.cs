@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static EthereumNetworkManager;
 
 /// <summary>
 /// Class which is used as a fixed scriptable object version of a ContractBase.
@@ -9,8 +10,9 @@ using UnityEngine;
 public abstract class FixedContract<T> : ScriptableObject where T : ContractBase
 {
 
-    [SerializeField] protected string contractAddress;
-    [SerializeField] protected string contractAbi;
+    [SerializeField] private string contractAddress;
+    [SerializeField] private string contractAbi;
+    [SerializeField] private NetworkType networkType;
 
     /// <summary>
     /// The usable ContractBase.

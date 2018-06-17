@@ -1,9 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-
-public class Hodler : FixedContract<HodlerContract>
-{
-}
 
 public class HodlerContract : ContractBase
 {
@@ -17,5 +14,4 @@ public class HodlerContract : ContractBase
     public HodlerContract(string contractAddress, string abi) : base(contractAddress, abi)
     {
     }
-
 }

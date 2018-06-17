@@ -1,9 +1,10 @@
-﻿using Zenject;
+﻿using UnityEngine;
+using Zenject;
 
 /// <summary>
 /// Class which contains the settings for certain classes.
 /// </summary>
-//[CreateAssetMenu(menuName = "Crypto/App Settings")]
+//[CreateAssetMenu(menuName = "Hope/App Settings")]
 public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstaller>
 {
 
