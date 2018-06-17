@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -19,6 +21,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindSettings();
         BindSingletonTypes();
+        BindScriptableObjectTypes();
         BindFactories();
     }
 
@@ -30,6 +33,16 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.BindInstance(tradableAssetButtonSettings).AsSingle().NonLazy();
         Container.BindInstance(transactionButtonSettings).AsSingle().NonLazy();
         Container.BindInstance(uiProvider).AsSingle().NonLazy();
+    }
+
+    /// <summary>
+    /// Binds all scriptable object types.
+    /// </summary>
+    private void BindScriptableObjectTypes()
+    {
+        // Bind all contracts.
+        Resources.LoadAll<FixedContractBase>("").Where(contract => contract.NetworkType == appSettings.ethereumNetworkSettings.networkType)
+                                        .ForEach(contract => Container.BindInstance(contract.CreateContract()).AsSingle().NonLazy());
     }
 
     /// <summary>

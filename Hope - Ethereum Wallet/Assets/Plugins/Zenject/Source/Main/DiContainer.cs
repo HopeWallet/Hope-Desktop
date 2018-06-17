@@ -2175,7 +2175,7 @@ namespace Zenject
         //
         public IdScopeConditionCopyNonLazyBinder BindInstance<TContract>(TContract instance)
         {
-            var bindInfo = new BindInfo(typeof(TContract));
+            var bindInfo = new BindInfo(instance.GetType());
             var binding = StartBinding();
 
             binding.SubFinalizer = new ScopableBindingFinalizer(

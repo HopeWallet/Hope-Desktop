@@ -14,4 +14,5 @@ public class HodlerContract : ContractBase
     public HodlerContract(string contractAddress, string abi) : base(contractAddress, abi)
     {
     }
+
 }
