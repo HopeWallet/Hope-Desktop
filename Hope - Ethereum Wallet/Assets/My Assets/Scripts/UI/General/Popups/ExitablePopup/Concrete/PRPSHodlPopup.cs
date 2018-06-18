@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Hope.Utils.EthereumUtils;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using Zenject;

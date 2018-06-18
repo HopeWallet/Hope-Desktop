@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using Hope.Utils.EthereumUtils;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>

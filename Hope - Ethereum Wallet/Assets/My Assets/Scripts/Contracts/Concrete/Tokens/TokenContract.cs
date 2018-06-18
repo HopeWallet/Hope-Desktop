@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Hex.HexTypes;
 using System;
 using UnityEngine;
 
@@ -48,15 +49,15 @@ public class TokenContract : ContractBase
     /// </summary>
     /// <param name="address"> The address to check the balance of. </param>
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
-    public void BalanceOf(string address, Action<dynamic> onBalanceReceived) 
-        => this.ContractViewCall<dynamic>(this[FUNC_BALANCEOF], 
+    public void BalanceOf(string address, Action<dynamic> onBalanceReceived)
+        => this.ContractViewCall<dynamic>(this[FUNC_BALANCEOF],
             balance => onBalanceReceived?.Invoke(balance == null ? 0 : SolidityUtils.ConvertFromUInt(balance, TokenDecimals)), address);
 
     /// <summary>
     /// Gets the total supply of this ERC20 token contract.
     /// </summary>
     /// <param name="onSupplyReceived"> Callback action which should pass in the total supply of this token. </param>
-    public void TotalSupply(Action<dynamic> onSupplyReceived) 
+    public void TotalSupply(Action<dynamic> onSupplyReceived)
         => this.ContractViewCall<dynamic>(this[FUNC_TOTALSUPPLY], supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, TokenDecimals)));
 
     /// <summary>
@@ -71,33 +72,24 @@ public class TokenContract : ContractBase
     {
         userWallet.SignTransferRequest(gasLimit, gasPrice, address, ContractAddress, amount, req =>
         {
-            this.ExecuteContractFunction(this[FUNC_TRANSFER], 
-                                         req, 
-                                         userWallet.Address, 
-                                         gasLimit, 
+            this.ExecuteContractFunction(this[FUNC_TRANSFER],
+                                         req,
+                                         userWallet.Address,
+                                         gasLimit,
                                          gasPrice,
-                                         () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address), 
-                                         address, 
+                                         () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address),
+                                         address,
                                          SolidityUtils.ConvertToUInt(amount, TokenDecimals));
         });
     }
 
     /// <summary>
-    /// Initializes all token contract info.
-    /// </summary>
-    /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
-    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
-    {
-        InitializeTokenInfo(onContractInitialized);
-    }
-
-    /// <summary>
-    /// Initializes the name and symbol of the token.
+    /// Initializes the name, symbol, and decimals of the token.
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been fully initialized. </param>
-    private void InitializeTokenInfo(Action<ContractBase, string> onContractInitialized)
+    protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
-        this.ContractViewCall<string>(this[FUNC_NAME], tokenName => this.ContractViewCall<string>(this[FUNC_SYMBOL], tokenSymbol => 
+        this.ContractViewCall<string>(this[FUNC_NAME], tokenName => this.ContractViewCall<string>(this[FUNC_SYMBOL], tokenSymbol =>
         this.ContractViewCall<dynamic>(this[FUNC_DECIMALS], tokenDecimals =>
         {
             TokenName = string.IsNullOrEmpty(tokenName) ? tokenSymbol : tokenName;
@@ -107,5 +99,4 @@ public class TokenContract : ContractBase
             onContractInitialized?.Invoke(this, ContractABI);
         })));
     }
-
 }

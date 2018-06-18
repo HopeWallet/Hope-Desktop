@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Utils.EthereumUtils;
+using System;
 using System.Numerics;
 
 /// <summary>

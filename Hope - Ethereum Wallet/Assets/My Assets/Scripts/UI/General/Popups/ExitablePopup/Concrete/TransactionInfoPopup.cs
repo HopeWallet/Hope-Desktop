@@ -1,4 +1,5 @@
-﻿using Nethereum.Util;
+﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

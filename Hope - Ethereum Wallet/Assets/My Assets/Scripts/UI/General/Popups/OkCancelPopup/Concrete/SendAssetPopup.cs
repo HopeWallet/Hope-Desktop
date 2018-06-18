@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Hex.HexTypes;
 using System.Linq;
 using System.Numerics;
 using UnityEngine.UI;
