@@ -35,7 +35,7 @@ public class HodlerItem
     /// <summary>
     /// Whether this item has been reclaimed and the purpose no longer exists in the contract.
     /// </summary>
-    [Parameter("uint256", "fulfilled", 5)]
+    [Parameter("bool", "fulfilled", 5)]
     public bool Fulfilled { get; set; }
 
 }

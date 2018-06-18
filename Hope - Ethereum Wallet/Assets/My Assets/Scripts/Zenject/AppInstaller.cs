@@ -69,6 +69,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<EthereumNetworkManager>().AsSingle().NonLazy();
 
         Container.BindInstance(GetComponent<UIManager>()).AsSingle().NonLazy();
+        Container.Bind<OptionsDropdownActionAssigner>().AsSingle().NonLazy();
         Container.Bind<MenuFactoryManager>().AsSingle().NonLazy();
         Container.Bind<PopupManager>().AsSingle().NonLazy();
         Container.Bind<ButtonObserver>().AsSingle().NonLazy();
@@ -107,6 +108,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<ConfirmHideAssetPopup>();
         BindPopupFactory<ReceiveAssetPopup>();
         BindPopupFactory<TransactionInfoPopup>();
+        BindPopupFactory<PRPSHodlPopup>();
     }
 
     /// <summary>

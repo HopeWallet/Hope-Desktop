@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 
 public class HodlerContract : ContractBase
 {
@@ -15,6 +16,6 @@ public class HodlerContract : ContractBase
     {
     }
 
-    //public void Hodl(UserWallet userWallet, )
+    public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
 }

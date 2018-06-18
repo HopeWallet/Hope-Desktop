@@ -24,7 +24,7 @@ public static class ContractUtils
     }
 
     /// <summary>
-    /// Calls a "view" or "constant" function which returns one or more values.
+    /// Calls a "view" or "constant" function which returns a value.
     /// </summary>
     /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
     /// <param name="contract"> The contract you are executing this function from. </param>
@@ -33,6 +33,17 @@ public static class ContractUtils
     /// <param name="input"> The input parameters to pass into the function. </param>
     public static void ContractViewCall<T>(this ContractBase contract, Function function, Action<T> onValueReceived, params object[] input) 
         => _ContractViewFunctionCoroutine(function, onValueReceived, input).StartCoroutine();
+
+    /// <summary>
+    /// Calls a "view" or "constant" function which returns multiple values or a struct.
+    /// </summary>
+    /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
+    /// <param name="contract"> The contract you are executing this function from. </param>
+    /// <param name="function"> The function to execute. </param>
+    /// <param name="onValueReceived"> The callback to execute when the value(s) is received, and passed as a parameter. </param>
+    /// <param name="input"> The input parameters to pass into the function. </param>
+    public static void ComplexContractViewCall<T>(this ContractBase contract, Function function, Action<T> onValueReceived, params object[] input) where T : new()
+        => _ComplexContractViewFunctionCoroutine(function, onValueReceived, input).StartCoroutine();
 
     /// <summary>
     /// Executes the function of a given function of a given contract.
@@ -66,6 +77,23 @@ public static class ContractUtils
         yield return request.SendRequest(function.CreateCallInput(input), BlockParameter.CreateLatest());
 
         request.CheckTransactionRequest(() => onValueReceived(function.DecodeSimpleTypeOutput<T>(request.Result)));
+    }
+
+    /// <summary>
+    /// Calls a "view" or "constant" function which returns a series of values or a struct.
+    /// </summary>
+    /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
+    /// <param name="function"> The function to execute. </param>
+    /// <param name="onValueReceived"> The callback to execute when the value is received, and passed as a parameter. </param>
+    /// <param name="input"> The input parameters to pass into the function. </param>
+    /// <returns> The time waited for the request to complete. </returns>
+    private static IEnumerator _ComplexContractViewFunctionCoroutine<T>(Function function, Action<T> onValueReceived, params object[] input) where T : new()
+    {
+        var request = new EthCallUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+
+        yield return request.SendRequest(function.CreateCallInput(input), BlockParameter.CreateLatest());
+
+        request.CheckTransactionRequest(() => onValueReceived(function.DecodeDTOTypeOutput<T>(request.Result)));
     }
 
     /// <summary>

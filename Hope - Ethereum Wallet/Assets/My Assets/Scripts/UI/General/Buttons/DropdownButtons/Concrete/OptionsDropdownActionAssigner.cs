@@ -6,8 +6,8 @@
 public class OptionsDropdownActionAssigner
 {
 
-    public OptionsDropdownActionAssigner(UIManager.Settings uiSettings)
+    public OptionsDropdownActionAssigner(UIManager.Settings uiSettings, PopupManager popupManager)
     {
-
+        uiSettings.generalSettings.dropdowns.extraOptionsDropdowns[0].onClickAction = () => popupManager.GetPopup<PRPSHodlPopup>();
     }
 }

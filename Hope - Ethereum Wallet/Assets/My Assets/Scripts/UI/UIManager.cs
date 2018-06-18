@@ -163,6 +163,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObserver
     public class Settings
     {
         public GeneralSettings generalSettings;
-        public UIPrefabs uiPrefabs;
+        //public UIPrefabs uiPrefabs;
     }
 }
