@@ -68,4 +68,14 @@ public class EthereumAPI
     public string GetTokenTransfersFromWalletUrl(string walletAddress, string tokenAddress)
     => tokenTransfersUrl + "&address=" + tokenAddress + TOKEN_TRANSFER_TOPIC + "&topic1=0x000000000000000000000000" + walletAddress.Remove(0, 2);
 
+    /// <summary>
+    /// Gets the api url for token transfers coming from one address and into another address.
+    /// </summary>
+    /// <param name="tokenAddress"> The address of the token being sent. </param>
+    /// <param name="fromAddress"> The address sending the tokens. </param>
+    /// <param name="toAddress"> The address receiving the tokens. </param>
+    /// <returns> The api url for the token transfers sent from an address and into another. </returns>
+    public string GetTokenTransfersFromAndToUrl(string tokenAddress, string fromAddress, string toAddress)
+        => tokenTransfersUrl + "&address=" + tokenAddress + TOKEN_TRANSFER_TOPIC + "&topic1=0x000000000000000000000000" + fromAddress.Remove(0, 2) + "&topic2=0x000000000000000000000000" + toAddress.Remove(0, 2);
+
 }

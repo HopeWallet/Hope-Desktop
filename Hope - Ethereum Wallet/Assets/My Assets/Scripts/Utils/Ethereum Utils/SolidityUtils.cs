@@ -41,10 +41,7 @@ public static class SolidityUtils
     /// <param name="number"> The number to convert to solidity uint format. </param>
     /// <param name="decimals"> The number of decimal places the value converting will have. </param>
     /// <returns> The number converted to the BigInteger range. </returns>
-    public static BigInteger ConvertToUInt(dynamic number, int decimals)
-    {
-        return new BigInteger((decimal)number * (decimal)GetBigIntegerValue(decimals));
-    }
+    public static BigInteger ConvertToUInt(dynamic number, int decimals) => new BigInteger((decimal)number * (decimal)GetBigIntegerValue(decimals));
 
     /// <summary>
     /// Converts a number from its solidity uint representation to a readable representation in decimal format.
@@ -52,10 +49,7 @@ public static class SolidityUtils
     /// <param name="number"> The number to convert to readable format. </param>
     /// <param name="decimals"> The number of decimal places to convert to. </param>
     /// <returns> The number converted from the BigInteger range to a readable decimal </returns>
-    public static decimal ConvertFromUInt(dynamic number, int decimals)
-    {
-        return (decimal)number / (decimal)GetBigIntegerValue(decimals);
-    }
+    public static decimal ConvertFromUInt(dynamic number, int decimals) => (decimal)number / (decimal)GetBigIntegerValue(decimals);
 
     /// <summary>
     /// Gets the BigInteger value corresponding to the number of decimal places needed.
