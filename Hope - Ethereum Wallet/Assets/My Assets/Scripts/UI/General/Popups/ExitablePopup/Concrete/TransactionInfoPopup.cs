@@ -88,7 +88,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
         transactionInfoText.text = tradableAsset.AssetSymbol + " Transaction Info";
         txHashText.text = transactionInfo.TxHash.LimitEnd(46, "...");
-        valueText.text = valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals) + " " + tradableAsset.AssetSymbol;
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals), 23, "...");
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp) + "";
