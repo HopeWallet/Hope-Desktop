@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Zenject;
 
 public class PRPSHodlPopup : ExitablePopupComponent<PRPSHodlPopup>
@@ -27,7 +23,7 @@ public class PRPSHodlPopup : ExitablePopupComponent<PRPSHodlPopup>
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
     }
 
-    private void OnEnable()
+    private void Awake()
     {
         WebClientUtils.GetTransactionList(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
                                                                                             userWalletManager.WalletAddress,
