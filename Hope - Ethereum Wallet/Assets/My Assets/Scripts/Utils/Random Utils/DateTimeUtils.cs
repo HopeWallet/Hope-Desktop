@@ -15,6 +15,12 @@ public static class DateTimeUtils
     public const int MINUTE_IN_SECONDS = 60;
 
     /// <summary>
+    /// Gets the current unix time.
+    /// </summary>
+    /// <returns> The current unix time. </returns>
+    public static int GetCurrentUnixTime() => (Int32)(DateTime.UtcNow.Subtract(UnixTimeStart)).TotalSeconds;
+
+    /// <summary>
     /// Converts a unix time stamp to a DateTime object.
     /// </summary>
     /// <param name="timeStamp"> The unix time stamp to convert. </param>

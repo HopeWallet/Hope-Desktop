@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 224011002232585266}
   - component: {fileID: 222354034644554498}
   - component: {fileID: 114689462283731586}
+  - component: {fileID: 114858901037688750}
   m_Layer: 5
   m_Name: LockedPRPSItemButton
   m_TagString: Untagged
@@ -358,6 +359,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 20.4824
+--- !u!114 &114858901037688750
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363833085934560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e6b1d3bf9abdc4ab9500e1abe5e07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purposeAmountText: {fileID: 114781396217236290}
+  dubiAmountText: {fileID: 114718734701924818}
+  lockPeriodText: {fileID: 114979263504282076}
+  timeLeftText: {fileID: 114023326579881816}
+  releasePurposeButton: {fileID: 114391267995886722}
 --- !u!114 &114979263504282076
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -101,8 +101,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <param name="transaction"> The info of this transaction. </param>
     private void SetTimeFromNow(TransactionInfo transaction)
     {
-        var currentTimeStamp = (Int32)(DateTime.UtcNow.Subtract(DateTimeUtils.UnixTimeStart)).TotalSeconds;
-        timeFromNowText.text = DateTimeUtils.GetMaxTimeInterval(currentTimeStamp - transaction.TimeStamp, " ago");
+        timeFromNowText.text = DateTimeUtils.GetMaxTimeInterval(DateTimeUtils.GetCurrentUnixTime() - transaction.TimeStamp, " ago");
     }
 
     /// <summary>

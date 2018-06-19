@@ -93,6 +93,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindButtonFactory<TransactionInfoButton>(transactionButtonSettings.spawnTransform);
         BindButtonFactory<AssetButton>(tradableAssetButtonSettings.spawnTransform);
+        BindButtonFactory<LockedPRPSItemButton>(null);
     }
 
     /// <summary>

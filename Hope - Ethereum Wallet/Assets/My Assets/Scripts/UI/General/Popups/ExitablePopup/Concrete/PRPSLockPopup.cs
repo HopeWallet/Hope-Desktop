@@ -13,13 +13,14 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     public Transform itemSpawnTransform;
 
-    private readonly List<HodlerItem> items = new List<HodlerItem>();
+    private readonly List<LockedPRPSItemButton> items = new List<LockedPRPSItemButton>();
 
     private HodlerContract hodlerContract;
     private TradableAssetManager tradableAssetManager;
     private UserWalletManager userWalletManager;
     private PeriodicUpdateManager periodicUpdateManager;
     private EthereumNetwork ethereumNetwork;
+    private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
 
     public float UpdateInterval => 10f;
 
@@ -28,31 +29,29 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         TradableAssetManager tradableAssetManager, 
         UserWalletManager userWalletManager, 
         PeriodicUpdateManager periodicUpdateManager,
-        EthereumNetworkManager ethereumNetworkManager)
+        EthereumNetworkManager ethereumNetworkManager,
+        LockedPRPSItemButton.Factory lockedPRPSItemFactory)
     {
         this.hodlerContract = hodlerContract;
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
+        this.lockedPRPSItemFactory = lockedPRPSItemFactory;
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
     }
 
-    private void Awake()
-    {
-        StartItemSearch();
-        AssignUiValues();
-    }
+    private void Awake() => StartNewItemSearch();
 
     private void OnEnable() => periodicUpdateManager.AddPeriodicUpdater(this);
 
     private void OnDisable() => periodicUpdateManager.RemovePeriodicUpdater(this);
 
-    public void PeriodicUpdate() => StartItemSearch();
+    public void PeriodicUpdate() => StartNewItemSearch();
 
-    private void AssignUiValues() => prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
-
-    private void StartItemSearch()
+    private void StartNewItemSearch()
     {
+        prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
+
         WebClientUtils.GetTransactionList(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
                                                                                     userWalletManager.WalletAddress,
                                                                                     hodlerContract.ContractAddress),
@@ -71,19 +70,34 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private void GetTransactionInputData(TokenTransactionJson tokenTransactionJson)
     {
         TransactionUtils.CheckTransactionDetails(tokenTransactionJson.transactionHash, 
-            tx => GetItem(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
+            tx => UpdateItems(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
     }
 
-    private void GetItem(string[] inputData, BigInteger timeStamp)
+    private void UpdateItems(string[] inputData, BigInteger timeStamp)
     {
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
         {
-            if (items.Select(i => i.ReleaseTime).Count() == 0)
-            {
-                item.LockedTimeStamp = timeStamp;
-                items.Add(item);
-            }
+            item.LockedTimeStamp = timeStamp;
+            GetItemButton(item).SetButtonInfo(item);
         });
+    }
+
+    private LockedPRPSItemButton GetItemButton(HodlerItem item)
+    {
+        var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
+
+        if (sameItems.Count() == 0)
+        {
+            var newItem = lockedPRPSItemFactory.Create();
+            newItem.transform.parent = itemSpawnTransform;
+            items.Add(newItem);
+            return newItem;
+        }
+
+        else
+        {
+            return sameItems.Single();
+        }
     }
 
 }
