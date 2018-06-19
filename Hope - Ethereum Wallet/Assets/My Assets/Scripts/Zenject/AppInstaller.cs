@@ -108,7 +108,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<ConfirmHideAssetPopup>();
         BindPopupFactory<ReceiveAssetPopup>();
         BindPopupFactory<TransactionInfoPopup>();
-        BindPopupFactory<PRPSHodlPopup>();
+        BindPopupFactory<PRPSLockPopup>();
+        BindPopupFactory<ConfirmPRPSLockPopup>();
     }
 
     /// <summary>

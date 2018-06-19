@@ -142,27 +142,15 @@ public class UserWallet
 
     #region Transaction Signature Methods
 
-    /// <summary>
-    /// Signs an asset transfer request from this wallet to another wallet.
-    /// </summary>
-    /// <param name="gasLimit"> The gas limit to use for the transaction. </param>
-    /// <param name="gasPrice"> The gas price to use for the transaction. </param>
-    /// <param name="receivingAddress"> The receiving address of the transfer request. </param>
-    /// <param name="assetAddress"> The address of the asset which will be transfer. </param>
-    /// <param name="amount"> The amount that will be transfered. </param>
-    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
-    public void SignTransferRequest(HexBigInteger gasLimit, HexBigInteger gasPrice,
-        string receivingAddress, string assetAddress, decimal amount, Action<TransactionSignedUnityRequest> onTransactionSigned)
+    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned, 
+        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
-        popupManager.GetPopup<ConfirmSendAssetPopup>()
-                    .SetSendAssetValues(receivingAddress,
-                                        assetAddress,
-                                        amount,
-                                        gasPrice,
-                                        gasLimit,
-                                        () => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)));
+        popupManager.GetPopup<T>()
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                                           gasLimit,
+                                           gasPrice,
+                                           transactionInput);
     }
-
     #endregion
 
 }

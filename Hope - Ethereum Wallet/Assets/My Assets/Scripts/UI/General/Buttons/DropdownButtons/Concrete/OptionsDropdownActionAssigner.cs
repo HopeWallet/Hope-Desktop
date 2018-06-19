@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-/// <summary>
+﻿/// <summary>
 /// Class which assigns the actions for each dropdown button in the options menu.
 /// </summary>
 public class OptionsDropdownActionAssigner
@@ -13,6 +11,6 @@ public class OptionsDropdownActionAssigner
     /// <param name="popupManager"> The active PopupManager. </param>
     public OptionsDropdownActionAssigner(UIManager.Settings uiSettings, PopupManager popupManager)
     {
-        uiSettings.generalSettings.dropdowns.extraOptionsDropdowns[0].onClickAction = () => popupManager.GetPopup<PRPSHodlPopup>();
+        uiSettings.generalSettings.dropdowns.extraOptionsDropdowns[0].onClickAction = () => popupManager.GetPopup<PRPSLockPopup>();
     }
 }

@@ -70,17 +70,17 @@ public class TokenContract : ContractBase
     /// <param name="amount"> The amount of tokens to transfer. </param>
     public void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransferRequest(gasLimit, gasPrice, address, ContractAddress, amount, req =>
+        userWallet.SignTransaction<ConfirmSendAssetPopup>(request =>
         {
             this.ExecuteContractFunction(this[FUNC_TRANSFER],
-                                         req,
+                                         request,
                                          userWallet.Address,
                                          gasLimit,
                                          gasPrice,
                                          () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address),
                                          address,
                                          SolidityUtils.ConvertToUInt(amount, TokenDecimals));
-        });
+        }, gasLimit, gasPrice, address, ContractAddress, amount);
     }
 
     /// <summary>

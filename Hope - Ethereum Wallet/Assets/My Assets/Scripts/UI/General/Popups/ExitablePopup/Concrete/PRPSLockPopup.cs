@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine.UI;
 using Zenject;
 
-public class PRPSHodlPopup : ExitablePopupComponent<PRPSHodlPopup>, IPeriodicUpdater
+public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater
 {
 
     public Text prpsBalanceText;
