@@ -38,4 +38,10 @@ public class HodlerItem
     [Parameter("bool", "fulfilled", 5)]
     public bool Fulfilled { get; set; }
 
+
+    /// <summary>
+    /// The unix time stamp when the purpose was locked.
+    /// </summary>
+    public BigInteger LockedTimeStamp { get; set; }
+
 }

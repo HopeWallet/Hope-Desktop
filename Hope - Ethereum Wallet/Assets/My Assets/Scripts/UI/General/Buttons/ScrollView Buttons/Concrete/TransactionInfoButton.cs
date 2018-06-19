@@ -102,20 +102,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     private void SetTimeFromNow(TransactionInfo transaction)
     {
         var currentTimeStamp = (Int32)(DateTime.UtcNow.Subtract(DateTimeUtils.UnixTimeStart)).TotalSeconds;
-
-        var seconds = currentTimeStamp - transaction.TimeStamp;
-        var minutes = seconds / DateTimeUtils.MINUTE_IN_SECONDS;
-        var hours = seconds / DateTimeUtils.HOUR_IN_SECONDS;
-        var days = seconds / DateTimeUtils.DAY_IN_SECONDS;
-        var months = seconds / DateTimeUtils.MONTH_IN_SECONDS;
-        var years = seconds / DateTimeUtils.YEAR_IN_SECONDS;
-
-        if (years > 0) timeFromNowText.text = DateTimeUtils.GetTimeAgoText(years, "year");
-        else if (months > 0) timeFromNowText.text = DateTimeUtils.GetTimeAgoText(months, "month");
-        else if (days > 0) timeFromNowText.text = DateTimeUtils.GetTimeAgoText(days, "day");
-        else if (hours > 0) timeFromNowText.text = DateTimeUtils.GetTimeAgoText(hours, "hour");
-        else if (minutes > 0) timeFromNowText.text = DateTimeUtils.GetTimeAgoText(minutes, "minute");
-        else timeFromNowText.text = DateTimeUtils.GetTimeAgoText(seconds, "second");
+        timeFromNowText.text = DateTimeUtils.GetMaxTimeInterval(currentTimeStamp - transaction.TimeStamp, " ago");
     }
 
     /// <summary>

@@ -1,6 +1,8 @@
 ﻿using Hope.Utils.EthereumUtils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -8,6 +10,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 {
 
     public Text prpsBalanceText;
+
+    public Transform itemSpawnTransform;
 
     private readonly List<HodlerItem> items = new List<HodlerItem>();
 
@@ -66,15 +70,19 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void GetTransactionInputData(TokenTransactionJson tokenTransactionJson)
     {
-        TransactionUtils.CheckTransactionDetails(tokenTransactionJson.transactionHash, tx => GetItem(SolidityUtils.ExtractFunctionParameters(tx.Input)));
+        TransactionUtils.CheckTransactionDetails(tokenTransactionJson.transactionHash, 
+            tx => GetItem(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
     }
 
-    private void GetItem(string[] inputData)
+    private void GetItem(string[] inputData, BigInteger timeStamp)
     {
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
         {
             if (items.Select(i => i.ReleaseTime).Count() == 0)
+            {
+                item.LockedTimeStamp = timeStamp;
                 items.Add(item);
+            }
         });
     }
 
