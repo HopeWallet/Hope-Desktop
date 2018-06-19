@@ -52,7 +52,7 @@ contract Hodler is Ownable {
     require(item.id != _id);
 
     // turn months to seconds
-    uint256 _seconds = _months.mul(2628000);
+    uint256 _seconds = _months.mul(1200);
     // get release time
     uint256 _releaseTime = now.add(_seconds);
     require(_releaseTime > now);
