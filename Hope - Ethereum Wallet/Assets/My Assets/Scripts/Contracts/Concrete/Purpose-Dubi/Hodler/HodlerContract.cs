@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
@@ -34,6 +35,20 @@ public class HodlerContract : ContractBase
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
-
+    public void Hodl(UserWallet wallet, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
+    {
+        wallet.SignTransaction<ConfirmPRPSLockPopup>(request =>
+        {
+            this.ExecuteContractFunction(this[FUNC_HODL],
+                                         request,
+                                         wallet.Address,
+                                         gasLimit,
+                                         gasPrice,
+                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
+                                         id,
+                                         value,
+                                         monthsToLock);
+        }, gasLimit, gasPrice, monthsToLock, value);
+    }
 
 }
