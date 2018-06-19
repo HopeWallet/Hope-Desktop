@@ -34,4 +34,6 @@ public class HodlerContract : ContractBase
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
+
+
 }
