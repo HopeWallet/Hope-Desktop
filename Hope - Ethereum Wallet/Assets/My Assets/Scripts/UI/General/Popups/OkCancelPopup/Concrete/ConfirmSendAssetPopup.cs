@@ -27,6 +27,10 @@ public class ConfirmSendAssetPopup : ConfirmTransactionRequestPopup<ConfirmSendA
         this.tradableAssetImageManager = tradableAssetImageManager;
     }
 
+    /// <summary>
+    /// Displays the asset transfer request details.
+    /// </summary>
+    /// <param name="transactionInput"> The input of the send asset transaction request. </param>
     protected override void InternalSetConfirmationValues(object[] transactionInput)
     {
         tradableAssetImageManager.LoadImage(tradableAssetManager.GetTradableAsset(transactionInput[1].ToString()).AssetSymbol, img => assetImage.sprite = img);

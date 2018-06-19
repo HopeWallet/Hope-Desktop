@@ -77,6 +77,24 @@ public class UserWallet
     }
 
     /// <summary>
+    /// Signs a transaction using this UserWallet.
+    /// </summary>
+    /// <typeparam name="T"> The type of the popup to display the transaction confirmation for. </typeparam>
+    /// <param name="onTransactionSigned"> The action to call if the transaction is confirmed and signed. </param>
+    /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
+    /// <param name="gasPrice"> The gas price to use with the transaction. </param>
+    /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
+        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+    {
+        popupManager.GetPopup<T>()
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                                           gasLimit,
+                                           gasPrice,
+                                           transactionInput);
+    }
+
+    /// <summary>
     /// Checks whether a wallet currently exists or not.
     /// </summary>
     /// <param name="safePassword"> SafePassword object to use to check if the PlayerPrefs are active. </param>
@@ -88,8 +106,6 @@ public class UserWallet
     /// </summary>
     /// <param name="startingText"> The starting text to display on the loading popup. </param>
     private void StartLoadingPopup(string startingText) => popupManager.GetPopup<LoadingPopup>().SetLoadingText("wallet", startingText: startingText);
-
-    #region Try Open/Create Methods
 
     /// <summary>
     /// Attempts to unlock the wallet with the given password.
@@ -137,20 +153,5 @@ public class UserWallet
             OnWalletLoadUnsuccessful?.Invoke();
         }
     }
-
-    #endregion
-
-    #region Transaction Signature Methods
-
-    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned, 
-        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
-    {
-        popupManager.GetPopup<T>()
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
-                                           gasLimit,
-                                           gasPrice,
-                                           transactionInput);
-    }
-    #endregion
 
 }
