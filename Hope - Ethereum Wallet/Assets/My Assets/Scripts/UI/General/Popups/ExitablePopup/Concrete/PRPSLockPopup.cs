@@ -45,7 +45,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     public void PeriodicUpdate() => StartItemSearch();
 
-    private void AssignUiValues() => prpsBalanceText.text = tradableAssetManager.ActiveTradableAsset.AssetBalance + "";
+    private void AssignUiValues() => prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
 
     private void StartItemSearch()
     {
