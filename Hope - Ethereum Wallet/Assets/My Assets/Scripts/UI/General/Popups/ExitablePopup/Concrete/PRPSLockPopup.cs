@@ -78,33 +78,45 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     {
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
         {
-            item.LockedTimeStamp = timeStamp;
-
-            GetItemButton(item).SetButtonInfo(item);
-
-            items.Sort((i1, i2) => i1.ButtonInfo.LockedTimeStamp.CompareTo(i2.ButtonInfo.LockedTimeStamp));
-            items.ForEach(i => i.transform.SetSiblingIndex(items.IndexOf(i)));
+            if (item.Fulfilled)
+                RemoveItemButton(item);
+            else
+                UpdateItemList(item, timeStamp);
         });
     }
 
-    private LockedPRPSItemButton GetItemButton(HodlerItem item)
+    private void UpdateItemList(HodlerItem item, BigInteger timeStamp)
+    {
+        item.LockedTimeStamp = timeStamp;
+
+        var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
+        var currentItemButton = sameItems.Count() == 0 ? CreateItemButton(item) : sameItems.Single();
+
+        currentItemButton.SetButtonInfo(item);
+
+        items.Sort((i1, i2) => i1.ButtonInfo.LockedTimeStamp.CompareTo(i2.ButtonInfo.LockedTimeStamp));
+        items.ForEach(i => i.transform.SetSiblingIndex(items.IndexOf(i)));
+    }
+
+    private void RemoveItemButton(HodlerItem item)
     {
         var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
 
-        if (sameItems.Count() == 0)
-        {
-            var newItem = lockedPRPSItemFactory.Create();
-            var rectTransform = newItem.GetComponent<RectTransform>();
-            rectTransform.parent = itemSpawnTransform;
-            rectTransform.localScale = Vector3.one;
-            items.Add(newItem);
-            return newItem;
-        }
+        if (sameItems.Count() > 0)
+            items.Remove(sameItems.Single());
+    }
 
-        else
-        {
-            return sameItems.Single();
-        }
+    private LockedPRPSItemButton CreateItemButton(HodlerItem item)
+    {
+        var newItem = lockedPRPSItemFactory.Create();
+        var rectTransform = newItem.GetComponent<RectTransform>();
+
+        rectTransform.parent = itemSpawnTransform;
+        rectTransform.localScale = Vector3.one;
+
+        items.Add(newItem);
+
+        return newItem;
     }
 
 }

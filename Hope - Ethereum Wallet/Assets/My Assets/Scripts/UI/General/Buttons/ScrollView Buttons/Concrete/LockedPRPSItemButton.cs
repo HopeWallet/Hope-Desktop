@@ -32,10 +32,10 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         var correctedPrpsAmount = SolidityUtils.ConvertFromUInt(value.Value, 18);
         var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
         
-        purposeAmountText.text = correctedPrpsAmount.ToString();
-        dubiAmountText.text = (multiplier * correctedPrpsAmount).ToString();
+        purposeAmountText.text = correctedPrpsAmount.ToString().LimitEnd(8, "...");
+        dubiAmountText.text = (multiplier * correctedPrpsAmount).ToString().LimitEnd(15, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
-        timeLeftText.text = DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
+        timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
         releasePurposeButton.interactable = currentTimeDifference < 0;
     }
 
