@@ -11,6 +11,11 @@ using Zenject;
 public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicUpdater, IEnterButtonObserver, ITabButtonObserver
 {
 
+    // FIX BUG:
+    // - Sometimes the tab button to switch input fields doesn't work and an error is thrown
+    // - Missing an input field apparently
+    // - Sometimes it takes a long time to get the gas estimates as well
+
     public InputField addressField,
                       amountField,
                       gasLimitField,
