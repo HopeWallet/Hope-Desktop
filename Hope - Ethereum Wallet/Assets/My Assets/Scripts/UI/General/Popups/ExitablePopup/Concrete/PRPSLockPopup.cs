@@ -81,11 +81,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
             if (item.Fulfilled)
                 RemoveItemButton(item);
             else
-                UpdateItemList(item, timeStamp);
+                UpdateList(item, timeStamp);
         });
     }
 
-    private void UpdateItemList(HodlerItem item, BigInteger timeStamp)
+    private void UpdateList(HodlerItem item, BigInteger timeStamp)
     {
         item.LockedTimeStamp = timeStamp;
 

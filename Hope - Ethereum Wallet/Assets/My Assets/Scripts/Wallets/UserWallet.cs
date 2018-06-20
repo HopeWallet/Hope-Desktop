@@ -87,7 +87,7 @@ public class UserWallet
     public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
-        popupManager.GetPopup<T>()
+        popupManager.GetPopup<T>(true)
                     .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,

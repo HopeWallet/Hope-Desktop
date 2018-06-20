@@ -10,9 +10,9 @@ public class PopupManager
 {
 
     private readonly List<object> factoryPopups = new List<object>();
+    private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
 
     private Action closePopup;
-    private object activePopup;
 
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.
@@ -57,15 +57,14 @@ public class PopupManager
     /// <returns> Whether the active popup was closed or not. </returns>
     public bool CloseActivePopup(params Type[] typesToIgnore)
     {
-        if (activePopup == null)
+        if (activePopups.Count == 0)
             return false;
 
         foreach (Type type in typesToIgnore)
-            if (activePopup.GetType() == type)
+            if (activePopups.Peek().Key.GetType() == type)
                 return false;
 
-        activePopup = null;
-        closePopup?.Invoke();
+        activePopups.Pop().Value?.Invoke();
 
         return true;
     }
@@ -74,16 +73,19 @@ public class PopupManager
     /// Gets the current active popup or creates a new popup given the popup type.
     /// </summary>
     /// <typeparam name="TPopup"> The type of the popup. </typeparam>
+    /// <param name="stackPopups"> Whether this popup should stack on top of the last popup. </param>
     /// <returns> The popup created or retrieved. </returns>
-    public TPopup GetPopup<TPopup>() where TPopup : FactoryPopup<TPopup>
+    public TPopup GetPopup<TPopup>(bool stackPopups = false) where TPopup : FactoryPopup<TPopup>
     {
-        if (activePopup != null)
-            return activePopup as TPopup;
+        var popupsOfType = activePopups.Where(popup => popup.Key.GetType() == typeof(TPopup));
+        if (popupsOfType.Count() > 0)
+            return popupsOfType.Single().Key as TPopup;
+        else if (activePopups.Count > 0 && !stackPopups)
+            return null;
 
-        var popup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().First().Create();
-        closePopup = () => Object.Destroy(popup.gameObject);
-        activePopup = popup;
+        var newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().First().Create();
+        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => Object.Destroy(newPopup.gameObject)));
 
-        return popup;
+        return newPopup;
     }
 }
