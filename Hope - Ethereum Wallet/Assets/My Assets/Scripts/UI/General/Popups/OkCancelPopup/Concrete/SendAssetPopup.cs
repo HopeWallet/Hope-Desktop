@@ -317,6 +317,8 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
             {
                 tradableAssetManager.EtherAsset.UpdateBalance(() =>
                 {
+                    limit = (limit * 10) / 9;
+
                     BigInteger currentLimit;
                     BigInteger.TryParse(gasLimitField.text, out currentLimit);
 
