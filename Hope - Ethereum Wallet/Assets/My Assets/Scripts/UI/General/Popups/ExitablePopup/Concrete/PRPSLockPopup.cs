@@ -5,6 +5,7 @@ using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Vector3 = UnityEngine.Vector3;
 
 public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater
 {
@@ -64,7 +65,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         if (transactionsJson == null)
             return;
 
-        transactionsJson.result.ForEach(json => GetTransactionInputData(json));
+        transactionsJson.result.Reverse().ForEach(json => GetTransactionInputData(json));
     }
 
     private void GetTransactionInputData(TokenTransactionJson tokenTransactionJson)
@@ -78,7 +79,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
         {
             item.LockedTimeStamp = timeStamp;
+
             GetItemButton(item).SetButtonInfo(item);
+
+            items.Sort((i1, i2) => i1.ButtonInfo.LockedTimeStamp.CompareTo(i2.ButtonInfo.LockedTimeStamp));
+            items.ForEach(i => i.transform.SetSiblingIndex(items.IndexOf(i)));
         });
     }
 
@@ -89,7 +94,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         if (sameItems.Count() == 0)
         {
             var newItem = lockedPRPSItemFactory.Create();
-            newItem.transform.parent = itemSpawnTransform;
+            var rectTransform = newItem.GetComponent<RectTransform>();
+            rectTransform.parent = itemSpawnTransform;
+            rectTransform.localScale = Vector3.one;
             items.Add(newItem);
             return newItem;
         }

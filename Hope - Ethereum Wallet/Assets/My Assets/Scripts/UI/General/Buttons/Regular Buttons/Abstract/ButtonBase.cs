@@ -39,6 +39,9 @@ public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"> The data of the click event. </param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (button == null)
+            return;
+
         if (button.interactable && eventData.button == PointerEventData.InputButton.Left)
             ButtonLeftClicked();
         else if (eventData.button == PointerEventData.InputButton.Right)

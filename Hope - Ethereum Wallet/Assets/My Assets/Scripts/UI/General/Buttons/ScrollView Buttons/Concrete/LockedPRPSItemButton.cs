@@ -22,10 +22,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     /// </summary>
     /// <param name="ethereumNetworkManager"> The active ethereum network. </param>
     [Inject]
-    public void DetermineDUBIPercentage(EthereumNetworkManager.Settings networkSettings)
-    {
-        this.networkSettings = networkSettings;
-    }
+    public void DetermineDUBIPercentage(EthereumNetworkManager.Settings networkSettings) => this.networkSettings = networkSettings;
 
     protected override void OnValueUpdated(HodlerItem value)
     {
@@ -33,11 +30,12 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         var releaseTimeDifference = value.ReleaseTime - value.LockedTimeStamp;
         var currentTimeDifference = value.ReleaseTime - DateTimeUtils.GetCurrentUnixTime();
         var correctedPrpsAmount = SolidityUtils.ConvertFromUInt(value.Value, 18);
-        var multiplier = (decimal)(minPercentageTime / releaseTimeDifference) / 100;
-
+        var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
+        
         purposeAmountText.text = correctedPrpsAmount.ToString();
-        dubiAmountText.text = (multiplier * (correctedPrpsAmount / 300)).ToString();
-        lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)(value.ReleaseTime - value.LockedTimeStamp));
+        dubiAmountText.text = (multiplier * correctedPrpsAmount).ToString();
+        lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
+        timeLeftText.text = DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
         releasePurposeButton.interactable = currentTimeDifference < 0;
     }
 

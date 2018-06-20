@@ -100,7 +100,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return request.SendRequest(function.CreateTransactionInput(callerAddress, input));
 
-            request.CheckTransactionRequest(() => onGasReceived(request.Result.Value));
+            request.CheckTransactionRequest(() => onGasReceived((request.Result.Value * 10) / 9));
         }
 
         /// <summary>
