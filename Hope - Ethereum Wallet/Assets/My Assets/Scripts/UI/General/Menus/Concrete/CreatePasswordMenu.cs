@@ -4,7 +4,7 @@ using Zenject;
 /// <summary>
 /// GUIMenu for creating a new password to be used with the new wallet.
 /// </summary>
-public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, IEnterButtonObserver
+public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable, IEnterButtonObservable
 {
 
     public InputField[] passwordFields;

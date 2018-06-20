@@ -8,7 +8,7 @@ using Zenject;
 /// <summary>
 /// Class which contains basic info of the root object where all UI elements are children of.
 /// </summary>
-public class UIManager : MonoBehaviour, IEscapeButtonObserver
+public class UIManager : MonoBehaviour, IEscapeButtonObservable
 {
 
     [SerializeField]

@@ -8,7 +8,7 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicUpdater, IEnterButtonObserver, ITabButtonObserver
+public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicUpdater, IEnterButtonObservable, ITabButtonObservable
 {
 
     // FIX BUG:

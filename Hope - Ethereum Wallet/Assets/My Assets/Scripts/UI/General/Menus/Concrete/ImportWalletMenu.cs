@@ -6,7 +6,7 @@ using Zenject;
 /// <summary>
 /// Menu for importing an ethereum wallet.
 /// </summary>
-public class ImportWalletMenu : WalletLoaderBase<ImportWalletMenu>, IEnterButtonObserver
+public class ImportWalletMenu : WalletLoaderBase<ImportWalletMenu>, IEnterButtonObservable
 {
 
     public InputField seedInput;

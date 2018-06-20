@@ -76,7 +76,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<TokenContractManager>().AsSingle().NonLazy();
 
         Container.Bind<EthereumNetworkManager>().AsSingle().NonLazy();
-        Container.Bind<GasPriceObserverManager>().AsSingle().NonLazy();
+        Container.Bind<GasPriceObserver>().AsSingle().NonLazy();
 
         Container.BindInstance(GetComponent<UIManager>()).AsSingle().NonLazy();
         Container.Bind<OptionsDropdownActionAssigner>().AsSingle().NonLazy();

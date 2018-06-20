@@ -2,14 +2,14 @@
 /// <summary>
 /// Base interface to implement for classes that require gas prices.
 /// </summary>
-public interface IGasPriceObserverBase
+public interface IGasPriceObservableBase
 {
 }
 
 /// <summary>
 /// Interface to extend when you need to know the current standard transaction speed gas price.
 /// </summary>
-public interface IStandardGasPriceObserver : IGasPriceObserverBase
+public interface IStandardGasPriceObservable : IGasPriceObservableBase
 {
     /// <summary>
     /// The gas price for medium transaction speed.
@@ -20,7 +20,7 @@ public interface IStandardGasPriceObserver : IGasPriceObserverBase
 /// <summary>
 /// Interface to extend when you need to know the current slow transaction speed gas price.
 /// </summary>
-public interface ISlowGasPriceObserver : IGasPriceObserverBase
+public interface ISlowGasPriceObservable : IGasPriceObservableBase
 {
     /// <summary>
     /// The gas price for slow transaction speed.
@@ -31,7 +31,7 @@ public interface ISlowGasPriceObserver : IGasPriceObserverBase
 /// <summary>
 /// Interface to extend when you need to know the current fast transaction speed gas price.
 /// </summary>
-public interface IFastGasPriceObserver : IGasPriceObserverBase
+public interface IFastGasPriceObservable : IGasPriceObservableBase
 {
     /// <summary>
     /// The gas price for fast transaction speed.
@@ -42,6 +42,6 @@ public interface IFastGasPriceObserver : IGasPriceObserverBase
 /// <summary>
 /// Interface to extend when you need to know the standard, slow, and fast gas prices.
 /// </summary>
-public interface IGasPriceObserver : IStandardGasPriceObserver, ISlowGasPriceObserver, IFastGasPriceObserver
+public interface IGasPriceObservable : IStandardGasPriceObservable, ISlowGasPriceObservable, IFastGasPriceObservable
 {
 }
