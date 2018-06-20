@@ -72,7 +72,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
                                 null,
                                 new BigInteger(999999),
                                 SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
-                                12);
+                                new BigInteger(12));
     }
 
     private void StartNewItemSearch()
@@ -140,7 +140,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
 
         if (sameItems.Count() > 0)
-            items.Remove(sameItems.Single());
+        {
+            var sameItem = sameItems.Single();
+            items.Remove(sameItem);
+            Destroy(sameItem.gameObject);
+        }
     }
 
     private LockedPRPSItemButton CreateItemButton(HodlerItem item)

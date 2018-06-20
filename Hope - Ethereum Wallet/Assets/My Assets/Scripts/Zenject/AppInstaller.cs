@@ -120,6 +120,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<TransactionInfoPopup>();
         BindPopupFactory<PRPSLockPopup>();
         BindPopupFactory<ConfirmPRPSLockPopup>();
+        BindPopupFactory<GeneralTransactionConfirmationPopup>();
     }
 
     /// <summary>

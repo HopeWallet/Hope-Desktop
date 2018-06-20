@@ -15,6 +15,8 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
 
     private EthereumNetworkManager.Settings networkSettings;
     private HodlerContract hodlerContract;
+    private UserWalletManager userWalletManager;
+    private TransactionHelper releasePurposeHelper;
 
     private BigInteger id;
     private decimal lockedPurpose;
@@ -27,11 +29,13 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     /// </summary>
     /// <param name="networkSettings"> The active ethereum network settings. </param>
     /// <param name="hodlerContract"> The active HodlerContract. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
-    public void DetermineDUBIPercentage(EthereumNetworkManager.Settings networkSettings, HodlerContract hodlerContract)
+    public void DetermineDUBIPercentage(EthereumNetworkManager.Settings networkSettings, HodlerContract hodlerContract, UserWalletManager userWalletManager)
     {
         this.networkSettings = networkSettings;
         this.hodlerContract = hodlerContract;
+        this.userWalletManager = userWalletManager;
     }
 
     private void OnEnable()
@@ -46,11 +50,13 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
 
     private void ReleasePurpose()
     {
-        
+        hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.GasPrice, id, lockedPurpose);
     }
 
     public void UpdateTransactionGas(TransactionHelper releasePurposeHelper)
     {
+        this.releasePurposeHelper = releasePurposeHelper;
+
         releasePurposeButton.interactable = releasePurposeButton.interactable && releasePurposeHelper.CanExecuteTransaction;
     }
 

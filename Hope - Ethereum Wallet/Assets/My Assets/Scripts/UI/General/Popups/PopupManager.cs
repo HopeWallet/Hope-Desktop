@@ -12,8 +12,6 @@ public class PopupManager
     private readonly List<object> factoryPopups = new List<object>();
     private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
 
-    private Action closePopup;
-
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.
     /// </summary>
@@ -27,6 +25,7 @@ public class PopupManager
     /// <param name="transactionInfoPopupFactory"> The factory for creating TransactionInfoPopups. </param>
     /// <param name="prpsLockPopupFactory"> The factory for creating PRPSLockPopups. </param>
     /// <param name="confirmPrpsLockPopupFactory"> The factory for creating ConfirmPRPSLockPopups. </param>
+    /// <param name="generalConfirmationPopupFactory"> The factory for creating GeneralTransactionConfirmationPopups. </param>
     public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
@@ -36,7 +35,8 @@ public class PopupManager
         ReceiveAssetPopup.Factory receiveAssetPopupFactory,
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
         PRPSLockPopup.Factory prpsLockPopupFactory,
-        ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory) : base()
+        ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
+        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory) : base()
     {
         factoryPopups.AddItems(loadingPopupFactory, 
                           addTokenPopupFactory, 
@@ -47,7 +47,8 @@ public class PopupManager
                           receiveAssetPopupFactory,
                           transactionInfoPopupFactory,
                           prpsLockPopupFactory,
-                          confirmPrpsLockPopupFactory);
+                          confirmPrpsLockPopupFactory,
+                          generalConfirmationPopupFactory);
     }
 
     /// <summary>

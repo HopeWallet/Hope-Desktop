@@ -14,8 +14,6 @@ public class HodlerContract : ContractBase
     public const string FUNC_RELEASE = "release";
     public const string FUNC_GETITEM = "getItem";
 
-    [Inject] private UserWalletManager userWalletManager;
-
     /// <summary>
     /// The function names associated with the Hodler contract.
     /// </summary>
@@ -38,7 +36,7 @@ public class HodlerContract : ContractBase
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
-    public void Hodl(HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
+    public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
     {
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
@@ -54,7 +52,7 @@ public class HodlerContract : ContractBase
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 
-    public void Release(HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
+    public void Release(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
     {
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {

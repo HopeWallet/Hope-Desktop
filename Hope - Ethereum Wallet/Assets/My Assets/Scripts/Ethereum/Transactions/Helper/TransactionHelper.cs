@@ -37,12 +37,17 @@ public class TransactionHelper : IPeriodicUpdater
 
     public void Start(Function functionToEstimate, Action onEstimateFinished = null, params object[] input)
     {
-        if (functionToEstimate == null)
-            periodicUpdateManager.AddPeriodicUpdater(this);
+        var lastFunction = this.functionToEstimate;
 
-        this.functionToEstimate = functionToEstimate;
         this.input = input;
         this.onEstimateFinished = onEstimateFinished;
+        this.functionToEstimate = functionToEstimate;
+
+        if (lastFunction == null)
+        {
+            PeriodicUpdate();
+            periodicUpdateManager.AddPeriodicUpdater(this);
+        }
     }
 
     public void Stop()
@@ -72,8 +77,8 @@ public class TransactionHelper : IPeriodicUpdater
     private void UpdateValue(ref HexBigInteger value, BigInteger valueToSet)
     {
         value = new HexBigInteger(valueToSet);
-        UnityEngine.Debug.Log(GasLimit + " " + GasPrice);
-        if (GasLimit == null && GasPrice == null)
+
+        if (GasLimit == null || GasPrice == null)
             return;
 
         EstimateTransactionViability();
