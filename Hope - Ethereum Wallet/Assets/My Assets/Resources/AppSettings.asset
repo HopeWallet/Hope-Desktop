@@ -43,7 +43,7 @@ MonoBehaviour:
         extraOptionsDropdowns:
         - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
             type: 3}
-          buttonText: Hodl PRPS
+          buttonText: Lock PRPS
           assetAddresses:
           - 0x7641b2Ca9DDD58adDf6e3381c1F994Aac5f1A32f
           - 0xd94F2778e2B3913C53637Ae60647598bE588c570

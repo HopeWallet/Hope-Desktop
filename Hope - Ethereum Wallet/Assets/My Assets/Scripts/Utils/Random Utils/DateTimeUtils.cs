@@ -15,6 +15,12 @@ public static class DateTimeUtils
     public const int MINUTE_IN_SECONDS = 60;
 
     /// <summary>
+    /// Gets the current unix time.
+    /// </summary>
+    /// <returns> The current unix time. </returns>
+    public static int GetCurrentUnixTime() => (Int32)(DateTime.UtcNow.Subtract(UnixTimeStart)).TotalSeconds;
+
+    /// <summary>
     /// Converts a unix time stamp to a DateTime object.
     /// </summary>
     /// <param name="timeStamp"> The unix time stamp to convert. </param>
@@ -30,12 +36,42 @@ public static class DateTimeUtils
     public static string GetStringFormattedDate(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year;
 
     /// <summary>
-    /// Gets the text displaying '1 second ago' or anything similar.
+    /// Gets the maximum time interval in a unix time.
+    /// For example, a value of 60 will produce '1 second'.
+    /// A value of 3600 will produce '1 hour'.
+    /// Etc.
     /// </summary>
-    /// <param name="timeVal"> The value of how long ago the time was in the form of the timeValName. </param>
+    /// <param name="unixTime"> The unix time to convert to the maximum time interval. </param>
+    /// <param name="extraText"> The extra text to add to the end of the time interval string. </param>
+    /// <returns> The final time interval text. </returns>
+    public static string GetMaxTimeInterval(int unixTime, string extraText = "")
+    {
+        string finalTimeText;
+
+        int seconds = unixTime;
+        int minutes = seconds / MINUTE_IN_SECONDS;
+        int hours = seconds / HOUR_IN_SECONDS;
+        int days = seconds / DAY_IN_SECONDS;
+        int months = seconds / MONTH_IN_SECONDS;
+        int years = seconds / YEAR_IN_SECONDS;
+
+        if (years > 0) finalTimeText = GetCleanTimeText(years, "year");
+        else if (months > 0) finalTimeText = GetCleanTimeText(months, "month");
+        else if (days > 0) finalTimeText = GetCleanTimeText(days, "day");
+        else if (hours > 0) finalTimeText = GetCleanTimeText(hours, "hour");
+        else if (minutes > 0) finalTimeText = GetCleanTimeText(minutes, "minute");
+        else finalTimeText = GetCleanTimeText(seconds, "second");
+
+        return finalTimeText + extraText;
+    }
+
+    /// <summary>
+    /// The clean version of the time text.
+    /// </summary>
+    /// <param name="timeVal"> The time value. </param>
     /// <param name="timeValName"> The name of the time conversion type. Example: 'second', 'minute', 'hour', etc. </param>
-    /// <returns> The text which displays how long ago something was in terms of x 'seconds' ago or anything similar. </returns>
-    public static string GetTimeAgoText(int timeVal, string timeValName) => timeVal + " " + timeValName + "" + GetAddedCharacter(timeVal) + " ago";
+    /// <returns> The time text with the added s in case of plural time.. </returns>
+    private static string GetCleanTimeText(int timeVal, string timeValName) => timeVal + " " + timeValName + "" + GetAddedCharacter(timeVal);
 
     /// <summary>
     /// Gets an added 's' if the value is greater than one. 

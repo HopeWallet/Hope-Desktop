@@ -483,10 +483,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114342082073458160}
   cancelButton: {fileID: 114177380112597570}
+  timerText: {fileID: 114203793294622450}
   assetImage: {fileID: 114016967441884456}
   amountText: {fileID: 114721144755934544}
   addressText: {fileID: 114734538039146078}
-  timerText: {fileID: 114203793294622450}
 --- !u!114 &114427427523519762
 MonoBehaviour:
   m_ObjectHideFlags: 1

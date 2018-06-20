@@ -91,14 +91,14 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals), 23, "...");
         sendingAddressText.text = transactionInfo.From;
         receivingAddressText.text = transactionInfo.To;
-        timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp) + "";
-        gasUsedText.text = transactionInfo.GasUsed + "";
+        timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).ToString();
+        gasUsedText.text = transactionInfo.GasUsed.ToString();
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
 
         TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
         {
             gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + " Gwei");
-            gasLimitText.SetText(tx.Gas.Value + "");
+            gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }
 

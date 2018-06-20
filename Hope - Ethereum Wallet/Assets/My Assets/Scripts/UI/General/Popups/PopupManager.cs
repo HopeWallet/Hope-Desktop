@@ -25,7 +25,8 @@ public class PopupManager
     /// <param name="confirmHideAssetPopupFactory"> The factory for creating ConfirmHideAssetPopups. </param>
     /// <param name="receiveAssetPopupFactory"> The factory for creating ReceiveAssetPopups. </param>
     /// <param name="transactionInfoPopupFactory"> The factory for creating TransactionInfoPopups. </param>
-    /// <param name="prpsHodlPopupFactory"> The factory for creating PRPSHodlPopups. </param>
+    /// <param name="prpsLockPopupFactory"> The factory for creating PRPSLockPopups. </param>
+    /// <param name="confirmPrpsLockPopupFactory"> The factory for creating ConfirmPRPSLockPopups. </param>
     public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
@@ -34,7 +35,8 @@ public class PopupManager
         ConfirmHideAssetPopup.Factory confirmHideAssetPopupFactory,
         ReceiveAssetPopup.Factory receiveAssetPopupFactory,
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
-        PRPSHodlPopup.Factory prpsHodlPopupFactory) : base()
+        PRPSLockPopup.Factory prpsLockPopupFactory,
+        ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory) : base()
     {
         factoryPopups.AddItems(loadingPopupFactory, 
                           addTokenPopupFactory, 
@@ -44,7 +46,8 @@ public class PopupManager
                           confirmHideAssetPopupFactory,
                           receiveAssetPopupFactory,
                           transactionInfoPopupFactory,
-                          prpsHodlPopupFactory);
+                          prpsLockPopupFactory,
+                          confirmPrpsLockPopupFactory);
     }
 
     /// <summary>

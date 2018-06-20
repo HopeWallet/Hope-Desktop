@@ -35,14 +35,16 @@ public class EtherAsset : TradableAsset
     /// <param name="userWallet"> The UserWallet to send the ether from. </param>
     /// <param name="gasLimit"> The gas limit to use for this ether send transaction. </param>
     /// <param name="gasPrice"> The gas price to use for this ether send transaction. </param>
-    /// <param name="address"> The address to send the teher to. </param>
+    /// <param name="address"> The address to send the ether to. </param>
     /// <param name="amount"> The amount of ether to send. </param>
     public override void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransferRequest(gasLimit, gasPrice, address, AssetAddress, amount, req =>
-        {
-            WalletUtils.SendEther(req, userWallet.Address, gasLimit, gasPrice, address, amount);
-        });
+        userWallet.SignTransaction<ConfirmSendAssetPopup>(request => WalletUtils.SendEther(request, userWallet.Address, gasLimit, gasPrice, address, amount),
+                                                          gasLimit,
+                                                          gasPrice,
+                                                          address,
+                                                          AssetAddress,
+                                                          amount);
     }
 
     /// <summary>

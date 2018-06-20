@@ -17,16 +17,9 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
     [Inject]
     public void Construct(MouseClickObserver mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
 
-    protected override void OnAwake()
-    {
-        mainButtonObj = gameObject;
-        Button.onClick.AddListener(ChangeButtonDropdown);
-    }
+    protected void OnEnable() => Button.onClick.AddListener(ChangeButtonDropdown);
 
-    private void OnDisable()
-    {
-        Button.onClick.RemoveAllListeners();
-    }
+    private void OnDisable() => Button.onClick.RemoveAllListeners();
 
     private void ChangeButtonDropdown()
     {
@@ -47,7 +40,7 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
 
     private void OpenButtonDropdown()
     {
-        var buttonToInstantiate = mainButtonObj;
+        var buttonToInstantiate = gameObject;
         foreach (DropdownButtonInfo button in dropdownButtons)
         {
             var newButton = Instantiate(buttonToInstantiate, transform);

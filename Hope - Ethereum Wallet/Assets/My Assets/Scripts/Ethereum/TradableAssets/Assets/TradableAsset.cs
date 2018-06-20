@@ -2,7 +2,6 @@
 using System;
 using System.Numerics;
 using UnityEngine;
-using Zenject;
 
 /// <summary>
 /// Class which represents an asset that can be traded to and from other ethereum addresses.
