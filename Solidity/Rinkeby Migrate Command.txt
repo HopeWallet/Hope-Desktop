@@ -1,2 +1,4 @@
 Git bash -> solidity-project
-truffle migrate --network rinkeby
+
+Deploy Command: truffle migrate --network rinkeby
+Reset Command: truffle migrate --reset

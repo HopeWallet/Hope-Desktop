@@ -12,10 +12,21 @@ contract Purpose is StandardToken, BurnableToken, MintableToken, RBAC {
   uint8 public constant decimals = 18;
   string constant public ROLE_TRANSFER = "transfer";
 
+  address public hodlerContract;
+
   function Purpose() public {
     totalSupply_ = 1000000 * (10 ** uint256(decimals));
     balances[msg.sender] = totalSupply_;
     emit Transfer(address(0), msg.sender, totalSupply_);
+  }
+
+  function changeHodlerContract(address _hodler) external onlyOwner {
+    if (hasRole(hodlerContract, ROLE_TRANSFER)) {
+      removeRole(hodlerContract, ROLE_TRANSFER);
+    }
+    
+    hodlerContract = _hodler;
+    addRole(hodlerContract, ROLE_TRANSFER);
   }
 
   // used by hodler contract to transfer users tokens to it
