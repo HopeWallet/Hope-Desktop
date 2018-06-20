@@ -21,6 +21,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindSettings();
         BindSingletonTypes();
+        BindUniqueInstances();
         BindScriptableObjectTypes();
         BindFactories();
     }
@@ -43,6 +44,14 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         // Bind all contracts.
         Resources.LoadAll<FixedContractBase>("").Where(contract => contract.NetworkType == appSettings.ethereumNetworkSettings.networkType)
                                         .ForEach(contract => Container.BindInstance(contract.CreateContract()).AsSingle().NonLazy());
+    }
+
+    /// <summary>
+    /// Binds unique instances of all the types to the classes that need them.
+    /// </summary>
+    private void BindUniqueInstances()
+    {
+        Container.Bind<TransactionHelper>().AsTransient();
     }
 
     /// <summary>

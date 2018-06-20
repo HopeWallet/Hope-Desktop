@@ -49,6 +49,11 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         
     }
 
+    public void UpdateTransactionGas(TransactionHelper releasePurposeHelper)
+    {
+        releasePurposeButton.interactable = releasePurposeButton.interactable && releasePurposeHelper.CanExecuteTransaction;
+    }
+
     protected override void OnValueUpdated(HodlerItem value)
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(value.Value, 18);
