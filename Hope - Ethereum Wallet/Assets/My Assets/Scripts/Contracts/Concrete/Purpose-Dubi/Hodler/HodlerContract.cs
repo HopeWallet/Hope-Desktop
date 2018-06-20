@@ -2,6 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
+using Zenject;
 
 /// <summary>
 /// Contract which is used for locking purpose and receiving dubi.
@@ -9,9 +10,11 @@ using System.Numerics;
 public class HodlerContract : ContractBase
 {
 
-    private const string FUNC_HODL = "hodl";
-    private const string FUNC_RELEASE = "release";
-    private const string FUNC_GETITEM = "getItem";
+    public const string FUNC_HODL = "hodl";
+    public const string FUNC_RELEASE = "release";
+    public const string FUNC_GETITEM = "getItem";
+
+    [Inject] private UserWalletManager userWalletManager;
 
     /// <summary>
     /// The function names associated with the Hodler contract.
@@ -35,13 +38,13 @@ public class HodlerContract : ContractBase
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
-    public void Hodl(UserWallet wallet, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
+    public void Hodl(HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
     {
-        wallet.SignTransaction<ConfirmPRPSLockPopup>(request =>
+        userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
             this.ExecuteContractFunction(this[FUNC_HODL],
                                          request,
-                                         wallet.Address,
+                                         userWalletManager.WalletAddress,
                                          gasLimit,
                                          gasPrice,
                                          () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
@@ -49,6 +52,20 @@ public class HodlerContract : ContractBase
                                          value,
                                          monthsToLock);
         }, gasLimit, gasPrice, monthsToLock, value);
+    }
+
+    public void Release(HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
+    {
+        userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
+        {
+            this.ExecuteContractFunction(this[FUNC_RELEASE],
+                                         request,
+                                         userWalletManager.WalletAddress,
+                                         gasLimit,
+                                         gasPrice,
+                                         () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose."),
+                                         id);
+        }, gasLimit, gasPrice, "Release Purpose Confirmation");
     }
 
 }

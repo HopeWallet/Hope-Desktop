@@ -1,4 +1,5 @@
 ﻿using Nethereum.Hex.HexTypes;
+using Nethereum.JsonRpc.UnityClient;
 using System;
 
 /// <summary>
@@ -44,6 +45,20 @@ public class UserWalletManager
     /// <param name="amount"> The amount of the specified asset to send. </param>
     public void TransferAsset(TradableAsset tradableAsset, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, dynamic amount) 
         => tradableAsset.Transfer(userWallet, gasLimit, gasPrice, address, amount);
+
+    /// <summary>
+    /// Signs a transaction using the main UserWallet.
+    /// </summary>
+    /// <typeparam name="T"> The type of the popup to display the transaction confirmation for. </typeparam>
+    /// <param name="onTransactionSigned"> The action to call if the transaction is confirmed and signed. </param>
+    /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
+    /// <param name="gasPrice"> The gas price to use with the transaction. </param>
+    /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
+        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+    {
+        userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, transactionInput);
+    }
 
     /// <summary>
     /// Attempts to load a wallet given a password.
