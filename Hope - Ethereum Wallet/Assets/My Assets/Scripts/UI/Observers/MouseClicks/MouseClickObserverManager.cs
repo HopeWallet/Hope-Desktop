@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Class which observes mouse click events.
 /// </summary>
-public class MouseClickObserver
+public class MouseClickObserverManager
 {
 
     private readonly List<IObserveLeftClick> leftClickObservers = new List<IObserveLeftClick>();
@@ -16,7 +16,7 @@ public class MouseClickObserver
     /// <summary>
     /// Starts the observers.
     /// </summary>
-    public MouseClickObserver()
+    public MouseClickObserverManager()
     {
         StartLeftClickObservers();
         StartRightClickObservers();

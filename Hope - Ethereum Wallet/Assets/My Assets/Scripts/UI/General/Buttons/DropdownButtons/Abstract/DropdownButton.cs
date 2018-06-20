@@ -12,10 +12,10 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
     private List<Button> buttonList = new List<Button>();
     private GameObject mainButtonObj;
 
-    private MouseClickObserver mouseClickObserver;
+    private MouseClickObserverManager mouseClickObserver;
 
     [Inject]
-    public void Construct(MouseClickObserver mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
+    public void Construct(MouseClickObserverManager mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
 
     protected void OnEnable() => Button.onClick.AddListener(ChangeButtonDropdown);
 

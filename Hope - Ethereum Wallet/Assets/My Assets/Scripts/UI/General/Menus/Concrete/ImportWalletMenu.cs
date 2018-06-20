@@ -13,7 +13,7 @@ public class ImportWalletMenu : WalletLoaderBase<ImportWalletMenu>, IEnterButton
     public Button importButton,
                   backButton;
 
-    private ButtonObserver buttonObserver;
+    private ButtonObserverManager buttonObserver;
 
     private readonly int[] validWordCounts = new int[] { 12, 24 };
 
@@ -22,7 +22,7 @@ public class ImportWalletMenu : WalletLoaderBase<ImportWalletMenu>, IEnterButton
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     [Inject]
-    public void Construct(ButtonObserver buttonObserver) => this.buttonObserver = buttonObserver;
+    public void Construct(ButtonObserverManager buttonObserver) => this.buttonObserver = buttonObserver;
 
     /// <summary>
     /// Adds the button click events.

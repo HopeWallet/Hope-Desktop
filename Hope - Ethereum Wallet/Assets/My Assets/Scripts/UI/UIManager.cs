@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObserver
     [Inject]
     public void Construct(Settings settings,
         UIProvider uiProvider,
-        ButtonObserver buttonObserver,
+        ButtonObserverManager buttonObserver,
         PopupManager popupManager,
         MenuFactoryManager menuFactoryManager,
         UserWalletManager userWalletManager)

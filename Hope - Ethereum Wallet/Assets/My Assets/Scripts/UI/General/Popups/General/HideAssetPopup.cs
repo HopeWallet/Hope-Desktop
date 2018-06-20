@@ -19,7 +19,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
 
     private UpdateManager updateManager;
     private PopupManager popupManager;
-    private MouseClickObserver clickObserver;
+    private MouseClickObserverManager clickObserver;
 
     private RectTransform rectTransform;
     private Rect buttonBounds;
@@ -69,7 +69,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="clickObserver"> The active ClickObserver. </param>
     [Inject]
-    public void Construct(UpdateManager updateManager, PopupManager popupManager, MouseClickObserver clickObserver)
+    public void Construct(UpdateManager updateManager, PopupManager popupManager, MouseClickObserverManager clickObserver)
     {
         this.updateManager = updateManager;
         this.popupManager = popupManager;

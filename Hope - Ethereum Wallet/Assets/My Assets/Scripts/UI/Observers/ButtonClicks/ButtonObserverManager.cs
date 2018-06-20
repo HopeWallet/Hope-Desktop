@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Class used for observing button clicks and notifying the certain subscribers.
 /// </summary>
-public class ButtonObserver
+public class ButtonObserverManager
 {
 
     private readonly List<IEscapeButtonObserver> escapeButtonObservers = new List<IEscapeButtonObserver>();
@@ -16,7 +16,7 @@ public class ButtonObserver
     /// <summary>
     /// Initializes the ButtonObserver by starting all the observers.
     /// </summary>
-    public ButtonObserver()
+    public ButtonObserverManager()
     {
         StartEscapeButtonObservers();
         StartTabButtonObservers();

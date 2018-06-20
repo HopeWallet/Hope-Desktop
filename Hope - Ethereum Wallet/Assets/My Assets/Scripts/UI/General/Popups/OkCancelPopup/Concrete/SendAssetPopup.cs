@@ -31,7 +31,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     public Dropdown speedDropdown;
 
     private PeriodicUpdateManager periodicUpdateManager;
-    private ButtonObserver buttonObserver;
+    private ButtonObserverManager buttonObserver;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
@@ -72,7 +72,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     /// <param name="tradableAssetImageManager"> The TradableAssetImageManager to use to retrieve the asset image. </param>
     [Inject]
     public void Construct(PeriodicUpdateManager periodicUpdateManager,
-        ButtonObserver buttonObserver,
+        ButtonObserverManager buttonObserver,
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
