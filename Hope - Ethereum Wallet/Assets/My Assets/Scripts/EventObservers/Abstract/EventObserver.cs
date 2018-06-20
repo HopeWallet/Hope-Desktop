@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class EventObserver<TInterfaceBase>
+public abstract class EventObserver<TInterfaceBase>
 {
 
     protected readonly List<TInterfaceBase> observables = new List<TInterfaceBase>();
