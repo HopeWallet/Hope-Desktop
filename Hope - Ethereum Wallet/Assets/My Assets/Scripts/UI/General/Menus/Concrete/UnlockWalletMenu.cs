@@ -1,5 +1,4 @@
-﻿using UnityEngine.EventSystems;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -13,14 +12,14 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     public Button unlockButton;
     public Button restoreButton;
 
-    private ButtonObserverManager buttonObserver;
+    private ButtonObserver buttonObserver;
 
     /// <summary>
     /// Adds the dependencies required for this menu.
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     [Inject]
-    public void Construct(ButtonObserverManager buttonObserver) => this.buttonObserver = buttonObserver;
+    public void Construct(ButtonObserver buttonObserver) => this.buttonObserver = buttonObserver;
 
     /// <summary>
     /// Adds the button click events on start.
@@ -32,21 +31,21 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     }
 
     /// <summary>
-    /// Adds this IEnterButtonObserver.
+    /// Subscribes this IEnterButtonObserver.
     /// </summary>
     protected override void OnEnable()
     {
         base.OnEnable();
-        buttonObserver.AddEnterButtonObserver(this);
+        buttonObserver.SubscribeObservable(this);
     }
 
     /// <summary>
-    /// Removes this IEnterButtonObserver.
+    /// Unsubscribes this IEnterButtonObserver.
     /// </summary>
     protected override void OnDisable()
     {
         base.OnDisable();
-        buttonObserver.RemoveEnterButtonObserver(this);
+        buttonObserver.UnsubscribeObservable(this);
     }
 
     /// <summary>

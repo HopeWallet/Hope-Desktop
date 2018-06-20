@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObserver
     [Inject]
     public void Construct(Settings settings,
         UIProvider uiProvider,
-        ButtonObserverManager buttonObserver,
+        ButtonObserver buttonObserver,
         PopupManager popupManager,
         MenuFactoryManager menuFactoryManager,
         UserWalletManager userWalletManager)
@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObserver
         this.menuFactoryManager = menuFactoryManager;
         this.userWalletManager = userWalletManager;
 
-        buttonObserver.AddEscapeButtonObserver(this);
+        buttonObserver.SubscribeObservable(this);
     }
 
     /// <summary>

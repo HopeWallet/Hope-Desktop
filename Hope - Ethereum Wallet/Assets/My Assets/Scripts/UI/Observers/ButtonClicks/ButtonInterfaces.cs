@@ -1,8 +1,14 @@
-﻿
+﻿/// <summary>
+/// Base interface for all classes that want to observe buttons.
+/// </summary>
+public interface IButtonObserverBase
+{
+}
+
 /// <summary>
 /// Interface which allows for classes to listen for escape button presses.
 /// </summary>
-public interface IEscapeButtonObserver
+public interface IEscapeButtonObserver : IButtonObserverBase
 {
     /// <summary>
     /// Called when the escape button is pressed.
@@ -14,7 +20,7 @@ public interface IEscapeButtonObserver
 /// <summary>
 /// Interface which allows for classes to listen for tab button presses.
 /// </summary>
-public interface ITabButtonObserver
+public interface ITabButtonObserver : IButtonObserverBase
 {
     /// <summary>
     /// Called when the tab button is pressed.
@@ -26,7 +32,7 @@ public interface ITabButtonObserver
 /// <summary>
 /// Interface which allows for classes to listen for enter button presses.
 /// </summary>
-public interface IEnterButtonObserver
+public interface IEnterButtonObserver : IButtonObserverBase
 {
     /// <summary>
     /// Called when the enter button is pressed.

@@ -27,7 +27,6 @@ public class TransactionHelper : IPeriodicUpdater
 
     public bool CanExecuteTransaction { get; private set; }
 
-    [Inject]
     public TransactionHelper(PeriodicUpdateManager periodicUpdateManager, TradableAssetManager tradableAssetManager, UserWalletManager userWalletManager)
     {
         this.periodicUpdateManager = periodicUpdateManager;

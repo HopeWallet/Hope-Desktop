@@ -2,7 +2,7 @@
 using Nethereum.Hex.HexTypes;
 using System.Collections.Generic;
 
-public class GasPriceObserver : IPeriodicUpdater
+public class GasPriceObserverManager : IPeriodicUpdater
 {
 
     private readonly List<IGasPriceObserverBase> gasPriceObservers = new List<IGasPriceObserverBase>();
@@ -13,7 +13,7 @@ public class GasPriceObserver : IPeriodicUpdater
 
     public float UpdateInterval => 15f;
 
-    public GasPriceObserver(PeriodicUpdateManager periodicUpdateManager)
+    public GasPriceObserverManager(PeriodicUpdateManager periodicUpdateManager)
     {
         periodicUpdateManager.AddPeriodicUpdater(this);
         PeriodicUpdate();

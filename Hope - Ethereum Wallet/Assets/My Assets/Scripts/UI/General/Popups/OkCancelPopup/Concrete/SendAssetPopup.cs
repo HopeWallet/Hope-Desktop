@@ -31,7 +31,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     public Dropdown speedDropdown;
 
     private PeriodicUpdateManager periodicUpdateManager;
-    private ButtonObserverManager buttonObserver;
+    private ButtonObserver buttonObserver;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
@@ -72,7 +72,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     /// <param name="tradableAssetImageManager"> The TradableAssetImageManager to use to retrieve the asset image. </param>
     [Inject]
     public void Construct(PeriodicUpdateManager periodicUpdateManager,
-        ButtonObserverManager buttonObserver,
+        ButtonObserver buttonObserver,
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
@@ -104,8 +104,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
         GetGasEstimates(true);
 
         periodicUpdateManager.AddPeriodicUpdater(this);
-        buttonObserver.AddEnterButtonObserver(this);
-        buttonObserver.AddTabButtonObserver(this);
+        buttonObserver.SubscribeObservable(this);
     }
 
     /// <summary>
@@ -129,8 +128,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     protected override void OnCancelClicked()
     {
         periodicUpdateManager.RemovePeriodicUpdater(this);
-        buttonObserver.RemoveEnterButtonObserver(this);
-        buttonObserver.RemoveTabButtonObserver(this);
+        buttonObserver.UnsubscribeObservable(this);
     }
 
     /// <summary>

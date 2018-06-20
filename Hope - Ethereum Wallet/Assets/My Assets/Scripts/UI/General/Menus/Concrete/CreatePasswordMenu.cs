@@ -12,7 +12,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, 
     public Button createPasswordButton;
 
     private UserWalletManager userWalletManager;
-    private ButtonObserverManager buttonObserver;
+    private ButtonObserver buttonObserver;
 
     private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
@@ -22,7 +22,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, 
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     [Inject]
-    public void Construct(UserWalletManager userWalletManager, ButtonObserverManager buttonObserver)
+    public void Construct(UserWalletManager userWalletManager, ButtonObserver buttonObserver)
     {
         this.userWalletManager = userWalletManager;
         this.buttonObserver = buttonObserver;
@@ -39,22 +39,14 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObserver, 
     }
 
     /// <summary>
-    /// Add the button observers.
+    /// Subscribe this class to the button observer.
     /// </summary>
-    private void OnEnable()
-    {
-        buttonObserver.AddTabButtonObserver(this);
-        buttonObserver.AddEnterButtonObserver(this);
-    }
+    private void OnEnable() => buttonObserver.SubscribeObservable(this);
 
     /// <summary>
-    /// Remove the button observers.
+    /// Unsubscribe this class from the button observer.
     /// </summary>
-    private void OnDisable()
-    {
-        buttonObserver.RemoveTabButtonObserver(this);
-        buttonObserver.RemoveEnterButtonObserver(this);
-    }
+    private void OnDisable() => buttonObserver.UnsubscribeObservable(this);
 
     /// <summary>
     /// Updates the button's state based on the text in the input fields.
