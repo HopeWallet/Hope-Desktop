@@ -82,8 +82,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<OptionsDropdownActionAssigner>().AsSingle().NonLazy();
         Container.Bind<MenuFactoryManager>().AsSingle().NonLazy();
         Container.Bind<PopupManager>().AsSingle().NonLazy();
-        Container.Bind<ButtonObserver>().AsSingle().NonLazy();
-        Container.Bind<MouseClickObserverManager>().AsSingle().NonLazy();
+        Container.Bind<ButtonClickObserver>().AsSingle().NonLazy();
+        Container.Bind<MouseClickObserver>().AsSingle().NonLazy();
     }
 
     /// <summary>

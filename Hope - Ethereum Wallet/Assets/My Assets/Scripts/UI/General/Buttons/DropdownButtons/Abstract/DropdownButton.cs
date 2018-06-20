@@ -3,19 +3,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
+public class DropdownButton : ImageButton, ILeftClickObservable, IRightClickObservable
 {
 
     public Text text;
     public DropdownButtonInfo[] dropdownButtons;
 
     private List<Button> buttonList = new List<Button>();
-    private GameObject mainButtonObj;
 
-    private MouseClickObserverManager mouseClickObserver;
+    private MouseClickObserver mouseClickObserver;
 
     [Inject]
-    public void Construct(MouseClickObserverManager mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
+    public void Construct(MouseClickObserver mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
 
     protected void OnEnable() => Button.onClick.AddListener(ChangeButtonDropdown);
 
@@ -34,8 +33,7 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
         buttonList.SafeForEach(button => Destroy(button.gameObject));
         buttonList.Clear();
 
-        mouseClickObserver.RemoveLeftClickObserver(this);
-        mouseClickObserver.RemoveRightClickObserver(this);
+        mouseClickObserver.UnsubscribeObservable(this);
     }
 
     private void OpenButtonDropdown()
@@ -63,8 +61,7 @@ public class DropdownButton : ImageButton, IObserveLeftClick, IObserveRightClick
             buttonToInstantiate = newButton;
         }
 
-        mouseClickObserver.AddLeftClickObserver(this);
-        mouseClickObserver.AddRightClickObserver(this);
+        mouseClickObserver.SubscribeObservable(this);
     }
 
     public void OnRightClick(ClickType clickType) => CheckBounds(clickType);

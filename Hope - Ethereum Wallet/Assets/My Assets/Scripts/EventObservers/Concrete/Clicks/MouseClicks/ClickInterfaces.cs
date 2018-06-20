@@ -1,7 +1,14 @@
 ﻿/// <summary>
+/// Base interface for all concrete click observables to implement.
+/// </summary>
+public interface IClickObservableBase
+{
+}
+
+/// <summary>
 /// Interface to implement to receive callbacks on left click.
 /// </summary>
-public interface IObserveLeftClick
+public interface ILeftClickObservable : IClickObservableBase
 {
 
     /// <summary>
@@ -13,7 +20,7 @@ public interface IObserveLeftClick
 /// <summary>
 /// Interface to implement to receive callbacks on right click.
 /// </summary>
-public interface IObserveRightClick
+public interface IRightClickObservable : IClickObservableBase
 {
 
     /// <summary>
@@ -25,7 +32,7 @@ public interface IObserveRightClick
 /// <summary>
 /// Interface to implement to receive callbacks on middle click.
 /// </summary>
-public interface IObserveMiddleClick
+public interface IMiddleClickObservable : IClickObservableBase
 {
 
     /// <summary>

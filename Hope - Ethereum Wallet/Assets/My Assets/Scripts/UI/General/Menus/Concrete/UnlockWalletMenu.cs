@@ -12,14 +12,14 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     public Button unlockButton;
     public Button restoreButton;
 
-    private ButtonObserver buttonObserver;
+    private ButtonClickObserver buttonObserver;
 
     /// <summary>
     /// Adds the dependencies required for this menu.
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     [Inject]
-    public void Construct(ButtonObserver buttonObserver) => this.buttonObserver = buttonObserver;
+    public void Construct(ButtonClickObserver buttonObserver) => this.buttonObserver = buttonObserver;
 
     /// <summary>
     /// Adds the button click events on start.

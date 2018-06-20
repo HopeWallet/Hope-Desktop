@@ -12,7 +12,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     public Button createPasswordButton;
 
     private UserWalletManager userWalletManager;
-    private ButtonObserver buttonObserver;
+    private ButtonClickObserver buttonObserver;
 
     private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
@@ -22,7 +22,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     [Inject]
-    public void Construct(UserWalletManager userWalletManager, ButtonObserver buttonObserver)
+    public void Construct(UserWalletManager userWalletManager, ButtonClickObserver buttonObserver)
     {
         this.userWalletManager = userWalletManager;
         this.buttonObserver = buttonObserver;

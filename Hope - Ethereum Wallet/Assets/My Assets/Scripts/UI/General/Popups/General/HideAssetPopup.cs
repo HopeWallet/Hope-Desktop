@@ -5,7 +5,7 @@ using Zenject;
 /// <summary>
 /// Class used for displaying the remove button on a TradableAsset.
 /// </summary>
-public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObserveLeftClick, IObserveRightClick
+public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, ILeftClickObservable, IRightClickObservable
 {
 
     // ==========
@@ -19,7 +19,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
 
     private UpdateManager updateManager;
     private PopupManager popupManager;
-    private MouseClickObserverManager clickObserver;
+    private MouseClickObserver clickObserver;
 
     private RectTransform rectTransform;
     private Rect buttonBounds;
@@ -45,8 +45,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
     protected void OnDestroy()
     {
         updateManager.RemoveLateUpdater(this);
-        clickObserver.RemoveLeftClickObserver(this);
-        clickObserver.RemoveRightClickObserver(this);
+        clickObserver.UnsubscribeObservable(this);
     }
 
     /// <summary>
@@ -58,8 +57,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
         button.onClick.AddListener(RemoveButtonDependencies);
 
         updateManager.AddLateUpdater(this);
-        clickObserver.AddLeftClickObserver(this);
-        clickObserver.AddRightClickObserver(this);
+        clickObserver.SubscribeObservable(this);
     }
 
     /// <summary>
@@ -69,7 +67,7 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, IObser
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="clickObserver"> The active ClickObserver. </param>
     [Inject]
-    public void Construct(UpdateManager updateManager, PopupManager popupManager, MouseClickObserverManager clickObserver)
+    public void Construct(UpdateManager updateManager, PopupManager popupManager, MouseClickObserver clickObserver)
     {
         this.updateManager = updateManager;
         this.popupManager = popupManager;

@@ -6,13 +6,13 @@ using UnityEngine;
 /// <summary>
 /// Class used for observing button clicks and notifying the certain subscribers.
 /// </summary>
-public class ButtonObserver : EventObserver<IButtonObservableBase>
+public class ButtonClickObserver : EventObserver<IButtonObservableBase>
 {
 
     /// <summary>
     /// Initializes the ButtonObserver by starting all the observers.
     /// </summary>
-    public ButtonObserver()
+    public ButtonClickObserver()
     {
         StartButtonObservers<IEscapeButtonObservable>(KeyCode.Escape, (button, click) => button.EscapeButtonPressed(click));
         StartButtonObservers<ITabButtonObservable>(KeyCode.Tab, (button, click) => button.TabButtonPressed(click));
@@ -31,10 +31,10 @@ public class ButtonObserver : EventObserver<IButtonObservableBase>
                   .Subscribe(_ => ButtonPressed<T>(ClickType.Down, b => buttonPressAction(b, ClickType.Down)));
 
         Observable.EveryUpdate().Where(_ => Input.GetKey(buttonKeyCode))
-                  .Subscribe(_ => ButtonPressed<T>(ClickType.Down, b => buttonPressAction(b, ClickType.Hold)));
+                  .Subscribe(_ => ButtonPressed<T>(ClickType.Hold, b => buttonPressAction(b, ClickType.Hold)));
 
         Observable.EveryUpdate().Where(_ => Input.GetKeyUp(buttonKeyCode))
-                  .Subscribe(_ => ButtonPressed<T>(ClickType.Down, b => buttonPressAction(b, ClickType.Up)));
+                  .Subscribe(_ => ButtonPressed<T>(ClickType.Up, b => buttonPressAction(b, ClickType.Up)));
     }
 
     /// <summary>
