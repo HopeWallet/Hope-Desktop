@@ -7,7 +7,7 @@ using UniRx;
 /// </summary>
 /// <typeparam name="T"> The type of the class inheriting this class. </typeparam>
 /// <typeparam name="TInputArg"> The type of the input argument to pass through to Input.xyz when checking for a click. </typeparam>
-public abstract class ClickObserver<T, TInputArg> : EventObserver<T> where T : EventObserver<T>
+public abstract class ClickObserver<T, TInputArg> : EventObserver<T>
 {
 
     /// <summary>
@@ -31,7 +31,7 @@ public abstract class ClickObserver<T, TInputArg> : EventObserver<T> where T : E
     /// <typeparam name="TClickObserver"> The specific type of the click observer to start the down, hold, and up click observations for. </typeparam>
     /// <param name="inputArg"> The value to pass into the Down, Hold, and Up click functions to check for a click. </param>
     /// <param name="clickAction"> The action to call once the click has been detected. </param>
-    protected void StartClickObservers<TClickObserver>(TInputArg inputArg, Action<T, ClickType> clickAction) where TClickObserver : T
+    protected void StartClickObservers<TClickObserver>(TInputArg inputArg, Action<TClickObserver, ClickType> clickAction) where TClickObserver : T
     {
         Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(ClickType.Down, b => clickAction(b, ClickType.Down)));
         Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(ClickType.Hold, b => clickAction(b, ClickType.Hold)));
