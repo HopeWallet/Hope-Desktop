@@ -14,8 +14,7 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
 
     public GasPriceObserver(PeriodicUpdateManager periodicUpdateManager)
     {
-        periodicUpdateManager.AddPeriodicUpdater(this);
-        GetUpdatedGasPrices();
+        periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     public void PeriodicUpdate() => GetUpdatedGasPrices();
@@ -40,6 +39,8 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
         UpdateObservable<IFastGasPriceObservable>(ref fastGasPrice, 
                                                   new GasPrice(new HexBigInteger(price.Value * 2)), 
                                                   observable => observable.FastGasPrice = fastGasPrice);
+
+        observables.SafeForEach(observable => observable.OnGasPricesUpdated());
     }
 
     private void UpdateObservable<T>(ref GasPrice gasPriceVariable, GasPrice gasPriceValue, Action<T> updateObservableAction) where T : IGasPriceObservableBase

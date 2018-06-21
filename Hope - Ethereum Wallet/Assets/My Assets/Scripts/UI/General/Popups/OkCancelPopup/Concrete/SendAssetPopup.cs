@@ -8,7 +8,7 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicUpdater, IEnterButtonObservable, ITabButtonObservable
+public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceObservable, IEnterButtonObservable, ITabButtonObservable
 {
 
     // FIX BUG:
@@ -30,7 +30,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
 
     public Dropdown speedDropdown;
 
-    private PeriodicUpdateManager periodicUpdateManager;
+    private GasPriceObserver gasPriceObserver;
     private ButtonClickObserver buttonObserver;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -41,19 +41,17 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
 
     private TradableAsset activeAsset;
 
-    private BigInteger slowPrice,
-                       standardPrice,
-                       fastPrice,
-                       lastEstimatedLimit;
+    private BigInteger lastEstimatedLimit;
 
-    private HexBigInteger gasPrice,
-                          gasLimit;
+    private HexBigInteger gasLimit,
+                          gasPrice;
 
     private decimal transferAmount;
 
     private bool isValidAmount,
                  isValidAddress,
-                 updating;
+                 updating,
+                 updatedBefore;
 
     private const int MAX_AMOUNT_FIELD_LENGTH = 30;
     private const int MAX_ADDRESS_FIELD_LENGTH = 42;
@@ -64,20 +62,26 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     /// </summary>
     public float UpdateInterval => 20f;
 
+    public GasPrice StandardGasPrice { get; set; }
+
+    public GasPrice SlowGasPrice { get; set; }
+
+    public GasPrice FastGasPrice { get; set; }
+
     /// <summary>
     /// Adds the required dependencies to this class.
     /// </summary>
-    /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use when checking the gas prices. </param>
+    /// <param name="gasPriceObserver"> The GasPriceObserver to use to receive gas prices. </param>
     /// <param name="tradableAssetManager"> The TradableAssetManager to use to retrieve the active asset. </param>
     /// <param name="tradableAssetImageManager"> The TradableAssetImageManager to use to retrieve the asset image. </param>
     [Inject]
-    public void Construct(PeriodicUpdateManager periodicUpdateManager,
+    public void Construct(GasPriceObserver gasPriceObserver,
         ButtonClickObserver buttonObserver,
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
     {
-        this.periodicUpdateManager = periodicUpdateManager;
+        this.gasPriceObserver = gasPriceObserver;
         this.buttonObserver = buttonObserver;
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
@@ -101,9 +105,9 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
 
         ValidateFields();
         SetSendAssetInfo();
-        GetGasEstimates(true);
+        OnGasPricesUpdated();
 
-        periodicUpdateManager.AddPeriodicUpdater(this);
+        gasPriceObserver.SubscribeObservable(this);
         buttonObserver.SubscribeObservable(this);
     }
 
@@ -118,16 +122,11 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     }
 
     /// <summary>
-    /// Updates the gas estimates.
-    /// </summary>
-    public void PeriodicUpdate() => GetGasEstimates();
-
-    /// <summary>
     /// Removes this component from the managers once the popoup is closed.
     /// </summary>
     protected override void OnCancelClicked()
     {
-        periodicUpdateManager.RemovePeriodicUpdater(this);
+        gasPriceObserver.UnsubscribeObservable(this);
         buttonObserver.UnsubscribeObservable(this);
     }
 
@@ -137,7 +136,9 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     /// </summary>
     protected override void OnOkClicked()
     {
-        periodicUpdateManager.RemovePeriodicUpdater(this);
+        gasPriceObserver.UnsubscribeObservable(this);
+        buttonObserver.UnsubscribeObservable(this);
+
         userWalletManager.TransferAsset(activeAsset, gasLimit, gasPrice, addressField.text, transferAmount);
     }
 
@@ -276,8 +277,10 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
         if (updating)
             return;
 
-        var correctPrice = (GasUtils.GasPriceTarget)speedDropdown.value == GasUtils.GasPriceTarget.Slow ? slowPrice :
-                           (GasUtils.GasPriceTarget)speedDropdown.value == GasUtils.GasPriceTarget.Standard ? standardPrice : fastPrice;
+        var correctPrice = (GasUtils.GasPriceTarget)speedDropdown.value == GasUtils.GasPriceTarget.Slow
+                                ? SlowGasPrice.FunctionalGasPrice.Value :
+                           (GasUtils.GasPriceTarget)speedDropdown.value == GasUtils.GasPriceTarget.Standard
+                                ? StandardGasPrice.FunctionalGasPrice.Value : FastGasPrice.FunctionalGasPrice.Value;
 
         SetGasValues(lastEstimatedLimit, correctPrice);
     }
@@ -300,55 +303,13 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
     }
 
     /// <summary>
-    /// Estimates the gas limit and price required to send the transaction.
-    /// </summary>
-    /// <param name="firstTime"> Whether this is the first time gas is being estimated. Sets the advanced mode price and limit fields to the estimate if so. </param>
-    private void GetGasEstimates(bool firstTime = false)
-    {
-        updating = true;
-
-        activeAsset.GetTransferGasLimit(isValidAddress ? addressField.text : userWalletManager.WalletAddress, 
-                                        isValidAmount ? transferAmount : (decimal)activeAsset.AssetBalance, 
-                                        limit =>
-        {
-            GasUtils.EstimateGasPrice(GasUtils.GasPriceTarget.Standard, price =>
-            {
-                tradableAssetManager.EtherAsset.UpdateBalance(() =>
-                {
-                    BigInteger currentLimit;
-                    BigInteger.TryParse(gasLimitField.text, out currentLimit);
-
-                    lastEstimatedLimit = limit;
-                    slowPrice = (price * 2) / 3;
-                    standardPrice = price;
-                    fastPrice = price * 2;
-
-                    if (!advancedModeToggle.isOn || firstTime)
-                    {
-                        SetGasValues(limit, price);
-                        UpdateGasFieldText(limit);
-                    }
-                    else if (currentLimit < lastEstimatedLimit)
-                    {
-                        gasLimitField.text = limit + "";
-                    }
-
-                    assetBalance.text = StringUtils.LimitEnd(activeAsset.AssetBalance + "", MAX_BALANCE_TEXT_LENGTH, "...");
-
-                    updating = false;
-                });
-            });
-        });
-    }
-
-    /// <summary>
     /// Updates the text for the gas field based on the new limit and price.
     /// </summary>
     /// <param name="limit"> The new gas limit. </param>
     private void UpdateGasFieldText(BigInteger limit)
     {
-        gasLimitField.text = limit + "";
-        gasPriceField.text = GasUtils.GetReadableGasPrice(standardPrice) + "";
+        gasLimitField.text = limit.ToString();
+        gasPriceField.text = StandardGasPrice.ReadableGasPrice.ToString();
     }
 
     /// <summary>
@@ -373,5 +334,42 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IPeriodicU
             return;
 
         (advancedModeToggle.isOn ? advancedModeFields : simpleModeFields).MoveToNextInputField();
+    }
+
+    /// <summary>
+    /// Updates the gas of the transaction.
+    /// </summary>
+    public void OnGasPricesUpdated()
+    {
+        updating = true;
+
+        activeAsset.GetTransferGasLimit(isValidAddress ? addressField.text : userWalletManager.WalletAddress,
+                                        isValidAmount ? transferAmount : (decimal)activeAsset.AssetBalance,
+                                        limit =>
+        {
+            tradableAssetManager.EtherAsset.UpdateBalance(() =>
+            {
+                BigInteger currentLimit;
+                BigInteger.TryParse(gasLimitField.text, out currentLimit);
+
+                lastEstimatedLimit = limit;
+
+                if (!advancedModeToggle.isOn || !updatedBefore)
+                {
+                    updatedBefore = true;
+
+                    SetGasValues(limit, StandardGasPrice.FunctionalGasPrice.Value);
+                    UpdateGasFieldText(limit);
+                }
+                else if (currentLimit < lastEstimatedLimit)
+                {
+                    gasLimitField.text = limit.ToString();
+                }
+
+                assetBalance.text = StringUtils.LimitEnd(activeAsset.AssetBalance + "", MAX_BALANCE_TEXT_LENGTH, "...");
+
+                updating = false;
+            });
+        });
     }
 }

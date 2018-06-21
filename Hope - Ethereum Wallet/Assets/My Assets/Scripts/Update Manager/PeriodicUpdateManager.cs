@@ -36,8 +36,12 @@ public sealed class PeriodicUpdateManager : IUpdater
     /// Adds an IUpdater to the dictionary of IPeriodicUpdaters to periodically update.
     /// </summary>
     /// <param name="updater"> The IPeriodicUpdater to update in given intervals. </param>
-    public void AddPeriodicUpdater(IPeriodicUpdater updater)
+    /// <param name="firstUpdateNow"> Whether the first PeriodicUpdate should occur now. </param>
+    public void AddPeriodicUpdater(IPeriodicUpdater updater, bool firstUpdateNow = false)
     {
+        if (firstUpdateNow)
+            updater.PeriodicUpdate();
+
         periodicUpdaters[updater] = new KeyValuePair<float, bool>(updater.UpdateInterval, false);
     }
 

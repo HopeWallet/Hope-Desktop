@@ -4,6 +4,10 @@
 /// </summary>
 public interface IGasPriceObservableBase
 {
+    /// <summary>
+    /// Called after the gas prices have been updated again.
+    /// </summary>
+    void OnGasPricesUpdated();
 }
 
 /// <summary>

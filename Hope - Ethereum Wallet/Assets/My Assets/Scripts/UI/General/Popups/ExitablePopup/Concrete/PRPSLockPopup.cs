@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using Zenject;
 using Vector3 = UnityEngine.Vector3;
 
-public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater
+public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater, IStandardGasPriceObservable
 {
 
     public Text prpsBalanceText;
@@ -22,11 +22,10 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private PeriodicUpdateManager periodicUpdateManager;
     private EthereumNetwork ethereumNetwork;
     private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
-    private TransactionHelper lockPurposeHelper;
 
     public float UpdateInterval => 10f;
 
-    public TransactionHelper ReleasePurposeHelper { get; private set; }
+    public GasPrice StandardGasPrice { get; set; }
 
     [Inject]
     public void Construct(HodlerContract hodlerContract, 
@@ -34,51 +33,53 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         UserWalletManager userWalletManager, 
         PeriodicUpdateManager periodicUpdateManager,
         EthereumNetworkManager ethereumNetworkManager,
-        LockedPRPSItemButton.Factory lockedPRPSItemFactory,
-        TransactionHelper lockPurposeHelper,
-        TransactionHelper releasePurposeHelper)
+        LockedPRPSItemButton.Factory lockedPRPSItemFactory)
     {
         this.hodlerContract = hodlerContract;
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
         this.lockedPRPSItemFactory = lockedPRPSItemFactory;
-        this.lockPurposeHelper = lockPurposeHelper;
-        ReleasePurposeHelper = releasePurposeHelper;
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
     }
 
     private void Awake()
     {
-        StartNewItemSearch();
         StartLockPurposeHelper();
+        UpdatePRPSDisplay();
     }
 
-    private void OnEnable() => periodicUpdateManager.AddPeriodicUpdater(this);
+    private void OnEnable()
+    {
+        TradableAssetManager.OnBalancesUpdated += UpdatePRPSDisplay;
+        periodicUpdateManager.AddPeriodicUpdater(this, true);
+    }
 
     private void OnDisable()
     {
+        TradableAssetManager.OnBalancesUpdated -= UpdatePRPSDisplay;
+
         periodicUpdateManager.RemovePeriodicUpdater(this);
 
-        lockPurposeHelper.Stop();
-        ReleasePurposeHelper.Stop();
+        //lockPurposeHelper.Stop();
+        //ReleasePurposeHelper.Stop();
     }
 
     public void PeriodicUpdate() => StartNewItemSearch();
 
+    private void UpdatePRPSDisplay() => prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
+
     private void StartLockPurposeHelper()
     {
-        lockPurposeHelper.Start(hodlerContract[HodlerContract.FUNC_HODL],
-                                null,
-                                new BigInteger(999999),
-                                SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
-                                new BigInteger(12));
+        //lockPurposeHelper.Start(hodlerContract[HodlerContract.FUNC_HODL],
+        //                        null,
+        //                        new BigInteger(999999),
+        //                        SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
+        //                        new BigInteger(12));
     }
 
     private void StartNewItemSearch()
     {
-        prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
-
         WebClientUtils.GetTransactionList(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
                                                                                     userWalletManager.WalletAddress,
                                                                                     hodlerContract.ContractAddress),
@@ -113,9 +114,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void UpdateList(HodlerItem item, BigInteger timeStamp)
     {
-        ReleasePurposeHelper.Start(hodlerContract[HodlerContract.FUNC_RELEASE],
-                                   OnReleaseGasEstimated,
-                                   item.Id);
+        //ReleasePurposeHelper.Start(hodlerContract[HodlerContract.FUNC_RELEASE],
+        //                           OnReleaseGasEstimated,
+        //                           item.Id);
 
         item.LockedTimeStamp = timeStamp;
 
@@ -127,12 +128,16 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         items.Sort((i1, i2) => i1.ButtonInfo.LockedTimeStamp.CompareTo(i2.ButtonInfo.LockedTimeStamp));
         items.ForEach(i => i.transform.SetSiblingIndex(items.IndexOf(i)));
 
-        OnReleaseGasEstimated();
+        //OnReleaseGasEstimated();
     }
 
-    private void OnReleaseGasEstimated()
+    //private void OnReleaseGasEstimated()
+    //{
+    //    items.ForEach(item => item.UpdateTransactionGas(ReleasePurposeHelper));
+    //}
+
+    public void OnGasPricesUpdated()
     {
-        items.ForEach(item => item.UpdateTransactionGas(ReleasePurposeHelper));
     }
 
     private void RemoveItemButton(HodlerItem item)
@@ -159,5 +164,4 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
         return newItem;
     }
-
 }
