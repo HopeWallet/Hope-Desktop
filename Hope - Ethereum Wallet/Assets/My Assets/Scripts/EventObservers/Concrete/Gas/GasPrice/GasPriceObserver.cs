@@ -30,16 +30,16 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
             return;
 
         UpdateObservable<ISlowGasPriceObservable>(ref slowGasPrice, 
-                                                new GasPrice(new HexBigInteger((price.Value * 2) / 3)), 
-                                                observable => observable.SlowGasPrice = slowGasPrice);
+                                                  new GasPrice(new HexBigInteger((price.Value * 2) / 3)), 
+                                                  observable => observable.SlowGasPrice = slowGasPrice);
 
         UpdateObservable<IStandardGasPriceObservable>(ref standardGasPrice, 
-                                                    new GasPrice(price), 
-                                                    observable => observable.StandardGasPrice = standardGasPrice);
+                                                      new GasPrice(price), 
+                                                      observable => observable.StandardGasPrice = standardGasPrice);
 
         UpdateObservable<IFastGasPriceObservable>(ref fastGasPrice, 
-                                                new GasPrice(new HexBigInteger(price.Value * 2)), 
-                                                observable => observable.FastGasPrice = fastGasPrice);
+                                                  new GasPrice(new HexBigInteger(price.Value * 2)), 
+                                                  observable => observable.FastGasPrice = fastGasPrice);
     }
 
     private void UpdateObservable<T>(ref GasPrice gasPriceVariable, GasPrice gasPriceValue, Action<T> updateObservableAction) where T : IGasPriceObservableBase

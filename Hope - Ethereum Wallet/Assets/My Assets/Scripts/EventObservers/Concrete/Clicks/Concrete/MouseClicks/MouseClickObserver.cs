@@ -7,10 +7,19 @@ using UnityEngine;
 public class MouseClickObserver : ClickObserver<IClickObservableBase, int>
 {
 
+    /// <summary>
+    /// The function that alerts a click down.
+    /// </summary>
     protected override Func<int, bool> DownClickFunc => val => Input.GetMouseButtonDown(val);
 
+    /// <summary>
+    /// The function that alerts a click hold.
+    /// </summary>
     protected override Func<int, bool> HoldClickFunc => val => Input.GetMouseButton(val);
 
+    /// <summary>
+    /// The function that alerts a click up.
+    /// </summary>
     protected override Func<int, bool> UpClickFunc => val => Input.GetMouseButtonUp(val);
 
     /// <summary>

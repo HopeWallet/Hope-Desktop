@@ -3,7 +3,6 @@ using Nethereum.Contracts;
 using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
-using Zenject;
 
 public class TransactionHelper : IPeriodicUpdater
 {
