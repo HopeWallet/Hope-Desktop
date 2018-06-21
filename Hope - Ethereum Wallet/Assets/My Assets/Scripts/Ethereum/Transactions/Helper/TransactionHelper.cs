@@ -41,8 +41,7 @@ public class TransactionHelper : IPeriodicUpdater
         this.onEstimateFinished = onEstimateFinished;
         this.functionToEstimate = functionToEstimate;
 
-        if (lastFunction == null)
-            periodicUpdateManager.AddPeriodicUpdater(this, true);
+        if (lastFunction == null) periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     public void Stop()

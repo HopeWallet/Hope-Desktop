@@ -2,7 +2,6 @@
 using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
-using Zenject;
 
 /// <summary>
 /// Contract which is used for locking purpose and receiving dubi.
