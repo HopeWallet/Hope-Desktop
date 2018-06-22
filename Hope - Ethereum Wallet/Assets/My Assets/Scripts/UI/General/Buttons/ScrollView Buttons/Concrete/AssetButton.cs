@@ -21,6 +21,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <summary>
     /// Injects the required dependencies into this class.
     /// </summary>
+    /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager object. </param>
     /// <param name="tradableAssetButtonManager"> The active TradableAssetButtonManager object. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager object. </param>

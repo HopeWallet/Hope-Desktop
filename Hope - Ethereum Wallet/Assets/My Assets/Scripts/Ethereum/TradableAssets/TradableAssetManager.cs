@@ -23,9 +23,9 @@ public class TradableAssetManager : IPeriodicUpdater
     public TradableAsset ActiveTradableAsset { get; private set; }
 
     /// <summary>
-    /// The TradableAsset that is Ether.
+    /// The active ethereum asset.
     /// </summary>
-    public TradableAsset EtherAsset { get; private set; }
+    public EtherAsset EtherAsset { get; private set; }
 
     /// <summary>
     /// The amount of time between each PeriodicUpdate.
@@ -60,7 +60,7 @@ public class TradableAssetManager : IPeriodicUpdater
 
         if (tradableAsset is EtherAsset)
         {
-            EtherAsset = tradableAsset;
+            EtherAsset = tradableAsset as EtherAsset;
             SetNewActiveAsset(tradableAsset);
         }
 

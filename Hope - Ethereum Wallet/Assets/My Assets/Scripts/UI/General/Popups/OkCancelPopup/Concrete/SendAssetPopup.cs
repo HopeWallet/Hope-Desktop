@@ -8,7 +8,7 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceObservable, IEnterButtonObservable, ITabButtonObservable
+public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceObservable, IEnterButtonObservable, ITabButtonObservable, IEtherBalanceObservable
 {
 
     // FIX BUG:
@@ -32,6 +32,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
 
     private GasPriceObserver gasPriceObserver;
     private ButtonClickObserver buttonObserver;
+    private EtherBalanceObserver etherBalanceObserver;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
@@ -62,27 +63,46 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
     /// </summary>
     public float UpdateInterval => 20f;
 
+    /// <summary>
+    /// The gas price for standard transaction speed.
+    /// </summary>
     public GasPrice StandardGasPrice { get; set; }
 
+    /// <summary>
+    /// The gas price for slow transaction speed.
+    /// </summary>
     public GasPrice SlowGasPrice { get; set; }
 
+    /// <summary>
+    /// The gas price for fast transaction speed.
+    /// </summary>
     public GasPrice FastGasPrice { get; set; }
+
+    /// <summary>
+    /// The ether balance of the current wallet.
+    /// </summary>
+    public dynamic EtherBalance { get; set; }
 
     /// <summary>
     /// Adds the required dependencies to this class.
     /// </summary>
     /// <param name="gasPriceObserver"> The GasPriceObserver to use to receive gas prices. </param>
+    /// <param name="buttonObserver"> The active ButtonClickObserver. </param>
+    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
     /// <param name="tradableAssetManager"> The TradableAssetManager to use to retrieve the active asset. </param>
     /// <param name="tradableAssetImageManager"> The TradableAssetImageManager to use to retrieve the asset image. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
     public void Construct(GasPriceObserver gasPriceObserver,
         ButtonClickObserver buttonObserver,
+        EtherBalanceObserver etherBalanceObserver,
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
     {
         this.gasPriceObserver = gasPriceObserver;
         this.buttonObserver = buttonObserver;
+        this.etherBalanceObserver = etherBalanceObserver;
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
@@ -106,9 +126,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
         ValidateFields();
         SetSendAssetInfo();
         OnGasPricesUpdated();
-
-        gasPriceObserver.SubscribeObservable(this);
-        buttonObserver.SubscribeObservable(this);
+        SubscribeAll();
     }
 
     /// <summary>
@@ -122,24 +140,41 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
     }
 
     /// <summary>
-    /// Removes this component from the managers once the popoup is closed.
+    /// Unsubscribes this component from the observers once the popoup is closed.
     /// </summary>
-    protected override void OnCancelClicked()
-    {
-        gasPriceObserver.UnsubscribeObservable(this);
-        buttonObserver.UnsubscribeObservable(this);
-    }
+    protected override void OnCancelClicked() => UnsubscribeAll();
 
     /// <summary>
     /// Called when the Send button is clicked, which transfers or attempts to transfer the current asset given the input from this popup.
-    /// Also removes this periodic updater from the manager.
+    /// Also unsubscribes this class from the observers.
     /// </summary>
     protected override void OnOkClicked()
     {
-        gasPriceObserver.UnsubscribeObservable(this);
-        buttonObserver.UnsubscribeObservable(this);
-
+        UnsubscribeAll();
         userWalletManager.TransferAsset(activeAsset, gasLimit, gasPrice, addressField.text, transferAmount);
+    }
+
+    /// <summary>
+    /// Subscribes this class to the different observers.
+    /// </summary>
+    private void SubscribeAll()
+    {
+        ObserverHelpers.SubscribeObservables(this, etherBalanceObserver, gasPriceObserver, buttonObserver);
+
+        //etherBalanceObserver.SubscribeObservable(this);
+        //gasPriceObserver.SubscribeObservable(this);
+        //buttonObserver.SubscribeObservable(this);
+    }
+
+    /// <summary>
+    /// Unsubsribes this class from the different observers.
+    /// </summary>
+    private void UnsubscribeAll()
+    {
+        ObserverHelpers.UnsubscribeObservables(this, etherBalanceObserver, gasPriceObserver, buttonObserver);
+        //etherBalanceObserver.UnsubscribeObservable(this);
+        //gasPriceObserver.UnsubscribeObservable(this);
+        //buttonObserver.UnsubscribeObservable(this);
     }
 
     /// <summary>
