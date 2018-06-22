@@ -196,30 +196,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
     /// <summary>
     /// Fixes the amount field so that the length of the amount does not go over the overflow limit of the decimal value, or the amount of decimals the asset can hodl.
     /// </summary>
-    private void FixAmountField()
-    {
-        var sendAmount = amountField.text;
-
-        if (sendAmount == null)
-            return;
-
-        sendAmount = new string(sendAmount.Where(c => char.IsDigit(c) || c == '.').ToArray());
-        amountField.text = sendAmount;
-
-        var decimals = activeAsset.AssetDecimals;
-        var decimalIndex = sendAmount.IndexOf(".");
-        var assetDecimalLength = decimals + decimalIndex + 1;
-
-        if (decimals == 0)
-            if (decimalIndex != -1)
-                sendAmount = sendAmount.Substring(0, sendAmount.Length - 1);
-
-        var substringLength = assetDecimalLength > MAX_AMOUNT_FIELD_LENGTH || decimalIndex == -1 ? MAX_AMOUNT_FIELD_LENGTH : assetDecimalLength;
-        if (sendAmount.Length > substringLength)
-            sendAmount = sendAmount.Substring(0, substringLength);
-
-        amountField.text = sendAmount;
-    }
+    private void FixAmountField() => amountField.RestrictToBalance(activeAsset);
 
     /// <summary>
     /// Makes sure the address field does not go over the length of an address, and checks if it is a valid address.

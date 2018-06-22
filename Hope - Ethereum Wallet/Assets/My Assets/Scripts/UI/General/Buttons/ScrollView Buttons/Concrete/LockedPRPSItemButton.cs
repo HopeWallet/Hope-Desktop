@@ -16,7 +16,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     private EthereumNetworkManager.Settings networkSettings;
     private HodlerContract hodlerContract;
     private UserWalletManager userWalletManager;
-    private FunctionHelper releasePurposeHelper;
+    private FunctionEstimation releasePurposeHelper;
 
     private BigInteger id;
     private decimal lockedPurpose;
@@ -53,7 +53,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         //hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.GasPrice, id, lockedPurpose);
     }
 
-    public void UpdateTransactionGas(FunctionHelper releasePurposeHelper)
+    public void UpdateTransactionGas(FunctionEstimation releasePurposeHelper)
     {
         this.releasePurposeHelper = releasePurposeHelper;
 
