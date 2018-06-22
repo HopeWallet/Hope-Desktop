@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Zenject;
 
 /// <summary>
 /// Class which updates IPeriodicUpdaters repeatedly in periodic intervals.

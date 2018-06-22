@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 /// <summary>
 /// Base class for all observer classes to extend.
@@ -9,11 +8,6 @@ public abstract class EventObserver<TObservableBase>
 {
 
     protected readonly List<TObservableBase> observables = new List<TObservableBase>();
-
-    /// <summary>
-    /// The type of the observable.
-    /// </summary>
-    public Type ObservableType => typeof(TObservableBase);
 
     /// <summary>
     /// Subscribes the observable to the current list of observables.
