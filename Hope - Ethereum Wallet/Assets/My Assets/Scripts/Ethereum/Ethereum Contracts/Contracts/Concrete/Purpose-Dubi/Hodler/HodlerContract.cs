@@ -44,7 +44,7 @@ public class HodlerContract : ContractBase
                                          userWalletManager.WalletAddress,
                                          gasLimit,
                                          gasPrice,
-                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
+                                         () => UnityEngine.Debug.Log("Successfully locked " + SolidityUtils.ConvertFromUInt(value, 18) + " PRPS"),
                                          id,
                                          value,
                                          monthsToLock);

@@ -1,4 +1,6 @@
-﻿using UnityEngine.UI;
+﻿using Hope.Utils.EthereumUtils;
+using System.Numerics;
+using UnityEngine.UI;
 
 public class ConfirmPRPSLockPopup : ConfirmTransactionRequestPopup<ConfirmPRPSLockPopup>
 {
@@ -7,7 +9,8 @@ public class ConfirmPRPSLockPopup : ConfirmTransactionRequestPopup<ConfirmPRPSLo
                 prpsAmountText,
                 dubiAmountText;
 
-    protected override void InternalSetConfirmationValues(object[] transactionInput) => SetLockPrpsValues((int)transactionInput[0], (decimal)transactionInput[1]);
+    protected override void InternalSetConfirmationValues(object[] transactionInput) 
+        => SetLockPrpsValues((int)transactionInput[0], SolidityUtils.ConvertFromUInt(transactionInput[1], 18));
 
     private void SetLockPrpsValues(int monthLock, decimal lockAmount)
     {

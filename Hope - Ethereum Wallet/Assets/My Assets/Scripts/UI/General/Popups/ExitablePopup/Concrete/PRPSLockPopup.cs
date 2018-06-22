@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -18,6 +19,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
                       rewardAmountField;
 
     private readonly List<LockedPRPSItemButton> items = new List<LockedPRPSItemButton>();
+    private readonly HashSet<BigInteger> usedIds = new HashSet<BigInteger>();
 
     private HodlerContract hodlerContract;
     private TradableAssetManager tradableAssetManager;
@@ -25,6 +27,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private PeriodicUpdateManager periodicUpdateManager;
     private EthereumNetwork ethereumNetwork;
     private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
+
+    private decimal purposeToLock;
 
     public FunctionEstimation LockPurposeEstimation { get; private set; }
 
@@ -167,6 +171,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
             items.Remove(sameItem);
             Destroy(sameItem.gameObject);
         }
+
+        else
+        {
+            usedIds.Add(item.Id);
+        }
     }
 
     private LockedPRPSItemButton CreateItemButton(HodlerItem item)
@@ -178,6 +187,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         rectTransform.localScale = Vector3.one;
 
         items.Add(newItem);
+        usedIds.Add(item.Id);
 
         return newItem;
     }
@@ -185,10 +195,17 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private void OnLockFieldsChanged()
     {
         lockAmountField.RestrictToBalance(tradableAssetManager.ActiveTradableAsset);
+        purposeToLock = string.IsNullOrEmpty(lockAmountField.text) ? 0 : decimal.Parse(lockAmountField.text);
+        rewardAmountField.text = (purposeToLock * Math.Round(((decimal)(lockPeriodDropdown.value + 1) / 100) * (decimal)1.2, 2)).ToString();
     }
 
     private void LockPurpose()
     {
-        
+        hodlerContract.Hodl(userWalletManager,
+                            LockPurposeEstimation.GasLimit,
+                            LockPurposeEstimation.StandardGasPrice.FunctionalGasPrice,
+                            RandomUtils.GenerateRandomBigInteger(usedIds),
+                            SolidityUtils.ConvertToUInt(purposeToLock, tradableAssetManager.ActiveTradableAsset.AssetDecimals),
+                            (int)(Math.Round((lockPeriodDropdown.value + 1) * (decimal)1.2) * 3));
     }
 }
