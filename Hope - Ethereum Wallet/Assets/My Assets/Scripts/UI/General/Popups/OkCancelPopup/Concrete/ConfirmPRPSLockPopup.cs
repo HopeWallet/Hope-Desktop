@@ -9,8 +9,7 @@ public class ConfirmPRPSLockPopup : ConfirmTransactionRequestPopup<ConfirmPRPSLo
                 prpsAmountText,
                 dubiAmountText;
 
-    protected override void InternalSetConfirmationValues(object[] transactionInput) 
-        => SetLockPrpsValues((int)transactionInput[0], SolidityUtils.ConvertFromUInt(transactionInput[1], 18));
+    protected override void InternalSetConfirmationValues(object[] transactionInput) => SetLockPrpsValues((int)transactionInput[0], (decimal)transactionInput[1]);
 
     private void SetLockPrpsValues(int monthLock, decimal lockAmount)
     {

@@ -72,7 +72,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
         var amount = start + SolidityUtils.ConvertFromUInt(transaction.Value, tradableAsset.AssetDecimals);
         var symbol = tradableAsset.AssetSymbol;
 
-        amountText.text = amount.LimitEnd(18 - symbol.Length, "...") + " " + symbol;
+        amountText.SetText(amount.LimitEnd(18 - symbol.Length, "...") + " " + symbol);
         amountText.color = send ? UIColors.Red : UIColors.Green;
     }
 
@@ -83,7 +83,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     private void SetAddress(TransactionInfo transaction)
     {
         var address = transaction.Type == TransactionInfo.TransactionType.Send ? transaction.To : transaction.From;
-        addressText.text = address.LimitEnd(6) + "..." + address.Substring(address.Length - 4, 4);
+        addressText.SetText(address.LimitEnd(6) + "..." + address.Substring(address.Length - 4, 4));
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <param name="transaction"> The info of this transaction. </param>
     private void SetDate(TransactionInfo transaction)
     {
-        dateText.text = DateTimeUtils.TimeStampToDateTime(transaction.TimeStamp).GetStringFormattedDate();
+        dateText.SetText(DateTimeUtils.TimeStampToDateTime(transaction.TimeStamp).GetStringFormattedDate());
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <param name="transaction"> The info of this transaction. </param>
     private void SetTimeFromNow(TransactionInfo transaction)
     {
-        timeFromNowText.text = DateTimeUtils.GetMaxTimeInterval(DateTimeUtils.GetCurrentUnixTime() - transaction.TimeStamp, " ago");
+        timeFromNowText.SetText(DateTimeUtils.GetMaxTimeInterval(DateTimeUtils.GetCurrentUnixTime() - transaction.TimeStamp, " ago"));
     }
 
     /// <summary>

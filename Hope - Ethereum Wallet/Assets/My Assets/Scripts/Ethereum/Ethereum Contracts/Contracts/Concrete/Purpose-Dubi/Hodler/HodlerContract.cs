@@ -35,7 +35,16 @@ public class HodlerContract : ContractBase
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
-    public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, BigInteger value, int monthsToLock)
+    /// <summary>
+    /// Locks a certain
+    /// </summary>
+    /// <param name="userWalletManager"></param>
+    /// <param name="gasLimit"></param>
+    /// <param name="gasPrice"></param>
+    /// <param name="id"></param>
+    /// <param name="value"></param>
+    /// <param name="monthsToLock"></param>
+    public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
@@ -44,9 +53,9 @@ public class HodlerContract : ContractBase
                                          userWalletManager.WalletAddress,
                                          gasLimit,
                                          gasPrice,
-                                         () => UnityEngine.Debug.Log("Successfully locked " + SolidityUtils.ConvertFromUInt(value, 18) + " PRPS"),
+                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
                                          id,
-                                         value,
+                                         SolidityUtils.ConvertToUInt(value, 18),
                                          monthsToLock);
         }, gasLimit, gasPrice, monthsToLock, value);
     }

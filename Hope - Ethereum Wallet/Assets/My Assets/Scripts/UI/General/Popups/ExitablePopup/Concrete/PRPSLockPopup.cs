@@ -88,12 +88,14 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private void OnPurposeUpdated()
     {
         LockPurposeEstimation.Estimate(hodlerContract[HodlerContract.FUNC_HODL],
-                                  null,
-                                  new BigInteger(999999),
-                                  SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
-                                  new BigInteger(12));
+                                       null,
+                                       new BigInteger(999999),
+                                       SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
+                                       new BigInteger(12));
 
         prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
+
+        OnLockFieldsChanged();
     }
 
     private void StartNewItemSearch()
@@ -197,6 +199,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         lockAmountField.RestrictToBalance(tradableAssetManager.ActiveTradableAsset);
         purposeToLock = string.IsNullOrEmpty(lockAmountField.text) ? 0 : decimal.Parse(lockAmountField.text);
         rewardAmountField.text = (purposeToLock * Math.Round(((decimal)(lockPeriodDropdown.value + 1) / 100) * (decimal)1.2, 2)).ToString();
+
+        lockButton.interactable = LockPurposeEstimation.CanExecuteTransaction 
+                    && (purposeToLock > 0 && purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
     }
 
     private void LockPurpose()
@@ -205,7 +210,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
                             LockPurposeEstimation.GasLimit,
                             LockPurposeEstimation.StandardGasPrice.FunctionalGasPrice,
                             RandomUtils.GenerateRandomBigInteger(usedIds),
-                            SolidityUtils.ConvertToUInt(purposeToLock, tradableAssetManager.ActiveTradableAsset.AssetDecimals),
+                            purposeToLock,
                             (int)(Math.Round((lockPeriodDropdown.value + 1) * (decimal)1.2) * 3));
     }
 }
