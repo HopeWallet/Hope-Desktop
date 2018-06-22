@@ -39,20 +39,22 @@ public class FunctionHelper : IStandardGasPriceObservable, IEtherBalanceObservab
 
     public void EstimateFunctionCost(Function function, Action onEstimateFinished, params object[] input)
     {
+        if (GasLimit == null)
+            GasUtils.EstimateGasLimit(function, userWalletManager.WalletAddress, limit => OnGasLimitReceived(onEstimateFinished, limit), input);
+        else
+            OnGasLimitReceived(onEstimateFinished, GasLimit.Value);
     }
 
     public void Stop()
     {
     }
 
-    private void EstimateGasLimit(Function function, Action onEstimateFinished, params object[] input)
-    {
-        GasUtils.EstimateGasLimit(function, userWalletManager.WalletAddress, limit => OnGasLimitReceived(onEstimateFinished, limit), input);
-    }
-
     private void OnGasLimitReceived(Action onEstimateFinished, BigInteger gasLimit)
     {
         GasLimit = new HexBigInteger(gasLimit);
+
+        RecheckIfFunctionCanBeSent();
+        onEstimateFinished?.Invoke();
     }
 
     public void OnGasPricesUpdated() => RecheckIfFunctionCanBeSent();

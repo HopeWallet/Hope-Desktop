@@ -120,9 +120,10 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
 
         ValidateFields();
         SetSendAssetInfo();
-        OnGasPricesUpdated();
 
         ObserverHelpers.SubscribeObservables(this, etherBalanceObserver, gasPriceObserver, buttonObserver);
+
+        OnGasPricesUpdated();
     }
 
     /// <summary>
@@ -364,7 +365,6 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
             if (!advancedModeToggle.isOn || !updatedBefore)
             {
                 updatedBefore = true;
-                UnityEngine.Debug.Log(StandardGasPrice);
                 SetGasValues(limit, StandardGasPrice.FunctionalGasPrice.Value);
                 UpdateGasFieldText(limit);
             }
