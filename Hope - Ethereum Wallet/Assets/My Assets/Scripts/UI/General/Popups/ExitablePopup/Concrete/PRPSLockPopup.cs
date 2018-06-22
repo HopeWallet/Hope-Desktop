@@ -7,12 +7,15 @@ using UnityEngine.UI;
 using Zenject;
 using Vector3 = UnityEngine.Vector3;
 
-public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater, IStandardGasPriceObservable
+public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater
 {
 
-    public Text prpsBalanceText;
-
     public Transform itemSpawnTransform;
+    public Dropdown lockPeriodDropdown;
+    public Button lockButton;
+    public Text prpsBalanceText;
+    public InputField lockAmountField,
+                      rewardAmountField;
 
     private readonly List<LockedPRPSItemButton> items = new List<LockedPRPSItemButton>();
 
@@ -26,8 +29,6 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     public FunctionEstimation LockPurposeEstimation { get; private set; }
 
     public FunctionEstimation ReleasePurposeEstimation { get; private set; }
-
-    public GasPrice StandardGasPrice { get; set; }
 
     public float UpdateInterval => 10f;
 
@@ -53,12 +54,19 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
     }
 
-    private void Awake() => OnPurposeUpdated();
+    private void Awake()
+    {
+        OnPurposeUpdated();
+    }
 
     private void OnEnable()
     {
         TradableAssetManager.OnBalancesUpdated += OnPurposeUpdated;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
+
+        lockAmountField.onValueChanged.AddListener(val => OnLockFieldsChanged());
+        lockPeriodDropdown.onValueChanged.AddListener(val => OnLockFieldsChanged());
+        lockButton.onClick.AddListener(LockPurpose);
     }
 
     private void OnDisable()
@@ -136,21 +144,17 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void EstimateReleaseGas()
     {
-        if (items.Count == 0)
+        if (items.Count == 0 || ReleasePurposeEstimation.GasLimit != null)
             return;
 
         ReleasePurposeEstimation.Estimate(hodlerContract[HodlerContract.FUNC_RELEASE],
                                           OnReleaseGasEstimated,
-                                          items.Single().ButtonInfo.Id);
+                                          items.First().ButtonInfo.Id);
     }
 
     private void OnReleaseGasEstimated()
     {
         items.ForEach(item => item.UpdateTransactionGas(ReleasePurposeEstimation));
-    }
-
-    public void OnGasPricesUpdated()
-    {
     }
 
     private void RemoveItemButton(HodlerItem item)
@@ -176,5 +180,15 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         items.Add(newItem);
 
         return newItem;
+    }
+
+    private void OnLockFieldsChanged()
+    {
+        lockAmountField.RestrictToBalance(tradableAssetManager.ActiveTradableAsset);
+    }
+
+    private void LockPurpose()
+    {
+        
     }
 }

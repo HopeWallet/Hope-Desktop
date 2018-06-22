@@ -11,7 +11,6 @@ public class FunctionEstimation : IStandardGasPriceObservable, IEtherBalanceObse
     private readonly TradableAssetManager tradableAssetManager;
     private readonly GasPriceObserver gasPriceObserver;
     private readonly EtherBalanceObserver etherBalanceObserver;
-
     private dynamic etherBalance;
 
     public GasPrice StandardGasPrice { get; set; }

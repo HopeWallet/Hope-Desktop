@@ -20,6 +20,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
 
     private BigInteger id;
     private decimal lockedPurpose;
+    private bool lockPeriodDone;
 
     private const int MIN_PERCENTAGE_TIME_RINKEBY = 3600; // For use with the rinkeby hodler where the lock period minimum is 1 hour.
     private const int MIN_PERCENTAGE_TIME_MAINNET = 7884000; // For use with the mainnet hodler where the lock period minimum is 3 months.
@@ -43,21 +44,16 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         releasePurposeButton.onClick.AddListener(ReleasePurpose);
     }
 
-    private void OnDisable()
-    {
-        releasePurposeButton.onClick.RemoveAllListeners();
-    }
-
     private void ReleasePurpose()
     {
-        //hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.GasPrice, id, lockedPurpose);
+        hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.StandardGasPrice.FunctionalGasPrice, id, lockedPurpose);
     }
 
     public void UpdateTransactionGas(FunctionEstimation releasePurposeHelper)
     {
         this.releasePurposeHelper = releasePurposeHelper;
 
-        releasePurposeButton.interactable = releasePurposeButton.interactable && releasePurposeHelper.CanExecuteTransaction;
+        releasePurposeButton.interactable = lockPeriodDone && releasePurposeHelper.CanExecuteTransaction;
     }
 
     protected override void OnValueUpdated(HodlerItem value)
@@ -69,12 +65,12 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         var releaseTimeDifference = value.ReleaseTime - value.LockedTimeStamp;
         var currentTimeDifference = value.ReleaseTime - DateTimeUtils.GetCurrentUnixTime();
         var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
-        
+        lockPeriodDone = currentTimeDifference < 0;
+
         purposeAmountText.text = lockedPurpose.ToString().LimitEnd(8, "...");
         dubiAmountText.text = (multiplier * lockedPurpose).ToString().LimitEnd(15, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
         timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
-        releasePurposeButton.interactable = currentTimeDifference < 0;
     }
 
 }
