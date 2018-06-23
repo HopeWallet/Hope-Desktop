@@ -482,6 +482,7 @@ GameObject:
   - component: {fileID: 1404536059}
   - component: {fileID: 1404536058}
   - component: {fileID: 1404536061}
+  - component: {fileID: 1404536062}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -556,6 +557,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   extraMenus:
   - {fileID: 1196481135}
+--- !u!114 &1404536062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1404536057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c0e0490d1030e4cb3fb54af9f4e25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1491621424
 GameObject:
   m_ObjectHideFlags: 0
