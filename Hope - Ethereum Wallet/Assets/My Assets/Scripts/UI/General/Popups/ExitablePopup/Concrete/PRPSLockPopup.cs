@@ -8,6 +8,9 @@ using UnityEngine.UI;
 using Zenject;
 using Vector3 = UnityEngine.Vector3;
 
+/// <summary>
+/// Class which represents the popup used for displaying the current locked purpose, and the ui for locking purpose.
+/// </summary>
 public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpdater
 {
 
@@ -28,16 +31,25 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     private EthereumNetwork ethereumNetwork;
     private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
 
+    private FunctionGasEstimator lockPurposeEstimator;
+    private FunctionGasEstimator releasePurposeEstimator;
+
     private decimal purposeToLock;
-
     private bool closed;
-
-    public FunctionGasEstimator LockPurposeEstimation { get; private set; }
-
-    public FunctionGasEstimator ReleasePurposeEstimation { get; private set; }
 
     public float UpdateInterval => 10f;
 
+    /// <summary>
+    /// Adds all required dependencies to this class.
+    /// </summary>
+    /// <param name="hodlerContract"> The HodlerContract. </param>
+    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
+    /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager. </param>
+    /// <param name="lockedPRPSItemFactory"> The factory for creating LockedPRPSItemButtons. </param>
+    /// <param name="lockPurposeEstimator"> The FunctionGasEstimator for estimating the cost of locking purpose. </param>
+    /// <param name="releasePurposeEstimator"> The FunctionGasEstimator for estimating the cost of releasing purpose. </param>
     [Inject]
     public void Construct(HodlerContract hodlerContract, 
         TradableAssetManager tradableAssetManager, 
@@ -45,26 +57,28 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         PeriodicUpdateManager periodicUpdateManager,
         EthereumNetworkManager ethereumNetworkManager,
         LockedPRPSItemButton.Factory lockedPRPSItemFactory,
-        FunctionGasEstimator lockPurposeEstimation,
-        FunctionGasEstimator releasePurposeEstimation)
+        FunctionGasEstimator lockPurposeEstimator,
+        FunctionGasEstimator releasePurposeEstimator)
     {
         this.hodlerContract = hodlerContract;
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
         this.lockedPRPSItemFactory = lockedPRPSItemFactory;
-
-        LockPurposeEstimation = lockPurposeEstimation;
-        ReleasePurposeEstimation = releasePurposeEstimation;
+        this.lockPurposeEstimator = lockPurposeEstimator;
+        this.releasePurposeEstimator = releasePurposeEstimator;
 
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
     }
 
-    private void Awake()
-    {
-        OnPurposeUpdated();
-    }
+    /// <summary>
+    /// Sets the text of the purpose display as well as starts the LockPurposeEstimator.
+    /// </summary>
+    private void Awake() => OnPurposeUpdated();
 
+    /// <summary>
+    /// Adds all required callbacks to the events, managers, and buttons.
+    /// </summary>
     private void OnEnable()
     {
         closed = false;
@@ -72,11 +86,14 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         TradableAssetManager.OnBalancesUpdated += OnPurposeUpdated;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
 
-        lockAmountField.onValueChanged.AddListener(val => OnLockFieldsChanged());
-        lockPeriodDropdown.onValueChanged.AddListener(val => OnLockFieldsChanged());
+        lockAmountField.onValueChanged.AddListener(val => UpdateLockFields());
+        lockPeriodDropdown.onValueChanged.AddListener(val => UpdateLockFields());
         lockButton.onClick.AddListener(LockPurpose);
     }
 
+    /// <summary>
+    /// Removes the callbacks and stops the estimators.
+    /// </summary>
     private void OnDisable()
     {
         closed = true;
@@ -85,15 +102,21 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
         periodicUpdateManager.RemovePeriodicUpdater(this);
 
-        LockPurposeEstimation.StopEstimation();
-        ReleasePurposeEstimation.StopEstimation();
+        lockPurposeEstimator.StopEstimation();
+        releasePurposeEstimator.StopEstimation();
     }
 
+    /// <summary>
+    /// Searches for any new locked items, or any locked items that are now unlocked.
+    /// </summary>
     public void PeriodicUpdate() => StartNewItemSearch();
 
+    /// <summary>
+    /// Estimates the gas limit of the lock function, updates purpose display to the newest balance, and fixes the lock input fields.
+    /// </summary>
     private void OnPurposeUpdated()
     {
-        LockPurposeEstimation.Estimate(hodlerContract[HodlerContract.FUNC_HODL],
+        lockPurposeEstimator.Estimate(hodlerContract[HodlerContract.FUNC_HODL],
                                        null,
                                        new BigInteger(999999),
                                        SolidityUtils.ConvertToUInt(tradableAssetManager.ActiveTradableAsset.AssetBalance, 18),
@@ -101,9 +124,12 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
         prpsBalanceText.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance + "", 18, "...");
 
-        OnLockFieldsChanged();
+        UpdateLockFields();
     }
 
+    /// <summary>
+    /// Searches for any token transfers from the user's address to the hodl contract.
+    /// </summary>
     private void StartNewItemSearch()
     {
         WebClientUtils.GetTransactionList(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
@@ -112,6 +138,10 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
                                                                                     txList => ProcessTxList(txList));
     }
 
+    /// <summary>
+    /// Processes the list of purpose transactions sent out to the hodl contract.
+    /// </summary>
+    /// <param name="txList"> The list of transactions. </param>
     private void ProcessTxList(string txList)
     {
         var transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<TokenTransactionJson>>(txList);
@@ -121,12 +151,21 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         transactionsJson.result.Reverse().ForEach(json => GetTransactionInputData(json));
     }
 
+    /// <summary>
+    /// Checks the details of each purpose transaction sent to the hodl contract.
+    /// </summary>
+    /// <param name="tokenTransactionJson"> The json of the token transaction. </param>
     private void GetTransactionInputData(TokenTransactionJson tokenTransactionJson)
     {
         TransactionUtils.CheckTransactionDetails(tokenTransactionJson.transactionHash, 
             tx => UpdateItems(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
     }
 
+    /// <summary>
+    /// Updates the current list of items with the newest item found from the transaction list.
+    /// </summary>
+    /// <param name="inputData"> The input data found in the transaction. </param>
+    /// <param name="timeStamp"> The time stamp of the transaction. </param>
     private void UpdateItems(string[] inputData, BigInteger timeStamp)
     {
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
@@ -141,6 +180,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         });
     }
 
+    /// <summary>
+    /// Updates the list with an item that is still unclaimed and locked into the smart contract.
+    /// </summary>
+    /// <param name="item"> The item found and still unclaimed. </param>
+    /// <param name="timeStamp"> The timestamp the purpose was locked in. </param>
     private void UpdateList(HodlerItem item, BigInteger timeStamp)
     {
         item.LockedTimeStamp = timeStamp;
@@ -154,24 +198,35 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         items.ForEach(i => i.transform.SetSiblingIndex(items.IndexOf(i)));
 
         EstimateReleaseGas();
-        OnReleaseGasEstimated();
+        UpdateItemTransactionDetails();
     }
 
+    /// <summary>
+    /// Estimates the gas required to release the purpose from the contract.
+    /// </summary>
     private void EstimateReleaseGas()
     {
-        if (items.Count == 0 || ReleasePurposeEstimation.GasLimit != null)
+        if (items.Count == 0 || releasePurposeEstimator.GasLimit != null)
             return;
 
-        ReleasePurposeEstimation.Estimate(hodlerContract[HodlerContract.FUNC_RELEASE],
-                                          OnReleaseGasEstimated,
+        releasePurposeEstimator.Estimate(hodlerContract[HodlerContract.FUNC_RELEASE],
+                                          UpdateItemTransactionDetails,
                                           items.First().ButtonInfo.Id);
     }
 
-    private void OnReleaseGasEstimated()
+    /// <summary>
+    /// Called when the release gas is estimated or every time new items are added.
+    /// Makes sure each item has the transaction details to release the purpose.
+    /// </summary>
+    private void UpdateItemTransactionDetails()
     {
-        items.ForEach(item => item.UpdateTransactionDetails(ReleasePurposeEstimation));
+        items.ForEach(item => item.UpdateTransactionDetails(releasePurposeEstimator));
     }
 
+    /// <summary>
+    /// Removes an item button from the current list.
+    /// </summary>
+    /// <param name="item"> The item to remove. </param>
     private void RemoveItemButton(HodlerItem item)
     {
         var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
@@ -189,6 +244,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         }
     }
 
+    /// <summary>
+    /// Creates a new item button from a HodlerItem.
+    /// </summary>
+    /// <param name="item"> The item found still unclaimed and locked in the smart contract. </param>
+    /// <returns> The newly created item object. </returns>
     private LockedPRPSItemButton CreateItemButton(HodlerItem item)
     {
         var newItem = lockedPRPSItemFactory.Create();
@@ -203,22 +263,29 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         return newItem;
     }
 
-    private void OnLockFieldsChanged()
+    /// <summary>
+    /// Updates the lock purpose fields to reflect the newly changed transaction estimates, or the changed input values.
+    /// </summary>
+    private void UpdateLockFields()
     {
         lockAmountField.RestrictToBalance(tradableAssetManager.ActiveTradableAsset);
         purposeToLock = string.IsNullOrEmpty(lockAmountField.text) ? 0 : decimal.Parse(lockAmountField.text);
         rewardAmountField.text = (purposeToLock * Math.Round(((decimal)(lockPeriodDropdown.value + 1) / 100) * (decimal)1.2, 2)).ToString();
 
-        lockButton.interactable = LockPurposeEstimation.CanExecuteTransaction &&
+        lockButton.interactable = lockPurposeEstimator.CanExecuteTransaction &&
                                   (purposeToLock >= (decimal)0.0000000000000001 &&
                                   purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
     }
 
+    /// <summary>
+    /// Executes the 'hodl' function of the hodler smart contract.
+    /// Locks in the amount of purpose entered in the input field.
+    /// </summary>
     private void LockPurpose()
     {
         hodlerContract.Hodl(userWalletManager,
-                            LockPurposeEstimation.GasLimit,
-                            LockPurposeEstimation.StandardGasPrice.FunctionalGasPrice,
+                            lockPurposeEstimator.GasLimit,
+                            lockPurposeEstimator.StandardGasPrice.FunctionalGasPrice,
                             RandomUtils.GenerateRandomBigInteger(usedIds),
                             purposeToLock,
                             (int)(Math.Round((lockPeriodDropdown.value + 1) * (decimal)1.2) * 3));
