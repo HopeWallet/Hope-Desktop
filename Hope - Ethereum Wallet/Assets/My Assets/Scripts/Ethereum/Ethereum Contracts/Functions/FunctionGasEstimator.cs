@@ -4,13 +4,14 @@ using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
-public class FunctionEstimation : IStandardGasPriceObservable, IEtherBalanceObservable
+public class FunctionGasEstimator : IStandardGasPriceObservable, IEtherBalanceObservable
 {
 
     private readonly UserWalletManager userWalletManager;
     private readonly TradableAssetManager tradableAssetManager;
     private readonly GasPriceObserver gasPriceObserver;
     private readonly EtherBalanceObserver etherBalanceObserver;
+
     private dynamic etherBalance;
 
     public GasPrice StandardGasPrice { get; set; }
@@ -32,7 +33,7 @@ public class FunctionEstimation : IStandardGasPriceObservable, IEtherBalanceObse
         }
     }
 
-    public FunctionEstimation(UserWalletManager userWalletManager, 
+    public FunctionGasEstimator(UserWalletManager userWalletManager, 
         TradableAssetManager tradableAssetManager,
         GasPriceObserver gasPriceObserver,
         EtherBalanceObserver etherBalanceObserver)

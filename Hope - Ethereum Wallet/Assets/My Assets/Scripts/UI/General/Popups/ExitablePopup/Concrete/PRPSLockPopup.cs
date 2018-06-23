@@ -30,9 +30,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private decimal purposeToLock;
 
-    public FunctionEstimation LockPurposeEstimation { get; private set; }
+    public FunctionGasEstimator LockPurposeEstimation { get; private set; }
 
-    public FunctionEstimation ReleasePurposeEstimation { get; private set; }
+    public FunctionGasEstimator ReleasePurposeEstimation { get; private set; }
 
     public float UpdateInterval => 10f;
 
@@ -43,8 +43,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         PeriodicUpdateManager periodicUpdateManager,
         EthereumNetworkManager ethereumNetworkManager,
         LockedPRPSItemButton.Factory lockedPRPSItemFactory,
-        FunctionEstimation lockPurposeEstimation,
-        FunctionEstimation releasePurposeEstimation)
+        FunctionGasEstimator lockPurposeEstimation,
+        FunctionGasEstimator releasePurposeEstimation)
     {
         this.hodlerContract = hodlerContract;
         this.tradableAssetManager = tradableAssetManager;
@@ -160,7 +160,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void OnReleaseGasEstimated()
     {
-        items.ForEach(item => item.UpdateTransactionGas(ReleasePurposeEstimation));
+        items.ForEach(item => item.UpdateTransactionDetails(ReleasePurposeEstimation));
     }
 
     private void RemoveItemButton(HodlerItem item)

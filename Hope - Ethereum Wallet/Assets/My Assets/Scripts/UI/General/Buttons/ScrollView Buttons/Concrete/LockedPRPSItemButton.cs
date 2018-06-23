@@ -3,6 +3,9 @@ using System.Numerics;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// Class which manages each locked purpose item that is displayed.
+/// </summary>
 public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
 {
 
@@ -16,7 +19,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     private EthereumNetworkManager.Settings networkSettings;
     private HodlerContract hodlerContract;
     private UserWalletManager userWalletManager;
-    private FunctionEstimation releasePurposeHelper;
+    private FunctionGasEstimator releasePurposeHelper;
 
     private BigInteger id;
     private decimal lockedPurpose;
@@ -39,23 +42,34 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         this.userWalletManager = userWalletManager;
     }
 
-    private void OnEnable()
-    {
-        releasePurposeButton.onClick.AddListener(ReleasePurpose);
-    }
+    /// <summary>
+    /// Adds the release purpose method to the button listener.
+    /// </summary>
+    private void OnEnable() => releasePurposeButton.onClick.AddListener(ReleasePurpose);
 
+    /// <summary>
+    /// Releases the purpose held in the item represented by this button.
+    /// </summary>
     private void ReleasePurpose()
     {
         hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.StandardGasPrice.FunctionalGasPrice, id, lockedPurpose);
     }
 
-    public void UpdateTransactionGas(FunctionEstimation releasePurposeHelper)
+    /// <summary>
+    /// Updates the details of the transaction.
+    /// </summary>
+    /// <param name="releasePurposeHelper"> The helper which is responsible for knowing the transaction limit and price of the hodler release function. </param>
+    public void UpdateTransactionDetails(FunctionGasEstimator releasePurposeHelper)
     {
         this.releasePurposeHelper = releasePurposeHelper;
 
         releasePurposeButton.interactable = lockPeriodDone && releasePurposeHelper.CanExecuteTransaction;
     }
 
+    /// <summary>
+    /// Updates the ui elements and the transaction info whenever the HodlerItem is changed/updated.
+    /// </summary>
+    /// <param name="value"> The item that holds the info on the purpose locked in the contract. </param>
     protected override void OnValueUpdated(HodlerItem value)
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(value.Value, 18);
@@ -65,8 +79,8 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
         var releaseTimeDifference = value.ReleaseTime - value.LockedTimeStamp;
         var currentTimeDifference = value.ReleaseTime - DateTimeUtils.GetCurrentUnixTime();
         var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
-        lockPeriodDone = currentTimeDifference < 0;
 
+        lockPeriodDone = currentTimeDifference < 0;
         purposeAmountText.text = lockedPurpose.ToString().LimitEnd(8, "...");
         dubiAmountText.text = (multiplier * lockedPurpose).ToString().LimitEnd(15, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);

@@ -36,14 +36,14 @@ public class HodlerContract : ContractBase
     public void GetItem(string address, BigInteger id, Action<HodlerItem> onItemReceived) => this.ComplexContractViewCall(this[FUNC_GETITEM], onItemReceived, address, id);
 
     /// <summary>
-    /// Locks a certain
+    /// Locks a certain amount of purpose into the Hodler smart contract.
     /// </summary>
-    /// <param name="userWalletManager"></param>
-    /// <param name="gasLimit"></param>
-    /// <param name="gasPrice"></param>
-    /// <param name="id"></param>
-    /// <param name="value"></param>
-    /// <param name="monthsToLock"></param>
+    /// <param name="userWalletManager"> The class managing the wallet. </param>
+    /// <param name="gasLimit"> The gas limit to send with the transaction. </param>
+    /// <param name="gasPrice"> The gas price to send with the transaction. </param>
+    /// <param name="id"> The id of the lock function call. </param>
+    /// <param name="value"> The amount of purpose to lock. </param>
+    /// <param name="monthsToLock"> How many months the purpose should be locked for. </param>
     public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
@@ -60,6 +60,14 @@ public class HodlerContract : ContractBase
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 
+    /// <summary>
+    /// Releases some purpose from the Hodler smart contract.
+    /// </summary>
+    /// <param name="userWalletManager"> The class managing the wallet. </param>
+    /// <param name="gasLimit"> The gas limit to send with the transaction. </param>
+    /// <param name="gasPrice"> The gas price to send with the transaction. </param>
+    /// <param name="id"> The id of the locked purpose item. </param>
+    /// <param name="amountToRelease"> The amount of purpose that will be released. </param>
     public void Release(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
     {
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>

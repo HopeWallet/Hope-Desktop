@@ -51,7 +51,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindUniqueInstances()
     {
-        Container.Bind<FunctionEstimation>().AsTransient();
+        Container.Bind<FunctionGasEstimator>().AsTransient();
     }
 
     /// <summary>
