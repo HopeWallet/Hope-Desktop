@@ -30,6 +30,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private decimal purposeToLock;
 
+    private bool closed;
+
     public FunctionGasEstimator LockPurposeEstimation { get; private set; }
 
     public FunctionGasEstimator ReleasePurposeEstimation { get; private set; }
@@ -65,6 +67,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void OnEnable()
     {
+        closed = false;
+
         TradableAssetManager.OnBalancesUpdated += OnPurposeUpdated;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
 
@@ -75,6 +79,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
     private void OnDisable()
     {
+        closed = true;
+
         TradableAssetManager.OnBalancesUpdated -= OnPurposeUpdated;
 
         periodicUpdateManager.RemovePeriodicUpdater(this);
@@ -125,6 +131,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     {
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item =>
         {
+            if (closed)
+                return;
+
             if (item.Fulfilled)
                 RemoveItemButton(item);
             else

@@ -1,20 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-public class DropdownButton : ImageButton, ILeftClickObservable, IRightClickObservable
+public class DropdownButton : ImageButton, IPopupButton
 {
 
+    public bool createDropdownOnClick = true;
     public Text text;
     public DropdownButtonInfo[] dropdownButtons;
 
     private List<Button> buttonList = new List<Button>();
 
-    private MouseClickObserver mouseClickObserver;
+    private PopupButtonObserver popupButtonObserver;
+
+    public bool PointerEntered { get; private set; }
+
+    public GameObject PopupObject => gameObject;
 
     [Inject]
-    public void Construct(MouseClickObserver mouseClickObserver) => this.mouseClickObserver = mouseClickObserver;
+    public void Construct(PopupButtonObserver popupButtonObserver) => this.popupButtonObserver = popupButtonObserver;
 
     protected void OnEnable() => Button.onClick.AddListener(ChangeButtonDropdown);
 
@@ -22,6 +29,9 @@ public class DropdownButton : ImageButton, ILeftClickObservable, IRightClickObse
 
     private void ChangeButtonDropdown()
     {
+        if (!createDropdownOnClick)
+            return;
+
         if (buttonList.Count > 0)
             CloseButtonDropdown();
         else
@@ -30,10 +40,9 @@ public class DropdownButton : ImageButton, ILeftClickObservable, IRightClickObse
 
     public void CloseButtonDropdown()
     {
-        buttonList.SafeForEach(button => Destroy(button.gameObject));
+        buttonList.Select(b => b.GetComponent<DropdownButton>()).ForEach(b => popupButtonObserver.UnsubscribeObservable(b));
+        buttonList.Where(button => button.gameObject != null).ToList().SafeForEach(button => Destroy(button.gameObject));
         buttonList.Clear();
-
-        mouseClickObserver.UnsubscribeObservable(this);
     }
 
     private void OpenButtonDropdown()
@@ -44,46 +53,32 @@ public class DropdownButton : ImageButton, ILeftClickObservable, IRightClickObse
             var newButton = Instantiate(buttonToInstantiate, transform);
             var rectTransform = newButton.GetComponent<RectTransform>();
             var dropdownComponent = newButton.GetComponent<DropdownButton>();
+
             dropdownComponent.buttonImage.sprite = button.buttonImage;
             dropdownComponent.text.text = button.buttonText;
+            dropdownComponent.createDropdownOnClick = false;
+
             rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.localPosition = new Vector3(0f, (buttonList.Count + 1) * -rectTransform.rect.size.y, 0f);
 
-            Destroy(dropdownComponent);
+            popupButtonObserver.SubscribeObservable(dropdownComponent);
 
             var buttonComponent = newButton.GetComponent<Button>();
+
             if (button.onClickAction != null)
                 buttonComponent.onClick.AddListener(button.onClickAction);
+
             buttonComponent.onClick.AddListener(CloseButtonDropdown);
 
             buttonList.Add(buttonComponent);
             buttonToInstantiate = newButton;
         }
 
-        mouseClickObserver.SubscribeObservable(this);
+        popupButtonObserver.SetPopupCloseAction(CloseButtonDropdown);
     }
 
-    public void OnRightClick(ClickType clickType) => CheckBounds(clickType);
+    public void OnPointerEnter(PointerEventData eventData) => PointerEntered = true;
 
-    public void OnLeftClick(ClickType clickType) => CheckBounds(clickType);
-
-    private void CheckBounds(ClickType clickType)
-    {
-        if (clickType != ClickType.Down)
-            return;
-
-        var mousePosition = Input.mousePosition;
-        var inBounds = false;
-
-        buttonList.ForEach(button =>
-        {
-            if (button.GetButtonBounds().Contains(mousePosition))
-                inBounds = true;
-        });
-
-        if (!inBounds && !Button.GetButtonBounds().Contains(mousePosition))
-            CloseButtonDropdown();
-    }
-
+    public void OnPointerExit(PointerEventData eventData) => PointerEntered = false;
 }

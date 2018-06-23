@@ -63,6 +63,9 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     {
         this.releasePurposeHelper = releasePurposeHelper;
 
+        if (releasePurposeButton == null)
+            return;
+
         releasePurposeButton.interactable = lockPeriodDone && releasePurposeHelper.CanExecuteTransaction;
     }
 
