@@ -209,8 +209,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         purposeToLock = string.IsNullOrEmpty(lockAmountField.text) ? 0 : decimal.Parse(lockAmountField.text);
         rewardAmountField.text = (purposeToLock * Math.Round(((decimal)(lockPeriodDropdown.value + 1) / 100) * (decimal)1.2, 2)).ToString();
 
-        lockButton.interactable = LockPurposeEstimation.CanExecuteTransaction 
-                    && (purposeToLock > 0 && purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
+        lockButton.interactable = LockPurposeEstimation.CanExecuteTransaction &&
+                                  (purposeToLock >= (decimal)0.0000000000000001 &&
+                                  purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
     }
 
     private void LockPurpose()
