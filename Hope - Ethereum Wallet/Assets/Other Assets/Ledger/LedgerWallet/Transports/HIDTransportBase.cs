@@ -106,7 +106,7 @@ namespace LedgerWallet.Transports
 				if(response == null)
 					throw new LedgerWalletException("Error while transmission");
 			}
-			return response;
+            return response;
 		}
 
 		bool RenewTransport()
@@ -153,7 +153,8 @@ namespace LedgerWallet.Transports
 
 		internal Task<byte[][]> ExchangeCore(byte[][] apdus)
 		{
-			if(apdus == null || apdus.Length == 0)
+            // Ethereum is correct here
+            if (apdus == null || apdus.Length == 0)
 				return null;
 			List<byte[]> resultList = new List<byte[]>();
 			var lastAPDU = apdus.Last();
@@ -168,6 +169,7 @@ namespace LedgerWallet.Transports
 					resultList.Add(result);
 				}
 			}
+            // Ethereum is incorrect here
 			return Task.FromResult(resultList.ToArray());
 		}
 

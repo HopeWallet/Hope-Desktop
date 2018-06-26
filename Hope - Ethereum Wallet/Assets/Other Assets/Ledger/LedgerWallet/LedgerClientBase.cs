@@ -169,8 +169,8 @@ namespace LedgerWallet
 		protected async Task<byte[]> ExchangeApdus(byte[][] apdus, int[] acceptedSW)
 		{
 			var resp = await ExchangeSingle(apdus).ConfigureAwait(false);
-			CheckSW(acceptedSW, resp.SW);
-			return resp.Response;
+            CheckSW(acceptedSW, resp.SW);
+            return resp.Response;
 		}
 
 		protected async Task<APDUResponse> ExchangeSingle(byte[][] apdus)
@@ -187,7 +187,9 @@ namespace LedgerWallet
 		protected async Task<APDUResponse[]> Exchange(byte[][] apdus)
 		{
 			byte[][] responses = await Transport.Exchange(apdus).ConfigureAwait(false);
-			List<APDUResponse> resultResponses = new List<APDUResponse>();
+            //responses[0][0] = 27;
+            //UnityEngine.Debug.Log(responses[0][0] + " " + responses.Length + " " + responses.LongLength);
+            List<APDUResponse> resultResponses = new List<APDUResponse>();
 			foreach(var response in responses)
 			{
 				if(response.Length < 2)
@@ -196,12 +198,15 @@ namespace LedgerWallet
 				}
 				int sw = ((int)(response[response.Length - 2] & 0xff) << 8) |
 						(int)(response[response.Length - 1] & 0xff);
+                //UnityEngine.Debug.Log(sw);
 				if(sw == 0x6faa)
 					Throw(sw);
 				byte[] result = new byte[response.Length - 2];
+                //UnityEngine.Debug.Log(result.Length);
 				Array.Copy(response, 0, result, 0, response.Length - 2);
 				resultResponses.Add(new APDUResponse() { Response = result, SW = sw });
 			}
+            //UnityEngine.Debug.Log(resultResponses[0].Response.Length);
 			return resultResponses.ToArray();
 		}
 	}

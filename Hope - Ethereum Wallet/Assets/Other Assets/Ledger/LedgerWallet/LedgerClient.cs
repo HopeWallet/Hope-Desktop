@@ -31,7 +31,7 @@ namespace LedgerWallet
 
 		public async Task<LedgerWalletFirmware> GetFirmwareVersionAsync()
 		{
-			byte[] response = await ExchangeSingleAPDU(LedgerWalletConstants.LedgerWallet_CLA, LedgerWalletConstants.LedgerWallet_INS_GET_FIRMWARE_VERSION, (byte)0x00, (byte)0x00, 0x00, OK).ConfigureAwait(false);
+			byte[] response = await ExchangeSingleAPDU(LedgerWalletConstants.LedgerWallet_CLA, LedgerWalletConstants.LedgerWallet_INS_GET_FIRMWARE_VERSION, 0x00, 0x00, 0x00, OK).ConfigureAwait(false);
 			return new LedgerWalletFirmware(response);
 		}
 		public LedgerWalletFirmware GetFirmwareVersion()
