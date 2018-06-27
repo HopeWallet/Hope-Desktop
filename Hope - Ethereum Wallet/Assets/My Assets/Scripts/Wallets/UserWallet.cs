@@ -16,7 +16,7 @@ public class UserWallet
 
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
-    private readonly SafePasswordStorage safePassword;
+    private readonly PlayerPrefPassword safePassword;
 
     private Account account;
 
@@ -38,7 +38,7 @@ public class UserWallet
     /// <param name="safePassword"> The SafePassword object used to encrypt the wallet. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    public UserWallet(SafePasswordStorage safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork)
+    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork)
     {
         this.safePassword = safePassword;
         this.popupManager = popupManager;

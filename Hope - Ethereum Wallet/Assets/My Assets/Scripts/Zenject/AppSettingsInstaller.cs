@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Zenject;
+﻿using Zenject;
 
 /// <summary>
 /// Class which contains the settings for certain classes.

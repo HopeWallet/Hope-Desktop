@@ -10,7 +10,7 @@ using UnityEngine;
 public class WalletPasswordRandomizer
 {
 
-    private static SafePasswordStorage PasswordObj;
+    private static PlayerPrefPassword PasswordObj;
 
     private static int[] SavedOps;
     private static string[] SavedKeys;
@@ -87,6 +87,6 @@ public class WalletPasswordRandomizer
     /// Loads the WalletPassword object from the Resources folder.
     /// </summary>
     /// <returns> The SafePassword object we will change the values for. </returns>
-    private static SafePasswordStorage GetWalletPasswordObj() => Resources.Load("WalletEncryptionPasswordStorage") as SafePasswordStorage;
+    private static PlayerPrefPassword GetWalletPasswordObj() => Resources.Load("PasswordBase") as PlayerPrefPassword;
 
 }

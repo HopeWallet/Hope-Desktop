@@ -12,7 +12,7 @@ public static class AsyncWalletEncryption
 	/// <param name="safePassword"> The SafePassword object to extract the encryption password from. </param>
 	/// <param name="userPassword"> The user's password for accessing the wallet, for extra layer of security. </param>
 	/// <param name="generateNew"> Whether to generate a new encryption password or extract an old one. </param>
-	public static async void GetEncryptionPasswordAsync(SafePasswordStorage safePassword, string userPassword, 
+	public static async void GetEncryptionPasswordAsync(PlayerPrefPassword safePassword, string userPassword, 
         Action<string> onPasswordExtracted, bool generateNew = false)
 	{
 		onPasswordExtracted?.Invoke(await TaskUtils.StartStringTask(() 

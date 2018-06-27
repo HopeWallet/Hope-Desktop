@@ -93,7 +93,7 @@ public class UserWalletManager
     [Serializable]
     public class Settings
     {
-        public SafePasswordStorage safePassword;
+        public PlayerPrefPassword safePassword;
         public string[] safePasswordCharLookups;
     }
 

@@ -5,6 +5,7 @@ using Nethereum.Web3.Accounts;
 using System.Linq;
 using UnityEngine;
 using System.Security.Cryptography;
+using System.Text;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
+        string test = "Hello this is a test";
+        byte[] testBytes = Encoding.UTF8.GetBytes(test);
+        Encoding.UTF8.GetString(testBytes).Log();
     }
 
     private void Update()
