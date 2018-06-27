@@ -63,7 +63,11 @@ namespace LedgerWallet.Transports
 		const int DEFAULT_LEDGER_CHANNEL = 0x0101;
 		const int LEDGER_HID_PACKET_SIZE = 64;
 
-		protected override byte[] WrapCommandAPDU(Stream command, ref int sequenceIdx)
+        // PROBLEMS OCCUR IN THIS CLASS
+        // BITCOIN, ETC ALL WORK
+        // CRYPTOS THAT HAVE SETTINGS OPTIONS (LIKE ETH) DO NOT WORK
+
+        protected override byte[] WrapCommandAPDU(Stream command, ref int sequenceIdx)
 		{
 			MemoryStream output = new MemoryStream();
 			int position = (int)output.Position;
