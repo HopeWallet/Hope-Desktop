@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HopeWalletMenu : MenuAnimation
+public class HopeWalletForm : MenuAnimation
 {
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -52,7 +52,7 @@ public class HopeWalletMenu : MenuAnimation
 	/// <summary>
 	/// Disables menu and moves to previous menu
 	/// </summary>
-	public void BackButton()
+	public void BackButtonClicked()
 	{
 		DisableMenu();
 

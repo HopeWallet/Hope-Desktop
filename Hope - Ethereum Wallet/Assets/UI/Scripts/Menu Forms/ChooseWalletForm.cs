@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ChooseWalletMenu : MenuAnimation
+public class ChooseWalletForm : MenuAnimation
 {
 
 	[SerializeField] private GameObject vignette;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WalletListMenu : MenuAnimation
+public class WalletListForm : MenuAnimation
 {
 
 	[SerializeField] private GameObject form;
