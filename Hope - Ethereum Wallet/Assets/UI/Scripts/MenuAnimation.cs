@@ -31,7 +31,7 @@ public abstract class MenuAnimation : MonoBehaviour
 	protected void FinishedAnimatingOut()
 	{
 		ChangeAnimationState(false);
-		Destroy(this.gameObject);
+		//Destroy(this.gameObject);
 	}
 
 	private void ChangeAnimationState(bool state)

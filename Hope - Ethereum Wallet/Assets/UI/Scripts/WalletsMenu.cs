@@ -54,15 +54,15 @@ public class WalletsMenu : MenuAnimation
 	/// <summary>
 	/// Loops through the amount of saved wallets and animates them one by one
 	/// </summary>
-	/// <param name="i"></param>
+	/// <param name="i">The wallet number in the array</param>
 	private void AnimateWallets(int i)
 	{
 		if (i == (wallets.Length - 1))
-			wallets[i].AnimateScaleX(1f, 0.15f,
+			wallets[i].AnimateScaleX(1f, 0.2f,
 				() => FinishedAnimatingIn());
 
 		else
-			wallets[i].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++i));
+			wallets[i].AnimateScaleX(1f, 0.2f, () => AnimateWallets(++i));
 	}
 
 	#endregion
