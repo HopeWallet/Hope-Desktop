@@ -39,6 +39,6 @@ public static class RandomUtils
     /// a-f, A-F.
     /// </summary>
     /// <returns> The hexadecimal character. </returns>
-    public static char GenerateRandomHexLetter() => (char)(UnityEngine.Random.Range(0, 6) + (Convert.ToBoolean(UnityEngine.Random.Range(0, 2)) ? 65 : 97));
+    public static char GenerateRandomHexLetter() => (char)(new Random().Next(0, 6) + (Convert.ToBoolean(new Random().Next(0, 2)) ? 65 : 97));
 
 }

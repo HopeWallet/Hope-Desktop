@@ -1,16 +1,13 @@
 using Nethereum.Signer;
 using Transaction = Nethereum.Signer.Transaction;
 using Nethereum.RPC.Eth.DTOs;
-using Nethereum.RPC.Eth.Transactions;
 using Nethereum.Hex.HexTypes;
 using System.Collections;
 using System;
-using UnityEngine;
-using Zenject;
 
 namespace Nethereum.JsonRpc.UnityClient
 {
- 
+
     public class TransactionSignedUnityRequest:UnityRequest<string>
     {
         private string _url;

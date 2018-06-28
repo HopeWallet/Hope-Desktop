@@ -1,5 +1,5 @@
 ﻿using Nethereum.Signer;
-using UnityEngine;
+using System;
 
 /// <summary>
 /// Class used for creating random password strings.
@@ -23,7 +23,9 @@ public static class PasswordUtils
     /// Generates a random password between random min and max bounds.
     /// </summary>
     /// <returns> The random password generated. </returns>
-    public static string GenerateRandomPassword() 
-        => GenerateFixedLengthPassword(Random.Range(Random.Range(8, 12), Random.Range(16, 24)));
-
+    public static string GenerateRandomPassword()
+    {
+        var random = new Random();
+        return GenerateFixedLengthPassword(random.Next(random.Next(8, 12), random.Next(16, 24)));
+    }
 }

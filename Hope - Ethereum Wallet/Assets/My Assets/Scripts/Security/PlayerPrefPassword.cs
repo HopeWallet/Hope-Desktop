@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Globalization;
 using System;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.
@@ -51,9 +52,8 @@ public class PlayerPrefPassword : ScriptableObject
         if (prefDictionary == null)
             return;
 
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefs.SetString(key, prefDictionary[key]));
-        
         GenerateSpoofKeys();
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key, prefDictionary[key]));
     }
 
     /// <summary>
@@ -63,10 +63,10 @@ public class PlayerPrefPassword : ScriptableObject
     public bool HasPlayerPrefs()
     {
         foreach (string key in keys)
-            if (!SecurePlayerPrefs.HasKey(key) || string.IsNullOrEmpty(SecurePlayerPrefs.GetString(key)))
+            if (string.IsNullOrEmpty(SecurePlayerPrefs.GetString(key)))
                 return false;
 
-        return true;
+        return false;
     }
 
     /// <summary>
@@ -83,11 +83,7 @@ public class PlayerPrefPassword : ScriptableObject
     {
         prefDictionary = new Dictionary<string, string>();
 
-        keys.SafeForEach(key =>
-        {
-            if (SecurePlayerPrefs.HasKey(key))
-                prefDictionary.Add(key, SecurePlayerPrefs.GetString(key));
-        });
+        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString(key)));
     }
 
     /// <summary>
@@ -96,20 +92,19 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="iterations"> The amount of times to iterate through the length of the dictionary and add the spoof keys. </param>
     private void GenerateSpoofKeys(int iterations = 10)
     {
-        for (int i = 0; i < iterations; i++)
-        {
-            foreach (string key in prefDictionary.Keys)
-            {
-                string spoofKey;
+        for (int i = 0; i < iterations * prefDictionary.Keys.Count; i++)
+            AsyncTaskScheduler.Schedule(GenerateSpoofKey);
+    }
 
-                do
-                {
-                    spoofKey = PasswordUtils.GenerateRandomPassword() + RandomUtils.GenerateRandomHexLetter();
-                } while (SecurePlayerPrefs.HasKey(spoofKey));
-
-                SecurePlayerPrefs.SetString(spoofKey, PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH));
-            }
-        }
+    /// <summary>
+    /// Generates a spoof key asynchronously.
+    /// </summary>
+    /// <returns> The task used for generating the spoof key. </returns>
+    private async Task GenerateSpoofKey()
+    {
+        string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(16));
+        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter());
+        SecurePlayerPrefsAsync.SetString(key, value);
     }
 
     /// <summary>
