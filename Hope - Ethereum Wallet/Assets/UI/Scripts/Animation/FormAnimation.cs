@@ -25,7 +25,11 @@ public abstract class FormAnimation : MonoBehaviour
 
 	protected void FinishedAnimatingIn() => ChangeAnimationState(false);
 
-	protected void FinishedAnimatingOut() => ChangeAnimationState(false);
+	protected void FinishedAnimatingOut()
+	{
+		ChangeAnimationState(false);
+		gameObject.SetActive(false);
+	}
 
 	private void ChangeAnimationState(bool state)
 	{
