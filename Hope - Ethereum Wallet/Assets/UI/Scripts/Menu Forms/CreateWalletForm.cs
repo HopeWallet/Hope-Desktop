@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 
-public class CreateWalletForm : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
+public class CreateWalletForm : FormAnimation
+{
+	protected override void AnimateIn()
+	{
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	protected override void AnimateOut()
+	{
 	}
 }

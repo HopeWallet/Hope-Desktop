@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class MenuAnimation : MonoBehaviour
+public abstract class FormAnimation : MonoBehaviour
 {
 
 	public GameObject blocker;
@@ -23,16 +23,9 @@ public abstract class MenuAnimation : MonoBehaviour
 
 	protected abstract void AnimateOut();
 
-	protected void FinishedAnimatingIn()
-	{
-		ChangeAnimationState(false);
-	}
+	protected void FinishedAnimatingIn() => ChangeAnimationState(false);
 
-	protected void FinishedAnimatingOut()
-	{
-		ChangeAnimationState(false);
-		//Destroy(this.gameObject);
-	}
+	protected void FinishedAnimatingOut() => ChangeAnimationState(false);
 
 	private void ChangeAnimationState(bool state)
 	{

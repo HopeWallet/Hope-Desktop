@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class HopeWalletForm : MenuAnimation
+public class HopeWalletForm : FormAnimation
 {
+
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject importWalletButton;
 	[SerializeField] private GameObject importWalletDesc;
 	[SerializeField] private GameObject createWalletButton;
 	[SerializeField] private GameObject createWalletDesc;
+
+	#region Animating
 
 	protected override void AnimateIn()
 	{
@@ -33,29 +36,6 @@ public class HopeWalletForm : MenuAnimation
 			() => FinishedAnimatingOut()))));
 	}
 
-	/// <summary>
-	/// Disables the menu and proceeds to next menu
-	/// </summary>
-	/// <param name="importing">Checks if user is importing wallet or creating new wallet</param>
-	public void ImportOrCreateClicked(bool importing)
-	{
-		DisableMenu();
+	#endregion
 
-		//if (import)
-			//Open up importing wallet menu
-
-		//else
-			//Open up creating wallet menu
-	}
-
-
-	/// <summary>
-	/// Disables menu and moves to previous menu
-	/// </summary>
-	public void BackButtonClicked()
-	{
-		DisableMenu();
-
-		//Go back to saved wallets menu, or choose wallet menu, depending on if first time or not
-	}
 }

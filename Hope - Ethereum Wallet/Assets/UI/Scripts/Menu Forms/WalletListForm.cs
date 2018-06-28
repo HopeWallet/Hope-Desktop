@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WalletListForm : MenuAnimation
+public class WalletListForm : FormAnimation
 {
 
 	[SerializeField] private GameObject form;
@@ -57,38 +57,6 @@ public class WalletListForm : MenuAnimation
 
 		else
 			wallets[i].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++i));
-	}
-
-	#endregion
-
-	#region ButtonClicks
-
-	/// <summary>
-	/// Disables menu and opens up the wallet number that has been clicked
-	/// </summary>
-	/// <param name="walletNum">The wallet number in the list of wallets</param>
-	public void SavedWalletClicked(int walletNum)
-	{
-		DisableMenu();
-		//Open up the saved wallet by the designated number in the list
-	}
-
-	/// <summary>
-	/// Disables menu and opens up the create wallet menu
-	/// </summary>
-	public void NewWalletClicked()
-	{
-		DisableMenu();
-		//Open up create wallet menu
-	}
-
-	/// <summary>
-	/// Disables menu and opens up the previous ChooseWallet menu
-	/// </summary>
-	public void BackButtonClicked()
-	{
-		DisableMenu();
-		//Add the ChooseWallet menu to the canvas
 	}
 
 	#endregion
