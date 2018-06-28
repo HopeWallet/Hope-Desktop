@@ -52,6 +52,8 @@ public class PlayerPrefPassword : ScriptableObject
             return;
 
         prefDictionary.Keys.ForEach(key => SecurePlayerPrefs.SetString(key, prefDictionary[key]));
+        
+        GenerateSpoofKeys();
     }
 
     /// <summary>
@@ -86,6 +88,28 @@ public class PlayerPrefPassword : ScriptableObject
             if (SecurePlayerPrefs.HasKey(key))
                 prefDictionary.Add(key, SecurePlayerPrefs.GetString(key));
         });
+    }
+
+    /// <summary>
+    /// Generates spoof keys and adds them to the player prefs.
+    /// </summary>
+    /// <param name="iterations"> The amount of times to iterate through the length of the dictionary and add the spoof keys. </param>
+    private void GenerateSpoofKeys(int iterations = 5)
+    {
+        for (int i = 0; i < iterations; i++)
+        {
+            foreach (string key in prefDictionary.Keys)
+            {
+                string spoofKey;
+
+                do
+                {
+                    spoofKey = PasswordUtils.GenerateRandomPassword() + RandomUtils.GenerateRandomHexLetter();
+                } while (!SecurePlayerPrefs.HasKey(spoofKey));
+
+                SecurePlayerPrefs.SetString(spoofKey, PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH));
+            }
+        }
     }
 
     /// <summary>
