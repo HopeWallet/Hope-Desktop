@@ -68,7 +68,7 @@ public class TokenContractManager
     {
         var fixedAddress = tokenAddress.ToLower();
 
-        if (PlayerPrefs.HasKey(fixedAddress))
+        if (SecurePlayerPrefs.HasKey(fixedAddress))
             return;
 
         popupManager.GetPopup<LoadingPopup>();
@@ -79,8 +79,8 @@ public class TokenContractManager
             {
                 string tokenPref = fixedAddress + "-" + asset.AssetSymbol;
 
-                PlayerPrefs.SetString(settings.tokenPrefName + (tokenPrefIndex++), tokenPref);
-                PlayerPrefs.SetString(tokenPref, abi);
+                SecurePlayerPrefs.SetString(settings.tokenPrefName + (tokenPrefIndex++), tokenPref);
+                SecurePlayerPrefs.SetString(tokenPref, abi);
 
                 addressSymbolPair.Add(fixedAddress, asset.AssetSymbol);
                 popupManager.CloseActivePopup();
@@ -101,10 +101,10 @@ public class TokenContractManager
             string prefName = settings.tokenPrefName + i;
             string nextPrefName = settings.tokenPrefName + (i + 1);
 
-            if (!PlayerPrefs.HasKey(prefName))
+            if (!SecurePlayerPrefs.HasKey(prefName))
                 break;
 
-            string tokenPref = PlayerPrefs.GetString(prefName);
+            string tokenPref = SecurePlayerPrefs.GetString(prefName);
             string tokenAddress = GetTokenAddressFromPref(tokenPref);
 
             if (tokenAddress.EqualsIgnoreCase(addressToRemove))
@@ -113,18 +113,18 @@ public class TokenContractManager
                 startRemoving = true;
 
                 addressSymbolPair.Remove(tokenAddress);
-                PlayerPrefs.DeleteKey(addressToRemove + "-" + GetTokenSymbolFromPref(tokenPref));
+                SecurePlayerPrefs.DeleteKey(addressToRemove + "-" + GetTokenSymbolFromPref(tokenPref));
                 OnTokenRemoved?.Invoke(addressToRemove);
             }
 
             if (startRemoving)
             {
-                PlayerPrefs.DeleteKey(prefName);
+                SecurePlayerPrefs.DeleteKey(prefName);
 
-                if (!PlayerPrefs.HasKey(nextPrefName))
+                if (!SecurePlayerPrefs.HasKey(nextPrefName))
                     break;
 
-                PlayerPrefs.SetString(prefName, PlayerPrefs.GetString(nextPrefName));
+                SecurePlayerPrefs.SetString(prefName, SecurePlayerPrefs.GetString(nextPrefName));
             }
         }
 
@@ -157,13 +157,13 @@ public class TokenContractManager
         {
             string prefName = settings.tokenPrefName + i;
 
-            if (!PlayerPrefs.HasKey(prefName))
+            if (!SecurePlayerPrefs.HasKey(prefName))
             {
                 tokenPrefIndex = i;
                 break;
             }
 
-            string addressPref = PlayerPrefs.GetString(prefName);
+            string addressPref = SecurePlayerPrefs.GetString(prefName);
 
             tokensToInitialize.Enqueue(addressPref);
             addressButtonIndices.Add(GetTokenAddressFromPref(addressPref), i + 1);
@@ -182,7 +182,7 @@ public class TokenContractManager
             return;
 
         string tokenPref = tokensToInitialize.Dequeue();
-        string tokenAbi = PlayerPrefs.GetString(tokenPref);
+        string tokenAbi = SecurePlayerPrefs.GetString(tokenPref);
         string tokenAddress = GetTokenAddressFromPref(tokenPref);
         string tokenSymbol = GetTokenSymbolFromPref(tokenPref);
 
