@@ -14,12 +14,13 @@ using Zenject;
 public class UserWallet
 {
 
+    public static event Action OnWalletCreated;
     public static event Action OnWalletLoadSuccessful;
     public static event Action OnWalletLoadUnsuccessful;
 
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
-    private readonly PlayerPrefPassword safePassword;
+    private readonly PlayerPrefPassword prefPassword;
     private readonly ByteDataCache byteDataCache;
 
     private Account account;
@@ -32,18 +33,18 @@ public class UserWallet
     /// <summary>
     /// Initializes the UserWallet with the SafePassword object.
     /// </summary>
-    /// <param name="safePassword"> The SafePassword object used to encrypt the wallet. </param>
+    /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
     /// <param name="byteDataCache"> The active ByteDataCache. </param>
-    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ByteDataCache byteDataCache)
+    public UserWallet(PlayerPrefPassword prefPassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ByteDataCache byteDataCache)
     {
-        this.safePassword = safePassword;
+        this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
         this.byteDataCache = byteDataCache;
 
-        OnWalletLoadSuccessful += safePassword.SetupPlayerPrefs;
+        OnWalletCreated += prefPassword.SetupPlayerPrefs;
     }
 
     /// <summary>
@@ -52,8 +53,8 @@ public class UserWallet
     public void UnlockWallet()
     {
         StartLoadingPopup("Unlocking ");
-        safePassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
+        prefPassword.PopulatePrefDictionary();
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -63,12 +64,13 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
                 UserWalletJsonHandler.CreateWallet(walletData);
                 OnWalletLoadSuccessful?.Invoke();
+                OnWalletCreated?.Invoke();
             });
         }, true));
     }
@@ -96,7 +98,7 @@ public class UserWallet
     /// </summary>
     /// <param name="safePassword"> SafePassword object to use to check if the PlayerPrefs are active. </param>
     /// <returns> True if there is a readable wallet. </returns>
-    public bool CanReadWallet => safePassword.HasPlayerPrefs() && UserWalletJsonHandler.JsonWalletExists;
+    public bool CanReadWallet => prefPassword.HasPlayerPrefs() && UserWalletJsonHandler.JsonWalletExists;
 
     /// <summary>
     /// Starts the loading popup for the wallet.

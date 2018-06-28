@@ -63,10 +63,10 @@ public class PlayerPrefPassword : ScriptableObject
     public bool HasPlayerPrefs()
     {
         foreach (string key in keys)
-            if (string.IsNullOrEmpty(SecurePlayerPrefs.GetString(key)))
+            if (!SecurePlayerPrefs.HasKey(key))
                 return false;
 
-        return false;
+        return true;
     }
 
     /// <summary>
