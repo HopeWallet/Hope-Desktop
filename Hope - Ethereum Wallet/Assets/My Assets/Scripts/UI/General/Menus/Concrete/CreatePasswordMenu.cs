@@ -65,8 +65,6 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     public void SetPassword()
     {
         byteDataCache[0] = passwordFields[1].text.Protect();
-        //byteDataCache.CollectiveData.Add(ProtectedData.Protect(Encoding.UTF8.GetBytes(passwordFields[1].text), null, DataProtectionScope.CurrentUser));
-        //userWalletManager.SetWalletPassword(passwordFields[1].text);
         uiManager.OpenMenu<ImportOrCreateMenu>();
     }
 

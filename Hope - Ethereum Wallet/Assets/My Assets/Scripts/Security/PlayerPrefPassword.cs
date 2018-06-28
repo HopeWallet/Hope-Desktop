@@ -105,7 +105,7 @@ public class PlayerPrefPassword : ScriptableObject
                 do
                 {
                     spoofKey = PasswordUtils.GenerateRandomPassword() + RandomUtils.GenerateRandomHexLetter();
-                } while (!SecurePlayerPrefs.HasKey(spoofKey));
+                } while (SecurePlayerPrefs.HasKey(spoofKey));
 
                 SecurePlayerPrefs.SetString(spoofKey, PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH));
             }
