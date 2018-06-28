@@ -5,6 +5,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Web3.Accounts;
 using System;
+using System.Text;
 using Zenject;
 
 /// <summary>
@@ -23,17 +24,10 @@ public class UserWallet
 
     private Account account;
 
-    private string password;
-
     /// <summary>
     /// The user's public address.
     /// </summary>
     public string Address => account.Address;
-
-    /// <summary>
-    /// The password of the wallet.
-    /// </summary>
-    public string Password { set { password = value; } }
 
     /// <summary>
     /// Initializes the UserWallet with the SafePassword object.
@@ -55,23 +49,21 @@ public class UserWallet
     /// <summary>
     /// Unlocks a wallet if the password is correct.
     /// </summary>
-    /// <param name="userPassword"> The user's password for accessing the wallet, for extra layer of security. </param>
-    public void UnlockWallet(string userPassword = null)
+    public void UnlockWallet()
     {
         StartLoadingPopup("Unlocking ");
         safePassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, userPassword ?? password, (pass) => TryCreateAccount(pass));
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
     /// Creates a wallet given a mnemonic phrase if it is a valid phrase.
     /// </summary>
     /// <param name="mnemonic"> The mnemonic phrase to use to derive the wallet data. </param>
-    /// <param name="userPassword"> The user's password for accessing the wallet, for extra layer of security. </param>
-    public void CreateWallet(string mnemonic, string userPassword = null)
+    public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, userPassword ?? password, (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
