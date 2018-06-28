@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class MenuAnimator
+public static class FormAnimator
 {
 
 	private readonly static Dictionary<GameObject, List<Component>> animatedComponents = new Dictionary<GameObject, List<Component>>();
