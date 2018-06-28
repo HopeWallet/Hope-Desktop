@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hope.Security.Encryption;
+using UnityEngine;
 
 /// <summary>
 /// Class that is used to securely and obscurely save data to the PlayerPrefs with a seemingly random name and encrypted data.
@@ -27,8 +28,36 @@ public static class SecurePlayerPrefs
     /// Gets a string from the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
-    /// <returns> The value returned from the PlayerPrefs with the given key. </returns>
+    /// <returns> The string value returned from the PlayerPrefs with the given key. </returns>
     public static string GetString(string key) => PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt();
+
+    /// <summary>
+    /// Sets an int value in the PlayerPrefs.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <param name="value"> The value of the pref. </param>
+    public static void SetInt(string key, int value) => SetString(key, value.ToString());
+
+    /// <summary>
+    /// Gets an int from the PlayerPrefs.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <returns> The int value returned from the PlayerPrefs with the given key. </returns>
+    public static int GetInt(string key) => int.Parse(PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt());
+
+    /// <summary>
+    /// Sets a float value in the PlayerPrefs.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <param name="value"> The value of the pref. </param>
+    public static void SetFloat(string key, float value) => SetString(key, value.ToString());
+
+    /// <summary>
+    /// Gets a float from the PlayerPrefs.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <returns> The float value returned from the PlayerPrefs with the given key. </returns>
+    public static float GetFloat(string key) => float.Parse(PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt());
 
     /// <summary>
     /// Deletes a key from the PlayerPrefs.

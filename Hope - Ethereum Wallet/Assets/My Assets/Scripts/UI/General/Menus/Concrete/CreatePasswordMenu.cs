@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using Hope.Security.Encryption;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>

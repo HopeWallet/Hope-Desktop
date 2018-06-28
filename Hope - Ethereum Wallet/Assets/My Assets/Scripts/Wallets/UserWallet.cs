@@ -1,4 +1,5 @@
-﻿using Hope.Utils.EthereumUtils;
+﻿using Hope.Security.Encryption;
+using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
