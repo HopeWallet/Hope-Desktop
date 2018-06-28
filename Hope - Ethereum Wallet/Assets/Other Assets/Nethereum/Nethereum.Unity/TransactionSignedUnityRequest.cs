@@ -6,6 +6,7 @@ using Nethereum.Hex.HexTypes;
 using System.Collections;
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace Nethereum.JsonRpc.UnityClient
 {
@@ -15,15 +16,18 @@ namespace Nethereum.JsonRpc.UnityClient
         private string _url;
         private readonly string _privateKey;
         private readonly string _account;
+
+        private readonly ByteDataCache _byteDataCache;
         private readonly TransactionSigner _transactionSigner;
         private readonly EthGetTransactionCountUnityRequest _transactionCountRequest;
         private readonly EthSendRawTransactionUnityRequest _ethSendTransactionRequest;
 
-        public TransactionSignedUnityRequest(string url, string privateKey, string account)
+        public TransactionSignedUnityRequest(ByteDataCache byteDataCache, string url, string privateKey, string account)
         {
             _url = url;
             _account = account;
             _privateKey = privateKey;
+            _byteDataCache = byteDataCache;
             _transactionSigner = new TransactionSigner(); 
             _ethSendTransactionRequest = new EthSendRawTransactionUnityRequest(_url);
             _transactionCountRequest = new EthGetTransactionCountUnityRequest(_url);
@@ -64,6 +68,7 @@ namespace Nethereum.JsonRpc.UnityClient
 
             var signedTransaction = _transactionSigner.SignTransaction(_privateKey, transactionInput.To, value.Value, nonce,
                 gasPrice.Value, gasLimit.Value, transactionInput.Data);
+
             
             
             yield return _ethSendTransactionRequest.SendRequest(signedTransaction);

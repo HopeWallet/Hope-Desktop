@@ -27,7 +27,7 @@ public class TokenPrefRandomizer
 
         AppSettings = Resources.Load("AppSettings") as AppSettingsInstaller;
         OldTokenPrefName = AppSettings.tokenContractSettings.tokenPrefName;
-        AppSettings.tokenContractSettings.tokenPrefName = PasswordUtils.GenerateRandomPassword() + GetRandomHexLetter();
+        AppSettings.tokenContractSettings.tokenPrefName = PasswordUtils.GenerateRandomPassword() + RandomUtils.GenerateRandomHexLetter();
     }
 
     /// <summary>
@@ -37,12 +37,5 @@ public class TokenPrefRandomizer
     /// <param name="result"> The result of the build. </param>
     [PostProcessBuild(2)]
     public static void RestoreValues(BuildTarget target, string result) => AppSettings.tokenContractSettings.tokenPrefName = OldTokenPrefName;
-
-    /// <summary>
-    /// Generates and returns a random hexadecimal letter.
-    /// a-f, A-F.
-    /// </summary>
-    /// <returns> The hexadecimal character. </returns>
-    private static char GetRandomHexLetter() => (char)(Random.Range(0, 6) + (Convert.ToBoolean(Random.Range(0, 2)) ? 65 : 97));
 
 }

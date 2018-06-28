@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using System.Text;
 using Random = System.Random;
 using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
+using Zenject;
+using Hope.Security.Encryption;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -20,9 +22,6 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-
-        //SecurePlayerPrefs.SetInt("MyNumber", 12);
-        SecurePlayerPrefs.GetInt("MyNumber").Log();
     }
 
     private void Update()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using UnityEngine;
@@ -31,6 +32,13 @@ public static class RandomUtils
 
         return val;
     }
+
+    /// <summary>
+    /// Generates and returns a random hexadecimal character.
+    /// a-f, A-F.
+    /// </summary>
+    /// <returns> The hexadecimal character. </returns>
+    public static char GenerateRandomHexLetter() => (char)(UnityEngine.Random.Range(0, 6) + (Convert.ToBoolean(UnityEngine.Random.Range(0, 2)) ? 65 : 97));
 
     /// <summary>
     /// Generates a random string based on another string as a seed.

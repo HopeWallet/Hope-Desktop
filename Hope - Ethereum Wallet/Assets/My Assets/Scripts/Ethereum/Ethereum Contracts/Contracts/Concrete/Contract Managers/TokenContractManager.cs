@@ -17,9 +17,9 @@ public class TokenContractManager
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
 
-    private readonly Queue<string> tokensToInitialize;
-    private readonly Dictionary<string, string> addressSymbolPair;
-    private readonly Dictionary<string, int> addressButtonIndices;
+    private readonly Queue<string> tokensToInitialize = new Queue<string>();
+    private readonly Dictionary<string, string> addressSymbolPair = new Dictionary<string, string>();
+    private readonly Dictionary<string, int> addressButtonIndices = new Dictionary<string, int>();
 
     private int tokenPrefIndex,
                 savedTokenCount,
@@ -39,10 +39,6 @@ public class TokenContractManager
         this.popupManager = popupManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
-
-        tokensToInitialize = new Queue<string>();
-        addressSymbolPair = new Dictionary<string, string>();
-        addressButtonIndices = new Dictionary<string, int>();
 
         AddSavedTokensToQueue();
     }

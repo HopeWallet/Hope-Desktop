@@ -1,4 +1,6 @@
-﻿using UnityEngine.UI;
+﻿using Hope.Security.Encryption;
+using System.Text;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -13,13 +15,19 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     public Button restoreButton;
 
     private ButtonClickObserver buttonObserver;
+    private ByteDataCache byteDataCache;
 
     /// <summary>
     /// Adds the dependencies required for this menu.
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
+    /// <param name="byteDataCache"> The active ByteDataCache. </param>
     [Inject]
-    public void Construct(ButtonClickObserver buttonObserver) => this.buttonObserver = buttonObserver;
+    public void Construct(ButtonClickObserver buttonObserver, ByteDataCache byteDataCache)
+    {
+        this.buttonObserver = buttonObserver;
+        this.byteDataCache = byteDataCache;
+    }
 
     /// <summary>
     /// Adds the button click events on start.
@@ -52,7 +60,11 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// Loads a wallet with the text input by the user as the password.
     /// Will not close this gui or open the next gui unless the password was correct.
     /// </summary>
-    public override void LoadWallet() => userWalletManager.UnlockWallet(passwordField.text);
+    public override void LoadWallet()
+    {
+        byteDataCache[0] = passwordField.text.Protect();
+        userWalletManager.UnlockWallet();
+    }
 
     /// <summary>
     /// Enables the menu for creating a new wallet from the beginning.

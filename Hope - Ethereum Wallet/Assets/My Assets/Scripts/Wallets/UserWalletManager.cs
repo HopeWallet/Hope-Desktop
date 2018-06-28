@@ -21,10 +21,11 @@ public class UserWalletManager
     /// <param name="settings"> The settings to initialize the wallet with. </param>
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
-    public UserWalletManager(Settings settings, PopupManager popupManager, EthereumNetworkManager ethereumNetworkManager) : base()
+    /// <param name="byteDataCache"> The active ByteDataCache. </param>
+    public UserWalletManager(Settings settings, PopupManager popupManager, EthereumNetworkManager ethereumNetworkManager, ByteDataCache byteDataCache)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork);
+        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, byteDataCache);
     }
 
     /// <summary>
@@ -65,21 +66,14 @@ public class UserWalletManager
     /// Calls the action if the wallet loaded successfully.
     /// </summary>
     /// <param name="password"> The password to attempt to load the wallet with. </param>
-    public void UnlockWallet(string password = null) => userWallet.UnlockWallet(password);
+    public void UnlockWallet() => userWallet.UnlockWallet();
 
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// Calls the action with the state of successful or unsuccessful wallet creation.
     /// </summary>
     /// <param name="mnemonic"> The mnemonic phrase to create the wallet with. </param>
-    /// <param name="password"> The password to encrypt the wallet with. </param>
-    public void CreateWallet(string mnemonic, string password = null) => userWallet.CreateWallet(mnemonic, password);
-
-    /// <summary>
-    /// Sets the password to encrypt or decrypt the wallet with.
-    /// </summary>
-    /// <param name="password"> The wallet password. </param>
-    public void SetWalletPassword(string password) => userWallet.Password = password;
+    public void CreateWallet(string mnemonic) => userWallet.CreateWallet(mnemonic);
 
     /// <summary>
     /// Checks if a wallet exists and can be attempted to be opened.

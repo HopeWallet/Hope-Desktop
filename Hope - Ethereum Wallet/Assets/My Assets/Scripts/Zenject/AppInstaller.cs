@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -61,6 +60,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         Container.BindInterfacesAndSelfTo<UpdateManager>().AsSingle().NonLazy();
         Container.Bind<PeriodicUpdateManager>().AsSingle().NonLazy();
+
+        Container.Bind<ByteDataCache>().AsSingle().NonLazy();
 
         Container.Bind<DebugManager>().AsSingle().NonLazy();
 

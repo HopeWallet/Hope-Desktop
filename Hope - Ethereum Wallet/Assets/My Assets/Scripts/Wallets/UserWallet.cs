@@ -5,6 +5,8 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Web3.Accounts;
 using System;
+using System.Text;
+using Zenject;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
@@ -18,10 +20,9 @@ public class UserWallet
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword safePassword;
+    private readonly ByteDataCache byteDataCache;
 
     private Account account;
-
-    private string password;
 
     /// <summary>
     /// The user's public address.
@@ -29,21 +30,18 @@ public class UserWallet
     public string Address => account.Address;
 
     /// <summary>
-    /// The password of the wallet.
-    /// </summary>
-    public string Password { set { password = value; } }
-
-    /// <summary>
     /// Initializes the UserWallet with the SafePassword object.
     /// </summary>
     /// <param name="safePassword"> The SafePassword object used to encrypt the wallet. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork)
+    /// <param name="byteDataCache"> The active ByteDataCache. </param>
+    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ByteDataCache byteDataCache)
     {
         this.safePassword = safePassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
+        this.byteDataCache = byteDataCache;
 
         OnWalletLoadSuccessful += safePassword.SetupPlayerPrefs;
     }
@@ -51,23 +49,21 @@ public class UserWallet
     /// <summary>
     /// Unlocks a wallet if the password is correct.
     /// </summary>
-    /// <param name="userPassword"> The user's password for accessing the wallet, for extra layer of security. </param>
-    public void UnlockWallet(string userPassword = null)
+    public void UnlockWallet()
     {
         StartLoadingPopup("Unlocking ");
         safePassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, userPassword ?? password, (pass) => TryCreateAccount(pass));
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
     /// Creates a wallet given a mnemonic phrase if it is a valid phrase.
     /// </summary>
     /// <param name="mnemonic"> The mnemonic phrase to use to derive the wallet data. </param>
-    /// <param name="userPassword"> The user's password for accessing the wallet, for extra layer of security. </param>
-    public void CreateWallet(string mnemonic, string userPassword = null)
+    public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, userPassword ?? password, (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(safePassword, byteDataCache[0].Unprotect(), (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
@@ -89,7 +85,7 @@ public class UserWallet
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(byteDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);

@@ -1,4 +1,6 @@
 ﻿using Hope.Security.Encryption;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine.UI;
 using Zenject;
 
@@ -14,6 +16,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
 
     private UserWalletManager userWalletManager;
     private ButtonClickObserver buttonObserver;
+    private ByteDataCache byteDataCache;
 
     private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
@@ -22,11 +25,13 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
+    /// <param name="byteDataCache"> The active ByteDataCache. </param>
     [Inject]
-    public void Construct(UserWalletManager userWalletManager, ButtonClickObserver buttonObserver)
+    public void Construct(UserWalletManager userWalletManager, ButtonClickObserver buttonObserver, ByteDataCache byteDataCache)
     {
         this.userWalletManager = userWalletManager;
         this.buttonObserver = buttonObserver;
+        this.byteDataCache = byteDataCache;
     }
 
     /// <summary>
@@ -59,7 +64,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     public void SetPassword()
     {
-        userWalletManager.SetWalletPassword(passwordFields[1].text);
+        byteDataCache[0] = passwordFields[1].text.Protect();
         uiManager.OpenMenu<ImportOrCreateMenu>();
     }
 
