@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Hope.Security.Encryption
 {
@@ -18,7 +19,7 @@ namespace Hope.Security.Encryption
         public static async void GetEncryptionPasswordAsync(PlayerPrefPassword safePassword, string userPassword,
             Action<string> onPasswordExtracted, bool generateNew = false)
         {
-            onPasswordExtracted?.Invoke(await TaskUtils.StartStringTask(()
+            onPasswordExtracted?.Invoke(await Task.Run(()
                 => generateNew ? safePassword.GenerateEncryptionPassword(userPassword) : safePassword.ExtractEncryptionPassword(userPassword)));
         }
 
@@ -34,10 +35,10 @@ namespace Hope.Security.Encryption
             var splitPvtKey = privateKey.SplitHalf();
             var splitPhrase = phrase.SplitHalf();
 
-            var pvtKey1Task = TaskUtils.StartStringTask(() => splitPvtKey.firstHalf.AESEncrypt(encryptionPassword));
-            var pvtKey2Task = TaskUtils.StartStringTask(() => splitPvtKey.secondHalf.DPEncrypt(encryptionPassword));
-            var phrase1Task = TaskUtils.StartStringTask(() => splitPhrase.firstHalf.AESEncrypt(encryptionPassword));
-            var phrase2Task = TaskUtils.StartStringTask(() => splitPhrase.secondHalf.DPEncrypt(encryptionPassword));
+            var pvtKey1Task = Task.Run(() => splitPvtKey.firstHalf.AESEncrypt(encryptionPassword));
+            var pvtKey2Task = Task.Run(() => splitPvtKey.secondHalf.DPEncrypt(encryptionPassword));
+            var phrase1Task = Task.Run(() => splitPhrase.firstHalf.AESEncrypt(encryptionPassword));
+            var phrase2Task = Task.Run(() => splitPhrase.secondHalf.DPEncrypt(encryptionPassword));
 
             onWalletEncrypted?.Invoke(new WalletData(await pvtKey1Task, await pvtKey2Task, await phrase1Task, await phrase2Task));
         }
@@ -53,10 +54,10 @@ namespace Hope.Security.Encryption
             if (walletData == null)
                 return;
 
-            var pvtKey1Task = TaskUtils.StartStringTask(() => walletData.PrivateKey1.AESDecrypt(encryptionPassword));
-            var pvtKey2Task = TaskUtils.StartStringTask(() => walletData.PrivateKey2.DPDecrypt(encryptionPassword));
-            var phrase1Task = TaskUtils.StartStringTask(() => walletData.Phrase1.AESDecrypt(encryptionPassword));
-            var phrase2Task = TaskUtils.StartStringTask(() => walletData.Phrase2.DPDecrypt(encryptionPassword));
+            var pvtKey1Task = Task.Run(() => walletData.PrivateKey1.AESDecrypt(encryptionPassword));
+            var pvtKey2Task = Task.Run(() => walletData.PrivateKey2.DPDecrypt(encryptionPassword));
+            var phrase1Task = Task.Run(() => walletData.Phrase1.AESDecrypt(encryptionPassword));
+            var phrase2Task = Task.Run(() => walletData.Phrase2.DPDecrypt(encryptionPassword));
 
             onWalletDecrypted?.Invoke(await pvtKey1Task + await pvtKey2Task, await phrase1Task + await phrase2Task);
         }

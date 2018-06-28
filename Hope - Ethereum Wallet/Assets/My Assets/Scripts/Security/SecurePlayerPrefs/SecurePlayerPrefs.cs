@@ -1,6 +1,9 @@
 ﻿using Hope.Security;
 using Hope.Security.Encryption;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 /// <summary>
 /// Class that is used to securely and obscurely save data to the PlayerPrefs with a seemingly random name and encrypted data.
@@ -16,6 +19,20 @@ public static class SecurePlayerPrefs
     static SecurePlayerPrefs()
     {
         EnsureSeedCreation();
+    }
+
+    public static void GetStringAsync(string key, Action<string> onStringReceived) => InternalGetStringAsync(key, onStringReceived);
+
+    private static async void InternalGetStringAsync(string key, Action<string> onStringReceived)
+    {
+        string baseKeyEncrypted = PlayerPrefs.GetString(SECURE_PREF_SEED_NAME);
+
+        string secureKey = await Task.Run(() => string.Concat(baseKeyEncrypted.DPDecrypt(), key).GetSha384Hash());
+        string secureEntropy = await Task.Run(() => secureKey.GetMd5Hash());
+
+        string encryptedValue = PlayerPrefs.GetString(secureKey);
+
+        onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt(secureEntropy)));
     }
 
     /// <summary>
@@ -91,7 +108,7 @@ public static class SecurePlayerPrefs
 
         PlayerPrefs.SetString(secureKey, value.DPEncrypt(secureKey.GetMd5Hash()));
     }
-    
+
     /// <summary>
     /// Gets a string from the PlayerPrefs after hashing the string values.
     /// </summary>
