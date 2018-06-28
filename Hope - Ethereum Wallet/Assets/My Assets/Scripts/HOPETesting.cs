@@ -26,10 +26,11 @@ public class HOPETesting : MonoBehaviour
 
         PlayerPrefs.DeleteAll();
 
-        string test = "This is a test string";
+        string test = PasswordUtils.GenerateRandomPassword();
         test.GetMd5Hash().Log();
         test.GetSha1Hash().Log();
         test.GetSha256Hash().Log();
+        test.GetSha384Hash().Log();
         test.GetSha512Hash().Log();
     }
 
