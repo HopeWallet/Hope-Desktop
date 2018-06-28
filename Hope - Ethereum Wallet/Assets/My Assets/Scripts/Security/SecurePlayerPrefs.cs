@@ -7,7 +7,7 @@ using UnityEngine;
 public static class SecurePlayerPrefs
 {
 
-    private const string SECURE_PREF_SEED_NAME = "0x0000000000000000000000000000000000000000";
+    private const string SECURE_PREF_SEED_NAME = "i2E.z4cF^lVo_m-+cw,p@cj;)hAqQBFDp3d{Zi+l";
 
     /// <summary>
     /// Initializes the SecurePlayerPrefs by making sure we have the base seed pref initialized.

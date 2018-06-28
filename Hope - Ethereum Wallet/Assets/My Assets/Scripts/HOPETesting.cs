@@ -20,9 +20,6 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-
-        //SecurePlayerPrefs.SetInt("MyNumber", 12);
-        SecurePlayerPrefs.GetInt("MyNumber").Log();
     }
 
     private void Update()
