@@ -94,7 +94,7 @@ public class PlayerPrefPassword : ScriptableObject
     /// Generates spoof keys and adds them to the player prefs.
     /// </summary>
     /// <param name="iterations"> The amount of times to iterate through the length of the dictionary and add the spoof keys. </param>
-    private void GenerateSpoofKeys(int iterations = 5)
+    private void GenerateSpoofKeys(int iterations = 10)
     {
         for (int i = 0; i < iterations; i++)
         {

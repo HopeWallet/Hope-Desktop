@@ -10,21 +10,23 @@ namespace Hope.Security.Encryption
     public static class Protection
     {
 
-        private static readonly byte[] Entropy = Encoding.UTF8.GetBytes(RandomUtils.GenerateSeededRandomString(PasswordUtils.GenerateRandomPassword()));
+        private static readonly byte[] Entropy = Encoding.UTF8.GetBytes(PasswordUtils.GenerateRandomPassword().GetSha512Hash());
 
         /// <summary>
         /// Protects a piece of string text.
         /// </summary>
         /// <param name="data"> The string data. </param>
         /// <returns> The protected data as a byte array. </returns>
-        public static byte[] Protect(this string data) => ProtectedData.Protect(Encoding.UTF8.GetBytes(data), Entropy, DataProtectionScope.CurrentUser);
+        //public static byte[] Protect(this string data) => ProtectedData.Protect(Encoding.UTF8.GetBytes(data), Entropy, DataProtectionScope.CurrentUser);
+        public static byte[] Protect(this string data) => Encoding.UTF8.GetBytes(data.DPEncrypt(Encoding.UTF8.GetString(Entropy)));
 
         /// <summary>
         /// Unprotects a byte array of data.
         /// </summary>
         /// <param name="data"> The data to unprotect. </param>
         /// <returns> The unprotected string retrieved from the data. </returns>
-        public static string Unprotect(this byte[] data) => Encoding.UTF8.GetString(ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser));
+        //public static string Unprotect(this byte[] data) => Encoding.UTF8.GetString(ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser));
+        public static string Unprotect(this byte[] data) => Encoding.UTF8.GetString(data).DPDecrypt(Encoding.UTF8.GetString(Entropy));
 
     }
 

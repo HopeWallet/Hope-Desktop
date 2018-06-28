@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption;
+﻿using Hope.Security;
+using Hope.Security.Encryption;
 using UnityEngine;
 
 /// <summary>
@@ -77,7 +78,7 @@ public static class SecurePlayerPrefs
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => RandomUtils.GenerateSeededRandomString(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt() + key);
+    private static string GetSecureKey(string key) => string.Concat(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt(), key).GetSha512Hash();
 
     /// <summary>
     /// Ensures the base seed for all secure key generation is created.
