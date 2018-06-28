@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 using Random = System.Random;
@@ -39,24 +40,5 @@ public static class RandomUtils
     /// </summary>
     /// <returns> The hexadecimal character. </returns>
     public static char GenerateRandomHexLetter() => (char)(UnityEngine.Random.Range(0, 6) + (Convert.ToBoolean(UnityEngine.Random.Range(0, 2)) ? 65 : 97));
-
-    /// <summary>
-    /// Generates a random string based on another string as a seed.
-    /// </summary>
-    /// <param name="seed"> The string seed to use to generate the random string. </param>
-    /// <param name="strLength"> The length of the random string. </param>
-    /// <returns> The randomly generated string. </returns>
-    public static string GenerateSeededRandomString(string seed, int strLength = 40)
-    {
-        var random = new Random(seed.GetHashCode());
-        var bytes = new byte[strLength];
-
-        random.NextBytes(bytes);
-
-        for (int i = 0; i < bytes.Length; i++)
-            bytes[i] = (byte)Mathf.Lerp(40, 125, bytes[i] / 255f);
-
-        return Encoding.ASCII.GetString(bytes);
-    }
 
 }

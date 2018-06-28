@@ -36,8 +36,7 @@ public class TradableAssetManager : IPeriodicUpdater
     /// Initializes the TradableAssetManager by adding required methods to events and adding this class to the PeriodicUpdateManager.
     /// </summary>
     /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use to run this class's periodic updates. </param>
-    [Inject]
-    public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager) : base()
+    public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager)
     {
         TradableAssets = new Dictionary<string, TradableAsset>();
 

@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using UnityEngine;
 
 /// <summary>
 /// Class used for scraping data off of web apis.

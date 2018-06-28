@@ -1,13 +1,13 @@
-﻿using Hope.Security.Encryption;
+﻿using Hope.Security;
+using Hope.Security.Encryption;
+using Hope.Security.SecurePlayerPrefs.Base;
 using UnityEngine;
 
 /// <summary>
 /// Class that is used to securely and obscurely save data to the PlayerPrefs with a seemingly random name and encrypted data.
 /// </summary>
-public static class SecurePlayerPrefs
+public class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
-
-    private const string SECURE_PREF_SEED_NAME = "i2E.z4cF^lVo_m-+cw,p@cj;)hAqQBFDp3d{Zi+l";
 
     /// <summary>
     /// Initializes the SecurePlayerPrefs by making sure we have the base seed pref initialized.
@@ -22,42 +22,42 @@ public static class SecurePlayerPrefs
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
-    public static void SetString(string key, string value) => PlayerPrefs.SetString(GetSecureKey(key), value.DPEncrypt());
+    public static void SetString(string key, string value) => InternalSetString(key, value.ToString());
 
     /// <summary>
     /// Gets a string from the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <returns> The string value returned from the PlayerPrefs with the given key. </returns>
-    public static string GetString(string key) => PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt();
+    public static string GetString(string key) => InternalGetString(key);
 
     /// <summary>
     /// Sets an int value in the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
-    public static void SetInt(string key, int value) => SetString(key, value.ToString());
+    public static void SetInt(string key, int value) => InternalSetString(key, value.ToString());
 
     /// <summary>
     /// Gets an int from the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <returns> The int value returned from the PlayerPrefs with the given key. </returns>
-    public static int GetInt(string key) => int.Parse(PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt());
+    public static int GetInt(string key) => int.Parse(InternalGetString(key));
 
     /// <summary>
     /// Sets a float value in the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
-    public static void SetFloat(string key, float value) => SetString(key, value.ToString());
+    public static void SetFloat(string key, float value) => InternalSetString(key, value.ToString());
 
     /// <summary>
     /// Gets a float from the PlayerPrefs.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <returns> The float value returned from the PlayerPrefs with the given key. </returns>
-    public static float GetFloat(string key) => float.Parse(PlayerPrefs.GetString(GetSecureKey(key)).DPDecrypt());
+    public static float GetFloat(string key) => float.Parse(InternalGetString(key));
 
     /// <summary>
     /// Deletes a key from the PlayerPrefs.
@@ -77,17 +77,29 @@ public static class SecurePlayerPrefs
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => RandomUtils.GenerateSeededRandomString(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt() + key);
+    private static string GetSecureKey(string key) => string.Concat(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt(), key).GetSHA384Hash();
 
     /// <summary>
-    /// Ensures the base seed for all secure key generation is created.
+    /// Sets a string to the PlayerPrefs after hashing the string values.
     /// </summary>
-    private static void EnsureSeedCreation()
+    /// <param name="key"> The key of the value in the PlayerPrefs. </param>
+    /// <param name="value"> The value returned from the key in the PlayerPrefs. </param>
+    private static void InternalSetString(string key, string value)
     {
-        if (PlayerPrefs.HasKey(SECURE_PREF_SEED_NAME))
-            return;
+        string secureKey = GetSecureKey(key);
 
-        PlayerPrefs.SetString(SECURE_PREF_SEED_NAME, PasswordUtils.GenerateRandomPassword().DPEncrypt());
+        PlayerPrefs.SetString(secureKey, value.DPEncrypt(secureKey.GetMD5Hash()));
     }
 
+    /// <summary>
+    /// Gets a string from the PlayerPrefs after hashing the string values.
+    /// </summary>
+    /// <param name="key"> The key of the value in the PlayerPrefs. </param>
+    /// <returns> The value returned from the key in the PlayerPrefs. </returns>
+    private static string InternalGetString(string key)
+    {
+        string secureKey = GetSecureKey(key);
+
+        return PlayerPrefs.GetString(secureKey).DPDecrypt(secureKey.GetMD5Hash());
+    }
 }
