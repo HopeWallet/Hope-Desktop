@@ -5,6 +5,7 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Web3.Accounts;
 using System;
+using Zenject;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
@@ -18,6 +19,7 @@ public class UserWallet
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword safePassword;
+    private readonly ByteDataCache byteDataCache;
 
     private Account account;
 
@@ -39,11 +41,13 @@ public class UserWallet
     /// <param name="safePassword"> The SafePassword object used to encrypt the wallet. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork)
+    /// <param name="byteDataCache"> The active ByteDataCache. </param>
+    public UserWallet(PlayerPrefPassword safePassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ByteDataCache byteDataCache)
     {
         this.safePassword = safePassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
+        this.byteDataCache = byteDataCache;
 
         OnWalletLoadSuccessful += safePassword.SetupPlayerPrefs;
     }
@@ -89,7 +93,7 @@ public class UserWallet
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(byteDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);

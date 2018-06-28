@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Random = System.Random;
 using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
+using Zenject;
 
 public class HOPETesting : MonoBehaviour
 {
