@@ -15,10 +15,6 @@ using Hope.Security;
 public class HOPETesting : MonoBehaviour
 {
 
-    private string value;
-
-    public bool async = true;
-
     private void Start()
     {
         //var ledger = LedgerClient.GetHIDLedgers().First();
@@ -27,22 +23,6 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-        SecurePlayerPrefs.SetString("value", "key");
-        //value = SecurePlayerPrefs.GetStringAsync("value");
-    }
-
-    private void Update()
-    {
-        if (async)
-        {
-            for (int i = 0; i < 16; i++)
-                SecurePlayerPrefs.GetStringAsync("value", null)/*.Log()*/;
-        }
-        else
-        {
-            for (int i = 0; i < 16; i++)
-                SecurePlayerPrefs.GetString("value")/*.Log()*/;
-        }
     }
 
 }

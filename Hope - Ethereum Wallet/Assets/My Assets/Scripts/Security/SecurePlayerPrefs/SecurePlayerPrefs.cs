@@ -1,17 +1,13 @@
 ﻿using Hope.Security;
 using Hope.Security.Encryption;
-using System;
-using System.Threading.Tasks;
+using Hope.Security.SecurePlayerPrefs.Base;
 using UnityEngine;
-using Zenject;
 
 /// <summary>
 /// Class that is used to securely and obscurely save data to the PlayerPrefs with a seemingly random name and encrypted data.
 /// </summary>
-public static class SecurePlayerPrefs
+public class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
-
-    private const string SECURE_PREF_SEED_NAME = "9bd1f75eb75c8ffad8f4b4c67c8f14db32cc3d4177b942334abd47f9e02e35b371d599cb4796185d7410e808f046e119";
 
     /// <summary>
     /// Initializes the SecurePlayerPrefs by making sure we have the base seed pref initialized.
@@ -19,20 +15,6 @@ public static class SecurePlayerPrefs
     static SecurePlayerPrefs()
     {
         EnsureSeedCreation();
-    }
-
-    public static void GetStringAsync(string key, Action<string> onStringReceived) => InternalGetStringAsync(key, onStringReceived);
-
-    private static async void InternalGetStringAsync(string key, Action<string> onStringReceived)
-    {
-        string baseKeyEncrypted = PlayerPrefs.GetString(SECURE_PREF_SEED_NAME);
-
-        string secureKey = await Task.Run(() => string.Concat(baseKeyEncrypted.DPDecrypt(), key).GetSha384Hash());
-        string secureEntropy = await Task.Run(() => secureKey.GetMd5Hash());
-
-        string encryptedValue = PlayerPrefs.GetString(secureKey);
-
-        onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt(secureEntropy)));
     }
 
     /// <summary>
@@ -95,7 +77,7 @@ public static class SecurePlayerPrefs
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => string.Concat(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt(), key).GetSha384Hash();
+    private static string GetSecureKey(string key) => string.Concat(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt(), key).GetSHA384Hash();
 
     /// <summary>
     /// Sets a string to the PlayerPrefs after hashing the string values.
@@ -106,7 +88,7 @@ public static class SecurePlayerPrefs
     {
         string secureKey = GetSecureKey(key);
 
-        PlayerPrefs.SetString(secureKey, value.DPEncrypt(secureKey.GetMd5Hash()));
+        PlayerPrefs.SetString(secureKey, value.DPEncrypt(secureKey.GetMD5Hash()));
     }
 
     /// <summary>
@@ -118,18 +100,6 @@ public static class SecurePlayerPrefs
     {
         string secureKey = GetSecureKey(key);
 
-        return PlayerPrefs.GetString(secureKey).DPDecrypt(secureKey.GetMd5Hash());
+        return PlayerPrefs.GetString(secureKey).DPDecrypt(secureKey.GetMD5Hash());
     }
-
-    /// <summary>
-    /// Ensures the base seed for all secure key generation is created.
-    /// </summary>
-    private static void EnsureSeedCreation()
-    {
-        if (PlayerPrefs.HasKey(SECURE_PREF_SEED_NAME))
-            return;
-
-        PlayerPrefs.SetString(SECURE_PREF_SEED_NAME, PasswordUtils.GenerateRandomPassword().DPEncrypt());
-    }
-
 }

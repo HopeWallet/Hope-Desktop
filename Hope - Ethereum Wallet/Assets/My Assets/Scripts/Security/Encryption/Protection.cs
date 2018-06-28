@@ -10,7 +10,7 @@ namespace Hope.Security.Encryption
     public static class Protection
     {
 
-        private static readonly byte[] Entropy = Encoding.UTF8.GetBytes(PasswordUtils.GenerateRandomPassword().GetSha512Hash());
+        private static readonly byte[] Entropy = Encoding.UTF8.GetBytes(PasswordUtils.GenerateRandomPassword().GetSHA512Hash());
 
         /// <summary>
         /// Protects a piece of string text.
