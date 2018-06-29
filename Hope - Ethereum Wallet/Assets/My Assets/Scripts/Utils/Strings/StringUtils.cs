@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
 
 /// <summary>
 /// Class which contains certain string utilities.
@@ -52,6 +53,21 @@ public static class StringUtils
     {
         foreach (char c in str)
             action?.Invoke(c);
+    }
+
+    /// <summary>
+    /// Gets a hexadecimal string from an array of byte data.
+    /// </summary>
+    /// <param name="data"> The byte data to convert to a string. </param>
+    /// <returns> The hexadecimal string. </returns>
+    public static string GetHexString(this byte[] data)
+    {
+        StringBuilder sBuilder = new StringBuilder();
+
+        for (int i = 0; i < data.Length; i++)
+            sBuilder.Append(data[i].ToString("x2"));
+
+        return sBuilder.ToString();
     }
 
     /// <summary>

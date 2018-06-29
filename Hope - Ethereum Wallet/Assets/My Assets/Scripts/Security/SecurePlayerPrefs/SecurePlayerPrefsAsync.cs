@@ -45,7 +45,7 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
 
     private static async Task<string> GetSecureKey(string key)
     {
-        string baseKeyEncrypted = PlayerPrefs.GetString(SECURE_PREF_SEED_NAME);
+        string baseKeyEncrypted = GetSeedValue();
 
         return await Task.Run(() => GetKeyHash(string.Concat(baseKeyEncrypted.DPDecrypt(), key)));
     }

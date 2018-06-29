@@ -76,7 +76,7 @@ public class SecurePlayerPrefs : SecurePlayerPrefsBase
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(PlayerPrefs.GetString(SECURE_PREF_SEED_NAME).DPDecrypt(), key));
+    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(GetSeedValue().DPDecrypt(), key));
 
     /// <summary>
     /// Sets a string to the PlayerPrefs after hashing the string values.

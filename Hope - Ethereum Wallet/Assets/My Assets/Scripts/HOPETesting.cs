@@ -13,6 +13,8 @@ using Hope.Security.Encryption;
 using Hope.Security;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Management;
+using System.Net.NetworkInformation;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -25,4 +27,5 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
     }
+
 }

@@ -54,16 +54,7 @@ namespace Hope.Security
         private static string GetHash<T>(string input) where T : HashAlgorithm
         {
             using (T hash = (T)CryptoConfig.CreateFromName(typeof(T).ToString()))
-            {
-                byte[] data = hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-                StringBuilder sBuilder = new StringBuilder();
-
-                for (int i = 0; i < data.Length; i++)
-                    sBuilder.Append(data[i].ToString("x2"));
-
-                return sBuilder.ToString();
-            }
+                return hash.ComputeHash(Encoding.UTF8.GetBytes(input)).GetHexString();
         }
     }
 

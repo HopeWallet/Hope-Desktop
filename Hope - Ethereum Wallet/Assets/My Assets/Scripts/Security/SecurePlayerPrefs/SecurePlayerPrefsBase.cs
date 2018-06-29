@@ -1,4 +1,7 @@
 ﻿using Hope.Security.Encryption;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
 using UnityEngine;
 
 namespace Hope.Security.SecurePlayerPrefs.Base
@@ -9,8 +12,6 @@ namespace Hope.Security.SecurePlayerPrefs.Base
     /// </summary>
     public abstract class SecurePlayerPrefsBase
     {
-
-        protected const string SECURE_PREF_SEED_NAME = "9bd1f75eb75c8ffad8f4b4c67c8f14db32cc3d4177b942334abd47f9e02e35b371d599cb4796185d7410e808f046e119";
 
         /// <summary>
         /// Hashes the key using a specific HashAlgorithm.
@@ -26,15 +27,28 @@ namespace Hope.Security.SecurePlayerPrefs.Base
         /// <returns> The hashed value string. </returns>
         protected static string GetValueHash(string input) => input.GetSHA1Hash();
 
+        protected static string GetSeedValue() => PlayerPrefs.GetString(GetSeedName());
+
         /// <summary>
         /// Ensures the base seed for all secure key generation is created.
         /// </summary>
         protected static void EnsureSeedCreation()
         {
-            if (PlayerPrefs.HasKey(SECURE_PREF_SEED_NAME))
+            string seedName = GetSeedName();
+
+            if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(SECURE_PREF_SEED_NAME, PasswordUtils.GenerateRandomPassword().DPEncrypt().GetSHA512Hash().DPEncrypt());
+            PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().DPEncrypt());
+        }
+
+        private static string GetSeedName()
+        {
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
+                    return GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString());
+
+            return null;
         }
     }
 }
