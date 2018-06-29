@@ -14,18 +14,18 @@ namespace Hope.Security.SecurePlayerPrefs.Base
     {
 
         /// <summary>
-        /// Hashes the key using a specific HashAlgorithm.
+        /// Hashes the key using a specific HashAlgorithm. (SHA384 for now)
         /// </summary>
-        /// <param name="input"> The key to hash. </param>
+        /// <param name="key"> The key to hash. </param>
         /// <returns> The hashed key string. </returns>
-        protected static string GetKeyHash(string input) => input.GetSHA384Hash();
+        protected static string GetKeyHash(string key) => key.GetSHA384Hash();
 
         /// <summary>
-        /// Hashes the value using a specific HashAlgorithm.
+        /// Hashes the value using a specific HashAlgorithm. (SHA1 for now)
         /// </summary>
-        /// <param name="input"> The value to hash. </param>
+        /// <param name="value"> The value to hash. </param>
         /// <returns> The hashed value string. </returns>
-        protected static string GetValueHash(string input) => input.GetSHA1Hash();
+        protected static string GetValueHash(string value) => value.GetSHA512Hash();
 
         /// <summary>
         /// Gets the seed value from the player prefs.

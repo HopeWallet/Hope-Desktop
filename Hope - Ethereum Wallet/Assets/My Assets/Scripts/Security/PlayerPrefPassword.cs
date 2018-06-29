@@ -26,8 +26,16 @@ public class PlayerPrefPassword : ScriptableObject
     /// Extracts the encryption password from the SecurePlayerPrefs.
     /// </summary>
     /// <returns> The encryption password to access the wallet data. </returns>
-    public string ExtractEncryptionPassword(string seed) => DeriveEncryptionPassword(prefDictionary[keys[keys.Length - 1]], prefDictionary[keys[0]],
-                                                                                     i => prefDictionary[keys[i]]).CombineAndRandomize(seed);
+    public string ExtractEncryptionPassword(string seed)
+    {
+        string pass =  DeriveEncryptionPassword(prefDictionary[keys[keys.Length - 1]], prefDictionary[keys[0]],
+                                                i => prefDictionary[keys[i]]).CombineAndRandomize(seed);
+
+        prefDictionary.Clear();
+
+        return pass;
+    }
+
     /// <summary>
     /// Generates an encryption password to use to encrypt WalletData.
     /// </summary>
@@ -54,6 +62,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         GenerateSpoofKeys();
         prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key, prefDictionary[key]));
+        prefDictionary.Clear();
     }
 
     /// <summary>
@@ -102,7 +111,7 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> The task used for generating the spoof key. </returns>
     private async Task GenerateSpoofKey()
     {
-        string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(16));
+        string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH));
         string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter());
         SecurePlayerPrefsAsync.SetString(key, value);
     }
@@ -163,8 +172,6 @@ public class PlayerPrefPassword : ScriptableObject
             password = ModifyString(password, newPass, operationNumbers, i);
             usePass?.Invoke(i, newPass);
         }
-
-        prefDictionary.Clear();
 
         return password;
     }

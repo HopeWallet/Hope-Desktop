@@ -69,8 +69,8 @@ public class UserWallet
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
                 UserWalletJsonHandler.CreateWallet(walletData);
-                OnWalletLoadSuccessful?.Invoke();
                 OnWalletCreated?.Invoke();
+                OnWalletLoadSuccessful?.Invoke();
             });
         }, true));
     }

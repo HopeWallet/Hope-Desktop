@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Zenject;
 
 /// <summary>
 /// Class which manages all TradableAssets.

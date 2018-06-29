@@ -42,7 +42,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         // Bind all contracts.
         Resources.LoadAll<FixedContractBase>("").Where(contract => contract.NetworkType == appSettings.ethereumNetworkSettings.networkType)
-                                        .ForEach(contract => Container.BindInstance(contract.CreateContract()).AsSingle().NonLazy());
+                                                .ForEach(contract => Container.BindInstance(contract.CreateContract()).AsSingle().NonLazy());
     }
 
     /// <summary>
