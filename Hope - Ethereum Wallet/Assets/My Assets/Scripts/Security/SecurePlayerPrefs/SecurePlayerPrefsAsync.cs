@@ -64,6 +64,14 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     /// <param name="onFloatSet"> Optional action to call when the float value has been set. </param>
     public static void SetFloat(string key, float value, Action onFloatSet = null) => AsyncTaskScheduler.Schedule(() => InternalSetString(key, value.ToString(), onFloatSet));
 
+    /// <summary>
+    /// Sets a string value to the SecurePlayerPrefs asynchronously.
+    /// Gets the secure key, secure entropy, and encrypted value all asynchronously.
+    /// </summary>
+    /// <param name="key"> The key to use to set the PlayerPref. </param>
+    /// <param name="value"> The value to use for the PlayerPref. </param>
+    /// <param name="onValueSet"> Action called once the PlayerPref has been set successfully. </param>
+    /// <returns> The task for creating the hashed key/values and setting the PlayerPref. </returns>
     private static async Task InternalSetString(string key, string value, Action onValueSet)
     {
         string secureKey = await GetSecureKey(key);
@@ -74,6 +82,12 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         onValueSet?.Invoke();
     }
 
+    /// <summary>
+    /// Gets a string value from the SecurePlayerPrefs asynchronously.
+    /// </summary>
+    /// <param name="key"> The key to use to get the value from the PlayerPrefs. </param>
+    /// <param name="onStringReceived"> Action called once the string value has been received. </param>
+    /// <returns> The task for creating the hashed key and retrieving the string from the PlayerPrefs. </returns>
     private static async Task InternalGetString(string key, Action<string> onStringReceived)
     {
         string secureKey = await GetSecureKey(key);
@@ -83,6 +97,11 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt().DPDecrypt(secureEntropy)));
     }
 
+    /// <summary>
+    /// Gets the encrypted and hashed key asynchronously.
+    /// </summary>
+    /// <param name="key"> The unencrypted key to use to derive the encrypted and hashed key. </param>
+    /// <returns> The secure key to use to set/get the PlayerPref. </returns>
     private static async Task<string> GetSecureKey(string key)
     {
         string baseKeyEncrypted = GetSeedValue();
