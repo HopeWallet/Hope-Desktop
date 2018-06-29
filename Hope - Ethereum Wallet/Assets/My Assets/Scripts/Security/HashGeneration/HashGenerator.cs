@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Hope.Security
+namespace Hope.Security.HashGeneration
 {
 
     /// <summary>

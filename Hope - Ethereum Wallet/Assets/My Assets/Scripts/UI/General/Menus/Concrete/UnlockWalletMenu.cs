@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using System.Text;
 using UnityEngine.UI;
 using Zenject;

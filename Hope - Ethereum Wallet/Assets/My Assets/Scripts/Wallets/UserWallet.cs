@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;

@@ -23,6 +23,7 @@ using Isopoh.Cryptography.Argon2;
 using Org.BouncyCastle.Crypto.Digests;
 using System.IO;
 using System.Collections.Generic;
+using Hope.Security.Encryption.DPAPI;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -34,17 +35,7 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-        //PlayerPrefs.DeleteAll();
 
-        string password = "pass";
-        byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(password), null, DataProtectionScope.CurrentUser);
-
-        byte[] encryptedBytes = byteData.PadData();
-        ProtectedMemory.Protect(encryptedBytes, MemoryProtectionScope.SameProcess);
-
-        ProtectedMemory.Unprotect(encryptedBytes, MemoryProtectionScope.SameProcess);
-        byte[] decryptedData = ProtectedData.Unprotect(encryptedBytes.UnpadData(), null, DataProtectionScope.CurrentUser);
-        Convert.ToBase64String(decryptedData).Log();
     }
 
 }

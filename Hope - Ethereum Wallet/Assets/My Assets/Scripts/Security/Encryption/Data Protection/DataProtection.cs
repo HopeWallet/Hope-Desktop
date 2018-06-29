@@ -1,7 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using Hope.Security.HashGeneration;
+using System;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace Hope.Security.Encryption
+namespace Hope.Security.Encryption.DPAPI
 {
 
     /// <summary>
@@ -19,11 +21,9 @@ namespace Hope.Security.Encryption
         /// <returns> The protected data as a byte array. </returns>
         public static byte[] Protect(this string data)
         {
-            //byte[] byteData = ProtectedData.Protect(Encoding.UTF8.GetBytes(data), Entropy, DataProtectionScope.CurrentUser);
-            //byteData.Length.Log();
-            //ProtectedMemory.Protect(byteData, MemoryProtectionScope.SameProcess);
-
-            return ProtectedData.Protect(Encoding.UTF8.GetBytes(data), Entropy, DataProtectionScope.CurrentUser)/*byteData*/;
+            byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(data), Entropy, DataProtectionScope.CurrentUser).PadData();
+            ProtectedMemory.Protect(byteData, MemoryProtectionScope.SameProcess);
+            return byteData;
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace Hope.Security.Encryption
         /// <returns> The unprotected string retrieved from the data. </returns>
         public static string Unprotect(this byte[] data)
         {
-            //ProtectedMemory.Unprotect(data, MemoryProtectionScope.SameProcess);
-            return Encoding.UTF8.GetString(ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser));
+            ProtectedMemory.Unprotect(data, MemoryProtectionScope.SameProcess);
+            return Convert.ToBase64String(ProtectedData.Unprotect(data.UnpadData(), Entropy, DataProtectionScope.CurrentUser));
         }
     }
 

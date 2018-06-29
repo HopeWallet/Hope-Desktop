@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.HashGeneration;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
