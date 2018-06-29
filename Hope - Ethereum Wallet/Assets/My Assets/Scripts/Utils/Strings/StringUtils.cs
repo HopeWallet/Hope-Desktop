@@ -60,7 +60,7 @@ public static class StringUtils
     /// </summary>
     /// <param name="data"> The byte data to convert to a string. </param>
     /// <returns> The hexadecimal string. </returns>
-    public static string GetHexString(this byte[] data)
+    public static string ToHexString(this byte[] data)
     {
         StringBuilder sBuilder = new StringBuilder();
 

@@ -23,7 +23,7 @@ public class AsyncTaskScheduler
         Tasks.Enqueue(task);
         TaskAddedOrCompleted();
     }
-
+     
     /// <summary>
     /// Called when a task is added or completed.
     /// Runs a new task if tasks remain and we are under the concurrent task limit.

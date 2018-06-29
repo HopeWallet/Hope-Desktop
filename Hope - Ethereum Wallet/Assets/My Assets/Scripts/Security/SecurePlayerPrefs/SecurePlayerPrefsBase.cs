@@ -54,7 +54,7 @@ namespace Hope.Security.SecurePlayerPrefs.Base
         {
             return NetworkInterface.GetAllNetworkInterfaces()
                                    .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
+                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().ToHexString()))
                                    .Single();
         }
     }

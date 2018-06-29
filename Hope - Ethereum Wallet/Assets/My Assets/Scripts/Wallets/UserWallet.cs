@@ -5,8 +5,6 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Web3.Accounts;
 using System;
-using System.Text;
-using Zenject;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
