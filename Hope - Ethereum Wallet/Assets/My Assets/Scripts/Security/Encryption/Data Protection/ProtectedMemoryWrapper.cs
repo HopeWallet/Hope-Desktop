@@ -3,22 +3,22 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Hope.Security.Encryption
+namespace Hope.Security.Encryption.DPAPI
 {
 
     /// <summary>
-    /// Class which pads the string/byte data to the required length (16) of certain encryption algorithms.
+    /// Wrapper class which adds padding to byte data which wants to be protected but is not a multiple of 16.
     /// </summary>
-    public static class EncryptionPadder
+    public static class ProtectedMemoryWrapper
     {
 
         private static readonly byte[] KEY;
         private static readonly byte[] IV;
 
         /// <summary>
-        /// Initializes the EncryptionPadder with a key and iv for the encryption.
+        /// Initializes the ProtectedMemoryWrapper with a key and iv for the padding encryption.
         /// </summary>
-        static EncryptionPadder()
+        static ProtectedMemoryWrapper()
         {
             SecureRandom secureRandom = new SecureRandom();
             KEY = SecureRandom.GetNextBytes(secureRandom, 16);
@@ -28,25 +28,40 @@ namespace Hope.Security.Encryption
         }
 
         /// <summary>
-        /// Pads the byte data to the nearest multiple of 16.
+        /// Protects data in memory using ProtectedMemory.Protect and also adds padding to the byte array if it is not a multiple of 16.
+        /// Does not work with readonly variables.
         /// </summary>
-        /// <param name="data"> The data to pad. </param>
-        /// <returns> The padded byte data. </returns>
-        public static byte[] PadData(this byte[] data) => Encrypt(Convert.ToBase64String(data));
+        /// <param name="data"> The data to protect. </param>
+        /// <param name="scope"> The scope to protect the data with. </param>
+        public static void Protect(byte[] data, MemoryProtectionScope scope)
+        {
+            if (data.Length % 16 != 0 || data.Length == 0)
+                data = AddPadding(Convert.ToBase64String(data));
+
+            ProtectedMemory.Protect(data, scope);
+        }
 
         /// <summary>
-        /// Unpads the byte data from the nearest multiple of 16 and restores its original state.
+        /// Unprotects data in memory using ProtectedMemory.Unprotect.
         /// </summary>
-        /// <param name="data"> The data to unpad. </param>
-        /// <returns> The unpadded data. </returns>
-        public static byte[] UnpadData(this byte[] data) => Decrypt(Convert.ToBase64String(data));
+        /// <param name="data"> The data to unprotect. </param>
+        /// <param name="scope"> The scope used to protect the data, now being used to unprotect the data. </param>
+        public static void Unprotect(byte[] data, MemoryProtectionScope scope)
+        {
+            if (data.Length % 16 != 0 || data.Length == 0)
+                return;
+
+            ProtectedMemory.Unprotect(data, scope);
+
+            data = RemovePadding(Convert.ToBase64String(data));
+        }
 
         /// <summary>
         /// Pads the data by encrypting it using the AES encryption algorithm which encrypts data to a multiple of 16.
         /// </summary>
         /// <param name="data"> The data to encrypt. </param>
         /// <returns> The encrypted and padded byte data. </returns>
-        public static byte[] Encrypt(this string data)
+        private static byte[] AddPadding(string data)
         {
             UnprotectPaddingSeed();
 
@@ -75,7 +90,7 @@ namespace Hope.Security.Encryption
         /// </summary>
         /// <param name="data"> The data to decrypt. </param>
         /// <returns> The decrypted and unpadded byte data. </returns>
-        public static byte[] Decrypt(this string data)
+        private static byte[] RemovePadding(string data)
         {
             UnprotectPaddingSeed();
 
@@ -112,7 +127,6 @@ namespace Hope.Security.Encryption
             ProtectedMemory.Unprotect(KEY, MemoryProtectionScope.SameProcess);
             ProtectedMemory.Unprotect(IV, MemoryProtectionScope.SameProcess);
         }
-
     }
 
 }

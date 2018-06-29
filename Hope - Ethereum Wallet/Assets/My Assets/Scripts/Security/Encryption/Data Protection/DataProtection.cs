@@ -1,5 +1,7 @@
 ﻿using Hope.Security.HashGeneration;
+using Org.BouncyCastle.Security;
 using System;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,7 +14,18 @@ namespace Hope.Security.Encryption.DPAPI
     public static class DataProtection
     {
 
-        private static readonly byte[] Entropy = Encoding.UTF8.GetBytes(PasswordUtils.GenerateRandomPassword().GetSHA512Hash());
+        private static readonly byte[] Entropy;
+
+        /// <summary>
+        /// Initializes the entropy to use to encrypt the data.
+        /// </summary>
+        static DataProtection()
+        {
+            SecureRandom secureRandom = new SecureRandom();
+            Entropy = SecureRandom.GetNextBytes(secureRandom, 128);
+
+            ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
+        }
 
         /// <summary>
         /// Protects a piece of string text.
@@ -21,8 +34,13 @@ namespace Hope.Security.Encryption.DPAPI
         /// <returns> The protected data as a byte array. </returns>
         public static byte[] Protect(this string data)
         {
-            byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(data), Entropy, DataProtectionScope.CurrentUser).PadData();
-            ProtectedMemory.Protect(byteData, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Unprotect(Entropy, MemoryProtectionScope.SameProcess);
+
+            byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(data), Entropy, DataProtectionScope.CurrentUser);
+
+            ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
+            ProtectedMemoryWrapper.Protect(byteData, MemoryProtectionScope.SameProcess);
+
             return byteData;
         }
 
@@ -33,8 +51,14 @@ namespace Hope.Security.Encryption.DPAPI
         /// <returns> The unprotected string retrieved from the data. </returns>
         public static string Unprotect(this byte[] data)
         {
-            ProtectedMemory.Unprotect(data, MemoryProtectionScope.SameProcess);
-            return Convert.ToBase64String(ProtectedData.Unprotect(data.UnpadData(), Entropy, DataProtectionScope.CurrentUser));
+            ProtectedMemoryWrapper.Unprotect(data, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Unprotect(Entropy, MemoryProtectionScope.SameProcess);
+
+            string stringData = Convert.ToBase64String(ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser));
+
+            ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
+
+            return stringData;
         }
     }
 
