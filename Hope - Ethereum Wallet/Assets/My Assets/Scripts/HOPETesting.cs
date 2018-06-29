@@ -21,6 +21,8 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Isopoh.Cryptography.Argon2;
 using Org.BouncyCastle.Crypto.Digests;
+using System.IO;
+using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -46,32 +48,57 @@ public class HOPETesting : MonoBehaviour
 
 
 
-        //BouncyCastleHashing mainHashingLib = new BouncyCastleHashing();
+        //string password = "password";
+        //string saltedHash = WalletPasswordEncryption.GetSaltedPasswordHash(password);
+        //WalletPasswordEncryption.VerifyPassword("password", saltedHash).Log();
 
-        //var password = "password"; // That's really secure! :)
+        //password.GetSHA512Hash().Log();
 
-        //byte[] saltBytes = mainHashingLib.CreateSalt();
-        //string saltString = Convert.ToBase64String(saltBytes);
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] key = SecureRandom.GetNextBytes(secureRandom, 16);
+        byte[] iv = SecureRandom.GetNextBytes(secureRandom, 16);
 
-        //string pwdHash = mainHashingLib.PBKDF2_SHA256_GetHash(password, saltString);
+        string password = "pass";
+        byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(password), null, DataProtectionScope.CurrentUser);
 
-        //string password2 = "password";
+        byte[] encryptedBytes = Encrypt(Convert.ToBase64String(byteData), key, iv); Convert.ToBase64String(encryptedBytes).Log();
+        ProtectedMemory.Protect(encryptedBytes, MemoryProtectionScope.SameProcess); Convert.ToBase64String(encryptedBytes).Log();
 
-        //var isValid = mainHashingLib.ValidatePassword(password2, saltBytes, Convert.FromBase64String(pwdHash));
-        ////pwdHash.Log();
-        ////isValid.Log();
-        //Convert.ToBase64String(saltBytes).Log();
-        //pwdHash.Log();
+        ProtectedMemory.Unprotect(encryptedBytes, MemoryProtectionScope.SameProcess);
+        string decryptedPass = Decrypt(Convert.ToBase64String(encryptedBytes), key, iv);
 
-        //string salt = "Ma0rWvAm7ydOr4G/++goNeb4VbNPrfgRvsDWih6koJ/vOfOJvswvu5Cqj5XByxqQodGCsN9o9T+e1sWZTOS0Ug==";
-        //string hash = "4weScmLHeaZJgBHrs/wbe0c8vlY0fXDJXn6Kyj9F6MZyNtpsmgBfkinge1JRxDJ1iX+R/CfVQ828P2QFKRTfEFR/ZRwdISWAaRcZMqU23irifF+hbpmwmsxabQOUbFScqXw4z5ksi9Bnzz5pF19/iJ4ISPATbeiLuejomVbmGvQ=";
+        byte[] decryptedData = ProtectedData.Unprotect(Convert.FromBase64String(decryptedPass), null, DataProtectionScope.CurrentUser);
+        Convert.ToBase64String(decryptedData).Log();
+    }
 
-        //BouncyCastleHashing hashing = new BouncyCastleHashing();
-        //hashing.ValidatePassword("password", Convert.FromBase64String(salt), Convert.FromBase64String(hash)).Log();
+    private byte[] Encrypt(string password, byte[] key, byte[] iv)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            ICryptoTransform encryptor = aes.CreateEncryptor(key, iv);
 
-        string saltedHash = WalletPasswordEncryption.GetSaltedPasswordHash("password");
-        WalletPasswordEncryption.VerifyPassword("password", saltedHash).Log();
-        
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                using (StreamWriter sw = new StreamWriter(cs))
+                    sw.Write(password);
+
+                return ms.ToArray();
+            }
+        }
+    }
+
+    private string Decrypt(string password, byte[] key, byte[] iv)
+    {
+        using (Aes aes = Aes.Create())
+        {
+            ICryptoTransform decryptor = aes.CreateDecryptor(key, iv);
+
+            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(password)))
+            using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+            using (StreamReader sw = new StreamReader(cs))
+                return sw.ReadToEnd();
+        }
     }
 
 }

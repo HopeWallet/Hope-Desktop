@@ -10,12 +10,7 @@ public static class ClipboardUtils
     /// Copies a string to the clipboard.
     /// </summary>
     /// <param name="str"> The string to copy to the clipboard. </param>
-    public static void CopyToClipboard(string str)
-    {
-        TextEditor textEditor = new TextEditor { text = str };
-        textEditor.SelectAll();
-        textEditor.Copy();
-    }
+    public static void CopyToClipboard(string str) => GUIUtility.systemCopyBuffer = str;
 
     /// <summary>
     /// Clears the clipboard and sets the contents to empty.
