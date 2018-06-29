@@ -164,6 +164,8 @@ public class PlayerPrefPassword : ScriptableObject
             usePass?.Invoke(i, newPass);
         }
 
+        prefDictionary.Clear();
+
         return password;
     }
 

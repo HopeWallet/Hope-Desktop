@@ -12,11 +12,11 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         EnsureSeedCreation();
     }
 
-    public static void GetString(string key, Action<string> onStringReceived) => InternalGetString(key, onStringReceived);
+    public static void GetString(string key, Action<string> onStringReceived) => AsyncTaskScheduler.Schedule(() => InternalGetString(key, onStringReceived));
 
-    public static void GetInt(string key, Action<int> onIntReceived) => InternalGetString(key, str => onIntReceived?.Invoke(int.Parse(str)));
+    public static void GetInt(string key, Action<int> onIntReceived) => AsyncTaskScheduler.Schedule(() => InternalGetString(key, str => onIntReceived?.Invoke(int.Parse(str))));
 
-    public static void GetFloat(string key, Action<float> onFloatReceived) => InternalGetString(key, str => onFloatReceived?.Invoke(float.Parse(str)));
+    public static void GetFloat(string key, Action<float> onFloatReceived) => AsyncTaskScheduler.Schedule(() => InternalGetString(key, str => onFloatReceived?.Invoke(float.Parse(str))));
 
     public static void SetString(string key, string value, Action onStringSet = null) => AsyncTaskScheduler.Schedule(() => InternalSetString(key, value, onStringSet));
 
@@ -34,7 +34,7 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         onValueSet?.Invoke();
     }
 
-    private static async void InternalGetString(string key, Action<string> onStringReceived)
+    private static async Task InternalGetString(string key, Action<string> onStringReceived)
     {
         string secureKey = await GetSecureKey(key);
         string secureEntropy = await Task.Run(() => GetValueHash(secureKey));

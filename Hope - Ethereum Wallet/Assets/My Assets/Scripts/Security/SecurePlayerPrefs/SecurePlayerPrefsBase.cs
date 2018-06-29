@@ -27,6 +27,10 @@ namespace Hope.Security.SecurePlayerPrefs.Base
         /// <returns> The hashed value string. </returns>
         protected static string GetValueHash(string input) => input.GetSHA1Hash();
 
+        /// <summary>
+        /// Gets the seed value from the player prefs.
+        /// </summary>
+        /// <returns> The seed value to use to derive all other SecurePlayerPrefs. </returns>
         protected static string GetSeedValue() => PlayerPrefs.GetString(GetSeedName());
 
         /// <summary>
@@ -42,13 +46,16 @@ namespace Hope.Security.SecurePlayerPrefs.Base
             PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().DPEncrypt());
         }
 
+        /// <summary>
+        /// Gets the seed name based on this computer.
+        /// </summary>
+        /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
-                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-                    return GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString());
-
-            return null;
+            return NetworkInterface.GetAllNetworkInterfaces()
+                                   .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
+                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
+                                   .Single();
         }
     }
 }
