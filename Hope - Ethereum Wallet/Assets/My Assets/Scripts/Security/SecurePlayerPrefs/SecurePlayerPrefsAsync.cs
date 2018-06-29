@@ -1,8 +1,6 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.SecurePlayerPrefs.Base;
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -29,8 +27,8 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     private static async Task InternalSetString(string key, string value, Action onValueSet)
     {
         string secureKey = await GetSecureKey(key);
-        string secureEntropy = await Task.Run(() => ValueHash(secureKey));
-        string encryptedValue = await Task.Run(() => value.DPEncrypt(secureEntropy));
+        string secureEntropy = await Task.Run(() => GetValueHash(secureKey));
+        string encryptedValue = await Task.Run(() => value.DPEncrypt(secureEntropy).DPEncrypt());
 
         PlayerPrefs.SetString(secureKey, encryptedValue);
         onValueSet?.Invoke();
@@ -39,16 +37,16 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     private static async void InternalGetString(string key, Action<string> onStringReceived)
     {
         string secureKey = await GetSecureKey(key);
-        string secureEntropy = await Task.Run(() => ValueHash(secureKey));
+        string secureEntropy = await Task.Run(() => GetValueHash(secureKey));
         string encryptedValue = PlayerPrefs.GetString(secureKey);
 
-        onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt(secureEntropy)));
+        onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt().DPDecrypt(secureEntropy)));
     }
 
     private static async Task<string> GetSecureKey(string key)
     {
         string baseKeyEncrypted = PlayerPrefs.GetString(SECURE_PREF_SEED_NAME);
 
-        return await Task.Run(() => KeyHash(string.Concat(baseKeyEncrypted.DPDecrypt(), key)));
+        return await Task.Run(() => GetKeyHash(string.Concat(baseKeyEncrypted.DPDecrypt(), key)));
     }
 }

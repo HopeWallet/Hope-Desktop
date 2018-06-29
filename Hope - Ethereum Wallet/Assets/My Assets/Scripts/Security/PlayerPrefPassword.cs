@@ -57,7 +57,7 @@ public class PlayerPrefPassword : ScriptableObject
     }
 
     /// <summary>
-    /// Checks if the PlayerPrefs contain the derivation data needed.
+    /// Checks if the SecurePlayerPrefs contain the derivation data needed.
     /// </summary>
     /// <returns> True if the data exists. </returns>
     public bool HasPlayerPrefs()
