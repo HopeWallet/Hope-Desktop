@@ -18,7 +18,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     private ButtonClickObserver buttonObserver;
     private ByteDataCache byteDataCache;
 
-    private const int PASSWORD_LENGTH = BasicLevelEncryption.MIN_PASSWORD_LENGTH;
+    private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
     /// <summary>
     /// Injects the UserWalletManager as this class's dependency.
