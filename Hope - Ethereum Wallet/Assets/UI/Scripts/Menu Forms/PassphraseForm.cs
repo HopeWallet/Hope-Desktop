@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Random = System.Random;
+using Nethereum.HdWallet;
+using NBitcoin;
 
 public class PassphraseForm : FormAnimation
 {
@@ -15,6 +17,8 @@ public class PassphraseForm : FormAnimation
 	[SerializeField] private GameObject generateNewButton;
 	[SerializeField] private GameObject copyAllButton;
 	[SerializeField] private GameObject confirmButton;
+
+	private string[] mnemonicWords;
 
 	protected override void InitializeElements()
 	{
@@ -39,6 +43,7 @@ public class PassphraseForm : FormAnimation
 			() => copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));
 
+		SetWords();
 		AnimatePassphrase(0);
 	}
 
@@ -108,7 +113,7 @@ public class PassphraseForm : FormAnimation
 	/// <param name="index">The index that is being animated</param>
 	private void ExpandWord(List<GameObject> wordList, int index)
 	{
-		//Generate random word and set it using words[i].getComponent<TextMeshProUGUI>().text
+		wordList[index].GetComponent<TextMeshProUGUI>().text = mnemonicWords[index];
 		wordList[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(wordList, ++index));
 	}
 
@@ -116,8 +121,11 @@ public class PassphraseForm : FormAnimation
 
 	#endregion
 
+	#region Button Clicks
+
 	public void GenerateNewClicked()
 	{
+		GenerateMnemonicPhrase();
 		StartWordAnimation();
 	}
 
@@ -129,5 +137,26 @@ public class PassphraseForm : FormAnimation
 			entirePassphrase += words[i].GetComponent<TextMeshProUGUI>().text + " ";
 
 		ClipboardUtils.CopyToClipboard(entirePassphrase);
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Generates a new passphrase onto the mnemonicWords array
+	/// </summary>
+	private void GenerateMnemonicPhrase()
+	{
+		mnemonicWords = new Wallet(Wordlist.English, WordCount.Twelve).Words;
+	}
+
+	/// <summary>
+	/// Sets the array of words to the newly generated passphrase
+	/// </summary>
+	private void SetWords()
+	{
+		GenerateMnemonicPhrase();
+
+		for (int i = 0; i < 12; i++)
+			words[i].GetComponent<TextMeshProUGUI>().text = mnemonicWords[i];
 	}
 }
