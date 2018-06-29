@@ -9,7 +9,7 @@ public class WalletListForm : FormAnimation
 	[SerializeField] private GameObject[] wallets;
 	[SerializeField] private GameObject newWalletButton;
 
-	private void Start()
+	protected override void InitializeElements()
 	{
 		Transform walletListTransform = walletList.transform.GetChild(0).GetChild(0);
 		wallets = new GameObject[walletListTransform.childCount];

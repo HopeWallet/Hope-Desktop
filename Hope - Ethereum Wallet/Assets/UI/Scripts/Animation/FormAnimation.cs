@@ -4,8 +4,15 @@ public abstract class FormAnimation : MonoBehaviour
 {
 
 	public GameObject blocker;
+	private bool animating;
 
-	public bool Animating { get; private set; }
+	public bool Animating
+	{
+		get { return animating; }
+		protected set { ChangeAnimationState(value); }
+	}
+
+	protected virtual void InitializeElements() { }
 
 	protected void DisableMenu()
 	{
@@ -15,6 +22,7 @@ public abstract class FormAnimation : MonoBehaviour
 
 	private void OnEnable()
 	{
+		InitializeElements();
 		ChangeAnimationState(true);
 		AnimateIn();
 	}
@@ -34,7 +42,7 @@ public abstract class FormAnimation : MonoBehaviour
 	private void ChangeAnimationState(bool state)
 	{
 		blocker.SetActive(state);
-		Animating = state;
+		animating = state;
 	}
 
 }
