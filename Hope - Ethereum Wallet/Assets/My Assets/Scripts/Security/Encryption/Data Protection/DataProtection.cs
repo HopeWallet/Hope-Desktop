@@ -22,7 +22,7 @@ namespace Hope.Security.Encryption.DPAPI
         static DataProtection()
         {
             SecureRandom secureRandom = new SecureRandom();
-            Entropy = SecureRandom.GetNextBytes(secureRandom, 128);
+            Entropy = SecureRandom.GetNextBytes(secureRandom, 256);
 
             ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
         }
@@ -36,7 +36,7 @@ namespace Hope.Security.Encryption.DPAPI
         {
             ProtectedMemory.Unprotect(Entropy, MemoryProtectionScope.SameProcess);
 
-            byte[] byteData = ProtectedData.Protect(Convert.FromBase64String(data), Entropy, DataProtectionScope.CurrentUser);
+            byte[] byteData = ProtectedData.Protect(data.FromBase64String(), Entropy, DataProtectionScope.CurrentUser);
 
             ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
             ProtectedMemoryWrapper.Protect(byteData, MemoryProtectionScope.SameProcess);
@@ -54,10 +54,10 @@ namespace Hope.Security.Encryption.DPAPI
             ProtectedMemoryWrapper.Unprotect(data, MemoryProtectionScope.SameProcess);
             ProtectedMemory.Unprotect(Entropy, MemoryProtectionScope.SameProcess);
 
-            string stringData = Convert.ToBase64String(ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser));
+            string stringData = ProtectedData.Unprotect(data, Entropy, DataProtectionScope.CurrentUser).ToBase64String();
 
             ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
-
+            
             return stringData;
         }
     }

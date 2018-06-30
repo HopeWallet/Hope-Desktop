@@ -5,7 +5,6 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
 
 public static class WalletPasswordEncryption
 {
@@ -16,9 +15,8 @@ public static class WalletPasswordEncryption
 
     public static string GetSaltedPasswordHash(string password)
     {
-        byte[] salt = new byte[SALT_SIZE];
-        
-        RandomNumberGenerator.Create().GetBytes(salt);
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = SecureRandom.GetNextBytes(secureRandom, SALT_SIZE);
 
         return Convert.ToBase64String(salt.Concat(GetPasswordHash(password, salt)).ToArray());
     }

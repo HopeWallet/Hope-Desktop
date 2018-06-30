@@ -12,8 +12,8 @@ namespace Hope.Security.Encryption.DPAPI
     public static class ProtectedMemoryWrapper
     {
 
-        private static readonly byte[] KEY;
-        private static readonly byte[] IV;
+        private static readonly byte[] PAD_KEY;
+        private static readonly byte[] PAD_IV;
 
         /// <summary>
         /// Initializes the ProtectedMemoryWrapper with a key and iv for the padding encryption.
@@ -21,8 +21,8 @@ namespace Hope.Security.Encryption.DPAPI
         static ProtectedMemoryWrapper()
         {
             SecureRandom secureRandom = new SecureRandom();
-            KEY = SecureRandom.GetNextBytes(secureRandom, 16);
-            IV = SecureRandom.GetNextBytes(secureRandom, 16);
+            PAD_KEY = SecureRandom.GetNextBytes(secureRandom, 16);
+            PAD_IV = SecureRandom.GetNextBytes(secureRandom, 16);
 
             ProtectPaddingSeed();
         }
@@ -36,7 +36,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static void Protect(byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
-                data = AddPadding(Convert.ToBase64String(data));
+                data = AddPadding(data.ToBase64String());
 
             ProtectedMemory.Protect(data, scope);
         }
@@ -53,7 +53,7 @@ namespace Hope.Security.Encryption.DPAPI
 
             ProtectedMemory.Unprotect(data, scope);
 
-            data = RemovePadding(Convert.ToBase64String(data));
+            data = RemovePadding(data.ToBase64String());
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Hope.Security.Encryption.DPAPI
             byte[] encryptedData;
             using (Aes aes = Aes.Create())
             {
-                ICryptoTransform encryptor = aes.CreateEncryptor(KEY, IV);
+                ICryptoTransform encryptor = aes.CreateEncryptor(PAD_KEY, PAD_IV);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -97,12 +97,12 @@ namespace Hope.Security.Encryption.DPAPI
             byte[] decryptedData;
             using (Aes aes = Aes.Create())
             {
-                ICryptoTransform decryptor = aes.CreateDecryptor(KEY, IV);
+                ICryptoTransform decryptor = aes.CreateDecryptor(PAD_KEY, PAD_IV);
 
                 using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(data)))
                 using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                 using (StreamReader sw = new StreamReader(cs))
-                    decryptedData = Convert.FromBase64String(sw.ReadToEnd());
+                    decryptedData = sw.ReadToEnd().FromBase64String();
             }
 
             ProtectPaddingSeed();
@@ -115,8 +115,8 @@ namespace Hope.Security.Encryption.DPAPI
         /// </summary>
         private static void ProtectPaddingSeed()
         {
-            ProtectedMemory.Protect(KEY, MemoryProtectionScope.SameProcess);
-            ProtectedMemory.Protect(IV, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Protect(PAD_KEY, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Protect(PAD_IV, MemoryProtectionScope.SameProcess);
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace Hope.Security.Encryption.DPAPI
         /// </summary>
         private static void UnprotectPaddingSeed()
         {
-            ProtectedMemory.Unprotect(KEY, MemoryProtectionScope.SameProcess);
-            ProtectedMemory.Unprotect(IV, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Unprotect(PAD_KEY, MemoryProtectionScope.SameProcess);
+            ProtectedMemory.Unprotect(PAD_IV, MemoryProtectionScope.SameProcess);
         }
     }
 

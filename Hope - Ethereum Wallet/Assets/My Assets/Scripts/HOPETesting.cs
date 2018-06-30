@@ -24,6 +24,7 @@ using Org.BouncyCastle.Crypto.Digests;
 using System.IO;
 using System.Collections.Generic;
 using Hope.Security.Encryption.DPAPI;
+using Hope.Security.HashGeneration;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -35,7 +36,6 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-
     }
 
 }
