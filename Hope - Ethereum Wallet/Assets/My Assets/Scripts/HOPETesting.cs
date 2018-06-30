@@ -25,6 +25,8 @@ using System.IO;
 using System.Collections.Generic;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
+using Hope.Security.ProtectedTypes.Types;
+using Hope.Security.ProtectedTypes.Types.Base;
 
 public class HOPETesting : MonoBehaviour
 {

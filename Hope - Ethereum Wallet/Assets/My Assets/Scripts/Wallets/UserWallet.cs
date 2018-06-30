@@ -57,7 +57,8 @@ public class UserWallet
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
 
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, protectedStringDataCache.GetData(0).Value, (pass) => TryCreateAccount(pass));
+        using (var str = protectedStringDataCache.GetData(0).GetDisposableData())
+            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -67,15 +68,18 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, protectedStringDataCache.GetData(0).Value, (pass) =>
+        using (var str = protectedStringDataCache.GetData(0).GetDisposableData())
         {
-            AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
+            TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
             {
-                UserWalletJsonHandler.CreateWallet(walletData);
-                OnWalletCreated?.Invoke();
-                OnWalletLoadSuccessful?.Invoke();
-            });
-        }, true));
+                AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
+                {
+                    UserWalletJsonHandler.CreateWallet(walletData);
+                    OnWalletCreated?.Invoke();
+                    OnWalletLoadSuccessful?.Invoke();
+                });
+            }, true));
+        }
     }
 
     /// <summary>
