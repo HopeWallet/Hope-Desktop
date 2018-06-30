@@ -53,7 +53,7 @@ public class UserWallet
     {
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].UnprotectMemory(), (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].UnprotectMemory(), (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {

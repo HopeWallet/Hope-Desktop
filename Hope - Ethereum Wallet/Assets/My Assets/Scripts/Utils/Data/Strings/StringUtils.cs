@@ -60,7 +60,7 @@ public static class StringUtils
     /// </summary>
     /// <param name="str"> The Base64 string to convert. </param>
     /// <returns> The byte data of the string. </returns>
-    public static byte[] FromBase64String(this string str) => Convert.FromBase64String(str);
+    public static byte[] FromBase64String(this string str) => string.IsNullOrEmpty(str) ? null : Convert.FromBase64String(str);
 
     /// <summary>
     /// Converts a string from hex to a decimal value.

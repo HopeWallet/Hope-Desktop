@@ -36,6 +36,16 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
+
+        string data = "test";
+        string entropy = "omfg";
+
+        string protectedData = data.ProtectStorage();
+        string unprotectedData = protectedData.UnprotectStorage();
+
+        protectedData.Log();
+        unprotectedData.Log();
+
     }
 
 }
