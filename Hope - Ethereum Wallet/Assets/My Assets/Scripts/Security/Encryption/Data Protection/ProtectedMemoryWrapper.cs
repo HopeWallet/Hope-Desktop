@@ -33,10 +33,12 @@ namespace Hope.Security.Encryption.DPAPI
         /// </summary>
         /// <param name="data"> The data to protect. </param>
         /// <param name="scope"> The scope to protect the data with. </param>
-        public static void Protect(byte[] data, MemoryProtectionScope scope)
+        public static void Protect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
-                data = AddPadding(data.ToBase64String());
+            {
+                data = AddPadding(data.GetBase64String());
+            }
 
             ProtectedMemory.Protect(data, scope);
         }
@@ -46,14 +48,14 @@ namespace Hope.Security.Encryption.DPAPI
         /// </summary>
         /// <param name="data"> The data to unprotect. </param>
         /// <param name="scope"> The scope used to protect the data, now being used to unprotect the data. </param>
-        public static void Unprotect(byte[] data, MemoryProtectionScope scope)
+        public static void Unprotect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
                 return;
 
             ProtectedMemory.Unprotect(data, scope);
 
-            data = RemovePadding(data.ToBase64String());
+            data = RemovePadding(data.GetBase64String());
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace Hope.Security.Encryption.DPAPI
                 using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(data)))
                 using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                 using (StreamReader sw = new StreamReader(cs))
-                    decryptedData = sw.ReadToEnd().FromBase64String();
+                    decryptedData = sw.ReadToEnd().GetBase64Bytes();
             }
 
             ProtectPaddingSeed();

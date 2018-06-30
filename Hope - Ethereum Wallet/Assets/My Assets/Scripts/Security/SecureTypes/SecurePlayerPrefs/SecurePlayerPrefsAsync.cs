@@ -77,7 +77,7 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     {
         string secureKey = await GetSecureKey(key);
         string secureEntropy = await Task.Run(() => GetValueHash(secureKey));
-        string encryptedValue = await Task.Run(() => value.DPEncrypt(secureEntropy).DPEncrypt());
+        string encryptedValue = await Task.Run(() => StorProtect.Protect(value.DPEncrypt(secureEntropy)));
 
         PlayerPrefs.SetString(secureKey, encryptedValue);
         onValueSet?.Invoke();
@@ -95,7 +95,7 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         string secureEntropy = await Task.Run(() => GetValueHash(secureKey));
         string encryptedValue = PlayerPrefs.GetString(secureKey);
 
-        onStringReceived?.Invoke(await Task.Run(() => encryptedValue.DPDecrypt().DPDecrypt(secureEntropy)));
+        onStringReceived?.Invoke(await Task.Run(() => StorProtect.Unprotect(encryptedValue).DPDecrypt(secureEntropy)));
     }
 
     /// <summary>
@@ -107,6 +107,6 @@ public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     {
         string baseKeyEncrypted = GetSeedValue();
 
-        return await Task.Run(() => GetKeyHash(string.Concat(baseKeyEncrypted.DPDecrypt(), key)));
+        return await Task.Run(() => GetKeyHash(string.Concat(StorProtect.Unprotect(baseKeyEncrypted), key)));
     }
 }

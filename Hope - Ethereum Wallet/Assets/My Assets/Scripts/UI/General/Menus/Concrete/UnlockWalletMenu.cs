@@ -63,7 +63,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// </summary>
     public override void LoadWallet()
     {
-        byteDataCache[0] = passwordField.text.ProtectMemory();
+        byteDataCache[0] = MemProtect.Protect(passwordField.text);
         userWalletManager.UnlockWallet();
     }
 

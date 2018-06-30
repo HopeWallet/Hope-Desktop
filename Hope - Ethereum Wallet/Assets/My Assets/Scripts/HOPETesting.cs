@@ -28,6 +28,7 @@ using Hope.Security.HashGeneration;
 
 public class HOPETesting : MonoBehaviour
 {
+
     private void Start()
     {
         //var ledger = LedgerClient.GetHIDLedgers().First();
@@ -37,15 +38,17 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        string data = "test";
-        string entropy = "omfg";
+        int value = 15;
+        long bigNum = 15531414342;
 
-        string protectedData = data.ProtectStorage();
-        string unprotectedData = protectedData.UnprotectStorage();
+        byte[] intBytes = Convert.ToString(value).GetUTF8Bytes();
+        byte[] longBytes = Convert.ToString(bigNum).GetUTF8Bytes();
 
-        protectedData.Log();
-        unprotectedData.Log();
+        intBytes.LogArray();
+        longBytes.LogArray();
 
+        int.Parse(intBytes.GetUTF8String()).Log();
+        long.Parse(longBytes.GetUTF8String()).Log();
     }
 
 }

@@ -19,7 +19,7 @@ namespace Hope.Security.HashGeneration
         public static string GetHash<T>(string input) where T : HashAlgorithm
         {
             using (T hash = (T)CryptoConfig.CreateFromName(typeof(T).ToString()))
-                return hash.ComputeHash(Encoding.UTF8.GetBytes(input)).ToHexString();
+                return hash.ComputeHash(Encoding.UTF8.GetBytes(input)).GetHexString();
         }
 
     }
