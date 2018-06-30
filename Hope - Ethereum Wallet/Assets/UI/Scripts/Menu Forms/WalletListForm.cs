@@ -9,6 +9,9 @@ public class WalletListForm : FormAnimation
 	[SerializeField] private GameObject[] wallets;
 	[SerializeField] private GameObject newWalletButton;
 
+	/// <summary>
+	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// </summary>
 	protected override void InitializeElements()
 	{
 		Transform walletListTransform = walletList.transform.GetChild(0).GetChild(0);
@@ -18,8 +21,9 @@ public class WalletListForm : FormAnimation
 			wallets[i] = walletListTransform.GetChild(i).GetChild(0).gameObject;
 	}
 
-	#region Animating
-
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
@@ -30,6 +34,9 @@ public class WalletListForm : FormAnimation
 			() => AnimateWallets(0));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		newWalletButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
@@ -48,7 +55,7 @@ public class WalletListForm : FormAnimation
 	/// <summary>
 	/// Loops through the amount of saved wallets and animates them one by one
 	/// </summary>
-	/// <param name="i">The wallet number in the array</param>
+	/// <param name="i"> The wallet number in the array </param>
 	private void AnimateWallets(int i)
 	{
 		if (i == (wallets.Length - 1))
@@ -58,7 +65,5 @@ public class WalletListForm : FormAnimation
 		else
 			wallets[i].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++i));
 	}
-
-	#endregion
 
 }

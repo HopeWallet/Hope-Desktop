@@ -23,6 +23,9 @@ public class CreatePassphraseForm : FormAnimation
 
 	private string[] mnemonicWords;
 
+	/// <summary>
+	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// </summary>
 	protected override void InitializeElements()
 	{
 		wordObjects = new GameObject[12];
@@ -37,8 +40,9 @@ public class CreatePassphraseForm : FormAnimation
 		checkMarkIcon = copyAllButton.transform.GetChild(0).gameObject;
 	}
 
-	#region Animating
-
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
@@ -52,14 +56,18 @@ public class CreatePassphraseForm : FormAnimation
 		AnimatePassphrase(0);
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
+		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 
 	/// <summary>
 	/// Animates the word objects scaleX by row
 	/// </summary>
-	/// <param name="row">The int to be added by for each row</param>
+	/// <param name="row"> The int to be added by for each row </param>
 	private void AnimatePassphrase(int row)
 	{
 		for (int x = 0; x < 3; x++)
@@ -88,8 +96,6 @@ public class CreatePassphraseForm : FormAnimation
 			() => copyButtonComponent.interactable = true)));
 	}
 
-	#region Word Generation Animation
-
 	/// <summary>
 	/// Initializes the randomized list of words and starts the series of random word animations
 	/// </summary>
@@ -105,10 +111,31 @@ public class CreatePassphraseForm : FormAnimation
 	}
 
 	/// <summary>
-	/// If there are still words left to animate, it calls the CrunchWord animation
+	/// Scales the word's X value to zero
 	/// </summary>
-	/// <param name="wordList">The randomized list of words</param>
-	/// <param name="index">The index that is being animated</param>
+	/// <param name="wordList"> The randomized list of words </param>
+	/// <param name="index"> The index that is being animated </param>
+	private void CrunchWord(List<GameObject> wordList, int index)
+	{
+		wordList[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(wordList, index));
+	}
+
+	/// <summary>
+	/// Scales the word's X value back to 1
+	/// </summary>
+	/// <param name="wordList"> The randomized list of words </param>
+	/// <param name="index"> The index that is being animated </param>
+	private void ExpandWord(List<GameObject> wordList, int index)
+	{
+		wordList[index].GetComponent<TextMeshProUGUI>().text = mnemonicWords[index];
+		wordList[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(wordList, ++index));
+	}
+
+	/// <summary>
+	/// If there are still words left to animate, it calls the CrunchWord animation again
+	/// </summary>
+	/// <param name="wordList"> The randomized list of words </param>
+	/// <param name="index"> The index that is being animated </param>
 	private void ProcessWordAnimation(List<GameObject> wordList, int index)
 	{
 		if (index < wordList.Count)
@@ -118,47 +145,22 @@ public class CreatePassphraseForm : FormAnimation
 	}
 
 	/// <summary>
-	/// Scales the word's X value to zero
+	/// Generates a random passphrase and animates the words
 	/// </summary>
-	/// <param name="wordList">The randomized list of words</param>
-	/// <param name="index">The index that is being animated</param>
-	private void CrunchWord(List<GameObject> wordList, int index)
-	{
-		wordList[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(wordList, index));
-	}
-
-	/// <summary>
-	/// Scales the word's X value back to 1
-	/// </summary>
-	/// <param name="wordList">The randomized list of words</param>
-	/// <param name="index">The index that is being animated</param>
-	private void ExpandWord(List<GameObject> wordList, int index)
-	{
-		wordList[index].GetComponent<TextMeshProUGUI>().text = mnemonicWords[index];
-		wordList[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(wordList, ++index));
-	}
-
-	#endregion
-
-	#endregion
-
-	#region Button Clicks
-
 	public void GenerateNewClicked()
 	{
 		GenerateMnemonicPhrase();
 		StartWordAnimation();
 	}
 
+	/// <summary>
+	/// Merges all the words to one giant string and copies it to the clipboard
+	/// </summary>
 	public void CopyAllClicked()
 	{
 		CopyPassphraseToClipboard();
 		AnimateCheckMarkIcon();
 	}
-
-	#endregion
-
-	#region Other Methods
 
 	/// <summary>
 	/// Generates a new passphrase onto the mnemonicWords array
@@ -191,7 +193,5 @@ public class CreatePassphraseForm : FormAnimation
 
 		ClipboardUtils.CopyToClipboard(entirePassphrase);
 	}
-
-	#endregion
 
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ExitConfirmationForm : FormAnimation
 {
@@ -11,8 +9,9 @@ public class ExitConfirmationForm : FormAnimation
 	[SerializeField] private GameObject yesButton;
 	[SerializeField] private GameObject noButton;
 
-	#region Animating
-
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		dim.AnimateGraphic(1f, 0.2f);
@@ -24,6 +23,9 @@ public class ExitConfirmationForm : FormAnimation
 			() => FinishedAnimatingIn()));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		dim.AnimateGraphic(0, 0.2f);
@@ -35,14 +37,14 @@ public class ExitConfirmationForm : FormAnimation
 			() => FinishedAnimatingOut());
 	}
 
-	#endregion
-
-	#region Button Clicks
-
+	/// <summary>
+	/// Quits the Hope Wallet application
+	/// </summary>
 	public void YesButtonClicked() => Application.Quit();
 
+	/// <summary>
+	/// Disables the ExitConfirmation form
+	/// </summary>
 	public void NoButtonClicked() => DisableMenu();
-
-	#endregion
 
 }

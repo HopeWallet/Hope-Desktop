@@ -25,7 +25,7 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The correct path to derive the wallet from. </returns>
         public static string DetermineCorrectPath(string mnemonicPhrase)
         {
-            var wordCount = mnemonicPhrase.Split(' ', '\t', '\n').Length;
+            var wordCount = mnemonicPhrase.GetMnemonicWords().Length;
 
             if (wordCount == 12)
                 return PATH_TWELVE_WORDS;
@@ -35,12 +35,19 @@ namespace Hope.Utils.EthereumUtils
                 return null;
         }
 
-        /// <summary>
-        /// Gets the amount of ether in a user's wallet.
-        /// </summary>
-        /// <param name="wallet"> The wallet to check for the ether amount. </param>
-        /// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
-        public static void GetEthBalance(UserWallet wallet, Action<dynamic> onBalanceReceived)
+		/// <summary>
+		/// Gets the individual words of a mnemonic phrase.
+		/// </summary>
+		/// <param name="str"> The string which contains the words. </param>
+		/// <returns> The array of individual words. </returns>
+		public static string[] GetMnemonicWords(this string str) => str.Split(' ', '\t', '\n');
+
+		/// <summary>
+		/// Gets the amount of ether in a user's wallet.
+		/// </summary>
+		/// <param name="wallet"> The wallet to check for the ether amount. </param>
+		/// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
+		public static void GetEthBalance(UserWallet wallet, Action<dynamic> onBalanceReceived)
             => _AddressEthBalanceCoroutine(wallet.Address, onBalanceReceived).StartCoroutine();
 
         /// <summary>

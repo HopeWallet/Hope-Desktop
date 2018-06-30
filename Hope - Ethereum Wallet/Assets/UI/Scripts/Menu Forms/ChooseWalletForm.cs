@@ -8,8 +8,9 @@ public class ChooseWalletForm : FormAnimation
 	[SerializeField] private GameObject ledgerButton;
 	[SerializeField] private GameObject hopeButton;
 
-	#region Animating
-
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
@@ -19,6 +20,9 @@ public class ChooseWalletForm : FormAnimation
 			() => FinishedAnimatingIn()))));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		hopeButton.AnimateGraphicAndScale(0f, 0.1f, 0.2f);
@@ -27,7 +31,5 @@ public class ChooseWalletForm : FormAnimation
 			() => form.AnimateGraphicAndScale(0f, 0.1f, 0.2f,
 			() => FinishedAnimatingOut()));		
 	}
-
-	#endregion
 
 }

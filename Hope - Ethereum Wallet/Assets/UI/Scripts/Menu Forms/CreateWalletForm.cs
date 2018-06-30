@@ -19,6 +19,9 @@ public class CreateWalletForm : FormAnimation
 	private Button createButtonComponent;
 	private TMP_InputField[] inputFields;
 
+	/// <summary>
+	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// </summary>
 	protected override void InitializeElements()
 	{
 		InitializeVariable(ref walletNameField);
@@ -49,8 +52,9 @@ public class CreateWalletForm : FormAnimation
 		}
 	}
 
-	#region Animating
-
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
@@ -65,6 +69,9 @@ public class CreateWalletForm : FormAnimation
 
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		createButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
@@ -81,17 +88,13 @@ public class CreateWalletForm : FormAnimation
 		checkMarkIcon.AnimateGraphic(0f, 0.1f);
 	}
 
-	#endregion
-
-	#region Other Methods
-
 	/// <summary>
 	/// Adds listeners to a given input field
 	/// </summary>
-	/// <param name="gameObject">The gameobject input field</param>
+	/// <param name="gameObject"> The gameobject input field </param>
 	private void InitializeVariable(ref GameObject gameObject)
 	{
-		var inputField = gameObject.GetComponent<TMP_InputField>();
+		TMP_InputField inputField = gameObject.GetComponent<TMP_InputField>();
 		inputField.onValueChanged.AddListener(str => SetText());
 		inputField.onValueChanged.AddListener(str => SetButtonInteractable());
 	}
@@ -127,7 +130,5 @@ public class CreateWalletForm : FormAnimation
 
 		createButtonComponent.interactable = walletNameText != "" && passwordsValid;
 	}
-
-	#endregion
 
 }
