@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Random = System.Random;
 using Nethereum.HdWallet;
 using NBitcoin;
+using Random = System.Random;
 
 public class PassphraseForm : FormAnimation
 {
@@ -17,6 +18,7 @@ public class PassphraseForm : FormAnimation
 	[SerializeField] private GameObject generateNewButton;
 	[SerializeField] private GameObject copyAllButton;
 	[SerializeField] private GameObject confirmButton;
+	[SerializeField] private GameObject checkMarkIcon;
 
 	private string[] mnemonicWords;
 
@@ -65,6 +67,22 @@ public class PassphraseForm : FormAnimation
 
 			else wordObjects[x + row].AnimateScaleX(1f, 0.2f);
 		}
+	}
+
+	/// <summary>
+	/// Animates the check mark icon on and off screen
+	/// </summary>
+	private void AnimateCheckMarkIcon()
+	{
+		Button copyButtonComponent = copyAllButton.GetComponent<Button>();
+		copyButtonComponent.interactable = false;
+
+		checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
+
+		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => checkMarkIcon.AnimateScaleX(1.01f, 1f,
+			() => checkMarkIcon.AnimateGraphic(0f, 1f,
+			() => copyButtonComponent.interactable = true)));
 	}
 
 	#region Word Generation Animation
@@ -131,15 +149,13 @@ public class PassphraseForm : FormAnimation
 
 	public void CopyAllClicked()
 	{
-		string entirePassphrase = "";
-
-		for (int i = 0; i < 12; i++)
-			entirePassphrase += words[i].GetComponent<TextMeshProUGUI>().text + " ";
-
-		ClipboardUtils.CopyToClipboard(entirePassphrase);
+		CopyPassphraseToClipboard();
+		AnimateCheckMarkIcon();
 	}
 
 	#endregion
+
+	#region Other Methods
 
 	/// <summary>
 	/// Generates a new passphrase onto the mnemonicWords array
@@ -159,4 +175,20 @@ public class PassphraseForm : FormAnimation
 		for (int i = 0; i < 12; i++)
 			words[i].GetComponent<TextMeshProUGUI>().text = mnemonicWords[i];
 	}
+
+	/// <summary>
+	/// Combines all the words in the array into one long string and copies it to the clipboard
+	/// </summary>
+	private void CopyPassphraseToClipboard()
+	{
+		string entirePassphrase = "";
+
+		for (int i = 0; i < 12; i++)
+			entirePassphrase += words[i].GetComponent<TextMeshProUGUI>().text + " ";
+
+		ClipboardUtils.CopyToClipboard(entirePassphrase);
+	}
+
+	#endregion
+
 }
