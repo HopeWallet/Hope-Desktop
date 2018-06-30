@@ -2,7 +2,8 @@
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {
-    public class DisposableData<T> : IDisposable
+
+    public abstract class DisposableData<T> : IDisposable
     {
 
         private bool disposedValue = false;
@@ -26,5 +27,4 @@ namespace Hope.Security.ProtectedTypes.Types.Base
             GC.Collect();
         }
     }
-
 }

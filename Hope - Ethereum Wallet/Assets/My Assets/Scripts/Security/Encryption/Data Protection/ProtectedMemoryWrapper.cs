@@ -1,5 +1,4 @@
 ﻿using Org.BouncyCastle.Security;
-using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -36,9 +35,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static void Protect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
-            {
                 data = AddPadding(data.GetBase64String());
-            }
 
             ProtectedMemory.Protect(data, scope);
         }
@@ -101,7 +98,7 @@ namespace Hope.Security.Encryption.DPAPI
             {
                 ICryptoTransform decryptor = aes.CreateDecryptor(PAD_KEY, PAD_IV);
 
-                using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(data)))
+                using (MemoryStream ms = new MemoryStream(data.GetBase64Bytes()))
                 using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                 using (StreamReader sw = new StreamReader(cs))
                     decryptedData = sw.ReadToEnd().GetBase64Bytes();

@@ -3,15 +3,11 @@
 namespace Hope.Security.ProtectedTypes.Types
 {
 
-    public class ProtectedInt : ProtectedTypeBase<int>
+    public sealed class ProtectedInt : ProtectedType<int, DisposableInt>
     {
-
         public ProtectedInt(int value) : base(value)
         {
         }
-
-        protected override int ConvertToType(string strValue) => int.Parse(strValue);
-
     }
 
 }

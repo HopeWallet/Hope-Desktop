@@ -56,6 +56,14 @@ public static class StringUtils
     }
 
     /// <summary>
+    /// Converts a string value to a different type.
+    /// </summary>
+    /// <typeparam name="T"> The type to convert the string to. </typeparam>
+    /// <param name="str"> The string value to convert. </param>
+    /// <returns> The newly converted string now of type T. </returns>
+    public static T ConvertTo<T>(this string str) => TypeConversion.ChangeType<T>(str);
+
+    /// <summary>
     /// Converts a Base64 string to a byte array.
     /// </summary>
     /// <param name="str"> The Base64 string to convert. </param>

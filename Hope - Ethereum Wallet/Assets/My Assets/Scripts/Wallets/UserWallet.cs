@@ -9,7 +9,7 @@ using System;
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
 /// </summary>
-public class UserWallet
+public sealed class UserWallet
 {
 
     // TODO:
@@ -57,7 +57,7 @@ public class UserWallet
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
 
-        using (var str = protectedStringDataCache.GetData(0).GetDisposableData())
+        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
             AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
     }
 
@@ -68,7 +68,7 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        using (var str = protectedStringDataCache.GetData(0).GetDisposableData())
+        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
             TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
             {
