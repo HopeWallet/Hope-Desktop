@@ -76,6 +76,9 @@ public class CreateWalletForm : FormAnimation
 		passwordHeader.AnimateScaleX(0f, 0.15f);
 		password1Field.AnimateScaleX(0f, 0.15f);
 		password2Field.AnimateScaleX(0f, 0.15f);
+
+		warningIcon.AnimateGraphic(0f, 0.1f);
+		checkMarkIcon.AnimateGraphic(0f, 0.1f);
 	}
 
 	#endregion
@@ -122,7 +125,7 @@ public class CreateWalletForm : FormAnimation
 			checkMarkIcon.AnimateGraphic(0f, 0.25f);
 		}
 
-		createButtonComponent.interactable = walletNameText != null && passwordsValid;
+		createButtonComponent.interactable = walletNameText != "" && passwordsValid;
 	}
 
 	#endregion
