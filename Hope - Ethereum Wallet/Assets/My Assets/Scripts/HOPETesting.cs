@@ -27,6 +27,7 @@ using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Security.ProtectedTypes.Types.Base;
+using System.ComponentModel;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -40,5 +41,4 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
     }
-
 }

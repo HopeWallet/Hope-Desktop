@@ -1,3 +1,4 @@
+using Hope.Security.Injection;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -65,6 +66,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<DebugManager>().AsSingle().NonLazy();
         Container.Bind<ExceptionManager>().AsSingle().NonLazy();
+        Container.Bind<AssemblyInjectionDetector>().AsSingle().NonLazy();
 
         Container.Bind<TradableAssetManager>().AsSingle().NonLazy();
         Container.Bind<TradableAssetButtonManager>().AsSingle().NonLazy();

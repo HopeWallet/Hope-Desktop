@@ -3,15 +3,11 @@
 namespace Hope.Security.ProtectedTypes.Types
 {
 
-    public class ProtectedString : ProtectedTypeBase<string>
+    public sealed class ProtectedString : ProtectedType<string, DisposableString>
     {
-
         public ProtectedString(string value) : base(value)
         {
         }
-
-        protected override string ConvertToType(string strValue) => strValue;
-
     }
 
 }
