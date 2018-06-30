@@ -37,18 +37,6 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-
-        int value = 15;
-        long bigNum = 15531414342;
-
-        byte[] intBytes = Convert.ToString(value).GetUTF8Bytes();
-        byte[] longBytes = Convert.ToString(bigNum).GetUTF8Bytes();
-
-        intBytes.LogArray();
-        longBytes.LogArray();
-
-        int.Parse(intBytes.GetUTF8String()).Log();
-        long.Parse(longBytes.GetUTF8String()).Log();
     }
 
 }

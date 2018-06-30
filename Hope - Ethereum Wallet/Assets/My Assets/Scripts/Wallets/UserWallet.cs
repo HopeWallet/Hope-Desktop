@@ -13,6 +13,11 @@ using System;
 public class UserWallet
 {
 
+    // TODO:
+    // Only open wallet once the password has been verified
+    // Only open the wallet once it has been created and fully encrypted
+    // Only locate the wallet seed and the private key when signing a transaction
+
     public static event Action OnWalletCreated;
     public static event Action OnWalletLoadSuccessful;
     public static event Action OnWalletLoadUnsuccessful;

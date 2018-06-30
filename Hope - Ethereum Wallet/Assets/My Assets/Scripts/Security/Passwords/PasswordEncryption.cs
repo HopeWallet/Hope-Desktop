@@ -8,6 +8,11 @@ using System.Linq;
 public static class PasswordEncryption
 {
 
+    // TODO:
+    // Implement wallet password encryption
+    // Save the salted hash to player prefs
+    // Only check the password when the wallet is loaded
+
     private const int ITERATIONS = 100000;
     private const int SALT_SIZE = 64;
     private const int HASH_SIZE = 128;
