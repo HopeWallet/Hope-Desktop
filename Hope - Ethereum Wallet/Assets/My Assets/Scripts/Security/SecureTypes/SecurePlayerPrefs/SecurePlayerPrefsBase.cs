@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.HashGeneration;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -43,7 +44,7 @@ namespace Hope.Security.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().DPEncrypt());
+            PlayerPrefs.SetString(seedName, StorProtect.Protect(PasswordUtils.GenerateRandomPassword().GetSHA512Hash()));
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Hope.Security.SecurePlayerPrefs.Base
         {
             return NetworkInterface.GetAllNetworkInterfaces()
                                    .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().ToHexString()))
+                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
                                    .Single();
         }
     }

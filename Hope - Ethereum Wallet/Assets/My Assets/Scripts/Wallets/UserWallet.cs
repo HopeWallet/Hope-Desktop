@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
@@ -52,7 +53,7 @@ public class UserWallet
     {
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) => TryCreateAccount(pass));
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, MemProtect.Unprotect(byteDataCache[0]).GetBase64String(), (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -62,7 +63,7 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, byteDataCache[0].Unprotect(), (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, MemProtect.Unprotect(byteDataCache[0]).GetBase64String(), (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {

@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using System.Text;
 using UnityEngine.UI;
 using Zenject;
@@ -62,7 +63,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// </summary>
     public override void LoadWallet()
     {
-        byteDataCache[0] = passwordField.text.Protect();
+        byteDataCache[0] = MemProtect.Protect(passwordField.text);
         userWalletManager.UnlockWallet();
     }
 

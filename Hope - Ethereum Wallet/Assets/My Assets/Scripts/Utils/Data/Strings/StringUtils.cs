@@ -56,19 +56,18 @@ public static class StringUtils
     }
 
     /// <summary>
-    /// Gets a hexadecimal string from an array of byte data.
+    /// Converts a Base64 string to a byte array.
     /// </summary>
-    /// <param name="data"> The byte data to convert to a string. </param>
-    /// <returns> The hexadecimal string. </returns>
-    public static string ToHexString(this byte[] data)
-    {
-        StringBuilder sBuilder = new StringBuilder();
+    /// <param name="str"> The Base64 string to convert. </param>
+    /// <returns> The byte data of the string. </returns>
+    public static byte[] GetBase64Bytes(this string str) => string.IsNullOrEmpty(str) ? null : Convert.FromBase64String(str);
 
-        for (int i = 0; i < data.Length; i++)
-            sBuilder.Append(data[i].ToString("x2"));
-
-        return sBuilder.ToString();
-    }
+    /// <summary>
+    /// Converts string to a byte array using UTF8 encoding.
+    /// </summary>
+    /// <param name="str"> The string to encode. </param>
+    /// <returns> The string encoded to UTF8 bytes. </returns>
+    public static byte[] GetUTF8Bytes(this string str) => string.IsNullOrEmpty(str) ? null : Encoding.UTF8.GetBytes(str);
 
     /// <summary>
     /// Converts a string from hex to a decimal value.

@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     private ButtonClickObserver buttonObserver;
     private ByteDataCache byteDataCache;
 
-    private const int PASSWORD_LENGTH = BasicLevelEncryption.MIN_PASSWORD_LENGTH;
+    private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
     /// <summary>
     /// Injects the UserWalletManager as this class's dependency.
@@ -64,7 +65,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     public void SetPassword()
     {
-        byteDataCache[0] = passwordFields[1].text.Protect();
+        byteDataCache[0] = MemProtect.Protect(passwordFields[1].text);
         uiManager.OpenMenu<ImportOrCreateMenu>();
     }
 

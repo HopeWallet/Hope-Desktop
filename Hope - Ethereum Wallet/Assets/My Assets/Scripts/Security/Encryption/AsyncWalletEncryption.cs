@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Security.Encryption.DPAPI;
+using System;
 using System.Threading.Tasks;
 
 namespace Hope.Security.Encryption

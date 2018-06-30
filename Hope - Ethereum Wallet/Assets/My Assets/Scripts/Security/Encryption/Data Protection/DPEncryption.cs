@@ -17,7 +17,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-namespace Hope.Security.Encryption
+namespace Hope.Security.Encryption.DPAPI
 {
 
     /// <summary>

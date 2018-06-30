@@ -3,11 +3,9 @@ using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
-using System;
 using System.Linq;
-using System.Security.Cryptography;
 
-public static class WalletPasswordEncryption
+public static class PasswordEncryption
 {
 
     private const int ITERATIONS = 100000;
@@ -16,11 +14,10 @@ public static class WalletPasswordEncryption
 
     public static string GetSaltedPasswordHash(string password)
     {
-        byte[] salt = new byte[SALT_SIZE];
-        
-        RandomNumberGenerator.Create().GetBytes(salt);
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = SecureRandom.GetNextBytes(secureRandom, SALT_SIZE);
 
-        return Convert.ToBase64String(salt.Concat(GetPasswordHash(password, salt)).ToArray());
+        return salt.Concat(GetPasswordHash(password, salt)).ToArray().GetBase64String();
     }
 
     private static byte[] GetPasswordHash(string password, byte[] salt)
@@ -33,7 +30,7 @@ public static class WalletPasswordEncryption
 
     public static bool VerifyPassword(string password, string saltedHash)
     {
-        byte[] hashBytes = Convert.FromBase64String(saltedHash);
+        byte[] hashBytes = saltedHash.GetBase64Bytes();
         return VerifyPassword(password, hashBytes.Skip(SALT_SIZE).ToArray(), hashBytes.Take(SALT_SIZE).ToArray());
     }
 
