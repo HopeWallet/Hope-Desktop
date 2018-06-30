@@ -28,6 +28,8 @@ using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Security.ProtectedTypes.Types.Base;
 using System.ComponentModel;
+using System.Numerics;
+using Hope.Utils.EthereumUtils;
 
 public class HOPETesting : MonoBehaviour
 {
