@@ -14,12 +14,12 @@ namespace Nethereum.JsonRpc.UnityClient
         private readonly string _privateKey;
         private readonly string _account;
 
-        private readonly StringProtectedDataCache _byteDataCache;
+        private readonly ProtectedStringDataCache _byteDataCache;
         private readonly TransactionSigner _transactionSigner;
         private readonly EthGetTransactionCountUnityRequest _transactionCountRequest;
         private readonly EthSendRawTransactionUnityRequest _ethSendTransactionRequest;
 
-        public TransactionSignedUnityRequest(StringProtectedDataCache byteDataCache, string url, string privateKey, string account)
+        public TransactionSignedUnityRequest(ProtectedStringDataCache byteDataCache, string url, string privateKey, string account)
         {
             _url = url;
             _account = account;

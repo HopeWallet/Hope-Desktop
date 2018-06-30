@@ -1,6 +1,5 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.SecurePlayerPrefs.Base;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
 using UnityEngine;
 
 /// <summary>
@@ -77,7 +76,7 @@ public class SecurePlayerPrefs : SecurePlayerPrefsBase
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(StorProtect.Unprotect(GetSeedValue()), key));
+    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(StorageProtect.Unprotect(GetSeedValue()), key));
 
     /// <summary>
     /// Sets a string to the PlayerPrefs after hashing the string values.
@@ -88,7 +87,7 @@ public class SecurePlayerPrefs : SecurePlayerPrefsBase
     {
         string secureKey = GetSecureKey(key);
 
-        PlayerPrefs.SetString(secureKey, StorProtect.Protect(value.DPEncrypt(GetValueHash(secureKey))));
+        PlayerPrefs.SetString(secureKey, StorageProtect.Protect(value.DPEncrypt(GetValueHash(secureKey))));
     }
 
     /// <summary>
@@ -100,6 +99,6 @@ public class SecurePlayerPrefs : SecurePlayerPrefsBase
     {
         string secureKey = GetSecureKey(key);
 
-        return StorProtect.Unprotect(PlayerPrefs.GetString(secureKey)).DPDecrypt(GetValueHash(secureKey));
+        return StorageProtect.Unprotect(PlayerPrefs.GetString(secureKey)).DPDecrypt(GetValueHash(secureKey));
     }
 }

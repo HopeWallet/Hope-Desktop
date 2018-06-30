@@ -6,7 +6,7 @@ namespace Hope.Security.Encryption.DPAPI
     /// <summary>
     /// Class which protects data for long term storage which can be protected and unprotected across multiple sessions.
     /// </summary>
-    public static class StorProtect
+    public static class StorageProtect
     {
 
         public static string Protect(this string data) => Protect(data, null);

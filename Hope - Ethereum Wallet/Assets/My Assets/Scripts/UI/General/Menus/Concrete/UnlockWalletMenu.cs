@@ -1,6 +1,4 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using System.Text;
+﻿using Hope.Security.ProtectedTypes.Types;
 using UnityEngine.UI;
 using Zenject;
 
@@ -16,7 +14,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     public Button restoreButton;
 
     private ButtonClickObserver buttonObserver;
-    private StringProtectedDataCache byteDataCache;
+    private ProtectedStringDataCache byteDataCache;
 
     /// <summary>
     /// Adds the dependencies required for this menu.
@@ -24,7 +22,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     /// <param name="byteDataCache"> The active ByteDataCache. </param>
     [Inject]
-    public void Construct(ButtonClickObserver buttonObserver, StringProtectedDataCache byteDataCache)
+    public void Construct(ButtonClickObserver buttonObserver, ProtectedStringDataCache byteDataCache)
     {
         this.buttonObserver = buttonObserver;
         this.byteDataCache = byteDataCache;
@@ -63,7 +61,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// </summary>
     public override void LoadWallet()
     {
-        byteDataCache.SetData(new StringProtected(passwordField.text), 0);
+        byteDataCache.SetData(new ProtectedString(passwordField.text), 0);
         userWalletManager.UnlockWallet();
     }
 

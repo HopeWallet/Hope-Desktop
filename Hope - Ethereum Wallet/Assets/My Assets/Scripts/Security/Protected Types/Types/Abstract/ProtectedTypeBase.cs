@@ -6,26 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public abstract class ProtectedTypeBase<T>
+namespace Hope.Security.ProtectedTypes.Types.Base
 {
 
-    protected byte[] data;
-
-    public bool IsLocked { get; private set; }
-
-    public string EncryptedValue => data.GetBase64String();
-
-    public T Value
+    public abstract class ProtectedTypeBase<T>
     {
-        get { return ConvertToType(MemProtect.Unprotect(data).GetUTF8String()); }
-        set { data = MemProtect.Protect(value.ToString().GetUTF8Bytes()); }
-    }
 
-    public ProtectedTypeBase(T value)
-    {
-        Value = value;
-    }
+        protected byte[] data;
 
-    protected abstract T ConvertToType(string strValue);
+        public bool IsLocked { get; private set; }
+
+        public string EncryptedValue => data.GetBase64String();
+
+        public T Value
+        {
+            get { return ConvertToType(MemoryProtect.Unprotect(data).GetUTF8String()); }
+            set { data = MemoryProtect.Protect(value.ToString().GetUTF8Bytes()); }
+        }
+
+        public ProtectedTypeBase(T value)
+        {
+            Value = value;
+        }
+
+        protected abstract T ConvertToType(string strValue);
+
+    }
 
 }

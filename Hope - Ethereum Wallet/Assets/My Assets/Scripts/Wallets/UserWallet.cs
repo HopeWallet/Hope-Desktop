@@ -23,7 +23,7 @@ public class UserWallet
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
-    private readonly StringProtectedDataCache stringProtectedDataCache;
+    private readonly ProtectedStringDataCache protectedStringDataCache;
 
     private Account account;
 
@@ -38,13 +38,13 @@ public class UserWallet
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    /// <param name="stringProtectedDataCache"> The active StringProtectedDataCache. </param>
-    public UserWallet(PlayerPrefPassword prefPassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, StringProtectedDataCache stringProtectedDataCache)
+    /// <param name="protectedStringDataCache"> The active ProtectedStringDataCache. </param>
+    public UserWallet(PlayerPrefPassword prefPassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ProtectedStringDataCache protectedStringDataCache)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
-        this.stringProtectedDataCache = stringProtectedDataCache;
+        this.protectedStringDataCache = protectedStringDataCache;
 
         OnWalletCreated += prefPassword.SetupPlayerPrefs;
     }
@@ -57,7 +57,7 @@ public class UserWallet
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
 
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, stringProtectedDataCache.GetData(0).Value, (pass) => TryCreateAccount(pass));
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, protectedStringDataCache.GetData(0).Value, (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, stringProtectedDataCache.GetData(0).Value, (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, protectedStringDataCache.GetData(0).Value, (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
@@ -90,7 +90,7 @@ public class UserWallet
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(stringProtectedDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(protectedStringDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);

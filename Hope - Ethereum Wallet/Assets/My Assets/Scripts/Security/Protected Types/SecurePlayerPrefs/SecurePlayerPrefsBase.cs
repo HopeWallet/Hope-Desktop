@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using UnityEngine;
 
-namespace Hope.Security.SecurePlayerPrefs.Base
+namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
 {
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace Hope.Security.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, StorProtect.Protect(PasswordUtils.GenerateRandomPassword().GetSHA512Hash()));
+            PlayerPrefs.SetString(seedName, StorageProtect.Protect(PasswordUtils.GenerateRandomPassword().GetSHA512Hash()));
         }
 
         /// <summary>

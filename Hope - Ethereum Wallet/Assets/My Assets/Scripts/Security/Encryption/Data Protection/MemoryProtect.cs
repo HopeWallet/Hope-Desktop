@@ -7,7 +7,7 @@ namespace Hope.Security.Encryption.DPAPI
     /// <summary>
     /// Class which protects data which is stored in memory which persists only as long as the session lifetime.
     /// </summary>
-    public static class MemProtect
+    public static class MemoryProtect
     {
 
         private static readonly byte[] Entropy;
@@ -15,7 +15,7 @@ namespace Hope.Security.Encryption.DPAPI
         /// <summary>
         /// Initializes the entropy to use to encrypt the data.
         /// </summary>
-        static MemProtect()
+        static MemoryProtect()
         {
             SecureRandom secureRandom = new SecureRandom();
             Entropy = SecureRandom.GetNextBytes(secureRandom, 256);
@@ -25,20 +25,20 @@ namespace Hope.Security.Encryption.DPAPI
 
         /// <summary>
         /// Protects a piece of string text in memory.
-        /// ProtectMemory should only be used with UnprotectMemory in one session of program execution.
+        /// Protect should only be used with MemoryProtect.Unprotect in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// </summary>
-        /// <param name="data"> The string data. </param>
+        /// <param name="data"> The data to protect. </param>
         /// <returns> The protected data as a byte array. </returns>
         public static byte[] Protect(byte[] data) => Protect(data, MemoryProtectionScope.SameProcess);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by ProtectMemory during this session history.
-        /// UnprotectMemory should only be used with ProtectMemory in one session of program execution.
+        /// Unprotects a byte array of data which was protected by MemoryProtect.Protect during this session history.
+        /// Unprotect should only be used with MemoryProtect.Protect in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// </summary>
         /// <param name="data"> The data to unprotect. </param>
-        /// <returns> The unprotected string retrieved from the data. </returns>
+        /// <returns> The unprotected data. </returns>
         public static byte[] Unprotect(byte[] data) => Unprotect(data, MemoryProtectionScope.SameProcess);
 
         public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope) => Protect(data, memoryScope, DataProtectionScope.CurrentUser);
