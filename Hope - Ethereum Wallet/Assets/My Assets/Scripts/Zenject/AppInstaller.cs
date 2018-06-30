@@ -61,9 +61,10 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.BindInterfacesAndSelfTo<UpdateManager>().AsSingle().NonLazy();
         Container.Bind<PeriodicUpdateManager>().AsSingle().NonLazy();
 
-        Container.Bind<ByteDataCache>().AsSingle().NonLazy();
+        Container.Bind<StringProtectedDataCache>().AsSingle().NonLazy();
 
         Container.Bind<DebugManager>().AsSingle().NonLazy();
+        Container.Bind<ExceptionManager>().AsSingle().NonLazy();
 
         Container.Bind<TradableAssetManager>().AsSingle().NonLazy();
         Container.Bind<TradableAssetButtonManager>().AsSingle().NonLazy();

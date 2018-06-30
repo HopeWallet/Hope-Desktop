@@ -16,7 +16,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     public Button restoreButton;
 
     private ButtonClickObserver buttonObserver;
-    private ByteDataCache byteDataCache;
+    private StringProtectedDataCache byteDataCache;
 
     /// <summary>
     /// Adds the dependencies required for this menu.
@@ -24,7 +24,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     /// <param name="byteDataCache"> The active ByteDataCache. </param>
     [Inject]
-    public void Construct(ButtonClickObserver buttonObserver, ByteDataCache byteDataCache)
+    public void Construct(ButtonClickObserver buttonObserver, StringProtectedDataCache byteDataCache)
     {
         this.buttonObserver = buttonObserver;
         this.byteDataCache = byteDataCache;
@@ -63,7 +63,7 @@ public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButton
     /// </summary>
     public override void LoadWallet()
     {
-        byteDataCache[0] = MemProtect.Protect(passwordField.text);
+        byteDataCache.SetData(new StringProtected(passwordField.text), 0);
         userWalletManager.UnlockWallet();
     }
 

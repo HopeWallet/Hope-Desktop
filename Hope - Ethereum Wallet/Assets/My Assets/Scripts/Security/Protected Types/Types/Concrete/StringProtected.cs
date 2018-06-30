@@ -10,5 +10,4 @@ public class StringProtected : ProtectedTypeBase<string>
     }
 
     protected override string ConvertToType(string strValue) => strValue;
-
 }

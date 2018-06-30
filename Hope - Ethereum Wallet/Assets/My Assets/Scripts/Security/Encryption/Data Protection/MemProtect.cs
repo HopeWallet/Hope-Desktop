@@ -23,8 +23,6 @@ namespace Hope.Security.Encryption.DPAPI
             ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
         }
 
-        public static byte[] Protect(string data) => Protect(data.GetUTF8Bytes());
-
         /// <summary>
         /// Protects a piece of string text in memory.
         /// ProtectMemory should only be used with UnprotectMemory in one session of program execution.
@@ -55,6 +53,9 @@ namespace Hope.Security.Encryption.DPAPI
 
         private static byte[] InternalProtect(this byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
         {
+            if (data == null || data.Length == 0)
+                return null;
+
             ProtectedMemory.Unprotect(Entropy, memoryScope);
 
             byte[] byteData = ProtectedData.Protect(data, Entropy, dataScope);
@@ -67,6 +68,9 @@ namespace Hope.Security.Encryption.DPAPI
 
         private static byte[] InternalUnprotect(this byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
         {
+            if (data == null || data.Length == 0)
+                return null;
+
             ProtectedMemoryWrapper.Unprotect(ref data, memoryScope);
             ProtectedMemory.Unprotect(Entropy, memoryScope);
 

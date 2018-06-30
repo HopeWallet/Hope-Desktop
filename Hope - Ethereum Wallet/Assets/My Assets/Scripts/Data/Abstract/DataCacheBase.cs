@@ -5,34 +5,33 @@
 /// </summary>
 public abstract class DataCache<T>
 {
+
+    private readonly List<T> dataCollection = new List<T>();
+
     /// <summary>
-    /// Gets the data at the index of the CollectiveData list.
+    /// Sets the data cache at a given index.
     /// </summary>
-    /// <param name="index"> The index to get the data from. </param>
-    /// <returns> The data array. </returns>
-    public T[] this[int index]
+    /// <param name="value"> The value of the data to set. </param>
+    /// <param name="index"> The index to set the data at. If the index is outside the range, simply add the data onto the end of the list. </param>
+    public void SetData(T value, int index)
     {
-        get
-        {
-            return CollectiveData[index];
-        }
-        set
-        {
-            if (CollectiveData.Count <= index)
-                CollectiveData.Add(value);
-            else
-                CollectiveData[index] = value;
-        }
+        if (dataCollection.Count <= index)
+            dataCollection.Add(value);
+        else
+            dataCollection[index] = value;
     }
 
     /// <summary>
-    /// List of collective data.
+    /// Gets the data from the cache at a given index.
     /// </summary>
-    public List<T[]> CollectiveData { get; } = new List<T[]>();
+    /// <param name="index"> The index of the data. </param>
+    /// <returns> The data found at the given index. </returns>
+    public T GetData(int index)
+    {
+        if (index >= dataCollection.Count)
+            return default(T);
 
-    /// <summary>
-    /// List of singular data.
-    /// </summary>
-    public List<T> SingularData { get; } = new List<T>();
+        return dataCollection[index];
+    }
 
 }

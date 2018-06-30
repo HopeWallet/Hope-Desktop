@@ -1,5 +1,4 @@
 ﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
@@ -20,12 +19,11 @@ public class UserWallet
 
     public static event Action OnWalletCreated;
     public static event Action OnWalletLoadSuccessful;
-    public static event Action OnWalletLoadUnsuccessful;
 
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
-    private readonly ByteDataCache byteDataCache;
+    private readonly StringProtectedDataCache stringProtectedDataCache;
 
     private Account account;
 
@@ -40,13 +38,13 @@ public class UserWallet
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    /// <param name="byteDataCache"> The active ByteDataCache. </param>
-    public UserWallet(PlayerPrefPassword prefPassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, ByteDataCache byteDataCache)
+    /// <param name="stringProtectedDataCache"> The active StringProtectedDataCache. </param>
+    public UserWallet(PlayerPrefPassword prefPassword, PopupManager popupManager, EthereumNetwork ethereumNetwork, StringProtectedDataCache stringProtectedDataCache)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
-        this.byteDataCache = byteDataCache;
+        this.stringProtectedDataCache = stringProtectedDataCache;
 
         OnWalletCreated += prefPassword.SetupPlayerPrefs;
     }
@@ -58,7 +56,8 @@ public class UserWallet
     {
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
-        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, MemProtect.Unprotect(byteDataCache[0]).GetBase64String(), (pass) => TryCreateAccount(pass));
+
+        AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, stringProtectedDataCache.GetData(0).Value, (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -68,7 +67,7 @@ public class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, MemProtect.Unprotect(byteDataCache[0]).GetBase64String(), (pass) =>
+        TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, stringProtectedDataCache.GetData(0).Value, (pass) =>
         {
             AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
             {
@@ -91,7 +90,7 @@ public class UserWallet
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(byteDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(stringProtectedDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);
@@ -122,7 +121,7 @@ public class UserWallet
             {
                 if (string.IsNullOrEmpty(pkey))
                 {
-                    ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "), popupManager);
+                    ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
                     return;
                 }
 
@@ -132,8 +131,7 @@ public class UserWallet
         }
         catch
         {
-            ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "), popupManager);
-            OnWalletLoadUnsuccessful?.Invoke();
+            ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
         }
     }
 
@@ -152,8 +150,7 @@ public class UserWallet
         }
         catch
         {
-            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."), popupManager);
-            OnWalletLoadUnsuccessful?.Invoke();
+            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."));
         }
     }
 
