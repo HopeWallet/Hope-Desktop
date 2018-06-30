@@ -20,12 +20,14 @@ public abstract class FormAnimation : MonoBehaviour
 		AnimateOut();
 	}
 
-	private void OnEnable()
+	protected virtual void OnEnable()
 	{
 		InitializeElements();
 		ChangeAnimationState(true);
 		AnimateIn();
 	}
+
+	protected virtual void OnDisable() { }
 
 	protected abstract void AnimateIn();
 

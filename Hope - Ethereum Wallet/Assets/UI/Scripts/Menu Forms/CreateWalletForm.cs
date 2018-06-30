@@ -12,10 +12,12 @@ public class CreateWalletForm : FormAnimation
 	[SerializeField] private GameObject password1Field;
 	[SerializeField] private GameObject password2Field;
 	[SerializeField] private GameObject createButton;
-	[SerializeField] private GameObject warningSign;
+	[SerializeField] private GameObject warningIcon;
+	[SerializeField] private GameObject checkMarkIcon;
 
 	private string walletNameText, password1Text, password2Text;
 	private Button createButtonComponent;
+	private TMP_InputField[] inputFields;
 
 	protected override void InitializeElements()
 	{
@@ -25,6 +27,26 @@ public class CreateWalletForm : FormAnimation
 
 		createButtonComponent = createButton.GetComponent<Button>();
 		createButtonComponent.interactable = false;
+
+		inputFields = new TMP_InputField[3];
+		inputFields[0] = walletNameField.GetComponent<TMP_InputField>();
+		inputFields[1] = password1Field.GetComponent<TMP_InputField>();
+		inputFields[2] = password2Field.GetComponent<TMP_InputField>();
+	}
+
+	private void Update()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			if (Input.GetKeyDown(KeyCode.Tab) && inputFields[i].isFocused)
+			{
+				if (i != 2)
+					inputFields[++i].ActivateInputField();
+
+				else
+					inputFields[0].ActivateInputField();
+			}
+		}
 	}
 
 	#region Animating
@@ -86,11 +108,19 @@ public class CreateWalletForm : FormAnimation
 	/// </summary>
 	private void SetButtonInteractable()
 	{
-		bool passwordsMatch = password1Text == password2Text;
+		bool passwordsValid = password1Text == password2Text && password1Text.Length >= 8;
 
-		warningSign.SetActive(!passwordsMatch);
+		if (password1Text != "" && password2Text != "")
+		{
+			warningIcon.AnimateGraphic(passwordsValid ? 0f : 1f, 0.25f);
+			checkMarkIcon.AnimateGraphic(passwordsValid ? 1f : 0f, 0.25f);
+		}
 
-		bool passwordsValid = passwordsMatch && password1Text.Length >= 8;
+		else
+		{
+			warningIcon.AnimateGraphic(0f, 0.25f);
+			checkMarkIcon.AnimateGraphic(0f, 0.25f);
+		}
 
 		createButtonComponent.interactable = walletNameText != null && passwordsValid;
 	}
