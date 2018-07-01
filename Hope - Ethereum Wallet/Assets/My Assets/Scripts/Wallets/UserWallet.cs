@@ -33,6 +33,11 @@ public sealed class UserWallet
     public string Address => account.Address;
 
     /// <summary>
+    /// Checks whether a wallet currently exists or not.
+    /// </summary>
+    public bool CanReadWallet => prefPassword.HasPlayerPrefs() && UserWalletJsonHandler.JsonWalletExists;
+
+    /// <summary>
     /// Initializes the UserWallet with the SafePassword object.
     /// </summary>
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
@@ -99,13 +104,6 @@ public sealed class UserWallet
                                            gasPrice,
                                            transactionInput);
     }
-
-    /// <summary>
-    /// Checks whether a wallet currently exists or not.
-    /// </summary>
-    /// <param name="safePassword"> SafePassword object to use to check if the PlayerPrefs are active. </param>
-    /// <returns> True if there is a readable wallet. </returns>
-    public bool CanReadWallet => prefPassword.HasPlayerPrefs() && UserWalletJsonHandler.JsonWalletExists;
 
     /// <summary>
     /// Starts the loading popup for the wallet.

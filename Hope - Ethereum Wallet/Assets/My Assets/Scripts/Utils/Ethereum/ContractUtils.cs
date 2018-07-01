@@ -16,7 +16,7 @@ namespace Hope.Utils.EthereumUtils
 
         /// <summary>
         /// Checks if an address is a smart contract.
-        /// Calls an action with the boolean result and abi if it is a smart contract.
+        /// Calls an action with the <see langword="bool"/> result and abi if it is a smart contract.
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <param name="onResultReceived"> Action passing the result of the check. </param>
@@ -49,7 +49,7 @@ namespace Hope.Utils.EthereumUtils
             => _ComplexContractViewFunctionCoroutine(function, onValueReceived, input).StartCoroutine();
 
         /// <summary>
-        /// Executes the function of a given function of a given contract.
+        /// Executes the function of a given smart contract.
         /// </summary>
         /// <param name="contract"> The contract the function exists on. </param>
         /// <param name="function"> The function to execute. </param>
