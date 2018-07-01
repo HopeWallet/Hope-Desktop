@@ -38,7 +38,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         public TDisposable CreateDisposableData()
         {
             if (disposableData == null)
-                disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), MemoryProtect.Unprotect(protectedData).GetUTF8String().ConvertTo<TType>());
+                disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), MemoryProtect.Unprotect(protectedData));
 
             return disposableData;
         }
@@ -53,9 +53,17 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             if (disposableData != null)
                 throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before settings new data!");
-
-            protectedData = MemoryProtect.Protect(value.ToString().GetUTF8Bytes());
+            
+            protectedData = MemoryProtect.Protect(GetBytes(value));
         }
+
+        /// <summary>
+        /// Abstract method for retrieving the byte array representation of TType.
+        /// </summary>
+        /// <param name="value"> The value to convert to a byte array. </param>
+        /// <returns> The converted value as a byte array. </returns>
+        protected abstract byte[] GetBytes(TType value);
+
     }
 
 }

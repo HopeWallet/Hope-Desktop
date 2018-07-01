@@ -10,45 +10,45 @@ namespace Hope.Security.HashGeneration
     {
 
         /// <summary>
-        /// Gets the MD5 hash of a string input.
+        /// Gets the <see cref="MD5"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The MD5 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="MD5"/> hashed <see langword="string"/>. </returns>
         public static string GetMD5Hash(this string input) => HashGenerationHelpers.GetHash<MD5>(input);
 
         /// <summary>
-        /// Gets the RIPEMD160 hash of a string input.
+        /// Gets the <see cref="RIPEMD160"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The RIPEMD160 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="RIPEMD160"/> hashed <see langword="string"/>. </returns>
         public static string GetRIPEMD160Hash(this string input) => HashGenerationHelpers.GetHash<RIPEMD160>(input);
 
         /// <summary>
-        /// Gets the SHA1 hash of a string input.
+        /// Gets the <see cref="SHA1"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The SHA1 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="SHA1"/> hashed <see langword="string"/>. </returns>
         public static string GetSHA1Hash(this string input) => HashGenerationHelpers.GetHash<SHA1>(input);
 
         /// <summary>
-        /// Gets the SHA256 hash of a string input.
+        /// Gets the <see cref="SHA256"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The SHA256 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="SHA256"/> hashed <see langword="string"/>. </returns>
         public static string GetSHA256Hash(this string input) => HashGenerationHelpers.GetHash<SHA256>(input);
 
         /// <summary>
-        /// Gets the SHA384 hash of a string input.
+        /// Gets the <see cref="SHA384"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The SHA384 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="SHA384"/> hashed <see langword="string"/>. </returns>
         public static string GetSHA384Hash(this string input) => HashGenerationHelpers.GetHash<SHA384>(input);
 
         /// <summary>
-        /// Gets the SHA512 hash of a string input.
+        /// Gets the <see cref="SHA512"/> hash of a <see langword="string"/> input.
         /// </summary>
-        /// <param name="input"> The string to get the hash for. </param>
-        /// <returns> The SHA512 hashed string. </returns>
+        /// <param name="input"> The <see langword="string"/> to get the hash for. </param>
+        /// <returns> The <see cref="SHA512"/> hashed <see langword="string"/>. </returns>
         public static string GetSHA512Hash(this string input) => HashGenerationHelpers.GetHash<SHA512>(input);
 
     }

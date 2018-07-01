@@ -20,6 +20,6 @@ public static class TypeConversion
     /// <typeparam name="T"> The type to convert to. </typeparam>
     /// <param name="value"> The value to convert. </param>
     /// <returns> The converted value. </returns>
-    private static T Convert<T>(object value) => (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(value);
+    private static T Convert<T>(object value) => value == null ? default(T) : (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFrom(value);
 
 }
