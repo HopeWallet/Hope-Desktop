@@ -48,22 +48,20 @@ public class WalletListForm : FormAnimation
 		}
 
 		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => FinishedAnimatingOut()));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
 	}
 
 	/// <summary>
 	/// Loops through the amount of saved wallets and animates them one by one
 	/// </summary>
 	/// <param name="i"> The wallet number in the array </param>
-	private void AnimateWallets(int i)
+	private void AnimateWallets(int index)
 	{
-		if (i == (wallets.Length - 1))
-			wallets[i].AnimateScaleX(1f, 0.15f,
-				() => FinishedAnimatingIn());
+		if (index == (wallets.Length - 1))
+			wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimatingIn);
 
 		else
-			wallets[i].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++i));
+			wallets[index].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++index));
 	}
 
 }

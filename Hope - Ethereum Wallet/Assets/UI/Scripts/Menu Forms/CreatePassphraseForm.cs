@@ -18,8 +18,7 @@ public class CreatePassphraseForm : FormAnimation
 	[SerializeField] private GameObject generateNewButton;
 	[SerializeField] private GameObject copyAllButton;
 	[SerializeField] private GameObject confirmButton;
-
-	private GameObject checkMarkIcon;
+	[SerializeField] private GameObject checkMarkIcon;
 
 	private string[] mnemonicWords;
 
@@ -36,8 +35,6 @@ public class CreatePassphraseForm : FormAnimation
 			wordObjects[i] = passphrase.transform.GetChild(i).gameObject;
 			words[i] = wordObjects[i].transform.GetChild(2).gameObject;
 		}
-
-		checkMarkIcon = copyAllButton.transform.GetChild(0).gameObject;
 	}
 
 	/// <summary>

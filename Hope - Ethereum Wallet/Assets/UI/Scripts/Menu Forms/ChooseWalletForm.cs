@@ -16,8 +16,7 @@ public class ChooseWalletForm : FormAnimation
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
 			() => ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => hopeButton.AnimateGraphicAndScale(1f, 1f, 0.2f, 
-			() => FinishedAnimatingIn()))));
+			() => hopeButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn))));
 	}
 
 	/// <summary>
@@ -28,8 +27,7 @@ public class ChooseWalletForm : FormAnimation
 		hopeButton.AnimateGraphicAndScale(0f, 0.1f, 0.2f);
 		ledgerButton.AnimateGraphicAndScale(0f, 0.1f, 0.2f);
 		title.AnimateGraphicAndScale(0f, 0.1f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0.1f, 0.2f,
-			() => FinishedAnimatingOut()));		
+			() => form.AnimateGraphicAndScale(0f, 0.1f, 0.2f, FinishedAnimatingOut));		
 	}
 
 }

@@ -21,8 +21,7 @@ public class HopeWalletForm : FormAnimation
 		importWalletButton.AnimateScaleX(1f, 0.2f,
 			() => importWalletDesc.AnimateScaleX(1f, 0.2f,
 			() => createWalletButton.AnimateScaleX(1f, 0.2f,
-			() => createWalletDesc.AnimateScaleX(1f, 0.2f,
-			() => FinishedAnimatingIn()))));
+			() => createWalletDesc.AnimateScaleX(1f, 0.2f, FinishedAnimatingIn))));
 	}
 
 	/// <summary>
@@ -36,8 +35,7 @@ public class HopeWalletForm : FormAnimation
 		importWalletDesc.AnimateScaleX(0f, 0.1f,
 			() => importWalletButton.AnimateScaleX(0f, 0.1f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => FinishedAnimatingOut()))));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut))));
 	}
 
 }

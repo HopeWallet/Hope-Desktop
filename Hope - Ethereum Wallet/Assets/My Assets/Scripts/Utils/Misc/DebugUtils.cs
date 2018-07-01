@@ -21,7 +21,7 @@ public static class DebugUtils
     {
         string text = "";
         array.ForEach(i => text += i.ToString() + ", ");
-        Debug.Log(text.Remove(text.Length - 2, 1));
+        Debug.Log(text.Trim().Remove(text.Length - 2, 1));
     }
 
 }

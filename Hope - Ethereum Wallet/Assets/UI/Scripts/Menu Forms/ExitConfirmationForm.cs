@@ -19,8 +19,7 @@ public class ExitConfirmationForm : FormAnimation
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
 
 		noButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => FinishedAnimatingIn()));
+			() => yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn));
 	}
 
 	/// <summary>
@@ -33,8 +32,7 @@ public class ExitConfirmationForm : FormAnimation
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f));
 
 		noButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		yesButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => FinishedAnimatingOut());
+		yesButton.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut);
 	}
 
 	/// <summary>

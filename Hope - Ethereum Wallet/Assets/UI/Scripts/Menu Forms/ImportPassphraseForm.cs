@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using Hope.Utils.EthereumUtils;
+using UnityEngine.UI;
 
 public class ImportPassphraseForm : FormAnimation
 {
@@ -8,14 +9,17 @@ public class ImportPassphraseForm : FormAnimation
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passphrase;
-	[SerializeField] private GameObject[] wordInputField;
-	[SerializeField] private GameObject[] wordTextObjects;
 	[SerializeField] private GameObject pastePhraseButton;
 	[SerializeField] private GameObject importButton;
 	[SerializeField] private GameObject checkMarkIcon;
 	[SerializeField] private GameObject errorIcon;
 
+	private GameObject[] wordInputField;
+	private GameObject[] wordTextObjects;
+
 	private string[] wordStrings;
+	
+	//yard casino top you benefit night bachelor vivid casual ship blush forward 
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -28,8 +32,12 @@ public class ImportPassphraseForm : FormAnimation
 		for (int i = 0; i < 12; i++)
 		{
 			wordInputField[i] = passphrase.transform.GetChild(i).gameObject;
-			wordTextObjects[i] = wordInputField[i].transform.GetChild(2).gameObject;
+			wordTextObjects[i] = wordInputField[i].transform.GetChild(0).GetChild(2).gameObject;
+
+			wordInputField[i].GetComponent<TMP_InputField>().onValueChanged.AddListener((str) => SetButtonInteractable());
 		}
+
+		importButton.GetComponent<Button>().interactable = false;
 	}
 
 	/// <summary>
@@ -38,6 +46,7 @@ public class ImportPassphraseForm : FormAnimation
 	protected override void AnimateIn()
 	{
 		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		FinishedAnimatingIn();
 	}
 
 	/// <summary>
@@ -51,15 +60,17 @@ public class ImportPassphraseForm : FormAnimation
 	/// <summary>
 	/// Splits the copied string on the clipboard into an array and sets them individually during the animations
 	/// </summary>
-	private void PastePhraseClicked()
+	public void PastePhraseClicked()
 	{
-		string clipboard = GUIUtility.systemCopyBuffer;
+		string clipboard = ClipboardUtils.GetClipboardString();
 
-		if (clipboard != null) wordStrings = clipboard.GetMnemonicWords();
+		if (clipboard != "") wordStrings = clipboard.GetMnemonicWords();
 
-		else Debug.LogError("Nothing copied to clipboard! (add this message to a UI popup for user to see)"); //Add this message to a UI popup for the user to see if nothing is copied to the clipboard
+		if (wordStrings.Length == 12)
+			StartWordAnimation();
 
-		StartWordAnimation();	
+		else
+			Debug.Log("Add Error mark beside PastePhrase button, or create a popup saying (not a valid pass phrase)");
 	}
 
 	/// <summary>
@@ -86,7 +97,7 @@ public class ImportPassphraseForm : FormAnimation
 	/// <param name="index"> The index that is being animated </param>
 	private void ExpandWord(int index)
 	{
-		wordTextObjects[index].GetComponent<TextMeshProUGUI>().text = wordStrings[index];
+		wordInputField[index].GetComponent<TMP_InputField>().text = wordStrings[index];
 		wordTextObjects[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(++index));
 	}
 
@@ -100,5 +111,24 @@ public class ImportPassphraseForm : FormAnimation
 			CrunchWord(index);
 		else
 			Animating = false;
+	}
+
+	/// <summary>
+	/// Checks to see if all words are filled out and sets the import button to interactable if so
+	/// </summary>
+	private void SetButtonInteractable()
+	{
+		Button importButtonComponent = importButton.GetComponent<Button>();
+
+		for (int i = 0; i < wordTextObjects.Length; i++)
+		{
+			if (wordInputField[i].GetComponent<TMP_InputField>().text == "")
+			{
+				importButtonComponent.interactable = false;
+				return;
+			}
+		}
+
+		importButtonComponent.interactable = true;
 	}
 }

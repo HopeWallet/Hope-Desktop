@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 222305524573852442}
   - component: {fileID: 114905593532053410}
   m_Layer: 5
-  m_Name: Warning_Icon
+  m_Name: Error_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -953,8 +953,8 @@ MonoBehaviour:
   password1Field: {fileID: 1882821427497912}
   password2Field: {fileID: 1793328637038048}
   createButton: {fileID: 1705478405815034}
-  warningIcon: {fileID: 1812031648026760}
   checkMarkIcon: {fileID: 1347916449913932}
+  errorIcon: {fileID: 1812031648026760}
 --- !u!114 &114350053259310042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2236,8 +2236,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 178.8, y: -118}
-  m_SizeDelta: {x: 25, y: 25}
+  m_AnchoredPosition: {x: 176.20998, y: -118}
+  m_SizeDelta: {x: 27, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224204091252672830
 RectTransform:
@@ -2347,8 +2347,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 178.9, y: -117.99997}
-  m_SizeDelta: {x: 25, y: 25}
+  m_AnchoredPosition: {x: 176.31, y: -117.99997}
+  m_SizeDelta: {x: 27, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224458278292294494
 RectTransform:

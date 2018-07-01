@@ -40,7 +40,7 @@ namespace Hope.Utils.EthereumUtils
 		/// </summary>
 		/// <param name="str"> The string which contains the words. </param>
 		/// <returns> The array of individual words. </returns>
-		public static string[] GetMnemonicWords(this string str) => str.Split(' ', '\t', '\n');
+		public static string[] GetMnemonicWords(this string str) => str.Trim().Split(' ', '\t', '\n');
 
 		/// <summary>
 		/// Gets the amount of ether in a user's wallet.

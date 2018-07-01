@@ -12,8 +12,8 @@ public class CreateWalletForm : FormAnimation
 	[SerializeField] private GameObject password1Field;
 	[SerializeField] private GameObject password2Field;
 	[SerializeField] private GameObject createButton;
-	[SerializeField] private GameObject warningIcon;
 	[SerializeField] private GameObject checkMarkIcon;
+	[SerializeField] private GameObject errorIcon;
 
 	private string walletNameText, password1Text, password2Text;
 	private Button createButtonComponent;
@@ -64,8 +64,7 @@ public class CreateWalletForm : FormAnimation
 		walletNameField.AnimateScaleX(1f, 0.15f,
 			() => passwordHeader.AnimateScaleX(1f, 0.15f,
 			() => password1Field.AnimateScaleX(1f, 0.15f,
-			() => password2Field.AnimateScaleX(1f, 0.15f,
-			() => FinishedAnimatingIn()))));
+			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimatingIn))));
 
 	}
 
@@ -76,15 +75,14 @@ public class CreateWalletForm : FormAnimation
 	{
 		createButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => FinishedAnimatingOut())));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut)));
 
 		walletNameField.AnimateScaleX(0f, 0.15f);
 		passwordHeader.AnimateScaleX(0f, 0.15f);
 		password1Field.AnimateScaleX(0f, 0.15f);
 		password2Field.AnimateScaleX(0f, 0.15f);
 
-		warningIcon.AnimateGraphic(0f, 0.1f);
+		errorIcon.AnimateGraphic(0f, 0.1f);
 		checkMarkIcon.AnimateGraphic(0f, 0.1f);
 	}
 
@@ -118,13 +116,13 @@ public class CreateWalletForm : FormAnimation
 
 		if (password1Text != "" && password2Text != "")
 		{
-			warningIcon.AnimateGraphic(passwordsValid ? 0f : 1f, 0.25f);
+			errorIcon.AnimateGraphic(passwordsValid ? 0f : 1f, 0.25f);
 			checkMarkIcon.AnimateGraphic(passwordsValid ? 1f : 0f, 0.25f);
 		}
 
 		else
 		{
-			warningIcon.AnimateGraphic(0f, 0.25f);
+			errorIcon.AnimateGraphic(0f, 0.25f);
 			checkMarkIcon.AnimateGraphic(0f, 0.25f);
 		}
 
