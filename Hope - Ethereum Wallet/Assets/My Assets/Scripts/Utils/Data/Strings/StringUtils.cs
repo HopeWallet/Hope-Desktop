@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Text;
 
 /// <summary>
-/// Class which contains certain string utilities.
+/// Class which contains certain <see langword="string"/> utilities.
 /// </summary>
 public static class StringUtils
 {
@@ -12,10 +12,10 @@ public static class StringUtils
     /// <summary>
     /// Checks if two strings characters are equal, ignoring uppercase or lowercase differences.
     /// </summary>
-    /// <param name="str1"> The first string to compare. </param>
-    /// <param name="str2"> The second string to compare. </param>
-    /// <param name="trimEmptyChars"> Trims the empty spaces and characters when comparing the strings. </param>
-    /// <returns> Whether the two strings are equal. </returns>
+    /// <param name="str1"> The first <see langword="string"/> to compare. </param>
+    /// <param name="str2"> The second <see langword="string"/> to compare. </param>
+    /// <param name="trimEmptyChars"> Trims the empty spaces and characters when comparing the <see langword="string"/> values. </param>
+    /// <returns> Whether the two <see langword="string"/> values are equal. </returns>
     public static bool EqualsIgnoreCase(this string str1, string str2, bool trimEmptyChars = false) 
         => string.Equals(trimEmptyChars ? str1.Trim() : str1, trimEmptyChars ? str2.Trim() : str2, StringComparison.OrdinalIgnoreCase);
 

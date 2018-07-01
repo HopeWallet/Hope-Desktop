@@ -10,7 +10,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     {
         protected readonly byte[] unprotectedBytes;
 
-        private bool disposedValue = false;
+        private bool disposedValue;
 
         /// <summary>
         /// The value belonging to this <see cref="DisposableData"/>.
