@@ -19,6 +19,7 @@ public class ImportPassphraseForm : FormAnimation
 
 	private string[] wordStrings;
 	
+	//DEMO 12 WORD PASSPHRASE:
 	//yard casino top you benefit night bachelor vivid casual ship blush forward 
 
 	/// <summary>
@@ -70,7 +71,10 @@ public class ImportPassphraseForm : FormAnimation
 			StartWordAnimation();
 
 		else
-			Debug.Log("Add Error mark beside PastePhrase button, or create a popup saying (not a valid pass phrase)");
+		{
+			AnimateIcon(errorIcon);
+			Debug.Log("Add popup saying clipboard text is not a passphrase");
+		}
 	}
 
 	/// <summary>
@@ -78,7 +82,8 @@ public class ImportPassphraseForm : FormAnimation
 	/// </summary>
 	private void StartWordAnimation()
 	{
-		Animating = true;
+		AnimateIcon(checkMarkIcon);
+
 		CrunchWord(0);
 	}
 
@@ -109,8 +114,6 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		if (index < wordStrings.Length)
 			CrunchWord(index);
-		else
-			Animating = false;
 	}
 
 	/// <summary>
@@ -130,5 +133,21 @@ public class ImportPassphraseForm : FormAnimation
 		}
 
 		importButtonComponent.interactable = true;
+	}
+
+	/// <summary>
+	/// Animates an icon in and out of view
+	/// </summary>
+	/// <param name="gameObject"> The GameObject that is being animated </param>
+	private void AnimateIcon(GameObject gameObject)
+	{
+		Animating = true;
+
+		gameObject.transform.localScale = new Vector3(0, 0, 1);
+
+		gameObject.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => gameObject.AnimateScaleX(1.01f, 1f,
+			() => gameObject.AnimateGraphic(0f, 0.5f,
+			() => Animating = false)));
 	}
 }
