@@ -3,7 +3,6 @@ using System;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {
-
     /// <summary>
     /// Base class to use for all protected data types.
     /// </summary>
@@ -11,7 +10,6 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     /// <typeparam name="TDisposable"> The DisposableData of type TType. </typeparam>
     public abstract class ProtectedType<TType, TDisposable> where TDisposable : DisposableData<TType>
     {
-
         private TDisposable disposableData;
         private byte[] protectedData;
 
@@ -24,7 +22,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// Initializes the ProtectedType with type TType.
         /// </summary>
         /// <param name="value"> The value to protect. </param>
-        public ProtectedType(TType value)
+        protected ProtectedType(TType value)
         {
             SetValue(value);
         }
@@ -37,10 +35,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// <returns> Returns the DisposableData of this ProtectedType. </returns>
         public TDisposable CreateDisposableData()
         {
-            if (disposableData == null)
-                disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), MemoryProtect.Unprotect(protectedData));
-
-            return disposableData;
+            return disposableData ?? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), MemoryProtect.Unprotect(protectedData)));
         }
 
         /// <summary>
@@ -53,7 +48,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             if (disposableData != null)
                 throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before settings new data!");
-            
+
             protectedData = MemoryProtect.Protect(GetBytes(value));
         }
 
@@ -63,7 +58,5 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// <param name="value"> The value to convert to a byte array. </param>
         /// <returns> The converted value as a byte array. </returns>
         protected abstract byte[] GetBytes(TType value);
-
     }
-
 }

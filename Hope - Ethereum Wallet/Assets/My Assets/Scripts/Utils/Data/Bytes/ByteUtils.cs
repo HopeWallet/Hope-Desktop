@@ -43,6 +43,6 @@ public static class ByteUtils
     /// </summary>
     /// <param name="data"> The byte data to perform the check on. </param>
     /// <returns> True if the byte data is invalid. </returns>
-    private static bool IsInvalid(this IEnumerable<byte> data) => data == null || data.Count() == 0;
+    private static bool IsInvalid(this IEnumerable<byte> data) => data?.Any() != true;
 
 }

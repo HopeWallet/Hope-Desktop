@@ -23,6 +23,7 @@ namespace Hope.Security.Injection
         {
             var name = assembly.FullName;
             var nameHash = name.GetSHA384Hash();
+
             //UnityEngine.Debug.Log(name + " | | | =====> " + nameHash);
         }
 

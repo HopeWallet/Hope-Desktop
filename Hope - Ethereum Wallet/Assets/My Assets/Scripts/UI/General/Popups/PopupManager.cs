@@ -38,9 +38,9 @@ public class PopupManager
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
         GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory) : base()
     {
-        factoryPopups.AddItems(loadingPopupFactory, 
-                          addTokenPopupFactory, 
-                          sendAssetPopupFactory, 
+        factoryPopups.AddItems(loadingPopupFactory,
+                          addTokenPopupFactory,
+                          sendAssetPopupFactory,
                           confirmSendAssetPopupFactory,
                           hideAssetPopupFactory,
                           confirmHideAssetPopupFactory,
@@ -79,7 +79,7 @@ public class PopupManager
     public TPopup GetPopup<TPopup>(bool stackPopups = false) where TPopup : FactoryPopup<TPopup>
     {
         var popupsOfType = activePopups.Where(popup => popup.Key.GetType() == typeof(TPopup));
-        if (popupsOfType.Count() > 0)
+        if (popupsOfType.Any())
             return popupsOfType.Single().Key as TPopup;
         else if (activePopups.Count > 0 && !stackPopups)
             return null;

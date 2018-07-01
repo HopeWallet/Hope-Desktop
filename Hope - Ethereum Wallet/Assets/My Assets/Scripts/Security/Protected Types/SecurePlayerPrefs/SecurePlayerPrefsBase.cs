@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
 {
-
     /// <summary>
     /// Base class for the different types of SecurePlayerPrefs to derive from.
     /// </summary>
@@ -44,7 +43,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, StorageProtect.Protect(PasswordUtils.GenerateRandomPassword().GetSHA512Hash()));
+            PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().Protect());
         }
 
         /// <summary>

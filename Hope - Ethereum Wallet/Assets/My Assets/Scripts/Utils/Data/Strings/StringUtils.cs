@@ -96,7 +96,7 @@ public static class StringUtils
 
             if (val > 16)
                 return sum;
-            
+
             sum += val * BigInteger.Pow(16, (strLen - 1) - i);
         }
 

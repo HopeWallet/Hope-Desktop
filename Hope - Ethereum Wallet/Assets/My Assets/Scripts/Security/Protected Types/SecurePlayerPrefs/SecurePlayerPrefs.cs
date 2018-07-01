@@ -7,9 +7,8 @@ using UnityEngine;
 /// </summary>
 public class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
-
     /// <summary>
-    /// Initializes the SecurePlayerPrefs by making sure we have the base seed pref initialized.
+    /// Initializes the <see cref="SecurePlayerPrefs"/> by making sure we have the base seed pref initialized.
     /// </summary>
     static SecurePlayerPrefs()
     {
@@ -17,88 +16,88 @@ public class SecurePlayerPrefs : SecurePlayerPrefsBase
     }
 
     /// <summary>
-    /// Sets a string value in the PlayerPrefs.
+    /// Sets a string value in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
-    public static void SetString(string key, string value) => InternalSetString(key, value.ToString());
+    public static void SetString(string key, string value) => InternalSetString(key, value);
 
     /// <summary>
-    /// Gets a string from the PlayerPrefs.
+    /// Gets a string from the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
-    /// <returns> The string value returned from the PlayerPrefs with the given key. </returns>
+    /// <returns> The string value returned from the <see cref="PlayerPrefs"/> with the given key. </returns>
     public static string GetString(string key) => InternalGetString(key);
 
     /// <summary>
-    /// Sets an int value in the PlayerPrefs.
+    /// Sets an int value in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
     public static void SetInt(string key, int value) => InternalSetString(key, value.ToString());
 
     /// <summary>
-    /// Gets an int from the PlayerPrefs.
+    /// Gets an int from the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
-    /// <returns> The int value returned from the PlayerPrefs with the given key. </returns>
+    /// <returns> The int value returned from the <see cref="PlayerPrefs"/> with the given key. </returns>
     public static int GetInt(string key) => int.Parse(InternalGetString(key));
 
     /// <summary>
-    /// Sets a float value in the PlayerPrefs.
+    /// Sets a float value in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
     /// <param name="value"> The value of the pref. </param>
     public static void SetFloat(string key, float value) => InternalSetString(key, value.ToString());
 
     /// <summary>
-    /// Gets a float from the PlayerPrefs.
+    /// Gets a float from the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
-    /// <returns> The float value returned from the PlayerPrefs with the given key. </returns>
+    /// <returns> The float value returned from the <see cref="PlayerPrefs"/> with the given key. </returns>
     public static float GetFloat(string key) => float.Parse(InternalGetString(key));
 
     /// <summary>
-    /// Deletes a key from the PlayerPrefs.
+    /// Deletes a key from the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref to delete. </param>
     public static void DeleteKey(string key) => PlayerPrefs.DeleteKey(GetSecureKey(key));
 
     /// <summary>
-    /// Checks if the PlayerPrefs contains a key.
+    /// Checks if the <see cref="PlayerPrefs"/> contains a key.
     /// </summary>
     /// <param name="key"> The key to check for. </param>
-    /// <returns> True if the key is contained in the PlayerPrefs. </returns>
+    /// <returns> True if the key is contained in the <see cref="PlayerPrefs"/>. </returns>
     public static bool HasKey(string key) => PlayerPrefs.HasKey(GetSecureKey(key));
 
     /// <summary>
-    /// Gets the secure key used to be the actual key for storing data in the PlayerPrefs.
+    /// Gets the secure key used to be the actual key for storing data in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key that is used to access the pref. </param>
     /// <returns> The secure, random text version of the key. </returns>
-    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(StorageProtect.Unprotect(GetSeedValue()), key));
+    private static string GetSecureKey(string key) => GetKeyHash(string.Concat(GetSeedValue().Unprotect(), key));
 
     /// <summary>
-    /// Sets a string to the PlayerPrefs after hashing the string values.
+    /// Sets a string to the <see cref="PlayerPrefs"/> after hashing the string values.
     /// </summary>
-    /// <param name="key"> The key of the value in the PlayerPrefs. </param>
-    /// <param name="value"> The value returned from the key in the PlayerPrefs. </param>
+    /// <param name="key"> The key of the value in the <see cref="PlayerPrefs"/>. </param>
+    /// <param name="value"> The value returned from the key in the <see cref="PlayerPrefs"/>. </param>
     private static void InternalSetString(string key, string value)
     {
         string secureKey = GetSecureKey(key);
 
-        PlayerPrefs.SetString(secureKey, StorageProtect.Protect(value.DPEncrypt(GetValueHash(secureKey))));
+        PlayerPrefs.SetString(secureKey, value.DPEncrypt(GetValueHash(secureKey)).Protect());
     }
 
     /// <summary>
-    /// Gets a string from the PlayerPrefs after hashing the string values.
+    /// Gets a string from the <see cref="PlayerPrefs"/> after hashing the string values.
     /// </summary>
-    /// <param name="key"> The key of the value in the PlayerPrefs. </param>
-    /// <returns> The value returned from the key in the PlayerPrefs. </returns>
+    /// <param name="key"> The key of the value in the <see cref="PlayerPrefs"/>. </param>
+    /// <returns> The value returned from the key in the <see cref="PlayerPrefs"/>. </returns>
     private static string InternalGetString(string key)
     {
         string secureKey = GetSecureKey(key);
 
-        return StorageProtect.Unprotect(PlayerPrefs.GetString(secureKey)).DPDecrypt(GetValueHash(secureKey));
+        return PlayerPrefs.GetString(secureKey).Unprotect().DPDecrypt(GetValueHash(secureKey));
     }
 }

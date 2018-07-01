@@ -34,7 +34,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static byte[] Protect(byte[] data) => Protect(data, MemoryProtectionScope.SameProcess);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by <see cref="MemoryProtect.Protect"/> during this session history.
+        /// Unprotects some <see langword="byte"/>[] data which was protected by <see cref="MemoryProtect.Protect"/> during this session history.
         /// Unprotect should only be used with <see cref="MemoryProtect.Protect"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// </summary>
@@ -54,7 +54,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope) => Protect(data, memoryScope, DataProtectionScope.CurrentUser);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by <see cref="Protect(byte[], MemoryProtectionScope)"/> during this session history.
+        /// Unprotects some <see langword="byte"/>[] data which was protected by <see cref="Protect(byte[], MemoryProtectionScope)"/> during this session history.
         /// Unprotect should only be used with <see cref="Protect(byte[], MemoryProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which should be the same as how the data was protected.
@@ -65,7 +65,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static byte[] Unprotect(byte[] data, MemoryProtectionScope memoryScope) => Unprotect(data, memoryScope, DataProtectionScope.CurrentUser);
 
         /// <summary>
-        /// Protects some byte data in memory.
+        /// Protects some <see langword="byte"/>[] data in memory.
         /// Protect should only be used with <see cref="Unprotect(byte[], MemoryProtectionScope, DataProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which defines which processes can unprotect the data.
@@ -78,7 +78,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope) => InternalProtect(data, memoryScope, dataScope);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by <see cref="Protect(byte[], MemoryProtectionScope, DataProtectionScope)"/> during this session history.
+        /// Unprotects some <see langword="byte"/>[] data which was protected by <see cref="Protect(byte[], MemoryProtectionScope, DataProtectionScope)"/> during this session history.
         /// Unprotect should only be used with <see cref="Protect(byte[], MemoryProtectionScope, DataProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which should be the same as how the data was protected.
