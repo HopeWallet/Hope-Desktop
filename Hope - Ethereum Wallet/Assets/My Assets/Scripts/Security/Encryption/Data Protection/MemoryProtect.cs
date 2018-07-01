@@ -6,6 +6,7 @@ namespace Hope.Security.Encryption.DPAPI
 
     /// <summary>
     /// Class which protects data which is stored in memory which persists only as long as the session lifetime.
+    /// Uses <see cref="ProtectedMemory.Protect"/> and <see cref="ProtectedData.Protect"/> to encrypt and protect data.
     /// </summary>
     public static class MemoryProtect
     {
@@ -24,81 +25,79 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Protects some byte data in memory.
-        /// Protect should only be used with MemoryProtect.Unprotect in one session of program execution.
+        /// Protects some <see langword="byte"/>[] data in memory.
+        /// Protect should only be used with <see cref="MemoryProtect.Unprotect"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// </summary>
-        /// <param name="data"> The data to protect. </param>
-        /// <returns> The protected data as a byte array. </returns>
+        /// <param name="data"> The <see langword="byte"/>[] data to protect. </param>
+        /// <returns> The protected <see langword="byte"/>[] data. </returns>
         public static byte[] Protect(byte[] data) => Protect(data, MemoryProtectionScope.SameProcess);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by MemoryProtect.Protect during this session history.
-        /// Unprotect should only be used with MemoryProtect.Protect in one session of program execution.
+        /// Unprotects a byte array of data which was protected by <see cref="MemoryProtect.Protect"/> during this session history.
+        /// Unprotect should only be used with <see cref="MemoryProtect.Protect"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
         /// </summary>
-        /// <param name="data"> The data to unprotect. </param>
-        /// <returns> The unprotected data. </returns>
+        /// <param name="data"> The <see langword="byte"/>[] data to unprotect. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
         public static byte[] Unprotect(byte[] data) => Unprotect(data, MemoryProtectionScope.SameProcess);
 
         /// <summary>
-        /// Protects some byte data in memory.
-        /// Protect should only be used with MemoryProtect.Unprotect in one session of program execution.
+        /// Protects some <see langword="byte"/>[] data in memory.
+        /// Protect should only be used with <see cref="Unprotect(byte[], MemoryProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
-        /// Accepts optional MemoryProtectionScope parameter which defines which processes can unprotect the data.
+        /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which defines which processes can unprotect the data.
         /// </summary>
-        /// <param name="data"> The data to protect. </param>
-        /// <param name="memoryScope"> The memory scope to apply to the protection. </param>
-        /// <returns> The protected data as a byte array. </returns>
+        /// <param name="data"> The <see langword="byte"/>[] data to protect. </param>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> to apply to the protection. </param>
+        /// <returns> The protected data as a <see langword="byte"/>[] array. </returns>
         public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope) => Protect(data, memoryScope, DataProtectionScope.CurrentUser);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by MemoryProtect.Protect during this session history.
-        /// Unprotect should only be used with MemoryProtect.Protect in one session of program execution.
+        /// Unprotects a byte array of data which was protected by <see cref="Protect(byte[], MemoryProtectionScope)"/> during this session history.
+        /// Unprotect should only be used with <see cref="Protect(byte[], MemoryProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
-        /// Accepts optional MemoryProtectionScope parameter which should be the same as how the data was protected.
+        /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which should be the same as how the data was protected.
         /// </summary>
-        /// <param name="data"> The data to unprotect. </param>
-        /// <param name="memoryScope"> The memory scope applied to the data protection. </param>
-        /// <returns> The unprotected data. </returns>
+        /// <param name="data"> The <see langword="byte"/>[] data to unprotect. </param>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> applied to the data protection. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
         public static byte[] Unprotect(byte[] data, MemoryProtectionScope memoryScope) => Unprotect(data, memoryScope, DataProtectionScope.CurrentUser);
 
         /// <summary>
         /// Protects some byte data in memory.
-        /// Protect should only be used with MemoryProtect.Unprotect in one session of program execution.
+        /// Protect should only be used with <see cref="Unprotect(byte[], MemoryProtectionScope, DataProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
-        /// Accepts optional MemoryProtectionScope parameter which defines which processes can unprotect the data.
-        /// Accepts optional DataProtectionScope which defines which users can unprotect the data.
+        /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which defines which processes can unprotect the data.
+        /// Accepts optional <see cref="DataProtectionScope"/> which defines which users can unprotect the data.
         /// </summary>
-        /// <param name="data"> The data to protect. </param>
-        /// <param name="memoryScope"> The memory scope to apply to the protection. </param>
-        /// <param name="dataScope"> The data protection scope to apply to the protection. </param>
-        /// <returns> The protected data as a byte array. </returns>
-        public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
-            => InternalProtect(data, memoryScope, dataScope);
+        /// <param name="data"> The <see langword="byte"/>[] data to protect. </param>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> to apply to the protection. </param>
+        /// <param name="dataScope"> The <see cref="DataProtectionScope"/> to apply to the protection. </param>
+        /// <returns> The protected <see langword="byte"/>[] data. </returns>
+        public static byte[] Protect(byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope) => InternalProtect(data, memoryScope, dataScope);
 
         /// <summary>
-        /// Unprotects a byte array of data which was protected by MemoryProtect.Protect during this session history.
-        /// Unprotect should only be used with MemoryProtect.Protect in one session of program execution.
+        /// Unprotects a byte array of data which was protected by <see cref="Protect(byte[], MemoryProtectionScope, DataProtectionScope)"/> during this session history.
+        /// Unprotect should only be used with <see cref="Protect(byte[], MemoryProtectionScope, DataProtectionScope)"/> in one session of program execution.
         /// Protected data in one session cannot be unprotected in another session.
-        /// Accepts optional MemoryProtectionScope parameter which should be the same as how the data was protected.
-        /// Accepts optional DataProtectionScope which should be the same as when the data was protected.
+        /// Accepts optional <see cref="MemoryProtectionScope"/> parameter which should be the same as how the data was protected.
+        /// Accepts optional <see cref="DataProtectionScope"/> which should be the same as when the data was protected.
         /// </summary>
-        /// <param name="data"> The data to unprotect. </param>
-        /// <param name="memoryScope"> The memory scope applied to the data protection. </param>
-        /// <param name="dataScope"> The data protection scope which was applied during the protection. </param>
-        /// <returns> The unprotected data. </returns>
-        public static byte[] Unprotect(byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
-            => InternalUnprotect(data, memoryScope, dataScope);
+        /// <param name="data"> The <see langword="byte"/>[] data to unprotect. </param>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> applied to the data protection. </param>
+        /// <param name="dataScope"> The <see cref="DataProtectionScope"/> which was applied during the protection. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
+        public static byte[] Unprotect(byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope) => InternalUnprotect(data, memoryScope, dataScope);
 
         /// <summary>
-        /// Encrypts the data using ProtectedMemory.Protect and ProtectedData.Protect.
+        /// Encrypts the data using <see cref="ProtectedMemory.Protect"/> and <see cref="ProtectedData.Protect"/>.
         /// Uses the randomized entropy which was generated on session launch to encrypt the data.
         /// </summary>
-        /// <param name="data"> The data to encrypt. </param>
-        /// <param name="memoryScope"> The memory scope to apply to the encryption. </param>
-        /// <param name="dataScope"> The data scope to apply to the encryption. </param>
-        /// <returns> The encrypted byte data. </returns>
+        /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> to apply to the encryption. </param>
+        /// <param name="dataScope"> The <see cref="DataProtectionScope"/> to apply to the encryption. </param>
+        /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         private static byte[] InternalProtect(this byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
         {
             if (data == null || data.Length == 0)
@@ -115,13 +114,13 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Decrypts the data using ProtectedMemory.Unprotect and ProtectedData.Unprotect.
+        /// Decrypts the data using <see cref="ProtectedMemory.Unprotect"/> and <see cref="ProtectedData.Unprotect"/>.
         /// Uses the randomized entropy which was generated on session launch to decrypt the data.
         /// </summary>
         /// <param name="data"> The data to decrypt. </param>
-        /// <param name="memoryScope"> The memory scope applied to the encryption. </param>
-        /// <param name="dataScope"> The data scope applied to the encryption. </param>
-        /// <returns> The decrypted byte data. </returns>
+        /// <param name="memoryScope"> The <see cref="MemoryProtectionScope"/> applied to the encryption. </param>
+        /// <param name="dataScope"> The <see cref="DataProtectionScope"/> which was applied to the encryption. </param>
+        /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
         private static byte[] InternalUnprotect(this byte[] data, MemoryProtectionScope memoryScope, DataProtectionScope dataScope)
         {
             if (data == null || data.Length == 0)

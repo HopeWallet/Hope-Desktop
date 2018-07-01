@@ -10,18 +10,18 @@ namespace Hope.Security.ProtectedTypes.Types
     {
 
         /// <summary>
-        /// Initializes the ProtectedString with the string value it starts with.
+        /// Initializes the <see cref="ProtectedString"/> with the <see langword="string"/> value it starts with.
         /// </summary>
-        /// <param name="value"> The starting string value. </param>
+        /// <param name="value"> The starting <see langword="string"/> value. </param>
         public ProtectedString(string value) : base(value)
         {
         }
 
         /// <summary>
-        /// Gets the byte array representation of the string.
+        /// Gets the <see langword="byte"/>[] data representation of the <see langword="string"/>.
         /// </summary>
-        /// <param name="value"> The string value to convert to bytes. </param>
-        /// <returns> The byte array. </returns>
+        /// <param name="value"> The <see langword="string"/> value to convert to <see langword="byte"/>[] data. </param>
+        /// <returns> The <see langword="byte"/>[] data of the string value. </returns>
         protected override byte[] GetBytes(string value) => value.GetUTF8Bytes();
     }
 
