@@ -18,8 +18,8 @@ public class ExitConfirmationForm : FormAnimation
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
 
-		noButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn));
+		yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn));
 	}
 
 	/// <summary>
