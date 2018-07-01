@@ -5,7 +5,10 @@ namespace Hope.Security.ProtectedTypes.Types
 
     public sealed class DisposableString : DisposableData<string>
     {
-        public DisposableString(string value) : base(value)
+
+        public override string Value => unprotectedBytes.GetUTF8String();
+
+        public DisposableString(byte[] data) : base(data)
         {
         }
     }
