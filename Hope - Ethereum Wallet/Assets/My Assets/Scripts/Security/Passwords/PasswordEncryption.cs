@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 public static class PasswordEncryption
 {
-
     // TODO:
     // Implement wallet password encryption
     // Save the salted hash to player prefs
@@ -18,13 +17,13 @@ public static class PasswordEncryption
 
     public static readonly string PWD_PREF_NAME = HashGenerator.GetSHA512Hash("password");
 
-    private const int ITERATIONS = 100000;
+    private const int ITERATIONS = 50000;
     private const int SALT_SIZE = 64;
     private const int HASH_SIZE = 128;
 
     public static async Task GetSaltedPasswordHashAsync(string password, Action<string> onHashReceived)
     {
-        string saltedHash = await Task.Run(() => GetSaltedPasswordHash(password));
+        string saltedHash = await Task.Run(() => GetSaltedPasswordHash(password)).ConfigureAwait(false);
         onHashReceived?.Invoke(saltedHash);
     }
 
@@ -46,7 +45,7 @@ public static class PasswordEncryption
 
     public static async Task VerifyPasswordAsync(string password, string saltedHash, Action<bool> onResultReceived)
     {
-        bool result = await Task.Run(() => VerifyPassword(password, saltedHash));
+        bool result = await Task.Run(() => VerifyPassword(password, saltedHash)).ConfigureAwait(false);
         onResultReceived?.Invoke(result);
     }
 
