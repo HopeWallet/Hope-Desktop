@@ -45,17 +45,17 @@ namespace Hope.Security.Encryption
         /// <param name="walletNum"> The number of the wallet to encrypt. </param>
         /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
         public static async void EncryptWalletAsync(string mnemonicPhrase, string encryptionPassword, 
-            int walletNum, Action onWalletEncrypted)
+            int walletNum, Action<string, string, string, string, string> onWalletEncrypted)
         {
             SplitString splitPass = encryptionPassword.SplitHalf();
             SplitString lvl12string = splitPass.firstHalf.SplitHalf();
             SplitString lvl34string = splitPass.secondHalf.SplitHalf();
 
-            string walletPref = "wallet_" + walletNum;
-            string lvl1 = "wallet_" + walletNum + "_lvl_1";
-            string lvl2 = "wallet_" + walletNum + "_lvl_2";
-            string lvl3 = "wallet_" + walletNum + "_lvl_3";
-            string lvl4 = "wallet_" + walletNum + "_lvl_4";
+            //string walletPref = "wallet_" + walletNum;
+            //string lvl1 = "wallet_" + walletNum + "_lvl_1";
+            //string lvl2 = "wallet_" + walletNum + "_lvl_2";
+            //string lvl3 = "wallet_" + walletNum + "_lvl_3";
+            //string lvl4 = "wallet_" + walletNum + "_lvl_4";
             string hash1 = await Task.Run(() => lvl12string.firstHalf.GetSHA384Hash()).ConfigureAwait(false);
             string hash2 = await Task.Run(() => lvl12string.secondHalf.GetSHA384Hash()).ConfigureAwait(false);
             string hash3 = await Task.Run(() => lvl34string.firstHalf.GetSHA384Hash()).ConfigureAwait(false);
@@ -69,13 +69,7 @@ namespace Hope.Security.Encryption
             UnityEngine.Debug.Log("HASH3 => " + hash3);
             UnityEngine.Debug.Log("HASH4 => " + hash4);
 
-            SecurePlayerPrefs.SetString(lvl1, hash1);
-            SecurePlayerPrefs.SetString(lvl2, hash2);
-            SecurePlayerPrefs.SetString(lvl3, hash3);
-            SecurePlayerPrefs.SetString(lvl4, hash4);
-            SecurePlayerPrefs.SetString(walletPref, encryptedPhrase);
-
-            onWalletEncrypted?.Invoke();
+            onWalletEncrypted?.Invoke(hash1, hash2, hash3, hash4, encryptedPhrase);
         }
 
         /// <summary>

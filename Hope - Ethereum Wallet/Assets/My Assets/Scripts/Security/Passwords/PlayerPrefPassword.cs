@@ -55,13 +55,13 @@ public class PlayerPrefPassword : ScriptableObject
     /// <summary>
     /// Sets the player pref values to correspond with the dictionary.
     /// </summary>
-    public void SetupPlayerPrefs()
+    public void SetupPlayerPrefs(int walletNum)
     {
         if (prefDictionary == null)
             return;
 
         GenerateSpoofKeys();
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key, prefDictionary[key]));
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key]));
         prefDictionary.Clear();
     }
 

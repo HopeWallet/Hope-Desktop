@@ -52,10 +52,11 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            return NetworkInterface.GetAllNetworkInterfaces()
-                                   .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
-                                   .Single();
+            //return NetworkInterface.GetAllNetworkInterfaces()
+            //                       .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
+            //                       .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
+            //                       .Single();
+            return ("TEST").GetSHA512Hash();
         }
     }
 }

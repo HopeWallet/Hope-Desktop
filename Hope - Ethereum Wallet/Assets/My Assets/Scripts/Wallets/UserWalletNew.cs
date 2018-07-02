@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
@@ -58,8 +59,8 @@ public sealed class UserWalletNew
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
 
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
+        //using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
+        //    AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
     }
 
     /// <summary>
@@ -78,17 +79,23 @@ public sealed class UserWalletNew
         {
             AsyncTaskScheduler.Schedule(() => PasswordEncryption.GetSaltedPasswordHashAsync(str.Value, hash =>
             {
-                TryCreateWallet(mnemonic, wallet => AsyncWalletEncryptionNew.GetEncryptionPasswordAsync(prefPassword, str.Value, encryptionPassword =>
-                {
-                    AsyncWalletEncryptionNew.EncryptWalletAsync(wallet.Phrase, encryptionPassword, walletNumber, () =>
-                    {
-                        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNumber);
-                        SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNumber, hash);
-                        prefPassword.SetupPlayerPrefs();
-                        OnWalletLoadSuccessful?.Invoke();
-                    });
-                }, true));
+                //SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNumber, hash);
             }));
+
+            TryCreateWallet(mnemonic, wallet => AsyncWalletEncryptionNew.GetEncryptionPasswordAsync(prefPassword, str.Value, encryptionPassword =>
+            {
+                AsyncWalletEncryptionNew.EncryptWalletAsync(wallet.Phrase, encryptionPassword, walletNumber, (h1, h2, h3, h4, ep) =>
+                {
+                    //SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNumber);
+                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h1", h1);
+                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h2", h2);
+                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h3", h3);
+                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h4", h4);
+                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber, ep);
+                    prefPassword.SetupPlayerPrefs(walletNumber);
+                    OnWalletLoadSuccessful?.Invoke();
+                });
+            }, true));
         }
     }
 

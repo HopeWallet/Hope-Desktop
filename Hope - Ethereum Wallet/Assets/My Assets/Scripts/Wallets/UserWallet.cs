@@ -73,30 +73,18 @@ public sealed class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        //using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-        //{
-        //    TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
-        //    {
-        //        AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
-        //        {
-        //            UserWalletJsonHandler.CreateWallet(walletData);
-        //            prefPassword.SetupPlayerPrefs();
-        //            OnWalletLoadSuccessful?.Invoke();
-        //        });
-        //    }, true));
-        //}
-
         using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
-            if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME))
+            TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
             {
-                AsyncTaskScheduler.Schedule(() => PasswordEncryption.GetSaltedPasswordHashAsync(str.Value, hash =>
+                AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
                 {
-                    SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME, hash);
-                }));
-            }
+                    UserWalletJsonHandler.CreateWallet(walletData);
+                    prefPassword.SetupPlayerPrefs(0);
+                    OnWalletLoadSuccessful?.Invoke();
+                });
+            }, true));
         }
-
     }
 
     /// <summary>
