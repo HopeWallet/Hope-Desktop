@@ -44,15 +44,14 @@ public sealed class UserWalletNew
     public UserWalletNew(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
-        ProtectedStringDataCache protectedStringDataCache,
-        UpdateManager updateManager)
+        ProtectedStringDataCache protectedStringDataCache)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
         this.protectedStringDataCache = protectedStringDataCache;
 
-        walletCreator = new WalletCreator(prefPassword, protectedStringDataCache, updateManager);
+        walletCreator = new WalletCreator(popupManager, prefPassword, protectedStringDataCache);
         walletUnlocker = new WalletUnlocker();
     }
 
@@ -70,13 +69,7 @@ public sealed class UserWalletNew
 
     public void Create(string mnemonic)
     {
-        StartLoadingPopup("Creating");
-
-        Action createAction = () => popupManager.CloseActivePopup();
-        createAction += OnWalletLoadSuccessful;
-
-        walletCreator.CreateWallet(mnemonic, createAction);
-        //OnWalletLoadSuccessful?.Invoke();
+        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful);
     }
 
     /// <summary>

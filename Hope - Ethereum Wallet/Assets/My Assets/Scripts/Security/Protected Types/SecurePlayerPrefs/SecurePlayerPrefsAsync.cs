@@ -70,13 +70,11 @@ public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         string secureEntropy = await Task.Run(() => GetValueHash(secureKey)).ConfigureAwait(false);
         string encryptedValue = await Task.Run(() => value.DPEncrypt(secureEntropy).Protect()).ConfigureAwait(false);
 
-        Action setAction = () =>
+        MainThreadExecutor.QueueAction(() =>
         {
             PlayerPrefs.SetString(secureKey, encryptedValue);
             onValueSet?.Invoke();
-        };
-
-        MainThreadExecutor.QueueAction(setAction);
+        });
     }
 
     /// <summary>

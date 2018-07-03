@@ -53,7 +53,7 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache, updateManager);
+        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
         protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
         walletTest.Create("ridge capable pact idea interest fame okay nice trophy rack surface rack");
     }

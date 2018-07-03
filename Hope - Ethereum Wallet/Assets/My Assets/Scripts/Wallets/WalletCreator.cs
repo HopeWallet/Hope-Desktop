@@ -4,65 +4,49 @@ using Hope.Security.HashGeneration;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using UnityEngine;
-using Zenject;
 
-public class WalletCreator : IUpdater
+public class WalletCreator
 {
     private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
 
+    private readonly PopupManager popupManager;
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly ProtectedStringDataCache protectedStringDataCache;
-    private readonly UpdateManager updateManager;
-
-    private PrefData walletCreationData;
 
     private Action onWalletCreated;
 
-    private bool completed;
-
-    public WalletCreator(PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache, UpdateManager updateManager)
+    public WalletCreator(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache)
     {
+        this.popupManager = popupManager;
         this.playerPrefPassword = playerPrefPassword;
         this.protectedStringDataCache = protectedStringDataCache;
-        this.updateManager = updateManager;
-
-        walletCreationData = new PrefData();
     }
 
-    public void UpdaterUpdate()
+    public void CreateWallet(string mnemonic, Action walletCreateFinished)
     {
-        if (!completed)
-            return;
-
-        int currentWalletNum = /*SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1*/ 1;
-
-        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, currentWalletNum);
-        SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + currentWalletNum, walletCreationData.saltedPasswordHash);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h1", walletCreationData.hashLvl1);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h2", walletCreationData.hashLvl2);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h3", walletCreationData.hashLvl3);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h4", walletCreationData.hashLvl4);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum, walletCreationData.encryptedPhrase);
-        playerPrefPassword.SetupPlayerPrefs(currentWalletNum, onWalletCreated);
-
-        updateManager.RemoveUpdater(this);
-        completed = false;
-    }
-
-    public void CreateWallet(string mnemonic, Action onWalletCreated)
-    {
-        this.onWalletCreated = onWalletCreated;
-        updateManager.AddUpdater(this);
-
+        SetupWalletCreatedCallback(walletCreateFinished);
+        StartLoadingPopup();
         using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
             CreateWalletCountPref();
             StartWalletEncryption(pass.Value, mnemonic);
         }
+    }
+
+    private void StartLoadingPopup()
+    {
+        popupManager.GetPopup<LoadingPopup>().SetLoadingText(" wallet", "Encrypting");
+    }
+
+    private void SetupWalletCreatedCallback(Action walletCreateFinished)
+    {
+        onWalletCreated = () =>
+        {
+            popupManager.CloseActivePopup();
+            walletCreateFinished?.Invoke();
+        };
     }
 
     private void StartWalletEncryption(string basePass, string mnemonic)
@@ -77,26 +61,32 @@ public class WalletCreator : IUpdater
         var lvl12string = splitPass.firstHalf.SplitHalf();
         var lvl34string = splitPass.secondHalf.SplitHalf();
 
-        walletCreationData.saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
-        walletCreationData.hashLvl1 = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl2 = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl3 = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl4 = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
+        string[] hashLvls = new string[4];
+        hashLvls[0] = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
+        hashLvls[1] = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
+        hashLvls[2] = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
+        hashLvls[3] = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
 
-        string combinedHashes = walletCreationData.hashLvl1 + walletCreationData.hashLvl2 + walletCreationData.hashLvl3 + walletCreationData.hashLvl4;
+        string combinedHashes = hashLvls[0] + hashLvls[1] + hashLvls[2] + hashLvls[3];
 
-        walletCreationData.encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(combinedHashes).Protect(combinedHashes)).ConfigureAwait(false);
+        string encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(combinedHashes).Protect(combinedHashes)).ConfigureAwait(false);
+        string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
 
-        completed = true;
+        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(hashLvls, saltedPasswordHash, encryptedPhrase));
+    }
 
-        UnityEngine.Debug.Log(lvl12string.firstHalf + " " + lvl12string.secondHalf + " " + lvl34string.firstHalf + " " + lvl34string.secondHalf);
-        UnityEngine.Debug.Log(walletCreationData.hashLvl1);
-        UnityEngine.Debug.Log(walletCreationData.hashLvl2);
-        UnityEngine.Debug.Log(walletCreationData.hashLvl3);
-        UnityEngine.Debug.Log(walletCreationData.hashLvl4);
-        UnityEngine.Debug.Log(combinedHashes);
-        UnityEngine.Debug.Log(walletCreationData.encryptedPhrase);
-        UnityEngine.Debug.Log(walletCreationData.saltedPasswordHash);
+    private void SetWalletPlayerPrefs(string[] hashLvls, string saltedPasswordHash, string encryptedPhrase)
+    {
+        int currentWalletNum = /*SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1*/ 1;
+
+        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, currentWalletNum);
+        SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + currentWalletNum, saltedPasswordHash);
+        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum, encryptedPhrase);
+
+        for (int i = 0; i < hashLvls.Length; i++)
+            SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h" + (i + 1), hashLvls[i]);
+
+        playerPrefPassword.SetupPlayerPrefs(currentWalletNum, onWalletCreated);
     }
 
     private void CreateWalletCountPref()
@@ -121,15 +111,5 @@ public class WalletCreator : IUpdater
         {
             ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."));
         }
-    }
-
-    private struct PrefData
-    {
-        public string saltedPasswordHash;
-        public string hashLvl1;
-        public string hashLvl2;
-        public string hashLvl3;
-        public string hashLvl4;
-        public string encryptedPhrase;
     }
 }
