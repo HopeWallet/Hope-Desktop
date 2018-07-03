@@ -64,6 +64,9 @@ public class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<ProtectedStringDataCache>().AsSingle().NonLazy();
 
+        Container.Bind<SecurePlayerPrefs>().AsSingle().NonLazy();
+        Container.Bind<SecurePlayerPrefsAsync>().AsSingle().NonLazy();
+
         Container.Bind<DebugManager>().AsSingle().NonLazy();
         Container.Bind<ExceptionManager>().AsSingle().NonLazy();
         Container.Bind<AssemblyInjectionDetector>().AsSingle().NonLazy();

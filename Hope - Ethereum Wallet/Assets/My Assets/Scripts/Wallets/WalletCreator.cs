@@ -67,21 +67,21 @@ public class WalletCreator : IUpdater
 
     private void StartWalletEncryption(string basePass, string mnemonic)
     {
-        TryCreateWallet(mnemonic, () => AsyncTaskScheduler.Schedule(() => EncryptWalletData(mnemonic, basePass)));
+        TryCreateWallet(mnemonic, () => EncryptWalletData(mnemonic, basePass));
     }
 
-    private async Task EncryptWalletData(string mnemonic, string basePass)
+    private async void EncryptWalletData(string mnemonic, string basePass)
     {
-        var encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(basePass)).ConfigureAwait(false);
+        var encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(basePass).GetSHA256Hash()).ConfigureAwait(false);
         var splitPass = encryptionPassword.SplitHalf();
         var lvl12string = splitPass.firstHalf.SplitHalf();
         var lvl34string = splitPass.secondHalf.SplitHalf();
 
         walletCreationData.saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
-        walletCreationData.hashLvl1 = await Task.Run(() => lvl12string.firstHalf.GetSHA384Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl2 = await Task.Run(() => lvl12string.secondHalf.GetSHA384Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl3 = await Task.Run(() => lvl34string.firstHalf.GetSHA384Hash()).ConfigureAwait(false);
-        walletCreationData.hashLvl4 = await Task.Run(() => lvl34string.secondHalf.GetSHA384Hash()).ConfigureAwait(false);
+        walletCreationData.hashLvl1 = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
+        walletCreationData.hashLvl2 = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
+        walletCreationData.hashLvl3 = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
+        walletCreationData.hashLvl4 = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
 
         string combinedHashes = walletCreationData.hashLvl1 + walletCreationData.hashLvl2 + walletCreationData.hashLvl3 + walletCreationData.hashLvl4;
 
@@ -94,6 +94,7 @@ public class WalletCreator : IUpdater
         UnityEngine.Debug.Log(walletCreationData.hashLvl2);
         UnityEngine.Debug.Log(walletCreationData.hashLvl3);
         UnityEngine.Debug.Log(walletCreationData.hashLvl4);
+        UnityEngine.Debug.Log(combinedHashes);
         UnityEngine.Debug.Log(walletCreationData.encryptedPhrase);
         UnityEngine.Debug.Log(walletCreationData.saltedPasswordHash);
     }

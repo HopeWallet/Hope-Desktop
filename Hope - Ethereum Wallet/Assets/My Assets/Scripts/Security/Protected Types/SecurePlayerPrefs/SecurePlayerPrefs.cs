@@ -5,12 +5,12 @@ using UnityEngine;
 /// <summary>
 /// Class that is used to securely and obscurely save data to the PlayerPrefs with a seemingly random name and encrypted data.
 /// </summary>
-public class SecurePlayerPrefs : SecurePlayerPrefsBase
+public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
     /// <summary>
     /// Initializes the <see cref="SecurePlayerPrefs"/> by making sure we have the base seed pref initialized.
     /// </summary>
-    static SecurePlayerPrefs()
+    public SecurePlayerPrefs()
     {
         EnsureSeedCreation();
     }

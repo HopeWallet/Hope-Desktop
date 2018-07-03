@@ -55,11 +55,6 @@ public class HOPETesting : MonoBehaviour
 
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache, updateManager);
         protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
-    }
-
-    [ContextMenu("Create Wallet")]
-    public void Create()
-    {
         walletTest.Create("ridge capable pact idea interest fame okay nice trophy rack surface rack");
     }
 

@@ -133,7 +133,7 @@ public class PlayerPrefPassword : ScriptableObject
     private async Task GenerateSpoofKey()
     {
         string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
-        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter());
+        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter()).ConfigureAwait(false);
         SecurePlayerPrefsAsync.SetString(key, value);
     }
 
