@@ -4,6 +4,7 @@ using System.Linq;
 using System.Globalization;
 using System;
 using System.Threading.Tasks;
+using Zenject;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.
@@ -134,7 +135,8 @@ public class PlayerPrefPassword : ScriptableObject
     {
         string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
         string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter()).ConfigureAwait(false);
-        SecurePlayerPrefsAsync.SetString(key, value);
+
+        MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value));
     }
 
     /// <summary>
