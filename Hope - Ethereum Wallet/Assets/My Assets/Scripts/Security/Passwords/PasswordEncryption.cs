@@ -15,7 +15,7 @@ public static class PasswordEncryption
     // Save the salted hash to player prefs
     // Only check the password when the wallet is loaded
 
-    public static readonly string PWD_PREF_NAME = HashGenerator.GetSHA512Hash("password");
+    public static readonly string PWD_PREF_NAME = HashGenerator.GetSHA1Hash("password");
 
     private const int ITERATIONS = 50000;
     private const int SALT_SIZE = 64;

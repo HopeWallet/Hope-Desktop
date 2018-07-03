@@ -10,7 +10,6 @@ using UnityEngine;
 /// </summary>
 public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
 {
-
     /// <summary>
     /// Initializes the SecurePlayerPrefsAsync by ensuring we have the base seed created.
     /// </summary>

@@ -1,6 +1,7 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
+using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
@@ -28,6 +29,8 @@ public sealed class UserWalletNew
 
     private readonly WalletCreator walletCreator;
     private readonly WalletUnlocker walletUnlocker;
+
+    private ProtectedString[] addresses;
 
     /// <summary>
     /// Checks whether a wallet currently exists or not.
@@ -63,13 +66,19 @@ public sealed class UserWalletNew
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary();
 
-        //using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-        //    AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
+        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
+            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);
+    }
+
+    public string GetAddress(int addressIndex)
+    {
+        using (var address = addresses[addressIndex].CreateDisposableData())
+            return address.Value;
     }
 
     public void Create(string mnemonic)
     {
-        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful);
+        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
     }
 
     /// <summary>
