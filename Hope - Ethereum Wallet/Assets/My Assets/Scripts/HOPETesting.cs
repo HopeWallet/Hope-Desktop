@@ -40,6 +40,9 @@ public class HOPETesting : MonoBehaviour
     [Inject] private PopupManager popupManager;
     [Inject] private EthereumNetworkManager ethereumNetwork;
     [Inject] private ProtectedStringDataCache protectedStringDataCache;
+    [Inject] private UpdateManager updateManager;
+
+    private UserWalletNew walletTest;
 
     private void Start()
     {
@@ -50,9 +53,14 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        UserWalletNew walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
+        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache, updateManager);
         protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
-        walletTest.StartWalletCreation("ridge capable pact idea interest fame okay nice trophy rack surface rack");
+    }
+
+    [ContextMenu("Create Wallet")]
+    public void Create()
+    {
+        walletTest.Create("ridge capable pact idea interest fame okay nice trophy rack surface rack");
     }
 
 }

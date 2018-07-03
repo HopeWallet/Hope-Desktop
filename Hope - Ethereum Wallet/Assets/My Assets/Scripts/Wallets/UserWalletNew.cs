@@ -21,12 +21,13 @@ public sealed class UserWalletNew
 
     public static event Action OnWalletLoadSuccessful;
 
-    private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
-
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
     private readonly ProtectedStringDataCache protectedStringDataCache;
+
+    private readonly WalletCreator walletCreator;
+    private readonly WalletUnlocker walletUnlocker;
 
     /// <summary>
     /// Checks whether a wallet currently exists or not.
@@ -43,12 +44,16 @@ public sealed class UserWalletNew
     public UserWalletNew(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
-        ProtectedStringDataCache protectedStringDataCache)
+        ProtectedStringDataCache protectedStringDataCache,
+        UpdateManager updateManager)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
         this.protectedStringDataCache = protectedStringDataCache;
+
+        walletCreator = new WalletCreator(prefPassword, protectedStringDataCache, updateManager);
+        walletUnlocker = new WalletUnlocker();
     }
 
     /// <summary>
@@ -63,46 +68,15 @@ public sealed class UserWalletNew
         //    AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
     }
 
-    /// <summary>
-    /// Creates a wallet given a mnemonic phrase if it is a valid phrase.
-    /// </summary>
-    /// <param name="mnemonic"> The mnemonic phrase to use to derive the wallet data. </param>
-    public void StartWalletCreation(string mnemonic)
+    public void Create(string mnemonic)
     {
-        CreateWalletCountPref();
-        CreateWallet(mnemonic, SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1);
-    }
+        StartLoadingPopup("Creating");
 
-    private void CreateWallet(string mnemonic, int walletNumber)
-    {
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-        {
-            AsyncTaskScheduler.Schedule(() => PasswordEncryption.GetSaltedPasswordHashAsync(str.Value, hash =>
-            {
-                //SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNumber, hash);
-            }));
+        Action createAction = () => popupManager.CloseActivePopup();
+        createAction += OnWalletLoadSuccessful;
 
-            TryCreateWallet(mnemonic, wallet => AsyncWalletEncryptionNew.GetEncryptionPasswordAsync(prefPassword, str.Value, encryptionPassword =>
-            {
-                AsyncWalletEncryptionNew.EncryptWalletAsync(wallet.Phrase, encryptionPassword, walletNumber, (h1, h2, h3, h4, ep) =>
-                {
-                    //SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNumber);
-                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h1", h1);
-                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h2", h2);
-                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h3", h3);
-                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber + "_h4", h4);
-                    //SecurePlayerPrefs.SetString("wallet_" + walletNumber, ep);
-                    prefPassword.SetupPlayerPrefs(walletNumber);
-                    OnWalletLoadSuccessful?.Invoke();
-                });
-            }, true));
-        }
-    }
-
-    private void CreateWalletCountPref()
-    {
-        if (!SecurePlayerPrefs.HasKey(WALLET_NUM_PREF))
-            SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, 0);
+        walletCreator.CreateWallet(mnemonic, createAction);
+        //OnWalletLoadSuccessful?.Invoke();
     }
 
     /// <summary>
@@ -151,24 +125,6 @@ public sealed class UserWalletNew
         catch
         {
             ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
-        }
-    }
-
-    /// <summary>
-    /// Attempts to create a wallet given a mnemonic phrase.
-    /// </summary>
-    /// <param name="mnemonic"> The phrase to attempt to create a wallet with. </param>
-    /// <param name="onWalletCreatedSuccessfully"> Action to call if the wallet was created successfully. </param>
-    private void TryCreateWallet(string mnemonic, Action<Wallet> onWalletCreatedSuccessfully)
-    {
-        try
-        {
-            var wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
-            onWalletCreatedSuccessfully?.Invoke(wallet);
-        }
-        catch
-        {
-            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."));
         }
     }
 

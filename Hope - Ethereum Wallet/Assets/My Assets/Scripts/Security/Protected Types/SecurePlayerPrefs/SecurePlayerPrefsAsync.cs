@@ -8,7 +8,7 @@ using UnityEngine;
 /// Class used for saving data to SecurePlayerPrefs asynchronously.
 /// Useful in the case where a lot of data needs to be saved.
 /// </summary>
-public class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
+public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
 {
     /// <summary>
     /// Initializes the SecurePlayerPrefsAsync by ensuring we have the base seed created.

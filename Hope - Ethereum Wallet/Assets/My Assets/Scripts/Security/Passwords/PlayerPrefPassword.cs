@@ -20,6 +20,8 @@ public class PlayerPrefPassword : ScriptableObject
 
     private string[] extraCharLookups;
 
+    private int prefCounter;
+
     private const int PASSWORD_LENGTH = 16;
 
     /// <summary>
@@ -55,13 +57,15 @@ public class PlayerPrefPassword : ScriptableObject
     /// <summary>
     /// Sets the player pref values to correspond with the dictionary.
     /// </summary>
-    public void SetupPlayerPrefs(int walletNum)
+    /// <param name="walletNum"> The wallet number to setup the player prefs for. </param>
+    /// <param name="onPrefsSetup"> Action to call once all the PlayerPrefs were setup. </param>
+    public void SetupPlayerPrefs(int walletNum, Action onPrefsSetup = null)
     {
         if (prefDictionary == null)
             return;
 
         GenerateSpoofKeys();
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key]));
+        GenerateCorrectKeys(walletNum, onPrefsSetup);
         prefDictionary.Clear();
     }
 
@@ -96,6 +100,23 @@ public class PlayerPrefPassword : ScriptableObject
     }
 
     /// <summary>
+    /// Generates the correct PlayerPref keys for the given wallet number.
+    /// </summary>
+    /// <param name="walletNum"> The wallet number to generate the PlayerPrefs for. </param>
+    /// <param name="onPrefsGenerated"> The action to call once all PlayerPrefs have been generated. </param>
+    private void GenerateCorrectKeys(int walletNum, Action onPrefsGenerated)
+    {
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key], () =>
+        {
+            if (++prefCounter == keys.Length)
+            {
+                onPrefsGenerated?.Invoke();
+                prefCounter = 0;
+            }
+        }));
+    }
+
+    /// <summary>
     /// Generates spoof keys and adds them to the player prefs.
     /// </summary>
     /// <param name="iterations"> The amount of times to iterate through the length of the dictionary and add the spoof keys. </param>
@@ -111,8 +132,8 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> The task used for generating the spoof key. </returns>
     private async Task GenerateSpoofKey()
     {
-        string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH));
-        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter());
+        string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
+        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter());
         SecurePlayerPrefsAsync.SetString(key, value);
     }
 
