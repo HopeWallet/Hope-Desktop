@@ -58,7 +58,17 @@ public class CreatePassphraseForm : FormAnimation
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f));
+
+		generateNewButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		copyAllButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
+
+		for (int i = 0; i < wordObjects.Length; i++)
+		{
+			wordObjects[i].AnimateGraphicAndScale(0f, 0f, 0.2f);
+		}
 	}
 
 	/// <summary>
@@ -69,7 +79,7 @@ public class CreatePassphraseForm : FormAnimation
 	{
 		for (int x = 0; x < 3; x++)
 		{
-			if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.2f, () => FinishedAnimatingIn());
+			if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.2f, FinishedAnimatingIn);
 
 			else if (x == 2) wordObjects[x + row].AnimateScaleX(1f, 0.2f, () => AnimatePassphrase(row += 3));
 

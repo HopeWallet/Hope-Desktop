@@ -23,7 +23,7 @@ public class ImportPassphraseForm : FormAnimation
 	private TMP_Dropdown dropdownComponent;
 
 	private string[] wordStrings;
-	private int wordCount;
+	private int wordCount = 12;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -55,8 +55,14 @@ public class ImportPassphraseForm : FormAnimation
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		FinishedAnimatingIn();
+		form1.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
+			() => wordCountDropdown.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn)));
+
+		pastePhraseButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => importButton.AnimateGraphicAndScale(1f, 1f, 0.2f));
+
+		AnimateRow(0, true, 12);
 	}
 
 	/// <summary>
@@ -64,7 +70,22 @@ public class ImportPassphraseForm : FormAnimation
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		wordCountDropdown.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => form1.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut)));
+
+		pastePhraseButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => importButton.AnimateGraphicAndScale(0f, 0f, 0.15f));
+
+		for (int i = 0; i < wordCount; i++)
+		{
+			wordInputField[i].AnimateScaleX(0f, 0.15f);
+		}
+	}
+
+	public void BackButtonClicked()
+	{
+		DisableMenu();
 	}
 
 	/// <summary>
@@ -207,7 +228,7 @@ public class ImportPassphraseForm : FormAnimation
 		backButton1.AnimateGraphic(bigForm ? 0f : 1f, 0.2f);
 		form2.AnimateGraphic(bigForm ? 1f : 0f, 0.2f);
 		form2.AnimateScaleY(bigForm ? 1f : 0f, 0.2f);
-		backButton2.AnimateGraphic(bigForm ? 1f : 0f, 0.2f);
+		backButton2.AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.2f);
 
 		title.AnimateTransformY(bigForm ? 283f : 173f, 0.2f);
 		passphrase.AnimateTransformY(bigForm ? 101f : -11f, 0.2f);
@@ -215,7 +236,7 @@ public class ImportPassphraseForm : FormAnimation
 		pastePhraseButton.AnimateTransformY(bigForm ? -236f : -126f, 0.2f);
 		importButton.AnimateTransformY(bigForm ? -303f : -193f, 0.2f);
 
-		AnimateRow(bigForm ? 12 : 20, bigForm);
+		AnimateRow(bigForm ? 12 : 20, bigForm, bigForm ? 25 : 8);
 	}
 
 	/// <summary>
@@ -223,19 +244,20 @@ public class ImportPassphraseForm : FormAnimation
 	/// </summary>
 	/// <param name="row"> The number to add on by to reach the beginning of the row </param>
 	/// <param name="bigForm"> Boolean that checks if it is being animated to the big version of this form </param>
-	private void AnimateRow(int row, bool bigForm)
+	/// <param name="stoppingPoint"> The inputfield index to stop at when animating </param>
+	private void AnimateRow(int row, bool addingRows, int stoppingPoint)
 	{
-		if (row == 25 || row == 8) return;
+		if (row == stoppingPoint) return;
 
-		int newInt = bigForm ? row + 4 : row - 4;
+		int newInt = addingRows ? row + 4 : row - 4;
 
 		for (int i = 0; i < 4; i++)
 		{
 			if (i == 3)
-				wordInputField[i + row].AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.1f, () => AnimateRow(newInt, bigForm));
+				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f, () => AnimateRow(newInt, addingRows, stoppingPoint));
 
 			else
-				wordInputField[i + row].AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.1f);
+				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f);
 		}
 	}
 }
