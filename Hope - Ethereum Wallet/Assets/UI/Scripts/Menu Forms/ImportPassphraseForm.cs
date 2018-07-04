@@ -47,7 +47,7 @@ public class ImportPassphraseForm : FormAnimation
 		importButton.GetComponent<Button>().interactable = false;
 
 		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
-		dropdownComponent.onValueChanged.AddListener(PassphraseWordCount);
+		dropdownComponent.onValueChanged.AddListener(PassphraseWordCountChanged);
 	}
 
 	/// <summary>
@@ -77,16 +77,19 @@ public class ImportPassphraseForm : FormAnimation
 		string[] tempArray = clipboard.GetMnemonicWords();
 
 		wordStrings = new string[24];
-		
+
 		for (int i = 0; i < wordStrings.Length; i++)
 		{
 			try { wordStrings[i] = tempArray[i]; }
 
-			catch {	wordStrings[i] = ""; }
+			catch { wordStrings[i] = ""; }
 		}
 
-		dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
-		wordCount = dropdownComponent.value == 0 ? 12 : 24;
+		if (tempArray.Length <= 24)
+		{
+			dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
+			wordCount = dropdownComponent.value == 0 ? 12 : 24;
+		}
 
 		if (clipboard != null && tempArray.Length <= wordInputField.Length)
 		{
@@ -179,7 +182,7 @@ public class ImportPassphraseForm : FormAnimation
 	/// Checks the value of the word count dropdown and adjusts the form accordingly
 	/// </summary>
 	/// <param name="value"> The value of the dropdown </param>
-	private void PassphraseWordCount(int value)
+	private void PassphraseWordCountChanged(int value)
 	{
 		if (value == 0)
 		{
