@@ -22,7 +22,8 @@ public class ImportPassphraseForm : FormAnimation
 	private GameObject[] wordTextObjects;
 	private TMP_Dropdown dropdownComponent;
 
-	private string[] wordStrings; 
+	private string[] wordStrings;
+	private int wordCount;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -32,10 +33,10 @@ public class ImportPassphraseForm : FormAnimation
 		backButton1 = form1.transform.GetChild(0).gameObject;
 		backButton2 = form2.transform.GetChild(0).gameObject;
 
-		wordInputField = new GameObject[12];
-		wordTextObjects = new GameObject[12];
+		wordInputField = new GameObject[24];
+		wordTextObjects = new GameObject[24];
 
-		for (int i = 0; i < 12; i++)
+		for (int i = 0; i < wordInputField.Length; i++)
 		{
 			wordInputField[i] = passphrase.transform.GetChild(i).gameObject;
 			wordTextObjects[i] = wordInputField[i].transform.GetChild(0).GetChild(2).gameObject;
@@ -73,10 +74,25 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		string clipboard = ClipboardUtils.GetClipboardString();
 
-		wordStrings = clipboard.GetMnemonicWords();
+		string[] tempArray = clipboard.GetMnemonicWords();
 
-		if (wordStrings.Length == 12 && clipboard != "")
+		wordStrings = new string[24];
+		
+		for (int i = 0; i < wordStrings.Length; i++)
+		{
+			try { wordStrings[i] = tempArray[i]; }
+
+			catch {	wordStrings[i] = ""; }
+		}
+
+		dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
+		wordCount = dropdownComponent.value == 0 ? 12 : 24;
+
+		if (clipboard != null && tempArray.Length <= wordInputField.Length)
+		{
+			AnimateFormChange(wordCount == 12 ? false : true);
 			StartWordAnimation();
+		}
 
 		else
 		{
@@ -131,7 +147,7 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		Button importButtonComponent = importButton.GetComponent<Button>();
 
-		for (int i = 0; i < wordTextObjects.Length; i++)
+		for (int i = 0; i < wordCount; i++)
 		{
 			if (wordInputField[i].GetComponent<TMP_InputField>().text == "")
 			{
@@ -166,24 +182,57 @@ public class ImportPassphraseForm : FormAnimation
 	private void PassphraseWordCount(int value)
 	{
 		if (value == 0)
+		{
+			wordCount = 12;
 			AnimateFormChange(false);
+		}
 
 		else
+		{
+			wordCount = 24;
 			AnimateFormChange(true);
+		}
 	}
 
+	/// <summary>
+	/// Changes the form to either accept a 12 word passphrase or 24 word passphrase
+	/// </summary>
+	/// <param name="bigForm"> Boolean that checks if it is a 24 word passphrase, animating this form to the bigger version </param>
 	private void AnimateFormChange(bool bigForm)
 	{
-		form1.AnimateGraphic(0f, 0.2f);
-		backButton1.AnimateGraphic(0f, 0.2f);
-		form2.AnimateGraphic(1f, 0.2f);
-		form2.AnimateScaleY(1f, 0.2f);
-		backButton2.AnimateGraphic(1f, 0.2f);
+		form1.AnimateGraphic(bigForm ? 0f : 1f, 0.2f);
+		backButton1.AnimateGraphic(bigForm ? 0f : 1f, 0.2f);
+		form2.AnimateGraphic(bigForm ? 1f : 0f, 0.2f);
+		form2.AnimateScaleY(bigForm ? 1f : 0f, 0.2f);
+		backButton2.AnimateGraphic(bigForm ? 1f : 0f, 0.2f);
 
-		title.AnimateTransformY(283f, 0.2f);
-		passphrase.AnimateTransformY(101f, 0.2f);
-		wordCountDropdown.AnimateTransformY(308f, 0.2f);
-		pastePhraseButton.AnimateTransformY(-236f, 0.2f);
-		importButton.AnimateTransformY(-303f, 0.2f);
+		title.AnimateTransformY(bigForm ? 283f : 173f, 0.2f);
+		passphrase.AnimateTransformY(bigForm ? 101f : -11f, 0.2f);
+		wordCountDropdown.AnimateTransformY(bigForm ? 308f : 198f, 0.2f);
+		pastePhraseButton.AnimateTransformY(bigForm ? -236f : -126f, 0.2f);
+		importButton.AnimateTransformY(bigForm ? -303f : -193f, 0.2f);
+
+		AnimateRow(bigForm ? 12 : 20, bigForm);
+	}
+
+	/// <summary>
+	/// Animates the input fields by row
+	/// </summary>
+	/// <param name="row"> The number to add on by to reach the beginning of the row </param>
+	/// <param name="bigForm"> Boolean that checks if it is being animated to the big version of this form </param>
+	private void AnimateRow(int row, bool bigForm)
+	{
+		if (row == 25 || row == 8) return;
+
+		int newInt = bigForm ? row + 4 : row - 4;
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (i == 3)
+				wordInputField[i + row].AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.1f, () => AnimateRow(newInt, bigForm));
+
+			else
+				wordInputField[i + row].AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.1f);
+		}
 	}
 }
