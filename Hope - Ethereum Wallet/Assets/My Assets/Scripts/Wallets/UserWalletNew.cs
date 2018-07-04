@@ -55,7 +55,7 @@ public sealed class UserWalletNew
         this.protectedStringDataCache = protectedStringDataCache;
 
         walletCreator = new WalletCreator(popupManager, prefPassword, protectedStringDataCache);
-        walletUnlocker = new WalletUnlocker();
+        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, protectedStringDataCache);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public sealed class UserWalletNew
     public void UnlockWallet()
     {
         StartLoadingPopup("Unlocking ");
-        prefPassword.PopulatePrefDictionary();
+        prefPassword.PopulatePrefDictionary(0);
 
         using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
             AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);

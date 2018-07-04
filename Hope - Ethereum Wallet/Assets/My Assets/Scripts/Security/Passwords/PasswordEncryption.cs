@@ -17,7 +17,7 @@ public static class PasswordEncryption
 
     public static readonly string PWD_PREF_NAME = HashGenerator.GetSHA1Hash("password");
 
-    private const int ITERATIONS = 50000;
+    private const int ITERATIONS = 100000;
     private const int SALT_SIZE = 64;
     private const int HASH_SIZE = 128;
 

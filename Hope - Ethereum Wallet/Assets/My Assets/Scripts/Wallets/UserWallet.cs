@@ -54,7 +54,7 @@ public sealed class UserWallet
     public void UnlockWallet()
     {
         StartLoadingPopup("Unlocking ");
-        prefPassword.PopulatePrefDictionary();
+        prefPassword.PopulatePrefDictionary(0);
 
         using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
             AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));

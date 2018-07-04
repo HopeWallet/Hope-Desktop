@@ -101,10 +101,10 @@ public class WalletCreator
         var lvl34string = splitPass.secondHalf.SplitHalf();
 
         string[] hashLvls = new string[4];
-        hashLvls[0] = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
-        hashLvls[1] = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
-        hashLvls[2] = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash()).ConfigureAwait(false);
-        hashLvls[3] = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash()).ConfigureAwait(false);
+        hashLvls[0] = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash().Protect(lvl34string.firstHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
+        hashLvls[1] = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash().DPEncrypt(lvl34string.secondHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
+        hashLvls[2] = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash().AESEncrypt(lvl12string.secondHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
+        hashLvls[3] = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash().Protect(lvl12string.firstHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
 
         string encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(hashLvls[0] + hashLvls[1]).Protect(hashLvls[2] + hashLvls[3])).ConfigureAwait(false);
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);

@@ -92,12 +92,13 @@ public class PlayerPrefPassword : ScriptableObject
     /// <summary>
     /// Takes the player prefs saved in the registry and moves them into a dictionary.
     /// </summary>
+    /// <param name="walletNum"> The wallet number to get the PlayerPrefs for. </param>
     /// <returns> The dictionary of player prefs. </returns>
-    public void PopulatePrefDictionary()
+    public void PopulatePrefDictionary(int walletNum)
     {
         prefDictionary = new Dictionary<string, string>();
 
-        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString(key)));
+        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString(key + "_" + walletNum)));
     }
 
     /// <summary>
