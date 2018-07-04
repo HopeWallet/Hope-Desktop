@@ -5,9 +5,12 @@ using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Web3.Accounts;
+using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 
 public class WalletCreator
 {
@@ -100,16 +103,17 @@ public class WalletCreator
         var lvl12string = splitPass.firstHalf.SplitHalf();
         var lvl34string = splitPass.secondHalf.SplitHalf();
 
-        string[] hashLvls = new string[4];
-        hashLvls[0] = await Task.Run(() => lvl12string.firstHalf.GetSHA512Hash().Protect(lvl34string.firstHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
-        hashLvls[1] = await Task.Run(() => lvl12string.secondHalf.GetSHA512Hash().DPEncrypt(lvl34string.secondHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
-        hashLvls[2] = await Task.Run(() => lvl34string.firstHalf.GetSHA512Hash().AESEncrypt(lvl12string.secondHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
-        hashLvls[3] = await Task.Run(() => lvl34string.secondHalf.GetSHA512Hash().Protect(lvl12string.firstHalf.GetSHA256Hash()).GetSHA384Hash()).ConfigureAwait(false);
+        SecureRandom secureRandom = new SecureRandom();
 
-        string encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(hashLvls[0] + hashLvls[1]).Protect(hashLvls[2] + hashLvls[3])).ConfigureAwait(false);
+        string h1 = await Task.Run(() => lvl12string.firstHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h2 = await Task.Run(() => lvl12string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h3 = await Task.Run(() => lvl34string.firstHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h4 = await Task.Run(() => lvl34string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
+        string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.firstHalf.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.secondHalf.GetSHA512Hash()) }).ConfigureAwait(false);
 
-        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(hashLvls, saltedPasswordHash, encryptedPhrase));
+        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedPhrase));
     }
 
     private async Task GetAddresses(Wallet wallet)
