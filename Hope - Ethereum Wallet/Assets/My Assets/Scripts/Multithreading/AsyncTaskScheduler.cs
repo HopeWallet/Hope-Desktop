@@ -15,9 +15,9 @@ public class AsyncTaskScheduler
     private const int MAX_CONCURRENT_TASKS = 5;
 
     /// <summary>
-    /// Schedules a task to be run asynchronously.
+    /// Schedules a <see cref="Task"/> to be run asynchronously.
     /// </summary>
-    /// <param name="task"> The func which returns a task to be run asynchronously. </param>
+    /// <param name="task"> The <see cref="Func"/> which returns a <see cref="Task"/> to be run asynchronously. </param>
     public static void Schedule(Func<Task> task)
     {
         Tasks.Enqueue(task);
@@ -25,8 +25,8 @@ public class AsyncTaskScheduler
     }
      
     /// <summary>
-    /// Called when a task is added or completed.
-    /// Runs a new task if tasks remain and we are under the concurrent task limit.
+    /// Called when a <see cref="Task"/> is added or completed.
+    /// Runs a new <see cref="Task"/> if tasks remain and we are under the concurrent <see cref="Task"/> limit.
     /// </summary>
     private static void TaskAddedOrCompleted()
     {
@@ -35,9 +35,9 @@ public class AsyncTaskScheduler
     }
 
     /// <summary>
-    /// Runs a task and increases the current running task count until the task is completed.
+    /// Runs a <see cref="Task"/> and increases the current running <see cref="Task"/> count until is is completed.
     /// </summary>
-    /// <param name="task"> The func returning the task to execute. </param>
+    /// <param name="task"> The <see cref="Func"/> returning the <see cref="Task"/> to execute. </param>
     private static async void RunTask(Func<Task> task)
     {
         currentRunningCount++;

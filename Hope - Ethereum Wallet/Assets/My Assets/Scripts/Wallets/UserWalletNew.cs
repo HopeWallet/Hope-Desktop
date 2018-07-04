@@ -1,4 +1,7 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.Encryption.DPAPI;
+using Hope.Security.HashGeneration;
+using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
@@ -9,8 +12,14 @@ using System;
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
 /// </summary>
-public sealed class UserWallet
+public sealed class UserWalletNew
 {
+
+    // TODO:
+    // Only open wallet once the password has been verified
+    // Only open the wallet once it has been created and fully encrypted
+    // Only locate the wallet seed and the private key when signing a transaction
+
     public static event Action OnWalletLoadSuccessful;
 
     private readonly PopupManager popupManager;
@@ -18,12 +27,10 @@ public sealed class UserWallet
     private readonly PlayerPrefPassword prefPassword;
     private readonly ProtectedStringDataCache protectedStringDataCache;
 
-    private Account account;
+    private readonly WalletCreator walletCreator;
+    private readonly WalletUnlocker walletUnlocker;
 
-    /// <summary>
-    /// The user's public address.
-    /// </summary>
-    public string Address => account.Address;
+    private ProtectedString[] addresses;
 
     /// <summary>
     /// Checks whether a wallet currently exists or not.
@@ -37,7 +44,7 @@ public sealed class UserWallet
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
     /// <param name="protectedStringDataCache"> The active ProtectedStringDataCache. </param>
-    public UserWallet(PlayerPrefPassword prefPassword,
+    public UserWalletNew(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
         ProtectedStringDataCache protectedStringDataCache)
@@ -46,6 +53,9 @@ public sealed class UserWallet
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
         this.protectedStringDataCache = protectedStringDataCache;
+
+        walletCreator = new WalletCreator(popupManager, prefPassword, protectedStringDataCache);
+        walletUnlocker = new WalletUnlocker();
     }
 
     /// <summary>
@@ -57,28 +67,18 @@ public sealed class UserWallet
         prefPassword.PopulatePrefDictionary();
 
         using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
+            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);
     }
 
-    /// <summary>
-    /// Creates a wallet given a mnemonic phrase if it is a valid phrase.
-    /// </summary>
-    /// <param name="mnemonic"> The mnemonic phrase to use to derive the wallet data. </param>
-    public void CreateWallet(string mnemonic)
+    public string GetAddress(int addressIndex)
     {
-        StartLoadingPopup("Creating ");
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-        {
-            TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
-            {
-                AsyncWalletEncryption.EncryptWalletAsync(account.PrivateKey, wallet.Phrase, pass, walletData =>
-                {
-                    UserWalletJsonHandler.CreateWallet(walletData);
-                    prefPassword.SetupPlayerPrefs(0);
-                    OnWalletLoadSuccessful?.Invoke();
-                });
-            }, true));
-        }
+        using (var address = addresses[addressIndex].CreateDisposableData())
+            return address.Value;
+    }
+
+    public void Create(string mnemonic)
+    {
+        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
     }
 
     /// <summary>
@@ -92,11 +92,11 @@ public sealed class UserWallet
     public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
-        popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(protectedStringDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
-                                           gasLimit,
-                                           gasPrice,
-                                           transactionInput);
+        //popupManager.GetPopup<T>(true)
+        //            .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(protectedStringDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+        //                                   gasLimit,
+        //                                   gasPrice,
+        //                                   transactionInput);
     }
 
     /// <summary>
@@ -121,32 +121,12 @@ public sealed class UserWallet
                     return;
                 }
 
-                account = new Account(pkey);
                 OnWalletLoadSuccessful?.Invoke();
             });
         }
         catch
         {
             ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
-        }
-    }
-
-    /// <summary>
-    /// Attempts to create a wallet given a mnemonic phrase.
-    /// </summary>
-    /// <param name="mnemonic"> The phrase to attempt to create a wallet with. </param>
-    /// <param name="onWalletCreatedSuccessfully"> Action to call if the wallet was created successfully. </param>
-    private void TryCreateWallet(string mnemonic, Action<Wallet> onWalletCreatedSuccessfully)
-    {
-        try
-        {
-            var wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
-            account = wallet.GetAccount(0);
-            onWalletCreatedSuccessfully?.Invoke(wallet);
-        }
-        catch
-        {
-            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."));
         }
     }
 

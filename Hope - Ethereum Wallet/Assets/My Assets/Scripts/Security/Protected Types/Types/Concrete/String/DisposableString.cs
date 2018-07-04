@@ -4,7 +4,7 @@ namespace Hope.Security.ProtectedTypes.Types
 {
 
     /// <summary>
-    /// Class used to contain the unencrypted data of a string variable which will be disposed after use.
+    /// Class used to contain the unencrypted data of a <see langword="string"/> variable which will be disposed after use.
     /// Meant to be used within a <see langword="using"/> statement for best effect.
     /// </summary>
     public sealed class DisposableString : DisposableData<string>

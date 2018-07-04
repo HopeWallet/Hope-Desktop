@@ -35,6 +35,15 @@ using System.Security;
 public class HOPETesting : MonoBehaviour
 {
 
+    public PlayerPrefPassword prefPassword;
+
+    [Inject] private PopupManager popupManager;
+    [Inject] private EthereumNetworkManager ethereumNetwork;
+    [Inject] private ProtectedStringDataCache protectedStringDataCache;
+    [Inject] private UpdateManager updateManager;
+
+    private UserWalletNew walletTest;
+
     private void Start()
     {
         //var ledger = LedgerClient.GetHIDLedgers().First();
@@ -44,6 +53,15 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
+
+    }
+
+    [ContextMenu("Open Wallet")]
+    public void OpenWallet()
+    {
+        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
+        protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
+        walletTest.Create("ridge capable pact idea interest fame okay nice trophy rack surface rack");
     }
 
 }

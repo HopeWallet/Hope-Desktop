@@ -1,21 +1,31 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Hope.Security.HashGeneration;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 public static class PasswordEncryption
 {
-
     // TODO:
     // Implement wallet password encryption
     // Save the salted hash to player prefs
     // Only check the password when the wallet is loaded
 
-    private const int ITERATIONS = 100000;
+    public static readonly string PWD_PREF_NAME = HashGenerator.GetSHA1Hash("password");
+
+    private const int ITERATIONS = 50000;
     private const int SALT_SIZE = 64;
     private const int HASH_SIZE = 128;
+
+    public static async Task GetSaltedPasswordHashAsync(string password, Action<string> onHashReceived)
+    {
+        string saltedHash = await Task.Run(() => GetSaltedPasswordHash(password)).ConfigureAwait(false);
+        onHashReceived?.Invoke(saltedHash);
+    }
 
     public static string GetSaltedPasswordHash(string password)
     {
@@ -31,6 +41,12 @@ public static class PasswordEncryption
         generator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, ITERATIONS);
 
         return ((KeyParameter)generator.GenerateDerivedMacParameters(HASH_SIZE * 8)).GetKey();
+    }
+
+    public static async Task VerifyPasswordAsync(string password, string saltedHash, Action<bool> onResultReceived)
+    {
+        bool result = await Task.Run(() => VerifyPassword(password, saltedHash)).ConfigureAwait(false);
+        onResultReceived?.Invoke(result);
     }
 
     public static bool VerifyPassword(string password, string saltedHash)

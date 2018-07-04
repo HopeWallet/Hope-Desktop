@@ -6,7 +6,7 @@ namespace Hope.Security.Encryption.DPAPI
 {
 
     /// <summary>
-    /// Wrapper class which adds padding to byte data which wants to be protected but is not a multiple of 16.
+    /// Wrapper class which adds padding to <see langword="byte"/>[] data which wants to be protected but is not a multiple of 16.
     /// </summary>
     public static class ProtectedMemoryWrapper
     {
@@ -15,7 +15,7 @@ namespace Hope.Security.Encryption.DPAPI
         private static readonly byte[] PAD_IV;
 
         /// <summary>
-        /// Initializes the ProtectedMemoryWrapper with a key and iv for the padding encryption.
+        /// Initializes the <see cref="ProtectedMemoryWrapper"/> with a key and iv for the padding encryption.
         /// </summary>
         static ProtectedMemoryWrapper()
         {
@@ -27,11 +27,11 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Protects data in memory using ProtectedMemory.Protect and also adds padding to the byte array if it is not a multiple of 16.
-        /// Does not work with readonly variables.
+        /// Protects data in memory using <see cref="ProtectedMemory.Protect"/> and also adds padding to the <see langword="byte"/>[] data if it is not a multiple of 16.
+        /// Does not work with <see langword="readonly"/> variables.
         /// </summary>
-        /// <param name="data"> The data to protect. </param>
-        /// <param name="scope"> The scope to protect the data with. </param>
+        /// <param name="data"> The <see langword="byte"/>[] data to protect. </param>
+        /// <param name="scope"> The <see cref="MemoryProtectionScope"/> to protect the data with. </param>
         public static void Protect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
@@ -41,10 +41,10 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Unprotects data in memory using ProtectedMemory.Unprotect.
+        /// Unprotects <see langword="byte"/>[] data in memory using <see cref="ProtectedMemory.Unprotect"/>.
         /// </summary>
-        /// <param name="data"> The data to unprotect. </param>
-        /// <param name="scope"> The scope used to protect the data, now being used to unprotect the data. </param>
+        /// <param name="data"> The <see langword="byte"/>[] data to unprotect. </param>
+        /// <param name="scope"> The <see cref="MemoryProtectionScope"/> used to protect the data, now being used to unprotect the data. </param>
         public static void Unprotect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
@@ -56,10 +56,10 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Pads the data by encrypting it using the AES encryption algorithm which encrypts data to a multiple of 16.
+        /// Pads the data by encrypting it using the <see cref="Aes"/> encryption algorithm which encrypts data to a multiple of 16.
         /// </summary>
-        /// <param name="data"> The data to encrypt. </param>
-        /// <returns> The encrypted and padded byte data. </returns>
+        /// <param name="data"> The <see langword="string"/> data to encrypt. </param>
+        /// <returns> The encrypted and padded <see langword="byte"/>[] data. </returns>
         private static byte[] AddPadding(string data)
         {
             UnprotectPaddingSeed();
@@ -85,10 +85,10 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Unpads the data by decrypting it using the AES encryption algorithm.
+        /// Unpads the data by decrypting it using the <see cref="Aes"/> encryption algorithm.
         /// </summary>
-        /// <param name="data"> The data to decrypt. </param>
-        /// <returns> The decrypted and unpadded byte data. </returns>
+        /// <param name="data"> The <see langword="string"/> data to decrypt. </param>
+        /// <returns> The decrypted and unpadded <see langword="byte"/>[] data. </returns>
         private static byte[] RemovePadding(string data)
         {
             UnprotectPaddingSeed();
@@ -110,7 +110,7 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Calls ProtectedMemory.Protect on the key and iv of the AES algorithm.
+        /// Calls <see cref="ProtectedMemory.Protect"/> on the key and iv of the AES algorithm.
         /// </summary>
         private static void ProtectPaddingSeed()
         {
@@ -119,7 +119,7 @@ namespace Hope.Security.Encryption.DPAPI
         }
 
         /// <summary>
-        /// Calls ProtectedMemory.Unprotect on the key and iv of the AES algorithm.
+        /// Calls <see cref="ProtectedMemory.Unprotect"/> on the key and iv of the AES algorithm.
         /// </summary>
         private static void UnprotectPaddingSeed()
         {

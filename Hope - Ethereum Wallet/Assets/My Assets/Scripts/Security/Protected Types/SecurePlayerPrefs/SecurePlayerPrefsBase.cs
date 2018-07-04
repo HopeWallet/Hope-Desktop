@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
 {
-
     /// <summary>
     /// Base class for the different types of SecurePlayerPrefs to derive from.
     /// </summary>
@@ -44,7 +43,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, StorageProtect.Protect(PasswordUtils.GenerateRandomPassword().GetSHA512Hash()));
+            PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().Protect());
         }
 
         /// <summary>
@@ -53,10 +52,11 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            return NetworkInterface.GetAllNetworkInterfaces()
-                                   .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-                                   .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
-                                   .Single();
+            //return NetworkInterface.GetAllNetworkInterfaces()
+            //                       .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
+            //                       .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
+            //                       .Single();
+            return ("TEST").GetSHA512Hash();
         }
     }
 }

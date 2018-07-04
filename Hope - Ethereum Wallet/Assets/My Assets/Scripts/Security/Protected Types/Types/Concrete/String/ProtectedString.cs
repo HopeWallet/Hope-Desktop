@@ -4,7 +4,7 @@ namespace Hope.Security.ProtectedTypes.Types
 {
 
     /// <summary>
-    /// Class which represents a regular string value but has its data encrypted and hidden.
+    /// Class which represents a regular <see langword="string"/> value but has its data encrypted and hidden.
     /// </summary>
     public sealed class ProtectedString : ProtectedType<string, DisposableString>
     {

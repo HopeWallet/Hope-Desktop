@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Hope.Security.ProtectedTypes.Types;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 
@@ -9,6 +10,9 @@ public class UserWalletManager
 {
 
     private readonly UserWallet userWallet;
+
+    private ProtectedInt walletNumber;
+    private ProtectedInt accountNumber;
 
     /// <summary>
     /// The address of the main UserWallet.
@@ -22,9 +26,17 @@ public class UserWalletManager
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
     /// <param name="byteDataCache"> The active ByteDataCache. </param>
-    public UserWalletManager(Settings settings, PopupManager popupManager, EthereumNetworkManager ethereumNetworkManager, ProtectedStringDataCache byteDataCache)
+    public UserWalletManager(
+        Settings settings,
+        PopupManager popupManager,
+        EthereumNetworkManager ethereumNetworkManager,
+        ProtectedStringDataCache byteDataCache)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
+
+        walletNumber = new ProtectedInt(0);
+        accountNumber = new ProtectedInt(0);
+
         userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, byteDataCache);
     }
 
@@ -55,10 +67,19 @@ public class UserWalletManager
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
     /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
-    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
-        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+    public void SignTransaction<T>(
+        Action<TransactionSignedUnityRequest> onTransactionSigned,
+        HexBigInteger gasLimit,
+        HexBigInteger gasPrice,
+        params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, transactionInput);
+    }
+
+    public void SwitchWallet(int walletNum, int accountNum)
+    {
+        walletNumber.SetValue(walletNum);
+        accountNumber.SetValue(accountNum);
     }
 
     /// <summary>
