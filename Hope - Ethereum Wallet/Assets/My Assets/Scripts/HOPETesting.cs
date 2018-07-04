@@ -31,16 +31,18 @@ using System.ComponentModel;
 using System.Numerics;
 using Hope.Utils.EthereumUtils;
 using System.Security;
+using Nethereum.Hex.HexConvertors.Extensions;
 
 public class HOPETesting : MonoBehaviour
 {
 
     public PlayerPrefPassword prefPassword;
 
+    public int walletNum;
+
     [Inject] private PopupManager popupManager;
     [Inject] private EthereumNetworkManager ethereumNetwork;
     [Inject] private ProtectedStringDataCache protectedStringDataCache;
-    [Inject] private UpdateManager updateManager;
 
     private UserWalletNew walletTest;
 
@@ -53,15 +55,35 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
+        const string mnemonic = "ridge capable pact idea interest fame okay nice trophy rack surface rack";
+        Wallet wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
 
-    }
+        string seed = wallet.Seed.GetHexString();
+        byte[] byteSeed = seed.HexToByteArray();
+        Wallet newWallet = new Wallet(byteSeed);
 
-    [ContextMenu("Open Wallet")]
-    public void OpenWallet()
-    {
+        newWallet.GetAddresses(20)[0].Log();
+
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
         protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
+    }
+
+    [ContextMenu("Create Wallet")]
+    public void CreateWallet()
+    {
         walletTest.Create("ridge capable pact idea interest fame okay nice trophy rack surface rack");
+    }
+
+    [ContextMenu("Unlock Wallet")]
+    public void UnlockWallet()
+    {
+        walletTest.Unlock(1);
+    }
+
+    [ContextMenu("Get Address")]
+    public void DisplayAddress()
+    {
+        walletTest.GetAddress(0).Log();
     }
 
 }

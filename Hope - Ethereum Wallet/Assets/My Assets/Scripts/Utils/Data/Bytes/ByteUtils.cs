@@ -14,15 +14,7 @@ public static class ByteUtils
     /// </summary>
     /// <param name="data"> The <see langword="byte"/>[] data to convert to a <see langword="string"/>. </param>
     /// <returns> The hexadecimal <see langword="string"/>. </returns>
-    public static string GetHexString(this IEnumerable<byte> data)
-    {
-        StringBuilder sBuilder = new StringBuilder();
-
-        foreach (byte b in data)
-            sBuilder.Append(b.ToString("x2"));
-
-        return sBuilder.ToString();
-    }
+    public static string GetHexString(this IEnumerable<byte> data) => string.Concat(data.Select(b => b.ToString("x2")).ToArray());
 
     /// <summary>
     /// Converts a collection of <see langword="byte"/>[] data to a Base64 <see langword="string"/>.

@@ -61,24 +61,20 @@ public sealed class UserWalletNew
     /// <summary>
     /// Unlocks a wallet if the password is correct.
     /// </summary>
-    public void UnlockWallet()
+    public void Unlock(int walletNum)
     {
-        StartLoadingPopup("Unlocking ");
-        prefPassword.PopulatePrefDictionary(0);
+        walletUnlocker.UnlockWallet(walletNum, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
+    }
 
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);
+    public void Create(string mnemonic)
+    {
+        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
     }
 
     public string GetAddress(int addressIndex)
     {
         using (var address = addresses[addressIndex].CreateDisposableData())
             return address.Value;
-    }
-
-    public void Create(string mnemonic)
-    {
-        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
     }
 
     /// <summary>

@@ -27,7 +27,7 @@ namespace Nethereum.HdWallet
 
         public Wallet(byte[] seed, string path = DEFAULT_PATH, IRandom random = null) : this(path, random)
         {
-            Seed = seed.ToHex();
+            Seed = seed;
         }
 
         private Wallet(string path = DEFAULT_PATH, IRandom random = null)
@@ -43,7 +43,7 @@ namespace Nethereum.HdWallet
             set { NBitcoin.RandomUtils.Random = value; }
         }
 
-        public string Seed { get; private set; }
+        public byte[] Seed { get; private set; }
         public string[] Words { get; private set; }
 		public string Phrase { get { return string.Join(" ", Words); } }
         public string Path { get; }
@@ -51,14 +51,14 @@ namespace Nethereum.HdWallet
         private void InitialiseSeed(Wordlist wordlist, WordCount wordCount, string seedPassword = null)
         {
             var mneumonic = new Mnemonic(wordlist, wordCount);
-            Seed = mneumonic.DeriveSeed(seedPassword).ToHex();
+            Seed = mneumonic.DeriveSeed(seedPassword);
             Words = mneumonic.Words;
         }
 
         private void InitialiseSeed(string words, string seedPassword = null)
         {
             var mneumonic = new Mnemonic(words);
-            Seed = mneumonic.DeriveSeed(seedPassword).ToHex();
+            Seed = mneumonic.DeriveSeed(seedPassword);
             Words = mneumonic.Words;
         }
 

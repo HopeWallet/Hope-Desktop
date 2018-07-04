@@ -44,7 +44,7 @@ public class WalletCreator
 
     private void StartLoadingPopup()
     {
-        popupManager.GetPopup<LoadingPopup>().SetLoadingText(" wallet", "Encrypting");
+        popupManager.GetPopup<LoadingPopup>().loadingText.text = "Creating wallet...";
     }
 
     private void SetupActions(Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
@@ -57,18 +57,18 @@ public class WalletCreator
         };
     }
 
-    private void SetWalletPlayerPrefs(string[] hashLvls, string saltedPasswordHash, string encryptedPhrase)
+    private void SetWalletPlayerPrefs(string[] hashLvls, string saltedPasswordHash, string encryptedSeed)
     {
-        const int currentWalletNum = /*SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1*/ 1;
+        int walletNum = SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1;
 
-        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, currentWalletNum);
-        SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + currentWalletNum, saltedPasswordHash);
-        SecurePlayerPrefs.SetString("wallet_" + currentWalletNum, encryptedPhrase);
+        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNum);
+        SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum, saltedPasswordHash);
+        SecurePlayerPrefs.SetString("wallet_" + walletNum, encryptedSeed);
 
         for (int i = 0; i < hashLvls.Length; i++)
-            SecurePlayerPrefs.SetString("wallet_" + currentWalletNum + "_h" + (i + 1), hashLvls[i]);
+            SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), hashLvls[i]);
 
-        playerPrefPassword.SetupPlayerPrefs(currentWalletNum, onWalletCreated);
+        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
     }
 
     private void CreateWalletCountPref()
@@ -88,15 +88,15 @@ public class WalletCreator
         {
             var wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
             AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
-            AsyncTaskScheduler.Schedule(() => EncryptWalletData(mnemonic, basePass));
+            AsyncTaskScheduler.Schedule(() => EncryptWalletData(wallet.Seed, basePass));
         }
         catch
         {
-            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that seed. Please try again."));
+            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again."));
         }
     }
 
-    private async Task EncryptWalletData(string mnemonic, string basePass)
+    private async Task EncryptWalletData(byte[] seed, string basePass)
     {
         var encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(basePass).GetSHA256Hash()).ConfigureAwait(false);
         var splitPass = encryptionPassword.SplitHalf();
@@ -109,11 +109,11 @@ public class WalletCreator
         string h2 = await Task.Run(() => lvl12string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
         string h3 = await Task.Run(() => lvl34string.firstHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
         string h4 = await Task.Run(() => lvl34string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string encryptedPhrase = await Task.Run(() => mnemonic.AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
+        string encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
         string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.firstHalf.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.secondHalf.GetSHA512Hash()) }).ConfigureAwait(false);
 
-        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedPhrase));
+        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedSeed));
     }
 
     private async Task GetAddresses(Wallet wallet)
