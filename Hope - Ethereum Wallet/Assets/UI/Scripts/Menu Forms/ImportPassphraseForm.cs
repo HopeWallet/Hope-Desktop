@@ -78,14 +78,7 @@ public class ImportPassphraseForm : FormAnimation
 			() => importButton.AnimateGraphicAndScale(0f, 0f, 0.15f));
 
 		for (int i = 0; i < wordCount; i++)
-		{
 			wordInputField[i].AnimateScaleX(0f, 0.15f);
-		}
-	}
-
-	public void BackButtonClicked()
-	{
-		DisableMenu();
 	}
 
 	/// <summary>
@@ -255,7 +248,6 @@ public class ImportPassphraseForm : FormAnimation
 		{
 			if (i == 3)
 				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f, () => AnimateRow(newInt, addingRows, stoppingPoint));
-
 			else
 				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f);
 		}
