@@ -27,4 +27,8 @@ public static class FormAnimator
 		gameObject.transform.DOScaleY(endValue, duration).OnComplete(() => callback?.Invoke());
 	}
 
+	public static void AnimateTransformY(this GameObject gameObject, float endValue, float duration)
+	{
+		gameObject.transform.DOLocalMoveY(endValue, duration);
+	}
 }

@@ -6,9 +6,13 @@ using UnityEngine.UI;
 public class ImportPassphraseForm : FormAnimation
 {
 
-	[SerializeField] private GameObject form;
+	[SerializeField] private GameObject form1;
+	[SerializeField] private GameObject backButton1;
+	[SerializeField] private GameObject form2;
+	[SerializeField] private GameObject backButton2;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passphrase;
+	[SerializeField] private GameObject wordCountDropdown;
 	[SerializeField] private GameObject pastePhraseButton;
 	[SerializeField] private GameObject importButton;
 	[SerializeField] private GameObject checkMarkIcon;
@@ -16,17 +20,18 @@ public class ImportPassphraseForm : FormAnimation
 
 	private GameObject[] wordInputField;
 	private GameObject[] wordTextObjects;
+	private TMP_Dropdown dropdownComponent;
 
-	private string[] wordStrings;
-	
-	//DEMO 12 WORD PASSPHRASE:
-	//yard casino top you benefit night bachelor vivid casual ship blush forward 
+	private string[] wordStrings; 
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
 	protected override void InitializeElements()
 	{
+		backButton1 = form1.transform.GetChild(0).gameObject;
+		backButton2 = form2.transform.GetChild(0).gameObject;
+
 		wordInputField = new GameObject[12];
 		wordTextObjects = new GameObject[12];
 
@@ -39,6 +44,9 @@ public class ImportPassphraseForm : FormAnimation
 		}
 
 		importButton.GetComponent<Button>().interactable = false;
+
+		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
+		dropdownComponent.onValueChanged.AddListener(PassphraseWordCount);
 	}
 
 	/// <summary>
@@ -65,9 +73,9 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		string clipboard = ClipboardUtils.GetClipboardString();
 
-		if (clipboard != "") wordStrings = clipboard.GetMnemonicWords();
+		wordStrings = clipboard.GetMnemonicWords();
 
-		if (wordStrings.Length == 12)
+		if (wordStrings.Length == 12 && clipboard != "")
 			StartWordAnimation();
 
 		else
@@ -149,5 +157,33 @@ public class ImportPassphraseForm : FormAnimation
 			() => gameObject.AnimateScaleX(1.01f, 1f,
 			() => gameObject.AnimateGraphic(0f, 0.5f,
 			() => Animating = false)));
+	}
+
+	/// <summary>
+	/// Checks the value of the word count dropdown and adjusts the form accordingly
+	/// </summary>
+	/// <param name="value"> The value of the dropdown </param>
+	private void PassphraseWordCount(int value)
+	{
+		if (value == 0)
+			AnimateFormChange(false);
+
+		else
+			AnimateFormChange(true);
+	}
+
+	private void AnimateFormChange(bool bigForm)
+	{
+		form1.AnimateGraphic(0f, 0.2f);
+		backButton1.AnimateGraphic(0f, 0.2f);
+		form2.AnimateGraphic(1f, 0.2f);
+		form2.AnimateScaleY(1f, 0.2f);
+		backButton2.AnimateGraphic(1f, 0.2f);
+
+		title.AnimateTransformY(283f, 0.2f);
+		passphrase.AnimateTransformY(101f, 0.2f);
+		wordCountDropdown.AnimateTransformY(308f, 0.2f);
+		pastePhraseButton.AnimateTransformY(-236f, 0.2f);
+		importButton.AnimateTransformY(-303f, 0.2f);
 	}
 }
