@@ -31,4 +31,9 @@ public static class FormAnimator
 	{
 		gameObject.transform.DOLocalMoveY(endValue, duration);
 	}
+
+	public static void AnimateTransformX(this GameObject gameObject, float endValue, float duration)
+	{
+		gameObject.transform.DOLocalMoveX(endValue, duration);
+	}
 }
