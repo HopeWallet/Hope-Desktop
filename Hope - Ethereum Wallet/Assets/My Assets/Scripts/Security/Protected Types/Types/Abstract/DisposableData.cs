@@ -36,9 +36,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             if (!Disposed)
             {
-                if (unprotectedBytes != null)
-                    Array.Clear(unprotectedBytes, 0, unprotectedBytes.Length);
-
+                unprotectedBytes?.ClearBytes();
                 Disposed = true;
             }
 
