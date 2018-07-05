@@ -38,7 +38,7 @@ public class WalletCreator
         using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
             CreateWalletCountPref();
-            TryMnemonic(mnemonic, pass.Value);
+            TryCredentials(mnemonic, pass.Value);
         }
     }
 
@@ -68,10 +68,8 @@ public class WalletCreator
         for (int i = 0; i < hashLvls.Length; i++)
             SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), hashLvls[i]);
 
-        
-
-        //playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
-        playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletCreated?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
+        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
+        //playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletCreated?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
     }
 
     private void CreateWalletCountPref()
@@ -85,8 +83,14 @@ public class WalletCreator
     /// </summary>
     /// <param name="mnemonic"> The phrase to attempt to create a wallet with. </param>
     /// <param name="basePass"> The password that was entered by the user. </param>
-    private void TryMnemonic(string mnemonic, string basePass)
+    private void TryCredentials(string mnemonic, string basePass)
     {
+        if (string.IsNullOrEmpty(basePass) || basePass.Length < AESEncryption.MIN_PASSWORD_LENGTH)
+        {
+            ExceptionManager.DisplayException(new Exception("Invalid wallet password. Please use a password with more than 8 characters!"));
+            return;
+        }
+
         try
         {
             var wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
