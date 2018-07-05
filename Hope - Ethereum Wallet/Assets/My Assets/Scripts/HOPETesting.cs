@@ -92,6 +92,12 @@ public class HOPETesting : MonoBehaviour
         walletTest.Unlock(walletNum);
     }
 
+    [ContextMenu("Get Address")]
+    public void GetAddress()
+    {
+        walletTest.GetAddress(0).Log();
+    }
+
     private void DoStuff()
     {
         byte[] original = new byte[50];

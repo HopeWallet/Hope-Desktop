@@ -4,16 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalletLoaderBase
+public abstract class WalletLoaderBase
 {
 
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPassword playerPrefPassword;
     protected readonly ProtectedStringDataCache protectedStringDataCache;
 
+    protected Action onWalletLoaded;
+
     protected ProtectedString[] addresses;
 
-    protected Action onWalletLoaded;
+    protected abstract string LoadingText { get; }
 
     protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache)
     {
@@ -21,4 +23,33 @@ public class WalletLoaderBase
         this.playerPrefPassword = playerPrefPassword;
         this.protectedStringDataCache = protectedStringDataCache;
     }
+
+    public void Load(object data, out ProtectedString[] addresses, Action onWalletLoaded)
+    {
+        SetupAddresses(out addresses);
+        SetupLoadActions(onWalletLoaded);
+        SetupPopup();
+
+        using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
+            LoadWallet(data, pass.Value);
+    }
+
+    private void SetupPopup()
+    {
+        popupManager.GetPopup<LoadingPopup>().loadingText.text = LoadingText;
+    }
+
+    private void SetupLoadActions(Action onWalletLoaded)
+    {
+        this.onWalletLoaded = () => { popupManager.CloseActivePopup(); onWalletLoaded?.Invoke(); };
+    }
+
+    private void SetupAddresses(out ProtectedString[] addresses)
+    {
+        addresses = new ProtectedString[50];
+        this.addresses = addresses;
+    }
+
+    protected abstract void LoadWallet(object data, string userPass);
+
 }

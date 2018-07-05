@@ -14,6 +14,8 @@ public class WalletCreator : WalletLoaderBase
 
     private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
 
+    protected override string LoadingText => "Creating wallet...";
+
     public WalletCreator(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
@@ -21,31 +23,37 @@ public class WalletCreator : WalletLoaderBase
     {
     }
 
-    public void CreateWallet(string mnemonic, Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
+    //public void CreateWallet(string mnemonic, Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
+    //{
+    //    SetupActions(walletCreateFinished, onAddressesLoaded);
+    //    StartLoadingPopup();
+    //    using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
+    //    {
+    //        CreateWalletCountPref();
+    //        TryCredentials(mnemonic, pass.Value);
+    //    }
+    //}
+
+    protected override void LoadWallet(object data, string userPass)
     {
-        SetupActions(walletCreateFinished, onAddressesLoaded);
-        StartLoadingPopup();
-        using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
-        {
-            CreateWalletCountPref();
-            TryCredentials(mnemonic, pass.Value);
-        }
+        CreateWalletCountPref();
+        TryCredentials((string)data, userPass);
     }
 
-    private void StartLoadingPopup()
-    {
-        popupManager.GetPopup<LoadingPopup>().loadingText.text = "Creating wallet...";
-    }
+    //private void StartLoadingPopup()
+    //{
+    //    popupManager.GetPopup<LoadingPopup>().loadingText.text = "Creating wallet...";
+    //}
 
-    private void SetupActions(Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
-    {
-        onWalletLoaded = () =>
-        {
-            popupManager.CloseActivePopup();
-            onAddressesLoaded?.Invoke(addresses);
-            walletCreateFinished?.Invoke();
-        };
-    }
+    //private void SetupActions(Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
+    //{
+    //    onWalletLoaded = () =>
+    //    {
+    //        popupManager.CloseActivePopup();
+    //        onAddressesLoaded?.Invoke(addresses);
+    //        walletCreateFinished?.Invoke();
+    //    };
+    //}
 
     private void SetWalletPlayerPrefs(string[] hashLvls, string saltedPasswordHash, string encryptedSeed)
     {
@@ -58,8 +66,8 @@ public class WalletCreator : WalletLoaderBase
         for (int i = 0; i < hashLvls.Length; i++)
             SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), hashLvls[i]);
 
-        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
-        //playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletCreated?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
+        //playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
+        playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletLoaded?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
     }
 
     private void CreateWalletCountPref()
@@ -115,6 +123,9 @@ public class WalletCreator : WalletLoaderBase
 
     private async Task GetAddresses(Wallet wallet)
     {
-        addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+        //addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+
+        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+        Array.Copy(addressesToCopy, addresses, addresses.Length);
     }
 }

@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 public class WalletUnlocker : WalletLoaderBase
 {
+
+    protected override string LoadingText => "Unlocking wallet...";
+
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
@@ -17,29 +20,45 @@ public class WalletUnlocker : WalletLoaderBase
     {
     }
 
-    public void UnlockWallet(int walletNum, Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
-    {
-        if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
-            return;
+    //public void UnlockWallet(int walletNum, Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
+    //{
+    //    //if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
+    //    //    return;
 
-        SetupActions(onWalletLoaded, onWalletUnlocked);
-        StartUnlockPopup();
-        using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
+    //    SetupActions(onWalletLoaded, onWalletUnlocked);
+    //    StartUnlockPopup();
+    //    using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
+    //    {
+    //        string saltedHash = SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum);
+    //        AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, saltedHash));
+    //    }
+    //}
+
+    protected override void LoadWallet(object data, string userPass)
+    {
+        int walletNum = (int)data;
+
+        if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
+        {
+            ExceptionManager.DisplayException(new Exception("No wallet found with that number. Please try a different wallet."));
+        }
+
+        else
         {
             string saltedHash = SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum);
-            AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, saltedHash));
+            AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, userPass, saltedHash));
         }
     }
 
-    private void SetupActions(Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
-    {
-        this.onWalletLoaded = () =>
-        {
-            popupManager.CloseActivePopup();
-            onWalletUnlocked?.Invoke(addresses);
-            onWalletLoaded?.Invoke();
-        };
-    }
+    //private void SetupActions(Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
+    //{
+    //    this.onWalletLoaded = () =>
+    //    {
+    //        popupManager.CloseActivePopup();
+    //        onWalletUnlocked?.Invoke(addresses);
+    //        onWalletLoaded?.Invoke();
+    //    };
+    //}
 
     private async Task TryPassword(int walletNum, string password, string saltedHash)
     {
@@ -86,13 +105,17 @@ public class WalletUnlocker : WalletLoaderBase
 
     private async Task GetAddresses(Wallet wallet)
     {
-        addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+        Array.Copy(addressesToCopy, addresses, addresses.Length);
+
+        addresses[0].CreateDisposableData().Value.Log();
+
         MainThreadExecutor.QueueAction(onWalletLoaded);
     }
 
-    private void StartUnlockPopup()
-    {
-        popupManager.GetPopup<LoadingPopup>().loadingText.text = "Unlocking wallet...";
-    }
+    //private void StartUnlockPopup()
+    //{
+    //    popupManager.GetPopup<LoadingPopup>().loadingText.text = "Unlocking wallet...";
+    //}
 
 }

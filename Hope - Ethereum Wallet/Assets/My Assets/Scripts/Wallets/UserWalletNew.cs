@@ -63,12 +63,13 @@ public sealed class UserWalletNew
     /// </summary>
     public void Unlock(int walletNum)
     {
-        walletUnlocker.UnlockWallet(walletNum, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
+        walletUnlocker.Load(walletNum, out addresses, OnWalletLoadSuccessful);
     }
 
     public void Create(string mnemonic)
     {
-        walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
+        walletCreator.Load(mnemonic, out addresses, OnWalletLoadSuccessful);
+        //walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
     }
 
     public string GetAddress(int addressIndex)
