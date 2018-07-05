@@ -569,7 +569,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefPassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
+  words:
+  - ridge
+  - capable
+  - grunt
+  - idea
+  - interest
+  - fame
+  - okay
+  - nice
+  - trophy
+  - surface
+  - rock
+  - trophy
   walletNum: 1
+  password: 
 --- !u!1 &1491621424
 GameObject:
   m_ObjectHideFlags: 0

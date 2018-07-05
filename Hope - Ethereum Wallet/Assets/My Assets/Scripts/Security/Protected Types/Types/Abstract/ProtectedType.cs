@@ -39,7 +39,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             protectedData = MemoryProtect.Unprotect(protectedData);
 
-            byte[] data = protectedData.ToArray();
+            byte[] data = protectedData?.ToArray();
 
             protectedData = MemoryProtect.Protect(protectedData);
 

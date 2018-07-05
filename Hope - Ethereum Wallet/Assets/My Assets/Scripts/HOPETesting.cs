@@ -38,14 +38,17 @@ public class HOPETesting : MonoBehaviour
 {
 
     public PlayerPrefPassword prefPassword;
-
+    public string[] words = new string[12];
     public int walletNum = 1;
+    public string password;
 
     [Inject] private PopupManager popupManager;
     [Inject] private EthereumNetworkManager ethereumNetwork;
     [Inject] private ProtectedStringDataCache protectedStringDataCache;
 
     private UserWalletNew walletTest;
+
+    private string lastPass = "013874013840183401384173048130487103847103784";
 
     private void Start()
     {
@@ -65,38 +68,28 @@ public class HOPETesting : MonoBehaviour
 
         //newWallet.GetAddresses(20)[0].Log();
 
-        ProtectedString str = new ProtectedString("test");
-        str.EncryptedValue.Log();
-        using (var val = str.CreateDisposableData())
-        {
-            UnityEngine.Debug.Log(val.Value);
-        }
-        str.EncryptedValue.Log();
-        using (var val = str.CreateDisposableData())
-        {
-            UnityEngine.Debug.Log(val.Value);
-        }
-
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
-        protectedStringDataCache.SetData(new ProtectedString("testpassword"), 0);
+    }
+
+    private void Update()
+    {
+        if (lastPass != password)
+        {
+            protectedStringDataCache.SetData(new ProtectedString(password), 0);
+            lastPass = password;
+        }
     }
 
     [ContextMenu("Create Wallet")]
     public void CreateWallet()
     {
-        walletTest.Create("ridge capable pact idea interest fame okay nice trophy surface surface rack");
+        walletTest.Create(string.Join(" ", words).Trim());
     }
 
     [ContextMenu("Unlock Wallet")]
     public void UnlockWallet()
     {
         walletTest.Unlock(walletNum);
-    }
-
-    [ContextMenu("Get Address")]
-    public void DisplayAddress()
-    {
-        walletTest.GetAddress(0).Log();
     }
 
     private void DoStuff()

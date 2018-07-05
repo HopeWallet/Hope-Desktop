@@ -35,8 +35,8 @@ public class WalletUnlocker
         StartUnlockPopup();
         using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
-            pass.Value.Log();
-            AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum)));
+            string saltedHash = SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum);
+            AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, saltedHash));
         }
     }
 
@@ -52,7 +52,7 @@ public class WalletUnlocker
 
     private async Task TryPassword(int walletNum, string password, string saltedHash)
     {
-        bool correctPassword = await Task.Run(() => PasswordEncryption.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
+        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
 
         if (!correctPassword)
             IncorrectPassword();
