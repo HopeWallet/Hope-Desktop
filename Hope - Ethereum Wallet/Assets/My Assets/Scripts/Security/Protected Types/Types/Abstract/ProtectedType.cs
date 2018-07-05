@@ -38,11 +38,8 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         public TDisposable CreateDisposableData()
         {
             protectedData = MemoryProtect.Unprotect(protectedData);
-
             byte[] data = protectedData?.ToArray();
-
             protectedData = MemoryProtect.Protect(protectedData);
-
             return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 

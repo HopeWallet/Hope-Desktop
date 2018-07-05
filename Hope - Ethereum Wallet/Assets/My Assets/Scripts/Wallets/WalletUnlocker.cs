@@ -31,6 +31,9 @@ public class WalletUnlocker
 
     public void UnlockWallet(int walletNum, Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
     {
+        if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
+            return;
+
         SetupActions(onWalletLoaded, onWalletUnlocked);
         StartUnlockPopup();
         using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
@@ -96,7 +99,6 @@ public class WalletUnlocker
     private async Task GetAddresses(Wallet wallet)
     {
         addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-        addresses[0].CreateDisposableData().Value.Log();
         MainThreadExecutor.QueueAction(walletUnlocked);
     }
 

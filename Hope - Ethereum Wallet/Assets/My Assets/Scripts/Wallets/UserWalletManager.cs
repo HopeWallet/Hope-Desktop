@@ -11,8 +11,8 @@ public class UserWalletManager
 
     private readonly UserWallet userWallet;
 
-    private ProtectedInt walletNumber;
-    private ProtectedInt accountNumber;
+    private readonly ProtectedInt walletNumber = new ProtectedInt(0);
+    private readonly ProtectedInt accountNumber = new ProtectedInt(0);
 
     /// <summary>
     /// The address of the main UserWallet.
@@ -33,10 +33,6 @@ public class UserWalletManager
         ProtectedStringDataCache byteDataCache)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-
-        walletNumber = new ProtectedInt(0);
-        accountNumber = new ProtectedInt(0);
-
         userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, byteDataCache);
     }
 
