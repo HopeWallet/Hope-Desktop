@@ -16,7 +16,6 @@ public class CreateWalletForm : FormAnimation
 	[SerializeField] private GameObject errorIcon;
 
 	private string walletNameText, password1Text, password2Text;
-	private Button createButtonComponent;
 	private TMP_InputField[] inputFields;
 
 	/// <summary>
@@ -27,9 +26,6 @@ public class CreateWalletForm : FormAnimation
 		InitializeVariable(ref walletNameField);
 		InitializeVariable(ref password1Field);
 		InitializeVariable(ref password2Field);
-
-		createButtonComponent = createButton.GetComponent<Button>();
-		createButtonComponent.interactable = false;
 
 		inputFields = new TMP_InputField[3];
 		inputFields[0] = walletNameField.GetComponent<TMP_InputField>();
@@ -126,7 +122,7 @@ public class CreateWalletForm : FormAnimation
 			checkMarkIcon.AnimateGraphic(0f, 0.25f);
 		}
 
-		createButtonComponent.interactable = walletNameText != "" && passwordsValid;
+		createButton.GetComponent<Button>().interactable = walletNameText != "" && passwordsValid;
 	}
 
 }
