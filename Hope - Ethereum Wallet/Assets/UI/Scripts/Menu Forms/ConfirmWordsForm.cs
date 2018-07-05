@@ -14,6 +14,7 @@ public class ConfirmWordsForm : FormAnimation
 
 	private GameObject[] checkBoxes;
 	private int wordIndex = 0;
+	private int[] randomNums;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -21,14 +22,13 @@ public class ConfirmWordsForm : FormAnimation
 	protected override void InitializeElements()
 	{
 		checkBoxes = new GameObject[4];
+		GenerateRandomInts();
 
 		for (int i = 0; i < checkBoxes.Length; i++)
 			checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
 
 		wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(SetButtonInteractable);
 		nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
-
-		GetRandomWord();
 	}
 
 	/// <summary>
@@ -37,9 +37,9 @@ public class ConfirmWordsForm : FormAnimation
 	protected override void AnimateIn()
 	{
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(1f, 1f, 0.2f));
+			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
 
-		instructions.AnimateScaleX(1f, 0.2f,
+		instructions.AnimateScaleX(0.85f, 0.2f,
 			() => wordInputField.AnimateScaleX(1f, 0.2f,
 			() => nextButton.AnimateScaleX(1f, 0.2f, FinishedAnimatingIn)));
 
@@ -51,7 +51,14 @@ public class ConfirmWordsForm : FormAnimation
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		//STILL NEED TO CODE YA DICKHEAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
+
+		nextButton.AnimateScaleX(0f, 0.1f,
+			() => wordInputField.AnimateScaleX(0f, 0.1f,
+			() => instructions.AnimateScaleX(0f, 0.1f)));
+
+		AnimateCheckboxes(0, false);
 	}
 
 	/// <summary>
@@ -62,19 +69,43 @@ public class ConfirmWordsForm : FormAnimation
 	private void AnimateCheckboxes(int index, bool animatingIn)
 	{
 		if (index != 3)
-			checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, 0.15f, () => AnimateCheckboxes(++index, animatingIn));
+			checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, animatingIn ? 0.15f : 0.05f, () => AnimateCheckboxes(++index, animatingIn));
 		else
-			checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, 0.15f);
+			checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, animatingIn ? 0.15f : 0.05f);
 	}
 
-	private void GetRandomWord()
+	/// <summary>
+	/// Generates a random word, and checks if it has any repeated numbers
+	/// </summary>
+	private void GenerateRandomInts()
 	{
-		int num = Random.Range(1, 12);
+		randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
 
-		instructions.GetComponent<TextMeshProUGUI>().text = "Please enter word #" + num + ":";
+		for (int i = 0; i < 4; i++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				if (i != x && randomNums[i] == randomNums[x])
+				{
+					randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
+					i = 0;
+					x = 0;
+				}
+			}
+		}
+
+		SetWordText();
+	}
+
+	/// <summary>
+	/// Sets the various text to ask for the next number
+	/// </summary>
+	private void SetWordText()
+	{
+		instructions.GetComponent<TextMeshProUGUI>().text = "Please enter word #" + randomNums[wordIndex] + ":";
 
 		TMP_InputField inputField = wordInputField.GetComponent<TMP_InputField>();
-		inputField.placeholder.GetComponent<TextMeshProUGUI>().text = "Word " + num + "...";
+		inputField.placeholder.GetComponent<TextMeshProUGUI>().text = "Word " + randomNums[wordIndex] + "...";
 		inputField.text = "";
 	}
 
@@ -104,6 +135,11 @@ public class ConfirmWordsForm : FormAnimation
 		else
 			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
 		//}
+
+		//else
+		//{
+		// Show popup saying the word is wrong
+		//}
 	}
 
 	/// <summary>
@@ -111,7 +147,7 @@ public class ConfirmWordsForm : FormAnimation
 	/// </summary>
 	private void SetUpNextWord()
 	{
-		GetRandomWord();
+		SetWordText();
 		SetObjectPlacement(instructions);
 		SetObjectPlacement(wordInputField);
 		AnimateNextWord(true);
