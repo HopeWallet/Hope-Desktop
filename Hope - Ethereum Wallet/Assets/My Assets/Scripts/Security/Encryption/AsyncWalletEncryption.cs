@@ -45,10 +45,10 @@ namespace Hope.Security.Encryption
             var splitPvtKey = privateKey.SplitHalf();
             var splitPhrase = phrase.SplitHalf();
 
-            var pvtKey1Task = await Task.Run(() => splitPvtKey.firstHalf.AESEncrypt(encryptionPassword));
-            var pvtKey2Task = await Task.Run(() => splitPvtKey.secondHalf.DPEncrypt(encryptionPassword));
-            var phrase1Task = await Task.Run(() => splitPhrase.firstHalf.AESEncrypt(encryptionPassword));
-            var phrase2Task = await Task.Run(() => splitPhrase.secondHalf.DPEncrypt(encryptionPassword));
+            var pvtKey1Task = await Task.Run(() => splitPvtKey.Item1.AESEncrypt(encryptionPassword));
+            var pvtKey2Task = await Task.Run(() => splitPvtKey.Item2.DPEncrypt(encryptionPassword));
+            var phrase1Task = await Task.Run(() => splitPhrase.Item1.AESEncrypt(encryptionPassword));
+            var phrase2Task = await Task.Run(() => splitPhrase.Item2.DPEncrypt(encryptionPassword));
 
             onWalletEncrypted?.Invoke(new WalletData(pvtKey1Task, pvtKey2Task, phrase1Task, phrase2Task));
         }

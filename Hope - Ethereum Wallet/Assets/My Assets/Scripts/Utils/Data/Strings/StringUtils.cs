@@ -107,14 +107,14 @@ public static class StringUtils
     /// Splits a string in half and returns a SplitString of the input string.
     /// </summary>
     /// <param name="str"> The string to split. </param>
-    /// <returns> The SplitString created from the string. </returns>
-    public static SplitString SplitHalf(this string str)
+    /// <returns> The string split in two parts. </returns>
+    public static Tuple<string, string> SplitHalf(this string str)
     {
         var length = str.Length;
         var halfLength = str.Length / 2;
         var fixedLength = length % 2 == 1 ? halfLength + 1 : halfLength;
 
-        return new SplitString(str.Substring(0, halfLength), str.Substring(halfLength, fixedLength));
+        return new Tuple<string, string>(str.Substring(0, halfLength), str.Substring(halfLength, fixedLength));
     }
 
 }
