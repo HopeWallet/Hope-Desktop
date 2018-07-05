@@ -10,12 +10,15 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     {
         protected readonly byte[] unprotectedBytes;
 
-        private bool disposedValue;
-
         /// <summary>
         /// The value belonging to this <see cref="DisposableData"/>.
         /// </summary>
         public abstract T Value { get; }
+
+        /// <summary>
+        /// Whether this <see cref="DisposableData"/> has been disposed of yet.
+        /// </summary>
+        public bool Disposed { get; private set; }
 
         /// <summary>
         /// Initializes this <see cref="DisposableData"/> with the value.
@@ -31,12 +34,12 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         public void Dispose()
         {
-            if (!disposedValue)
+            if (!Disposed)
             {
                 if (unprotectedBytes != null)
                     Array.Clear(unprotectedBytes, 0, unprotectedBytes.Length);
 
-                disposedValue = true;
+                Disposed = true;
             }
 
             GC.SuppressFinalize(this);

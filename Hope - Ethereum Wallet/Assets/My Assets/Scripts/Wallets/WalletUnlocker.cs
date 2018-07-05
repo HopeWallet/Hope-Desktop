@@ -35,6 +35,7 @@ public class WalletUnlocker
         StartUnlockPopup();
         using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
         {
+            pass.Value.Log();
             AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum)));
         }
     }

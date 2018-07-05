@@ -1,5 +1,7 @@
 ﻿using Hope.Security.Encryption.DPAPI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {
@@ -35,7 +37,13 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
         public TDisposable CreateDisposableData()
         {
-            return disposableData ?? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), MemoryProtect.Unprotect(protectedData)));
+            protectedData = MemoryProtect.Unprotect(protectedData);
+
+            byte[] data = protectedData.ToArray();
+
+            protectedData = MemoryProtect.Protect(protectedData);
+
+            return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 
         /// <summary>

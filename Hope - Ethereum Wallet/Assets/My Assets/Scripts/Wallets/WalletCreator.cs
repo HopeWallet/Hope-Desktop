@@ -68,7 +68,10 @@ public class WalletCreator
         for (int i = 0; i < hashLvls.Length; i++)
             SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), hashLvls[i]);
 
-        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
+        
+
+        //playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
+        playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletCreated?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
     }
 
     private void CreateWalletCountPref()
