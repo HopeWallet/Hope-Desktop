@@ -4,31 +4,21 @@ using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
-using Nethereum.Web3.Accounts;
-using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 
-public class WalletCreator
+public class WalletCreator : WalletLoaderBase
 {
+
     private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
 
-    private readonly PopupManager popupManager;
-    private readonly PlayerPrefPassword playerPrefPassword;
-    private readonly ProtectedStringDataCache protectedStringDataCache;
-
-    private ProtectedString[] addresses;
-
-    private Action onWalletCreated;
-
-    public WalletCreator(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache)
+    public WalletCreator(
+        PopupManager popupManager,
+        PlayerPrefPassword playerPrefPassword,
+        ProtectedStringDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
     {
-        this.popupManager = popupManager;
-        this.playerPrefPassword = playerPrefPassword;
-        this.protectedStringDataCache = protectedStringDataCache;
     }
 
     public void CreateWallet(string mnemonic, Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
@@ -49,7 +39,7 @@ public class WalletCreator
 
     private void SetupActions(Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
     {
-        onWalletCreated = () =>
+        onWalletLoaded = () =>
         {
             popupManager.CloseActivePopup();
             onAddressesLoaded?.Invoke(addresses);
@@ -68,7 +58,7 @@ public class WalletCreator
         for (int i = 0; i < hashLvls.Length; i++)
             SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), hashLvls[i]);
 
-        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletCreated);
+        playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
         //playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletCreated?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
     }
 

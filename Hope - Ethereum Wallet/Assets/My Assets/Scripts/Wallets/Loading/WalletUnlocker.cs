@@ -2,31 +2,19 @@
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-public class WalletUnlocker
+public class WalletUnlocker : WalletLoaderBase
 {
-
-    private readonly PopupManager popupManager;
-    private readonly PlayerPrefPassword playerPrefPassword;
-    private readonly ProtectedStringDataCache protectedStringDataCache;
-
-    private ProtectedString[] addresses;
-
-    private Action walletUnlocked;
-
-    public WalletUnlocker(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache)
+    public WalletUnlocker(
+        PopupManager popupManager,
+        PlayerPrefPassword playerPrefPassword,
+        ProtectedStringDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
     {
-        this.popupManager = popupManager;
-        this.playerPrefPassword = playerPrefPassword;
-        this.protectedStringDataCache = protectedStringDataCache;
     }
 
     public void UnlockWallet(int walletNum, Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
@@ -45,7 +33,7 @@ public class WalletUnlocker
 
     private void SetupActions(Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
     {
-        walletUnlocked = () =>
+        this.onWalletLoaded = () =>
         {
             popupManager.CloseActivePopup();
             onWalletUnlocked?.Invoke(addresses);
@@ -99,7 +87,7 @@ public class WalletUnlocker
     private async Task GetAddresses(Wallet wallet)
     {
         addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-        MainThreadExecutor.QueueAction(walletUnlocked);
+        MainThreadExecutor.QueueAction(onWalletLoaded);
     }
 
     private void StartUnlockPopup()
