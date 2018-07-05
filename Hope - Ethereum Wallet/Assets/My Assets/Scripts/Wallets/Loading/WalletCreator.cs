@@ -23,37 +23,11 @@ public class WalletCreator : WalletLoaderBase
     {
     }
 
-    //public void CreateWallet(string mnemonic, Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
-    //{
-    //    SetupActions(walletCreateFinished, onAddressesLoaded);
-    //    StartLoadingPopup();
-    //    using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
-    //    {
-    //        CreateWalletCountPref();
-    //        TryCredentials(mnemonic, pass.Value);
-    //    }
-    //}
-
     protected override void LoadWallet(object data, string userPass)
     {
         CreateWalletCountPref();
         TryCredentials((string)data, userPass);
     }
-
-    //private void StartLoadingPopup()
-    //{
-    //    popupManager.GetPopup<LoadingPopup>().loadingText.text = "Creating wallet...";
-    //}
-
-    //private void SetupActions(Action walletCreateFinished, Action<ProtectedString[]> onAddressesLoaded)
-    //{
-    //    onWalletLoaded = () =>
-    //    {
-    //        popupManager.CloseActivePopup();
-    //        onAddressesLoaded?.Invoke(addresses);
-    //        walletCreateFinished?.Invoke();
-    //    };
-    //}
 
     private void SetWalletPlayerPrefs(string[] hashLvls, string saltedPasswordHash, string encryptedSeed)
     {
@@ -105,27 +79,19 @@ public class WalletCreator : WalletLoaderBase
     {
         var encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(basePass).GetSHA256Hash()).ConfigureAwait(false);
         var splitPass = encryptionPassword.SplitHalf();
-        var lvl12string = splitPass.firstHalf.SplitHalf();
-        var lvl34string = splitPass.secondHalf.SplitHalf();
+        var lvl12string = splitPass.Item1.SplitHalf();
+        var lvl34string = splitPass.Item2.SplitHalf();
 
         SecureRandom secureRandom = new SecureRandom();
 
-        string h1 = await Task.Run(() => lvl12string.firstHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h2 = await Task.Run(() => lvl12string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h3 = await Task.Run(() => lvl34string.firstHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h4 = await Task.Run(() => lvl34string.secondHalf.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h1 = await Task.Run(() => lvl12string.Item1.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h2 = await Task.Run(() => lvl12string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h3 = await Task.Run(() => lvl34string.Item1.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h4 = await Task.Run(() => lvl34string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
         string encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
-        string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.firstHalf.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.secondHalf.GetSHA512Hash()) }).ConfigureAwait(false);
+        string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.Item1.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.Item2.GetSHA512Hash()) }).ConfigureAwait(false);
 
         MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedSeed));
-    }
-
-    private async Task GetAddresses(Wallet wallet)
-    {
-        //addresses = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-
-        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-        Array.Copy(addressesToCopy, addresses, addresses.Length);
     }
 }

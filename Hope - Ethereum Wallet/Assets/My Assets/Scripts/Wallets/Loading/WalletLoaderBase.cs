@@ -1,7 +1,10 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using Nethereum.HdWallet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class WalletLoaderBase
@@ -49,6 +52,16 @@ public abstract class WalletLoaderBase
         addresses = new ProtectedString[50];
         this.addresses = addresses;
     }
+
+    protected async Task GetAddresses(Wallet wallet)
+    {
+        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
+        Array.Copy(addressesToCopy, addresses, addresses.Length);
+
+        OnAddressesReceived();
+    }
+
+    protected virtual void OnAddressesReceived() { }
 
     protected abstract void LoadWallet(object data, string userPass);
 

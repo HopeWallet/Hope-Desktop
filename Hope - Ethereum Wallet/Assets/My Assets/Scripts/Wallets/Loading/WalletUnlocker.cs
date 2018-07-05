@@ -20,20 +20,6 @@ public class WalletUnlocker : WalletLoaderBase
     {
     }
 
-    //public void UnlockWallet(int walletNum, Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
-    //{
-    //    //if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
-    //    //    return;
-
-    //    SetupActions(onWalletLoaded, onWalletUnlocked);
-    //    StartUnlockPopup();
-    //    using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
-    //    {
-    //        string saltedHash = SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum);
-    //        AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, pass.Value, saltedHash));
-    //    }
-    //}
-
     protected override void LoadWallet(object data, string userPass)
     {
         int walletNum = (int)data;
@@ -49,16 +35,6 @@ public class WalletUnlocker : WalletLoaderBase
             AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, userPass, saltedHash));
         }
     }
-
-    //private void SetupActions(Action onWalletLoaded, Action<ProtectedString[]> onWalletUnlocked)
-    //{
-    //    this.onWalletLoaded = () =>
-    //    {
-    //        popupManager.CloseActivePopup();
-    //        onWalletUnlocked?.Invoke(addresses);
-    //        onWalletLoaded?.Invoke();
-    //    };
-    //}
 
     private async Task TryPassword(int walletNum, string password, string saltedHash)
     {
@@ -94,28 +70,18 @@ public class WalletUnlocker : WalletLoaderBase
     {
         var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password).GetSHA256Hash()).ConfigureAwait(false);
         var splitPass = encryptionPassword.SplitHalf();
-        var lvl12string = splitPass.firstHalf.SplitHalf();
-        var lvl34string = splitPass.secondHalf.SplitHalf();
+        var lvl12string = splitPass.Item1.SplitHalf();
+        var lvl34string = splitPass.Item2.SplitHalf();
 
-        string unprotectedSeed = await Task.Run(() => encryptedSeed.Unprotect(hashLvls[2].Unprotect() + hashLvls[3].AESDecrypt(lvl34string.secondHalf.GetSHA512Hash()))).ConfigureAwait(false);
-        byte[] decryptedSeed = await Task.Run(() => unprotectedSeed.AESDecrypt(hashLvls[0].AESDecrypt(lvl12string.firstHalf.GetSHA512Hash()) + hashLvls[1].Unprotect()).HexToByteArray()).ConfigureAwait(false);
+        string unprotectedSeed = await Task.Run(() => encryptedSeed.Unprotect(hashLvls[2].Unprotect() + hashLvls[3].AESDecrypt(lvl34string.Item2.GetSHA512Hash()))).ConfigureAwait(false);
+        byte[] decryptedSeed = await Task.Run(() => unprotectedSeed.AESDecrypt(hashLvls[0].AESDecrypt(lvl12string.Item1.GetSHA512Hash()) + hashLvls[1].Unprotect()).HexToByteArray()).ConfigureAwait(false);
 
         onWalletUnlocked?.Invoke(new Wallet(decryptedSeed));
     }
 
-    private async Task GetAddresses(Wallet wallet)
+    protected override void OnAddressesReceived()
     {
-        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-        Array.Copy(addressesToCopy, addresses, addresses.Length);
-
         addresses[0].CreateDisposableData().Value.Log();
-
         MainThreadExecutor.QueueAction(onWalletLoaded);
     }
-
-    //private void StartUnlockPopup()
-    //{
-    //    popupManager.GetPopup<LoadingPopup>().loadingText.text = "Unlocking wallet...";
-    //}
-
 }
