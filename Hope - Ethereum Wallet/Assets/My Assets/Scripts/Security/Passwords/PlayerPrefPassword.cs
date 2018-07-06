@@ -143,7 +143,7 @@ public class PlayerPrefPassword : ScriptableObject
         string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
         string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter()).ConfigureAwait(false);
 
-        MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value), "spoof player prefs");
+        MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value));
     }
 
     /// <summary>

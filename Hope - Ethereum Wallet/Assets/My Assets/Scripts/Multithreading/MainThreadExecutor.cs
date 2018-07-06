@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 /// <summary>
 /// Class that is used to execute Actions on the main thread.
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class MainThreadExecutor : IUpdater
 {
-    private static readonly Queue<Tuple<Action, string>> actionsToExecute = new Queue<Tuple<Action, string>>();
+    private static readonly ConcurrentQueue<Action> ActionsToExecute = new ConcurrentQueue<Action>();
 
     /// <summary>
     /// Initializes the MainThreadExecutor with the UpdateManager reference.
@@ -23,15 +23,13 @@ public class MainThreadExecutor : IUpdater
     /// </summary>
     public void UpdaterUpdate()
     {
-        while (actionsToExecute.Count != 0)
+        while (ActionsToExecute.Count != 0)
         {
-            var element = actionsToExecute.Dequeue();
+            Action action;
 
-            if (element.Item1 == null)
-                UnityEngine.Debug.Log("Action is null! Tag -> " + element.Item2);
+            ActionsToExecute.TryDequeue(out action);
 
-            element.Item1?.Invoke();
-            //element.Invoke();
+            action?.Invoke();
         }
     }
 
@@ -39,8 +37,8 @@ public class MainThreadExecutor : IUpdater
     /// Queues an action for updating on the main thread.
     /// </summary>
     /// <param name="action"> The action to execute on the main thread. </param>
-    public static void QueueAction(Action action, string executionTag)
+    public static void QueueAction(Action action)
     {
-        actionsToExecute.Enqueue(new Tuple<Action, string>(action, executionTag));
+        ActionsToExecute.Enqueue(action);
     }
 }

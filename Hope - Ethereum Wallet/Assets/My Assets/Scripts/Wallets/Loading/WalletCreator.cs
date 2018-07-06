@@ -14,10 +14,6 @@ public class WalletCreator : WalletLoaderBase
 
     private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
 
-    private string[] encryptedHashLvls;
-    private string saltedPasswordHash;
-    private string encryptedSeed;
-
     protected override string LoadingText => "Creating wallet...";
 
     public WalletCreator(
@@ -33,7 +29,7 @@ public class WalletCreator : WalletLoaderBase
         TryCredentials((string)data, userPass);
     }
 
-    private void SetWalletPlayerPrefs()
+    private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
     {
         UnityEngine.Debug.Log("pt. 9");
 
@@ -48,21 +44,8 @@ public class WalletCreator : WalletLoaderBase
 
         UnityEngine.Debug.Log("pt. 10");
 
-        ClearSensitiveData();
-
         playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
         //playerPrefPassword.SetupPlayerPrefs(walletNum, () => { onWalletLoaded?.Invoke(); UnityEngine.Debug.Log("WALLET #" + walletNum + " => " + addresses[0].CreateDisposableData().Value); });
-    }
-
-    private void ClearSensitiveData()
-    {
-        Array.Clear(encryptedHashLvls, 0, encryptedHashLvls.Length);
-
-        encryptedHashLvls = null;
-        saltedPasswordHash = null;
-        encryptedSeed = null;
-
-        GC.Collect();
     }
 
     private void CreateWalletCountPref()
@@ -109,10 +92,10 @@ public class WalletCreator : WalletLoaderBase
         string h2 = await Task.Run(() => lvl12string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 3");
         string h3 = await Task.Run(() => lvl34string.Item1.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 4");
         string h4 = await Task.Run(() => lvl34string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 5");
-        encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 6");
-        saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 7");
-        encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.Item1.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.Item2.GetSHA512Hash()) }).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 8");
+        string encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 6");
+        string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 7");
+        string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.Item1.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.Item2.GetSHA512Hash()) }).ConfigureAwait(false); UnityEngine.Debug.Log("pt. 8");
 
-        MainThreadExecutor.QueueAction(SetWalletPlayerPrefs, "setting wallet player prefs");
+        MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedSeed));
     }
 }
