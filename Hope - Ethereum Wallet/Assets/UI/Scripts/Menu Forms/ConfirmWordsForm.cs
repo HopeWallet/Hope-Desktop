@@ -13,7 +13,7 @@ public class ConfirmWordsForm : FormAnimation
 	[SerializeField] private GameObject checkBoxParent;
 
 	private GameObject[] checkBoxes;
-	private int wordIndex = 0;
+	private int wordIndex;
 	private int[] randomNums;
 
 	/// <summary>
