@@ -11,10 +11,21 @@ public class ConfirmWordsForm : FormAnimation
 	[SerializeField] private GameObject wordInputField;
 	[SerializeField] private GameObject nextButton;
 	[SerializeField] private GameObject checkBoxParent;
+	[SerializeField] private GameObject errorIcon;
 
 	private GameObject[] checkBoxes;
 	private int wordIndex;
 	private int[] randomNums;
+	private bool errorIconVisible;
+
+	private bool ErrorIconVisible
+	{
+		set
+		{
+			errorIconVisible = value;
+			if (errorIconVisible) nextButton.GetComponent<Button>().interactable = false;
+		}
+	}
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -27,7 +38,7 @@ public class ConfirmWordsForm : FormAnimation
 		for (int i = 0; i < checkBoxes.Length; i++)
 			checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
 
-		wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(SetButtonInteractable);
+		wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
 		nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
 	}
 
@@ -113,7 +124,25 @@ public class ConfirmWordsForm : FormAnimation
 	/// Sets the next button to interactable if the word input field has at least something in the input
 	/// </summary>
 	/// <param name="str"> The current string that is in the word input field </param>
-	private void SetButtonInteractable(string str) => nextButton.GetComponent<Button>().interactable = str != "" ? true : false;
+	private void InputFieldChanged(string str)
+	{
+		nextButton.GetComponent<Button>().interactable = str != "" ? true : false;
+
+		if (errorIconVisible) AnimateErrorIcon(false);
+	}
+
+	/// <summary>
+	/// Animates the error icon in or out of view
+	/// </summary>
+	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
+	private void AnimateErrorIcon(bool animatingIn)
+	{
+		Animating = true;
+
+		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
+
+		ErrorIconVisible = animatingIn;
+	}
 
 	/// <summary>
 	/// The nextButton has been clicked
@@ -124,21 +153,22 @@ public class ConfirmWordsForm : FormAnimation
 
 		//if (wordIsCorrect)
 		//{
-		if (wordIndex != 3)
-		{
-			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-			Animating = true;
-			AnimateNextWord(false);
-			wordIndex++;
-		}
+		
+		//if (wordIndex != 3)
+		//{
+		//	checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		//	Animating = true;
+		//	AnimateNextWord(false);
+		//	wordIndex++;
+		//}
 
-		else
-			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
+		//else
+		//	checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
 		//}
 
 		//else
 		//{
-		// Show popup saying the word is wrong
+			AnimateErrorIcon(true);
 		//}
 	}
 
