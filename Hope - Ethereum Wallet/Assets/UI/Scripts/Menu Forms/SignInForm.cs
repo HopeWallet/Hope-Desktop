@@ -14,6 +14,9 @@ public class SignInForm : FormAnimation
 
 	private bool errorIconVisible;
 
+	/// <summary>
+	/// Makes button interactable if the errorIcon is set to visible
+	/// </summary>
 	private bool ErrorIconVisible
 	{
 		set
@@ -82,7 +85,7 @@ public class SignInForm : FormAnimation
 	private void SignInAttempt()
 	{
 		//if (passwordIsCorrect)
-		//	DisabledMenu();
+		//	DisableMenu();
 		//else
 		AnimateErrorIcon(true);
 	}

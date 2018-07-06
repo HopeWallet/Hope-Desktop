@@ -18,6 +18,9 @@ public class ConfirmWordsForm : FormAnimation
 	private int[] randomNums;
 	private bool errorIconVisible;
 
+	/// <summary>
+	/// Makes button interactable if the errorIcon is set to visible
+	/// </summary>
 	private bool ErrorIconVisible
 	{
 		set
@@ -153,23 +156,20 @@ public class ConfirmWordsForm : FormAnimation
 
 		//if (wordIsCorrect)
 		//{
-		
-		//if (wordIndex != 3)
-		//{
-		//	checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		//	Animating = true;
-		//	AnimateNextWord(false);
-		//	wordIndex++;
+		if (wordIndex != 3)
+		{
+			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
+			Animating = true;
+			AnimateNextWord(false);
+			wordIndex++;
+		}
+
+		else
+			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
 		//}
 
 		//else
-		//	checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
-		//}
-
-		//else
-		//{
-			AnimateErrorIcon(true);
-		//}
+		//	AnimateErrorIcon(true);
 	}
 
 	/// <summary>
