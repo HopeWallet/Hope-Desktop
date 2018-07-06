@@ -10,16 +10,33 @@ public class SignInForm : FormAnimation
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
+	[SerializeField] private GameObject errorIcon;
+
+	private bool errorIconVisible;
+
+	/// <summary>
+	/// Makes button interactable if the errorIcon is set to visible
+	/// </summary>
+	private bool ErrorIconVisible
+	{
+		set
+		{
+			errorIconVisible = value;
+			if (errorIconVisible) signInButton.GetComponent<Button>().interactable = false;
+		}
+	}
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
 	protected override void InitializeElements()
 	{
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(exitButtonClicked);
-		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(SetButtonInteractable);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ExitButtonClicked);
+		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
 		signInButton.GetComponent<Button>().onClick.AddListener(SignInAttempt);
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
+
+		//title.GetComponent<TextMeshProUGUI>().text = walletName;
 	}
 
 	/// <summary>
@@ -49,13 +66,18 @@ public class SignInForm : FormAnimation
 	/// <summary>
 	/// Exit button is clicked
 	/// </summary>
-	private void exitButtonClicked() => DisableMenu();
+	private void ExitButtonClicked() => DisableMenu();
 
 	/// <summary>
 	/// Sets the button to interactable if the input field is not empty
 	/// </summary>
 	/// <param name="str"> The current string in the password input field </param>
-	private void SetButtonInteractable(string str) => signInButton.GetComponent<Button>().interactable = str != "" ? true : false;
+	private void InputFieldChanged(string str)
+	{
+		signInButton.GetComponent<Button>().interactable = str != "" ? true : false;
+
+		if (errorIconVisible) AnimateErrorIcon(false);
+	}
 
 	/// <summary>
 	/// Checks to see if password entered is correct
@@ -63,8 +85,21 @@ public class SignInForm : FormAnimation
 	private void SignInAttempt()
 	{
 		//if (passwordIsCorrect)
-		//	DisabledMenu();
+		//	DisableMenu();
 		//else
+		AnimateErrorIcon(true);
+	}
 
+	/// <summary>
+	/// Animates the error icon in or out of view
+	/// </summary>
+	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
+	private void AnimateErrorIcon(bool animatingIn)
+	{
+		Animating = true;
+
+		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
+
+		ErrorIconVisible = animatingIn;
 	}
 }
