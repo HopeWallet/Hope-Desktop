@@ -48,7 +48,7 @@ public class WalletUnlocker : WalletLoaderBase
 
     private void IncorrectPassword()
     {
-        MainThreadExecutor.QueueAction(() => ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. ")), "incorrect password");
+        MainThreadExecutor.QueueAction(() => ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. ")));
     }
 
     private void CorrectPassword(int walletNum, string password)
@@ -62,7 +62,7 @@ public class WalletUnlocker : WalletLoaderBase
                 hashLvls[i] = SecurePlayerPrefs.GetString("wallet_" + walletNum + "_h" + (i + 1));
 
             AsyncTaskScheduler.Schedule(() => UnlockWalletAsync(hashLvls, SecurePlayerPrefs.GetString("wallet_" + walletNum), password, wallet => AsyncTaskScheduler.Schedule(() => GetAddresses(wallet))));
-        }, "correct password");
+        });
 
     }
 
@@ -82,6 +82,6 @@ public class WalletUnlocker : WalletLoaderBase
     protected override void OnAddressesReceived()
     {
         addresses[0].CreateDisposableData().Value.Log();
-        MainThreadExecutor.QueueAction(onWalletLoaded, "wallet unlocked action");
+        MainThreadExecutor.QueueAction(onWalletLoaded);
     }
 }

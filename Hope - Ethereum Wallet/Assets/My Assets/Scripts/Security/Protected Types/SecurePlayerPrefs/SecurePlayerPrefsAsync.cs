@@ -73,7 +73,7 @@ public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
         {
             PlayerPrefs.SetString(secureKey, encryptedValue);
             onValueSet?.Invoke();
-        }, "async player prefs");
+        });
     }
 
     /// <summary>
