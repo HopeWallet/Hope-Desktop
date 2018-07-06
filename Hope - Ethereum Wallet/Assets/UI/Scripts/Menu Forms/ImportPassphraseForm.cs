@@ -44,10 +44,12 @@ public class ImportPassphraseForm : FormAnimation
 			wordInputField[i].GetComponent<TMP_InputField>().onValueChanged.AddListener((str) => SetButtonInteractable());
 		}
 
-		importButton.GetComponent<Button>().interactable = false;
-
 		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
 		dropdownComponent.onValueChanged.AddListener(PassphraseWordCountChanged);
+		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
+		importButton.GetComponent<Button>().onClick.AddListener(ImportButtonClicked);
+		backButton1.GetComponent<Button>().onClick.AddListener(BackButtonClicked);
+		backButton2.GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -71,8 +73,7 @@ public class ImportPassphraseForm : FormAnimation
 	protected override void AnimateOut()
 	{
 		wordCountDropdown.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form1.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut)));
+			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f, AnimateFormsOut));
 
 		pastePhraseButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => importButton.AnimateGraphicAndScale(0f, 0f, 0.15f));
@@ -82,40 +83,15 @@ public class ImportPassphraseForm : FormAnimation
 	}
 
 	/// <summary>
-	/// Splits the copied string on the clipboard into an array and sets them individually during the animations
+	/// Animates both forms off the screen
 	/// </summary>
-	public void PastePhraseClicked()
+	private void AnimateFormsOut()
 	{
-		string clipboard = ClipboardUtils.GetClipboardString();
+		form1.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		form2.AnimateScaleY(0f, 0.15f, FinishedAnimatingOut);
 
-		string[] tempArray = clipboard.GetMnemonicWords();
-
-		wordStrings = new string[24];
-
-		for (int i = 0; i < wordStrings.Length; i++)
-		{
-			try { wordStrings[i] = tempArray[i]; }
-
-			catch { wordStrings[i] = ""; }
-		}
-
-		if (tempArray.Length <= 24)
-		{
-			dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
-			wordCount = dropdownComponent.value == 0 ? 12 : 24;
-		}
-
-		if (clipboard != null && tempArray.Length <= wordInputField.Length)
-		{
-			AnimateFormChange(wordCount == 12 ? false : true);
-			StartWordAnimation();
-		}
-
-		else
-		{
-			AnimateIcon(errorIcon);
-			Debug.Log("Add popup saying clipboard text is not a passphrase");
-		}
+		backButton1.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		backButton2.AnimateGraphicAndScale(0f, 0f, 0.15f);
 	}
 
 	/// <summary>
@@ -124,7 +100,6 @@ public class ImportPassphraseForm : FormAnimation
 	private void StartWordAnimation()
 	{
 		AnimateIcon(checkMarkIcon);
-
 		CrunchWord(0);
 	}
 
@@ -152,25 +127,6 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		if (index < wordStrings.Length)
 			CrunchWord(index);
-	}
-
-	/// <summary>
-	/// Checks to see if all words are filled out and sets the import button to interactable if so
-	/// </summary>
-	private void SetButtonInteractable()
-	{
-		Button importButtonComponent = importButton.GetComponent<Button>();
-
-		for (int i = 0; i < wordCount; i++)
-		{
-			if (wordInputField[i].GetComponent<TMP_InputField>().text == "")
-			{
-				importButtonComponent.interactable = false;
-				return;
-			}
-		}
-
-		importButtonComponent.interactable = true;
 	}
 
 	/// <summary>
@@ -248,5 +204,79 @@ public class ImportPassphraseForm : FormAnimation
 			else
 				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f);
 		}
+	}
+
+	/// <summary>
+	/// Checks to see if all words are filled out and sets the import button to interactable if so
+	/// </summary>
+	private void SetButtonInteractable()
+	{
+		Button importButtonComponent = importButton.GetComponent<Button>();
+
+		for (int i = 0; i < wordCount; i++)
+		{
+			if (wordInputField[i].GetComponent<TMP_InputField>().text == "")
+			{
+				importButtonComponent.interactable = false;
+				return;
+			}
+		}
+
+		importButtonComponent.interactable = true;
+	}
+
+	/// <summary>
+	/// Splits the copied string on the clipboard into an array and sets them individually during the animations
+	/// </summary>
+	private void PastePhraseClicked()
+	{
+		string clipboard = ClipboardUtils.GetClipboardString();
+
+		string[] tempArray = clipboard.GetMnemonicWords();
+
+		wordStrings = new string[24];
+
+		for (int i = 0; i < wordStrings.Length; i++)
+		{
+			try { wordStrings[i] = tempArray[i]; }
+
+			catch { wordStrings[i] = ""; }
+		}
+
+		if (tempArray.Length <= 24)
+		{
+			dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
+			wordCount = dropdownComponent.value == 0 ? 12 : 24;
+		}
+
+		if (clipboard != null && tempArray.Length <= wordInputField.Length)
+		{
+			AnimateFormChange(wordCount == 12 ? false : true);
+			StartWordAnimation();
+		}
+
+		else
+		{
+			AnimateIcon(errorIcon);
+			Debug.Log("Add popup saying clipboard text is not a passphrase");
+		}
+	}
+
+	/// <summary>
+	/// Import button has been clicked
+	/// </summary>
+	private void ImportButtonClicked()
+	{
+		DisableMenu();
+		// GO TO NEXT FORM
+	}
+
+	/// <summary>
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
 	}
 }

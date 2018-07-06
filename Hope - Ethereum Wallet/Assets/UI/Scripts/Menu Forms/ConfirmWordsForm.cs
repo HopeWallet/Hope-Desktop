@@ -43,6 +43,7 @@ public class ConfirmWordsForm : FormAnimation
 
 		wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
 		nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -124,17 +125,6 @@ public class ConfirmWordsForm : FormAnimation
 	}
 
 	/// <summary>
-	/// Sets the next button to interactable if the word input field has at least something in the input
-	/// </summary>
-	/// <param name="str"> The current string that is in the word input field </param>
-	private void InputFieldChanged(string str)
-	{
-		nextButton.GetComponent<Button>().interactable = str != "" ? true : false;
-
-		if (errorIconVisible) AnimateErrorIcon(false);
-	}
-
-	/// <summary>
 	/// Animates the error icon in or out of view
 	/// </summary>
 	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
@@ -145,31 +135,6 @@ public class ConfirmWordsForm : FormAnimation
 		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
 
 		ErrorIconVisible = animatingIn;
-	}
-
-	/// <summary>
-	/// The nextButton has been clicked
-	/// </summary>
-	private void NextButtonClicked()
-	{
-		//Check if word is correct
-
-		//if (wordIsCorrect)
-		//{
-		if (wordIndex != 3)
-		{
-			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-			Animating = true;
-			AnimateNextWord(false);
-			wordIndex++;
-		}
-
-		else
-			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
-		//}
-
-		//else
-		//	AnimateErrorIcon(true);
 	}
 
 	/// <summary>
@@ -204,4 +169,49 @@ public class ConfirmWordsForm : FormAnimation
 	/// </summary>
 	/// <param name="gameObject"> The GameObject being moved </param>
 	private void SetObjectPlacement(GameObject gameObject) => gameObject.transform.localPosition = new Vector2(350, gameObject.transform.localPosition.y);
+
+	/// <summary>
+	/// Sets the next button to interactable if the word input field has at least something in the input
+	/// </summary>
+	/// <param name="str"> The current string that is in the word input field </param>
+	private void InputFieldChanged(string str)
+	{
+		nextButton.GetComponent<Button>().interactable = str != "" ? true : false;
+
+		if (errorIconVisible) AnimateErrorIcon(false);
+	}
+
+	/// <summary>
+	/// The nextButton has been clicked
+	/// </summary>
+	private void NextButtonClicked()
+	{
+		//Check if word is correct
+
+		//if (wordIsCorrect)
+		//{
+		if (wordIndex != 3)
+		{
+			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
+			Animating = true;
+			AnimateNextWord(false);
+			wordIndex++;
+		}
+
+		else
+			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
+		//}
+
+		//else
+		//	AnimateErrorIcon(true);
+	}
+
+	/// <summary>
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
+	}
 }

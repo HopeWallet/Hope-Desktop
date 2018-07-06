@@ -16,7 +16,6 @@ public class CreateWalletForm : FormAnimation
 	[SerializeField] private GameObject errorIcon;
 
 	private string walletNameText, password1Text, password2Text;
-	private TMP_InputField[] inputFields;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -27,25 +26,8 @@ public class CreateWalletForm : FormAnimation
 		InitializeVariable(ref password1Field);
 		InitializeVariable(ref password2Field);
 
-		inputFields = new TMP_InputField[3];
-		inputFields[0] = walletNameField.GetComponent<TMP_InputField>();
-		inputFields[1] = password1Field.GetComponent<TMP_InputField>();
-		inputFields[2] = password2Field.GetComponent<TMP_InputField>();
-	}
-
-	private void Update()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			if (Input.GetKeyDown(KeyCode.Tab) && inputFields[i].isFocused)
-			{
-				if (i != 2)
-					inputFields[++i].ActivateInputField();
-
-				else
-					inputFields[0].ActivateInputField();
-			}
-		}
+		createButton.GetComponent<Button>().onClick.AddListener(CreateButtonClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -125,4 +107,21 @@ public class CreateWalletForm : FormAnimation
 		createButton.GetComponent<Button>().interactable = walletNameText != "" && passwordsValid;
 	}
 
+	/// <summary>
+	/// Create button has been clicked
+	/// </summary>
+	private void CreateButtonClicked()
+	{
+		DisableMenu();
+		// GO TO NEXT FORM
+	}
+
+	/// <summary>
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
+	}
 }

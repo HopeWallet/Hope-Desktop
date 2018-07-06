@@ -35,6 +35,11 @@ public class CreatePassphraseForm : FormAnimation
 			wordObjects[i] = passphrase.transform.GetChild(i).gameObject;
 			words[i] = wordObjects[i].transform.GetChild(2).gameObject;
 		}
+
+		generateNewButton.GetComponent<Button>().onClick.AddListener(GenerateNewClicked);
+		copyAllButton.GetComponent<Button>().onClick.AddListener(CopyAllClicked);
+		confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButtonClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -147,24 +152,6 @@ public class CreatePassphraseForm : FormAnimation
 	}
 
 	/// <summary>
-	/// Generates a random passphrase and animates the words
-	/// </summary>
-	public void GenerateNewClicked()
-	{
-		GenerateMnemonicPhrase();
-		StartWordAnimation();
-	}
-
-	/// <summary>
-	/// Merges all the words to one giant string and copies it to the clipboard
-	/// </summary>
-	public void CopyAllClicked()
-	{
-		CopyPassphraseToClipboard();
-		AnimateCheckMarkIcon();
-	}
-
-	/// <summary>
 	/// Generates a new passphrase onto the mnemonicWords array
 	/// </summary>
 	private void GenerateMnemonicPhrase() => mnemonicWords = new Wallet(Wordlist.English, WordCount.Twelve).Words;
@@ -193,4 +180,39 @@ public class CreatePassphraseForm : FormAnimation
 		ClipboardUtils.CopyToClipboard(entirePassphrase);
 	}
 
+	/// <summary>
+	/// Generates a random passphrase and animates the words
+	/// </summary>
+	private void GenerateNewClicked()
+	{
+		GenerateMnemonicPhrase();
+		StartWordAnimation();
+	}
+
+	/// <summary>
+	/// Merges all the words to one giant string and copies it to the clipboard
+	/// </summary>
+	private void CopyAllClicked()
+	{
+		CopyPassphraseToClipboard();
+		AnimateCheckMarkIcon();
+	}
+
+	/// <summary>
+	/// Confirm button has been clicked
+	/// </summary>
+	private void ConfirmButtonClicked()
+	{
+		DisableMenu();
+		// GO TO NEXT FORM
+	}
+
+	/// <summary>
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
+	}
 }

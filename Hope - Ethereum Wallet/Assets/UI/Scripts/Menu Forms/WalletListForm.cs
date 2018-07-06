@@ -26,6 +26,7 @@ public class WalletListForm : FormAnimation
 		}
 
 		newWalletButton.GetComponent<Button>().onClick.AddListener(NewWalletButtonClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -80,11 +81,20 @@ public class WalletListForm : FormAnimation
 	private void NewWalletButtonClicked()
 	{
 		DisableMenu();
-		//OPEN UP NEXT FORM
+		// GO TO NEXT FORM
 	}
 
 	/// <summary>
-	/// Disables this form's menu
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
+	}
+
+	/// <summary>
+	/// Disables this form's menu (accessed from outside this class)
 	/// </summary>
 	public void DisableWalletListForm() => DisableMenu();
 }

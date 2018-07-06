@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HopeWalletForm : FormAnimation
 {
@@ -9,6 +10,16 @@ public class HopeWalletForm : FormAnimation
 	[SerializeField] private GameObject importWalletDesc;
 	[SerializeField] private GameObject createWalletButton;
 	[SerializeField] private GameObject createWalletDesc;
+
+	/// <summary>
+	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// </summary>
+	protected override void InitializeElements()
+	{
+		importWalletButton.GetComponent<Button>().onClick.AddListener(ImportWalletButtonClicked);
+		createWalletButton.GetComponent<Button>().onClick.AddListener(CreateWalletButtonClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
+	}
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -38,4 +49,30 @@ public class HopeWalletForm : FormAnimation
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut))));
 	}
 
+	/// <summary>
+	/// Import wallet button has been clicked
+	/// </summary>
+	private void ImportWalletButtonClicked()
+	{
+		DisableMenu();
+		// GO TO NEXT FORM
+	}
+
+	/// <summary>
+	/// Create wallet button has been clicked
+	/// </summary>
+	private void CreateWalletButtonClicked()
+	{
+		DisableMenu();
+		// GO TO NEXT FORM
+	}
+
+	/// <summary>
+	/// Back button has been clicked
+	/// </summary>
+	private void BackButtonClicked()
+	{
+		DisableMenu();
+		// GO TO PREVIOUS FORM
+	}
 }

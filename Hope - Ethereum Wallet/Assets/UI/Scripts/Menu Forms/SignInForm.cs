@@ -33,12 +33,12 @@ public class SignInForm : FormAnimation
 	/// </summary>
 	protected override void InitializeElements()
 	{
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ExitButtonClicked);
 		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
-		signInButton.GetComponent<Button>().onClick.AddListener(SignInAttempt);
+		signInButton.GetComponent<Button>().onClick.AddListener(SignInClicked);
+		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ExitButtonClicked);
+
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 		walletListForm = transform.parent.GetComponent<WalletListForm>();
-
 		//title.GetComponent<TextMeshProUGUI>().text = walletName;
 	}
 
@@ -67,9 +67,17 @@ public class SignInForm : FormAnimation
 	}
 
 	/// <summary>
-	/// Exit button is clicked
+	/// Animates the error icon in or out of view
 	/// </summary>
-	private void ExitButtonClicked() => DisableMenu();
+	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
+	private void AnimateErrorIcon(bool animatingIn)
+	{
+		Animating = true;
+
+		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
+
+		ErrorIconVisible = animatingIn;
+	}
 
 	/// <summary>
 	/// Sets the button to interactable if the input field is not empty
@@ -85,26 +93,19 @@ public class SignInForm : FormAnimation
 	/// <summary>
 	/// Checks to see if password entered is correct
 	/// </summary>
-	private void SignInAttempt()
+	private void SignInClicked()
 	{
 		//if (passwordIsCorrect)
 		//{
 		//	DisableMenu();
 		//	walletListForm.DisableWalletListForm();
+		// 	//GO TO NEXT FORM
 		//else
 			AnimateErrorIcon(true);
 	}
 
 	/// <summary>
-	/// Animates the error icon in or out of view
+	/// Exit button is clicked
 	/// </summary>
-	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
-	private void AnimateErrorIcon(bool animatingIn)
-	{
-		Animating = true;
-
-		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
-
-		ErrorIconVisible = animatingIn;
-	}
+	private void ExitButtonClicked() => DisableMenu();
 }
