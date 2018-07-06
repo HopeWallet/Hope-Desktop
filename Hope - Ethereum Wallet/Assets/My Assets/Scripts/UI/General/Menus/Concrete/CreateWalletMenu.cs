@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class used for creating a new ethereum wallet.
 /// </summary>
-public class CreateWalletMenu : WalletLoaderBase<CreateWalletMenu>
+public class CreateWalletMenu : WalletLoadMenuBase<CreateWalletMenu>
 {
 
     public Text mnemonicPhraseField;

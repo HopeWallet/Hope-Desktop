@@ -5,7 +5,7 @@ using Zenject;
 /// <summary>
 /// Class which will handle the entering of a password for unlocking a wallet.
 /// </summary>
-public class UnlockWalletMenu : WalletLoaderBase<UnlockWalletMenu>, IEnterButtonObservable
+public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButtonObservable
 {
 
     public InputField passwordField;

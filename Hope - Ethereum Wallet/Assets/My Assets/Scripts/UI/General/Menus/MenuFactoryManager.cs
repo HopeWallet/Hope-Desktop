@@ -13,18 +13,20 @@ public class MenuFactoryManager
     /// Initializes all the menu factories.
     /// </summary>
     public MenuFactoryManager(CreatePasswordMenu.Factory createPasswordMenuFactory,
-        ImportOrCreateMenu.Factory chooseImportOrCreateMenuFactory,
+        ImportOrCreateMenu.Factory importOrCreateMenuFactory,
         CreateWalletMenu.Factory walletCreateMenuFactory,
         ImportWalletMenu.Factory walletImportMenuFactory,
         UnlockWalletMenu.Factory walletUnlockMenuFactory,
-        OpenWalletMenu.Factory openedWalletMenuFactory)
+        OpenWalletMenu.Factory openedWalletMenuFactory,
+        ChooseWalletMenu.Factory chooseWalletMenuFactory)
     {
         menuFactories.AddItems(createPasswordMenuFactory,
-                               chooseImportOrCreateMenuFactory,
+                               importOrCreateMenuFactory,
                                walletCreateMenuFactory,
                                walletImportMenuFactory,
                                walletUnlockMenuFactory,
-                               openedWalletMenuFactory);
+                               openedWalletMenuFactory,
+                               chooseWalletMenuFactory);
     }
 
     /// <summary>

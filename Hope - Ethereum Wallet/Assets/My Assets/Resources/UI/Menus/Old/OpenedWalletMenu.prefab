@@ -1505,6 +1505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonImage: {fileID: 114653547266882504}
+  createDropdownOnClick: 1
   text: {fileID: 114573585150502658}
   dropdownButtons: []
 --- !u!114 &114639324569959066

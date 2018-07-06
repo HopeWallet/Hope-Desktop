@@ -57,10 +57,12 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     {
         createdMenus.AddItems(extraMenus);
 
-        if (userWalletManager.CanReadWallet())
-            OpenMenu<UnlockWalletMenu>();
-        else
-            OpenMenu<CreatePasswordMenu>();
+        OpenMenu<ChooseWalletMenu>();
+
+        //if (userWalletManager.CanReadWallet())
+        //    OpenMenu<UnlockWalletMenu>();
+        //else
+        //    OpenMenu<CreatePasswordMenu>();
     }
 
     /// <summary>
@@ -84,10 +86,9 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     {
         var sameTypeMenus = createdMenus.OfType<T>();
 
-        if (sameTypeMenus.Count() > 0)
+        if (sameTypeMenus.Any())
         {
-            EnableNewMenu(sameTypeMenus.First());
-            return;
+            EnableNewMenu(sameTypeMenus.Single());
         }
         else
         {

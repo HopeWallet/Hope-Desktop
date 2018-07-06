@@ -4,7 +4,7 @@ using Zenject;
 /// <summary>
 /// Base class for different GUI components used to unlock or create the wallet.
 /// </summary>
-public abstract class WalletLoaderBase<T> : Menu<T> where T : Menu<T>
+public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
 {
 
     protected UserWalletManager userWalletManager;

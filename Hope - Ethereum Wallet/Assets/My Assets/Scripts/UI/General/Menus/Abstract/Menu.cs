@@ -11,6 +11,16 @@ public abstract class Menu<T> : Menu where T : Menu<T>
     protected UIManager uiManager;
 
     /// <summary>
+    /// The class responsible for animating this menu.
+    /// </summary>
+    public FormAnimation Animation { get; private set; }
+
+    /// <summary>
+    /// Gets the Menus animation component.
+    /// </summary>
+    private void Awake() => Animation = GetComponent<FormAnimation>();
+
+    /// <summary>
     /// Adds the UIManager dependency to this menu.
     /// </summary>
     /// <param name="uiManager"> The active UIManager. </param>
