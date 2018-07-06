@@ -59,15 +59,6 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        //const string mnemonic = "ridge capable pact idea interest fame okay nice rack rack surface rack";
-        //Wallet wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
-
-        //string seed = wallet.Seed.GetHexString();
-        //byte[] byteSeed = seed.HexToByteArray();
-        //Wallet newWallet = new Wallet(byteSeed);
-
-        //newWallet.GetAddresses(20)[0].Log();
-
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
     }
 
@@ -96,19 +87,5 @@ public class HOPETesting : MonoBehaviour
     public void GetAddress()
     {
         walletTest.GetAddress(0).Log();
-    }
-
-    private void DoStuff()
-    {
-        byte[] original = new byte[50];
-        byte[] clear = new byte[original.Length];
-
-        unsafe
-        {
-            fixed (byte* ptr = &original[0])
-            {
-                Marshal.Copy(clear, 0, new IntPtr(ptr), original.Length);
-            }
-        }
     }
 }

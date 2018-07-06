@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 /// <summary>
@@ -8,6 +9,23 @@ using System.Text;
 /// </summary>
 public static class ByteUtils
 {
+
+    /// <summary>
+    /// Clears <see langword="byte"/>[] data by assigning a value of 0 to the location of each byte in memory.
+    /// </summary>
+    /// <param name="data"> The data to clear the bytes for. </param>
+    public static void ClearBytes(this byte[] data)
+    {
+        byte[] empty = new byte[data.Length];
+
+        unsafe
+        {
+            fixed (byte* ptr = &data[0])
+            {
+                Marshal.Copy(empty, 0, new IntPtr(ptr), data.Length);
+            }
+        }
+    }
 
     /// <summary>
     /// Gets a hexadecimal <see langword="string"/> from a collection of <see langword="byte"/>[] data.
