@@ -82,5 +82,9 @@ public class WalletListForm : FormAnimation
 		DisableMenu();
 		//OPEN UP NEXT FORM
 	}
-		
+
+	/// <summary>
+	/// Disables this form's menu
+	/// </summary>
+	public void DisableWalletListForm() => DisableMenu();
 }

@@ -12,6 +12,8 @@ public class SignInForm : FormAnimation
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject errorIcon;
 
+	private WalletListForm walletListForm;
+
 	private bool errorIconVisible;
 
 	/// <summary>
@@ -35,6 +37,7 @@ public class SignInForm : FormAnimation
 		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
 		signInButton.GetComponent<Button>().onClick.AddListener(SignInAttempt);
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
+		walletListForm = transform.parent.GetComponent<WalletListForm>();
 
 		//title.GetComponent<TextMeshProUGUI>().text = walletName;
 	}
@@ -85,9 +88,11 @@ public class SignInForm : FormAnimation
 	private void SignInAttempt()
 	{
 		//if (passwordIsCorrect)
+		//{
 		//	DisableMenu();
+		//	walletListForm.DisableWalletListForm();
 		//else
-		AnimateErrorIcon(true);
+			AnimateErrorIcon(true);
 	}
 
 	/// <summary>
