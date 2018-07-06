@@ -132,10 +132,7 @@ public class ImportPassphraseForm : FormAnimation
 	/// Scales the word's X value to zero
 	/// </summary>
 	/// <param name="index"> The index that is being animated </param>
-	private void CrunchWord(int index)
-	{
-		wordTextObjects[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(index));
-	}
+	private void CrunchWord(int index) => wordTextObjects[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(index));
 
 	/// <summary>
 	/// Scales the word's X value back to 1

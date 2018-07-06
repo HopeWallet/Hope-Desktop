@@ -66,9 +66,7 @@ public class CreatePassphraseForm : FormAnimation
 			() => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
 
 		for (int i = 0; i < wordObjects.Length; i++)
-		{
 			wordObjects[i].AnimateGraphicAndScale(0f, 0f, 0.2f);
-		}
 	}
 
 	/// <summary>
@@ -122,10 +120,7 @@ public class CreatePassphraseForm : FormAnimation
 	/// </summary>
 	/// <param name="wordList"> The randomized list of words </param>
 	/// <param name="index"> The index that is being animated </param>
-	private void CrunchWord(List<GameObject> wordList, int index)
-	{
-		wordList[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(wordList, index));
-	}
+	private void CrunchWord(List<GameObject> wordList, int index) => wordList[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(wordList, index));
 
 	/// <summary>
 	/// Scales the word's X value back to 1
@@ -172,10 +167,7 @@ public class CreatePassphraseForm : FormAnimation
 	/// <summary>
 	/// Generates a new passphrase onto the mnemonicWords array
 	/// </summary>
-	private void GenerateMnemonicPhrase()
-	{
-		mnemonicWords = new Wallet(Wordlist.English, WordCount.Twelve).Words;
-	}
+	private void GenerateMnemonicPhrase() => mnemonicWords = new Wallet(Wordlist.English, WordCount.Twelve).Words;
 
 	/// <summary>
 	/// Sets the array of words to the newly generated passphrase
