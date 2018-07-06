@@ -57,11 +57,7 @@ public abstract class WalletLoaderBase
     {
         var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
         Array.Copy(addressesToCopy, addresses, addresses.Length);
-
-        OnAddressesReceived();
     }
-
-    protected virtual void OnAddressesReceived() { }
 
     protected abstract void LoadWallet(object data, string userPass);
 

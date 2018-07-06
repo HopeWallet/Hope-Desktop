@@ -61,29 +61,16 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        //PlayerPrefs.DeleteAll();
-
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
-        protectedStringDataCache.SetData(new ProtectedString("passwordtest"), 0);
-
-        RecurseCreate(100);
-    }
-
-    private void RecurseCreate(int limit)
-    {
-        if (index++ >= limit)
-            return;
-
-        walletTest.Create(string.Join(" ", words).Trim(), () => RecurseCreate(limit));
     }
 
     private void Update()
     {
-        //if (lastPass != password)
-        //{
-        //    protectedStringDataCache.SetData(new ProtectedString(password), 0);
-        //    lastPass = password;
-        //}
+        if (lastPass != password)
+        {
+            protectedStringDataCache.SetData(new ProtectedString(password), 0);
+            lastPass = password;
+        }
     }
 
     [ContextMenu("Create Wallet")]
