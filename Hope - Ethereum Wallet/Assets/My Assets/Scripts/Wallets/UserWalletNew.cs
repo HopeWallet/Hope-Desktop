@@ -61,6 +61,7 @@ public sealed class UserWalletNew
     /// <summary>
     /// Unlocks a wallet if the password is correct.
     /// </summary>
+    /// <param name="walletNum"> The number of the wallet to unlock. </param>
     public void Unlock(int walletNum)
     {
         walletUnlocker.Load(walletNum, out addresses, OnWalletLoadSuccessful);
@@ -69,7 +70,11 @@ public sealed class UserWalletNew
     public void Create(string mnemonic)
     {
         walletCreator.Load(mnemonic, out addresses, OnWalletLoadSuccessful);
-        //walletCreator.CreateWallet(mnemonic, OnWalletLoadSuccessful, addresses => this.addresses = addresses);
+    }
+
+    public void Create(string mnemonic, Action onWalletCreated)
+    {
+        walletCreator.Load(mnemonic, out addresses, onWalletCreated);
     }
 
     public string GetAddress(int addressIndex)
