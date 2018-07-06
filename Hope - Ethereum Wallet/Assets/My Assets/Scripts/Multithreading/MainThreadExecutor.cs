@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 /// Class that is used to execute Actions on the main thread.
 /// Useful for when asynchronous tasks need to have some part updated on the main thread.
 /// </summary>
-public class MainThreadExecutor : IUpdater
+public sealed class MainThreadExecutor : IUpdater
 {
     private static readonly ConcurrentQueue<Action> ActionsToExecute = new ConcurrentQueue<Action>();
 
@@ -37,8 +37,6 @@ public class MainThreadExecutor : IUpdater
     /// Queues an action for updating on the main thread.
     /// </summary>
     /// <param name="action"> The action to execute on the main thread. </param>
-    public static void QueueAction(Action action)
-    {
-        ActionsToExecute.Enqueue(action);
-    }
+    public static void QueueAction(Action action) => ActionsToExecute.Enqueue(action);
+
 }

@@ -72,11 +72,6 @@ public sealed class UserWalletNew
         walletCreator.Load(mnemonic, out addresses, OnWalletLoadSuccessful);
     }
 
-    public void Create(string mnemonic, Action onWalletCreated)
-    {
-        walletCreator.Load(mnemonic, out addresses, onWalletCreated);
-    }
-
     public string GetAddress(int addressIndex)
     {
         using (var address = addresses[addressIndex].CreateDisposableData())

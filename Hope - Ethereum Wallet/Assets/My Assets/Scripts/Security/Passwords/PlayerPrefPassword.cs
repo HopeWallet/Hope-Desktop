@@ -112,15 +112,11 @@ public class PlayerPrefPassword : ScriptableObject
     private void GenerateCorrectKeys(int walletNum, Action onPrefsGenerated)
     {
         prefCounter = 0;
+
         prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key], () =>
         {
-            //prefCounter++;
-            //Debug.Log(prefCounter + " -> " + keys.Length);
             if (++prefCounter >= keys.Length)
-            {
                 onPrefsGenerated?.Invoke();
-                //prefCounter = 0;
-            }
         }));
     }
 
