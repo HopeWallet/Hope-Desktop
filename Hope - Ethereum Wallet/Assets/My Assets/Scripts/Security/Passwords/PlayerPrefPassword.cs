@@ -63,7 +63,10 @@ public class PlayerPrefPassword : ScriptableObject
     public void SetupPlayerPrefs(int walletNum, Action onPrefsSetup = null)
     {
         if (prefDictionary == null)
+        {
+            ExceptionManager.DisplayException(new Exception("Unable to save PlayerPrefs in the PlayerPrefPassword."));
             return;
+        }
 
         GenerateSpoofKeys();
         GenerateCorrectKeys(walletNum, onPrefsSetup);
@@ -108,12 +111,15 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="onPrefsGenerated"> The action to call once all PlayerPrefs have been generated. </param>
     private void GenerateCorrectKeys(int walletNum, Action onPrefsGenerated)
     {
+        prefCounter = 0;
         prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key], () =>
         {
-            if (++prefCounter == keys.Length)
+            //prefCounter++;
+            //Debug.Log(prefCounter + " -> " + keys.Length);
+            if (++prefCounter >= keys.Length)
             {
                 onPrefsGenerated?.Invoke();
-                prefCounter = 0;
+                //prefCounter = 0;
             }
         }));
     }
@@ -137,7 +143,7 @@ public class PlayerPrefPassword : ScriptableObject
         string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
         string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter()).ConfigureAwait(false);
 
-        MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value));
+        MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value), "spoof player prefs");
     }
 
     /// <summary>

@@ -568,6 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c0e0490d1030e4cb3fb54af9f4e25a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   prefPassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
   words:
   - ridge
@@ -583,7 +584,7 @@ MonoBehaviour:
   - rocket
   - trophy
   walletNum: 1
-  password: 
+  password: testpassword
 --- !u!1 &1491621424
 GameObject:
   m_ObjectHideFlags: 0

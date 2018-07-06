@@ -33,10 +33,12 @@ using Hope.Utils.EthereumUtils;
 using System.Security;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
+using System.Dynamic;
 
 public class HOPETesting : MonoBehaviour
 {
 
+    public int index = 0;
     public PlayerPrefPassword prefPassword;
     public string[] words = new string[12];
     public int walletNum = 1;
@@ -59,16 +61,29 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
+        //PlayerPrefs.DeleteAll();
+
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
+        protectedStringDataCache.SetData(new ProtectedString("passwordtest"), 0);
+
+        RecurseCreate(100);
+    }
+
+    private void RecurseCreate(int limit)
+    {
+        if (index++ >= limit)
+            return;
+
+        walletTest.Create(string.Join(" ", words).Trim(), () => RecurseCreate(limit));
     }
 
     private void Update()
     {
-        if (lastPass != password)
-        {
-            protectedStringDataCache.SetData(new ProtectedString(password), 0);
-            lastPass = password;
-        }
+        //if (lastPass != password)
+        //{
+        //    protectedStringDataCache.SetData(new ProtectedString(password), 0);
+        //    lastPass = password;
+        //}
     }
 
     [ContextMenu("Create Wallet")]
@@ -88,4 +103,21 @@ public class HOPETesting : MonoBehaviour
     {
         walletTest.GetAddress(0).Log();
     }
+
+    private void AnonymousStuff()
+    {
+
+        var thing = new { Name = "Something", Age = 50 };
+        var things = new[] { new { Name = "Something1", Age = 25 }, new { Name = "Something2", Age = 35 } };
+
+        dynamic obj = new ExpandoObject();
+        obj.Stuff = new ExpandoObject[20];
+        obj.Stuff[0].Something = "wow";
+        obj.Name = "MyName";
+        obj.Age = 22;
+
+        UnityEngine.Debug.Log(obj.Name);
+
+    }
+
 }

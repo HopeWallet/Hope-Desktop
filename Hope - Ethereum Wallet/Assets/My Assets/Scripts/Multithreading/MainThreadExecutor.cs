@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class MainThreadExecutor : IUpdater
 {
-    private static readonly Queue<Action> actionsToExecute = new Queue<Action>();
+    private static readonly Queue<Tuple<Action, string>> actionsToExecute = new Queue<Tuple<Action, string>>();
 
     /// <summary>
     /// Initializes the MainThreadExecutor with the UpdateManager reference.
@@ -24,13 +24,23 @@ public class MainThreadExecutor : IUpdater
     public void UpdaterUpdate()
     {
         while (actionsToExecute.Count != 0)
-            actionsToExecute.Dequeue()?.Invoke();
+        {
+            var element = actionsToExecute.Dequeue();
+
+            if (element.Item1 == null)
+                UnityEngine.Debug.Log("Action is null! Tag -> " + element.Item2);
+
+            element.Item1?.Invoke();
+            //element.Invoke();
+        }
     }
 
     /// <summary>
     /// Queues an action for updating on the main thread.
     /// </summary>
     /// <param name="action"> The action to execute on the main thread. </param>
-    public static void QueueAction(Action action) => actionsToExecute.Enqueue(action);
-
+    public static void QueueAction(Action action, string executionTag)
+    {
+        actionsToExecute.Enqueue(new Tuple<Action, string>(action, executionTag));
+    }
 }
