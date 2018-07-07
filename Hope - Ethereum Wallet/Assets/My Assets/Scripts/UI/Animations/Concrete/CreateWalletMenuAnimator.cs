@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreateWalletForm : FormAnimation
+public class CreateWalletMenuAnimator : FormAnimation
 {
 
 	[SerializeField] private GameObject form;
@@ -25,9 +25,6 @@ public class CreateWalletForm : FormAnimation
 		InitializeVariable(ref walletNameField);
 		InitializeVariable(ref password1Field);
 		InitializeVariable(ref password2Field);
-
-		createButton.GetComponent<Button>().onClick.AddListener(CreateButtonClicked);
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -92,36 +89,17 @@ public class CreateWalletForm : FormAnimation
 	{
 		bool passwordsValid = password1Text == password2Text && password1Text.Length >= 8;
 
-		if (password1Text != "" && password2Text != "")
+		if (!string.IsNullOrEmpty(password1Text) && !string.IsNullOrEmpty(password2Text))
 		{
 			errorIcon.AnimateGraphic(passwordsValid ? 0f : 1f, 0.25f);
 			checkMarkIcon.AnimateGraphic(passwordsValid ? 1f : 0f, 0.25f);
 		}
-
 		else
 		{
 			errorIcon.AnimateGraphic(0f, 0.25f);
 			checkMarkIcon.AnimateGraphic(0f, 0.25f);
 		}
 
-		createButton.GetComponent<Button>().interactable = walletNameText != "" && passwordsValid;
-	}
-
-	/// <summary>
-	/// Create button has been clicked
-	/// </summary>
-	private void CreateButtonClicked()
-	{
-		DisableMenu();
-		// GO TO NEXT FORM
-	}
-
-	/// <summary>
-	/// Back button has been clicked
-	/// </summary>
-	private void BackButtonClicked()
-	{
-		DisableMenu();
-		// GO TO PREVIOUS FORM
+		createButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(walletNameText) && passwordsValid;
 	}
 }

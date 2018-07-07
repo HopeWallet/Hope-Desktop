@@ -14,12 +14,11 @@ public class ChooseWalletMenu : Menu<ChooseWalletMenu>
 
     private void OpenHopeWallet()
     {
-
+        uiManager.OpenMenu<CreateWalletMenu>();
     }
 
     private void OpenLedgerWallet()
     {
-
     }
 
     public override void OnBackPressed()

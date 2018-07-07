@@ -1,40 +1,40 @@
-﻿using NBitcoin;
-using Nethereum.HdWallet;
+﻿using Hope.Security.ProtectedTypes.Types;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine.UI;
+using Zenject;
 
-/// <summary>
-/// Class used for creating a new ethereum wallet.
-/// </summary>
-public class CreateWalletMenu : WalletLoadMenuBase<CreateWalletMenu>
+public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 {
 
-    public Text mnemonicPhraseField;
-
-    public Button confirmButton;
+    public Button createWalletButton;
     public Button backButton;
+    public TMP_InputField walletNameField;
+    public TMP_InputField passwordField;
 
-    private string mnemonic;
+    private ProtectedStringDataCache protectedStringDataCache;
 
-    /// <summary>
-    /// Initializes this class by creating a new mnemonic phrase and setting the text to it.
-    /// </summary>
+    [Inject]
+    public void Construct(ProtectedStringDataCache protectedStringDataCache) => this.protectedStringDataCache = protectedStringDataCache;
+
     private void Start()
     {
-        confirmButton.onClick.AddListener(LoadWallet);
+        createWalletButton.onClick.AddListener(CreateWalletNameAndPass);
         backButton.onClick.AddListener(OnBackPressed);
-
-        mnemonic = new Wallet(Wordlist.English, WordCount.Twelve).Phrase;
-        mnemonicPhraseField.text = mnemonic;
     }
 
-    /// <summary>
-    /// Creates a wallet with the newly created mnemonic phrase.
-    /// </summary>
-    public override void LoadWallet() => userWalletManager.CreateWallet(mnemonic);
+    private void CreateWalletNameAndPass()
+    {
+        protectedStringDataCache.SetData(new ProtectedString(passwordField.text), 0);
+        protectedStringDataCache.SetData(new ProtectedString(walletNameField.name), 1);
 
-    /// <summary>
-    /// Closes this menu when the back button is pressed.
-    /// </summary>
+        // Open next menu
+    }
+
     public override void OnBackPressed() => uiManager.CloseMenu();
 
 }

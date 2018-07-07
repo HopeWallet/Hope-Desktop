@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class ChooseWalletMenuAnimation : FormAnimation
+/// <summary>
+/// Class which animates the ChooseWalletMenu.
+/// </summary>
+public sealed class ChooseWalletMenuAnimator : FormAnimation
 {
 
     [SerializeField] private GameObject form;

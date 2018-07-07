@@ -142,12 +142,13 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindMenuFactory<CreatePasswordMenu>();
         BindMenuFactory<ImportOrCreateMenu>();
-        BindMenuFactory<CreateWalletMenu>();
+        BindMenuFactory<CreatePassphraseMenu>();
         BindMenuFactory<ImportWalletMenu>();
         BindMenuFactory<UnlockWalletMenu>();
         BindMenuFactory<OpenWalletMenu>();
 
         BindMenuFactory<ChooseWalletMenu>();
+        BindMenuFactory<CreateWalletMenu>();
     }
 
     /// <summary>

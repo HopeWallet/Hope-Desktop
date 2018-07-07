@@ -24,9 +24,6 @@ public class WalletListForm : FormAnimation
 			wallets[i] = walletListTransform.GetChild(i).GetChild(0).gameObject;
 			walletListTransform.GetChild(i).GetComponent<Button>().onClick.AddListener(OpenExistingWallet);
 		}
-
-		newWalletButton.GetComponent<Button>().onClick.AddListener(NewWalletButtonClicked);
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -75,26 +72,4 @@ public class WalletListForm : FormAnimation
 	/// <param name="walletNum"> The number of the wallet being opened in the hierarchy </param>
 	private void OpenExistingWallet() => signInForm.SetActive(true);
 
-	/// <summary>
-	/// Disables the menu and opens up the next form
-	/// </summary>
-	private void NewWalletButtonClicked()
-	{
-		DisableMenu();
-		// GO TO NEXT FORM
-	}
-
-	/// <summary>
-	/// Back button has been clicked
-	/// </summary>
-	private void BackButtonClicked()
-	{
-		DisableMenu();
-		// GO TO PREVIOUS FORM
-	}
-
-	/// <summary>
-	/// Disables this form's menu (accessed from outside this class)
-	/// </summary>
-	public void DisableWalletListForm() => DisableMenu();
 }
