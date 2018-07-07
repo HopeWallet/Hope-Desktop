@@ -5,10 +5,8 @@ using UnityEngine.UI;
 /// <summary>
 /// Class used for creating a new ethereum wallet.
 /// </summary>
-public class CreatePassphraseMenu : WalletLoadMenuBase<CreatePassphraseMenu>
+public class CreateMnemonicMenu : WalletLoadMenuBase<CreateMnemonicMenu>
 {
-
-    public Text mnemonicPhraseField;
 
     public Button confirmButton;
     public Button backButton;
@@ -24,17 +22,11 @@ public class CreatePassphraseMenu : WalletLoadMenuBase<CreatePassphraseMenu>
         backButton.onClick.AddListener(GoBack);
 
         mnemonic = new Wallet(Wordlist.English, WordCount.Twelve).Phrase;
-        mnemonicPhraseField.text = mnemonic;
     }
 
     /// <summary>
     /// Creates a wallet with the newly created mnemonic phrase.
     /// </summary>
     public override void LoadWallet() => userWalletManager.CreateWallet(mnemonic);
-
-    /// <summary>
-    /// Closes this menu when the back button is pressed.
-    /// </summary>
-    public override void GoBack() => uiManager.CloseMenu();
 
 }

@@ -7,7 +7,7 @@ using Nethereum.HdWallet;
 using NBitcoin;
 using Random = System.Random;
 
-public class CreatePassphraseForm : MenuAnimator
+public class CreateMnemonicMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -170,12 +170,7 @@ public class CreatePassphraseForm : MenuAnimator
 	/// </summary>
 	private void CopyPassphraseToClipboard()
 	{
-		string entirePassphrase = "";
-
-		for (int i = 0; i < 12; i++)
-			entirePassphrase += words[i].GetComponent<TextMeshProUGUI>().text + " ";
-
-		ClipboardUtils.CopyToClipboard(entirePassphrase);
+		ClipboardUtils.CopyToClipboard(string.Join(" ", words.Select(word => word.GetComponent<TextMeshProUGUI>().text)));
 	}
 
 	/// <summary>

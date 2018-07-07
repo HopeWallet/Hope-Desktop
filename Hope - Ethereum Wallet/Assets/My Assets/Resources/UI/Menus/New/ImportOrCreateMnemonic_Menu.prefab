@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114551704241134354}
   - component: {fileID: 114480158081983146}
   m_Layer: 0
-  m_Name: ImportOrCreateMnemonicMenu_Form
+  m_Name: ImportOrCreateMnemonic_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

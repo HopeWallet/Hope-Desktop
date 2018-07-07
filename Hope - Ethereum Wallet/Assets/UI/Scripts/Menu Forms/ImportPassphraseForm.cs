@@ -248,7 +248,7 @@ public class ImportPassphraseForm : MenuAnimator
 
 		if (clipboard != null && tempArray.Length <= wordInputField.Length)
 		{
-			AnimateFormChange(wordCount == 12 ? false : true);
+			AnimateFormChange(wordCount != 12);
 			StartWordAnimation();
 		}
 

@@ -55,7 +55,6 @@ GameObject:
   - component: {fileID: 224059429069141012}
   - component: {fileID: 223579337113269946}
   - component: {fileID: 114323206983980696}
-  - component: {fileID: 114843525974195596}
   m_Layer: 5
   m_Name: CreateWalletMenu
   m_TagString: Untagged
@@ -384,22 +383,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114843525974195596
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1330923478747104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0437f36f7f84043b5d0b376f7310d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DestroyWhenClosed: 1
-  DisableMenusUnderneath: 1
-  mnemonicPhraseField: {fileID: 114145965372169764}
-  confirmButton: {fileID: 114376315663134302}
-  backButton: {fileID: 114748459505273850}
 --- !u!114 &114875380551301088
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -140,15 +140,16 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindMenuFactories()
     {
-        BindMenuFactory<CreatePasswordMenu>();
-        BindMenuFactory<ImportOrCreateMnemonicMenu>();
-        BindMenuFactory<CreatePassphraseMenu>();
-        BindMenuFactory<ImportWalletMenu>();
-        BindMenuFactory<UnlockWalletMenu>();
-        BindMenuFactory<OpenWalletMenu>();
-
         BindMenuFactory<ChooseWalletMenu>();
         BindMenuFactory<CreateWalletMenu>();
+
+        BindMenuFactory<ImportOrCreateMnemonicMenu>();
+        BindMenuFactory<CreateMnemonicMenu>();
+        BindMenuFactory<ImportWalletMenu>();
+
+        BindMenuFactory<UnlockWalletMenu>();
+        BindMenuFactory<OpenWalletMenu>();
+        BindMenuFactory<CreatePasswordMenu>();
     }
 
     /// <summary>
