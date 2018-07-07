@@ -77,7 +77,7 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
         smallAssetImage.sprite = tradableAsset.AssetImage;
     }
 
-    public override void OnBackPressed()
+    public override void GoBack()
     {
     }
 }

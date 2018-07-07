@@ -21,7 +21,7 @@ public class CreatePassphraseMenu : WalletLoadMenuBase<CreatePassphraseMenu>
     private void Start()
     {
         confirmButton.onClick.AddListener(LoadWallet);
-        backButton.onClick.AddListener(OnBackPressed);
+        backButton.onClick.AddListener(GoBack);
 
         mnemonic = new Wallet(Wordlist.English, WordCount.Twelve).Phrase;
         mnemonicPhraseField.text = mnemonic;
@@ -35,6 +35,6 @@ public class CreatePassphraseMenu : WalletLoadMenuBase<CreatePassphraseMenu>
     /// <summary>
     /// Closes this menu when the back button is pressed.
     /// </summary>
-    public override void OnBackPressed() => uiManager.CloseMenu();
+    public override void GoBack() => uiManager.CloseMenu();
 
 }

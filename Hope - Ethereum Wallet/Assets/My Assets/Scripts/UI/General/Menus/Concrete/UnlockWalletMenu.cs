@@ -81,7 +81,7 @@ public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButt
 
     }
 
-    public override void OnBackPressed()
+    public override void GoBack()
     {
     }
 

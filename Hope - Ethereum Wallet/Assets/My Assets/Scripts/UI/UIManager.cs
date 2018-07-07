@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         if (clickType == ClickType.Down)
         {
             if (!popupManager.CloseActivePopup(typeof(LoadingPopup)))
-                menus.Peek().OnBackPressed();
+                menus.Peek().GoBack();
         }
     }
 

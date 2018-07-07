@@ -1,8 +1,5 @@
 ﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
 using Hope.Security.ProtectedTypes.Types;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEngine.UI;
 using Zenject;
 
@@ -115,7 +112,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
         passwordFields.MoveToNextInputField();
     }
 
-    public override void OnBackPressed()
+    public override void GoBack()
     {
     }
 }

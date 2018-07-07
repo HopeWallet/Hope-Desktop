@@ -29,7 +29,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
     private void Start()
     {
         createWalletButton.onClick.AddListener(CreateWalletNameAndPass);
-        backButton.onClick.AddListener(OnBackPressed);
+        backButton.onClick.AddListener(GoBack);
     }
 
     /// <summary>
@@ -41,11 +41,5 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
         protectedStringDataCache.SetData(new ProtectedString(walletNameField.name), 1);
 
         // Open next menu
-    }
-
-    public override void OnBackPressed()
-    {
-        if (!Animator.Animating)
-            uiManager.CloseMenu();
     }
 }

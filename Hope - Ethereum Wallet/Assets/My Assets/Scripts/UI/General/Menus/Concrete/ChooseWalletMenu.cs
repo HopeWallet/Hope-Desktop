@@ -34,7 +34,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     {
     }
 
-    public override void OnBackPressed()
+    protected override void OnBackPressed()
     {
     }
 }

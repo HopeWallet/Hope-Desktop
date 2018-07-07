@@ -31,7 +31,7 @@ public class ImportWalletMenu : WalletLoadMenuBase<ImportWalletMenu>, IEnterButt
     {
         seedInput.onValueChanged.AddListener(val => CheckWordCount());
         importButton.onClick.AddListener(LoadWallet);
-        backButton.onClick.AddListener(OnBackPressed);
+        backButton.onClick.AddListener(GoBack);
     }
 
     /// <summary>
@@ -79,5 +79,5 @@ public class ImportWalletMenu : WalletLoadMenuBase<ImportWalletMenu>, IEnterButt
     /// <summary>
     /// Closes this menu.
     /// </summary>
-    public override void OnBackPressed() => uiManager.CloseMenu();
+    public override void GoBack() => uiManager.CloseMenu();
 }

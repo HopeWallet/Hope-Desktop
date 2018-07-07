@@ -18,6 +18,20 @@ public abstract class Menu<T> : Menu where T : Menu<T>
     public void Construct(UIManager uiManager) => this.uiManager = uiManager;
 
     /// <summary>
+    /// Calls the OnBackPressed method when this menu is not animating.
+    /// </summary>
+    public override void GoBack()
+    {
+        if (!Animator.Animating)
+            OnBackPressed();
+    }
+
+    /// <summary>
+    /// Closes the menu when the back button is pressed and the menu isn't animating.
+    /// </summary>
+    protected virtual void OnBackPressed() => uiManager.CloseMenu();
+
+    /// <summary>
     /// Class used for creating menus dynamically.
     /// </summary>
     public class Factory : Factory<T>
@@ -46,5 +60,5 @@ public abstract class Menu : MonoBehaviour
     /// <summary>
     /// Called when the back button is pressed.
     /// </summary>
-	public abstract void OnBackPressed();
+	public abstract void GoBack();
 }

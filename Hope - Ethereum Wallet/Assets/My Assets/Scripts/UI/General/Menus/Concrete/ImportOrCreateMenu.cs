@@ -27,7 +27,7 @@ public class ImportOrCreateMenu : Menu<ImportOrCreateMenu>
     /// </summary>
     public void CreateWallet() => uiManager.OpenMenu<CreatePassphraseMenu>();
 
-    public override void OnBackPressed()
+    public override void GoBack()
     {
     }
 }

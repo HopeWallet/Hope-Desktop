@@ -1355,7 +1355,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
-  DisableMenusUnderneath: 1
   createWalletButton: {fileID: 114450260774734892}
   backButton: {fileID: 114131630776764526}
   walletNameField: {fileID: 114047288921506502}
