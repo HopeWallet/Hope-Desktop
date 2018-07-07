@@ -58,11 +58,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         createdMenus.AddItems(extraMenus);
 
         OpenMenu<ChooseWalletMenu>();
-
-        //if (userWalletManager.CanReadWallet())
-        //    OpenMenu<UnlockWalletMenu>();
-        //else
-        //    OpenMenu<CreatePasswordMenu>();
     }
 
     /// <summary>
@@ -84,18 +79,26 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <typeparam name="T"> The type of menu to open. </typeparam>
     public void OpenMenu<T>() where T : Menu<T>
     {
-        var sameTypeMenus = createdMenus.OfType<T>();
+        Action openMenuAction = () =>
+        {
+            var sameTypeMenus = createdMenus.OfType<T>();
 
-        if (sameTypeMenus.Any())
-        {
-            EnableNewMenu(sameTypeMenus.Single());
-        }
+            if (sameTypeMenus.Any())
+            {
+                EnableNewMenu(sameTypeMenus.Single());
+            }
+            else
+            {
+                var newMenu = menuFactoryManager.CreateMenu<T>();
+                EnableNewMenu(newMenu);
+                createdMenus.Add(newMenu);
+            }
+        };
+
+        if (menus.Count > 0)
+            menus.Peek().Animator.AnimateDisable(openMenuAction);
         else
-        {
-            var newMenu = menuFactoryManager.CreateMenu<T>();
-            EnableNewMenu(newMenu);
-            createdMenus.Add(newMenu);
-        }
+            openMenuAction();
     }
 
     /// <summary>
@@ -108,23 +111,25 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 
         var menuToRemove = menus.Pop();
 
-        if (menuToRemove.DestroyWhenClosed)
+        menuToRemove.Animator.AnimateDisable(() =>
         {
-            Destroy(menuToRemove.gameObject);
-            createdMenus.Remove(menuToRemove);
-        }
-        else
-        {
-            menuToRemove.gameObject.SetActive(false);
-        }
+            if (menuToRemove.DestroyWhenClosed)
+            {
+                Destroy(menuToRemove.gameObject);
+                createdMenus.Remove(menuToRemove);
+            }
+            else
+            {
+                menuToRemove.gameObject.SetActive(false);
+            }
 
-        foreach (Menu menu in menus)
-        {
-            menu.gameObject.SetActive(true);
-
-            if (menu.DisableMenusUnderneath)
-                break;
-        }
+            if (menus.Count > 0)
+            {
+                var newActiveMenu = menus.Peek();
+                newActiveMenu.gameObject.SetActive(true);
+                newActiveMenu.Animator.AnimateEnable();
+            }
+        });
     }
 
     /// <summary>
@@ -134,9 +139,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     private void EnableNewMenu(Menu newMenu)
     {
         newMenu.gameObject.SetActive(true);
-
-        if (newMenu.DisableMenusUnderneath)
-            menus.ForEach(menu => menu.gameObject.SetActive(false));
+        newMenu.Animator.AnimateEnable();
 
         if (menus.Count > 0)
         {

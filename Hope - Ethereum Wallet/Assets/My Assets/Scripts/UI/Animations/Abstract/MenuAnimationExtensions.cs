@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class FormAnimator
+public static class MenuAnimationExtensions
 {
 
 	public static void AnimateGraphicAndScale(this GameObject gameObject, float alpha, float scale, float duration, TweenCallback callback = null)

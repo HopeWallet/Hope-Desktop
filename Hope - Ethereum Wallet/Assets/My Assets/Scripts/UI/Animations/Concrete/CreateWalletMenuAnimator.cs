@@ -1,8 +1,12 @@
-﻿using TMPro;
+﻿using Hope.Security.Encryption;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreateWalletMenuAnimator : FormAnimation
+/// <summary>
+/// Class which animates the CreateWalletMenu.
+/// </summary>
+public class CreateWalletMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -20,7 +24,7 @@ public class CreateWalletMenuAnimator : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		InitializeVariable(ref walletNameField);
 		InitializeVariable(ref password1Field);
@@ -39,7 +43,7 @@ public class CreateWalletMenuAnimator : FormAnimation
 		walletNameField.AnimateScaleX(1f, 0.15f,
 			() => passwordHeader.AnimateScaleX(1f, 0.15f,
 			() => password1Field.AnimateScaleX(1f, 0.15f,
-			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimatingIn))));
+			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimating))));
 
 	}
 
@@ -50,7 +54,7 @@ public class CreateWalletMenuAnimator : FormAnimation
 	{
 		createButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut)));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating)));
 
 		walletNameField.AnimateScaleX(0f, 0.15f);
 		passwordHeader.AnimateScaleX(0f, 0.15f);
@@ -87,7 +91,7 @@ public class CreateWalletMenuAnimator : FormAnimation
 	/// </summary>
 	private void SetButtonInteractable()
 	{
-		bool passwordsValid = password1Text == password2Text && password1Text.Length >= 8;
+		bool passwordsValid = password1Text == password2Text && password1Text.Length >= AESEncryption.MIN_PASSWORD_LENGTH;
 
 		if (!string.IsNullOrEmpty(password1Text) && !string.IsNullOrEmpty(password2Text))
 		{

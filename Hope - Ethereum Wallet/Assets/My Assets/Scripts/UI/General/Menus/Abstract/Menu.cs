@@ -11,16 +11,6 @@ public abstract class Menu<T> : Menu where T : Menu<T>
     protected UIManager uiManager;
 
     /// <summary>
-    /// The class responsible for animating this menu.
-    /// </summary>
-    public FormAnimation Animation { get; private set; }
-
-    /// <summary>
-    /// Gets the Menus animation component.
-    /// </summary>
-    private void Awake() => Animation = GetComponent<FormAnimation>();
-
-    /// <summary>
     /// Adds the UIManager dependency to this menu.
     /// </summary>
     /// <param name="uiManager"> The active UIManager. </param>
@@ -43,8 +33,15 @@ public abstract class Menu : MonoBehaviour
 	[Tooltip("Destroy the menu's gameobject when it is closed.")]
 	public bool DestroyWhenClosed = true;
 
-	[Tooltip("Disable menus that are under this one in the stack.")]
-	public bool DisableMenusUnderneath = true;
+    /// <summary>
+    /// The class responsible for animating this menu.
+    /// </summary>
+    public MenuAnimator Animator { get; private set; }
+
+    /// <summary>
+    /// Gets the Menus animation component.
+    /// </summary>
+    private void Awake() => Animator = GetComponent<MenuAnimator>();
 
     /// <summary>
     /// Called when the back button is pressed.

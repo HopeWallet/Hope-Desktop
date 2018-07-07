@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ExitConfirmationForm : FormAnimation
+public class ExitConfirmationForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject dim;
@@ -19,7 +19,7 @@ public class ExitConfirmationForm : FormAnimation
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
 
 		yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn));
+			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating));
 	}
 
 	/// <summary>
@@ -32,7 +32,7 @@ public class ExitConfirmationForm : FormAnimation
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f));
 
 		noButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		yesButton.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut);
+		yesButton.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -43,6 +43,8 @@ public class ExitConfirmationForm : FormAnimation
 	/// <summary>
 	/// Disables the ExitConfirmation form
 	/// </summary>
-	public void NoButtonClicked() => DisableMenu();
+	public void NoButtonClicked()
+    {
+    }
 
 }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfirmWordsForm : FormAnimation
+public class ConfirmWordsForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -33,17 +33,13 @@ public class ConfirmWordsForm : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		checkBoxes = new GameObject[4];
 		GenerateRandomInts();
 
 		for (int i = 0; i < checkBoxes.Length; i++)
 			checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
-
-		wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
-		nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -56,7 +52,7 @@ public class ConfirmWordsForm : FormAnimation
 
 		instructions.AnimateScaleX(0.85f, 0.2f,
 			() => wordInputField.AnimateScaleX(1f, 0.2f,
-			() => nextButton.AnimateScaleX(1f, 0.2f, FinishedAnimatingIn)));
+			() => nextButton.AnimateScaleX(1f, 0.2f, FinishedAnimating)));
 
 		AnimateCheckboxes(0, true);
 	}
@@ -67,7 +63,7 @@ public class ConfirmWordsForm : FormAnimation
 	protected override void AnimateOut()
 	{
 		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
 
 		nextButton.AnimateScaleX(0f, 0.1f,
 			() => wordInputField.AnimateScaleX(0f, 0.1f,
@@ -199,19 +195,10 @@ public class ConfirmWordsForm : FormAnimation
 		}
 
 		else
-			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, DisableMenu);
+			checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f/*, DisableMenu*/);
 		//}
 
 		//else
 		//	AnimateErrorIcon(true);
-	}
-
-	/// <summary>
-	/// Back button has been clicked
-	/// </summary>
-	private void BackButtonClicked()
-	{
-		DisableMenu();
-		// GO TO PREVIOUS FORM
 	}
 }

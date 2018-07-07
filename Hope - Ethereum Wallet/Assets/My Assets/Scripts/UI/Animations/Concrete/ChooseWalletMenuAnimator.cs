@@ -3,7 +3,7 @@
 /// <summary>
 /// Class which animates the ChooseWalletMenu.
 /// </summary>
-public sealed class ChooseWalletMenuAnimator : FormAnimation
+public sealed class ChooseWalletMenuAnimator : MenuAnimator
 {
 
     [SerializeField] private GameObject form;
@@ -19,7 +19,7 @@ public sealed class ChooseWalletMenuAnimator : FormAnimation
         form.AnimateGraphicAndScale(1f, 1f, 0.2f,
             () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
             () => ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => hopeButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn))));
+            () => hopeButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating))));
     }
 
     /// <summary>
@@ -30,6 +30,6 @@ public sealed class ChooseWalletMenuAnimator : FormAnimation
         hopeButton.AnimateGraphicAndScale(0f, 0.1f, 0.2f);
         ledgerButton.AnimateGraphicAndScale(0f, 0.1f, 0.2f);
         title.AnimateGraphicAndScale(0f, 0.1f, 0.2f,
-            () => form.AnimateGraphicAndScale(0f, 0.1f, 0.2f, FinishedAnimatingOut));
+            () => form.AnimateGraphicAndScale(0f, 0.1f, 0.2f, FinishedAnimating));
     }
 }

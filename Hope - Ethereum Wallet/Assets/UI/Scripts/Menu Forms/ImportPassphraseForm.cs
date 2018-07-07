@@ -3,7 +3,7 @@ using TMPro;
 using Hope.Utils.EthereumUtils;
 using UnityEngine.UI;
 
-public class ImportPassphraseForm : FormAnimation
+public class ImportPassphraseForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject form1;
@@ -28,7 +28,7 @@ public class ImportPassphraseForm : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		backButton1 = form1.transform.GetChild(0).gameObject;
 		backButton2 = form2.transform.GetChild(0).gameObject;
@@ -47,9 +47,6 @@ public class ImportPassphraseForm : FormAnimation
 		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
 		dropdownComponent.onValueChanged.AddListener(PassphraseWordCountChanged);
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
-		importButton.GetComponent<Button>().onClick.AddListener(ImportButtonClicked);
-		backButton1.GetComponent<Button>().onClick.AddListener(BackButtonClicked);
-		backButton2.GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -59,7 +56,7 @@ public class ImportPassphraseForm : FormAnimation
 	{
 		form1.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
-			() => wordCountDropdown.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimatingIn)));
+			() => wordCountDropdown.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating)));
 
 		pastePhraseButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => importButton.AnimateGraphicAndScale(1f, 1f, 0.2f));
@@ -88,7 +85,7 @@ public class ImportPassphraseForm : FormAnimation
 	private void AnimateFormsOut()
 	{
 		form1.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		form2.AnimateScaleY(0f, 0.15f, FinishedAnimatingOut);
+		form2.AnimateScaleY(0f, 0.15f, FinishedAnimating);
 
 		backButton1.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		backButton2.AnimateGraphicAndScale(0f, 0f, 0.15f);
@@ -260,23 +257,5 @@ public class ImportPassphraseForm : FormAnimation
 			AnimateIcon(errorIcon);
 			Debug.Log("Add popup saying clipboard text is not a passphrase");
 		}
-	}
-
-	/// <summary>
-	/// Import button has been clicked
-	/// </summary>
-	private void ImportButtonClicked()
-	{
-		DisableMenu();
-		// GO TO NEXT FORM
-	}
-
-	/// <summary>
-	/// Back button has been clicked
-	/// </summary>
-	private void BackButtonClicked()
-	{
-		DisableMenu();
-		// GO TO PREVIOUS FORM
 	}
 }

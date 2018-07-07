@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SignInForm : FormAnimation
+public class SignInForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject dim;
@@ -31,11 +31,10 @@ public class SignInForm : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
 		signInButton.GetComponent<Button>().onClick.AddListener(SignInClicked);
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(ExitButtonClicked);
 
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 		walletListForm = transform.parent.GetComponent<WalletListForm>();
@@ -51,7 +50,7 @@ public class SignInForm : FormAnimation
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateScaleX(1f, 0.1f, 
 			() => passwordInputField.AnimateScaleX(1f, 0.1f,
-			() => signInButton.AnimateScaleX(1f, 0.1f, FinishedAnimatingIn))));
+			() => signInButton.AnimateScaleX(1f, 0.1f, FinishedAnimating))));
 	}
 
 	/// <summary>
@@ -60,7 +59,7 @@ public class SignInForm : FormAnimation
 	protected override void AnimateOut()
 	{
 		title.AnimateScaleX(0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimatingOut));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating));
 
 		passwordInputField.AnimateScaleX(0f, 0.15f);
 		signInButton.AnimateScaleX(0f, 0.15f);
@@ -103,9 +102,4 @@ public class SignInForm : FormAnimation
 		//else
 			AnimateErrorIcon(true);
 	}
-
-	/// <summary>
-	/// Exit button is clicked
-	/// </summary>
-	private void ExitButtonClicked() => DisableMenu();
 }

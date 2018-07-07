@@ -7,7 +7,7 @@ using Nethereum.HdWallet;
 using NBitcoin;
 using Random = System.Random;
 
-public class CreatePassphraseForm : FormAnimation
+public class CreatePassphraseForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -25,7 +25,7 @@ public class CreatePassphraseForm : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		wordObjects = new GameObject[12];
 		words = new GameObject[12];
@@ -38,8 +38,6 @@ public class CreatePassphraseForm : FormAnimation
 
 		generateNewButton.GetComponent<Button>().onClick.AddListener(GenerateNewClicked);
 		copyAllButton.GetComponent<Button>().onClick.AddListener(CopyAllClicked);
-		confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButtonClicked);
-		form.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(BackButtonClicked);
 	}
 
 	/// <summary>
@@ -68,7 +66,7 @@ public class CreatePassphraseForm : FormAnimation
 
 		generateNewButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
 		copyAllButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
+			() => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
 
 		for (int i = 0; i < wordObjects.Length; i++)
 			wordObjects[i].AnimateGraphicAndScale(0f, 0f, 0.2f);
@@ -82,7 +80,7 @@ public class CreatePassphraseForm : FormAnimation
 	{
 		for (int x = 0; x < 3; x++)
 		{
-			if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.2f, FinishedAnimatingIn);
+			if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.2f, FinishedAnimating);
 
 			else if (x == 2) wordObjects[x + row].AnimateScaleX(1f, 0.2f, () => AnimatePassphrase(row += 3));
 
@@ -196,23 +194,5 @@ public class CreatePassphraseForm : FormAnimation
 	{
 		CopyPassphraseToClipboard();
 		AnimateCheckMarkIcon();
-	}
-
-	/// <summary>
-	/// Confirm button has been clicked
-	/// </summary>
-	private void ConfirmButtonClicked()
-	{
-		DisableMenu();
-		// GO TO NEXT FORM
-	}
-
-	/// <summary>
-	/// Back button has been clicked
-	/// </summary>
-	private void BackButtonClicked()
-	{
-		DisableMenu();
-		// GO TO PREVIOUS FORM
 	}
 }

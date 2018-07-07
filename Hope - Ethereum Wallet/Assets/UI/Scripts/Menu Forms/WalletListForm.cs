@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class WalletListForm : FormAnimation
+public class WalletListForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -14,7 +14,7 @@ public class WalletListForm : FormAnimation
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
-	protected override void InitializeElements()
+	private void Awake()
 	{
 		Transform walletListTransform = walletList.transform.GetChild(0).GetChild(0);
 		wallets = new GameObject[walletListTransform.childCount];
@@ -51,7 +51,7 @@ public class WalletListForm : FormAnimation
 			wallets[i].AnimateScaleX(0, 0.2f);
 
 		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimatingOut));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
 	}
 
 	/// <summary>
@@ -61,7 +61,7 @@ public class WalletListForm : FormAnimation
 	private void AnimateWallets(int index)
 	{
 		if (index == (wallets.Length - 1))
-			wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimatingIn);
+			wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
 		else
 			wallets[index].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++index));
 	}
