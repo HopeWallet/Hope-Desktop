@@ -46,7 +46,7 @@ public class HOPETesting : MonoBehaviour
 
     [Inject] private PopupManager popupManager;
     [Inject] private EthereumNetworkManager ethereumNetwork;
-    [Inject] private ProtectedStringDataCache protectedStringDataCache;
+    [Inject] private DynamicDataCache dynamicDataCache;
 
     private UserWalletNew walletTest;
 
@@ -61,14 +61,14 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, protectedStringDataCache);
+        walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, dynamicDataCache);
     }
 
     private void Update()
     {
         if (lastPass != password)
         {
-            protectedStringDataCache.SetData(new ProtectedString(password), 0);
+            dynamicDataCache.SetData(new ProtectedString(password), 0);
             lastPass = password;
         }
     }

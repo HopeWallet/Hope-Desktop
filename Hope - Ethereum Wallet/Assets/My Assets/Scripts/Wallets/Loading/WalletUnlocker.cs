@@ -14,7 +14,7 @@ public class WalletUnlocker : WalletLoaderBase
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
-        ProtectedStringDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
+        DynamicDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
     {
     }
 

@@ -14,14 +14,14 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
     public TMP_InputField walletNameField;
     public TMP_InputField passwordField;
 
-    private ProtectedStringDataCache protectedStringDataCache;
+    private DynamicDataCache dynamicDataCache;
 
     /// <summary>
     /// Adds the required dependencies into this class.
     /// </summary>
-    /// <param name="protectedStringDataCache"> The active ProtectedStringDataCache. </param>
+    /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
     [Inject]
-    public void Construct(ProtectedStringDataCache protectedStringDataCache) => this.protectedStringDataCache = protectedStringDataCache;
+    public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
 
     /// <summary>
     /// Adds the button listeners.
@@ -37,8 +37,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
     /// </summary>
     private void CreateWalletNameAndPass()
     {
-        protectedStringDataCache.SetData(new ProtectedString(passwordField.text), 0);
-        protectedStringDataCache.SetData(new ProtectedString(walletNameField.name), 1);
+        dynamicDataCache.SetData(new ProtectedString(passwordField.text), 0);
+        dynamicDataCache.SetData(walletNameField.name, 1);
 
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }

@@ -25,7 +25,6 @@ public sealed class UserWalletNew
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
-    private readonly ProtectedStringDataCache protectedStringDataCache;
 
     private readonly WalletCreator walletCreator;
     private readonly WalletUnlocker walletUnlocker;
@@ -43,19 +42,18 @@ public sealed class UserWalletNew
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    /// <param name="protectedStringDataCache"> The active ProtectedStringDataCache. </param>
+    /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
     public UserWalletNew(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
-        ProtectedStringDataCache protectedStringDataCache)
+        DynamicDataCache dynamicDataCache)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
-        this.protectedStringDataCache = protectedStringDataCache;
 
-        walletCreator = new WalletCreator(popupManager, prefPassword, protectedStringDataCache);
-        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, protectedStringDataCache);
+        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache);
+        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache);
     }
 
     /// <summary>

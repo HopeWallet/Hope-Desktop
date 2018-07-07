@@ -55,10 +55,19 @@ public abstract class Menu : MonoBehaviour
     /// <summary>
     /// Gets the Menus animation component.
     /// </summary>
-    private void Awake() => Animator = GetComponent<MenuAnimator>();
+    private void Awake()
+    {
+        Animator = GetComponent<MenuAnimator>();
+        OnAwake();
+    }
+
+    /// <summary>
+    /// Called during <see cref="Awake"/>.
+    /// </summary>
+    protected virtual void OnAwake() { }
 
     /// <summary>
     /// Called when the back button is pressed.
     /// </summary>
-	public abstract void GoBack();
+    public abstract void GoBack();
 }

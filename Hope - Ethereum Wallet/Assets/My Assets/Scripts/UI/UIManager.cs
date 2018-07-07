@@ -24,6 +24,8 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     private readonly Stack<Menu> menus = new Stack<Menu>();
     private readonly List<Menu> createdMenus = new List<Menu>();
 
+    private Menu closingMenu;
+
     /// <summary>
     /// Initializes the UIManager with all the required dependencies.
     /// </summary>
@@ -66,11 +68,14 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <param name="clickType"> The ClickType of the escape button press. </param>
     public void EscapeButtonPressed(ClickType clickType)
     {
-        if (clickType == ClickType.Down)
-        {
-            if (!popupManager.CloseActivePopup(typeof(LoadingPopup)))
-                menus.Peek().GoBack();
-        }
+        if (clickType != ClickType.Down)
+            return;
+
+        if (popupManager.CloseActivePopup(typeof(LoadingPopup)))
+            return;
+
+        if (closingMenu?.Animator.Animating != true)
+            menus.Peek().GoBack();
     }
 
     /// <summary>
@@ -109,18 +114,18 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         if (menus.Count == 0)
             return;
 
-        var menuToRemove = menus.Pop();
+        closingMenu = menus.Pop();
 
-        menuToRemove.Animator.AnimateDisable(() =>
+        closingMenu.Animator.AnimateDisable(() =>
         {
-            if (menuToRemove.DestroyWhenClosed)
+            if (closingMenu.DestroyWhenClosed)
             {
-                Destroy(menuToRemove.gameObject);
-                createdMenus.Remove(menuToRemove);
+                Destroy(closingMenu.gameObject);
+                createdMenus.Remove(closingMenu);
             }
             else
             {
-                menuToRemove.gameObject.SetActive(false);
+                closingMenu.gameObject.SetActive(false);
             }
 
             if (menus.Count > 0)
@@ -129,6 +134,8 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
                 newActiveMenu.gameObject.SetActive(true);
                 newActiveMenu.Animator.AnimateEnable();
             }
+
+            closingMenu = null;
         });
     }
 

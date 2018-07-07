@@ -25,15 +25,15 @@ public class UserWalletManager
     /// <param name="settings"> The settings to initialize the wallet with. </param>
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
-    /// <param name="byteDataCache"> The active ByteDataCache. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     public UserWalletManager(
         Settings settings,
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
-        ProtectedStringDataCache byteDataCache)
+        DynamicDataCache dynamicDataCache)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, byteDataCache);
+        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache);
     }
 
     /// <summary>
