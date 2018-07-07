@@ -15,7 +15,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
 
     private UserWalletManager userWalletManager;
     private ButtonClickObserver buttonObserver;
-    private ProtectedStringDataCache byteDataCache;
+    private DynamicDataCache dynamicDataCache;
 
     private const int PASSWORD_LENGTH = AESEncryption.MIN_PASSWORD_LENGTH;
 
@@ -24,13 +24,13 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
-    /// <param name="byteDataCache"> The active ByteDataCache. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     [Inject]
-    public void Construct(UserWalletManager userWalletManager, ButtonClickObserver buttonObserver, ProtectedStringDataCache byteDataCache)
+    public void Construct(UserWalletManager userWalletManager, ButtonClickObserver buttonObserver, DynamicDataCache dynamicDataCache)
     {
         this.userWalletManager = userWalletManager;
         this.buttonObserver = buttonObserver;
-        this.byteDataCache = byteDataCache;
+        this.dynamicDataCache = dynamicDataCache;
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     public void SetPassword()
     {
-        byteDataCache.SetData(new ProtectedString(passwordFields[1].text), 0);
+        dynamicDataCache.SetData(new ProtectedString(passwordFields[1].text), 0);
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }
 

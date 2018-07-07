@@ -1,4 +1,5 @@
 ﻿using Hope.Security.Encryption;
+using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
@@ -16,7 +17,7 @@ public sealed class UserWallet
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
-    private readonly ProtectedStringDataCache protectedStringDataCache;
+    private readonly DynamicDataCache dynamicDataCache;
 
     private Account account;
 
@@ -36,16 +37,16 @@ public sealed class UserWallet
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
-    /// <param name="protectedStringDataCache"> The active ProtectedStringDataCache. </param>
+    /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
     public UserWallet(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
-        ProtectedStringDataCache protectedStringDataCache)
+        DynamicDataCache dynamicDataCache)
     {
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
-        this.protectedStringDataCache = protectedStringDataCache;
+        this.dynamicDataCache = dynamicDataCache;
     }
 
     /// <summary>
@@ -56,8 +57,8 @@ public sealed class UserWallet
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary(0);
 
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
-            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) => TryCreateAccount(pass));
+        using (var str = (dynamicDataCache.GetData(0) as ProtectedString)?.CreateDisposableData())
+            AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public sealed class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        using (var str = protectedStringDataCache.GetData(0).CreateDisposableData())
+        using (var str = (dynamicDataCache.GetData(0) as ProtectedString)?.CreateDisposableData())
         {
             TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
             {
@@ -93,7 +94,7 @@ public sealed class UserWallet
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
         popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(protectedStringDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
+                    .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(dynamicDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);

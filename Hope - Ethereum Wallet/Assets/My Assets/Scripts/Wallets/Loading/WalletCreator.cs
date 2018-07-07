@@ -17,7 +17,7 @@ public class WalletCreator : WalletLoaderBase
     public WalletCreator(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
-        ProtectedStringDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
+        DynamicDataCache dynamicDataCache) : base(popupManager, playerPrefPassword, dynamicDataCache)
     {
     }
 

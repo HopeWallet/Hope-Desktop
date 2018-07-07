@@ -1,18 +1,15 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using Nethereum.HdWallet;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public abstract class WalletLoaderBase
 {
 
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPassword playerPrefPassword;
-    protected readonly ProtectedStringDataCache protectedStringDataCache;
+    protected readonly DynamicDataCache dynamicDataCache;
 
     protected Action onWalletLoaded;
 
@@ -20,11 +17,11 @@ public abstract class WalletLoaderBase
 
     protected abstract string LoadingText { get; }
 
-    protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, ProtectedStringDataCache protectedStringDataCache)
+    protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, DynamicDataCache dynamicDataCache)
     {
         this.popupManager = popupManager;
         this.playerPrefPassword = playerPrefPassword;
-        this.protectedStringDataCache = protectedStringDataCache;
+        this.dynamicDataCache = dynamicDataCache;
     }
 
     public void Load(object data, out ProtectedString[] addresses, Action onWalletLoaded)
@@ -33,7 +30,7 @@ public abstract class WalletLoaderBase
         SetupLoadActions(onWalletLoaded);
         SetupPopup();
 
-        using (var pass = protectedStringDataCache.GetData(0).CreateDisposableData())
+        using (var pass = dynamicDataCache.GetData(0).CreateDisposableData())
             LoadWallet(data, pass.Value);
     }
 
