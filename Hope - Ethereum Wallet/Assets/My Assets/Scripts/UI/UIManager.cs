@@ -68,14 +68,14 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <param name="clickType"> The ClickType of the escape button press. </param>
     public void EscapeButtonPressed(ClickType clickType)
     {
-        if (clickType == ClickType.Down)
-        {
-            if (!popupManager.CloseActivePopup(typeof(LoadingPopup)))
-            {
-                if (closingMenu?.Animator.Animating != true)
-                    menus.Peek().GoBack();
-            }
-        }
+        if (clickType != ClickType.Down)
+            return;
+
+        if (popupManager.CloseActivePopup(typeof(LoadingPopup)))
+            return;
+
+        if (closingMenu?.Animator.Animating != true)
+            menus.Peek().GoBack();
     }
 
     /// <summary>
