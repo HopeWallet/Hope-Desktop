@@ -11,7 +11,7 @@ using Zenject;
 /// <summary>
 /// Class used for creating a new ethereum wallet.
 /// </summary>
-public class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
+public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 {
     public GameObject[] objects;
 
@@ -24,6 +24,10 @@ public class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 
     private readonly List<TextMeshProUGUI> wordFields = new List<TextMeshProUGUI>();
 
+    /// <summary>
+    /// Adds the DynamicDataCache dependency.
+    /// </summary>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     [Inject]
     public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
 
@@ -42,26 +46,33 @@ public class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     }
 
     /// <summary>
-    /// Creates a wallet with the newly created mnemonic phrase.
+    /// Opens the confirm words menu.
     /// </summary>
-    //public override void LoadWallet() => userWalletManager.CreateWallet(mnemonic);
-
     public void ConfirmWords()
     {
 
     }
 
+    /// <summary>
+    /// Generates the mnemonic phrase.
+    /// </summary>
     public void GenerateMnemonic()
     {
         dynamicDataCache.SetData(new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase), 2);
     }
 
+    /// <summary>
+    /// Copies the mnemonic phrase to the clipboard.
+    /// </summary>
     public void CopyMnemonic()
     {
         using (var mnemonic = (dynamicDataCache.GetData(2) as ProtectedString)?.CreateDisposableData())
             ClipboardUtils.CopyToClipboard(mnemonic.Value);
     }
 
+    /// <summary>
+    /// Updates the word text objects with the initial mnemonic phrase.
+    /// </summary>
     private void UpdateWordFields()
     {
         for (int i = 0; i < objects.Length; i++)
