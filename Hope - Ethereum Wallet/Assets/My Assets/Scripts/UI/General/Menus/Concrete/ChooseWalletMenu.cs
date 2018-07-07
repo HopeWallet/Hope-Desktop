@@ -32,9 +32,14 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenLedgerWallet()
     {
+        // TODO
     }
 
+    /// <summary>
+    /// Opens the ExitConfirmationPopup which allows the user to exit the wallet.
+    /// </summary>
     protected override void OnBackPressed()
     {
+        // TODO
     }
 }

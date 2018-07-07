@@ -141,7 +141,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     private void BindMenuFactories()
     {
         BindMenuFactory<CreatePasswordMenu>();
-        BindMenuFactory<ImportOrCreateMenu>();
+        BindMenuFactory<ImportOrCreateMnemonicMenu>();
         BindMenuFactory<CreatePassphraseMenu>();
         BindMenuFactory<ImportWalletMenu>();
         BindMenuFactory<UnlockWalletMenu>();

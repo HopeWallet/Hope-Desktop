@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class HopeWalletForm : MenuAnimator
+/// <summary>
+/// Class which animates the transitions for the ImportOrCreateMnemonicMenu.
+/// </summary>
+public class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;

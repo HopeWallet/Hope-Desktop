@@ -13,7 +13,7 @@ public class MenuFactoryManager
     /// Initializes all the menu factories.
     /// </summary>
     public MenuFactoryManager(CreatePasswordMenu.Factory createPasswordMenuFactory,
-        ImportOrCreateMenu.Factory importOrCreateMenuFactory,
+        ImportOrCreateMnemonicMenu.Factory importOrCreateMenuFactory,
         CreatePassphraseMenu.Factory walletCreateMenuFactory,
         ImportWalletMenu.Factory walletImportMenuFactory,
         UnlockWalletMenu.Factory walletUnlockMenuFactory,

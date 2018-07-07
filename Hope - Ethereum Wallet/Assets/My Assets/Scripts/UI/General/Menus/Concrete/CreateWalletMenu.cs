@@ -40,6 +40,6 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
         protectedStringDataCache.SetData(new ProtectedString(passwordField.text), 0);
         protectedStringDataCache.SetData(new ProtectedString(walletNameField.name), 1);
 
-        // Open next menu
+        uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }
 }

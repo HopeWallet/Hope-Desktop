@@ -73,7 +73,6 @@ GameObject:
   - component: {fileID: 224265822525280888}
   - component: {fileID: 223331781487538812}
   - component: {fileID: 114536224995614438}
-  - component: {fileID: 114369706049404724}
   m_Layer: 5
   m_Name: ImportOrCreateWalletMenu
   m_TagString: Untagged
@@ -159,21 +158,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Import Wallet
---- !u!114 &114369706049404724
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1793149076540006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c237643aaad99b4a8f680fb5b521972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DestroyWhenClosed: 1
-  DisableMenusUnderneath: 1
-  importButton: {fileID: 114660127032570724}
-  createButton: {fileID: 114829016718171974}
 --- !u!114 &114536224995614438
 MonoBehaviour:
   m_ObjectHideFlags: 1
