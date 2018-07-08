@@ -209,6 +209,6 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
             {
                 AnimateErrorIcon(true);
             }
+        }
     }
-}
 }

@@ -6,32 +6,50 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// Menu which appears which allows the user to confirm several words of the mnemonic phrase to verify it has been saved in some form.
+/// </summary>
 public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu>
 {
-
     public Button backButton;
 
     private DynamicDataCache dynamicDataCache;
 
+    /// <summary>
+    /// Adds the DynamicDataCache dependency.
+    /// </summary>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     [Inject]
     public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
 
+    /// <summary>
+    /// Gets the word numbers and words of the part of the mnemonic that needs confirming.
+    /// </summary>
     protected override void OnAwake()
     {
         GetConfirmationNumbers();
         GetConfirmationWords();
     }
 
+    /// <summary>
+    /// Adds the back button listener.
+    /// </summary>
     private void Start()
     {
         backButton.onClick.AddListener(GoBack);
     }
 
+    /// <summary>
+    /// Starts to load the wallet.
+    /// </summary>
     public override void LoadWallet()
     {
 
     }
 
+    /// <summary>
+    /// Gets the numbers of the words that need to be confirmed.
+    /// </summary>
     private void GetConfirmationNumbers()
     {
         int[] numbers;
@@ -44,6 +62,9 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         dynamicDataCache.SetData("confirmation numbers", numbers);
     }
 
+    /// <summary>
+    /// Gets the words that need to be confirmed.
+    /// </summary>
     private void GetConfirmationWords()
     {
         ProtectedString[] correctWords;
@@ -62,5 +83,4 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 
         dynamicDataCache.SetData("confirmation words", correctWords);
     }
-
 }

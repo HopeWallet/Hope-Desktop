@@ -4,6 +4,10 @@ using System.Reflection;
 
 namespace Hope.Security.Injection
 {
+    //
+    // TODO
+    //
+
     public sealed class AssemblyInjectionDetector
     {
 
