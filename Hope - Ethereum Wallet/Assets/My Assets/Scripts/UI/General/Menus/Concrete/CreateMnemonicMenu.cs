@@ -58,7 +58,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// </summary>
     public void GenerateMnemonic()
     {
-        dynamicDataCache.SetData(new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase), 2);
+        dynamicDataCache.SetData("mnemonic", new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase));
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// </summary>
     public void CopyMnemonic()
     {
-        using (var mnemonic = (dynamicDataCache.GetData(2) as ProtectedString)?.CreateDisposableData())
+        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
             ClipboardUtils.CopyToClipboard(mnemonic.Value);
     }
 
@@ -78,7 +78,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
         for (int i = 0; i < objects.Length; i++)
             wordFields.Add(objects[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>());
 
-        using (var mnemonic = (dynamicDataCache.GetData(2) as ProtectedString)?.CreateDisposableData())
+        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
             string[] splitWords = mnemonic.Value.GetMnemonicWords();
 

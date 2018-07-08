@@ -121,7 +121,7 @@ public class CreateMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void StartWordAnimation()
     {
-        using (var mnemonic = (dynamicDataCache.GetData(2) as ProtectedString)?.CreateDisposableData())
+        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
             mnemonicWords = mnemonic.Value.GetMnemonicWords();
 
         Animating = true;

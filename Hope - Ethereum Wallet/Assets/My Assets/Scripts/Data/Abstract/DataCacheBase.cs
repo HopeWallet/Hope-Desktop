@@ -6,32 +6,29 @@
 public abstract class DataCache<T>
 {
 
-    private readonly List<T> dataCollection = new List<T>();
+    private readonly Dictionary<string, T> data = new Dictionary<string, T>();
 
     /// <summary>
-    /// Sets the data cache at a given index.
+    /// Sets a value to the DataCache with the key.
     /// </summary>
-    /// <param name="value"> The value of the data to set. </param>
-    /// <param name="index"> The index to set the data at. If the index is outside the range, simply add the data onto the end of the list. </param>
-    public void SetData(T value, int index)
+    /// <param name="key"> The key to use to retrieve the value. </param>
+    /// <param name="value"> The value to set. </param>
+    public void SetData(string key, T value)
     {
-        if (dataCollection.Count <= index)
-            dataCollection.Add(value);
+        if (data.ContainsKey(key))
+            data[key] = value;
         else
-            dataCollection[index] = value;
+            data.Add(key, value);
     }
 
     /// <summary>
-    /// Gets the data from the cache at a given index.
+    /// Gets some data from the DataCache given the key.
     /// </summary>
-    /// <param name="index"> The index of the data. </param>
-    /// <returns> The data found at the given index. </returns>
-    public T GetData(int index)
+    /// <param name="key"> The key to use to access the data. </param>
+    /// <returns> The data retrieved from the cache. </returns>
+    public T GetData(string key)
     {
-        if (index >= dataCollection.Count)
-            return default(T);
-
-        return dataCollection[index];
+        return data.ContainsKey(key) ? data[key] : default(T);
     }
 
 }

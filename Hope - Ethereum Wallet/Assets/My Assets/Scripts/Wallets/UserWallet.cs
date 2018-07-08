@@ -57,7 +57,7 @@ public sealed class UserWallet
         StartLoadingPopup("Unlocking ");
         prefPassword.PopulatePrefDictionary(0);
 
-        using (var str = (dynamicDataCache.GetData(0) as ProtectedString)?.CreateDisposableData())
+        using (var str = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
             AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, TryCreateAccount);
     }
 
@@ -68,7 +68,7 @@ public sealed class UserWallet
     public void CreateWallet(string mnemonic)
     {
         StartLoadingPopup("Creating ");
-        using (var str = (dynamicDataCache.GetData(0) as ProtectedString)?.CreateDisposableData())
+        using (var str = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
         {
             TryCreateWallet(mnemonic, wallet => AsyncWalletEncryption.GetEncryptionPasswordAsync(prefPassword, str.Value, (pass) =>
             {

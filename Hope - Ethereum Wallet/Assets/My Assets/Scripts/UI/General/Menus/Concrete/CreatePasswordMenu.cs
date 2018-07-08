@@ -63,7 +63,7 @@ public class CreatePasswordMenu : Menu<CreatePasswordMenu>, ITabButtonObservable
     /// </summary>
     public void SetPassword()
     {
-        dynamicDataCache.SetData(new ProtectedString(passwordFields[1].text), 0);
+        dynamicDataCache.SetData("pass", new ProtectedString(passwordFields[1].text));
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }
 
