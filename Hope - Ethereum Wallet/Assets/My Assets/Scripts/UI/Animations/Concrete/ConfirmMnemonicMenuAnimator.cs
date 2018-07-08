@@ -24,6 +24,7 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     private GameObject[] checkBoxes;
     private int[] randomNums;
     private string[] correctWords;
+
     private int wordIndex;
     private bool errorIconVisible;
 
@@ -58,17 +59,25 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
 
         checkBoxes = new GameObject[4];
         GenerateRandomInts();
-        
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        {
-            List<string> words = mnemonic.Value.GetMnemonicWords().ToList();
-            correctWords = words.Where(word => randomNums.Contains(words.IndexOf(word))).ToArray();
-        }
+        GetCorrectWords();
 
         correctWords.LogArray();
 
         for (int i = 0; i < checkBoxes.Length; i++)
             checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
+    }
+
+    /// <summary>
+    /// Gets the correct words that need to be verified by the user.
+    /// </summary>
+    private void GetCorrectWords()
+    {
+        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        {
+            List<int> randomIntList = randomNums.ToList();
+            List<string> words = mnemonic.Value.GetMnemonicWords().ToList();
+            correctWords = words.Where(word => randomNums.Contains(words.IndexOf(word) + 1)).OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1)).ToArray();
+        }
     }
 
     /// <summary>
@@ -79,7 +88,7 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
         form.AnimateGraphicAndScale(1f, 1f, 0.2f,
             () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
 
-        instructions.AnimateScaleX(0.85f, 0.2f,
+        instructions.AnimateScaleX(1f, 0.2f,
             () => wordInputField.AnimateScaleX(1f, 0.2f,
             () => nextButton.AnimateScaleX(1f, 0.2f, FinishedAnimating)));
 
@@ -119,21 +128,6 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void GenerateRandomInts()
     {
-        //randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    for (int x = 0; x < 4; x++)
-        //    {
-        //        if (i != x && randomNums[i] == randomNums[x])
-        //        {
-        //            randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
-        //            i = 0;
-        //            x = 0;
-        //        }
-        //    }
-        //}
-
         do
         {
             randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
@@ -216,10 +210,8 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void NextButtonClicked()
     {
-        //Check if word is correct
-
-        //if (wordIsCorrect)
-        //{
+        if (wordInputField.GetComponent<TMP_InputField>().text == correctWords[wordIndex])
+        {
             if (wordIndex != 3)
             {
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
@@ -229,12 +221,12 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
             }
             else
             {
-                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f/*, DisableMenu*/);
+                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
             }
-        //}
-        //else
-        //{
-        //    AnimateErrorIcon(true);
-        //}
+        }
+        else
+        {
+            AnimateErrorIcon(true);
+        }
     }
 }

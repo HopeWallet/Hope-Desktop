@@ -80,7 +80,7 @@ public class CreateMnemonicMenuAnimator : MenuAnimator
             () => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
 
         for (int i = 0; i < wordObjects.Count; i++)
-            wordObjects[i].AnimateGraphicAndScale(0f, 0f, 0.2f);
+            wordObjects[i].AnimateScaleX(0f, 0.2f);
     }
 
     /// <summary>
