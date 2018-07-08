@@ -59,13 +59,12 @@ public class CreateMnemonicMenuAnimator : MenuAnimator
     protected override void AnimateIn()
     {
         form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
+            () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f, 
+			() => AnimatePassphrase(0)));
 
         generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
             () => copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));
-
-        AnimatePassphrase(0);
+            () => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));       
     }
 
     /// <summary>
