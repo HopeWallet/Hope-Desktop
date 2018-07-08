@@ -86,6 +86,9 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     {
         Action openMenuAction = () =>
         {
+            if (menus.Count > 0)
+                menus.Peek().gameObject.SetActive(false);
+
             var sameTypeMenus = createdMenus.OfType<T>();
 
             if (sameTypeMenus.Any())
@@ -145,9 +148,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <param name="newMenu"> The new menu to enable. </param>
     private void EnableNewMenu(Menu newMenu)
     {
-        newMenu.gameObject.SetActive(true);
-        newMenu.Animator.AnimateEnable();
-
         if (menus.Count > 0)
         {
             var topCanvas = newMenu.GetComponent<Canvas>();
@@ -156,6 +156,9 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         }
 
         menus.Push(newMenu);
+
+        newMenu.gameObject.SetActive(true);
+        newMenu.Animator.AnimateEnable();
     }
 
     /// <summary>

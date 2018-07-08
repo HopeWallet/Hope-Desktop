@@ -19,7 +19,8 @@ public class MenuFactoryManager
         UnlockWalletMenu.Factory walletUnlockMenuFactory,
         OpenWalletMenu.Factory openedWalletMenuFactory,
         ChooseWalletMenu.Factory chooseWalletMenuFactory,
-        CreateWalletMenu.Factory createWalletMenuFactory)
+        CreateWalletMenu.Factory createWalletMenuFactory,
+        ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory)
     {
         menuFactories.AddItems(createPasswordMenuFactory,
                                importOrCreateMenuFactory,
@@ -28,7 +29,8 @@ public class MenuFactoryManager
                                walletUnlockMenuFactory,
                                openedWalletMenuFactory,
                                chooseWalletMenuFactory,
-                               createWalletMenuFactory);
+                               createWalletMenuFactory,
+                               confirmMnemonicMenuFactory);
     }
 
     /// <summary>

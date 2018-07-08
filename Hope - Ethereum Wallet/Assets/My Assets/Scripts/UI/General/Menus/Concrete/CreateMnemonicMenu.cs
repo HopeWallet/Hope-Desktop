@@ -40,7 +40,10 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
         backButton.onClick.AddListener(GoBack);
         copyMnemonic.onClick.AddListener(CopyMnemonic);
         generateNewWords.onClick.AddListener(GenerateMnemonic);
+    }
 
+    private void OnEnable()
+    {
         GenerateMnemonic();
         UpdateWordFields();
     }
@@ -50,7 +53,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// </summary>
     public void ConfirmWords()
     {
-
+        uiManager.OpenMenu<ConfirmMnemonicMenu>();
     }
 
     /// <summary>

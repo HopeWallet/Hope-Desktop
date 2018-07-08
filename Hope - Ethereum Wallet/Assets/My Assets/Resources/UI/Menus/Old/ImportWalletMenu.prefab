@@ -537,7 +537,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
-  DisableMenusUnderneath: 1
   seedInput: {fileID: 114904403400682024}
   importButton: {fileID: 114844639412291358}
   backButton: {fileID: 114908494553177312}
