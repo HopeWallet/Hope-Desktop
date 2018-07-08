@@ -52,16 +52,15 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void Awake()
     {
+        checkBoxes = new GameObject[4];
+
         confirmMnemonicMenu = GetComponent<ConfirmMnemonicMenu>();
 
         wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
 
-        checkBoxes = new GameObject[4];
         GenerateRandomInts();
         GetCorrectWords();
-
-        correctWords.LogArray();
 
         for (int i = 0; i < checkBoxes.Length; i++)
             checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
@@ -181,6 +180,7 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
         instructions.AnimateTransformX(animatingIn ? 0f : -350f, 0.2f);
         instructions.AnimateGraphic(animatingIn ? 1f : 0f, 0.2f);
         wordInputField.AnimateTransformX(animatingIn ? 0f : -350f, 0.2f);
+        wordInputField.GetComponent<TMP_InputField>().textComponent.gameObject.AnimateGraphic(animatingIn ? 1f : 0f, 0.2f);
 
         if (animatingIn)
             wordInputField.AnimateGraphic(animatingIn ? 1f : 0f, 0.2f, () => Animating = false);

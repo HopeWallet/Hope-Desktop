@@ -42,6 +42,9 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
         generateNewWords.onClick.AddListener(GenerateMnemonic);
     }
 
+    /// <summary>
+    /// Generates the mnemonic words and sets the initial text fields to the text.
+    /// </summary>
     private void OnEnable()
     {
         GenerateMnemonic();
