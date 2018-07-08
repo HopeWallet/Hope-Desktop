@@ -210,7 +210,7 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void NextButtonClicked()
     {
-        if (wordInputField.GetComponent<TMP_InputField>().text == correctWords[wordIndex])
+        if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(correctWords[wordIndex]))
         {
             if (wordIndex != 3)
             {
