@@ -22,8 +22,6 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     private ConfirmMnemonicMenu confirmMnemonicMenu;
 
     private GameObject[] checkBoxes;
-    private int[] randomNums;
-    private string[] correctWords;
 
     private int wordIndex;
     private bool errorIconVisible;
@@ -59,24 +57,16 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
         wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
 
-        GenerateRandomInts();
-        GetCorrectWords();
-
         for (int i = 0; i < checkBoxes.Length; i++)
             checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
     }
 
     /// <summary>
-    /// Gets the correct words that need to be verified by the user.
+    /// Sets the initial word text to what the first word should be.
     /// </summary>
-    private void GetCorrectWords()
+    private void Start()
     {
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        {
-            List<int> randomIntList = randomNums.ToList();
-            List<string> words = mnemonic.Value.GetMnemonicWords().ToList();
-            correctWords = words.Where(word => randomNums.Contains(words.IndexOf(word) + 1)).OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1)).ToArray();
-        }
+        SetWordText();
     }
 
     /// <summary>
@@ -123,23 +113,12 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     }
 
     /// <summary>
-    /// Generates a random word, and checks if it has any repeated numbers
-    /// </summary>
-    private void GenerateRandomInts()
-    {
-        do
-        {
-            randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
-        } while (randomNums.Distinct().Count() < 4);
-
-        SetWordText();
-    }
-
-    /// <summary>
     /// Sets the various text to ask for the next number
     /// </summary>
     private void SetWordText()
     {
+        int[] randomNums = dynamicDataCache.GetData("confirmation numbers");
+
         instructions.GetComponent<TextMeshProUGUI>().text = "Please enter word #" + randomNums[wordIndex] + ":";
 
         TMP_InputField inputField = wordInputField.GetComponent<TMP_InputField>();
@@ -210,23 +189,26 @@ public class ConfirmMnemonicMenuAnimator : MenuAnimator
     /// </summary>
     private void NextButtonClicked()
     {
-        if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(correctWords[wordIndex]))
+        using (var word = ((ProtectedString[])dynamicDataCache.GetData("confirmation words"))[wordIndex].CreateDisposableData())
         {
-            if (wordIndex != 3)
+            if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(word.Value/*((string[])dynamicDataCache.GetData("confirmation words"))[wordIndex]*/))
             {
-                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-                Animating = true;
-                AnimateNextWord(false);
-                wordIndex++;
+                if (wordIndex != checkBoxes.Length - 1)
+                {
+                    checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
+                    Animating = true;
+                    AnimateNextWord(false);
+                    wordIndex++;
+                }
+                else
+                {
+                    checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
+                }
             }
             else
             {
-                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
+                AnimateErrorIcon(true);
             }
-        }
-        else
-        {
-            AnimateErrorIcon(true);
-        }
     }
+}
 }
