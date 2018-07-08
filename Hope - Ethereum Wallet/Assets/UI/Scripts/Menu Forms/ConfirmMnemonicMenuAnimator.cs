@@ -1,8 +1,9 @@
-﻿using TMPro;
+﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfirmWordsForm : MenuAnimator
+public class ConfirmMnemonicMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject form;
@@ -90,20 +91,25 @@ public class ConfirmWordsForm : MenuAnimator
 	/// </summary>
 	private void GenerateRandomInts()
 	{
-		randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
+		//randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
 
-		for (int i = 0; i < 4; i++)
-		{
-			for (int x = 0; x < 4; x++)
-			{
-				if (i != x && randomNums[i] == randomNums[x])
-				{
-					randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
-					i = 0;
-					x = 0;
-				}
-			}
-		}
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	for (int x = 0; x < 4; x++)
+		//	{
+		//		if (i != x && randomNums[i] == randomNums[x])
+		//		{
+		//			randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
+		//			i = 0;
+		//			x = 0;
+		//		}
+		//	}
+		//}
+
+        do
+        {
+            randomNums = new int[4] { Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13), Random.Range(1, 13) };
+        } while (randomNums.Distinct().Count() < 4);
 
 		SetWordText();
 	}
@@ -172,7 +178,7 @@ public class ConfirmWordsForm : MenuAnimator
 	/// <param name="str"> The current string that is in the word input field </param>
 	private void InputFieldChanged(string str)
 	{
-		nextButton.GetComponent<Button>().interactable = str != "" ? true : false;
+		nextButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
 
 		if (errorIconVisible) AnimateErrorIcon(false);
 	}

@@ -30,7 +30,7 @@ public abstract class WalletLoaderBase
         SetupLoadActions(onWalletLoaded);
         SetupPopup();
 
-        using (var pass = dynamicDataCache.GetData(0).CreateDisposableData())
+        using (var pass = dynamicDataCache.GetData("pass").CreateDisposableData())
             LoadWallet(data, pass.Value);
     }
 

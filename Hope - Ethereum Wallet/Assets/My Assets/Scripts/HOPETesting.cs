@@ -68,7 +68,7 @@ public class HOPETesting : MonoBehaviour
     {
         if (lastPass != password)
         {
-            dynamicDataCache.SetData(new ProtectedString(password), 0);
+            dynamicDataCache.SetData("pass", new ProtectedString(password));
             lastPass = password;
         }
     }

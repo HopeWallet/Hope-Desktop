@@ -37,8 +37,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
     /// </summary>
     private void CreateWalletNameAndPass()
     {
-        dynamicDataCache.SetData(new ProtectedString(passwordField.text), 0);
-        dynamicDataCache.SetData(walletNameField.name, 1);
+        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
+        dynamicDataCache.SetData("name", walletNameField.name);
 
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }
