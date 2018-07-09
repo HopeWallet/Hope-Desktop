@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ public static class InputFieldUtils
         var system = EventSystem.current;
         var selectedField = system.currentSelectedGameObject.GetComponent<InputField>();
 
-        if (selectedField == null || !selectedField.interactable)
+        if (selectedField?.interactable != true)
             return;
 
         do {
@@ -51,9 +52,8 @@ public static class InputFieldUtils
         var decimalIndex = sendAmount.IndexOf(".");
         var assetDecimalLength = decimals + decimalIndex + 1;
 
-        if (decimals == 0)
-            if (decimalIndex != -1)
-                sendAmount = sendAmount.Substring(0, sendAmount.Length - 1);
+        if (decimals == 0 && decimalIndex != -1)
+            sendAmount = sendAmount.Substring(0, sendAmount.Length - 1);
 
         var substringLength = assetDecimalLength > MAX_BALANCE_FIELD_LENGTH || decimalIndex == -1 ? MAX_BALANCE_FIELD_LENGTH : assetDecimalLength;
         if (sendAmount.Length > substringLength)
@@ -67,5 +67,11 @@ public static class InputFieldUtils
     /// </summary>
     /// <returns> The currently active input field. </returns>
     public static InputField GetActiveInputField() => EventSystem.current.currentSelectedGameObject.GetComponent<InputField>();
+
+    /// <summary>
+    /// Gets the actively selected input field.
+    /// </summary>
+    /// <returns> The currently active input field. </returns>
+    public static TMP_InputField GetActiveTMPInputField() => EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>();
 
 }

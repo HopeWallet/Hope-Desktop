@@ -23,7 +23,7 @@ public class ImportOrCreateMnemonicMenu : Menu<ImportOrCreateMnemonicMenu>
     /// <summary>
     /// Changes to the import wallet gui.
     /// </summary>
-    public void ImportWallet() => uiManager.OpenMenu<ImportWalletMenu>();
+    public void ImportWallet() => uiManager.OpenMenu<ImportMnemonicMenu>();
 
     /// <summary>
     /// Changes to the create wallet gui.

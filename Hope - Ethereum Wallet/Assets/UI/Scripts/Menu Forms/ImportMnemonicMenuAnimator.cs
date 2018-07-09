@@ -3,7 +3,10 @@ using TMPro;
 using Hope.Utils.EthereumUtils;
 using UnityEngine.UI;
 
-public class ImportPassphraseForm : MenuAnimator
+/// <summary>
+/// Class used for animating the ImportMnemonicMenu.
+/// </summary>
+public class ImportMnemonicMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject form1;
@@ -18,7 +21,7 @@ public class ImportPassphraseForm : MenuAnimator
 	[SerializeField] private GameObject checkMarkIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	private GameObject[] wordInputField;
+	private GameObject[] wordInputFields;
 	private GameObject[] wordTextObjects;
 	private TMP_Dropdown dropdownComponent;
 
@@ -33,15 +36,15 @@ public class ImportPassphraseForm : MenuAnimator
 		backButton1 = form1.transform.GetChild(0).gameObject;
 		backButton2 = form2.transform.GetChild(0).gameObject;
 
-		wordInputField = new GameObject[24];
+		wordInputFields = new GameObject[24];
 		wordTextObjects = new GameObject[24];
 
-		for (int i = 0; i < wordInputField.Length; i++)
+		for (int i = 0; i < wordInputFields.Length; i++)
 		{
-			wordInputField[i] = passphrase.transform.GetChild(i).gameObject;
-			wordTextObjects[i] = wordInputField[i].transform.GetChild(0).GetChild(2).gameObject;
+			wordInputFields[i] = passphrase.transform.GetChild(i).gameObject;
+			wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(2).gameObject;
 
-			wordInputField[i].GetComponent<TMP_InputField>().onValueChanged.AddListener((str) => SetButtonInteractable());
+			wordInputFields[i].GetComponent<TMP_InputField>().onValueChanged.AddListener((str) => SetButtonInteractable());
 		}
 
 		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
@@ -76,7 +79,7 @@ public class ImportPassphraseForm : MenuAnimator
 			() => importButton.AnimateGraphicAndScale(0f, 0f, 0.15f));
 
 		for (int i = 0; i < wordCount; i++)
-			wordInputField[i].AnimateScaleX(0f, 0.15f);
+			wordInputFields[i].AnimateScaleX(0f, 0.15f);
 	}
 
 	/// <summary>
@@ -112,7 +115,7 @@ public class ImportPassphraseForm : MenuAnimator
 	/// <param name="index"> The index that is being animated </param>
 	private void ExpandWord(int index)
 	{
-		wordInputField[index].GetComponent<TMP_InputField>().text = wordStrings[index];
+		wordInputFields[index].GetComponent<TMP_InputField>().text = wordStrings[index];
 		wordTextObjects[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(++index));
 	}
 
@@ -134,9 +137,9 @@ public class ImportPassphraseForm : MenuAnimator
 	{
 		Animating = true;
 
-		gameObject.transform.localScale = new Vector3(0, 0, 1);
+        gameObject.transform.localScale = new Vector3(0, 0, 1);
 
-		gameObject.AnimateGraphicAndScale(1f, 1f, 0.2f,
+        gameObject.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => gameObject.AnimateScaleX(1.01f, 1f,
 			() => gameObject.AnimateGraphic(0f, 0.5f,
 			() => Animating = false)));
@@ -197,9 +200,9 @@ public class ImportPassphraseForm : MenuAnimator
 		for (int i = 0; i < 4; i++)
 		{
 			if (i == 3)
-				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f, () => AnimateRow(newInt, addingRows, stoppingPoint));
+				wordInputFields[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f, () => AnimateRow(newInt, addingRows, stoppingPoint));
 			else
-				wordInputField[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f);
+				wordInputFields[i + row].AnimateScaleX(addingRows ? 1f : 0f, 0.1f);
 		}
 	}
 
@@ -212,7 +215,7 @@ public class ImportPassphraseForm : MenuAnimator
 
 		for (int i = 0; i < wordCount; i++)
 		{
-			if (wordInputField[i].GetComponent<TMP_InputField>().text == "")
+			if (wordInputFields[i].GetComponent<TMP_InputField>().text == "")
 			{
 				importButtonComponent.interactable = false;
 				return;
@@ -246,7 +249,7 @@ public class ImportPassphraseForm : MenuAnimator
 			wordCount = dropdownComponent.value == 0 ? 12 : 24;
 		}
 
-		if (clipboard != null && tempArray.Length <= wordInputField.Length)
+		if (clipboard != null && tempArray.Length <= wordInputFields.Length)
 		{
 			AnimateFormChange(wordCount != 12);
 			StartWordAnimation();

@@ -1,35 +1,39 @@
 ﻿using System.Linq;
-using UnityEngine.EventSystems;
+using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
 /// Menu for importing an ethereum wallet.
 /// </summary>
-public class ImportWalletMenu : WalletLoadMenuBase<ImportWalletMenu>, IEnterButtonObservable
+public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
 {
 
-    public InputField seedInput;
     public Button importButton,
                   backButton;
 
-    private ButtonClickObserver buttonObserver;
+    public TMP_InputField[] wordFields;
 
-    private readonly int[] validWordCounts = new int[] { 12, 24 };
+    private ButtonClickObserver buttonObserver;
+    private DynamicDataCache dynamicDataCache;
 
     /// <summary>
     /// Injects the required dependencies into this menu.
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache </param>
     [Inject]
-    public void Construct(ButtonClickObserver buttonObserver) => this.buttonObserver = buttonObserver;
+    public void Construct(ButtonClickObserver buttonObserver, DynamicDataCache dynamicDataCache)
+    {
+        this.buttonObserver = buttonObserver;
+        this.dynamicDataCache = dynamicDataCache;
+    }
 
     /// <summary>
     /// Adds the button click events.
     /// </summary>
     private void Start()
     {
-        seedInput.onValueChanged.AddListener(val => CheckWordCount());
         importButton.onClick.AddListener(LoadWallet);
         backButton.onClick.AddListener(GoBack);
     }
@@ -53,31 +57,21 @@ public class ImportWalletMenu : WalletLoadMenuBase<ImportWalletMenu>, IEnterButt
     }
 
     /// <summary>
-    /// Checks the word count of the input field and sets the import button interactivity if the word count is valid.
-    /// </summary>
-    private void CheckWordCount()
-    {
-        var wordCount = seedInput.text.Split(' ', '\t', '\n').Length;
-        importButton.interactable = validWordCounts.Where(count => count == wordCount).Count() > 0;
-    }
-
-    /// <summary>
     /// Loads the wallet if the button is enabled.
     /// </summary>
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (InputFieldUtils.GetActiveInputField() == seedInput && importButton.interactable && clickType == ClickType.Down)
+        if (wordFields.Contains(InputFieldUtils.GetActiveTMPInputField()) && importButton.interactable && clickType == ClickType.Down)
             importButton.Press();
     }
 
     /// <summary>
     /// Sends a message to the UserWalletManager to create a wallet with the InputField text as the mnemonic phrase.
     /// </summary>
-    public override void LoadWallet() => userWalletManager.CreateWallet(seedInput.text);
-
-    /// <summary>
-    /// Closes this menu.
-    /// </summary>
-    public override void GoBack() => uiManager.CloseMenu();
+    public override void LoadWallet()
+    {
+        dynamicDataCache.SetData("mnemonic", string.Join(" ", wordFields.Select(field => field.text)));
+        userWalletManager.CreateWallet(dynamicDataCache.GetData("mnemonic"));
+    }
 }

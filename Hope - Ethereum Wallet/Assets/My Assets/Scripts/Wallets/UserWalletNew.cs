@@ -1,12 +1,9 @@
 ﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
-using Nethereum.Web3.Accounts;
 using System;
 
 /// <summary>
@@ -72,6 +69,12 @@ public sealed class UserWalletNew
 
     public string GetAddress(int addressIndex)
     {
+        if (addresses?.Length == 0)
+        {
+            ExceptionManager.DisplayException(new Exception("Wallet not created/unlocked yet!"));
+            return null;
+        }
+
         using (var address = addresses[addressIndex].CreateDisposableData())
             return address.Value;
     }
@@ -93,36 +96,4 @@ public sealed class UserWalletNew
         //                                   gasPrice,
         //                                   transactionInput);
     }
-
-    /// <summary>
-    /// Starts the loading popup for the wallet.
-    /// </summary>
-    /// <param name="startingText"> The starting text to display on the loading popup. </param>
-    private void StartLoadingPopup(string startingText) => popupManager.GetPopup<LoadingPopup>().SetLoadingText("wallet", startingText: startingText);
-
-    /// <summary>
-    /// Attempts to unlock the wallet with the given password.
-    /// </summary>
-    /// <param name="password"> The password to attempt to unlock the wallet with. </param>
-    private void TryCreateAccount(string password)
-    {
-        try
-        {
-            AsyncWalletEncryption.DecryptWalletAsync(UserWalletJsonHandler.GetWallet(), password, (pkey, seed) =>
-            {
-                if (string.IsNullOrEmpty(pkey))
-                {
-                    ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
-                    return;
-                }
-
-                OnWalletLoadSuccessful?.Invoke();
-            });
-        }
-        catch
-        {
-            ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
-        }
-    }
-
 }
