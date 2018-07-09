@@ -145,12 +145,11 @@ public class AppInstaller : MonoInstaller<AppInstaller>
 
         BindMenuFactory<ImportOrCreateMnemonicMenu>();
         BindMenuFactory<CreateMnemonicMenu>();
-        BindMenuFactory<ConfirmMnemonicMenu>();
         BindMenuFactory<ImportMnemonicMenu>();
+        BindMenuFactory<ConfirmMnemonicMenu>();
 
         BindMenuFactory<UnlockWalletMenu>();
         BindMenuFactory<OpenWalletMenu>();
-        BindMenuFactory<CreatePasswordMenu>();
     }
 
     /// <summary>

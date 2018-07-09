@@ -7,7 +7,6 @@ using Zenject;
 /// </summary>
 public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButtonObservable
 {
-
     public InputField passwordField;
 
     public Button unlockButton;
@@ -34,7 +33,6 @@ public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButt
     private void Start()
     {
         unlockButton.onClick.AddListener(LoadWallet);
-        restoreButton.onClick.AddListener(RestoreWallet);
     }
 
     /// <summary>
@@ -66,11 +64,6 @@ public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButt
     }
 
     /// <summary>
-    /// Enables the menu for creating a new wallet from the beginning.
-    /// </summary>
-    public void RestoreWallet() => uiManager.OpenMenu<CreatePasswordMenu>();
-
-    /// <summary>
     /// Loads the wallet when the enter button is pressed.
     /// </summary>
     /// <param name="clickType"> The enter button click type. </param>
@@ -80,9 +73,4 @@ public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButt
             unlockButton.Press();
 
     }
-
-    public override void GoBack()
-    {
-    }
-
 }

@@ -12,8 +12,7 @@ public class MenuFactoryManager
     /// <summary>
     /// Initializes all the menu factories.
     /// </summary>
-    public MenuFactoryManager(CreatePasswordMenu.Factory createPasswordMenuFactory,
-        ImportOrCreateMnemonicMenu.Factory importOrCreateMenuFactory,
+    public MenuFactoryManager(ImportOrCreateMnemonicMenu.Factory importOrCreateMenuFactory,
         CreateMnemonicMenu.Factory walletCreateMenuFactory,
         ImportMnemonicMenu.Factory walletImportMenuFactory,
         UnlockWalletMenu.Factory walletUnlockMenuFactory,
@@ -22,8 +21,7 @@ public class MenuFactoryManager
         CreateWalletMenu.Factory createWalletMenuFactory,
         ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory)
     {
-        menuFactories.AddItems(createPasswordMenuFactory,
-                               importOrCreateMenuFactory,
+        menuFactories.AddItems(importOrCreateMenuFactory,
                                walletCreateMenuFactory,
                                walletImportMenuFactory,
                                walletUnlockMenuFactory,
