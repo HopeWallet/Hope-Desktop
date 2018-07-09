@@ -18,9 +18,9 @@ public class WalletUnlocker : WalletLoaderBase
     {
     }
 
-    protected override void LoadWallet(object data, string userPass)
+    protected override void LoadWallet(string userPass)
     {
-        int walletNum = (int)data;
+        int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
         if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
         {
