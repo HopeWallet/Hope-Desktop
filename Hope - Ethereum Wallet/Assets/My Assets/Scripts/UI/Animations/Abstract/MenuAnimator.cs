@@ -4,12 +4,21 @@ using UnityEngine;
 public abstract class MenuAnimator : MonoBehaviour
 {
 
+	[SerializeField]
+	private bool animateOnEnable;
+
     [SerializeField]
 	private GameObject blocker;
 
     private Action onAnimationFinished;
 
 	private bool animating;
+
+	private void OnEnable()
+	{
+		if (animateOnEnable)
+			AnimateEnable();
+	}
 
 	public bool Animating
 	{
