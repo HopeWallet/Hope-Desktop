@@ -72,15 +72,15 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     /// <summary>
     /// Updates the ui elements and the transaction info whenever the HodlerItem is changed/updated.
     /// </summary>
-    /// <param name="value"> The item that holds the info on the purpose locked in the contract. </param>
-    protected override void OnValueUpdated(HodlerItem value)
+    /// <param name="info"> The item that holds the info on the purpose locked in the contract. </param>
+    protected override void OnValueUpdated(HodlerItem info)
     {
-        lockedPurpose = SolidityUtils.ConvertFromUInt(value.Value, 18);
-        id = value.Id;
+        lockedPurpose = SolidityUtils.ConvertFromUInt(info.Value, 18);
+        id = info.Id;
 
         var minPercentageTime = networkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? MIN_PERCENTAGE_TIME_MAINNET : MIN_PERCENTAGE_TIME_RINKEBY;
-        var releaseTimeDifference = value.ReleaseTime - value.LockedTimeStamp;
-        var currentTimeDifference = value.ReleaseTime - DateTimeUtils.GetCurrentUnixTime();
+        var releaseTimeDifference = info.ReleaseTime - info.LockedTimeStamp;
+        var currentTimeDifference = info.ReleaseTime - DateTimeUtils.GetCurrentUnixTime();
         var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
 
         lockPeriodDone = currentTimeDifference < 0;

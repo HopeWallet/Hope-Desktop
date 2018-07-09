@@ -47,16 +47,16 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <summary>
     /// Sets the info of a button based on the TransactionInfo object.
     /// </summary>
-    /// <param name="value"> The information of the transaction. </param>
+    /// <param name="info"> The information of the transaction. </param>
     /// <returns> Returns the button that had its values updated. </returns>
-    protected override void OnValueUpdated(TransactionInfo value)
+    protected override void OnValueUpdated(TransactionInfo info)
     {
-        var tradableAsset = tradableAssetManager.GetTradableAsset(value.AssetAddress);
-        SetAmount(value, tradableAsset);
-        SetAddress(value);
-        SetDate(value);
-        SetTimeFromNow(value);
-        SetImage(value, tradableAsset);
+        var tradableAsset = tradableAssetManager.GetTradableAsset(info.AssetAddress);
+        SetAmount(info, tradableAsset);
+        SetAddress(info);
+        SetDate(info);
+        SetTimeFromNow(info);
+        SetImage(info, tradableAsset);
     }
 
     /// <summary>
