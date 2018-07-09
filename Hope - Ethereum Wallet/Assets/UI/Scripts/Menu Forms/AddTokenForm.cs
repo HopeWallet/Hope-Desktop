@@ -74,10 +74,13 @@ public class AddTokenForm : MenuAnimator
 		//Check if address is a valid token
 
 		//if (addressIsValid)
+		//{
 			AnimateCheckMarkIcon();
+		//	Add this token to the token list and have it already checked and visible
+		//}
+
 		//else
 		//	AnimateErrorIcon(true);
-
 	}
 
 	/// <summary>
