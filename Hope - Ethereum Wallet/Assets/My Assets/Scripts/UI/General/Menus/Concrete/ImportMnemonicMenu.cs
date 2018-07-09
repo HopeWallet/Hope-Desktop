@@ -10,7 +10,8 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
 {
 
     public Button importButton,
-                  backButton;
+                  backButton1,
+                  backButton2;
 
     public TMP_InputField[] wordFields;
 
@@ -35,7 +36,8 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     private void Start()
     {
         importButton.onClick.AddListener(LoadWallet);
-        backButton.onClick.AddListener(GoBack);
+        backButton1.onClick.AddListener(GoBack);
+        backButton2.onClick.AddListener(GoBack);
     }
 
     /// <summary>
