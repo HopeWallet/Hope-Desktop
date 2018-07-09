@@ -15,19 +15,19 @@ public abstract class InfoButton<TButton, TValue> : FactoryButton<TButton> where
     /// <summary>
     /// Sets the button info to the input value.
     /// </summary>
-    /// <param name="value"> The value to set the button info. </param>
+    /// <param name="info"> The value to set the button info. </param>
     /// <returns> Returns the button. </returns>
-    public TButton SetButtonInfo(TValue value)
+    public TButton SetButtonInfo(TValue info)
     {
-        ButtonInfo = value;
-        OnValueUpdated(value);
+        ButtonInfo = info;
+        OnValueUpdated(info);
         return this as TButton;
     }
 
     /// <summary>
     /// Called internally if the button needs to be notified of a new value being set.
     /// </summary>
-    /// <param name="value"> The new value to use in the assignment. </param>
-    protected virtual void OnValueUpdated(TValue value) { }
+    /// <param name="info"> The new value to use in the assignment. </param>
+    protected virtual void OnValueUpdated(TValue info) { }
 
 }

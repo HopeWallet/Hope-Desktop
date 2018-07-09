@@ -12,6 +12,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     public AppSettingsInstaller appSettings;
     public TradableAssetButtonManager.Settings tradableAssetButtonSettings;
     public EthereumTransactionButtonManager.Settings transactionButtonSettings;
+    public WalletListMenu.Settings walletListMenuSettings;
     public UIManager.UIProvider uiProvider;
 
     /// <summary>
@@ -33,6 +34,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         Container.BindInstance(tradableAssetButtonSettings).AsSingle().NonLazy();
         Container.BindInstance(transactionButtonSettings).AsSingle().NonLazy();
+        Container.BindInstance(walletListMenuSettings).AsSingle().NonLazy();
         Container.BindInstance(uiProvider).AsSingle().NonLazy();
     }
 
@@ -87,7 +89,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<EthereumNetworkManager>().AsSingle().NonLazy();
         Container.Bind<GasPriceObserver>().AsSingle().NonLazy();
         Container.Bind<EtherBalanceObserver>().AsSingle().NonLazy();
-        
+
         Container.BindInstance(GetComponent<UIManager>()).AsSingle().NonLazy();
         Container.Bind<OptionsDropdownActionAssigner>().AsSingle().NonLazy();
         Container.Bind<MenuFactoryManager>().AsSingle().NonLazy();
@@ -114,6 +116,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindButtonFactory<TransactionInfoButton>(transactionButtonSettings.spawnTransform);
         BindButtonFactory<AssetButton>(tradableAssetButtonSettings.spawnTransform);
+        BindButtonFactory<WalletButton>(walletListMenuSettings.walletButtonSpawnTransform);
         BindButtonFactory<LockedPRPSItemButton>(null);
     }
 
@@ -142,13 +145,13 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindMenuFactory<ChooseWalletMenu>();
         BindMenuFactory<CreateWalletMenu>();
+        BindMenuFactory<WalletListMenu>();
 
         BindMenuFactory<ImportOrCreateMnemonicMenu>();
         BindMenuFactory<CreateMnemonicMenu>();
         BindMenuFactory<ImportMnemonicMenu>();
         BindMenuFactory<ConfirmMnemonicMenu>();
 
-        BindMenuFactory<UnlockWalletMenu>();
         BindMenuFactory<OpenWalletMenu>();
     }
 

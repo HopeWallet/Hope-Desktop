@@ -11,8 +11,6 @@ using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 public class WalletCreator : WalletLoaderBase
 {
 
-    private static readonly string WALLET_NUM_PREF = HashGenerator.GetSHA512Hash("wallet_count");
-
     protected override string LoadingText => "Creating wallet...";
 
     public WalletCreator(
@@ -30,9 +28,9 @@ public class WalletCreator : WalletLoaderBase
 
     private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
     {
-        int walletNum = SecurePlayerPrefs.GetInt(WALLET_NUM_PREF) + 1;
+        int walletNum = SecurePlayerPrefs.GetInt("wallet_count") + 1;
 
-        SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNum);
+        SecurePlayerPrefs.SetInt("wallet_count", walletNum);
         SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString("wallet_" + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString("wallet_" + walletNum + "_name", dynamicDataCache.GetData("name"));
@@ -45,8 +43,8 @@ public class WalletCreator : WalletLoaderBase
 
     private void CreateWalletCountPref()
     {
-        if (!SecurePlayerPrefs.HasKey(WALLET_NUM_PREF))
-            SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, 0);
+        if (!SecurePlayerPrefs.HasKey("wallet_count"))
+            SecurePlayerPrefs.SetInt("wallet_count", 0);
     }
 
     /// <summary>

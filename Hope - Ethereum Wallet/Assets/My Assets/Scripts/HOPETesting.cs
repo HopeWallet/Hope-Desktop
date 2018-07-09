@@ -60,6 +60,8 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
+        //PlayerPrefs.DeleteAll();
+
         walletTest = new UserWallet(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, dynamicDataCache);
     }
 
@@ -67,7 +69,7 @@ public class HOPETesting : MonoBehaviour
     {
         if (lastPass != password)
         {
-            var walletNum = SecurePlayerPrefs.HasKey(HashGenerator.GetSHA512Hash("wallet_count")) ? SecurePlayerPrefs.GetInt(HashGenerator.GetSHA512Hash("wallet_count")) : 1;
+            var walletNum = SecurePlayerPrefs.HasKey("wallet_count") ? SecurePlayerPrefs.GetInt("wallet_count") : 1;
             dynamicDataCache.SetData("pass", new ProtectedString(password));
             dynamicDataCache.SetData("name", "My Wallet_" + walletNum);
             lastPass = password;

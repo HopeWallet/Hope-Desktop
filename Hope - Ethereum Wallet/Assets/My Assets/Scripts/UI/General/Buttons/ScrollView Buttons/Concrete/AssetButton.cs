@@ -44,8 +44,8 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <summary>
     /// Updates the visuals of the AssetButton to the new TradableAsset.
     /// </summary>
-    /// <param name="value"> The TradableAsset to use to set the visuals of this button. </param>
-    protected override void OnValueUpdated(TradableAsset value)
+    /// <param name="info"> The TradableAsset to use to set the visuals of this button. </param>
+    protected override void OnValueUpdated(TradableAsset info)
     {
         UpdateButtonBalance();
         UpdateButtonSymbol();

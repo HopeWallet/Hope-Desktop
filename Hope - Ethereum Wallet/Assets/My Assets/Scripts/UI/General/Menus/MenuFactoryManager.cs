@@ -15,7 +15,7 @@ public class MenuFactoryManager
     public MenuFactoryManager(ImportOrCreateMnemonicMenu.Factory importOrCreateMenuFactory,
         CreateMnemonicMenu.Factory walletCreateMenuFactory,
         ImportMnemonicMenu.Factory walletImportMenuFactory,
-        UnlockWalletMenu.Factory walletUnlockMenuFactory,
+        WalletListMenu.Factory walletUnlockMenuFactory,
         OpenWalletMenu.Factory openedWalletMenuFactory,
         ChooseWalletMenu.Factory chooseWalletMenuFactory,
         CreateWalletMenu.Factory createWalletMenuFactory,

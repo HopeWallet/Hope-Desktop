@@ -5,7 +5,6 @@
 /// </summary>
 public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 {
-
     public Button ledgerButton;
     public Button hopeButton;
     public Button exitButton;
@@ -24,7 +23,10 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenHopeWallet()
     {
-        uiManager.OpenMenu<CreateWalletMenu>();
+        if (SecurePlayerPrefs.HasKey("wallet_count") && SecurePlayerPrefs.GetInt("wallet_count") > 0)
+            uiManager.OpenMenu<WalletListMenu>();
+        else
+            uiManager.OpenMenu<CreateWalletMenu>();
     }
 
     /// <summary>

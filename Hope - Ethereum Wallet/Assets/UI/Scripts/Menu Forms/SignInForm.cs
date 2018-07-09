@@ -12,7 +12,7 @@ public class SignInForm : MenuAnimator
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject errorIcon;
 
-	private WalletListForm walletListForm;
+	private WalletListMenuAnimator walletListForm;
 
 	private bool errorIconVisible;
 
@@ -37,7 +37,7 @@ public class SignInForm : MenuAnimator
 		signInButton.GetComponent<Button>().onClick.AddListener(SignInClicked);
 
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
-		walletListForm = transform.parent.GetComponent<WalletListForm>();
+		walletListForm = transform.parent.GetComponent<WalletListMenuAnimator>();
 		//title.GetComponent<TextMeshProUGUI>().text = walletName;
 	}
 
