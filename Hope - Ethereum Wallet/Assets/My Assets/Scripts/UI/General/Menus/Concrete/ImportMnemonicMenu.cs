@@ -8,7 +8,6 @@ using Zenject;
 /// </summary>
 public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
 {
-
     public Button importButton,
                   backButton1,
                   backButton2;
