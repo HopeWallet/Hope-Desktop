@@ -5,27 +5,27 @@ public class OpenWalletForm : MenuAnimator
 {
 
 	[SerializeField] private GameObject background;
-	[SerializeField] private GameObject tokenList;
+	[SerializeField] private GameObject assetList;
 	[SerializeField] private GameObject taskBarButtons;
 	[SerializeField] private GameObject transactionList;
-	[SerializeField] private GameObject tokenIcon;
-	[SerializeField] private GameObject tokenName;
-	[SerializeField] private GameObject tokenAmount;
+	[SerializeField] private GameObject assetIcon;
+	[SerializeField] private GameObject assetName;
+	[SerializeField] private GameObject assetAmount;
 	[SerializeField] private GameObject buyButton;
 	[SerializeField] private GameObject sellButton;
 
 	protected override void AnimateIn()
 	{
 		background.AnimateGraphic(1f, 0.15f,
-			() => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => tokenName.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
-			() => tokenAmount.AnimateGraphicAndScale(0.65f, 1f, 0.15f,
+			() => assetIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => assetName.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
+			() => assetAmount.AnimateGraphicAndScale(0.65f, 1f, 0.15f,
 			() => buyButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => sellButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating))))));
 
-		AnimateList(tokenList.transform.GetChild(0).GetChild(0), 0);
-		AnimateList(transactionList.transform.GetChild(0).GetChild(0), 0);
-		AnimateTaskbarButtons(0);
+		AnimateList(assetList.transform.GetChild(0).GetChild(0), 0, true);
+		AnimateList(transactionList.transform.GetChild(0).GetChild(0), 0, true);
+		AnimateList(taskBarButtons.transform, 0, false);
 	}
 
 	protected override void AnimateOut()
@@ -33,16 +33,11 @@ public class OpenWalletForm : MenuAnimator
 		FinishedAnimating();
 	}
 
-	private void AnimateList(Transform listTransform, int index)
+	private void AnimateList(Transform objectTransform, int index, bool isList)
 	{
-		if (index == listTransform.childCount - 1)
-			listTransform.GetChild(index).gameObject.AnimateScaleX(1.183325f, 0.15f);
+		if (index == objectTransform.childCount - 1)
+			objectTransform.GetChild(index).gameObject.AnimateScaleX(isList ? 1.183325f : 1f, 0.15f);
 		else
-			listTransform.GetChild(index).gameObject.AnimateScaleX(1.183325f, 0.15f, () => AnimateList(listTransform, ++index));
-	}
-
-	private void AnimateTaskbarButtons(int index)
-	{
-		taskBarButtons.transform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f);
+			objectTransform.GetChild(index).gameObject.AnimateScaleX(isList ? 1.183325f : 1f, 0.15f, () => AnimateList(objectTransform, ++index, isList));
 	}
 }
