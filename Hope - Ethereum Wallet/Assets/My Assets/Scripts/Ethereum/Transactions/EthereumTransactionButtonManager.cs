@@ -17,16 +17,17 @@ public class EthereumTransactionButtonManager
 
     private readonly List<TransactionInfoButton> transactionButtons = new List<TransactionInfoButton>();
 
-    /// <summary>
-    /// Initializes the EthereumTransactionButtonManager by assigning the settings.
-    /// </summary>
-    /// <param name="settings"> The settings of this manager. </param>
-    /// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
-    /// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list </param>
-    public EthereumTransactionButtonManager(Settings settings,
+	/// <summary>
+	/// Initializes the EthereumTransactionButtonManager by assigning the settings.
+	/// </summary>
+	/// <param name="settings"> The settings of this manager. </param>
+	/// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
+	/// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
+	/// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
+	public EthereumTransactionButtonManager(Settings settings,
         TradableAssetManager tradableAssetManager,
         EthereumTransactionManager transactionManager,
-        TransactionInfoButton.Factory buttonFactory) : base()
+        TransactionInfoButton.Factory buttonFactory)
     {
         this.settings = settings;
         this.tradableAssetManager = tradableAssetManager;
@@ -109,7 +110,7 @@ public class EthereumTransactionButtonManager
         var buttonCount = transactionList == null ? 0 : transactionList.Count;
 
         for (int i = 0; i < transactionButtons.Count; i++)
-            if (transactionButtons != null && transactionButtons[i] != null)
+            if (transactionButtons?[i] != null)
                 transactionButtons[i].gameObject.SetActive(i < buttonCount);
     }
 
