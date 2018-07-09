@@ -28,7 +28,7 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 
     protected override void OnValueUpdated(WalletInfo info)
     {
-        walletNameText.text = info.WalletName;
+        walletNameText.text = StringUtils.LimitEnd(info.WalletName, 14, "...");
     }
 
     private void WalletButtonClicked()

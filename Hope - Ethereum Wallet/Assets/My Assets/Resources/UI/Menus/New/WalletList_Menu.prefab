@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cbf1bebe28164b88ece4a08d0a6ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DestroyWhenClosed: 1
+  DestroyWhenClosed: 0
   backButton: {fileID: 114679122066358564}
   newWalletButton: {fileID: 114300797950357216}
 --- !u!114 &114455334767583872
@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224124770341042292}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.49249998
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2020,7 +2020,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1.2, y: -39.8}
+  m_AnchoredPosition: {x: 48, y: -39.8}
   m_SizeDelta: {x: 350, y: 318}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224124770341042292
@@ -2128,7 +2128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 675559.56}
+  m_AnchoredPosition: {x: 0, y: 19130.959}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224440322235729768
@@ -2258,7 +2258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 179.2}
+  m_AnchoredPosition: {x: 0, y: 180}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224692425003749348
@@ -2333,7 +2333,7 @@ RectTransform:
   - {fileID: 224769429160155282}
   - {fileID: 4516379108256478}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
