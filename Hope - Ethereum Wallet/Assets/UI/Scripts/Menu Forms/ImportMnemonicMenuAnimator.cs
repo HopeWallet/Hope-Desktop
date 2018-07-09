@@ -62,9 +62,8 @@ public class ImportMnemonicMenuAnimator : MenuAnimator
 			() => wordCountDropdown.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating)));
 
 		pastePhraseButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => importButton.AnimateGraphicAndScale(1f, 1f, 0.2f));
-
-		AnimateRow(0, true, 12);
+			() => importButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
+            () => AnimateRow(0, true, 12)));
 	}
 
 	/// <summary>

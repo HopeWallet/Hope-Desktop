@@ -158,7 +158,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         menus.Push(newMenu);
 
         newMenu.gameObject.SetActive(true);
-        newMenu.Animator.AnimateEnable();
+        newMenu.Animator?.AnimateEnable();
     }
 
     /// <summary>
