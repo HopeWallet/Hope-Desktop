@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -7,8 +8,8 @@ using Zenject;
 public class AssetButton : InfoButton<AssetButton, TradableAsset>
 {
 
-    public Text amountText,
-                symbolText;
+    public TMP_Text amountText,
+                    symbolText;
 
     public Image assetImage;
 

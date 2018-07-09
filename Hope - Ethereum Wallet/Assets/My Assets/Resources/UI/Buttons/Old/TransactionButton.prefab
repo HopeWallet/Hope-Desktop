@@ -107,7 +107,6 @@ GameObject:
   - component: {fileID: 222527445552431220}
   - component: {fileID: 114138326710633874}
   - component: {fileID: 114418340546184514}
-  - component: {fileID: 114495061479250556}
   m_Layer: 5
   m_Name: TransactionButton
   m_TagString: Untagged
@@ -243,22 +242,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114495061479250556
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1955460749561040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a90703b99d954e44bdf25e5f148e70a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountText: {fileID: 114628088463135740}
-  timeFromNowText: {fileID: 114783352569810516}
-  addressText: {fileID: 114734124801015708}
-  dateText: {fileID: 114384359097067206}
-  assetImage: {fileID: 114179060481831196}
 --- !u!114 &114628088463135740
 MonoBehaviour:
   m_ObjectHideFlags: 1

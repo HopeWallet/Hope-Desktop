@@ -61,8 +61,6 @@ public class HOPETesting : MonoBehaviour
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
 
-        Guid.NewGuid().ToString().Log();
-
         walletTest = new UserWalletNew(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, dynamicDataCache);
     }
 

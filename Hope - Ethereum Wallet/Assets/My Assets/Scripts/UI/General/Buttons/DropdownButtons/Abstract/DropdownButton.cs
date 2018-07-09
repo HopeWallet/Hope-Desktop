@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class DropdownButton : ImageButton, IPopupButton
 
     public bool createDropdownOnClick = true;
 
-    public Text text;
+    public TMP_Text text;
     public DropdownButtonInfo[] dropdownButtons;
 
     private List<DropdownButton> buttonList = new List<DropdownButton>();

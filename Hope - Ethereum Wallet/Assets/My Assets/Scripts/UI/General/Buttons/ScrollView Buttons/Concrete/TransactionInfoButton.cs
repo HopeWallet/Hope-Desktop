@@ -1,6 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
-using System;
-using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
@@ -10,10 +9,10 @@ using Zenject;
 public class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
 
-    public Text amountText,
-             timeFromNowText,
-             addressText,
-             dateText;
+    public TMP_Text amountText,
+                    timeFromNowText,
+                    addressText,
+                    dateText;
 
     public Image assetImage;
 
@@ -48,16 +47,16 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <summary>
     /// Sets the info of a button based on the TransactionInfo object.
     /// </summary>
-    /// <param name="transaction"> The information of the transaction. </param>
+    /// <param name="value"> The information of the transaction. </param>
     /// <returns> Returns the button that had its values updated. </returns>
-    protected override void OnValueUpdated(TransactionInfo transaction)
+    protected override void OnValueUpdated(TransactionInfo value)
     {
-        var tradableAsset = tradableAssetManager.GetTradableAsset(transaction.AssetAddress);
-        SetAmount(transaction, tradableAsset);
-        SetAddress(transaction);
-        SetDate(transaction);
-        SetTimeFromNow(transaction);
-        SetImage(transaction, tradableAsset);
+        var tradableAsset = tradableAssetManager.GetTradableAsset(value.AssetAddress);
+        SetAmount(value, tradableAsset);
+        SetAddress(value);
+        SetDate(value);
+        SetTimeFromNow(value);
+        SetImage(value, tradableAsset);
     }
 
     /// <summary>

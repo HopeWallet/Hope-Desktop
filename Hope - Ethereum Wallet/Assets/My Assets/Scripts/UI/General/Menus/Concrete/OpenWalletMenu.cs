@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using TMPro;
 using UISettings;
 using UnityEngine.UI;
 using Zenject;
@@ -9,13 +10,12 @@ using Zenject;
 public class OpenWalletMenu : Menu<OpenWalletMenu>
 {
 
-    public Text assetText,
-                assetSymbolText,
-                smallBalanceText,
-                balanceText;
+    public TMP_Text assetText,
+                    //assetSymbolText,
+                    //smallBalanceText,
+                    balanceText;
 
-    public Image assetImage,
-                 smallAssetImage;
+    public Image assetImage;
 
     public DropdownButton optionsDropdownButton;
 
@@ -23,9 +23,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     private TradableAssetManager tradableAssetManager;
     private Dropdowns uiDropdowns;
 
-    private const int MAX_ASSET_NAME_LENGTH = 36;
-    private const int MAX_ASSET_BALANCE_LENGTH = 50;
-    private const int MAX_SMALL_ASSET_BALANCE_LENGTH = 18;
+    private const int MAX_ASSET_NAME_LENGTH = 28;
+    private const int MAX_ASSET_BALANCE_LENGTH = 43;
 
     /// <summary>
     /// Injects the required dependency into this class.
@@ -69,12 +68,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
         assetText.text = StringUtils.LimitEnd(tradableAsset.AssetName, MAX_ASSET_NAME_LENGTH, "...");
         balanceText.text = StringUtils.LimitEnd(assetBalance, MAX_ASSET_BALANCE_LENGTH, "...");
-        smallBalanceText.text = StringUtils.LimitEnd(assetBalance, MAX_SMALL_ASSET_BALANCE_LENGTH, "...");
-
-        assetSymbolText.text = tradableAsset.AssetSymbol;
 
         assetImage.sprite = tradableAsset.AssetImage;
-        smallAssetImage.sprite = tradableAsset.AssetImage;
     }
 
     public override void GoBack()

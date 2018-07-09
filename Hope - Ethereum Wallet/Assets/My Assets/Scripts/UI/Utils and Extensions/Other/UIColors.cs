@@ -5,6 +5,6 @@
 /// </summary>
 public static class UIColors
 {
-    public static readonly Color Green = new Color(0.13725f, 0.6863f, 0.3921f, 1f);
-    public static readonly Color Red = new Color(0.7843f, 0f, 0f, 1f);
+    public static readonly Color Green = new Color(0f, 1f, 0.1294f, 0.8471f);
+    public static readonly Color Red = new Color(1f, 0f, 0f, 0.8471f);
 }
