@@ -1123,6 +1123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf8ad3cca6b8b9345a16778e600bff4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animateOnEnable: 0
   blocker: {fileID: 1475811618508708}
   form: {fileID: 1185842791821108}
   title: {fileID: 1877274499508246}

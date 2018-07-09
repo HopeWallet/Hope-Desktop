@@ -23,7 +23,7 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     private TradableAssetManager tradableAssetManager;
     private Dropdowns uiDropdowns;
 
-    private const int MAX_ASSET_NAME_LENGTH = 28;
+    private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 43;
 
     /// <summary>
