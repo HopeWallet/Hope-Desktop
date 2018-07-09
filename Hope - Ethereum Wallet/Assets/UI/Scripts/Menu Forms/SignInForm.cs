@@ -100,6 +100,6 @@ public class SignInForm : MenuAnimator
 		//	walletListForm.DisableWalletListForm();
 		// 	//GO TO NEXT FORM
 		//else
-			AnimateErrorIcon(true);
+		//	AnimateErrorIcon(true);
 	}
 }
