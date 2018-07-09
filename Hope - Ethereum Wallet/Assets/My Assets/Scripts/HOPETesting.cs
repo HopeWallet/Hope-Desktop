@@ -19,7 +19,6 @@ using System;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using Isopoh.Cryptography.Argon2;
 using Org.BouncyCastle.Crypto.Digests;
 using System.IO;
 using System.Collections.Generic;
