@@ -17,7 +17,7 @@ public class UserWalletManager
     /// <summary>
     /// The address of the main UserWallet.
     /// </summary>
-    public string WalletAddress { get { return userWallet.Address; } }
+    public string WalletAddress => userWallet.Address;
 
     /// <summary>
     /// Initializes the UserWallet given the settings to apply.
@@ -41,7 +41,7 @@ public class UserWalletManager
     /// </summary>
     /// <param name="tradableAsset"> The asset to check the balance of. </param>
     /// <param name="onBalanceReceived"> Called when the balnace has been received. </param>
-    public void GetAssetBalance(TradableAsset tradableAsset, Action<dynamic> onBalanceReceived) 
+    public void GetAssetBalance(TradableAsset tradableAsset, Action<dynamic> onBalanceReceived)
         => tradableAsset.GetBalance(userWallet, onBalanceReceived);
 
     /// <summary>
@@ -52,7 +52,7 @@ public class UserWalletManager
     /// <param name="gasPrice"> The gas price to use for this asset transfer transaction. </param>
     /// <param name="address"> The address to transfer the asset to. </param>
     /// <param name="amount"> The amount of the specified asset to send. </param>
-    public void TransferAsset(TradableAsset tradableAsset, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, dynamic amount) 
+    public void TransferAsset(TradableAsset tradableAsset, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, dynamic amount)
         => tradableAsset.Transfer(userWallet, gasLimit, gasPrice, address, amount);
 
     /// <summary>
@@ -82,15 +82,13 @@ public class UserWalletManager
     /// Attempts to load a wallet given a password.
     /// Calls the action if the wallet loaded successfully.
     /// </summary>
-    /// <param name="password"> The password to attempt to load the wallet with. </param>
-    public void UnlockWallet() => userWallet.UnlockWallet();
+    public void UnlockWallet() => userWallet.Unlock();
 
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// Calls the action with the state of successful or unsuccessful wallet creation.
     /// </summary>
-    /// <param name="mnemonic"> The mnemonic phrase to create the wallet with. </param>
-    public void CreateWallet(string mnemonic) => userWallet.CreateWallet(mnemonic);
+    public void CreateWallet() => userWallet.Create();
 
     /// <summary>
     /// Checks if a wallet exists and can be attempted to be opened.

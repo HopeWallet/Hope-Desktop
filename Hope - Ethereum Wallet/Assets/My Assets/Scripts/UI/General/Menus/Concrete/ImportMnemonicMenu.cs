@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Hope.Security.ProtectedTypes.Types;
+using System.Linq;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
@@ -72,7 +73,7 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     /// </summary>
     public override void LoadWallet()
     {
-        dynamicDataCache.SetData("mnemonic", string.Join(" ", wordFields.Select(field => field.text)));
-        userWalletManager.CreateWallet(dynamicDataCache.GetData("mnemonic"));
+        dynamicDataCache.SetData("mnemonic", new ProtectedString(string.Join(" ", wordFields.Select(field => field.text))));
+        userWalletManager.CreateWallet();
     }
 }

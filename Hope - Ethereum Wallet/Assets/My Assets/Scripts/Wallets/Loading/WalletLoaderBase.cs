@@ -24,14 +24,14 @@ public abstract class WalletLoaderBase
         this.dynamicDataCache = dynamicDataCache;
     }
 
-    public void Load(object data, out ProtectedString[] addresses, Action onWalletLoaded)
+    public void Load(out ProtectedString[] addresses, Action onWalletLoaded, Action setupAddressAction)
     {
         SetupAddresses(out addresses);
-        SetupLoadActions(onWalletLoaded);
+        SetupLoadActions(onWalletLoaded, setupAddressAction);
         SetupPopup();
 
         using (var pass = dynamicDataCache.GetData("pass").CreateDisposableData())
-            LoadWallet(data, pass.Value);
+            LoadWallet(pass.Value);
     }
 
     private void SetupPopup()
@@ -39,9 +39,14 @@ public abstract class WalletLoaderBase
         popupManager.GetPopup<LoadingPopup>().loadingText.text = LoadingText;
     }
 
-    private void SetupLoadActions(Action onWalletLoaded)
+    private void SetupLoadActions(Action onWalletLoaded, Action setupAddressAction)
     {
-        this.onWalletLoaded = () => { popupManager.CloseActivePopup(); onWalletLoaded?.Invoke(); };
+        this.onWalletLoaded = () =>
+        {
+            popupManager.CloseActivePopup();
+            setupAddressAction?.Invoke();
+            onWalletLoaded?.Invoke();
+        };
     }
 
     private void SetupAddresses(out ProtectedString[] addresses)
@@ -56,6 +61,6 @@ public abstract class WalletLoaderBase
         Array.Copy(addressesToCopy, addresses, addresses.Length);
     }
 
-    protected abstract void LoadWallet(object data, string userPass);
+    protected abstract void LoadWallet(string userPass);
 
 }

@@ -60,6 +60,7 @@ public class UnlockWalletMenu : WalletLoadMenuBase<UnlockWalletMenu>, IEnterButt
     public override void LoadWallet()
     {
         dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
+        dynamicDataCache.SetData("walletnum", 1);
         userWalletManager.UnlockWallet();
     }
 

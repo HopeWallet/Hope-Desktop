@@ -1,6 +1,7 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
+using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using System;
@@ -21,10 +22,10 @@ public class WalletCreator : WalletLoaderBase
     {
     }
 
-    protected override void LoadWallet(object data, string userPass)
+    protected override void LoadWallet(string userPass)
     {
         CreateWalletCountPref();
-        TryCredentials((string)data, userPass);
+        TryCredentials(userPass);
     }
 
     private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
@@ -34,6 +35,7 @@ public class WalletCreator : WalletLoaderBase
         SecurePlayerPrefs.SetInt(WALLET_NUM_PREF, walletNum);
         SecurePlayerPrefs.SetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString("wallet_" + walletNum, encryptedSeed);
+        SecurePlayerPrefs.SetString("wallet_" + walletNum + "_name", dynamicDataCache.GetData("name"));
 
         for (int i = 0; i < encryptedHashLvls.Length; i++)
             SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), encryptedHashLvls[i]);
@@ -50,9 +52,8 @@ public class WalletCreator : WalletLoaderBase
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// </summary>
-    /// <param name="mnemonic"> The phrase to attempt to create a wallet with. </param>
     /// <param name="basePass"> The password that was entered by the user. </param>
-    private void TryCredentials(string mnemonic, string basePass)
+    private void TryCredentials(string basePass)
     {
         if (string.IsNullOrEmpty(basePass) || basePass.Length < AESEncryption.MIN_PASSWORD_LENGTH)
         {
@@ -60,15 +61,18 @@ public class WalletCreator : WalletLoaderBase
             return;
         }
 
-        try
+        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
-            var wallet = new Wallet(mnemonic, null, WalletUtils.DetermineCorrectPath(mnemonic));
-            AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
-            AsyncTaskScheduler.Schedule(() => EncryptWalletData(wallet.Seed, basePass));
-        }
-        catch
-        {
-            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again."));
+            try
+            {
+                var wallet = new Wallet(mnemonic.Value, null, WalletUtils.DetermineCorrectPath(mnemonic.Value));
+                AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
+                AsyncTaskScheduler.Schedule(() => EncryptWalletData(wallet.Seed, basePass));
+            }
+            catch
+            {
+                ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again."));
+            }
         }
     }
 
