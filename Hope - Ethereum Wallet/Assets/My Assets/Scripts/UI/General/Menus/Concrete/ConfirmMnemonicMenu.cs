@@ -44,7 +44,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
     /// </summary>
     public override void LoadWallet()
     {
-
+        userWalletManager.CreateWallet();
     }
 
     /// <summary>

@@ -81,13 +81,13 @@ public class CreateWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	private void SetText()
 	{
-		walletNameText = walletNameField.GetComponent<TMP_InputField>().text;
+		walletNameText = walletNameField.GetComponent<TMP_InputField>().text.Trim();
 		password1Text = password1Field.GetComponent<TMP_InputField>().text;
 		password2Text = password2Field.GetComponent<TMP_InputField>().text;
 	}
 
 	/// <summary>
-	/// Checks if passwords match, are above 7 characters, and all fieldss are filled in
+	/// Checks if passwords match, are above 7 characters, and all fields are filled in
 	/// </summary>
 	private void SetButtonInteractable()
 	{

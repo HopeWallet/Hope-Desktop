@@ -28,12 +28,12 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 
     protected override void OnValueUpdated(WalletInfo info)
     {
-        walletNameText.text = StringUtils.LimitEnd(info.WalletName, 14, "...");
+        walletNameText.text = info.WalletName?.LimitEnd(14, "...");
     }
 
     private void WalletButtonClicked()
     {
-        dynamicDataCache.SetData("walletinfo", ButtonInfo);
+        dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
         // uiManager.OpenMenu<>();
     }
 }

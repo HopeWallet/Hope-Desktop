@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// Class which animates the WalletListMenu.
+/// </summary>
 public class WalletListMenuAnimator : MenuAnimator
 {
 
@@ -9,6 +11,9 @@ public class WalletListMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject walletList;
 	[SerializeField] private GameObject newWalletButton;
 
+    /// <summary>
+    /// The wallet gameobjects to animate.
+    /// </summary>
     public GameObject[] Wallets { get; set; }
 
 	/// <summary>

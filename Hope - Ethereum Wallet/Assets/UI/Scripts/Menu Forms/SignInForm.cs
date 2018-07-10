@@ -84,7 +84,7 @@ public class SignInForm : MenuAnimator
 	/// <param name="str"> The current string in the password input field </param>
 	private void InputFieldChanged(string str)
 	{
-		signInButton.GetComponent<Button>().interactable = str != "" ? true : false;
+		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str) ? true : false;
 
 		if (errorIconVisible) AnimateErrorIcon(false);
 	}
