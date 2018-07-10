@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SignInForm : MenuAnimator
+public class UnlockWalletMenuAnimator : MenuAnimator
 {
 
 	[SerializeField] private GameObject dim;
@@ -11,8 +11,6 @@ public class SignInForm : MenuAnimator
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject errorIcon;
-
-	private WalletListMenuAnimator walletListForm;
 
 	private bool errorIconVisible;
 
@@ -37,8 +35,6 @@ public class SignInForm : MenuAnimator
 		signInButton.GetComponent<Button>().onClick.AddListener(SignInClicked);
 
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
-		walletListForm = transform.parent.GetComponent<WalletListMenuAnimator>();
-		//title.GetComponent<TextMeshProUGUI>().text = walletName;
 	}
 
 	/// <summary>
@@ -84,7 +80,7 @@ public class SignInForm : MenuAnimator
 	/// <param name="str"> The current string in the password input field </param>
 	private void InputFieldChanged(string str)
 	{
-		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str) ? true : false;
+		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
 
 		if (errorIconVisible) AnimateErrorIcon(false);
 	}

@@ -56,18 +56,6 @@ public class WalletListMenu : Menu<WalletListMenu>
         uiManager.OpenMenu<CreateWalletMenu>();
     }
 
-    /// <summary>
-    /// Loads a wallet with the text input by the user as the password.
-    /// Will not close this gui or open the next gui unless the password was correct.
-    /// </summary>
-    //public override void LoadWallet()
-    //{
-    // set dynamic data cache pass and wallet
-    //dynamicDataCache.SetData("pass", new ProtectedString("..."));
-    //dynamicDataCache.SetData("walletnum", 1);
-    //userWalletManager.UnlockWallet();
-    //}
-
     [Serializable]
     public class Settings
     {

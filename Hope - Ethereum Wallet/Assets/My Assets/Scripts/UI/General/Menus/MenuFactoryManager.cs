@@ -7,7 +7,7 @@ using System.Linq;
 public class MenuFactoryManager
 {
 
-    private List<object> menuFactories = new List<object>();
+    private readonly List<object> menuFactories = new List<object>();
 
     /// <summary>
     /// Initializes all the menu factories.
@@ -19,7 +19,8 @@ public class MenuFactoryManager
         OpenWalletMenu.Factory openedWalletMenuFactory,
         ChooseWalletMenu.Factory chooseWalletMenuFactory,
         CreateWalletMenu.Factory createWalletMenuFactory,
-        ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory)
+        ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory,
+        UnlockWalletMenu.Factory unlockWalletMenuFactory)
     {
         menuFactories.AddItems(importOrCreateMenuFactory,
                                walletCreateMenuFactory,
@@ -28,7 +29,8 @@ public class MenuFactoryManager
                                openedWalletMenuFactory,
                                chooseWalletMenuFactory,
                                createWalletMenuFactory,
-                               confirmMnemonicMenuFactory);
+                               confirmMnemonicMenuFactory,
+                               unlockWalletMenuFactory);
     }
 
     /// <summary>

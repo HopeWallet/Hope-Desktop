@@ -146,6 +146,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindMenuFactory<ChooseWalletMenu>();
         BindMenuFactory<CreateWalletMenu>();
         BindMenuFactory<WalletListMenu>();
+        BindMenuFactory<UnlockWalletMenu>();
 
         BindMenuFactory<ImportOrCreateMnemonicMenu>();
         BindMenuFactory<CreateMnemonicMenu>();

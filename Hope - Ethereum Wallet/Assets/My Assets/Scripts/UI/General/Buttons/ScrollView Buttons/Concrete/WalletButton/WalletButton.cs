@@ -34,6 +34,6 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
     private void WalletButtonClicked()
     {
         dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-        // uiManager.OpenMenu<>();
+        uiManager.OpenMenu<UnlockWalletMenu>();
     }
 }
