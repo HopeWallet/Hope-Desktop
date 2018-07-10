@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using Zenject;
 
 public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 {
-
     public TMP_Text walletNameText;
 
     private PopupManager popupManager;

@@ -22,14 +22,14 @@ public class WalletUnlocker : WalletLoaderBase
     {
         int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
-        if (!SecurePlayerPrefs.HasKey(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum))
+        if (!SecurePlayerPrefs.HasKey("password_" + walletNum))
         {
             ExceptionManager.DisplayException(new Exception("No wallet found with that number. Please try a different wallet."));
         }
 
         else
         {
-            string saltedHash = SecurePlayerPrefs.GetString(PasswordEncryption.PWD_PREF_NAME + "_" + walletNum);
+            string saltedHash = SecurePlayerPrefs.GetString("password_" + walletNum);
             AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, userPass, saltedHash));
         }
     }

@@ -7,7 +7,7 @@ using Zenject;
 /// <summary>
 /// Class which will handle the entering of a password for unlocking a wallet.
 /// </summary>
-public class WalletListMenu : Menu<WalletListMenu>
+public sealed class WalletListMenu : Menu<WalletListMenu>
 {
 
     public Button backButton;
