@@ -61,7 +61,7 @@ public class AddTokenForm : MenuAnimator
 	/// <param name="str"> The current string in the addressField </param>
 	private void AddressFieldChanged(string str)
 	{
-		addTokenButton.GetComponent<Button>().interactable = str != "" ? true : false;
+		addTokenButton.GetComponent<Button>().interactable = string.IsNullOrEmpty(str) ? true : false;
 
 		if (errorIconVisible) AnimateErrorIcon(false);
 	}
