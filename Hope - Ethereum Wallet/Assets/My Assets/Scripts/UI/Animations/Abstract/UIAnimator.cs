@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class MenuAnimator : MonoBehaviour
+public abstract class UIAnimator : MonoBehaviour
 {
 
 	[SerializeField]

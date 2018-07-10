@@ -10,7 +10,7 @@ using Hope.Utils.EthereumUtils;
 /// <summary>
 /// Class which animates the CreateMnemonicMenu.
 /// </summary>
-public class CreateMnemonicMenuAnimator : MenuAnimator
+public class CreateMnemonicMenuAnimator : UIAnimator
 {
 
     [SerializeField] private GameObject form;

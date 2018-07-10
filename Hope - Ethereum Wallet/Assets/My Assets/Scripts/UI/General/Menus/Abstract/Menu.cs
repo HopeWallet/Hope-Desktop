@@ -50,14 +50,14 @@ public abstract class Menu : MonoBehaviour
     /// <summary>
     /// The class responsible for animating this menu.
     /// </summary>
-    public MenuAnimator Animator { get; private set; }
+    public UIAnimator Animator { get; private set; }
 
     /// <summary>
     /// Gets the Menus animation component.
     /// </summary>
     private void Awake()
     {
-        Animator = GetComponent<MenuAnimator>();
+        Animator = GetComponent<UIAnimator>();
         OnAwake();
     }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class used for animating the ImportMnemonicMenu.
 /// </summary>
-public class ImportMnemonicMenuAnimator : MenuAnimator
+public class ImportMnemonicMenuAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject form1;

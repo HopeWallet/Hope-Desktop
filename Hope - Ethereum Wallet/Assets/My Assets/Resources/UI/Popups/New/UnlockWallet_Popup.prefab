@@ -139,10 +139,10 @@ GameObject:
   - component: {fileID: 224221074927297250}
   - component: {fileID: 223411103995384908}
   - component: {fileID: 114738802187051206}
-  - component: {fileID: 114250044728197046}
-  - component: {fileID: 114746784361950686}
+  - component: {fileID: 114837806261545842}
+  - component: {fileID: 114956703899352404}
   m_Layer: 0
-  m_Name: UnlockWallet_Menu
+  m_Name: UnlockWallet_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -585,25 +585,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114250044728197046
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1740821759778292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49d82e49cdba32d47bddc7c8306c41a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1155031746067014}
-  dim: {fileID: 1682876523595610}
-  form: {fileID: 1075966695083058}
-  title: {fileID: 1134703402362794}
-  passwordInputField: {fileID: 1834140963388842}
-  signInButton: {fileID: 1754134967957440}
-  errorIcon: {fileID: 1440758780493164}
 --- !u!114 &114265021338834228
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -902,21 +883,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114746784361950686
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1740821759778292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eed1066aa49eb6543bbe6beec6a5e3e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DestroyWhenClosed: 1
-  unlockWalletButton: {fileID: 114788400095928252}
-  backButton: {fileID: 114068524187399860}
-  passwordField: {fileID: 114073814867379438}
 --- !u!114 &114788400095928252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -970,6 +936,25 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114837806261545842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1740821759778292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ced0da16852614e8fe58dd1dda7454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1155031746067014}
+  dim: {fileID: 1682876523595610}
+  form: {fileID: 1075966695083058}
+  title: {fileID: 1134703402362794}
+  passwordInputField: {fileID: 1834140963388842}
+  signInButton: {fileID: 1754134967957440}
+  errorIcon: {fileID: 1440758780493164}
 --- !u!114 &114900697890520578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -997,6 +982,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114956703899352404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1740821759778292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68837790eb556bb4e832ac61d9750336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitButton: {fileID: 114068524187399860}
+  unlockWalletButton: {fileID: 114788400095928252}
+  passwordField: {fileID: 114073814867379438}
 --- !u!222 &222119732321520192
 CanvasRenderer:
   m_ObjectHideFlags: 1

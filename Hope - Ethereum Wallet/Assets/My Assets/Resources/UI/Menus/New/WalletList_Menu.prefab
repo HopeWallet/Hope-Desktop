@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 224801781838125012}
   - component: {fileID: 223960793298833982}
   - component: {fileID: 114882357522395908}
-  - component: {fileID: 114349185648667798}
+  - component: {fileID: 114404939582385194}
   - component: {fileID: 114367632256249858}
   m_Layer: 0
   m_Name: WalletList_Menu
@@ -486,23 +486,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114349185648667798
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1586119722272208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f23404124f10fe940b5a8816a17b1f69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1541764132175294}
-  form: {fileID: 1802158620545558}
-  title: {fileID: 1878389192737506}
-  walletList: {fileID: 1051990768108308}
-  newWalletButton: {fileID: 1934045875058518}
 --- !u!114 &114367632256249858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -517,6 +500,23 @@ MonoBehaviour:
   DestroyWhenClosed: 0
   backButton: {fileID: 114679122066358564}
   newWalletButton: {fileID: 114300797950357216}
+--- !u!114 &114404939582385194
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1586119722272208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d953d7181b2763d4d9e7941515fcbb9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1541764132175294}
+  form: {fileID: 1802158620545558}
+  title: {fileID: 1878389192737506}
+  walletList: {fileID: 1051990768108308}
+  newWalletButton: {fileID: 1934045875058518}
 --- !u!114 &114455334767583872
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -3,7 +3,7 @@
 /// <summary>
 /// Class which animates the transitions for the ImportOrCreateMnemonicMenu.
 /// </summary>
-public class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
+public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject form;

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnlockWalletMenuAnimator : MenuAnimator
+public class UnlockWalletPopupAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

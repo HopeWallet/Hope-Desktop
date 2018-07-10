@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TokenListForm : MenuAnimator
+public class TokenListForm : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

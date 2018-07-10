@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224402714264290390}
   - component: {fileID: 223349206792301716}
   - component: {fileID: 114850275715659094}
-  - component: {fileID: 114551704241134354}
+  - component: {fileID: 114562392507145300}
   - component: {fileID: 114480158081983146}
   m_Layer: 0
   m_Name: ImportOrCreateMnemonic_Menu
@@ -577,7 +577,7 @@ MonoBehaviour:
   importButton: {fileID: 114760323859404906}
   createButton: {fileID: 114396688832307516}
   backButton: {fileID: 114426520794784918}
---- !u!114 &114551704241134354
+--- !u!114 &114562392507145300
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -585,7 +585,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1062368077964458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 609a8ae1e9f19a44b9b241940349d7da, type: 3}
+  m_Script: {fileID: 11500000, guid: c251cc59ebbcbe84ca506326f659afa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animateOnEnable: 0

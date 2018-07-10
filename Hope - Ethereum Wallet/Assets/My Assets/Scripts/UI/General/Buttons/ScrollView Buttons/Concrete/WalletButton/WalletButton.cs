@@ -11,13 +11,13 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 
     public TMP_Text walletNameText;
 
-    private UIManager uiManager;
+    private PopupManager popupManager;
     private DynamicDataCache dynamicDataCache;
 
     [Inject]
-    public void Construct(UIManager uiManager, DynamicDataCache dynamicDataCache)
+    public void Construct(PopupManager popupManager, DynamicDataCache dynamicDataCache)
     {
-        this.uiManager = uiManager;
+        this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;
     }
 
@@ -34,6 +34,6 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
     private void WalletButtonClicked()
     {
         dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-        uiManager.OpenMenu<UnlockWalletMenu>();
+        popupManager.GetPopup<UnlockWalletPopup>();
     }
 }

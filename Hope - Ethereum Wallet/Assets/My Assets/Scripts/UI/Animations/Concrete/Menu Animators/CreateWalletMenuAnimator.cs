@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class which animates the CreateWalletMenu.
 /// </summary>
-public class CreateWalletMenuAnimator : MenuAnimator
+public class CreateWalletMenuAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject form;

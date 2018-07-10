@@ -125,6 +125,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindPopupFactories()
     {
+        BindPopupFactory<UnlockWalletPopup>();
         BindPopupFactory<LoadingPopup>();
         BindPopupFactory<AddTokenPopup>();
         BindPopupFactory<SendAssetPopup>();
@@ -146,7 +147,6 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindMenuFactory<ChooseWalletMenu>();
         BindMenuFactory<CreateWalletMenu>();
         BindMenuFactory<WalletListMenu>();
-        BindMenuFactory<UnlockWalletMenu>();
 
         BindMenuFactory<ImportOrCreateMnemonicMenu>();
         BindMenuFactory<CreateMnemonicMenu>();

@@ -3,7 +3,7 @@
 /// <summary>
 /// Class which animates the ChooseWalletMenu.
 /// </summary>
-public sealed class ChooseWalletMenuAnimator : MenuAnimator
+public sealed class ChooseWalletMenuAnimator : UIAnimator
 {
 
     [SerializeField] private GameObject form;

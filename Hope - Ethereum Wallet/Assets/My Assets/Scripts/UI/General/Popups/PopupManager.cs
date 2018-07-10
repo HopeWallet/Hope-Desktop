@@ -17,17 +17,6 @@ public sealed class PopupManager
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.
     /// </summary>
-    /// <param name="loadingPopupFactory"> The factory for creating LoadingPopups. </param>
-    /// <param name="addTokenPopupFactory"> The factory for creating AddTokenPopups. </param>
-    /// <param name="sendAssetPopupFactory"> The factory for creating SendAssetPopups. </param>
-    /// <param name="confirmSendAssetPopupFactory"> The factory for creating ConfirmSendAssetPopups. </param>
-    /// <param name="hideAssetPopupFactory"> The factory for creating HideAssetPopups. </param>
-    /// <param name="confirmHideAssetPopupFactory"> The factory for creating ConfirmHideAssetPopups. </param>
-    /// <param name="receiveAssetPopupFactory"> The factory for creating ReceiveAssetPopups. </param>
-    /// <param name="transactionInfoPopupFactory"> The factory for creating TransactionInfoPopups. </param>
-    /// <param name="prpsLockPopupFactory"> The factory for creating PRPSLockPopups. </param>
-    /// <param name="confirmPrpsLockPopupFactory"> The factory for creating ConfirmPRPSLockPopups. </param>
-    /// <param name="generalConfirmationPopupFactory"> The factory for creating GeneralTransactionConfirmationPopups. </param>
     public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
@@ -38,7 +27,8 @@ public sealed class PopupManager
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
         PRPSLockPopup.Factory prpsLockPopupFactory,
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
-        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory)
+        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
+        UnlockWalletPopup.Factory unlockWalletPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                           addTokenPopupFactory,
@@ -50,7 +40,8 @@ public sealed class PopupManager
                           transactionInfoPopupFactory,
                           prpsLockPopupFactory,
                           confirmPrpsLockPopupFactory,
-                          generalConfirmationPopupFactory);
+                          generalConfirmationPopupFactory,
+                          unlockWalletPopupFactory);
     }
 
     /// <summary>
@@ -70,6 +61,15 @@ public sealed class PopupManager
         activePopups.Pop().Value?.Invoke();
 
         return true;
+    }
+
+    /// <summary>
+    /// Closes all active popups.
+    /// </summary>
+    public void CloseAllPopups()
+    {
+        while (activePopups.Count > 0)
+            activePopups.Pop().Value?.Invoke();
     }
 
     /// <summary>
@@ -94,8 +94,7 @@ public sealed class PopupManager
         return newPopup;
     }
 
-    private void AnimatePopup<TPopup>(TPopup newPopup,
-        bool animateEnable, Action onAnimationFinished) where TPopup : FactoryPopup<TPopup>
+    private void AnimatePopup<TPopup>(TPopup newPopup, bool animateEnable, Action onAnimationFinished) where TPopup : FactoryPopup<TPopup>
     {
         var popupAnimator = newPopup.Animator;
 

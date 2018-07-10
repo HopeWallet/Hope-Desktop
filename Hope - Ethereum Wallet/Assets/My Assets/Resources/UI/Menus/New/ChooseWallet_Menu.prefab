@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 224063599673769306}
   - component: {fileID: 223049039525678296}
   - component: {fileID: 114028863085515262}
-  - component: {fileID: 114960826813707806}
+  - component: {fileID: 114723571091844658}
   - component: {fileID: 114762448418641962}
   m_Layer: 0
   m_Name: ChooseWallet_Menu
@@ -325,7 +325,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -397,6 +397,23 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114723571091844658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1439940245231382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0208ed6f625019c409c6991a23f8a707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1365734454095788}
+  form: {fileID: 1676692660229582}
+  title: {fileID: 1482257829557672}
+  ledgerButton: {fileID: 1505725371067736}
+  hopeButton: {fileID: 1882595307454442}
 --- !u!114 &114762448418641962
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -454,23 +471,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114960826813707806
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1439940245231382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df77fb7cfc704fd4c83a013197d2c2ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1365734454095788}
-  form: {fileID: 1676692660229582}
-  title: {fileID: 1482257829557672}
-  ledgerButton: {fileID: 1505725371067736}
-  hopeButton: {fileID: 1882595307454442}
 --- !u!222 &222123298490279104
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -517,7 +517,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0

@@ -3,7 +3,7 @@
 /// <summary>
 /// Class which animates the WalletListMenu.
 /// </summary>
-public class WalletListMenuAnimator : MenuAnimator
+public class WalletListMenuAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject form;

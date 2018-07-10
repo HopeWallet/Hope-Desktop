@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 224697815498819106}
   - component: {fileID: 223883181484078676}
   - component: {fileID: 114551665239613124}
-  - component: {fileID: 114649056584258980}
+  - component: {fileID: 114975046007051778}
   - component: {fileID: 114270690221523182}
   m_Layer: 0
   m_Name: ConfirmMnemonic_Menu
@@ -1287,26 +1287,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114649056584258980
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1166190241027500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f183c0f1dbea24144a205c8b1f1daf61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1549381224271326}
-  form: {fileID: 1106544132477692}
-  title: {fileID: 1941841660059344}
-  instructions: {fileID: 1605589139344388}
-  wordInputField: {fileID: 1644317778175106}
-  nextButton: {fileID: 1419342140530206}
-  checkBoxParent: {fileID: 1047311549715386}
-  errorIcon: {fileID: 1177378240008642}
 --- !u!114 &114792085172195086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1631,6 +1611,26 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114975046007051778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1166190241027500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588a9933552c78149af2b3ae8da26b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1549381224271326}
+  form: {fileID: 1106544132477692}
+  title: {fileID: 1941841660059344}
+  instructions: {fileID: 1605589139344388}
+  wordInputField: {fileID: 1644317778175106}
+  nextButton: {fileID: 1419342140530206}
+  checkBoxParent: {fileID: 1047311549715386}
+  errorIcon: {fileID: 1177378240008642}
 --- !u!222 &222007859124750248
 CanvasRenderer:
   m_ObjectHideFlags: 1

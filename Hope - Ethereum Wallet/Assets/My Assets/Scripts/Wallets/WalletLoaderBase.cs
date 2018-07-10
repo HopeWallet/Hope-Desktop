@@ -36,14 +36,14 @@ public abstract class WalletLoaderBase
 
     private void SetupPopup()
     {
-        popupManager.GetPopup<LoadingPopup>().loadingText.text = LoadingText;
+        popupManager.GetPopup<LoadingPopup>(true).loadingText.text = LoadingText;
     }
 
     private void SetupLoadActions(Action onWalletLoaded, Action setupAddressAction)
     {
         this.onWalletLoaded = () =>
         {
-            popupManager.CloseActivePopup();
+            popupManager.CloseAllPopups();
             setupAddressAction?.Invoke();
             onWalletLoaded?.Invoke();
         };

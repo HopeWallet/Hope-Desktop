@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 224547918930093246}
   - component: {fileID: 223646324280473388}
   - component: {fileID: 114030727281137358}
-  - component: {fileID: 114322789877701674}
+  - component: {fileID: 114089250681367012}
   - component: {fileID: 114546480409090398}
   m_Layer: 0
   m_Name: CreateWallet_Menu
@@ -777,6 +777,28 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114089250681367012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1996787740156080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1faa5f75025340b4aa14643c891a21f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1475811618508708}
+  form: {fileID: 1185842791821108}
+  title: {fileID: 1877274499508246}
+  walletNameField: {fileID: 1152292358957426}
+  passwordHeader: {fileID: 1523661909573088}
+  password1Field: {fileID: 1962811763491760}
+  password2Field: {fileID: 1410199489587684}
+  createButton: {fileID: 1661517219496106}
+  checkMarkIcon: {fileID: 1784752828238066}
+  errorIcon: {fileID: 1473985596704052}
 --- !u!114 &114108722606095098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1112,28 +1134,6 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114322789877701674
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1996787740156080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8ad3cca6b8b9345a16778e600bff4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1475811618508708}
-  form: {fileID: 1185842791821108}
-  title: {fileID: 1877274499508246}
-  walletNameField: {fileID: 1152292358957426}
-  passwordHeader: {fileID: 1523661909573088}
-  password1Field: {fileID: 1962811763491760}
-  password2Field: {fileID: 1410199489587684}
-  createButton: {fileID: 1661517219496106}
-  checkMarkIcon: {fileID: 1784752828238066}
-  errorIcon: {fileID: 1473985596704052}
 --- !u!114 &114353119837887812
 MonoBehaviour:
   m_ObjectHideFlags: 1

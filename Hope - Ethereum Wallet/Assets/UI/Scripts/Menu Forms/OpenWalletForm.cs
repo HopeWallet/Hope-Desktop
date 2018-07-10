@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class OpenWalletForm : MenuAnimator
+public class OpenWalletForm : UIAnimator
 {
 
 	[SerializeField] private GameObject background;

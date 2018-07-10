@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class ConfirmMnemonicMenuAnimator : MenuAnimator
+public class ConfirmMnemonicMenuAnimator : UIAnimator
 {
 
     [SerializeField] private GameObject form;

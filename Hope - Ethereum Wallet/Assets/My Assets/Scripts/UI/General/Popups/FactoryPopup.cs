@@ -11,12 +11,12 @@ public abstract class FactoryPopup<T> : MonoBehaviour where T : FactoryPopup<T>
     /// <summary>
     /// The animator of this popup.
     /// </summary>
-    public MenuAnimator Animator { get; private set; }
+    public UIAnimator Animator { get; private set; }
 
     /// <summary>
     /// Gets the potential animator for this popup.
     /// </summary>
-    protected virtual void Awake() => Animator = GetComponent<MenuAnimator>();
+    protected virtual void Awake() => Animator = GetComponent<UIAnimator>();
 
     /// <summary>
     /// Class which represents the factory for popups.

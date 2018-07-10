@@ -967,7 +967,7 @@ GameObject:
   - component: {fileID: 224974103978608068}
   - component: {fileID: 223174165125723822}
   - component: {fileID: 114910761972152346}
-  - component: {fileID: 114479580561267096}
+  - component: {fileID: 114390196648586404}
   - component: {fileID: 114312258995201092}
   m_Layer: 0
   m_Name: CreateMnemonic_Menu
@@ -2640,6 +2640,26 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114390196648586404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1989257028509146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b814de36cf946804e8d14da1c5eb738e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1741409687112006}
+  form: {fileID: 1264565618320592}
+  title: {fileID: 1332409258444392}
+  passphrase: {fileID: 1601232707927276}
+  generateNewButton: {fileID: 1148146881530552}
+  copyAllButton: {fileID: 1368249272141420}
+  confirmButton: {fileID: 1355595997482264}
+  checkMarkIcon: {fileID: 1804926611688368}
 --- !u!114 &114391545299378412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2808,26 +2828,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114479580561267096
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1989257028509146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f009ea48965a73c459d3e25d6d7d4440, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1741409687112006}
-  form: {fileID: 1264565618320592}
-  title: {fileID: 1332409258444392}
-  passphrase: {fileID: 1601232707927276}
-  generateNewButton: {fileID: 1148146881530552}
-  copyAllButton: {fileID: 1368249272141420}
-  confirmButton: {fileID: 1355595997482264}
-  checkMarkIcon: {fileID: 1804926611688368}
 --- !u!114 &114486970901239882
 MonoBehaviour:
   m_ObjectHideFlags: 1
