@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 /// <summary>
 /// Class which manages the creation and destruction of all popups.
 /// </summary>
-public class PopupManager
+public sealed class PopupManager
 {
 
     private readonly List<object> factoryPopups = new List<object>();
