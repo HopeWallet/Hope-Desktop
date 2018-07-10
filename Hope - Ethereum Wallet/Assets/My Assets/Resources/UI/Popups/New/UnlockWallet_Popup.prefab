@@ -954,7 +954,6 @@ MonoBehaviour:
   title: {fileID: 1134703402362794}
   passwordInputField: {fileID: 1834140963388842}
   signInButton: {fileID: 1754134967957440}
-  errorIcon: {fileID: 1440758780493164}
 --- !u!114 &114900697890520578
 MonoBehaviour:
   m_ObjectHideFlags: 1

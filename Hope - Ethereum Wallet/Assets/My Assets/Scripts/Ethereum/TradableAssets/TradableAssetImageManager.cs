@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 public sealed class TradableAssetImageManager
 {
 
-    private readonly Dictionary<string, Sprite> loadedImages;
+    private readonly Dictionary<string, Sprite> loadedImages = new Dictionary<string, Sprite>();
     private readonly Sprite defaultSprite;
     private readonly Vector2 pivot;
 
@@ -20,9 +20,8 @@ public sealed class TradableAssetImageManager
     /// <summary>
     /// Initializes the TradableAssetManager by getting the default sprite and initializing the dictionary.
     /// </summary>
-    public TradableAssetImageManager() : base()
+    public TradableAssetImageManager()
     {
-        loadedImages = new Dictionary<string, Sprite>();
         imagePath = Application.streamingAssetsPath + "/";
         pivot = new Vector2(0.5f, 0.5f);
         defaultSprite = CreateSprite(Resources.Load("UI/Graphics/Icons/AssetLogos/DEFAULT") as Texture2D);
@@ -32,9 +31,10 @@ public sealed class TradableAssetImageManager
     /// Gets the image for an asset given the asset's symbol.
     /// </summary>
     /// <param name="assetSymbol"> The symbol of the asset. </param>
+    /// <param name="onImageReceived"> Action called once the image has been received. </param>
     public void LoadImage(string assetSymbol, Action<Sprite> onImageReceived = null)
     {
-        if (LoadFromDictionary(assetSymbol, onImageReceived))
+        if (LoadFromDictionary(assetSymbol, onImageReceived) || LoadFromResources(assetSymbol, onImageReceived))
             return;
 
         LoadFromFiles(assetSymbol, image =>
@@ -67,7 +67,6 @@ public sealed class TradableAssetImageManager
     /// </summary>
     /// <param name="assetSymbol"> The symbol of the asset to load the image for. </param>
     /// <param name="onImageReceived"> Action to call once the image has been received. </param>
-    /// <returns></returns>
     private void LoadFromFiles(string assetSymbol, Action<Sprite> onImageReceived)
     {
         if (!File.Exists(GetFilePath(assetSymbol)))
@@ -83,6 +82,23 @@ public sealed class TradableAssetImageManager
             else
                 onImageReceived?.Invoke(null);
         }).StartCoroutine();
+    }
+
+    /// <summary>
+    /// Loads the asset image from the resources folder.
+    /// </summary>
+    /// <param name="assetSymbol"> The symbol of the asset to load the image for. </param>
+    /// <param name="onImageReceived"> Action to call once the image has been received. </param>
+    /// <returns> Whether the image was found in the Resources folder or not. </returns>
+    private bool LoadFromResources(string assetSymbol, Action<Sprite> onImageReceived)
+    {
+        Texture2D image;
+
+        if ((image = Resources.Load("UI/Graphics/Icons/AssetLogos/" + assetSymbol) as Texture2D) == null)
+            return false;
+
+        SaveImageToDictionary(image, assetSymbol, onImageReceived);
+        return true;
     }
 
     /// <summary>
@@ -126,11 +142,6 @@ public sealed class TradableAssetImageManager
         if (tex == null)
             return defaultSprite;
 
-        // ENABLE THIS CODE IF STUFF GETS BLURRY AGAIN. IDK WHY YOU DON'T NEED THIS ANYMORE. THE IMAGES SUDDENLY AREN'T BLURRY??
-        //Texture2D fixedTex = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
-        //fixedTex.SetPixels32(tex.GetPixels32());
-        //fixedTex.Apply();
-
         return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), pivot);
     }
 
@@ -159,14 +170,7 @@ public sealed class TradableAssetImageManager
         var request = UnityWebRequestTexture.GetTexture("https://www.livecoinwatch.com/images/icons64/" + assetSymbol.ToLower() + ".png");
         yield return request.SendWebRequest();
 
-        if (request.isNetworkError || request.isHttpError)
-        {
-            onTextureReceived?.Invoke(null);
-        }
-        else
-        {
-            onTextureReceived?.Invoke(DownloadHandlerTexture.GetContent(request));
-        }
+        onTextureReceived?.Invoke(request.isNetworkError || request.isHttpError ? null : DownloadHandlerTexture.GetContent(request));
     }
 
     /// <summary>
@@ -180,15 +184,6 @@ public sealed class TradableAssetImageManager
         var www = new WWW("file://" + GetFilePath(assetSymbol));
         yield return www;
 
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            ExceptionManager.DisplayException(new Exception(www.error + " => " + assetSymbol));
-            onTextureReceived?.Invoke(null);
-        }
-        else
-        {
-            onTextureReceived?.Invoke(www.texture);
-        }
+        onTextureReceived?.Invoke(string.IsNullOrEmpty(www.error) ? null : www.texture);
     }
-
 }
