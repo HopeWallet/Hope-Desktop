@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class which animates the UnlockWalletPopup.
+/// </summary>
 public class UnlockWalletPopupAnimator : UIAnimator
 {
 
@@ -10,21 +13,6 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
-	[SerializeField] private GameObject errorIcon;
-
-	private bool errorIconVisible;
-
-	/// <summary>
-	/// Makes button interactable if the errorIcon is set to visible
-	/// </summary>
-	private bool ErrorIconVisible
-	{
-		set
-		{
-			errorIconVisible = value;
-			if (errorIconVisible) signInButton.GetComponent<Button>().interactable = false;
-		}
-	}
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -32,7 +20,6 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	private void Awake()
 	{
 		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
-		signInButton.GetComponent<Button>().onClick.AddListener(SignInClicked);
 
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 	}
@@ -61,41 +48,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		signInButton.AnimateScaleX(0f, 0.15f);
 	}
 
-	/// <summary>
-	/// Animates the error icon in or out of view
-	/// </summary>
-	/// <param name="animatingIn"> Checks if animating the icon in or out </param>
-	private void AnimateErrorIcon(bool animatingIn)
-	{
-		Animating = true;
-
-		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f, () => Animating = false);
-
-		ErrorIconVisible = animatingIn;
-	}
-
-	/// <summary>
-	/// Sets the button to interactable if the input field is not empty
-	/// </summary>
-	/// <param name="str"> The current string in the password input field </param>
-	private void InputFieldChanged(string str)
-	{
-		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
-
-		if (errorIconVisible) AnimateErrorIcon(false);
-	}
-
-	/// <summary>
-	/// Checks to see if password entered is correct
-	/// </summary>
-	private void SignInClicked()
-	{
-		//if (passwordIsCorrect)
-		//{
-		//	DisableMenu();
-		//	walletListForm.DisableWalletListForm();
-		// 	//GO TO NEXT FORM
-		//else
-		//	AnimateErrorIcon(true);
-	}
+    /// <summary>
+    /// Sets the button to interactable if the input field is not empty
+    /// </summary>
+    /// <param name="str"> The current string in the password input field </param>
+    private void InputFieldChanged(string str) => signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
 }

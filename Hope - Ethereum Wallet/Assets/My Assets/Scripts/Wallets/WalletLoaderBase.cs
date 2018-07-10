@@ -62,5 +62,4 @@ public abstract class WalletLoaderBase
     }
 
     protected abstract void LoadWallet(string userPass);
-
 }

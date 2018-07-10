@@ -3,7 +3,6 @@
 /// </summary>
 public sealed class WalletInfo
 {
-
     /// <summary>
     /// The number of the wallet.
     /// </summary>
