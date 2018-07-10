@@ -53,6 +53,12 @@ public class AddTokenForm : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		title.AnimateScaleX(0f, 0.1f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)));
+
+		addTokenButton.AnimateScaleX(0f, 0.1f,
+			() => addressField.AnimateScaleX(0f, 0.1f));
 	}
 
 	/// <summary>
@@ -61,7 +67,7 @@ public class AddTokenForm : MenuAnimator
 	/// <param name="str"> The current string in the addressField </param>
 	private void AddressFieldChanged(string str)
 	{
-		addTokenButton.GetComponent<Button>().interactable = string.IsNullOrEmpty(str) ? true : false;
+		addTokenButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
 
 		if (errorIconVisible) AnimateErrorIcon(false);
 	}
@@ -75,12 +81,12 @@ public class AddTokenForm : MenuAnimator
 
 		//if (addressIsValid)
 		//{
-			AnimateCheckMarkIcon();
+		//	AnimateCheckMarkIcon();
 		//	Add this token to the token list and have it already checked and visible
 		//}
 
 		//else
-		//	AnimateErrorIcon(true);
+			AnimateErrorIcon(true);
 	}
 
 	/// <summary>
