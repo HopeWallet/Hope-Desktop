@@ -1,5 +1,4 @@
-﻿using Hope.Security.ProtectedTypes.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +31,9 @@ public class WalletListMenu : Menu<WalletListMenu>
         this.settings = settings;
     }
 
+    /// <summary>
+    /// Creates WalletButtons for each wallet that exists currently in the PlayerPrefs.
+    /// </summary>
     protected override void OnAwake()
     {
         List<GameObject> walletObjects = new List<GameObject>();
@@ -51,11 +53,17 @@ public class WalletListMenu : Menu<WalletListMenu>
         backButton.onClick.AddListener(GoBack);
     }
 
+    /// <summary>
+    /// Opens the CreateWalletMenu to allow for creating a new wallet.
+    /// </summary>
     private void CreateNewWallet()
     {
         uiManager.OpenMenu<CreateWalletMenu>();
     }
 
+    /// <summary>
+    /// The settings for this WalletListMenu.
+    /// </summary>
     [Serializable]
     public class Settings
     {
