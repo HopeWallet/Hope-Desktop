@@ -37,7 +37,11 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, ILeftC
     /// <summary>
     /// Initializes the position of this popup.
     /// </summary>
-    private void Awake() => SetupPosition();
+    protected override void Awake()
+    {
+        base.Awake();
+        SetupPosition();
+    }
 
     /// <summary>
     /// Removes this popup from the UpdateManager.

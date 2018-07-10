@@ -12,6 +12,8 @@ public sealed class PopupManager
     private readonly List<object> factoryPopups = new List<object>();
     private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
 
+    public bool AnimatingPopup { get; private set; }
+
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.
     /// </summary>
@@ -36,7 +38,7 @@ public sealed class PopupManager
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
         PRPSLockPopup.Factory prpsLockPopupFactory,
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
-        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory) : base()
+        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                           addTokenPopupFactory,
@@ -84,9 +86,39 @@ public sealed class PopupManager
         else if (activePopups.Count > 0 && !stackPopups)
             return null;
 
-        var newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().First().Create();
-        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => Object.Destroy(newPopup.gameObject)));
+        TPopup newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().Single().Create();
+        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Object.Destroy(newPopup.gameObject))));
+
+        AnimatePopup(newPopup, true, null);
 
         return newPopup;
     }
+
+    private void AnimatePopup<TPopup>(TPopup newPopup,
+        bool animateEnable, Action onAnimationFinished) where TPopup : FactoryPopup<TPopup>
+    {
+        var popupAnimator = newPopup.Animator;
+
+        if (popupAnimator != null)
+        {
+            AnimatingPopup = true;
+
+            Action<Action> animateAction;
+            if (animateEnable)
+                animateAction = popupAnimator.AnimateEnable;
+            else
+                animateAction = popupAnimator.AnimateDisable;
+
+            animateAction?.Invoke(() =>
+            {
+                AnimatingPopup = false;
+                onAnimationFinished?.Invoke();
+            });
+        }
+        else
+        {
+            onAnimationFinished?.Invoke();
+        }
+    }
+
 }

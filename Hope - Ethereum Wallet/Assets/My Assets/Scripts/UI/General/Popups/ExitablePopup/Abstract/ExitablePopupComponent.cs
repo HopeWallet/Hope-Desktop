@@ -5,7 +5,7 @@ using Zenject;
 /// Class which represents a popup with displays information and has an exit button.
 /// </summary>
 /// <typeparam name="T"> The type of popup. </typeparam>
-public class ExitablePopupComponent<T> : FactoryPopup<T> where T : FactoryPopup<T>
+public abstract class ExitablePopupComponent<T> : FactoryPopup<T> where T : FactoryPopup<T>
 {
 
     public Button exitButton;
