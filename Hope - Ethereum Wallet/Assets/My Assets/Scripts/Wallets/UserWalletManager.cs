@@ -91,12 +91,6 @@ public class UserWalletManager
     public void CreateWallet() => userWallet.Create();
 
     /// <summary>
-    /// Checks if a wallet exists and can be attempted to be opened.
-    /// </summary>
-    /// <returns> True if a wallet exists that can be read from. </returns>
-    public bool CanReadWallet() => userWallet.CanReadWallet;
-
-    /// <summary>
     /// Class which contains the settings for safely storing the password to the wallet.
     /// </summary>
     [Serializable]

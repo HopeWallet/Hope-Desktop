@@ -23,11 +23,6 @@ public sealed class UserWallet
     public string Address { get; private set; }
 
     /// <summary>
-    /// Checks whether a wallet currently exists or not.
-    /// </summary>
-    public bool CanReadWallet => prefPassword.HasPlayerPrefs() && UserWalletJsonHandler.JsonWalletExists;
-
-    /// <summary>
     /// Initializes the UserWallet with the PlayerPrefPassword object.
     /// </summary>
     /// <param name="prefPassword"> The PlayerPrefPassword object used for managing the wallet's encryption password. </param>
