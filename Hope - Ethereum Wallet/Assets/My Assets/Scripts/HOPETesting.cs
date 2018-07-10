@@ -37,20 +37,6 @@ using System.Dynamic;
 public class HOPETesting : MonoBehaviour
 {
 
-    public int index = 0;
-    public PlayerPrefPassword prefPassword;
-    public string[] words = new string[12];
-    public int walletNum = 1;
-    public string password;
-
-    [Inject] private PopupManager popupManager;
-    [Inject] private EthereumNetworkManager ethereumNetwork;
-    [Inject] private DynamicDataCache dynamicDataCache;
-
-    private UserWallet walletTest;
-
-    private string lastPass = "013874013840183401384173048130487103847103784";
-
     private void Start()
     {
         //var ledger = LedgerClient.GetHIDLedgers().First();
@@ -59,42 +45,8 @@ public class HOPETesting : MonoBehaviour
         //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
         //Debug.Log(pubkey.Address);
         //Debug.Log(firmware);
-
-        //PlayerPrefs.DeleteAll();
-
-        walletTest = new UserWallet(prefPassword, popupManager, ethereumNetwork.CurrentNetwork, dynamicDataCache);
     }
 
-    private void Update()
-    {
-        if (lastPass != password)
-        {
-            var walletNum = SecurePlayerPrefs.HasKey("wallet_count") ? SecurePlayerPrefs.GetInt("wallet_count") : 1;
-            dynamicDataCache.SetData("pass", new ProtectedString(password));
-            dynamicDataCache.SetData("name", "My Wallet_" + walletNum);
-            lastPass = password;
-        }
-    }
-
-    [ContextMenu("Create Wallet")]
-    public void CreateWallet()
-    {
-        dynamicDataCache.SetData("mnemonic", new ProtectedString(string.Join(" ", words).Trim()));
-        walletTest.Create();
-    }
-
-    [ContextMenu("Unlock Wallet")]
-    public void UnlockWallet()
-    {
-        dynamicDataCache.SetData("walletnum", walletNum);
-        walletTest.Unlock();
-    }
-
-    [ContextMenu("Get Address")]
-    public void GetAddress()
-    {
-        walletTest.GetAddress(0).Log();
-    }
 
     private void AnonymousStuff()
     {

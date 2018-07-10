@@ -6,26 +6,17 @@ using Object = UnityEngine.Object;
 /// <summary>
 /// Class which manages the creation and destruction of all popups.
 /// </summary>
-public class PopupManager
+public sealed class PopupManager
 {
 
     private readonly List<object> factoryPopups = new List<object>();
     private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
 
+    public bool AnimatingPopup { get; private set; }
+
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.
     /// </summary>
-    /// <param name="loadingPopupFactory"> The factory for creating LoadingPopups. </param>
-    /// <param name="addTokenPopupFactory"> The factory for creating AddTokenPopups. </param>
-    /// <param name="sendAssetPopupFactory"> The factory for creating SendAssetPopups. </param>
-    /// <param name="confirmSendAssetPopupFactory"> The factory for creating ConfirmSendAssetPopups. </param>
-    /// <param name="hideAssetPopupFactory"> The factory for creating HideAssetPopups. </param>
-    /// <param name="confirmHideAssetPopupFactory"> The factory for creating ConfirmHideAssetPopups. </param>
-    /// <param name="receiveAssetPopupFactory"> The factory for creating ReceiveAssetPopups. </param>
-    /// <param name="transactionInfoPopupFactory"> The factory for creating TransactionInfoPopups. </param>
-    /// <param name="prpsLockPopupFactory"> The factory for creating PRPSLockPopups. </param>
-    /// <param name="confirmPrpsLockPopupFactory"> The factory for creating ConfirmPRPSLockPopups. </param>
-    /// <param name="generalConfirmationPopupFactory"> The factory for creating GeneralTransactionConfirmationPopups. </param>
     public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
@@ -36,7 +27,8 @@ public class PopupManager
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
         PRPSLockPopup.Factory prpsLockPopupFactory,
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
-        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory) : base()
+        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
+        UnlockWalletPopup.Factory unlockWalletPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                           addTokenPopupFactory,
@@ -48,7 +40,8 @@ public class PopupManager
                           transactionInfoPopupFactory,
                           prpsLockPopupFactory,
                           confirmPrpsLockPopupFactory,
-                          generalConfirmationPopupFactory);
+                          generalConfirmationPopupFactory,
+                          unlockWalletPopupFactory);
     }
 
     /// <summary>
@@ -71,6 +64,15 @@ public class PopupManager
     }
 
     /// <summary>
+    /// Closes all active popups.
+    /// </summary>
+    public void CloseAllPopups()
+    {
+        while (activePopups.Count > 0)
+            activePopups.Pop().Value?.Invoke();
+    }
+
+    /// <summary>
     /// Gets the current active popup or creates a new popup given the popup type.
     /// </summary>
     /// <typeparam name="TPopup"> The type of the popup. </typeparam>
@@ -84,9 +86,38 @@ public class PopupManager
         else if (activePopups.Count > 0 && !stackPopups)
             return null;
 
-        var newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().First().Create();
-        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => Object.Destroy(newPopup.gameObject)));
+        TPopup newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().Single().Create();
+        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Object.Destroy(newPopup.gameObject))));
+
+        AnimatePopup(newPopup, true, null);
 
         return newPopup;
     }
+
+    private void AnimatePopup<TPopup>(TPopup newPopup, bool animateEnable, Action onAnimationFinished) where TPopup : FactoryPopup<TPopup>
+    {
+        var popupAnimator = newPopup.Animator;
+
+        if (popupAnimator != null)
+        {
+            AnimatingPopup = true;
+
+            Action<Action> animateAction;
+            if (animateEnable)
+                animateAction = popupAnimator.AnimateEnable;
+            else
+                animateAction = popupAnimator.AnimateDisable;
+
+            animateAction?.Invoke(() =>
+            {
+                AnimatingPopup = false;
+                onAnimationFinished?.Invoke();
+            });
+        }
+        else
+        {
+            onAnimationFinished?.Invoke();
+        }
+    }
+
 }

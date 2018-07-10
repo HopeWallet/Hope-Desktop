@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddTokenForm : MenuAnimator
+public class AddTokenForm : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

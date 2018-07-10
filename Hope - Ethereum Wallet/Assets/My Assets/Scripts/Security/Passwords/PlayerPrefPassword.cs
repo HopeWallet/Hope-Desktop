@@ -74,19 +74,6 @@ public class PlayerPrefPassword : ScriptableObject
     }
 
     /// <summary>
-    /// Checks if the SecurePlayerPrefs contain the derivation data needed.
-    /// </summary>
-    /// <returns> True if the data exists. </returns>
-    public bool HasPlayerPrefs()
-    {
-        foreach (string key in keys)
-            if (!SecurePlayerPrefs.HasKey(key))
-                return false;
-
-        return true;
-    }
-
-    /// <summary>
     /// Adds a certain number of character lookup tables to use to derive passwords.
     /// </summary>
     /// <param name="extraCharLookups"> The array of character lookups to add. </param>

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ExitConfirmationForm : MenuAnimator
+public class ExitConfirmationForm : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

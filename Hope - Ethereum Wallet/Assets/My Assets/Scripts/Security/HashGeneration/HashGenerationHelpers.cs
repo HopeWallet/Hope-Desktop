@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 
 namespace Hope.Security.HashGeneration
 {
@@ -18,8 +17,11 @@ namespace Hope.Security.HashGeneration
         /// <returns> The hashed <see langword="string"/>. </returns>
         public static string GetHash<T>(string input) where T : HashAlgorithm
         {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
             using (T hash = (T)CryptoConfig.CreateFromName(typeof(T).ToString()))
-                return hash.ComputeHash(Encoding.UTF8.GetBytes(input)).GetHexString();
+                return hash.ComputeHash(input.GetUTF8Bytes()).GetHexString();
         }
 
     }
