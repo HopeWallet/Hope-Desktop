@@ -624,7 +624,7 @@ GameObject:
   - component: {fileID: 224158847075401152}
   - component: {fileID: 222765890711561800}
   - component: {fileID: 114242579542583220}
-  - component: {fileID: 114971197141990628}
+  - component: {fileID: 114148026897749932}
   m_Layer: 5
   m_Name: Loading_Icon
   m_TagString: Untagged
@@ -1115,6 +1115,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 1
+--- !u!114 &114148026897749932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1859220304818552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9947c0ed14382484c9dc300323e4e443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114152707913465598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3222,17 +3233,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114971197141990628
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1859220304818552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91ee8870cee51334d88476b7d27d340a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114982662387286436
 MonoBehaviour:
   m_ObjectHideFlags: 1

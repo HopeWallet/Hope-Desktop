@@ -693,6 +693,7 @@ MonoBehaviour:
   tradableAssetButtonSettings:
     spawnTransform: {fileID: 1030595572}
   transactionButtonSettings:
+    loadingIconObject: {fileID: 1551361040}
     spawnTransform: {fileID: 1030595574}
     loadingText: {fileID: 1924294306}
     scrollBar: {fileID: 1030595573}
@@ -945,6 +946,11 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &1551361040 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1859220304818552, guid: ab281cfd370a64b40832f35d5ea1bc00,
+    type: 2}
+  m_PrefabInternal: {fileID: 1632497333}
 --- !u!1001 &1632497333
 Prefab:
   m_ObjectHideFlags: 0

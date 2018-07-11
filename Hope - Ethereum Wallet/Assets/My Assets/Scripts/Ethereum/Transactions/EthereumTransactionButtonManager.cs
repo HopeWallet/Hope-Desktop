@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class which manages the transaction buttons.
 /// </summary>
-public class EthereumTransactionButtonManager
+public sealed class EthereumTransactionButtonManager
 {
 
     private readonly Settings settings;
@@ -57,7 +57,7 @@ public class EthereumTransactionButtonManager
 
         UpdateButtons(transactionList);
         UpdateTransactionList(transactionList);
-        UpdateText(transactionList);
+        UpdateLoadingVisuals(transactionList);
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class EthereumTransactionButtonManager
     /// Text will display "No transactions found." if the list is empty.
     /// </summary>
     /// <param name="transactionList"> The list of transactions to use to update the text. </param>
-    private void UpdateText(List<TransactionInfo> transactionList)
+    private void UpdateLoadingVisuals(List<TransactionInfo> transactionList)
     {
         if (settings.loadingText == null)
             return;
@@ -107,7 +107,7 @@ public class EthereumTransactionButtonManager
     /// <param name="transactionList"> The list to use to set the button visibility. </param>
     private void UpdateButtons(List<TransactionInfo> transactionList)
     {
-        var buttonCount = transactionList == null ? 0 : transactionList.Count;
+        var buttonCount = transactionList?.Count ?? 0;
 
         for (int i = 0; i < transactionButtons.Count; i++)
             if (transactionButtons?[i] != null)
@@ -125,6 +125,7 @@ public class EthereumTransactionButtonManager
     [Serializable]
     public class Settings
     {
+        public GameObject loadingIconObject;
         public Transform spawnTransform;
         public TMP_Text loadingText;
         public Scrollbar scrollBar;

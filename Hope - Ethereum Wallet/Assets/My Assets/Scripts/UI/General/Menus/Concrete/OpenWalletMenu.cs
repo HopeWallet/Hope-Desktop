@@ -50,6 +50,9 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
         tokenContractManager.StartTokenLoad(OpenMenu);
     }
 
+    /// <summary>
+    /// Called when the OpenWalletMenu is first opened.
+    /// </summary>
     private void OpenMenu()
     {
         backgroundVignette.SetActive(false);
