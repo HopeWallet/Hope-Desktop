@@ -15,11 +15,8 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     [Tooltip("Extra menus to use with the UIManager, except they will not be instantiated.")]
     private Menu[] extraMenus; // Extra menus that cannot be instantiated, but still need to be used in the UIManager.
 
-    private Settings settings;
-    private UIProvider uiProvider;
     private MenuFactoryManager menuFactoryManager;
     private PopupManager popupManager;
-    private UserWalletManager userWalletManager;
 
     private readonly Stack<Menu> menus = new Stack<Menu>();
     private readonly List<Menu> createdMenus = new List<Menu>();
@@ -29,25 +26,16 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <summary>
     /// Initializes the UIManager with all the required dependencies.
     /// </summary>
-    /// <param name="settings"> The settings to use with this UIManager. </param>
-    /// <param name="uiProvider"> The provider to use to retrieve the root gameobject of the ui. </param>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="menuFactoryManager"> The active MenuFactoryManager which is used to create menus of certain types. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
-    public void Construct(Settings settings,
-        UIProvider uiProvider,
-        ButtonClickObserver buttonObserver,
+    public void Construct(ButtonClickObserver buttonObserver,
         PopupManager popupManager,
-        MenuFactoryManager menuFactoryManager,
-        UserWalletManager userWalletManager)
+        MenuFactoryManager menuFactoryManager)
     {
-        this.settings = settings;
-        this.uiProvider = uiProvider;
         this.popupManager = popupManager;
         this.menuFactoryManager = menuFactoryManager;
-        this.userWalletManager = userWalletManager;
 
         buttonObserver.SubscribeObservable(this);
     }
