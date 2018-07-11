@@ -26,8 +26,8 @@ public class LoadingText : MonoBehaviour
 	private void Awake()
 	{
 		textMeshPro = transform.GetComponent<TextMeshProUGUI>();
-		baseText = textMeshPro.text;
-		endText = baseText + "....";
+		baseText = textMeshPro.text + ".";
+		endText = baseText + "...";
 		textString = baseText;
 	}
 
