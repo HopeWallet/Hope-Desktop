@@ -4,10 +4,15 @@ using TMPro;
 
 public class LoadingText : MonoBehaviour
 {
+
 	private TextMeshProUGUI textMeshPro;
-	private string baseText;
-	private string endText;
-	private string textString;
+
+    private GameObject loadingTextObj;
+
+    private string baseText,
+                   endText,
+                   textString;
+
 	private float waitTime = 0.2f;
 
 	/// <summary>
@@ -26,15 +31,16 @@ public class LoadingText : MonoBehaviour
 
 	private void Awake()
 	{
-		textMeshPro = transform.GetComponent<TextMeshProUGUI>();
-		baseText = textMeshPro.text + ".";
-		endText = baseText + "...";
-		textString = baseText;
 	}
 
 	private void Start()
 	{
-		StartCoroutine(AddDotsToText());
+        loadingTextObj = gameObject;
+        textMeshPro = transform.GetComponent<TextMeshProUGUI>();
+        baseText = textMeshPro.text + ".";
+        endText = baseText + "...";
+        textString = baseText;
+        StartCoroutine(AddDotsToText());
 	}
 
 	/// <summary>

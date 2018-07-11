@@ -17,14 +17,14 @@ public sealed class EthereumTransactionButtonManager
 
     private readonly List<TransactionInfoButton> transactionButtons = new List<TransactionInfoButton>();
 
-	/// <summary>
-	/// Initializes the EthereumTransactionButtonManager by assigning the settings.
-	/// </summary>
-	/// <param name="settings"> The settings of this manager. </param>
-	/// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
-	/// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
-	/// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
-	public EthereumTransactionButtonManager(Settings settings,
+    /// <summary>
+    /// Initializes the EthereumTransactionButtonManager by assigning the settings.
+    /// </summary>
+    /// <param name="settings"> The settings of this manager. </param>
+    /// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
+    /// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
+    /// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
+    public EthereumTransactionButtonManager(Settings settings,
         TradableAssetManager tradableAssetManager,
         EthereumTransactionManager transactionManager,
         TransactionInfoButton.Factory buttonFactory)
@@ -97,8 +97,9 @@ public sealed class EthereumTransactionButtonManager
         if (settings.loadingText == null)
             return;
 
-        settings.loadingText.text = transactionList == null ? "Loading transactions..." : transactionList.Count == 0 ? "No transactions found." : "";
+        settings.loadingIconObject.SetActive(transactionList == null);
         settings.loadingText.gameObject.SetActive(transactionList == null || transactionList.Count == 0);
+        settings.loadingText.text = transactionList == null ? "Loading transactions..." : transactionList.Count == 0 ? "No transactions found." : "";
     }
 
     /// <summary>
