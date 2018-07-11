@@ -73,7 +73,39 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     /// </summary>
     public override void LoadWallet()
     {
-        dynamicDataCache.SetData("mnemonic", new ProtectedString(string.Join(" ", wordFields.Select(field => field.text))));
-        userWalletManager.CreateWallet();
+        if (CheckCreatedMnemonic())
+            userWalletManager.CreateWallet();
     }
+
+    /// <summary>
+    /// Checks if data already exists in the DynamicDataCache.
+    /// If the data is equal to the mnemonic entered in the input fields, display the ConfirmMnemonicMenu.
+    /// </summary>
+    /// <returns> True if the mnemonic was unique and the wallet can be directly imported. </returns>
+    private bool CheckCreatedMnemonic()
+    {
+        var mnemonicData = dynamicDataCache.GetData("mnemonic");
+        var newMnemonic = string.Join(" ", wordFields.Select(field => field.text));
+
+        if (mnemonicData == null)
+        {
+            dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
+            return true;
+        }
+
+        using (var mnemonic = (mnemonicData as ProtectedString)?.CreateDisposableData())
+        {
+            if (mnemonic.Value.EqualsIgnoreCase(newMnemonic, true))
+            {
+                uiManager.OpenMenu<ConfirmMnemonicMenu>();
+                return false;
+            }
+            else
+            {
+                dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
+                return true;
+            }
+        }
+    }
+
 }
