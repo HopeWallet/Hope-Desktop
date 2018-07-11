@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LoadingBarForm : UIAnimator
+public class ProgressBarLoadingPopup : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

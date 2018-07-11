@@ -20,7 +20,6 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	private void Awake()
 	{
 		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
-
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 	}
 

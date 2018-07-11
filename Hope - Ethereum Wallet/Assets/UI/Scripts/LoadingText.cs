@@ -8,6 +8,7 @@ public class LoadingText : MonoBehaviour
 	private string baseText;
 	private string endText;
 	private string textString;
+	private float waitTime = 0.2f;
 
 	/// <summary>
 	/// The main text object's string
@@ -42,12 +43,10 @@ public class LoadingText : MonoBehaviour
 	/// <returns></returns>
 	private IEnumerator AddDotsToText()
 	{
-		yield return new WaitForSeconds(0.3f);
+		yield return new WaitForSeconds(waitTime);
 
-		if (TextString == endText)
-			TextString = baseText;
-		else
-			TextString += ".";
+		TextString = TextString == endText ? baseText : TextString + ".";
+		waitTime = TextString == endText ? 0.2f : waitTime + 0.05f;
 
 		StartCoroutine(AddDotsToText());
 	}

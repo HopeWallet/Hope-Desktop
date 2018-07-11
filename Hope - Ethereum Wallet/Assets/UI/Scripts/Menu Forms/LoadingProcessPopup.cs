@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class VerifyingPasswordForm : UIAnimator
+public class LoadingProcessPopup : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

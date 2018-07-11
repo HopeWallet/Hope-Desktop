@@ -51,9 +51,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4850164336645478}
-  - component: {fileID: 114137470254556588}
+  - component: {fileID: 114806137477373666}
   m_Layer: 0
-  m_Name: LoadingBar_Form
+  m_Name: ProgressBarLoading_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,23 +178,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114137470254556588
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1373716709977090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 993f5a3c1c233054cb01a6ad406a6f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 1
-  blocker: {fileID: 1711477312388612}
-  dim: {fileID: 1825478849590530}
-  form: {fileID: 1512772693821586}
-  text: {fileID: 1709170723448004}
-  loadingBar: {fileID: 1263498026755388}
 --- !u!114 &114320266795528108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,6 +324,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961fd753a6c12be499af7d0bfc9268c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114806137477373666
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1373716709977090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36377c84f6340045ad4e8329d1a3a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 1
+  blocker: {fileID: 1711477312388612}
+  dim: {fileID: 1825478849590530}
+  form: {fileID: 1512772693821586}
+  text: {fileID: 1709170723448004}
+  loadingBar: {fileID: 1263498026755388}
 --- !u!114 &114917560634067566
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -437,11 +437,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:

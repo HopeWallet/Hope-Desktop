@@ -37,9 +37,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4445093813573008}
-  - component: {fileID: 114722694893889006}
+  - component: {fileID: 114112261449245450}
   m_Layer: 0
-  m_Name: VerifyingPassword_Form
+  m_Name: LoadingProcess_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,6 +132,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114112261449245450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1364737141961984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c596b52dc15a0340887bf96a7719d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 1
+  blocker: {fileID: 1876843087142884}
+  dim: {fileID: 1761106594595056}
+  form: {fileID: 1534111880457628}
+  text: {fileID: 1697144743846782}
+  loadingIcon: {fileID: 1198707539821814}
 --- !u!114 &114370930303840042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -338,23 +355,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114722694893889006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1364737141961984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7f23c541de7ca14d988b14cd7a2a3ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 1
-  blocker: {fileID: 1876843087142884}
-  dim: {fileID: 1761106594595056}
-  form: {fileID: 1534111880457628}
-  text: {fileID: 1697144743846782}
-  loadingIcon: {fileID: 1198707539821814}
 --- !u!114 &114811538277622706
 MonoBehaviour:
   m_ObjectHideFlags: 1

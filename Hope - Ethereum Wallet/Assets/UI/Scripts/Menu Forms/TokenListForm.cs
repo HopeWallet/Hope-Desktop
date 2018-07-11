@@ -90,4 +90,16 @@ public class TokenListForm : UIAnimator
 	/// customTokenButton is clicked and opens up the addTokenForm
 	/// </summary>
 	private void CustomTokenClicked() => addTokenForm.SetActive(true);
+
+	/// <summary>
+	/// Animates the checkmark in or out if user has clicked on the checkbox for the desired token
+	/// </summary>
+	/// <param name="index"> The index of the checkbox in the tokenList </param>
+	/// <param name="animatingIn"> Checks if animating the checkmark in or out </param>
+	private void CheckboxClicked(int index, bool animatingIn)
+	{
+		float endValue = animatingIn ? 1f : 0f;
+
+		tokenList.transform.GetChild(0).GetChild(0).GetChild(index).GetChild(2).GetChild(0).gameObject.AnimateGraphicAndScale(endValue, endValue, 0.1f);
+	}
 }
