@@ -831,6 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
+  backgroundVignette: {fileID: 0}
   assetText: {fileID: 114897154735284166}
   balanceText: {fileID: 114189627227541964}
   assetImage: {fileID: 114967936315283588}

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using TMPro;
 using UISettings;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -10,9 +11,9 @@ using Zenject;
 public class OpenWalletMenu : Menu<OpenWalletMenu>
 {
 
+    public GameObject backgroundVignette;
+
     public TMP_Text assetText,
-                    //assetSymbolText,
-                    //smallBalanceText,
                     balanceText;
 
     public Image assetImage;
@@ -46,7 +47,13 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     private void Start()
     {
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
-        tokenContractManager.StartTokenLoad(() => transform.GetChild(0).gameObject.SetActive(true));
+        tokenContractManager.StartTokenLoad(OpenMenu);
+    }
+
+    private void OpenMenu()
+    {
+        backgroundVignette.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 
     /// <summary>
