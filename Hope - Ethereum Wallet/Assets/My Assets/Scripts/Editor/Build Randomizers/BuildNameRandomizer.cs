@@ -10,8 +10,6 @@ public class BuildNameRandomizer
     private static string CompanyName;
     private static string ProductName;
 
-    private static string[] SavedKeys;
-
     /// <summary>
     /// Replaces the names with a random password.
     /// </summary>
