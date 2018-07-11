@@ -9,6 +9,6 @@ public class LoadingIcon : MonoBehaviour
 	/// </summary>
 	private void Update()
 	{
-		if (transform.gameObject.activeInHierarchy) transform.DOLocalRotate(new Vector3(0f, 0f, -360f), 4f, RotateMode.LocalAxisAdd);
+		if (transform.gameObject.activeInHierarchy) transform.DOLocalRotate(new Vector3(0f, 0f, -360f), 6f, RotateMode.LocalAxisAdd);
 	}
 }
