@@ -93,7 +93,10 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		bool startingProcess = !loadingIcon.activeInHierarchy;
 
 		if (startingProcess)
+		{
 			loadingIcon.SetActive(true);
+			signInButton.GetComponent<Button>().interactable = false;
+		}
 
 		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.2f);
 
