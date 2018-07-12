@@ -7,49 +7,23 @@ using TMPro;
 /// </summary>
 public class LoadingTextAnimator : MonoBehaviour
 {
-
-    public string startingText;
-    public string finalText;
-
     private TextMeshProUGUI textMeshPro;
 
-    private GameObject loadingTextObj;
-
-    private string baseText,
-                   endText,
-                   textString;
-
     private float waitTime = 0.2f;
+
+    private const int LIMIT = 3;
 
     /// <summary>
     /// Whether the LoadingTextAnimator should be stopped.
     /// </summary>
     public bool Stop { get; set; }
-
-    /// <summary>
-    /// The main text object's string
-    /// </summary>
-    private string TextString
-    {
-        get { return textString; }
-
-        set
-        {
-            textString = value;
-            textMeshPro.text = value;
-        }
-    }
     
     /// <summary>
     /// Initializes elements.
     /// </summary>
     private void Awake()
     {
-        loadingTextObj = gameObject;
         textMeshPro = transform.GetComponent<TextMeshProUGUI>();
-        baseText = startingText + ".";
-        endText = baseText + "...";
-        textString = baseText;
     }
 
     /// <summary>
@@ -68,13 +42,19 @@ public class LoadingTextAnimator : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
 
-        TextString = TextString == endText ? baseText : TextString + ".";
-        waitTime = TextString == endText ? 0.2f : waitTime + 0.05f;
+        string currentText = textMeshPro.text;
 
-        if (Stop)
-            textMeshPro.text = finalText;
-        else
+        int firstIndex = currentText.IndexOf('.');
+        int lastIndex = currentText.LastIndexOf('.');
+
+        bool needsMoreDots = firstIndex == -1 || lastIndex - firstIndex < LIMIT;
+
+        textMeshPro.text = needsMoreDots ? currentText + "." : currentText.TrimEnd('.');
+        waitTime = needsMoreDots ? waitTime + 0.05f : 0.2f;
+
+        if (!Stop)
             StartCoroutine(AddDotsToText());
-
+        else
+            textMeshPro.text = textMeshPro.text.TrimEnd('.') + ".";
     }
 }
