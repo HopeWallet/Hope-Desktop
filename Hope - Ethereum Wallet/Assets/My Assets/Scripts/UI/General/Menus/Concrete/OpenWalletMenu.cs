@@ -25,7 +25,7 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     private Dropdowns uiDropdowns;
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
-    private const int MAX_ASSET_BALANCE_LENGTH = 43;
+    private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
     /// <summary>
     /// Injects the required dependency into this class.
