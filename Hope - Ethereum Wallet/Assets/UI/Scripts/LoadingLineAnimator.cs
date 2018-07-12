@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class LoadingLine : MonoBehaviour
+public class LoadingLineAnimator : MonoBehaviour
 {
 
 	[SerializeField] private GameObject[] circles;
