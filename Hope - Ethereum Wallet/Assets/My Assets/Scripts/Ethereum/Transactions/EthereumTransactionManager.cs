@@ -192,9 +192,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     {
         await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
 
-        // TESTING DELAYED TRANSACTION LOADING
-        MainThreadExecutor.QueueAction(() => CoroutineUtils.ExecuteAfterWait(3f, () => onTransactionsProcessed?.Invoke()));
-        //onTransactionsProcessed?.Invoke();
+        onTransactionsProcessed?.Invoke();
     }
 
     /// <summary>

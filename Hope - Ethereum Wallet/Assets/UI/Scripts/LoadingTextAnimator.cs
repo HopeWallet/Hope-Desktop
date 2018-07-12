@@ -2,6 +2,9 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Class which animates loading text.
+/// </summary>
 public class LoadingTextAnimator : MonoBehaviour
 {
 
@@ -18,6 +21,9 @@ public class LoadingTextAnimator : MonoBehaviour
 
     private float waitTime = 0.2f;
 
+    /// <summary>
+    /// Whether the LoadingTextAnimator should be stopped.
+    /// </summary>
     public bool Stop { get; set; }
 
     /// <summary>
@@ -33,7 +39,10 @@ public class LoadingTextAnimator : MonoBehaviour
             textMeshPro.text = value;
         }
     }
-
+    
+    /// <summary>
+    /// Initializes elements.
+    /// </summary>
     private void Awake()
     {
         loadingTextObj = gameObject;
@@ -43,6 +52,9 @@ public class LoadingTextAnimator : MonoBehaviour
         textString = baseText;
     }
 
+    /// <summary>
+    /// Starts the coroutine.
+    /// </summary>
     private void OnEnable()
     {
         StartCoroutine(AddDotsToText());
