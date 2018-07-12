@@ -61,7 +61,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 
 		passwordInputField.AnimateScaleX(0f, 0.15f);
 		signInButton.AnimateScaleX(0f, 0.15f);
+
 		if (errorIconVisible) AnimateErrorIcon(false);
+		if (loadingIcon.activeInHierarchy) VerifyingPassword();
 	}
 
 	/// <summary>
