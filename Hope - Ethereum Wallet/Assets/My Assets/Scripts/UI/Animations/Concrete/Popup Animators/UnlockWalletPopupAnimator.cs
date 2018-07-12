@@ -78,7 +78,11 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <summary>
 	/// Called if the password is incorrect
 	/// </summary>
-	public void PasswordIncorrect() => AnimateErrorIcon(true);
+	public void PasswordIncorrect()
+	{
+		AnimateErrorIcon(true);
+		VerifyingPassword();
+	}
 
 	/// <summary>
 	/// Animates the loadingIcon while starting and finished the verify password
