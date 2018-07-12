@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,8 +13,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
     private readonly Queue<AssetToScrape> assetsToScrape = new Queue<AssetToScrape>();
     private readonly Dictionary<string, List<TransactionInfo>> transactionsByAddress = new Dictionary<string, List<TransactionInfo>>();
-
-    //private readonly ConcurrentDictionary<string, List<TransactionInfo>> transactionsByAddress = new ConcurrentDictionary<string, List<TransactionInfo>>();
 
     private readonly TradableAssetManager tradableAssetManager;
     private readonly UserWalletManager userWalletManager;
@@ -72,9 +69,21 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     public void PeriodicUpdate() => tradableAssetManager.TradableAssets.ForEach(asset => AddAssetToScrape(asset.Value));
 
     /// <summary>
-    /// Gets the transaction list for each asset sequentially.
+    /// Scrapes the transaction list for each tradable asset sequentially.
     /// </summary>
-    public void UpdaterUpdate() => ScrapeQueuedAssets();
+    public void UpdaterUpdate()
+    {
+        if (assetsToScrape.Count == 0 || isScraping)
+            return;
+
+        isScraping = true;
+
+        ScrapeAsset(assetsToScrape.Dequeue(), () => ScrapeAsset(assetsToScrape.Dequeue(), () =>
+        {
+            MainThreadExecutor.QueueAction(OnTransactionsAdded);
+            isScraping = false;
+        }));
+    }
 
     /// <summary>
     /// Adds an asset to the list of assets to scrape transactions for.
@@ -129,29 +138,12 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <summary>
     /// Scrapes the transaction list for the next asset in the queue once it has finished with the last asset.
     /// </summary>
-    private void ScrapeQueuedAssets()
+    /// <param name="assetToScrape"> The current asset to have the transactions scraped for. </param>
+    /// <param name="onAssetScraped"> Action to call once the transactions have been scraped. </param>
+    private void ScrapeAsset(AssetToScrape assetToScrape, Action onAssetScraped)
     {
-        if (assetsToScrape.Count == 0 || isScraping)
-            return;
-
-        isScraping = true;
-
-        var scrape1 = assetsToScrape.Dequeue();
-        var scrape2 = assetsToScrape.Dequeue();
-        WebClientUtils.GetTransactionList(scrape1.Url, txlist =>
-        {
-            scrape1.ProcessTransactionList(txlist, scrape1.AssetAddress, scrape1.IgnoreReceipt, () =>
-            {
-                WebClientUtils.GetTransactionList(scrape2.Url, txlist2 =>
-                {
-                    scrape2.ProcessTransactionList(txlist2, scrape2.AssetAddress, scrape2.IgnoreReceipt, () =>
-                    {
-                        MainThreadExecutor.QueueAction(OnTransactionsAdded);
-                        isScraping = false;
-                    });
-                });
-            });
-        });
+        WebClientUtils.GetTransactionList(assetToScrape.Url,
+            txList => assetToScrape.ProcessTransactionList(txList, assetToScrape.AssetAddress, assetToScrape.IgnoreReceipt, onAssetScraped));
     }
 
     /// <summary>
@@ -199,8 +191,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         Func<T, TransactionInfo> getTransaction, Action onTransactionsProcessed)
     {
         await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
-        //ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction);
 
+        // TESTING DELAYED TRANSACTION LOADING
         MainThreadExecutor.QueueAction(() => CoroutineUtils.ExecuteAfterWait(3f, () => onTransactionsProcessed?.Invoke()));
         //onTransactionsProcessed?.Invoke();
     }

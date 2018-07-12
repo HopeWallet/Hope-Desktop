@@ -102,7 +102,6 @@ public sealed class EthereumTransactionButtonManager
         settings.loadingText.GetComponent<LoadingTextAnimator>().Stop = transactionList != null;
         settings.loadingText.gameObject.SetActive(transactionList == null || transactionList.Count == 0);
         settings.loadingText.text = transactionList?.Count == 0 ? "No transactions found." : "Loading transactions";
-        //settings.loadingText.text = transactionList == null ? "Loading transactions" : "No transactions found.";
     }
 
     /// <summary>
