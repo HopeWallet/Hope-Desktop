@@ -46,15 +46,11 @@ public sealed class UserWallet
     /// Unlocks a wallet if the password is correct.
     /// </summary>
     /// <param name="walletNum"> The number of the wallet to unlock. </param>
-    public void Unlock()
-    {
-        walletUnlocker.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
-    }
+    public void Unlock() => Load(walletUnlocker);
 
-    public void Create()
-    {
-        walletCreator.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
-    }
+    public void Create() => Load(walletCreator);
+
+    private void Load(WalletLoaderBase walletLoader) => walletLoader.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
 
     public string GetAddress(int addressIndex)
     {

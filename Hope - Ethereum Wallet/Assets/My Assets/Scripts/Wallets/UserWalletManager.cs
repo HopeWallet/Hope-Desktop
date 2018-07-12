@@ -8,7 +8,6 @@ using System;
 /// </summary>
 public class UserWalletManager
 {
-
     private readonly UserWallet userWallet;
 
     private readonly ProtectedInt walletNumber = new ProtectedInt(0);

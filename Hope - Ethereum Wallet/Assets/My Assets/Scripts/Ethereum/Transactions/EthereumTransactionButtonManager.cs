@@ -77,6 +77,7 @@ public sealed class EthereumTransactionButtonManager
     /// <summary>
     /// Gets the button for a transaction at a given index. Creates a new one if it doesn't exist already.
     /// </summary>
+    /// <param name="transactionInfo"> The TransactionInfo object to assign to the TransactionInfoButton. </param>
     /// <param name="index"> The index of the button in the list. </param>
     /// <returns> The button at that given index, or newly created. </returns>
     private void SetTransactionButton(TransactionInfo transactionInfo, int index)
@@ -133,5 +134,4 @@ public sealed class EthereumTransactionButtonManager
         public TMP_Text loadingText;
         public Scrollbar scrollBar;
     }
-
 }
