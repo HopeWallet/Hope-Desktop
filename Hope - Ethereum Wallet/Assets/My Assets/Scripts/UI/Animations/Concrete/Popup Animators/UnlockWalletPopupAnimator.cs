@@ -13,6 +13,22 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
+	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject errorIcon;
+
+	private bool errorIconVisible;
+
+	/// <summary>
+	/// Makes button interactable if the errorIcon is set to visible
+	/// </summary>
+	private bool ErrorIconVisible
+	{
+		set
+		{
+			errorIconVisible = value;
+			if (errorIconVisible) signInButton.GetComponent<Button>().interactable = false;
+		}
+	}
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -47,9 +63,48 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		signInButton.AnimateScaleX(0f, 0.15f);
 	}
 
-    /// <summary>
-    /// Sets the button to interactable if the input field is not empty
-    /// </summary>
-    /// <param name="str"> The current string in the password input field </param>
-    private void InputFieldChanged(string str) => signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
+	/// <summary>
+	/// Sets the button to interactable if the input field is not empty
+	/// </summary>
+	/// <param name="str"> The current string in the password input field </param>
+	private void InputFieldChanged(string str)
+	{
+		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
+
+		if (errorIconVisible) AnimateErrorIcon(false);
+	}
+
+	/// <summary>
+	/// Called if the password is incorrect
+	/// </summary>
+	public void PasswordIncorrect()
+	{
+		AnimateErrorIcon(true);
+		VerifyingPassword(false);
+	}
+
+	/// <summary>
+	/// Animates the loadingIcon while starting and finished the verify password
+	/// </summary>
+	/// <param name="startingProcess"> Checks if animating in or out </param>
+	public void VerifyingPassword(bool startingProcess)
+	{
+		if (startingProcess)
+			loadingIcon.SetActive(true);
+
+		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.2f);
+
+		if (!startingProcess)
+			loadingIcon.SetActive(false);
+	}
+
+	/// <summary>
+	/// Animates the error icon on or off screen
+	/// </summary>
+	/// <param name="animatingIn"> Checks if animating the error icon in or out </param>
+	private void AnimateErrorIcon(bool animatingIn)
+	{
+		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f);
+		ErrorIconVisible = animatingIn;
+	}
 }
