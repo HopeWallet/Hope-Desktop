@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -98,8 +99,10 @@ public sealed class EthereumTransactionButtonManager
             return;
 
         settings.loadingIconObject.SetActive(transactionList == null);
+        settings.loadingText.GetComponent<LoadingTextAnimator>().Stop = transactionList != null;
         settings.loadingText.gameObject.SetActive(transactionList == null || transactionList.Count == 0);
-        settings.loadingText.text = transactionList == null ? "Loading transactions..." : transactionList.Count == 0 ? "No transactions found." : "";
+        settings.loadingText.text = transactionList?.Count == 0 ? "No transactions found." : "Loading transactions";
+        //settings.loadingText.text = transactionList == null ? "Loading transactions" : "No transactions found.";
     }
 
     /// <summary>
