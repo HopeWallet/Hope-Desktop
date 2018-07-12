@@ -77,18 +77,16 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <summary>
 	/// Called if the password is incorrect
 	/// </summary>
-	public void PasswordIncorrect()
-	{
-		AnimateErrorIcon(true);
-		VerifyingPassword(false);
-	}
+	public void PasswordIncorrect() => AnimateErrorIcon(true);
 
 	/// <summary>
 	/// Animates the loadingIcon while starting and finished the verify password
 	/// </summary>
 	/// <param name="startingProcess"> Checks if animating in or out </param>
-	public void VerifyingPassword(bool startingProcess)
+	public void VerifyingPassword()
 	{
+		bool startingProcess = !loadingIcon.activeInHierarchy;
+
 		if (startingProcess)
 			loadingIcon.SetActive(true);
 
