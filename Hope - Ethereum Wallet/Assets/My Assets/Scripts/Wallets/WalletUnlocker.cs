@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 public class WalletUnlocker : WalletLoaderBase
 {
 
-    protected override string LoadingText => "Unlocking wallet...";
+    protected override string LoadingText => "Unlocking wallet";
 
     public WalletUnlocker(
         PopupManager popupManager,

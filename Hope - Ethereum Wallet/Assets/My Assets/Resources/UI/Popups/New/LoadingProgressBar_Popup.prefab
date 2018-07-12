@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4850164336645478}
   - component: {fileID: 114806137477373666}
   m_Layer: 0
-  m_Name: ProgressBarLoading_Popup
+  m_Name: LoadingProgressBar_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

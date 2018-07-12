@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 public abstract class WalletLoaderBase
 {
-
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPassword playerPrefPassword;
     protected readonly DynamicDataCache dynamicDataCache;
@@ -36,7 +35,7 @@ public abstract class WalletLoaderBase
 
     private void SetupPopup()
     {
-        popupManager.GetPopup<LoadingPopup>(true).loadingText.text = LoadingText;
+        popupManager.GetPopup<LoadingPopup>(true).Text = LoadingText;
     }
 
     private void SetupLoadActions(Action onWalletLoaded, Action setupAddressAction)

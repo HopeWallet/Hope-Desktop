@@ -11,7 +11,7 @@ using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 public class WalletCreator : WalletLoaderBase
 {
 
-    protected override string LoadingText => "Creating wallet...";
+    protected override string LoadingText => "Creating wallet";
 
     public WalletCreator(
         PopupManager popupManager,
