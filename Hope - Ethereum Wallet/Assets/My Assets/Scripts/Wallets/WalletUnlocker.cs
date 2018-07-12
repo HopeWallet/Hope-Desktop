@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 
 public class WalletUnlocker : WalletLoaderBase
 {
-
-    protected override string LoadingText => "Unlocking wallet";
-
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
@@ -34,6 +31,11 @@ public class WalletUnlocker : WalletLoaderBase
         }
     }
 
+    protected override void SetupPopup()
+    {
+        (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator).VerifyingPassword();
+    }
+
     private async Task TryPassword(int walletNum, string password, string saltedHash)
     {
         // Experiment with potentially multiple layers of passwords
@@ -50,7 +52,11 @@ public class WalletUnlocker : WalletLoaderBase
 
     private void IncorrectPassword()
     {
-        MainThreadExecutor.QueueAction(() => ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. ")));
+        MainThreadExecutor.QueueAction(() =>
+        {
+            //ExceptionManager.DisplayException(new Exception("Unable to unlock wallet, incorrect password. "));
+            (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator).PasswordIncorrect();
+        });
     }
 
     private void CorrectPassword(int walletNum, string password)
