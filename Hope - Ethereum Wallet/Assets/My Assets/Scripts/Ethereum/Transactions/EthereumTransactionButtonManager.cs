@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -76,6 +77,7 @@ public sealed class EthereumTransactionButtonManager
     /// <summary>
     /// Gets the button for a transaction at a given index. Creates a new one if it doesn't exist already.
     /// </summary>
+    /// <param name="transactionInfo"> The TransactionInfo object to assign to the TransactionInfoButton. </param>
     /// <param name="index"> The index of the button in the list. </param>
     /// <returns> The button at that given index, or newly created. </returns>
     private void SetTransactionButton(TransactionInfo transactionInfo, int index)
@@ -98,8 +100,9 @@ public sealed class EthereumTransactionButtonManager
             return;
 
         settings.loadingIconObject.SetActive(transactionList == null);
+        settings.loadingText.GetComponent<LoadingTextAnimator>().Stop = transactionList != null;
         settings.loadingText.gameObject.SetActive(transactionList == null || transactionList.Count == 0);
-        settings.loadingText.text = transactionList == null ? "Loading transactions..." : transactionList.Count == 0 ? "No transactions found." : "";
+        settings.loadingText.text = transactionList?.Count == 0 ? "No transactions found." : "Loading transactions";
     }
 
     /// <summary>
@@ -131,5 +134,4 @@ public sealed class EthereumTransactionButtonManager
         public TMP_Text loadingText;
         public Scrollbar scrollBar;
     }
-
 }

@@ -36,6 +36,10 @@ public class WalletUnlocker : WalletLoaderBase
 
     private async Task TryPassword(int walletNum, string password, string saltedHash)
     {
+        // Experiment with potentially multiple layers of passwords
+        // Layer 1 can be maybe 1/4th the password, and will have a very simplified version of the salted hash with less iterations.
+        // Layer 2 can be maybe 1/2 the password, with more iterations than layer 1, but still less than the full password.
+        // Checking these layers first will speed up the password checking process quite significantly.
         bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
 
         if (!correctPassword)
@@ -61,7 +65,6 @@ public class WalletUnlocker : WalletLoaderBase
 
             AsyncTaskScheduler.Schedule(() => UnlockWalletAsync(hashLvls, SecurePlayerPrefs.GetString("wallet_" + walletNum), password));
         });
-
     }
 
     private async Task UnlockWalletAsync(string[] hashLvls, string encryptedSeed, string password)

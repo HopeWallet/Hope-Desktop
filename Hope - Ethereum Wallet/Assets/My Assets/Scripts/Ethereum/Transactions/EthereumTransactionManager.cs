@@ -30,10 +30,11 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// </summary>
     /// <param name="periodicUpdateManager"> Thge PeriodicUpdateManager to use when periodically checking for new transactions. </param>
     /// <param name="updateManager"> The UpdateManager to use when getting the transactions for each asset. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     /// <param name="ethereumNetwork"> The network manager. </param>
-    public EthereumTransactionManager(PeriodicUpdateManager periodicUpdateManager, 
-        UpdateManager updateManager, 
+    public EthereumTransactionManager(PeriodicUpdateManager periodicUpdateManager,
+        UpdateManager updateManager,
         TradableAssetManager tradableAssetManager,
         UserWalletManager userWalletManager,
         EthereumNetworkManager ethereumNetwork) : base()
@@ -68,9 +69,21 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     public void PeriodicUpdate() => tradableAssetManager.TradableAssets.ForEach(asset => AddAssetToScrape(asset.Value));
 
     /// <summary>
-    /// Gets the transaction list for each asset sequentially.
+    /// Scrapes the transaction list for each tradable asset sequentially.
     /// </summary>
-    public void UpdaterUpdate() => ScrapeQueuedAssets();
+    public void UpdaterUpdate()
+    {
+        if (assetsToScrape.Count == 0 || isScraping)
+            return;
+
+        isScraping = true;
+
+        ScrapeAsset(assetsToScrape.Dequeue(), () => ScrapeAsset(assetsToScrape.Dequeue(), () =>
+        {
+            MainThreadExecutor.QueueAction(OnTransactionsAdded);
+            isScraping = false;
+        }));
+    }
 
     /// <summary>
     /// Adds an asset to the list of assets to scrape transactions for.
@@ -125,22 +138,12 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <summary>
     /// Scrapes the transaction list for the next asset in the queue once it has finished with the last asset.
     /// </summary>
-    private void ScrapeQueuedAssets()
+    /// <param name="assetToScrape"> The current asset to have the transactions scraped for. </param>
+    /// <param name="onAssetScraped"> Action to call once the transactions have been scraped. </param>
+    private void ScrapeAsset(AssetToScrape assetToScrape, Action onAssetScraped)
     {
-        if (assetsToScrape.Count == 0 || isScraping)
-            return;
-
-        isScraping = true;
-
-        var newAsset = assetsToScrape.Dequeue();
-        WebClientUtils.GetTransactionList(newAsset.Url, txlist =>
-        {
-            newAsset.ProcessTransactionList(txlist, newAsset.AssetAddress, newAsset.IgnoreReceipt, () =>
-            {
-                OnTransactionsAdded?.Invoke();
-                isScraping = false;
-            });
-        });
+        WebClientUtils.GetTransactionList(assetToScrape.Url,
+            txList => assetToScrape.ProcessTransactionList(txList, assetToScrape.AssetAddress, assetToScrape.IgnoreReceipt, onAssetScraped));
     }
 
     /// <summary>
@@ -187,19 +190,18 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     private async void ProcessTransactionData<T>(string transactionData, string assetAddress, Func<T, bool> isValidTransaction,
         Func<T, TransactionInfo> getTransaction, Action onTransactionsProcessed)
     {
-        Task readDataTask = new Task(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction));
-        readDataTask.Start();
+        await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
 
-        await readDataTask;
-
-        onTransactionsProcessed?.Invoke();
+        // TESTING DELAYED TRANSACTION LOADING
+        MainThreadExecutor.QueueAction(() => CoroutineUtils.ExecuteAfterWait(3f, () => onTransactionsProcessed?.Invoke()));
+        //onTransactionsProcessed?.Invoke();
     }
 
     /// <summary>
     /// Reads the json data from the transaction list received.
     /// </summary>
     /// <typeparam name="T"> The type of the transaction json object. Either EtherTransactionJson or TokenTransactionJson. </typeparam>
-    /// <param name="transactionData"> The transaction data to process. </param>
+    /// <param name="transactionList"> The transaction data to process. </param>
     /// <param name="assetAddress"> The address of this asset. </param>
     /// <param name="isValidTransaction"> Func to call to determine if the current transaction is valid or not. </param>
     /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
