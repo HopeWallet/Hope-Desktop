@@ -43,16 +43,13 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
         AnimateColor(true);
     }
 
-    private void OnDisable()
-    {
-        updateManager.RemoveUpdater(this);
-    }
+	private void OnDisable() => updateManager.RemoveUpdater(this);
 
-    /// <summary>
-    /// Animates the image's color to a white or a gray
-    /// </summary>
-    /// <param name="isGray"> Checks what the current color state is </param>
-    private void AnimateColor(bool isGray)
+	/// <summary>
+	/// Animates the image's color to a white or a gray
+	/// </summary>
+	/// <param name="isGray"> Checks what the current color state is </param>
+	private void AnimateColor(bool isGray)
     {
         if (iconObj.activeInHierarchy)
             image.DOColor(isGray ? LIGHT_COLOR : GRAY_COLOR, 1f).OnComplete(() => AnimateColor(!isGray));
