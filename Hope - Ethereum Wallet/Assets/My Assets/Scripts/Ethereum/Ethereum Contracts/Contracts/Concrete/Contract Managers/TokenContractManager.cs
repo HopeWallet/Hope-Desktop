@@ -133,7 +133,7 @@ public class TokenContractManager
     public void StartTokenLoad(Action onTokensLoaded = null)
     {
         var popup = popupManager.GetPopup<LoadingPopup>();
-        popup.SetLoadingText("wallet");
+        popup.Text = "Loading wallet";
 
         var loadAction = (() => popupManager.CloseActivePopup()) + onTokensLoaded;
 
