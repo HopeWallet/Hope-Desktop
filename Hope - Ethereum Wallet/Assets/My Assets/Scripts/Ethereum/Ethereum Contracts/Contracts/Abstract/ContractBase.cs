@@ -82,12 +82,12 @@ public abstract class ContractBase
     /// <param name="onContractInitialized"> Action to call once the contract gets intialized. </param>
     private void GetContractABI(string contractAddress, Action<ContractBase, string> onContractInitialized = null)
     {
-        //WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), (abi)
-        //           => TryContractSetup(contractAddress, abi, onContractInitialized));
+        WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), (abi)
+                   => TryContractSetup(contractAddress, abi, onContractInitialized));
 
-        
-        WebClientUtils.DownloadString(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), json
-                   => TryContractSetup(contractAddress, JsonConvert.DeserializeAnonymousType(, onContractInitialized));
+
+        //WebClientUtils.DownloadString(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), json
+        //           => TryContractSetup(contractAddress, JsonConvert.DeserializeAnonymousType(, onContractInitialized));
     }
 
     /// <summary>
