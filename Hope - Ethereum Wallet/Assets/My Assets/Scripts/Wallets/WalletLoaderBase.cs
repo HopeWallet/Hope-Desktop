@@ -14,8 +14,6 @@ public abstract class WalletLoaderBase
 
     protected ProtectedString[] addresses;
 
-    protected abstract string LoadingText { get; }
-
     protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, DynamicDataCache dynamicDataCache)
     {
         this.popupManager = popupManager;
@@ -31,11 +29,6 @@ public abstract class WalletLoaderBase
 
         using (var pass = dynamicDataCache.GetData("pass").CreateDisposableData())
             LoadWallet(pass.Value);
-    }
-
-    private void SetupPopup()
-    {
-        popupManager.GetPopup<LoadingPopup>(true).Text = LoadingText;
     }
 
     private void SetupLoadActions(Action onWalletLoaded, Action setupAddressAction)
@@ -59,6 +52,8 @@ public abstract class WalletLoaderBase
         var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
         Array.Copy(addressesToCopy, addresses, addresses.Length);
     }
+
+    protected abstract void SetupPopup();
 
     protected abstract void LoadWallet(string userPass);
 }

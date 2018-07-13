@@ -10,9 +10,6 @@ using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 
 public class WalletCreator : WalletLoaderBase
 {
-
-    protected override string LoadingText => "Creating wallet";
-
     public WalletCreator(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
@@ -24,6 +21,11 @@ public class WalletCreator : WalletLoaderBase
     {
         CreateWalletCountPref();
         TryCredentials(userPass);
+    }
+
+    protected override void SetupPopup()
+    {
+        popupManager.GetPopup<LoadingPopup>(true).Text = "Creating wallet";
     }
 
     private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
