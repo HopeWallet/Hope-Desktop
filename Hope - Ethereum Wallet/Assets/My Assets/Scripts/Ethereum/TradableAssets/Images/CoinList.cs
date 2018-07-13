@@ -10,6 +10,7 @@ public class CoinList
 	public CoinList()
 	{
 		GetCoinList();
+        UnityEngine.Debug.Log("starting");
 	}
 
 	public int? GetCoinID(string symbol)
@@ -30,5 +31,7 @@ public class CoinList
 		CMCData cmcData = await Task.Run(() => JsonUtils.GetJsonData<CMCData>(coinList)).ConfigureAwait(false);
 
 		await Task.Run(() => cmcData.data.ForEach(coin => coinIDs.Add(coin.symbol, coin.id))).ConfigureAwait(false);
+
+        MainThreadExecutor.QueueAction(() => UnityEngine.Debug.Log("Done getting data"));
 	}
 }

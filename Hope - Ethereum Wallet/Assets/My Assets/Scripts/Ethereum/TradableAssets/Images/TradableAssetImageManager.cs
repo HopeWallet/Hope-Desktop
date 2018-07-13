@@ -15,13 +15,17 @@ public sealed class TradableAssetImageManager
     private readonly Sprite defaultSprite;
     private readonly Vector2 pivot;
 
+    private readonly CoinList coinList;
+
     private readonly string imagePath;
 
     /// <summary>
     /// Initializes the TradableAssetManager by getting the default sprite and initializing the dictionary.
     /// </summary>
-    public TradableAssetImageManager()
+    public TradableAssetImageManager(CoinList coinList)
     {
+        this.coinList = coinList;
+
         imagePath = Application.streamingAssetsPath + "/";
         pivot = new Vector2(0.5f, 0.5f);
         defaultSprite = CreateSprite(Resources.Load("UI/Graphics/Icons/AssetLogos/DEFAULT") as Texture2D);
@@ -167,10 +171,16 @@ public sealed class TradableAssetImageManager
     /// <returns> Waits for the image download request to finish. </returns>
     private IEnumerator _DownloadImage(string assetSymbol, Action<Texture2D> onTextureReceived)
     {
-        var request = UnityWebRequestTexture.GetTexture("https://www.livecoinwatch.com/images/icons64/" + assetSymbol.ToLower() + ".png");
-        yield return request.SendWebRequest();
+        UnityWebRequest webRequest = null;
+        int? assetId = coinList.GetCoinID(assetSymbol);
 
-        onTextureReceived?.Invoke(request.isNetworkError || request.isHttpError ? null : DownloadHandlerTexture.GetContent(request));
+        if (assetId.HasValue)
+        {
+            webRequest = UnityWebRequestTexture.GetTexture("https://s2.coinmarketcap.com/static/img/coins/200x200/" + assetId.Value + ".png");
+            yield return webRequest.SendWebRequest();
+        }
+
+        onTextureReceived?.Invoke(webRequest?.isNetworkError != false || webRequest.isHttpError ? null : DownloadHandlerTexture.GetContent(webRequest));
     }
 
     /// <summary>
