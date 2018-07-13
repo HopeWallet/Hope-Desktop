@@ -13,6 +13,16 @@ public sealed class LoadingPopup : FactoryPopup<LoadingPopup>
     /// <summary>
     /// The text of the LoadingPopup.
     /// </summary>
-    public string Text { get { return loadingText.text; } set { loadingText.text = value; } }
+    public string Text
+	{
+		get { return loadingText.text; }
+		set
+		{
+			float transformX =  175f - (value.Length * 6.5f);
+			loadingText.transform.localPosition = new Vector2(transformX, loadingText.transform.localPosition.y);
+
+			loadingText.text = value;
+		}
+	}
 
 }
