@@ -1,4 +1,5 @@
 ﻿using Nethereum.Contracts;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -79,9 +80,15 @@ public abstract class ContractBase
     /// </summary>
     /// <param name="contractAddress"> The contract address to get the abi for. </param>
     /// <param name="onContractInitialized"> Action to call once the contract gets intialized. </param>
-    private void GetContractABI(string contractAddress, Action<ContractBase, string> onContractInitialized = null) 
-        => WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), (abi) 
-            => TryContractSetup(contractAddress, abi, onContractInitialized));
+    private void GetContractABI(string contractAddress, Action<ContractBase, string> onContractInitialized = null)
+    {
+        //WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), (abi)
+        //           => TryContractSetup(contractAddress, abi, onContractInitialized));
+
+        
+        WebClientUtils.DownloadString(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), json
+                   => TryContractSetup(contractAddress, JsonConvert.DeserializeAnonymousType(, onContractInitialized));
+    }
 
     /// <summary>
     /// Attempts to setup the contract. Throws an error if the contract was invalid, or something else went wrong in the process.

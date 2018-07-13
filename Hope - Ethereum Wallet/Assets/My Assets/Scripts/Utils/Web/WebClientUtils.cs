@@ -30,13 +30,13 @@ public static class WebClientUtils
     }
 
     /// <summary>
-    /// Gets the list of transactions from the transaction url.
+    /// Downloads a string from a url.
     /// </summary>
-    /// <param name="transactionsUrl"> The url which contains all the transactions of an ethereum address. </param>
-    /// <param name="onTransactionsReceived"> Action to call once the transaction list has been received. </param>
-    public static async void GetTransactionList(string transactionsUrl, Action<string> onTransactionsReceived)
+    /// <param name="url"> The url which contains the string data. </param>
+    /// <param name="onTransactionsReceived"> Action to call once the string has been received. </param>
+    public static async void DownloadString(string url, Action<string> onTransactionsReceived)
     {
-        onTransactionsReceived?.Invoke(await DownloadString(transactionsUrl));
+        onTransactionsReceived?.Invoke(await DownloadString(url).ConfigureAwait(false));
     }
 
     /// <summary>
