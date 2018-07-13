@@ -170,11 +170,6 @@ public sealed class TradableAssetImageManager
     /// <param name="onTextureReceived"> Action to call once the image has been downloaded. </param>
     /// <returns> Waits for the image download request to finish. </returns>
     private IEnumerator _DownloadImage(string assetSymbol, Action<Texture2D> onTextureReceived)
-<<<<<<< HEAD
-	{ 
-        var request = UnityWebRequestTexture.GetTexture("https://www.livecoinwatch.com/images/icons64/" + assetSymbol.ToLower() + ".png");
-        yield return request.SendWebRequest();
-=======
     {
         UnityWebRequest webRequest = null;
         int? assetId = coinList.GetCoinID(assetSymbol);
@@ -184,7 +179,6 @@ public sealed class TradableAssetImageManager
             webRequest = UnityWebRequestTexture.GetTexture("https://s2.coinmarketcap.com/static/img/coins/200x200/" + assetId.Value + ".png");
             yield return webRequest.SendWebRequest();
         }
->>>>>>> e63ab774a5db35d60f62569a44537ad026dcd23b
 
         onTextureReceived?.Invoke(webRequest?.isNetworkError != false || webRequest.isHttpError ? null : DownloadHandlerTexture.GetContent(webRequest));
     }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddTokenForm : UIAnimator
+public class AddTokenPopupAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;
