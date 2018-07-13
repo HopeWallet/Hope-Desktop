@@ -166,7 +166,7 @@ public sealed class TradableAssetImageManager
     /// <param name="onTextureReceived"> Action to call once the image has been downloaded. </param>
     /// <returns> Waits for the image download request to finish. </returns>
     private IEnumerator _DownloadImage(string assetSymbol, Action<Texture2D> onTextureReceived)
-    {
+	{ 
         var request = UnityWebRequestTexture.GetTexture("https://www.livecoinwatch.com/images/icons64/" + assetSymbol.ToLower() + ".png");
         yield return request.SendWebRequest();
 

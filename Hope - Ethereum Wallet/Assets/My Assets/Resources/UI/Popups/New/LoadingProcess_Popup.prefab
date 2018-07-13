@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c596b52dc15a0340887bf96a7719d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1876843087142884}
   dim: {fileID: 1761106594595056}
   form: {fileID: 1534111880457628}

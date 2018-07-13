@@ -13,7 +13,7 @@ public static class JsonUtils
     /// <typeparam name="T"> The type of the object. </typeparam>
     /// <param name="jsonString"> The string of json text. </param>
     /// <returns> The object created from the text. </returns>
-    public static T GetJsonData<T>(string jsonString) where T : class => jsonString == null ? null : JsonConvert.DeserializeObject<T>(jsonString);
+    public static T GetJsonData<T>(string jsonString) where T : class => string.IsNullOrEmpty(jsonString) ? null : JsonConvert.DeserializeObject<T>(jsonString);
 
     /// <summary>
     /// Writes a json object to a path.
