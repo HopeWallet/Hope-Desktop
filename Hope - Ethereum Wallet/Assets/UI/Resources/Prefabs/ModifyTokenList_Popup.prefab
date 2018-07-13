@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 222732065292201850}
   - component: {fileID: 114906070077047146}
   - component: {fileID: 114467131245159020}
+  - component: {fileID: 114959818401000252}
   m_Layer: 5
   m_Name: Checkbox_Icon
   m_TagString: Untagged
@@ -531,6 +532,7 @@ GameObject:
   - component: {fileID: 222252895287594258}
   - component: {fileID: 114295501602309378}
   - component: {fileID: 114971270009514148}
+  - component: {fileID: 114811394348515274}
   m_Layer: 5
   m_Name: Checkbox_Icon
   m_TagString: Untagged
@@ -689,6 +691,7 @@ GameObject:
   - component: {fileID: 222133493705840062}
   - component: {fileID: 114636244539535056}
   - component: {fileID: 114630561187043686}
+  - component: {fileID: 114448204909590916}
   m_Layer: 5
   m_Name: Checkbox_Icon
   m_TagString: Untagged
@@ -1498,7 +1501,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -1750,6 +1753,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114448204909590916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1971865262221358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4de07345e079548b5434465ff94405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114451050669679062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1803,9 +1817,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5,
+    m_HighlightedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2041,7 +2055,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224491789971137304}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.4860832
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2198,7 +2212,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -2242,9 +2256,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5,
+    m_HighlightedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2557,6 +2571,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114811394348515274
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1767150657684036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4de07345e079548b5434465ff94405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114870108421011122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2772,7 +2797,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -2790,6 +2815,17 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114959818401000252
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1500958407211154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4de07345e079548b5434465ff94405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114971270009514148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2816,9 +2852,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5,
+    m_HighlightedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: dcd773837e735a64d8517f3384a1a8c5, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 3bfe7152f1aa0a2449090f634e6e1284, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3727,7 +3763,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 612410.25}
+  m_AnchoredPosition: {x: 0, y: 639962.6}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224922574219337772
