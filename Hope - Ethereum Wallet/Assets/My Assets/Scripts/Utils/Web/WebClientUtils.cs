@@ -33,10 +33,10 @@ public static class WebClientUtils
     /// Downloads a string from a url.
     /// </summary>
     /// <param name="url"> The url which contains the string data. </param>
-    /// <param name="onTransactionsReceived"> Action to call once the string has been received. </param>
-    public static async void DownloadString(string url, Action<string> onTransactionsReceived)
+    /// <param name="onStringReceived"> Action to call once the string has been received. </param>
+    public static async void DownloadString(string url, Action<string> onStringReceived)
     {
-        onTransactionsReceived?.Invoke(await DownloadString(url).ConfigureAwait(false));
+        onStringReceived?.Invoke(await DownloadString(url).ConfigureAwait(false));
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public static class WebClientUtils
     /// <returns> Returns a task which downloads and performs operations on a retrieved from a url. </returns>
     private static Task<string> DownloadString(string url, Func<string, string> modifyString = null)
     {
-        Task<string> t = new Task<string>(() =>
+        return Task.Run(() =>
         {
             ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
 
@@ -70,10 +70,6 @@ public static class WebClientUtils
 
             return apiString;
         });
-
-        t.Start();
-
-        return t;
     }
 
     /// <summary>

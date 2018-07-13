@@ -68,6 +68,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<DynamicDataCache>().AsSingle().NonLazy();
 
+        Container.Bind<CoinList>().AsSingle().NonLazy();
+
         Container.Bind<SecurePlayerPrefs>().AsSingle().NonLazy();
         Container.Bind<SecurePlayerPrefsAsync>().AsSingle().NonLazy();
 
