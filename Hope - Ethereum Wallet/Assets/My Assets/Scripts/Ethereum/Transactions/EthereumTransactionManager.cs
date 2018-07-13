@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 /// <summary>
 /// Class which manages the loading and updating of ethereum and token transaction data.
@@ -37,7 +38,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         UpdateManager updateManager,
         TradableAssetManager tradableAssetManager,
         UserWalletManager userWalletManager,
-        EthereumNetworkManager ethereumNetwork) : base()
+        EthereumNetworkManager ethereumNetwork)
     {
         TradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
         TokenContractManager.OnTokensLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this);
@@ -142,7 +143,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="onAssetScraped"> Action to call once the transactions have been scraped. </param>
     private void ScrapeAsset(AssetToScrape assetToScrape, Action onAssetScraped)
     {
-        WebClientUtils.DownloadString(assetToScrape.Url,
+        HttpUtils.DownloadString(assetToScrape.Url,
             txList => assetToScrape.ProcessTransactionList(txList, assetToScrape.AssetAddress, assetToScrape.IgnoreReceipt, onAssetScraped));
     }
 
@@ -192,6 +193,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     {
         await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
 
+        //MainThreadExecutor.QueueAction(() => CoroutineUtils.ExecuteAfterWait(1f, () => onTransactionsProcessed?.Invoke()));
+
         onTransactionsProcessed?.Invoke();
     }
 
@@ -205,9 +208,13 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
     private void ReadJsonData<T>(string transactionList, string assetAddress, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
-        var transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<T>>(transactionList);
+        EtherscanAPIJson<T> transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<T>>(transactionList);
+
         if (transactionsJson == null)
+        {
+            Debug.Log("NULL => " + tradableAssetManager.GetTradableAsset(assetAddress).AssetSymbol + " => " + transactionList);
             return;
+        }
 
         AddTransactions(assetAddress, GetValidTransactions(transactionsJson, isValidTransaction, getTransaction));
     }
@@ -222,13 +229,22 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         if (!transactionsByAddress.ContainsKey(assetAddress))
             transactionsByAddress.Add(assetAddress, new List<TransactionInfo>());
 
-        transactions.ForEach(tx =>
+        if (transactions != null)
         {
-            if (!transactionsByAddress[assetAddress].Select(savedTx => savedTx.TxHash).Contains(tx.TxHash))
-                transactionsByAddress[assetAddress].Add(tx);
-        });
+            transactions.ForEach(tx =>
+            {
+                if (!transactionsByAddress[assetAddress].Select(savedTx => savedTx.TxHash).Contains(tx.TxHash))
+                    transactionsByAddress[assetAddress].Add(tx);
+            });
 
-        transactionsByAddress[assetAddress].Sort((info1, info2) => info1.TimeStamp.CompareTo(info2.TimeStamp));
+            transactionsByAddress[assetAddress].Sort((info1, info2) => info1.TimeStamp.CompareTo(info2.TimeStamp));
+        }
+
+        //MainThreadExecutor.QueueAction(() =>
+        //{
+        //    var tradableAsset = tradableAssetManager.GetTradableAsset(assetAddress);
+        //    Debug.Log(tradableAsset.AssetSymbol + " => " + transactionsByAddress[assetAddress]?.Count);
+        //});
     }
 
     /// <summary>

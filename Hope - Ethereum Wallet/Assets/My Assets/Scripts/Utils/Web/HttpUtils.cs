@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// Class used for scraping data off of web apis.
 /// </summary>
-public static class WebClientUtils
+public static class HttpUtils
 {
 
     /// <summary>
@@ -17,16 +18,15 @@ public static class WebClientUtils
     /// <param name="onAbiReceived"> Action to execute and pass the abi as a parameter once it has successfully been processed. </param>
     public static async void GetContractABI(string apiUrl, Action<string> onAbiReceived)
     {
-        onAbiReceived?.Invoke(await DownloadString(apiUrl, (abi) =>
-        {
-            if (abi != null)
-            {
-                abi = abi.Replace("\"", "'").Replace("\\", "");
-                abi = abi.Substring(abi.IndexOf("["), abi.LastIndexOf("'") - abi.IndexOf("["));
-            }
+        string abiJson = await DownloadString(apiUrl).ConfigureAwait(false);
 
-            return abi;
-        }));
+        if (abiJson != null)
+        {
+            abiJson = abiJson.Replace("\"", "'").Replace("\\", "");
+            abiJson = abiJson.Substring(abiJson.IndexOf("["), abiJson.LastIndexOf("'") - abiJson.IndexOf("["));
+        }
+
+        onAbiReceived?.Invoke(abiJson);
     }
 
     /// <summary>
@@ -43,37 +43,27 @@ public static class WebClientUtils
     /// Downloads a string from a given url.
     /// </summary>
     /// <param name="url"> The url to download the string from. </param>
-    /// <param name="modifyString"> Func to execute once the string has been received. Used to perform string operations on before returning the final result. </param>
     /// <returns> Returns a task which downloads and performs operations on a retrieved from a url. </returns>
-    private static Task<string> DownloadString(string url, Func<string, string> modifyString = null)
+    private static async Task<string> DownloadString(string url)
     {
-        return Task.Run(() =>
+        ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
+        string downloadedString = null;
+
+        try
         {
-            ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
+            using (HttpClient client = new HttpClient())
+                downloadedString = await client.GetStringAsync(url).ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.Log(url + " => " + e.Message);
+        }
 
-            string apiString = null;
-
-            try
-            {
-                using (WebClient webClient = new WebClient())
-                {
-                    apiString = webClient.DownloadString(url);
-                }
-
-                if (modifyString != null)
-                    apiString = modifyString(apiString);
-            }
-            catch
-            {
-                apiString = null;
-            }
-
-            return apiString;
-        });
+        return downloadedString;
     }
 
     /// <summary>
-    /// Allows us to successfully access the WebClient without errors.
+    /// Allows us to successfully access and make requests with the HttpClient without errors.
     /// </summary>
     private static bool MyRemoteCertificateValidationCallback(System.Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
     {

@@ -22,7 +22,7 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="onResultReceived"> Action passing the result of the check. </param>
         public static void IsSmartContract(string address, Action<bool, string> onResultReceived)
         {
-            WebClientUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(address), abi
+            HttpUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(address), abi
                        => onResultReceived(abi != null, abi));
         }
 

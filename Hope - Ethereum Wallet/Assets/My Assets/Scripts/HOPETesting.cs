@@ -37,6 +37,12 @@ using System.Dynamic;
 public class HOPETesting : MonoBehaviour
 {
 
+    [Inject]
+    private TradableAssetManager tradableAssetManager;
+
+    [Inject]
+    private EthereumTransactionManager transactionManager;
+    
 	private void Start()
 	{
 		//var ledger = LedgerClient.GetHIDLedgers().First();
@@ -44,8 +50,18 @@ public class HOPETesting : MonoBehaviour
 		//var pubkey = ledger.GetWalletPubKey(new KeyPath("1'/0"));
 		//var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
 		//Debug.Log(pubkey.Address);
-		//Debug.Log(firmware);
+	    //Debug.Log(firmware);
 	}
+
+    [ContextMenu("Get Stuff")]
+    public void GetStuff()
+    {
+        var assetAddress = tradableAssetManager.ActiveTradableAsset.AssetAddress;
+
+        var transactionList = transactionManager.GetTransactionListByAddress(assetAddress);
+
+        UnityEngine.Debug.Log(tradableAssetManager.ActiveTradableAsset.AssetSymbol + " => " + transactionList?.Count);
+    }
 
 	private void AnonymousStuff()
     {
