@@ -18,9 +18,7 @@ public sealed class LoadingPopup : FactoryPopup<LoadingPopup>
 		get { return loadingText.text; }
 		set
 		{
-			float transformX =  175f - (value.Length * 6.5f);
-			loadingText.transform.localPosition = new Vector2(transformX, loadingText.transform.localPosition.y);
-
+			loadingText.transform.localPosition = new Vector2(175f - (value.Length * 6.5f), loadingText.transform.localPosition.y);
 			loadingText.text = value;
 		}
 	}
