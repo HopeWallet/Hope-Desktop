@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isopoh.Cryptography.SecureArray</name>
+    </assembly>
+    <members>
+        <member name="T:Isopoh.Cryptography.SecureArray.DefaultLinuxSecureArrayCall">
+            <summary>
+            A <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayCall"/> with defaults for the Linux operating system.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.DefaultLinuxSecureArrayCall.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.DefaultLinuxSecureArrayCall"/> class.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.DefaultLinuxSecureArrayCall.LinuxRlimit">
+            <summary>
+            The structure for the setrlimit() and getrlimit() calls.
+            </summary>
+            <remarks>
+            On Linux, I found a comment in /usr/include/x64_32-linux-gnu/bits/typesizes.h
+            that said "X32 kernel interface is 64-bit" and the code seemed to bare that out
+            so this should work for both 32-bit and 64-bit kernels.
+            </remarks>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.DefaultOsxSecureArrayCall">
+            <summary>
+            A <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayCall"/> with defaults for the OSX operating system
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.DefaultOsxSecureArrayCall.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.DefaultOsxSecureArrayCall"/> class.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall">
+            <summary>
+            A <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayCall"/> with defaults for the Windows operating system.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall"/> class.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall.GetProcessWorkingSetSizeEx">
+            <summary>
+            Gets a delegate GetProcessWorkingSetSizeEx() that works on 32-bit or 64-bit operating systems
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall.SetProcessWorkingSetSizeEx">
+            <summary>
+            Gets a delegate SetProcessWorkingSetSizeEx() that works on 32-bit or 64-bit operating systems
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.DefaultWindowsSecureArrayCall.VirtualAlloc">
+            <summary>
+            Gets a delegate VirtualAlloc() that works on 32-bit or 64-bit operating systems
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.LockFailException">
+            <inheritdoc />
+            <summary>
+            Represents errors that occur trying to lock a buffer into memory
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.LockFailException.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.LockFailException"/> class.
+            </summary>
+            <param name="message">
+            Text for the <see cref="P:System.Exception.Message" /> property
+            </param>
+            <param name="currentMax">
+            Number of bytes currently available to lock. Don't assume you can
+            actually lock this exact amount the next time you request to lock
+            bytes into RAM - this value changes constantly.
+            </param>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.LockFailException.CurrentMax">
+            <summary>
+            Gets the current (as of when the exception was created) maximum number of
+            bytes that can be locked.
+            </summary>
+            <remarks>
+            Don't assume this amount of bytes will be lockable into RAM on the next
+            attempt - this value changes constantly.
+            </remarks>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.SecureArray`1">
+            <summary>
+            Manage an array that holds sensitive information.
+            </summary>
+            <typeparam name="T">
+            The type of the array. Limited to built in types.
+            </typeparam>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray`1.#ctor(System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayType,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> class.
+            </summary>
+            <param name="size">
+                The number of elements in the secure array.
+            </param>
+            <param name="type">
+                The type of secure array to initialize.
+            </param>
+            <param name="call">
+                The methods that get called to secure the array. A null value
+                defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray`1.#ctor(System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> class.
+            </summary>
+            <param name="size">
+                The number of elements in the secure array.
+            </param>
+            <param name="type">
+                The type of secure array to initialize.
+            </param>
+            <remarks>
+            Uses <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray`1.#ctor(System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> class.
+            </summary>
+            <param name="size">
+                The number of elements in the secure array.
+            </param>
+            <param name="call">
+                The methods that get called to secure the array. A null value
+                defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <remarks>
+            Uses <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayType"/>.<see cref="F:Isopoh.Cryptography.SecureArray.SecureArrayType.ZeroedPinnedAndNoSwap"/>
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> class.
+            </summary>
+            <param name="size">
+                The number of elements in the secure array.
+            </param>
+            <remarks>
+            Uses <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayType"/>.<see cref="F:Isopoh.Cryptography.SecureArray.SecureArrayType.ZeroedPinnedAndNoSwap"/>
+            and <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArray`1.Buffer">
+            <summary>
+            Gets the secure array.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArray`1.Item(System.Int32)">
+            <summary>
+            Gets or sets elements in the secure array.
+            </summary>
+            <param name="i">
+            The index of the element.
+            </param>
+            <returns>
+            The element.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray`1.Dispose">
+            <summary>
+            Zero buffer and release resources.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.SecureArray">
+            <summary>
+            Base class of all <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> classes.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.SecureArray.SecureArray.TypeSizes">
+            <summary>
+            Cannot find a way to do a compile-time verification that the
+            array element type is one of these so this dictionary gets
+            used to do it at runtime.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.#ctor(Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/> class.
+            </summary>
+            <param name="call">
+            The methods that get called to secure the array. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <remarks>
+            You cannot create a <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/> directly, you must
+            derive from this class like <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray`1"/> does.
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall">
+            <summary>
+            Gets the default methods that get called to secure the array.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArray.Call">
+            <summary>
+            Gets or sets the methods that get called to secure the array
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.BuiltInTypeElementSize``1(``0[])">
+            <summary>
+            Gets the size of the buffer element. Will throw a
+            <see cref="T:System.NotSupportedException"/> if the element type is not
+            a built in type.
+            </summary>
+            <typeparam name="T">
+            The array element type to return the size of.
+            </typeparam>
+            <param name="buffer">
+            The array.
+            </param>
+            <returns>
+            The lengths in bytes of the size of the element in <paramref name="buffer"/>.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.Zero``1(``0[],Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Zero the given buffer in a way that will not be optimized away.
+            </summary>
+            <typeparam name="T">
+            The type of the elements in the buffer.
+            </typeparam>
+            <param name="buffer">
+            The buffer to zero.
+            </param>
+            <param name="call">
+            The methods to call to secure the array. Defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.Cleanup``1(``0[])">
+            <summary>
+            Zero <paramref name="buf"/> and release resources.
+            </summary>
+            <typeparam name="T">
+            The type of the array elements in <paramref name="buf"/>.
+            </typeparam>
+            <param name="buf">
+            The buffer to zero and whose resources to release. Should be
+            the same as passed into <see cref="M:Isopoh.Cryptography.SecureArray.SecureArray.Init``1(``0[],Isopoh.Cryptography.SecureArray.SecureArrayType)"/>.
+            </param>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.Init``1(``0[],Isopoh.Cryptography.SecureArray.SecureArrayType)">
+            <summary>
+            Call this with the array to secure and the number of bytes in that
+            array. The buffer will be zeroed and the handle freed when the
+            instance is disposed.
+            </summary>
+            <typeparam name="T">
+            The type of the array elements in <paramref name="buf"/>.
+            </typeparam>
+            <param name="buf">
+            The array to secure.
+            </param>
+            <param name="type">
+            The type of secure array to initialize.
+            </param>
+            <exception cref="T:Isopoh.Cryptography.SecureArray.LockFailException">
+            Operating system did not allow the memory to be locked.
+            </exception>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArray.GetMaxLockable">
+            <summary>
+            Perform a binary search to find the current max lockable memory amount. Used
+            for error reporting.
+            </summary>
+            <returns>
+            The current number of bytes that can be locked. This is likely to change on
+            subsequent calls.
+            </returns>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.SecureArrayCall">
+            <summary>
+            Call used by <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/> to secure the array.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.SecureArray.SecureArrayCall.#ctor(System.Action{System.IntPtr,System.UIntPtr},System.Func{System.IntPtr,System.UIntPtr,System.String},System.Action{System.IntPtr,System.UIntPtr})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.SecureArray.SecureArrayCall"/> class.
+            </summary>
+            <param name="zeroMemory">
+            Call that zeroes memory in a way that does not get optimized away
+            </param>
+            <param name="lockMemory">
+            Call that locks the given memory so it doesn't get swapped out to disk.
+            </param>
+            <param name="unlockMemory">
+            Call that unlocks memory previously locked by a call to <paramref name="lockMemory"/>
+            </param>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArrayCall.ZeroMemory">
+            <summary>
+            Gets a method that zeroes memory in a way that does not get optimized away.
+            </summary>
+            <remarks>
+            On Linux and OSX, simply calls memset() and hopes the P/Invoke
+            mechanism does not have special handling for memset calls (and
+            thus does not even think about optimizing the call away).
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArrayCall.LockMemory">
+            <summary>
+            Gets a method that locks the given memory so it doesn't get swapped out to disk.
+            </summary>
+            <returns>
+            Null on success; otherwise an error message.
+            </returns>
+        </member>
+        <member name="P:Isopoh.Cryptography.SecureArray.SecureArrayCall.UnlockMemory">
+            <summary>
+            Gets a method that unlocks memory previously locked by a call to <see cref="P:Isopoh.Cryptography.SecureArray.SecureArrayCall.LockMemory"/>.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.SecureArray.SecureArrayType">
+            <summary>
+            The behavior of the secure array.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.SecureArray.SecureArrayType.Zeroed">
+            <summary>
+            Zero the memory on disposal
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.SecureArray.SecureArrayType.ZeroedAndPinned">
+            <summary>
+            Pin the memory so the garbage collector doesn't move it around
+            and zero the memory on disposal
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.SecureArray.SecureArrayType.ZeroedPinnedAndNoSwap">
+            <summary>
+            Lock the memory into RAM, pin the memory so the garbage collector
+            doesn't move it, and zero the memory on disposal.
+            </summary>
+        </member>
+    </members>
+</doc>
