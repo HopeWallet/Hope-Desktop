@@ -1,37 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class CoinList
 {
-	private readonly Dictionary<string, int> coinIDs = new Dictionary<string, int>();
+    private readonly Dictionary<string, int> coinIDs = new Dictionary<string, int>();
 
-	private const string API_URL = "https://api.coinmarketcap.com/v2/listings/";
+    private const string API_URL = "https://api.coinmarketcap.com/v2/listings/";
 
-	public CoinList()
-	{
-		GetCoinList();
-        UnityEngine.Debug.Log("starting");
-	}
+    public CoinList()
+    {
+        GetCoinList();
+    }
 
-	public int? GetCoinID(string symbol)
-	{
-		if (!coinIDs.ContainsKey(symbol))
-			return null;
+    public int? GetCoinID(string symbol)
+    {
+        if (!coinIDs.ContainsKey(symbol))
+            return null;
 
-		return coinIDs[symbol];
-	}
+        return coinIDs[symbol];
+    }
 
-	private void GetCoinList()
-	{
-		WebClientUtils.DownloadString(API_URL, CopyData);
-	}
+    private void GetCoinList()
+    {
+        var cmcData = Resources.Load<TextAsset>("Data/cmcdata");
+        CopyData(cmcData.text);
+        //Debug.Log(cmcData.text);
+    }
 
-	private async void CopyData(string coinList)
-	{
-		CMCData cmcData = await Task.Run(() => JsonUtils.GetJsonData<CMCData>(coinList)).ConfigureAwait(false);
+    private async void CopyData(string coinList)
+    {
+        CMCData cmcData = await Task.Run(() => JsonUtils.GetJsonData<CMCData>(coinList)).ConfigureAwait(false);
 
-		await Task.Run(() => cmcData.data.ForEach(coin => coinIDs.Add(coin.symbol, coin.id))).ConfigureAwait(false);
-
-        MainThreadExecutor.QueueAction(() => UnityEngine.Debug.Log("Done getting data"));
-	}
+        await Task.Run(() => cmcData.data.ForEach(coin =>
+        {
+            if (!coinIDs.ContainsKey(coin.symbol))
+                coinIDs.Add(coin.symbol, coin.id);
+        })).ConfigureAwait(false);
+    }
 }
