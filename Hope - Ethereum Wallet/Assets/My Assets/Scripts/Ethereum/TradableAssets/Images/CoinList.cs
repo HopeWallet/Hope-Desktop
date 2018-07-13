@@ -23,9 +23,7 @@ public class CoinList
 
     private void GetCoinList()
     {
-        var cmcData = Resources.Load<TextAsset>("Data/cmcdata");
-        CopyData(cmcData.text);
-        //Debug.Log(cmcData.text);
+        CopyData(Resources.Load<TextAsset>("Data/cmcdata").text);
     }
 
     private async void CopyData(string coinList)

@@ -13,19 +13,6 @@ namespace Hope.Utils.EthereumUtils
     /// </summary>
     public static class ContractUtils
     {
-
-        /// <summary>
-        /// Checks if an address is a smart contract.
-        /// Calls an action with the <see langword="bool"/> result and abi if it is a smart contract.
-        /// </summary>
-        /// <param name="address"> The address to check. </param>
-        /// <param name="onResultReceived"> Action passing the result of the check. </param>
-        public static void IsSmartContract(string address, Action<bool, string> onResultReceived)
-        {
-            HttpUtils.GetContractABI(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(address), abi
-                       => onResultReceived(abi != null, abi));
-        }
-
         /// <summary>
         /// Calls a "view" or "constant" function which returns a value.
         /// </summary>

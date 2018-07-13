@@ -239,12 +239,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
             transactionsByAddress[assetAddress].Sort((info1, info2) => info1.TimeStamp.CompareTo(info2.TimeStamp));
         }
-
-        //MainThreadExecutor.QueueAction(() =>
-        //{
-        //    var tradableAsset = tradableAssetManager.GetTradableAsset(assetAddress);
-        //    Debug.Log(tradableAsset.AssetSymbol + " => " + transactionsByAddress[assetAddress]?.Count);
-        //});
     }
 
     /// <summary>

@@ -36,12 +36,6 @@ using System.Dynamic;
 
 public class HOPETesting : MonoBehaviour
 {
-
-    [Inject]
-    private TradableAssetManager tradableAssetManager;
-
-    [Inject]
-    private EthereumTransactionManager transactionManager;
     
 	private void Start()
 	{
@@ -52,16 +46,6 @@ public class HOPETesting : MonoBehaviour
 		//Debug.Log(pubkey.Address);
 	    //Debug.Log(firmware);
 	}
-
-    [ContextMenu("Get Stuff")]
-    public void GetStuff()
-    {
-        var assetAddress = tradableAssetManager.ActiveTradableAsset.AssetAddress;
-
-        var transactionList = transactionManager.GetTransactionListByAddress(assetAddress);
-
-        UnityEngine.Debug.Log(tradableAssetManager.ActiveTradableAsset.AssetSymbol + " => " + transactionList?.Count);
-    }
 
 	private void AnonymousStuff()
     {

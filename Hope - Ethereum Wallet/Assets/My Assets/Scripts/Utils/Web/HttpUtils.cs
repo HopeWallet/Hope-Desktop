@@ -10,25 +10,6 @@ using System.Threading.Tasks;
 /// </summary>
 public static class HttpUtils
 {
-
-    /// <summary>
-    /// Gets the contract abi from the api url.
-    /// </summary>
-    /// <param name="apiUrl"> The url of the contract abi. </param>
-    /// <param name="onAbiReceived"> Action to execute and pass the abi as a parameter once it has successfully been processed. </param>
-    public static async void GetContractABI(string apiUrl, Action<string> onAbiReceived)
-    {
-        string abiJson = await DownloadString(apiUrl).ConfigureAwait(false);
-
-        if (abiJson != null)
-        {
-            abiJson = abiJson.Replace("\"", "'").Replace("\\", "");
-            abiJson = abiJson.Substring(abiJson.IndexOf("["), abiJson.LastIndexOf("'") - abiJson.IndexOf("["));
-        }
-
-        onAbiReceived?.Invoke(abiJson);
-    }
-
     /// <summary>
     /// Downloads a string from a url.
     /// </summary>
@@ -36,7 +17,8 @@ public static class HttpUtils
     /// <param name="onStringReceived"> Action to call once the string has been received. </param>
     public static async void DownloadString(string url, Action<string> onStringReceived)
     {
-        onStringReceived?.Invoke(await DownloadString(url).ConfigureAwait(false));
+        string downloadedString = await DownloadString(url).ConfigureAwait(false);
+        MainThreadExecutor.QueueAction(() => onStringReceived?.Invoke(downloadedString));
     }
 
     /// <summary>
