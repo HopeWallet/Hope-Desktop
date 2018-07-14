@@ -34,29 +34,26 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	private void Awake()
 	{
+		addressInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(AddressChanged);
+		amountInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(AmountChanged);
+		gasLimitInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(GasLimitChanged);
+		gasPriceInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(GasPriceChanged);
+
 		advancedModeToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = AdvancedModeClicked;
 		maxToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = MaxClicked;
 
 		SetTokenAmount(DEMO_TOKEN_AMOUNT);
 	}
 
+	public void SetTokenAmount(decimal tokenAmount) => tokenSection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tokenAmount.ToString();
+
 	protected override void AnimateIn()
 	{
-		//dim.AnimateGraphic(1f, 0.15f);
-		//form.AnimateGraphicAndScale(1f, 1f, 0.15f,
-		//	() => title.AnimateGraphicAndScale(1f, 0.85f, 0.12f,
-		//	() => tokenSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-		//	() => advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-		//	() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-		//	() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-		//	() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-		//	() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.12f, FinishedAnimating))))))));
-
-		dim.AnimateGraphic(1f, 0.15f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		title.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		tokenSection.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
+		dim.AnimateGraphic(1f, 0.2f);
+		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		title.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		tokenSection.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
@@ -65,23 +62,42 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	protected override void AnimateOut()
 	{
+
 	}
 
-	public void SetTokenAmount(decimal tokenAmount) => tokenSection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tokenAmount.ToString();
+	private void AddressChanged(string address)
+	{
+		SetSendButtonInteractable();
+	}
+
+	private void AmountChanged(string amount)
+	{
+		SetSendButtonInteractable();
+	}
+
+	private void GasLimitChanged(string gasLimit)
+	{
+		SetSendButtonInteractable();
+	}
+
+	private void GasPriceChanged(string gasPrice)
+	{
+		SetSendButtonInteractable();
+	}
 
 	private void SetSendButtonInteractable()
 	{
-		bool interactable = !IsEmptyString(addressInputField) && !IsEmptyString(amountInputField);
+		bool interactable = !IsEmptyField(addressInputField) && !IsEmptyField(amountInputField);
 
-		if (advancedMode && !IsEmptyString(gasLimitInputField) && !IsEmptyString(gasPriceInputField))
+		if (advancedMode && IsEmptyField(gasLimitInputField) || advancedMode && IsEmptyField(gasPriceInputField))
 			interactable = false;
 
 		sendButton.GetComponent<Button>().interactable = interactable;
 	}
 
-	private string GetInputFieldString(GameObject inputField) => gameObject.transform.GetComponent<TMP_InputField>().text;
+	private string GetInputFieldString(GameObject inputField) => inputField.transform.GetComponent<TMP_InputField>().text;
 
-	private bool IsEmptyString(GameObject inputField) => string.IsNullOrEmpty(GetInputFieldString(inputField));
+	private bool IsEmptyField(GameObject inputField) => string.IsNullOrEmpty(GetInputFieldString(inputField));
 
 	private void AdvancedModeClicked()
 	{
@@ -94,6 +110,8 @@ public class SendTokenPopupAnimator : UIAnimator
 				() => gasLimitSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
 				() => gasPriceSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
 				() => Animating = false)));
+
+			SetSendButtonInteractable();
 		}
 
 		else
@@ -103,6 +121,8 @@ public class SendTokenPopupAnimator : UIAnimator
 				() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
 				() => Animating = false)));
 		}
+
+		SetSendButtonInteractable();
 	}
 
 	private void MaxClicked()
