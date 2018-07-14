@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 114843600796415658}
   - component: {fileID: 114011499312968654}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: Address_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -643,7 +643,7 @@ GameObject:
   - component: {fileID: 114713686035835412}
   - component: {fileID: 114079030004027482}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: GasLimit_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -845,7 +845,7 @@ GameObject:
   - component: {fileID: 114991767425476200}
   - component: {fileID: 114555080447693696}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: GasPrice_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1167,7 +1167,7 @@ GameObject:
   - component: {fileID: 222967248818263858}
   - component: {fileID: 114593587942534724}
   m_Layer: 5
-  m_Name: Medium_Rectangle_Form2
+  m_Name: Medium_Rectangle_Form3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1233,7 +1233,7 @@ GameObject:
   - component: {fileID: 114218525176996910}
   - component: {fileID: 114438310447676444}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: Amount_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1309,7 +1309,7 @@ Transform:
   m_GameObject: {fileID: 1136820989969144}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -154, y: 182.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224882967778641834}
   - {fileID: 224605257707404754}
@@ -1325,7 +1325,7 @@ Transform:
   m_GameObject: {fileID: 1984219451912834}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 112.29997, y: -83.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224840351843750804}
   - {fileID: 224710181214432542}
@@ -1343,7 +1343,7 @@ Transform:
   m_GameObject: {fileID: 1180368863202824}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 112.30002, y: 25.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224229820751149788}
   - {fileID: 224558993100874362}
@@ -1392,7 +1392,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1473315200271990}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -112.29997, y: 83.9, z: 0}
+  m_LocalPosition: {x: -112.29997, y: 82.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224885099454790324}
@@ -1408,7 +1408,7 @@ Transform:
   m_GameObject: {fileID: 1167642886166198}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 122, y: -192.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224130001647827552}
   - {fileID: 224317054323005076}
@@ -1468,7 +1468,7 @@ Transform:
   m_GameObject: {fileID: 1945406085644034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 217, y: 186, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224961878847430704}
   - {fileID: 4272384000528808}
@@ -1807,7 +1807,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114713686035835412}
   m_TextViewport: {fileID: 224799151931781358}
   m_TextComponent: {fileID: 114959773657290906}
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3564,9 +3564,13 @@ MonoBehaviour:
   gasLimitSection: {fileID: 1106748867744170}
   gasPriceSection: {fileID: 1705711203184794}
   transactionSpeedSection: {fileID: 1167642886166198}
-  sendButton: {fileID: 1730614311671772}
+  addressInputField: {fileID: 1263585685240172}
+  amountInputField: {fileID: 1972226144694760}
+  gasLimitInputField: {fileID: 1402077357486986}
+  gasPriceInputField: {fileID: 1632573842534604}
   advancedModeToggle: {fileID: 1599734615053358}
   maxToggle: {fileID: 1272066228850016}
+  sendButton: {fileID: 1730614311671772}
 --- !u!114 &114519653199013094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3823,7 +3827,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114991767425476200}
   m_TextViewport: {fileID: 224097207655324018}
   m_TextComponent: {fileID: 114757650020558046}
@@ -3929,7 +3933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3998,7 +4002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4156,8 +4160,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3640655871
-  m_fontColor: {r: 1, g: 1, b: 1, a: 0.84705883}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -5717,7 +5721,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 35503.22432445
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -5786,10 +5790,10 @@ MonoBehaviour:
   m_margin: {x: -13.926407, y: 5.232739, z: -5.1899, w: 9.242976}
   m_textInfo:
     textComponent: {fileID: 114966845258691140}
-    characterCount: 14
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
-    wordCount: 2
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -6500,7 +6504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: -1.4}
+  m_AnchoredPosition: {x: -12, y: -1.4}
   m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224097207655324018
@@ -6539,7 +6543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.6449995, y: 3.36}
+  m_AnchoredPosition: {x: 0.6449995, y: 4.81}
   m_SizeDelta: {x: 26.21, y: 150}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224107871914670204
@@ -6586,7 +6590,7 @@ RectTransform:
   m_GameObject: {fileID: 1312914645154300}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 4772832806012392}
   m_RootOrder: 2
@@ -6725,8 +6729,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_AnchoredPosition: {x: 0, y: -4.37}
+  m_SizeDelta: {x: -17, y: -3.85}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224269904772179758
 RectTransform:
@@ -6799,7 +6803,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.425001, y: -0.000022888184}
+  m_AnchoredPosition: {x: 7.425001, y: 0.000022888184}
   m_SizeDelta: {x: -25.95, y: 28}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224317054323005076
@@ -6828,7 +6832,7 @@ RectTransform:
   m_GameObject: {fileID: 1730614311671772}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 4772832806012392}
   m_RootOrder: 10
@@ -6853,7 +6857,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: -1.4}
+  m_AnchoredPosition: {x: -12, y: -1.4}
   m_SizeDelta: {x: 65, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224490378973429010
@@ -6990,7 +6994,7 @@ RectTransform:
   m_GameObject: {fileID: 1936820499658470}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224737488031062722}
   m_Father: {fileID: 4772832806012392}
@@ -7070,7 +7074,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.1, y: 0}
   m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224605103756338220
@@ -7106,7 +7110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 83.5, y: -38.19998}
+  m_AnchoredPosition: {x: 85, y: -38.19998}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224656569303327596
@@ -7383,8 +7387,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 29.06}
+  m_AnchoredPosition: {x: 0, y: 1.58}
+  m_SizeDelta: {x: 0, y: 25.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224942856422230398
 RectTransform:
@@ -7439,7 +7443,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 65, y: 65}
+  m_SizeDelta: {x: 60, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224961878847430704
 RectTransform:

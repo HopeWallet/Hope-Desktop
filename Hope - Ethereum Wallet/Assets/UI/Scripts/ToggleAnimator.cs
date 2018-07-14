@@ -13,17 +13,13 @@ public class ToggleAnimator : MonoBehaviour
 	private readonly Color fadedColor = new Color(1f, 1f, 1f);
 
 	private Action toggleClick;
-	private bool isToggledOn;
 
 	public Action ToggleClick
 	{
 		set { toggleClick = value; }
 	}
 
-	public bool IsToggledOn
-	{
-		get { return isToggledOn; }
-	}
+	public bool IsToggledOn { get; private set; }
 
 	/// <summary>
 	/// Sets the button listeners
@@ -39,10 +35,10 @@ public class ToggleAnimator : MonoBehaviour
 	/// </summary>
 	private void ToggleClicked()
 	{
-		toggleCircle.AnimateTransformX(isToggledOn ? -15f : 15f, 0.1f);
-		toggleCircle.GetComponent<Image>().DOColor(isToggledOn ? fadedColor : blueColor, 0.1f);
-		toggleBackground.GetComponent<Image>().DOColor(isToggledOn ? fadedColor : blueColor, 0.1f);
-		isToggledOn = !isToggledOn;
+		toggleCircle.AnimateTransformX(IsToggledOn ? -12f : 12f, 0.1f);
+		toggleCircle.GetComponent<Image>().DOColor(IsToggledOn ? fadedColor : blueColor, 0.1f);
+		toggleBackground.GetComponent<Image>().DOColor(IsToggledOn ? fadedColor : blueColor, 0.1f);
+		IsToggledOn = !IsToggledOn;
 
 		toggleClick();
 	}
