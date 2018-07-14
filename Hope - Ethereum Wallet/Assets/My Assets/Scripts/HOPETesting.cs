@@ -37,6 +37,9 @@ using UnityEngine.UI;
 
 public class HOPETesting : MonoBehaviour
 {
+
+    public GameObject buttonToCheck;
+    //public GameObject topObj;
     
 	private void Start()
 	{
@@ -50,13 +53,22 @@ public class HOPETesting : MonoBehaviour
 
     private void Update()
     {
-        //UnityEngine.Debug.Log(rect.Contains(Input.mousePosition));
-        //UnityEngine.Debug.Log(Input.mousePosition);
+        //if (topObj == null)
+        //    return;
+
+        if (buttonToCheck == null)
+            return;
+
+        var rectTransform = buttonToCheck.GetComponent<RectTransform>();
+        var rect = rectTransform.rect;
+        var position = rectTransform.position;
+
+        //UnityEngine.Debug.Log(rect.position.y < buttonToCheck.transform.position.y);
+        rect.size.y.Log();
     }
 
     private void AnonymousStuff()
     {
-
         var thing = new { Name = "Something", Age = 50 };
         var things = new[] { new { Name = "Something1", Age = 25 }, new { Name = "Something2", Age = 35 } };
 

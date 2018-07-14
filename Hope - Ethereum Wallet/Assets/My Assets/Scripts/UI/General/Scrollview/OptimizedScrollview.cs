@@ -5,14 +5,20 @@ using UnityEngine.UI;
 
 public class OptimizedScrollview : MonoBehaviour
 {
-    private ScrollRect scrollRect;
 
+    [SerializeField]
+    private Transform listParent;
+
+    private ScrollRect scrollRect;
     private RectTransform rectTransform;
+
+    private float ySize;
 
     private void Start()
     {
         rectTransform = transform as RectTransform;
         scrollRect = GetComponent<ScrollRect>();
+        ySize = rectTransform.rect.size.y;
 
         scrollRect.onValueChanged.AddListener(val => CheckElements());
     }
@@ -21,6 +27,11 @@ public class OptimizedScrollview : MonoBehaviour
     {
         //Debug.Log(scrollRect.verticalNormalizedPosition + " ");
         //Debug.Log(rectTransform.rect.yMin + " " + rectTransform.rect.yMax);
-        Debug.Log(rectTransform.position + " " + rectTransform.localPosition + " " + rectTransform.anchoredPosition + " " + rectTransform.rect.size);
+        //Debug.Log(rectTransform.position + " " + rectTransform.localPosition + " " + rectTransform.anchoredPosition + " " + rectTransform.rect.size);
+        //Debug.Log(rectTransform.rect.size + " => " + scrollRect.verticalNormalizedPosition);
+
+        float globalButtonSize = listParent.childCount * listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y;
+        float currentTopCutoff = (1f - scrollRect.verticalNormalizedPosition) * globalButtonSize;
+        Debug.Log(currentTopCutoff);
     }
 }
