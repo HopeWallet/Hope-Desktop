@@ -8,14 +8,6 @@ using UnityEngine;
 public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
     /// <summary>
-    /// Initializes the <see cref="SecurePlayerPrefs"/> by making sure we have the base seed pref initialized.
-    /// </summary>
-    public SecurePlayerPrefs()
-    {
-        EnsureSeedCreation();
-    }
-
-    /// <summary>
     /// Sets a string value in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>

@@ -14,6 +14,14 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
     {
 
         /// <summary>
+        /// Initializes the SecurePlayerPrefsBase by getting the base player pref value.
+        /// </summary>
+        public SecurePlayerPrefsBase()
+        {
+            EnsureSeedCreation();
+        }
+
+        /// <summary>
         /// Hashes the key using a specific HashAlgorithm. (SHA384 for now)
         /// </summary>
         /// <param name="key"> The key to hash. </param>
@@ -36,7 +44,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <summary>
         /// Ensures the base seed for all secure key generation is created.
         /// </summary>
-        protected static void EnsureSeedCreation()
+        private void EnsureSeedCreation()
         {
             string seedName = GetSeedName();
 

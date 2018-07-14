@@ -11,14 +11,6 @@ using UnityEngine;
 public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
 {
     /// <summary>
-    /// Initializes the SecurePlayerPrefsAsync by ensuring we have the base seed created.
-    /// </summary>
-    public SecurePlayerPrefsAsync()
-    {
-        EnsureSeedCreation();
-    }
-
-    /// <summary>
     /// Sets a string value to the <see cref="SecurePlayerPrefs"/> asynchronously.
     /// </summary>
     /// <param name="key"> The key of the PlayerPref to set. </param>
