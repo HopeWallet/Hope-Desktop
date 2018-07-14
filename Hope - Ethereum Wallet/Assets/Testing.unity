@@ -1053,26 +1053,6 @@ Prefab:
       propertyPath: backgroundVignette
       value: 
       objectReference: {fileID: 707345613}
-    - target: {fileID: 224972324341524340, guid: ab281cfd370a64b40832f35d5ea1bc00,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -34.050003
-      objectReference: {fileID: 0}
-    - target: {fileID: 224972324341524340, guid: ab281cfd370a64b40832f35d5ea1bc00,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: -3.2999992
-      objectReference: {fileID: 0}
-    - target: {fileID: 224154833868463262, guid: ab281cfd370a64b40832f35d5ea1bc00,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: 8.149996
-      objectReference: {fileID: 0}
-    - target: {fileID: 224154833868463262, guid: ab281cfd370a64b40832f35d5ea1bc00,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: -62.500008
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ab281cfd370a64b40832f35d5ea1bc00, type: 2}
   m_IsPrefabParent: 0
