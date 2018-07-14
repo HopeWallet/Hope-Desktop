@@ -42,15 +42,25 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	protected override void AnimateIn()
 	{
+		//dim.AnimateGraphic(1f, 0.15f);
+		//form.AnimateGraphicAndScale(1f, 1f, 0.15f,
+		//	() => title.AnimateGraphicAndScale(1f, 0.85f, 0.12f,
+		//	() => tokenSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
+		//	() => advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
+		//	() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
+		//	() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
+		//	() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
+		//	() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.12f, FinishedAnimating))))))));
+
 		dim.AnimateGraphic(1f, 0.15f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => title.AnimateGraphicAndScale(1f, 0.85f, 0.12f,
-			() => tokenSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-			() => advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-			() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-			() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.12f,
-			() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.12f, FinishedAnimating))))))));
+		form.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		title.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		tokenSection.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating)))));
 	}
 
 	protected override void AnimateOut()
