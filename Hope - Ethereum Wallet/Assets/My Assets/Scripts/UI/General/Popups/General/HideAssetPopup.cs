@@ -93,9 +93,9 @@ public class HideAssetPopup : FactoryPopup<HideAssetPopup>, ILateUpdater, ILeftC
     private void SetupPosition()
     {
         rectTransform = transform as RectTransform;
-        position = new Vector2(Input.mousePosition.x + rectTransform.rect.size.x / 2.1f, Input.mousePosition.y - rectTransform.rect.size.y / 2.1f);
+        position = new Vector2(Input.mousePosition.x + (rectTransform.rect.size.x / 2.1f), Input.mousePosition.y - (rectTransform.rect.size.y / 2.1f));
         rectTransform.position = position;
-        buttonBounds = button.GetButtonBounds();
+        buttonBounds = rectTransform.GetBounds();
     }
 
     /// <summary>

@@ -33,6 +33,7 @@ using System.Security;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
 using System.Dynamic;
+using UnityEngine.UI;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -47,7 +48,13 @@ public class HOPETesting : MonoBehaviour
 	    //Debug.Log(firmware);
 	}
 
-	private void AnonymousStuff()
+    private void Update()
+    {
+        //UnityEngine.Debug.Log(rect.Contains(Input.mousePosition));
+        //UnityEngine.Debug.Log(Input.mousePosition);
+    }
+
+    private void AnonymousStuff()
     {
 
         var thing = new { Name = "Something", Age = 50 };
