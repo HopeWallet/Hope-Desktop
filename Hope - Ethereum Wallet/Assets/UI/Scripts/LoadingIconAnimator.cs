@@ -17,7 +17,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private readonly Color LIGHT_COLOR = new Color(1f, 1f, 1f);
     private readonly Color GRAY_COLOR = new Color(0.7f, 0.7f, 0.7f);
 
-    private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -360f);
+    private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -3f);
 
     [Inject]
     private UpdateManager updateManager;
@@ -38,6 +38,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private void OnEnable()
     {
         updateManager.AddUpdater(this);
+        //NewUpdate();
 
         image.color = GRAY_COLOR;
         AnimateColor(true);
@@ -61,6 +62,6 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     public void UpdaterUpdate()
     {
         if (iconObj.activeInHierarchy)
-            iconTransform.DOLocalRotate(ICON_ROTATION, 3f, RotateMode.LocalAxisAdd);
+            iconTransform.DOLocalRotate(ICON_ROTATION, 0.01f, RotateMode.LocalAxisAdd);
     }
 }

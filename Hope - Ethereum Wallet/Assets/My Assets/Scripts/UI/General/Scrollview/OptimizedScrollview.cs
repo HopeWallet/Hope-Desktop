@@ -24,9 +24,13 @@ public class OptimizedScrollview : MonoBehaviour
 
     private void CheckElements()
     {
-        float globalButtonSize = (listParent.childCount * listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y) - viewportHeight;
-        float currentTopCutoff = (1f - scrollRect.verticalNormalizedPosition) * globalButtonSize;
+        float globalButtonSize = (listParent.childCount * listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y);
+        float outOfBoundsSize = globalButtonSize - viewportHeight;
+        float currentTopCutoff = (1f - scrollRect.verticalNormalizedPosition) * outOfBoundsSize;
 
-        //Debug.Log(currentTopCutoff);
+        // Scrollbar size
+        // Mathf.Clamp01(viewportHeight / globalButtonSize);
+
+        Debug.Log(globalButtonSize + " " + outOfBoundsSize + " " + currentTopCutoff + " " + viewportHeight);
     }
 }
