@@ -94,6 +94,13 @@ public sealed class PopupManager
         return newPopup;
     }
 
+    /// <summary>
+    /// Animates a popup if it has a <see cref="UIAnimator"/> component.
+    /// </summary>
+    /// <typeparam name="TPopup"> The type of the popup to animate. </typeparam>
+    /// <param name="newPopup"> The instance of the popup to animate. </param>
+    /// <param name="animateEnable"> Whether the popup should be animated for enable or disable. </param>
+    /// <param name="onAnimationFinished"> Action called once the animation is finished. </param>
     private void AnimatePopup<TPopup>(TPopup newPopup, bool animateEnable, Action onAnimationFinished) where TPopup : FactoryPopup<TPopup>
     {
         var popupAnimator = newPopup.Animator;
@@ -119,5 +126,4 @@ public sealed class PopupManager
             onAnimationFinished?.Invoke();
         }
     }
-
 }
