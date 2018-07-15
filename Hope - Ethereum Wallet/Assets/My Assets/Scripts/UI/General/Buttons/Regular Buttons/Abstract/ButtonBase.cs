@@ -7,13 +7,12 @@ using UnityEngine.UI;
 /// </summary>
 public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
 {
-
     private Button button;
 
     /// <summary>
     /// The actual Button component of object.
     /// </summary>
-    public Button Button { get { if (button == null) button = GetComponent<Button>(); return button; } private set { button = value; } }
+    public Button Button { get { return button ?? (button = GetComponent<Button>()) ?? (button = transform.parent.GetComponent<Button>()); } private set { button = value; } }
 
     /// <summary>
     /// Initializes the button by getting the required components and adding the on click listener.

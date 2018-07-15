@@ -6,8 +6,6 @@ public class CoinList
 {
     private readonly Dictionary<string, int> coinIDs = new Dictionary<string, int>();
 
-    private const string API_URL = "https://api.coinmarketcap.com/v2/listings/";
-
     public CoinList()
     {
         GetCoinList();
