@@ -27,6 +27,6 @@ public class OptimizedScrollview : MonoBehaviour
         float globalButtonSize = (listParent.childCount * listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y) - viewportHeight;
         float currentTopCutoff = (1f - scrollRect.verticalNormalizedPosition) * globalButtonSize;
 
-        Debug.Log(currentTopCutoff);
+        //Debug.Log(currentTopCutoff);
     }
 }
