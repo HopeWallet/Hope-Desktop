@@ -20,9 +20,7 @@ public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         if (button == null)
-        {
-            button = GetComponent<Button>();
-        }
+            button = GetComponent<Button>() ?? transform.parent.GetComponent<Button>();
 
         OnAwake();
     }
