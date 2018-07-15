@@ -6,13 +6,16 @@ using UnityEngine.UI;
 
 public class OptimizedScrollview : MonoBehaviour
 {
+    private readonly List<GameObject> items = new List<GameObject>();
 
     private ScrollRect scrollRect;
 
     private Transform listParent;
     private RectTransform rectTransform;
 
-    private float viewportHeight;
+    private float viewportHeight,
+                  prevScrollVal = 1f,
+                  buttonSize;
 
     private int itemCount,
                 previousTopIndex,
@@ -33,37 +36,40 @@ public class OptimizedScrollview : MonoBehaviour
     private void ItemCountChanged()
     {
         int topIndex, bottomIndex;
+        float outOfViewContentSize;
 
         itemCount = listParent.childCount;
 
-        GetBorderIndices(out topIndex, out bottomIndex);
+        GetScrollData(out topIndex, out bottomIndex, out outOfViewContentSize);
+        CacheChildObjects();
         UpdateGlobalItemVisibility(topIndex, bottomIndex);
     }
 
     private void ScrollRectChanged()
     {
         int topIndex, bottomIndex;
+        float outOfViewContentSize;
 
-        GetBorderIndices(out topIndex, out bottomIndex);
-        UpdateCurrentBorderItemVisibility(topIndex, bottomIndex);
+        GetScrollData(out topIndex, out bottomIndex, out outOfViewContentSize);
+
+        if (ScrolledTooFar(outOfViewContentSize))
+            UpdateGlobalItemVisibility(topIndex, bottomIndex);
+        else
+            UpdateCurrentBorderItemVisibility(topIndex, bottomIndex);
     }
 
-    private void GetBorderIndices(out int topIndex, out int bottomIndex)
+    private void GetScrollData(out int topIndex, out int bottomIndex, out float outOfViewContentSize)
     {
-        float buttonSize = listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y;
-        float contentSize = itemCount * buttonSize;
-        float outOfViewSize = contentSize - viewportHeight;
+        if (buttonSize == 0f)
+            buttonSize = listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y;
 
-        float inViewMin = (1f - scrollRect.verticalNormalizedPosition) * outOfViewSize;
+        float inViewMin = (1f - scrollRect.verticalNormalizedPosition) * (outOfViewContentSize = (itemCount * buttonSize) - viewportHeight);
         float inViewMax = inViewMin + viewportHeight;
 
-        topIndex = (int)inViewMin / (int)buttonSize;
-        bottomIndex = (int)inViewMax / (int)buttonSize;
-
-        if (topIndex < 0)
+        if ((topIndex = (int)inViewMin / (int)buttonSize) < 0)
             topIndex = 0;
 
-        if (bottomIndex >= itemCount)
+        if ((bottomIndex = (int)inViewMax / (int)buttonSize) >= itemCount)
             bottomIndex = itemCount - 1;
     }
 
@@ -83,15 +89,23 @@ public class OptimizedScrollview : MonoBehaviour
         previousBottomIndex = bottomIndex;
     }
 
-    private void UpdateEnableItem(ref int previousIndex, int currentIndex)
+    private bool ScrolledTooFar(float outOfViewContentSize)
     {
-        //if (previousIndex < currentIndex)
+        return Mathf.Abs(prevScrollVal - (prevScrollVal = scrollRect.verticalNormalizedPosition)) > 1f / (outOfViewContentSize / buttonSize);
+    }
+
+    private void CacheChildObjects()
+    {
+        items.Clear();
+
+        foreach (Transform child in listParent)
+            items.Add(child.GetChild(0).gameObject);
     }
 
     private void UpdateGlobalItemVisibility(int topIndex, int bottomIndex)
     {
         for (int i = 0; i < itemCount; i++)
-            listParent.GetChild(i).GetChild(0).gameObject.SetActive(topIndex <= i && bottomIndex >= i);
+            items[i].SetActive(topIndex <= i && bottomIndex >= i);
 
         previousTopIndex = topIndex;
         previousBottomIndex = bottomIndex;
