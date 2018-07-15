@@ -38,12 +38,14 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private void OnEnable()
     {
         updateManager.AddUpdater(this);
-        //NewUpdate();
 
         image.color = GRAY_COLOR;
         AnimateColor(true);
     }
 
+    /// <summary>
+    /// Removes the updater.
+    /// </summary>
 	private void OnDisable() => updateManager.RemoveUpdater(this);
 
 	/// <summary>

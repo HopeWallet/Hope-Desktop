@@ -56,7 +56,8 @@ public class TradableAssetButtonManager
     {
         assetButtons.Sort((b1, b2) => tokenContractManager.GetTokenIndex(b1.ButtonInfo.AssetAddress)
                                                           .CompareTo(tokenContractManager.GetTokenIndex(b2.ButtonInfo.AssetAddress)));
-        assetButtons.ForEach(asset => asset.transform.parent.SetSiblingIndex(settings.spawnTransform.childCount - 2));
+
+        assetButtons.ForEach(asset => asset.transform.parent.SetAsLastSibling());
     }
 
     /// <summary>

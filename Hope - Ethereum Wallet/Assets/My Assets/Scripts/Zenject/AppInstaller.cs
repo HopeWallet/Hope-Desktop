@@ -194,5 +194,4 @@ public class AppInstaller : MonoInstaller<AppInstaller>
                  .FromComponentInNewPrefab(objectsToSearch.Select(obj => obj.GetComponentInChildren<TType>()).Single(type => type != null).gameObject.SelectParent())
                  .UnderObject(spawnTransform);
     }
-
 }

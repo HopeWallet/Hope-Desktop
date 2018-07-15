@@ -37,10 +37,6 @@ using UnityEngine.UI;
 
 public class HOPETesting : MonoBehaviour
 {
-
-    public GameObject buttonToCheck;
-    //public GameObject topObj;
-    
 	private void Start()
 	{
 		//var ledger = LedgerClient.GetHIDLedgers().First();
@@ -50,22 +46,6 @@ public class HOPETesting : MonoBehaviour
 		//Debug.Log(pubkey.Address);
 	    //Debug.Log(firmware);
 	}
-
-    private void Update()
-    {
-        //if (topObj == null)
-        //    return;
-
-        if (buttonToCheck == null)
-            return;
-
-        var rectTransform = buttonToCheck.GetComponent<RectTransform>();
-        var rect = rectTransform.rect;
-        var position = rectTransform.position;
-
-        //UnityEngine.Debug.Log(rect.position.y < buttonToCheck.transform.position.y);
-        rect.size.y.Log();
-    }
 
     private void AnonymousStuff()
     {
