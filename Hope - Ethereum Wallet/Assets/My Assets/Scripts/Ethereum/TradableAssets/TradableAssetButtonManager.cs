@@ -6,9 +6,8 @@ using Object = UnityEngine.Object;
 /// <summary>
 /// Class which manages the adding/enabling/disabling of tradable asset buttons.
 /// </summary>
-public class TradableAssetButtonManager
+public sealed class TradableAssetButtonManager
 {
-
     private readonly Settings settings;
     private readonly TokenContractManager tokenContractManager;
     private readonly AssetButton.Factory buttonFactory;
@@ -22,7 +21,8 @@ public class TradableAssetButtonManager
     /// </summary>
     /// <param name="settings"> The settings to use for the button manager. </param>
     /// <param name="buttonFactory"> The factory which creates AssetButtons. </param>
-    public TradableAssetButtonManager(Settings settings, AssetButton.Factory buttonFactory, TokenContractManager tokenContractManager) : base()
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    public TradableAssetButtonManager(Settings settings, AssetButton.Factory buttonFactory, TokenContractManager tokenContractManager)
     {
         this.settings = settings;
         this.tokenContractManager = tokenContractManager;

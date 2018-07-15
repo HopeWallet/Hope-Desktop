@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Class which contains the coin data for each cryptocurrency on CoinMarketCap.
+/// </summary>
 public class CoinData
 {
 	public int id;

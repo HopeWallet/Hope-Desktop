@@ -14,7 +14,9 @@ public class OptimizedScrollview : MonoBehaviour
 
     private float viewportHeight;
 
-    private int itemCount;
+    private int itemCount,
+                previousTopIndex,
+                previousBottomIndex;
 
     private void Start()
     {
@@ -23,34 +25,75 @@ public class OptimizedScrollview : MonoBehaviour
         scrollRect = rectTransform.parent.GetComponent<ScrollRect>();
         viewportHeight = rectTransform.rect.size.y;
 
-        Observable.EveryUpdate().Where(_ => CheckItemCount()).Subscribe(_ => CheckElements());
+        Observable.EveryUpdate().Where(_ => itemCount != listParent.childCount).Subscribe(_ => ItemCountChanged());
 
-        scrollRect.onValueChanged.AddListener(val => CheckElements());
+        scrollRect.onValueChanged.AddListener(_ => ScrollRectChanged());
     }
 
-    private bool CheckItemCount()
+    private void ItemCountChanged()
     {
-        int oldItemCount = itemCount;
+        int topIndex, bottomIndex;
+
         itemCount = listParent.childCount;
 
-        return oldItemCount != itemCount;
+        GetBorderIndices(out topIndex, out bottomIndex);
+        UpdateGlobalItemVisibility(topIndex, bottomIndex);
     }
 
-    private void CheckElements()
+    private void ScrollRectChanged()
     {
-        float buttonCount = listParent.childCount;
+        int topIndex, bottomIndex;
+
+        GetBorderIndices(out topIndex, out bottomIndex);
+        UpdateCurrentBorderItemVisibility(topIndex, bottomIndex);
+    }
+
+    private void GetBorderIndices(out int topIndex, out int bottomIndex)
+    {
         float buttonSize = listParent.GetChild(0).GetComponent<RectTransform>().rect.size.y;
-        float contentSize = buttonCount * buttonSize;
+        float contentSize = itemCount * buttonSize;
         float outOfViewSize = contentSize - viewportHeight;
 
         float inViewMin = (1f - scrollRect.verticalNormalizedPosition) * outOfViewSize;
         float inViewMax = inViewMin + viewportHeight;
 
-        for (int i = 0; i < buttonCount; i++)
-        {
-            float buttonPos = i * buttonSize;
-            bool inView = buttonPos + buttonSize > inViewMin && buttonPos < inViewMax;
-            listParent.GetChild(i).GetChild(0).gameObject.SetActive(inView);
-        }
+        topIndex = (int)inViewMin / (int)buttonSize;
+        bottomIndex = (int)inViewMax / (int)buttonSize;
+
+        if (topIndex < 0)
+            topIndex = 0;
+
+        if (bottomIndex >= itemCount)
+            bottomIndex = itemCount - 1;
+    }
+
+    private void UpdateCurrentBorderItemVisibility(int topIndex, int bottomIndex)
+    {
+        if (topIndex < previousTopIndex)
+            listParent.GetChild(topIndex).GetChild(0).gameObject.SetActive(true);
+        else if (topIndex > previousTopIndex)
+            listParent.GetChild(previousTopIndex).GetChild(0).gameObject.SetActive(false);
+
+        if (bottomIndex > previousBottomIndex)
+            listParent.GetChild(bottomIndex).GetChild(0).gameObject.SetActive(true);
+        else if (bottomIndex < previousBottomIndex)
+            listParent.GetChild(previousBottomIndex).GetChild(0).gameObject.SetActive(false);
+
+        previousTopIndex = topIndex;
+        previousBottomIndex = bottomIndex;
+    }
+
+    private void UpdateEnableItem(ref int previousIndex, int currentIndex)
+    {
+        //if (previousIndex < currentIndex)
+    }
+
+    private void UpdateGlobalItemVisibility(int topIndex, int bottomIndex)
+    {
+        for (int i = 0; i < itemCount; i++)
+            listParent.GetChild(i).GetChild(0).gameObject.SetActive(topIndex <= i && bottomIndex >= i);
+
+        previousTopIndex = topIndex;
+        previousBottomIndex = bottomIndex;
     }
 }
