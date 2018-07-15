@@ -1,4 +1,5 @@
 using Hope.Security.Injection;
+using System;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -162,20 +163,23 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     /// Binds the types for a menu factory.
     /// </summary>
     /// <typeparam name="TMenu"> The type of the menu. </typeparam>
-    private void BindMenuFactory<TMenu>() where TMenu : Menu<TMenu> => BindFactory<TMenu, Menu<TMenu>.Factory>(uiProvider.uiRoot.transform);
+    private void BindMenuFactory<TMenu>() where TMenu : Menu<TMenu> 
+        => BindFactory<TMenu, Menu<TMenu>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.menus);
 
     /// <summary>
     /// Binds the types for a button factory.
     /// </summary>
     /// <typeparam name="TButton"> The type of the button. </typeparam>
     /// <param name="spawnTransform"> The spawn transform to have the factory create the buttons under. </param>
-    private void BindButtonFactory<TButton>(Transform spawnTransform) where TButton : FactoryButton<TButton> => BindFactory<TButton, FactoryButton<TButton>.Factory>(spawnTransform);
+    private void BindButtonFactory<TButton>(Transform spawnTransform) where TButton : FactoryButton<TButton> 
+        => BindFactory<TButton, FactoryButton<TButton>.Factory>(spawnTransform, appSettings.uiSettings.menuSettings.factoryButtons);
 
     /// <summary>
     /// Binds the types for a popup factory.
     /// </summary>
     /// <typeparam name="TPopup"> The type of the popup. </typeparam>
-    private void BindPopupFactory<TPopup>() where TPopup : FactoryPopup<TPopup> => BindFactory<TPopup, FactoryPopup<TPopup>.Factory>(uiProvider.uiRoot.transform);
+    private void BindPopupFactory<TPopup>() where TPopup : FactoryPopup<TPopup>
+        => BindFactory<TPopup, FactoryPopup<TPopup>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.popups);
 
     /// <summary>
     /// Binds a certain factory type under a spawn transform.
@@ -183,10 +187,11 @@ public class AppInstaller : MonoInstaller<AppInstaller>
     /// <typeparam name="TType"> The type of the object we are creating. </typeparam>
     /// <typeparam name="TFactory"> The type of the factory being created. </typeparam>
     /// <param name="spawnTransform"> The transform where the factory will create objects under. </param>
-    private void BindFactory<TType, TFactory>(Transform spawnTransform) where TType : MonoBehaviour where TFactory : Factory<TType>
+    /// <param name="objectsToSearch"></param>
+    private void BindFactory<TType, TFactory>(Transform spawnTransform, GameObject[] objectsToSearch) where TType : MonoBehaviour where TFactory : Factory<TType>
     {
         Container.BindFactory<TType, TFactory>()
-                 .FromComponentInNewPrefab(Resources.LoadAll<TType>("")[0])
+                 .FromComponentInNewPrefab(objectsToSearch.Select(obj => obj.GetComponentInChildren<TType>()).Single(type => type != null).gameObject.SelectParent())
                  .UnderObject(spawnTransform);
     }
 

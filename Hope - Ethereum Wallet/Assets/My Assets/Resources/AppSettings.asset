@@ -48,3 +48,31 @@ MonoBehaviour:
           - 0x7641b2Ca9DDD58adDf6e3381c1F994Aac5f1A32f
           - 0xd94F2778e2B3913C53637Ae60647598bE588c570
           - 0x5831819C84C05DdcD2568dE72963AC9f1e6831b6
+    menuSettings:
+      factoryButtons:
+      - {fileID: 1732801882341504, guid: 5b47e53b5545c8a46a7d38752ad38258, type: 2}
+      - {fileID: 1817400213135506, guid: a8f723cd284722145a3bbb7054fffb94, type: 2}
+      - {fileID: 1893092726973402, guid: fe1d9cad619624c419f2e7dd79e237ad, type: 2}
+      - {fileID: 1363833085934560, guid: 2614529e95c430842808bc006e7d7ddf, type: 2}
+      menus:
+      - {fileID: 1439940245231382, guid: 217a9e66bc6ddbf4e806c0694d4d76dd, type: 2}
+      - {fileID: 1166190241027500, guid: 4557cc3f59e745148a109317f0559807, type: 2}
+      - {fileID: 1989257028509146, guid: 364dbf5040a83b944be09faf87205527, type: 2}
+      - {fileID: 1996787740156080, guid: f3f9c26bb13271243ba6c91222b7dee3, type: 2}
+      - {fileID: 1884720584753568, guid: 1f11e38fd6b617642a96a30f583e512e, type: 2}
+      - {fileID: 1062368077964458, guid: 2bd8cc9082c829b4aa2f769271b2543a, type: 2}
+      - {fileID: 1928204962434420, guid: ab281cfd370a64b40832f35d5ea1bc00, type: 2}
+      - {fileID: 1586119722272208, guid: d8f8f0502b424744f90627b25ee94f2a, type: 2}
+      popups:
+      - {fileID: 1643188915786944, guid: 5aa72b1feab2208499177ee7baa29dd2, type: 2}
+      - {fileID: 1566284343427046, guid: b9a83c3b7d485c8499d9133fbb7ac799, type: 2}
+      - {fileID: 1840495807225606, guid: 20737e47891268e468d1dbf2e6f4dd86, type: 2}
+      - {fileID: 1040657794818106, guid: fa9b4dbeb39f96d4693e3458b5f85d1e, type: 2}
+      - {fileID: 1364737141961984, guid: 56a531c57a4831a43a98f6f5e61c7b57, type: 2}
+      - {fileID: 1510163508908382, guid: 8dac450746a7f5241a83824fe1690c21, type: 2}
+      - {fileID: 1289950225011174, guid: 5ba108fded341144f960c73ae6741a88, type: 2}
+      - {fileID: 1419036711245744, guid: ac7a32faeef32fd48b625a30f54c17ca, type: 2}
+      - {fileID: 1603937347990144, guid: 2a6fa11d7dc4f3d459cb7ea39dba9fc8, type: 2}
+      - {fileID: 1843064404113374, guid: de630ed6f87c48d4c976ec39c572be95, type: 2}
+      - {fileID: 1419036711245744, guid: d1c3af1a50a5ea0498acc93aecb769e5, type: 2}
+      - {fileID: 1740821759778292, guid: 9eb0ced52061e814eb90bcb3a367edff, type: 2}

@@ -165,5 +165,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     public class Settings
     {
         public GeneralSettings generalSettings;
+        public MenuSettings menuSettings;
     }
 }
