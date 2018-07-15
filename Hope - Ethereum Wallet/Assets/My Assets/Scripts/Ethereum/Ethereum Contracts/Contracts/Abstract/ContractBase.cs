@@ -1,5 +1,4 @@
 ﻿using Nethereum.Contracts;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -40,7 +39,7 @@ public abstract class ContractBase
     /// <param name="contractAddress"> The address of the contract. </param>
     /// <param name="abi"> The abi of the contract. </param>
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
-    public ContractBase(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized)
+    protected ContractBase(string contractAddress, string abi, Action<ContractBase, string> onContractInitialized)
     {
         StartContractInitialization(contractAddress, abi, onContractInitialized);
     }
@@ -50,7 +49,7 @@ public abstract class ContractBase
     /// </summary>
     /// <param name="contractAddress"> The address of the contract. </param>
     /// <param name="abi"> The abi of the contract. </param>
-    public ContractBase(string contractAddress, string abi)
+    protected ContractBase(string contractAddress, string abi)
     {
         StartContractInitialization(contractAddress, abi);
     }

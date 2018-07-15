@@ -34,6 +34,8 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
 using System.Dynamic;
 using UnityEngine.UI;
+using System.Reactive;
+using System.Reactive.Linq;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -45,6 +47,7 @@ public class HOPETesting : MonoBehaviour
 		//var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
 		//Debug.Log(pubkey.Address);
 	    //Debug.Log(firmware);
+        
 	}
 
     private void AnonymousStuff()
