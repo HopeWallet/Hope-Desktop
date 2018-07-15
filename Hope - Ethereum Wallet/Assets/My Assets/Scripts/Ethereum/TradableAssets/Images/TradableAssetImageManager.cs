@@ -176,7 +176,7 @@ public sealed class TradableAssetImageManager
 
         if (assetId.HasValue)
         {
-            webRequest = UnityWebRequestTexture.GetTexture("https://s2.coinmarketcap.com/static/img/coins/200x200/" + assetId.Value + ".png");
+            webRequest = UnityWebRequestTexture.GetTexture("https://s2.coinmarketcap.com/static/img/coins/128x128/" + assetId.Value + ".png");
             yield return webRequest.SendWebRequest();
         }
 
