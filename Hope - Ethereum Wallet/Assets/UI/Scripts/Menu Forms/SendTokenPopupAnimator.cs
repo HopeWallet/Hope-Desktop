@@ -1,6 +1,7 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using Hope.Utils.EthereumUtils;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
@@ -28,6 +29,17 @@ public class SendTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject sendButton;
 
 	private bool advancedMode;
+	private bool validAddress;
+
+	private bool ValidAddress
+	{
+		set
+		{
+			validAddress = value;
+			if (!validAddress) addressSection.transform.GetChild(addressSection.transform.childCount - 1).gameObject
+					.AnimateGraphicAndScale(validAddress ? 0f : 1f, validAddress ? 0f : 1f, 0.2f);
+		}
+	}
 
 	//DEMO VARIABLE TO BE REPLACED
 	private readonly decimal DEMO_TOKEN_AMOUNT = 355.5994235643m;
@@ -41,6 +53,8 @@ public class SendTokenPopupAnimator : UIAnimator
 
 		advancedModeToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = AdvancedModeClicked;
 		maxToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = MaxClicked;
+
+		tokenSection.transform.GetChild(2).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(TokenChanged);
 
 		SetTokenAmount(DEMO_TOKEN_AMOUNT);
 	}
@@ -65,8 +79,22 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	}
 
+	private void TokenChanged(int value)
+	{
+
+	}
+
 	private void AddressChanged(string address)
 	{
+		if (address.Length > 42)
+			addressInputField.transform.GetComponent<TMP_InputField>().text = address.LimitEnd(42);
+
+		if (AddressUtils.IsValidEthereumAddress(address))
+			ValidAddress = true;
+		else
+			ValidAddress = false;
+
+		validAddress.Log();
 		SetSendButtonInteractable();
 	}
 
