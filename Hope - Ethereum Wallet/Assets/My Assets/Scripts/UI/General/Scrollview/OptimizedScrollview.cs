@@ -18,7 +18,7 @@ public class OptimizedScrollview : MonoBehaviour
         listParent = rectTransform.GetChild(0).transform;
         scrollRect = rectTransform.parent.GetComponent<ScrollRect>();
         viewportHeight = rectTransform.rect.size.y;
-
+        
         scrollRect.onValueChanged.AddListener(val => CheckElements());
     }
 

@@ -9,7 +9,6 @@ using UniRx;
 /// <typeparam name="TInputArg"> The type of the input argument to pass through to Input.xyz when checking for a click. </typeparam>
 public abstract class ClickObserver<T, TInputArg> : EventObserver<T>
 {
-
     /// <summary>
     /// The function called on the click down action.
     /// </summary>
@@ -33,20 +32,20 @@ public abstract class ClickObserver<T, TInputArg> : EventObserver<T>
     /// <param name="clickAction"> The action to call once the click has been detected. </param>
     protected void StartClickObservers<TClickObserver>(TInputArg inputArg, Action<TClickObserver, ClickType> clickAction) where TClickObserver : T
     {
-        Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(ClickType.Down, b => clickAction(b, ClickType.Down)));
-        Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(ClickType.Hold, b => clickAction(b, ClickType.Hold)));
-        Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(ClickType.Up, b => clickAction(b, ClickType.Up)));
+        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Down)));
+        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Hold)));
+        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Up)));
+
+        //Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Down)));
+        //Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Hold)));
+        //Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Up)));
     }
 
     /// <summary>
     /// Called when a click has been alerted.
     /// </summary>
     /// <typeparam name="TClickObserver"> The specific type of the click observer to notify all instances of. </typeparam>
-    /// <param name="clickType"> The type of the click, whether Down, Hold, or Up. </param>
     /// <param name="clickAction"> The action to call on each instance of TClickObserver. </param>
-    private void OnClick<TClickObserver>(ClickType clickType, Action<TClickObserver> clickAction) where TClickObserver : T
-    {
-        observables.OfType<TClickObserver>().ToList().SafeForEach(button => clickAction(button));
-    }
+    private void OnClick<TClickObserver>(Action<TClickObserver> clickAction) where TClickObserver : T => observables.OfType<TClickObserver>().ToList().SafeForEach(clickAction);
 
 }
