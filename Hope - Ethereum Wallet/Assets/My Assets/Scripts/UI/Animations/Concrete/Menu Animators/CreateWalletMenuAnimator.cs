@@ -13,11 +13,16 @@ public class CreateWalletMenuAnimator : UIAnimator
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject walletNameField;
 	[SerializeField] private GameObject passwordHeader;
+	[SerializeField] private GameObject passwordStrength;
 	[SerializeField] private GameObject password1Field;
 	[SerializeField] private GameObject password2Field;
 	[SerializeField] private GameObject createButton;
 	[SerializeField] private GameObject checkMarkIcon;
 	[SerializeField] private GameObject errorIcon;
+
+	private TextMeshProUGUI passwordStrengthText;
+	private GameObject progressBarEmpty;
+	private GameObject progressBarFull;
 
 	private string walletNameText, password1Text, password2Text;
 
@@ -29,6 +34,12 @@ public class CreateWalletMenuAnimator : UIAnimator
 		InitializeVariable(ref walletNameField);
 		InitializeVariable(ref password1Field);
 		InitializeVariable(ref password2Field);
+
+		password1Field.GetComponent<TMP_InputField>().onValueChanged.AddListener(GetPasswordStrength);
+
+		progressBarEmpty = passwordStrength.transform.GetChild(0).gameObject;
+		progressBarFull = passwordStrength.transform.GetChild(1).gameObject;
+		passwordStrengthText = passwordStrength.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 	}
 
 	/// <summary>
@@ -42,8 +53,9 @@ public class CreateWalletMenuAnimator : UIAnimator
 
 		walletNameField.AnimateScaleX(1f, 0.15f,
 			() => passwordHeader.AnimateScaleX(1f, 0.15f,
+			() => passwordStrength.AnimateScaleX(1f, 0.15f,
 			() => password1Field.AnimateScaleX(1f, 0.15f,
-			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimating))));
+			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimating)))));
 
 	}
 
@@ -58,6 +70,7 @@ public class CreateWalletMenuAnimator : UIAnimator
 
 		walletNameField.AnimateScaleX(0f, 0.15f);
 		passwordHeader.AnimateScaleX(0f, 0.15f);
+		passwordStrength.AnimateScaleX(0f, 0.15f);
 		password1Field.AnimateScaleX(0f, 0.15f);
 		password2Field.AnimateScaleX(0f, 0.15f);
 
@@ -72,8 +85,8 @@ public class CreateWalletMenuAnimator : UIAnimator
 	private void InitializeVariable(ref GameObject gameObject)
 	{
 		TMP_InputField inputField = gameObject.GetComponent<TMP_InputField>();
-		inputField.onValueChanged.AddListener(str => SetText());
-		inputField.onValueChanged.AddListener(str => SetButtonInteractable());
+		inputField.onValueChanged.AddListener(_ => SetText());
+		inputField.onValueChanged.AddListener(_ => SetButtonInteractable());
 	}
 
 	/// <summary>
@@ -84,6 +97,30 @@ public class CreateWalletMenuAnimator : UIAnimator
 		walletNameText = walletNameField.GetComponent<TMP_InputField>().text.Trim();
 		password1Text = password1Field.GetComponent<TMP_InputField>().text;
 		password2Text = password2Field.GetComponent<TMP_InputField>().text;
+	}
+
+	/// <summary>
+	/// Sets the password strength progress bar width, color, and sets the passwrod strength text, and color
+	/// </summary>
+	/// <param name="password"> The string in the password1Field </param>
+	private void GetPasswordStrength(string password)
+	{
+		progressBarEmpty.AnimateTransformX(string.IsNullOrEmpty(password) ? 0f : -35f, 0.15f);
+		passwordStrengthText.gameObject.AnimateGraphic(string.IsNullOrEmpty(password) ? 0f : 1f, 0.15f);
+
+		float lengthPercentage = ((20f / 8f) * password.Length) / 100f;
+		float colorPercentage = lengthPercentage >= 0.5f ? (lengthPercentage - 0.5f) * 2f : lengthPercentage * 2f;
+
+		Color strengthColor = Color.Lerp(lengthPercentage >= 0.5f ? UIColors.Yellow : UIColors.Red, lengthPercentage >= 0.5f ? UIColors.Green : UIColors.Yellow, colorPercentage);
+
+		if (lengthPercentage <= 1f)
+		{
+			progressBarFull.AnimateScaleX(lengthPercentage, 0.1f);
+			progressBarFull.GetComponent<Image>().color = strengthColor;
+		}
+
+		passwordStrengthText.text = lengthPercentage == 0f ? "" : lengthPercentage < 0.2f ? "Too Short" : lengthPercentage < 0.4f ? "Weak" : lengthPercentage < 0.6f ? "Fair" : lengthPercentage < 0.8f ? "Strong" : "Very Strong";
+		passwordStrengthText.color = strengthColor;
 	}
 
 	/// <summary>
