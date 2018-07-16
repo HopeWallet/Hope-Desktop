@@ -258,7 +258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4138706529023602}
   m_Layer: 0
-  m_Name: PasswordStrength_Bar
+  m_Name: PasswordStrength
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -293,6 +293,21 @@ GameObject:
   - component: {fileID: 114008531129889918}
   m_Layer: 5
   m_Name: Placeholder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1629694434893930
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4553935786581802}
+  m_Layer: 0
+  m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -465,11 +480,25 @@ Transform:
   m_LocalPosition: {x: 0, y: -19.1, z: 0}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children:
-  - {fileID: 224257737054068184}
-  - {fileID: 224855428189654876}
+  - {fileID: 4553935786581802}
   - {fileID: 224235436674182214}
   m_Father: {fileID: 224547918930093246}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4553935786581802
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629694434893930}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 224257737054068184}
+  - {fileID: 224855428189654876}
+  m_Father: {fileID: 4138706529023602}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114008531129889918
 MonoBehaviour:
@@ -870,13 +899,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1faa5f75025340b4aa14643c891a21f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1475811618508708}
   form: {fileID: 1185842791821108}
   title: {fileID: 1877274499508246}
   walletNameField: {fileID: 1152292358957426}
   passwordHeader: {fileID: 1523661909573088}
   passwordStrength: {fileID: 1514068630220970}
+  passwordStrengthProgressBar: {fileID: 1629694434893930}
   password1Field: {fileID: 1962811763491760}
   password2Field: {fileID: 1410199489587684}
   createButton: {fileID: 1661517219496106}
@@ -1209,7 +1239,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 3640655871
-  m_fontColor: {r: 0.9019608, g: 0.22637446, b: 0.22637446, a: 0.84705883}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.84705883}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -1226,8 +1256,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 13
-  m_fontSizeBase: 13
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2533,7 +2563,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4138706529023602}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2550,12 +2580,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4138706529023602}
+  m_Father: {fileID: 4553935786581802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.00005722046, y: 0}
   m_SizeDelta: {x: 235, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224265144770466540
@@ -2875,12 +2905,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4138706529023602}
+  m_Father: {fileID: 4553935786581802}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -152.50006, y: 0.000038146973}
+  m_AnchoredPosition: {x: -117.50006, y: 0.000038146973}
   m_SizeDelta: {x: 235, y: 10}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &224877958155212872

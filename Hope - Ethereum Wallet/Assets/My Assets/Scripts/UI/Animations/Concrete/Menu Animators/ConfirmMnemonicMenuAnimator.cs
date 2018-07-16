@@ -15,15 +15,13 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     [SerializeField] private GameObject instructions;
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
-    [SerializeField] private GameObject checkBoxParent;
-    [SerializeField] private GameObject errorIcon;
+	[SerializeField] private GameObject[] checkBoxes;
+	[SerializeField] private GameObject errorIcon;
 
     private DynamicDataCache dynamicDataCache;
     private ConfirmMnemonicMenu confirmMnemonicMenu;
 
-    private GameObject[] checkBoxes;
-
-    private int wordIndex;
+	private int wordIndex;
     private bool errorIconVisible;
 
     /// <summary>
@@ -50,19 +48,14 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     /// </summary>
     private void Awake()
     {
-        checkBoxes = new GameObject[4];
-
         confirmMnemonicMenu = GetComponent<ConfirmMnemonicMenu>();
 
         wordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
-
-        for (int i = 0; i < checkBoxes.Length; i++)
-            checkBoxes[i] = checkBoxParent.transform.GetChild(i).gameObject;
     }
 
     /// <summary>
-    /// Sets the initial word text to what the first word should be.
+    /// Sets the initial word text to what the first word should be
     /// </summary>
     private void Start()
     {

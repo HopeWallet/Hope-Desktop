@@ -14,15 +14,15 @@ public class CreateWalletMenuAnimator : UIAnimator
 	[SerializeField] private GameObject walletNameField;
 	[SerializeField] private GameObject passwordHeader;
 	[SerializeField] private GameObject passwordStrength;
+	[SerializeField] private GameObject passwordStrengthProgressBar;
 	[SerializeField] private GameObject password1Field;
 	[SerializeField] private GameObject password2Field;
 	[SerializeField] private GameObject createButton;
 	[SerializeField] private GameObject checkMarkIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	private TextMeshProUGUI passwordStrengthText;
-	private GameObject progressBarEmpty;
 	private GameObject progressBarFull;
+	private TextMeshProUGUI passwordStrengthText;
 
 	private string walletNameText, password1Text, password2Text;
 
@@ -37,9 +37,8 @@ public class CreateWalletMenuAnimator : UIAnimator
 
 		password1Field.GetComponent<TMP_InputField>().onValueChanged.AddListener(GetPasswordStrength);
 
-		progressBarEmpty = passwordStrength.transform.GetChild(0).gameObject;
-		progressBarFull = passwordStrength.transform.GetChild(1).gameObject;
-		passwordStrengthText = passwordStrength.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+		progressBarFull = passwordStrengthProgressBar.transform.GetChild(1).gameObject;
+		passwordStrengthText = passwordStrength.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
 	}
 
 	/// <summary>
@@ -105,10 +104,10 @@ public class CreateWalletMenuAnimator : UIAnimator
 	/// <param name="password"> The string in the password1Field </param>
 	private void GetPasswordStrength(string password)
 	{
-		progressBarEmpty.AnimateTransformX(string.IsNullOrEmpty(password) ? 0f : -35f, 0.15f);
+		passwordStrengthProgressBar.AnimateTransformX(string.IsNullOrEmpty(password) ? 0f : -35f, 0.15f);
 		passwordStrengthText.gameObject.AnimateGraphic(string.IsNullOrEmpty(password) ? 0f : 1f, 0.15f);
 
-		float lengthPercentage = ((20f / 8f) * password.Length) / 100f;
+		float lengthPercentage = 0.05f * password.Length;
 		float colorPercentage = lengthPercentage >= 0.5f ? (lengthPercentage - 0.5f) * 2f : lengthPercentage * 2f;
 
 		Color strengthColor = Color.Lerp(lengthPercentage >= 0.5f ? UIColors.Yellow : UIColors.Red, lengthPercentage >= 0.5f ? UIColors.Green : UIColors.Yellow, colorPercentage);
@@ -119,8 +118,7 @@ public class CreateWalletMenuAnimator : UIAnimator
 			progressBarFull.GetComponent<Image>().color = strengthColor;
 		}
 
-		passwordStrengthText.text = lengthPercentage == 0f ? "" : lengthPercentage < 0.2f ? "Too Short" : lengthPercentage < 0.4f ? "Weak" : lengthPercentage < 0.6f ? "Fair" : lengthPercentage < 0.8f ? "Strong" : "Very Strong";
-		passwordStrengthText.color = strengthColor;
+		passwordStrengthText.text = lengthPercentage == 0f ? "" : lengthPercentage < 0.4f ? "Too Short" : lengthPercentage < 0.55f ? "Weak" : lengthPercentage < 0.7f ? "Fair" : lengthPercentage < 0.85f ? "Strong" : "Very Strong";
 	}
 
 	/// <summary>
