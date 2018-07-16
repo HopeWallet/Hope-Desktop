@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +35,11 @@ public sealed class EthereumTransactionButtonManager
         this.tradableAssetManager = tradableAssetManager;
         this.transactionManager = transactionManager;
         this.buttonFactory = buttonFactory;
+
+        settings.spawnTransform.gameObject.AddComponent<ObservableDestroyTrigger>().OnDestroyAsObservable().Subscribe(_ => Debug.Log("destroyed"));
+
+        //MainThreadDispatcher
+        //MainThreadExecutor
 
         EthereumTransactionManager.OnTransactionsAdded += ProcessTransactions;
     }
