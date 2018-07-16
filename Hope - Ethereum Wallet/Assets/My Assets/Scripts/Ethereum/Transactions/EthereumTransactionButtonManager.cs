@@ -42,8 +42,8 @@ public sealed class EthereumTransactionButtonManager
     /// </summary>
     public void ProcessNewAssetList()
     {
-        ResetScrollBar();
         ProcessTransactions();
+        RefreshScrollBar();
     }
 
     /// <summary>
@@ -115,12 +115,19 @@ public sealed class EthereumTransactionButtonManager
         for (int i = 0; i < transactionButtons.Count; i++)
             if (transactionButtons?[i] != null)
                 transactionButtons[i].transform.parent.gameObject.SetActive(i < buttonCount);
+
+
     }
 
     /// <summary>
     /// Resets the value of the scroll bar once an asset changes.
+    /// Also refreshes the scrollview.
     /// </summary>
-    private void ResetScrollBar() => settings.scrollBar.value = 1;
+    private void RefreshScrollBar()
+    {
+        settings.scrollBar.value = 1;
+        settings.spawnTransform.parent.GetComponent<OptimizedScrollview>().Refresh();
+    }
 
     /// <summary>
     /// Class which represents the settings of this transaction button manager.

@@ -18,7 +18,6 @@ public class TokenContractManager
     private readonly UserWalletManager userWalletManager;
 
     private readonly Queue<string> tokensToInitialize = new Queue<string>();
-    private readonly Dictionary<string, string> addressSymbolPair = new Dictionary<string, string>();
     private readonly Dictionary<string, int> addressButtonIndices = new Dictionary<string, int>();
 
     private int tokenPrefIndex,
@@ -78,8 +77,6 @@ public class TokenContractManager
             {
                 SecurePlayerPrefs.SetString(settings.tokenPrefName + (tokenPrefIndex++), tokenPref);
                 SecurePlayerPrefs.SetString(tokenPref, abi);
-
-                addressSymbolPair.Add(tokenPref, asset.AssetSymbol);
                 popupManager.CloseActivePopup();
             });
         });
@@ -101,17 +98,14 @@ public class TokenContractManager
             if (!SecurePlayerPrefs.HasKey(prefName))
                 break;
 
-            string tokenPref = SecurePlayerPrefs.GetString(prefName);
-            //string tokenAddress = GetTokenAddressFromPref(tokenPref);
+            string tokenAddress = SecurePlayerPrefs.GetString(prefName);
 
-            if (tokenPref.EqualsIgnoreCase(addressToRemove))
+            if (tokenAddress.EqualsIgnoreCase(addressToRemove))
             {
                 tokenPrefIndex--;
                 startRemoving = true;
 
-                addressSymbolPair.Remove(tokenPref);
-                //SecurePlayerPrefs.DeleteKey(addressToRemove + "-" + GetTokenSymbolFromPref(tokenPref));
-                SecurePlayerPrefs.DeleteKey(tokenPref);
+                SecurePlayerPrefs.DeleteKey(tokenAddress);
                 OnTokenRemoved?.Invoke(addressToRemove);
             }
 
@@ -179,19 +173,17 @@ public class TokenContractManager
         if (tokensToInitialize.Count == 0)
             return;
 
-        string tokenPref = tokensToInitialize.Dequeue();
-        string tokenAbi = SecurePlayerPrefs.GetString(tokenPref);
-        //string tokenAddress = GetTokenAddressFromPref(tokenPref);
-        string tokenAddress = tokenPref;
-        string tokenSymbol = GetTokenSymbolFromPref(tokenPref);
+        string tokenAddress = tokensToInitialize.Dequeue();
+        string tokenAbi = SecurePlayerPrefs.GetString(tokenAddress);
+        string tokenSymbol = GetTokenSymbolFromPref(tokenAddress);
 
-        if (addressSymbolPair.ContainsKey(tokenAddress))
-        {
-            onLoadingFinished?.Invoke();
-            return;
-        }
+        //if (addressSymbolPair.ContainsKey(tokenAddress))
+        //{
+        //    onLoadingFinished?.Invoke();
+        //    return;
+        //}
 
-        addressSymbolPair.Add(tokenAddress, tokenSymbol);
+        //addressSymbolPair.Add(tokenAddress, tokenSymbol);
         InitializeToken(tokenAddress, tokenAbi, (_, asset) => UpdateTradableAssets(asset, () => CheckLoadStatus(onLoadingFinished)));
         LoadTokensFromQueue(onLoadingFinished);
     }
