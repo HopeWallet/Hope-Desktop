@@ -114,7 +114,7 @@ public sealed class EthereumTransactionButtonManager
 
         for (int i = 0; i < transactionButtons.Count; i++)
             if (transactionButtons?[i] != null)
-                transactionButtons[i].gameObject.SetActive(i < buttonCount);
+                transactionButtons[i].transform.parent.gameObject.SetActive(i < buttonCount);
     }
 
     /// <summary>
