@@ -17,7 +17,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private readonly Color LIGHT_COLOR = new Color(1f, 1f, 1f);
     private readonly Color GRAY_COLOR = new Color(0.7f, 0.7f, 0.7f);
 
-    private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -3f);
+    private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -1.2f);
 
     [Inject]
     private UpdateManager updateManager;
