@@ -22,6 +22,7 @@ public sealed class TradableAssetImageManager
     /// <summary>
     /// Initializes the TradableAssetManager by getting the default sprite and initializing the dictionary.
     /// </summary>
+    /// <param name="coinList"> Class which contains the list of CoinMarketCap coins with all the ids for image lookup. </param>
     public TradableAssetImageManager(CoinList coinList)
     {
         this.coinList = coinList;

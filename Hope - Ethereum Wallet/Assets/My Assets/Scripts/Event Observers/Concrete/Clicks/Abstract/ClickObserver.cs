@@ -32,13 +32,9 @@ public abstract class ClickObserver<T, TInputArg> : EventObserver<T>
     /// <param name="clickAction"> The action to call once the click has been detected. </param>
     protected void StartClickObservers<TClickObserver>(TInputArg inputArg, Action<TClickObserver, ClickType> clickAction) where TClickObserver : T
     {
-        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Down)));
-        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Hold)));
-        UniRx.ObservableExtensions.Subscribe(Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)), _ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Up)));
-
-        //Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Down)));
-        //Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Hold)));
-        //Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Up)));
+        Observable.EveryUpdate().Where(_ => DownClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Down)));
+        Observable.EveryUpdate().Where(_ => HoldClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Hold)));
+        Observable.EveryUpdate().Where(_ => UpClickFunc(inputArg)).Subscribe(_ => OnClick<TClickObserver>(b => clickAction(b, ClickType.Up)));
     }
 
     /// <summary>

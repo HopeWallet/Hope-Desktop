@@ -21,6 +21,8 @@ public class OptimizedScrollview : MonoBehaviour
                 previousTopIndex,
                 previousBottomIndex;
 
+    public void Refresh() => GetEnabledItems();
+
     private void Start()
     {
         rectTransform = transform as RectTransform;
@@ -38,10 +40,8 @@ public class OptimizedScrollview : MonoBehaviour
         int topIndex, bottomIndex;
         float outOfViewContentSize;
 
-        itemCount = listParent.childCount;
-
+        GetEnabledItems();
         GetScrollData(out topIndex, out bottomIndex, out outOfViewContentSize);
-        CacheChildObjects();
         UpdateGlobalItemVisibility(topIndex, bottomIndex);
     }
 
@@ -94,12 +94,18 @@ public class OptimizedScrollview : MonoBehaviour
         return Mathf.Abs(prevScrollVal - (prevScrollVal = scrollRect.verticalNormalizedPosition)) > 1f / (outOfViewContentSize / buttonSize);
     }
 
-    private void CacheChildObjects()
+    private void GetEnabledItems()
     {
+        if (listParent == null)
+            return;
+
         items.Clear();
 
         foreach (Transform child in listParent)
-            items.Add(child.GetChild(0).gameObject);
+            if (child.gameObject.activeInHierarchy)
+                items.Add(child.GetChild(0).gameObject);
+
+        itemCount = items.Count;
     }
 
     private void UpdateGlobalItemVisibility(int topIndex, int bottomIndex)

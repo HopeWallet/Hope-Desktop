@@ -158,7 +158,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     {
         ProcessTransactionData<TokenTransactionJson>(transactionData,
                                                      assetAddress,
-                                                     info => true,
+                                                     _ => true,
                                                      info => TransactionSimplifier.CreateTokenTransaction(info, userWalletManager),
                                                      onTransactionsProcessed);
     }
@@ -193,8 +193,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     {
         await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
 
-        //MainThreadExecutor.QueueAction(() => CoroutineUtils.ExecuteAfterWait(1f, () => onTransactionsProcessed?.Invoke()));
-
         onTransactionsProcessed?.Invoke();
     }
 
@@ -211,10 +209,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         EtherscanAPIJson<T> transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<T>>(transactionList);
 
         if (transactionsJson == null)
-        {
-            Debug.Log("NULL => " + tradableAssetManager.GetTradableAsset(assetAddress).AssetSymbol + " => " + transactionList);
             return;
-        }
 
         AddTransactions(assetAddress, GetValidTransactions(transactionsJson, isValidTransaction, getTransaction));
     }
@@ -252,8 +247,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     private TransactionInfo[] GetValidTransactions<T>(EtherscanAPIJson<T> transactionsJson, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
         return transactionsJson.result
-                       .Where(info => isValidTransaction(info))
-                       .Select(info => getTransaction(info))
+                       .Where(isValidTransaction)
+                       .Select(getTransaction)
                        .Where(tx => tx != null)
                        .ToArray();
     }

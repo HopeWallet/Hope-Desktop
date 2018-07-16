@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +36,11 @@ public sealed class EthereumTransactionButtonManager
         this.transactionManager = transactionManager;
         this.buttonFactory = buttonFactory;
 
+        settings.spawnTransform.gameObject.AddComponent<ObservableDestroyTrigger>().OnDestroyAsObservable().Subscribe(_ => Debug.Log("destroyed"));
+
+        //MainThreadDispatcher
+        //MainThreadExecutor
+
         EthereumTransactionManager.OnTransactionsAdded += ProcessTransactions;
     }
 
@@ -42,8 +49,8 @@ public sealed class EthereumTransactionButtonManager
     /// </summary>
     public void ProcessNewAssetList()
     {
-        ResetScrollBar();
         ProcessTransactions();
+        RefreshScrollBar();
     }
 
     /// <summary>
@@ -115,12 +122,19 @@ public sealed class EthereumTransactionButtonManager
         for (int i = 0; i < transactionButtons.Count; i++)
             if (transactionButtons?[i] != null)
                 transactionButtons[i].transform.parent.gameObject.SetActive(i < buttonCount);
+
+
     }
 
     /// <summary>
     /// Resets the value of the scroll bar once an asset changes.
+    /// Also refreshes the scrollview.
     /// </summary>
-    private void ResetScrollBar() => settings.scrollBar.value = 1;
+    private void RefreshScrollBar()
+    {
+        settings.scrollBar.value = 1;
+        settings.spawnTransform.parent.GetComponent<OptimizedScrollview>().Refresh();
+    }
 
     /// <summary>
     /// Class which represents the settings of this transaction button manager.

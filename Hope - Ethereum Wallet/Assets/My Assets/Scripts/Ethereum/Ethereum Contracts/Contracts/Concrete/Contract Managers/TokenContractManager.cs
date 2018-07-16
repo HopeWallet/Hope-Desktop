@@ -18,7 +18,6 @@ public class TokenContractManager
     private readonly UserWalletManager userWalletManager;
 
     private readonly Queue<string> tokensToInitialize = new Queue<string>();
-    private readonly Dictionary<string, string> addressSymbolPair = new Dictionary<string, string>();
     private readonly Dictionary<string, int> addressButtonIndices = new Dictionary<string, int>();
 
     private int tokenPrefIndex,
@@ -64,24 +63,20 @@ public class TokenContractManager
     /// <param name="tokenAddress"> The token address of the token to add to the ContractManager. </param>
     public void AddToken(string tokenAddress)
     {
-        var fixedAddress = tokenAddress.ToLower();
+        var tokenPref = tokenAddress.ToLower();
 
         // THIS CHECK TO SEE IF A TOKEN EXISTS DOESNT WORK
-        if (SecurePlayerPrefs.HasKey(fixedAddress))
+        if (SecurePlayerPrefs.HasKey(tokenPref))
             return;
 
         popupManager.GetPopup<LoadingPopup>();
 
-        InitializeToken(fixedAddress, null, (abi, asset) =>
+        InitializeToken(tokenPref, null, (abi, asset) =>
         {
             UpdateTradableAssets(asset, () =>
             {
-                string tokenPref = fixedAddress + "-" + asset.AssetSymbol;
-
                 SecurePlayerPrefs.SetString(settings.tokenPrefName + (tokenPrefIndex++), tokenPref);
                 SecurePlayerPrefs.SetString(tokenPref, abi);
-
-                addressSymbolPair.Add(fixedAddress, asset.AssetSymbol);
                 popupManager.CloseActivePopup();
             });
         });
@@ -103,16 +98,14 @@ public class TokenContractManager
             if (!SecurePlayerPrefs.HasKey(prefName))
                 break;
 
-            string tokenPref = SecurePlayerPrefs.GetString(prefName);
-            string tokenAddress = GetTokenAddressFromPref(tokenPref);
+            string tokenAddress = SecurePlayerPrefs.GetString(prefName);
 
             if (tokenAddress.EqualsIgnoreCase(addressToRemove))
             {
                 tokenPrefIndex--;
                 startRemoving = true;
 
-                addressSymbolPair.Remove(tokenAddress);
-                SecurePlayerPrefs.DeleteKey(addressToRemove + "-" + GetTokenSymbolFromPref(tokenPref));
+                SecurePlayerPrefs.DeleteKey(tokenAddress);
                 OnTokenRemoved?.Invoke(addressToRemove);
             }
 
@@ -165,7 +158,7 @@ public class TokenContractManager
             string addressPref = SecurePlayerPrefs.GetString(prefName);
 
             tokensToInitialize.Enqueue(addressPref);
-            addressButtonIndices.Add(GetTokenAddressFromPref(addressPref), i + 1);
+            addressButtonIndices.Add(/*GetTokenAddressFromPref(addressPref)*/addressPref, i + 1);
         }
 
         savedTokenCount = tokensToInitialize.Count + 1;
@@ -180,19 +173,18 @@ public class TokenContractManager
         if (tokensToInitialize.Count == 0)
             return;
 
-        string tokenPref = tokensToInitialize.Dequeue();
-        string tokenAbi = SecurePlayerPrefs.GetString(tokenPref);
-        string tokenAddress = GetTokenAddressFromPref(tokenPref);
-        string tokenSymbol = GetTokenSymbolFromPref(tokenPref);
+        string tokenAddress = tokensToInitialize.Dequeue();
+        string tokenAbi = SecurePlayerPrefs.GetString(tokenAddress);
+        string tokenSymbol = GetTokenSymbolFromPref(tokenAddress);
 
-        if (addressSymbolPair.ContainsKey(tokenAddress))
-        {
-            onLoadingFinished?.Invoke();
-            return;
-        }
+        //if (addressSymbolPair.ContainsKey(tokenAddress))
+        //{
+        //    onLoadingFinished?.Invoke();
+        //    return;
+        //}
 
-        addressSymbolPair.Add(tokenAddress, tokenSymbol);
-        InitializeToken(tokenAddress, tokenAbi, (abi, asset) => UpdateTradableAssets(asset, () => CheckLoadStatus(onLoadingFinished)));
+        //addressSymbolPair.Add(tokenAddress, tokenSymbol);
+        InitializeToken(tokenAddress, tokenAbi, (_, asset) => UpdateTradableAssets(asset, () => CheckLoadStatus(onLoadingFinished)));
         LoadTokensFromQueue(onLoadingFinished);
     }
 
@@ -214,7 +206,7 @@ public class TokenContractManager
     /// </summary>
     /// <param name="tokenPref"> The player pref of the token. </param>
     /// <returns> The token address of this pref. </returns>
-    private string GetTokenAddressFromPref(string tokenPref) => tokenPref.Substring(0, tokenPref.IndexOf("-")).ToLower();
+    //private string GetTokenAddressFromPref(string tokenPref) => tokenPref.Substring(0, tokenPref.IndexOf("-")).ToLower();
 
     /// <summary>
     /// Gets the token symbol from the token player pref.
