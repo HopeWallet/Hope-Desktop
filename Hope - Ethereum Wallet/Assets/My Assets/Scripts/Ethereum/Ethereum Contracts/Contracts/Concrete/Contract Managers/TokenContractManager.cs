@@ -13,6 +13,7 @@ public class TokenContractManager
 
     private readonly Settings settings;
     private readonly PopupManager popupManager;
+    private readonly TradableAssetManager tradableAssetManager;
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
 
@@ -29,10 +30,12 @@ public class TokenContractManager
     /// </summary>
     /// <param name="settings"> The settings to use with this TokenContractManager. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
-    public TokenContractManager(Settings settings, 
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"></param>
+    public TokenContractManager(Settings settings,
         PopupManager popupManager,
         TradableAssetImageManager tradableAssetImageManager,
-        UserWalletManager userWalletManager) : base()
+        UserWalletManager userWalletManager)
     {
         this.settings = settings;
         this.popupManager = popupManager;
@@ -63,6 +66,7 @@ public class TokenContractManager
     {
         var fixedAddress = tokenAddress.ToLower();
 
+        // THIS CHECK TO SEE IF A TOKEN EXISTS DOESNT WORK
         if (SecurePlayerPrefs.HasKey(fixedAddress))
             return;
 

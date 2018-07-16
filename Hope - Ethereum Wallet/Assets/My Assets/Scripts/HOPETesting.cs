@@ -34,8 +34,6 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
 using System.Dynamic;
 using UnityEngine.UI;
-using System.Reactive;
-using System.Reactive.Linq;
 
 public class HOPETesting : MonoBehaviour
 {

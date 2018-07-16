@@ -1,1 +1,2 @@
 -r:System.Security.dll
+-r:System.Net.Http.dll
