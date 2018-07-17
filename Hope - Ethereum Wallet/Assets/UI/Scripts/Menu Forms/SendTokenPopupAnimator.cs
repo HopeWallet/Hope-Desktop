@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using Hope.Utils.EthereumUtils;
+using System.Linq;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
@@ -18,10 +19,10 @@ public class SendTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject gasPriceSection;
 	[SerializeField] private GameObject transactionSpeedSection;
 
-	[SerializeField] private GameObject addressInputField;
-	[SerializeField] private GameObject amountInputField;
-	[SerializeField] private GameObject gasLimitInputField;
-	[SerializeField] private GameObject gasPriceInputField;
+	[SerializeField] private TMP_InputField addressInputField;
+	[SerializeField] private TMP_InputField amountInputField;
+	[SerializeField] private TMP_InputField gasLimitInputField;
+	[SerializeField] private TMP_InputField gasPriceInputField;
 
 	[SerializeField] private GameObject advancedModeToggle;
 	[SerializeField] private GameObject maxToggle;
@@ -30,14 +31,27 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	private bool advancedMode;
 	private bool validAddress;
+	private bool validAmount;
 
-	private bool ValidAddress
+	public bool ValidAddress
 	{
+		get { return validAddress; }
 		set
 		{
 			validAddress = value;
-			if (!validAddress) addressSection.transform.GetChild(addressSection.transform.childCount - 1).gameObject
+			addressSection.transform.GetChild(addressSection.transform.childCount - 1).gameObject
 					.AnimateGraphicAndScale(validAddress ? 0f : 1f, validAddress ? 0f : 1f, 0.2f);
+		}
+	}
+
+	public bool ValidAmount
+	{
+		get { return validAmount; }
+		set
+		{
+			validAmount = value;
+			amountSection.transform.GetChild(amountSection.transform.childCount - 1).gameObject
+				.AnimateGraphicAndScale(validAddress ? 0f : 1f, validAddress ? 0f : 1f, 0.2f);
 		}
 	}
 
@@ -46,10 +60,10 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	private void Awake()
 	{
-		addressInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(AddressChanged);
-		amountInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(AmountChanged);
-		gasLimitInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(GasLimitChanged);
-		gasPriceInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(GasPriceChanged);
+		addressInputField.onValueChanged.AddListener(AddressChanged);
+		amountInputField.onValueChanged.AddListener(AmountChanged);
+		gasLimitInputField.onValueChanged.AddListener(GasLimitChanged);
+		gasPriceInputField.onValueChanged.AddListener(GasPriceChanged);
 
 		advancedModeToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = AdvancedModeClicked;
 		maxToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = MaxClicked;
@@ -81,51 +95,62 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	private void TokenChanged(int value)
 	{
-
+		//Set token icon
+		//Set token amount
 	}
 
 	private void AddressChanged(string address)
 	{
 		if (address.Length > 42)
-			addressInputField.transform.GetComponent<TMP_InputField>().text = address.LimitEnd(42);
+			addressInputField.text = address.LimitEnd(42);
 
 		if (AddressUtils.IsValidEthereumAddress(address))
 			ValidAddress = true;
 		else
 			ValidAddress = false;
 
-		validAddress.Log();
 		SetSendButtonInteractable();
 	}
 
 	private void AmountChanged(string amount)
 	{
+		amountInputField.text = NumbersAndDotOnly(amountInputField.text);
 		SetSendButtonInteractable();
 	}
 
 	private void GasLimitChanged(string gasLimit)
 	{
+		gasLimitInputField.text = GetNumbersOnly(gasLimitInputField.text);
 		SetSendButtonInteractable();
 	}
 
 	private void GasPriceChanged(string gasPrice)
 	{
+		gasPriceInputField.text = GetNumbersOnly(gasPriceInputField.text);
 		SetSendButtonInteractable();
 	}
 
 	private void SetSendButtonInteractable()
 	{
-		bool interactable = !IsEmptyField(addressInputField) && !IsEmptyField(amountInputField);
+		bool interactable = !IsEmptyString(addressInputField.text) && !IsEmptyString(amountInputField.text);
 
-		if (advancedMode && IsEmptyField(gasLimitInputField) || advancedMode && IsEmptyField(gasPriceInputField))
+		if (advancedMode && IsEmptyString(gasLimitInputField.text) || advancedMode && IsEmptyString(gasPriceInputField.text))
 			interactable = false;
 
 		sendButton.GetComponent<Button>().interactable = interactable;
 	}
 
-	private string GetInputFieldString(GameObject inputField) => inputField.transform.GetComponent<TMP_InputField>().text;
+	private string GetNumbersOnly(string oldString) => new string(oldString.Where(c => char.IsDigit(c)).ToArray());
 
-	private bool IsEmptyField(GameObject inputField) => string.IsNullOrEmpty(GetInputFieldString(inputField));
+	private string NumbersAndDotOnly(string oldString)
+	{
+		if (oldString.Count(c => c == '.') == 2)
+			oldString = oldString.Substring(0, oldString.Length - 1);
+
+		return new string(oldString.Where(c => char.IsDigit(c) || c == '.').ToArray());
+	}
+
+	private bool IsEmptyString(string str) => string.IsNullOrEmpty(str);
 
 	private void AdvancedModeClicked()
 	{

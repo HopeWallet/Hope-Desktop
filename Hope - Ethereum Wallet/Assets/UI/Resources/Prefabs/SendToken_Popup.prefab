@@ -1330,8 +1330,8 @@ Transform:
   - {fileID: 224840351843750804}
   - {fileID: 224710181214432542}
   - {fileID: 224060921414251418}
-  - {fileID: 224954810618378182}
   - {fileID: 4688325824398268}
+  - {fileID: 224954810618378182}
   m_Father: {fileID: 4772832806012392}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1398,7 +1398,7 @@ Transform:
   - {fileID: 224885099454790324}
   - {fileID: 4884990966433052}
   m_Father: {fileID: 4360620609715774}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4699228544284282
 Transform:
@@ -3564,10 +3564,10 @@ MonoBehaviour:
   gasLimitSection: {fileID: 1106748867744170}
   gasPriceSection: {fileID: 1705711203184794}
   transactionSpeedSection: {fileID: 1167642886166198}
-  addressInputField: {fileID: 1263585685240172}
-  amountInputField: {fileID: 1972226144694760}
-  gasLimitInputField: {fileID: 1402077357486986}
-  gasPriceInputField: {fileID: 1632573842534604}
+  addressInputField: {fileID: 114011499312968654}
+  amountInputField: {fileID: 114438310447676444}
+  gasLimitInputField: {fileID: 114079030004027482}
+  gasPriceInputField: {fileID: 114555080447693696}
   advancedModeToggle: {fileID: 1599734615053358}
   maxToggle: {fileID: 1272066228850016}
   sendButton: {fileID: 1730614311671772}
@@ -7420,7 +7420,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 4360620609715774}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
