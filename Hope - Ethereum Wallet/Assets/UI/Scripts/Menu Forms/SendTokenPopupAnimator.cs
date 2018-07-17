@@ -79,7 +79,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	{
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		title.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		title.AnimateGraphicAndScale(0.85f, 1f, 0.2f);
 		tokenSection.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
@@ -88,9 +88,26 @@ public class SendTokenPopupAnimator : UIAnimator
 			() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating)))));
 	}
 
+	[ContextMenu("Animate Out")]
 	protected override void AnimateOut()
 	{
+		sendButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => title.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => dim.AnimateGraphic(0f, 2f, FinishedAnimating)));
+		amountSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => tokenSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f)));
+		addressSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f));
 
+		if (advancedMode)
+		{
+			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+			gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		}
+
+		else
+			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 2f);
 	}
 
 	private void TokenChanged(int value)
