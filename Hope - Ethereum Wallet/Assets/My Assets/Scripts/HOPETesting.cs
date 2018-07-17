@@ -40,7 +40,6 @@ using System.Runtime.CompilerServices;
 public class HOPETesting : MonoBehaviour
 {
 	private void Start()
-<<<<<<< HEAD
     {
         //var ledger = LedgerClient.GetHIDLedgers().First();
         //var firmware = ledger.GetFirmwareVersion();
@@ -63,16 +62,6 @@ public class HOPETesting : MonoBehaviour
 
         combinedHash.Log();
     }
-=======
-	{
-		//var ledger = LedgerClient.GetHIDLedgers().First();
-		//var firmware = ledger.GetFirmwareVersion();
-		//var pubkey = ledger.GetWalletPubKey(new KeyPath("1'/0"));
-		//var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
-		//Debug.Log(pubkey.Address);
-		//Debug.Log(firmware);
-	}
->>>>>>> f94ef119e1af51b8cec361d44c4243ce6bf40a1f
 
     private void AnonymousStuff()
     {

@@ -25,9 +25,9 @@ public class OpenWalletForm : UIAnimator
 			() => buyButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => sellButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating))))));
 
-		AnimateList(assetList.transform.GetChild(0).GetChild(0), 0, true);
-		AnimateList(transactionList.transform.GetChild(0).GetChild(0), 0, true);
-		AnimateList(taskBarButtons.transform, 0, false);
+		AnimateList(assetList.transform.GetChild(0).GetChild(0), 0);
+		AnimateList(transactionList.transform.GetChild(0).GetChild(0), 0);
+		AnimateList(taskBarButtons.transform, 0);
 	}
 
 	protected override void AnimateOut()
@@ -35,11 +35,11 @@ public class OpenWalletForm : UIAnimator
 		FinishedAnimating();
 	}
 
-	private void AnimateList(Transform objectTransform, int index, bool isList)
+	private void AnimateList(Transform objectTransform, int index)
 	{
 		if (index == objectTransform.childCount - 1)
-			objectTransform.GetChild(index).gameObject.AnimateScaleX(isList ? 1.183325f : 1f, 0.15f);
+			objectTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f);
 		else
-			objectTransform.GetChild(index).gameObject.AnimateScaleX(isList ? 1.183325f : 1f, 0.15f, () => AnimateList(objectTransform, ++index, isList));
+			objectTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateList(objectTransform, ++index));
 	}
 }

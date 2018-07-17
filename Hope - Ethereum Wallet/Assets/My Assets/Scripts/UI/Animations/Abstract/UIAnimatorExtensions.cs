@@ -15,7 +15,6 @@ public static class UIAnimatorExtensions
 	public static void AnimateGraphic(this GameObject gameObject, float endValue, float duration, TweenCallback callback = null)
 	{
 		gameObject.GetComponent<Graphic>().DOFade(endValue, duration).OnComplete(() => callback?.Invoke());
-		//gameObject.GetComponent<Graphic>().DOColor(new Color(endValue, endValue, endValue), duration).OnComplete(() => callback?.Invoke());
 	}
 
 	public static void AnimateScaleX(this GameObject gameObject, float endValue, float duration, TweenCallback callback = null)

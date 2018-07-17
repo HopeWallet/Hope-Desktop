@@ -15,14 +15,14 @@
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <returns> True if the <see langword="string"/> is a valid ethereum address. </returns>
-        public static bool IsValidEthereumAddress(string address) => address != null && CorrectAddressLength(address) && CorrectAddressBeginning(address) && CorrectAddressCharacters(address);
+        public static bool IsValidEthereumAddress(string address) => !string.IsNullOrEmpty(address) && CorrectAddressLength(address) && CorrectAddressBeginning(address) && CorrectAddressCharacters(address);
 
         /// <summary>
         /// Checks if the input <see langword="string"/> is of correct length to be an ethereum address.
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <returns> True if the string is of correct length. </returns>
-        private static bool CorrectAddressLength(string address) => address.Length == 42;
+        public static bool CorrectAddressLength(string address) => address.Length == 42;
 
         /// <summary>
         /// Checks if the input <see langword="string"/> has the correct beginning characters to be an ethereum address.
