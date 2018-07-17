@@ -76,17 +76,6 @@ namespace Hope.Security.Encryption
         }
 
         /// <summary>
-        /// Helper that generates a random new key on each call.
-        /// </summary>
-        /// <returns></returns>
-        private static byte[] NewKey()
-        {
-            var key = new byte[KEY_BIT_SIZE / 8];
-            Random.NextBytes(key);
-            return key;
-        }
-
-        /// <summary>
         /// Simple Encryption And Authentication (AES-GCM) of a UTF8 string.
         /// </summary>
         /// <param name="secretMessage">The secret message.</param>

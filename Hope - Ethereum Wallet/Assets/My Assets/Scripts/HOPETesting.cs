@@ -34,10 +34,36 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
 using System.Dynamic;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using System.Runtime.CompilerServices;
 
 public class HOPETesting : MonoBehaviour
 {
 	private void Start()
+<<<<<<< HEAD
+    {
+        //var ledger = LedgerClient.GetHIDLedgers().First();
+        //var firmware = ledger.GetFirmwareVersion();
+        //var pubkey = ledger.GetWalletPubKey(new KeyPath("1'/0"));
+        //var pubkey = ledger.GetWalletPubKey(new KeyPath("44'/60'/0'/0'/0"));
+        //Debug.Log(pubkey.Address);
+        //Debug.Log(firmware);
+    }
+
+    [ContextMenu("Get Hash")]
+    public void GetEncryptionHash()
+    {
+        var process = Process.GetCurrentProcess();
+
+        var idHash = process.Id.ToString().GetSHA384Hash();
+        var moduleHash = process.MainModule.ModuleName.GetHashCode().ToString().GetSHA256Hash();
+        var instanceHash = RuntimeHelpers.GetHashCode(this).ToString().GetSHA384Hash();
+
+        var combinedHash = idHash.CombineAndRandomize(moduleHash).GetSHA384Hash().CombineAndRandomize(instanceHash).GetSHA512Hash();
+
+        combinedHash.Log();
+    }
+=======
 	{
 		//var ledger = LedgerClient.GetHIDLedgers().First();
 		//var firmware = ledger.GetFirmwareVersion();
@@ -46,6 +72,7 @@ public class HOPETesting : MonoBehaviour
 		//Debug.Log(pubkey.Address);
 		//Debug.Log(firmware);
 	}
+>>>>>>> f94ef119e1af51b8cec361d44c4243ce6bf40a1f
 
     private void AnonymousStuff()
     {
@@ -58,7 +85,7 @@ public class HOPETesting : MonoBehaviour
         obj.Name = "MyName";
         obj.Age = 22;
 
-        UnityEngine.Debug.Log(obj.Name);
+        Debug.Log(obj.Name);
 
     }
 
