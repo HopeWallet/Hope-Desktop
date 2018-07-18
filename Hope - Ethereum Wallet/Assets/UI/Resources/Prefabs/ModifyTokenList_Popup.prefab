@@ -880,7 +880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7dd9f9e296aec24bb9ecb14b4d1fd7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1395972892304014}
   dim: {fileID: 1520288251594672}
   form: {fileID: 1841633691269756}

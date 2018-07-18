@@ -3547,12 +3547,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1702906166241232}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1f0130daa3f1db4a8c289c69c2c50cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1618860512982622}
   dim: {fileID: 1787032854652864}
   form: {fileID: 1936820499658470}
