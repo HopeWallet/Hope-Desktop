@@ -13,7 +13,6 @@ public class TokenContractManager
 
     private readonly Settings settings;
     private readonly PopupManager popupManager;
-    private readonly TradableAssetManager tradableAssetManager;
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
 
@@ -65,7 +64,6 @@ public class TokenContractManager
     {
         var tokenPref = tokenAddress.ToLower();
 
-        // THIS CHECK TO SEE IF A TOKEN EXISTS DOESNT WORK
         if (SecurePlayerPrefs.HasKey(tokenPref))
             return;
 
@@ -158,7 +156,7 @@ public class TokenContractManager
             string addressPref = SecurePlayerPrefs.GetString(prefName);
 
             tokensToInitialize.Enqueue(addressPref);
-            addressButtonIndices.Add(/*GetTokenAddressFromPref(addressPref)*/addressPref, i + 1);
+            addressButtonIndices.Add(addressPref, i + 1);
         }
 
         savedTokenCount = tokensToInitialize.Count + 1;
@@ -177,13 +175,6 @@ public class TokenContractManager
         string tokenAbi = SecurePlayerPrefs.GetString(tokenAddress);
         string tokenSymbol = GetTokenSymbolFromPref(tokenAddress);
 
-        //if (addressSymbolPair.ContainsKey(tokenAddress))
-        //{
-        //    onLoadingFinished?.Invoke();
-        //    return;
-        //}
-
-        //addressSymbolPair.Add(tokenAddress, tokenSymbol);
         InitializeToken(tokenAddress, tokenAbi, (_, asset) => UpdateTradableAssets(asset, () => CheckLoadStatus(onLoadingFinished)));
         LoadTokensFromQueue(onLoadingFinished);
     }
@@ -200,13 +191,6 @@ public class TokenContractManager
         OnTokensLoaded?.Invoke();
         onLoadFinished?.Invoke();
     }
-
-    /// <summary>
-    /// Gets the token address from the token player pref.
-    /// </summary>
-    /// <param name="tokenPref"> The player pref of the token. </param>
-    /// <returns> The token address of this pref. </returns>
-    //private string GetTokenAddressFromPref(string tokenPref) => tokenPref.Substring(0, tokenPref.IndexOf("-")).ToLower();
 
     /// <summary>
     /// Gets the token symbol from the token player pref.

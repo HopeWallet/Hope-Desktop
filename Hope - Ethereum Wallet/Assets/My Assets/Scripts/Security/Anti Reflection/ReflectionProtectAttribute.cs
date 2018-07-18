@@ -7,9 +7,9 @@
 public sealed class ReflectionProtectAttribute : Attribute
 {
 
-    private Type returnType;
+    private readonly Type returnType;
 
-    public object ReturnValue => returnType == null ? "" : returnType.IsValueType? Activator.CreateInstance(returnType) : null;
+    public object ReturnValue => returnType == null ? "" : returnType.IsValueType? Activator.CreateInstance(returnType) : "null";
 
     public ReflectionProtectAttribute(Type returnType)
     {

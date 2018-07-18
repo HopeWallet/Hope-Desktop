@@ -21,7 +21,6 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Digests;
 using System.IO;
-using System.Collections.Generic;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
@@ -41,137 +40,58 @@ using System.Security.Principal;
 using System.Reflection;
 using UnityEditor;
 
-public class Tester
-{
-    [ReflectionProtect]
-    private void DoStuff()
-    {
-    }
-
-    [ReflectionProtect(typeof(int))]
-    private int DoMoreStuff()
-    {
-        return 0;
-    }
-}
-
 public class HOPETesting : MonoBehaviour
 {
 
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
-    private const string TEST_CLASS_STRING = @"public class Tester
-{
-    [ReflectionProtect]
-    private void DoStuff()
-    {
-    }
-
-    [ReflectionProtect(typeof(int))]
-    private int DoMoreStuff()
-    {
-        return 0;
-    }
-}";
-
     private void Start()
     {
-        var list = LoopThroughAssemblies();
-        var dictionary = LoopThroughAssets().Where(p => list.Select(t => t.ToString()).Contains(p.Key));
-
-        dictionary.ForEach(p => Debug.Log(p.Key + " => " + p.Value));
-        list.ForEach(type => type.Log());
-    }
-
-    private Dictionary<string, string> LoopThroughAssets()
-    {
-        Dictionary<string, string> types = new Dictionary<string, string>();
-        foreach (string assetPath in AssetDatabase.GetAllAssetPaths())
-        {
-            if (assetPath.EndsWith(".cs"))
-            {
-                string removedEnd = assetPath.Remove(assetPath.Length - 3, 3);
-                string finalText = removedEnd.Remove(0, removedEnd.LastIndexOf('/') + 1);
-                if (!types.ContainsKey(finalText))
-                    types.Add(finalText, assetPath);
-            }
-        }
-        return types;
-    }
-
-    private List<Type> LoopThroughAssemblies()
-    {
-        List<Type> types = new List<Type>();
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-        {
-            types.AddItems(GetAttributeTypes<ReflectionProtectAttribute>(assembly).ToArray());
-        }
-
-        //types.ForEach(t => Debug.Log(t.ToString()));
-        return types;
-    }
-
-    private List<Type> GetAttributeTypes<T>(Assembly assembly) where T : Attribute
-    {
-        List<Type> typesContainingAttributes = new List<Type>();
-        foreach (Type type in assembly.GetTypes())
-        {
-            try
-            {
-                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-                {
-                    if (Attribute.IsDefined(method, typeof(T)) && !typesContainingAttributes.Contains(type))
-                        typesContainingAttributes.Add(type);
-                }
-            }
-            catch (BadImageFormatException e)
-            {
-            }
-        }
-
-        return typesContainingAttributes;
+        ReflectionProtectionInjector.Inject();
     }
 
     //private void Start()
     //{
-    //    //const string text = "this is my piece of text";
+    //    const string text = "this is my piece of text";
 
-    //    //byte[] encrypted = Encrypt(text.GetUTF8Bytes());
-    //    //byte[] decrypted = Decrypt(encrypted);
+    //    byte[] encrypted = Encrypt(text.GetUTF8Bytes());
+    //    byte[] decrypted = Decrypt(encrypted);
 
     //    //DeleteCspKeys();
 
-    //    //ReflectionCall();
+    //    ReflectionCall();
 
     //    //encrypted.GetBase64String().Log();
     //    //decrypted.GetUTF8String().Log();
     //}
 
+    [ReflectionProtect]
     private void ReflectionCall()
     {
         Type type = this.GetType();
+        FieldInfo fieldInfo = type.GetField("KEY_SIZE", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
         MethodInfo methodInfo = type.GetMethod("DeleteCspKeys", BindingFlags.NonPublic | BindingFlags.Instance);
+        fieldInfo.GetValue(this).ToString().Log();
         methodInfo.Invoke(this, null);
     }
 
-    [ReflectionProtect(typeof(HOPETesting))]
-    private void DeleteCspKeys()
+    [ReflectionProtect]
+    protected void DeleteCspKeys()
     {
-        if (RuntimeMethodSearcher.FindReflectionCalls())
-            Debug.Log("REFLECTION CALLED");
-
         var rsa = GetRSA();
         rsa.PersistKeyInCsp = false;
         rsa.Clear();
     }
 
+    [ReflectionProtect(typeof(byte[]))]
     private byte[] Encrypt(byte[] plain)
     {
         using (var rsa = GetRSA())
             return rsa.Encrypt(plain, true);
     }
 
+    [ReflectionProtect(typeof(byte[]))]
     private byte[] Decrypt(byte[] encrypted)
     {
         using (var rsa = GetRSA())

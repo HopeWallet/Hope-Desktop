@@ -2028,23 +2028,23 @@ namespace Zenject
             return bindingFinalizer;
         }
 
-        public ConcreteBinderGeneric<TContract> Rebind<TContract>()
+        private ConcreteBinderGeneric<TContract> Rebind<TContract>()
         {
             return RebindId<TContract>(null);
         }
 
-        public ConcreteBinderGeneric<TContract> RebindId<TContract>(object identifier)
+        private ConcreteBinderGeneric<TContract> RebindId<TContract>(object identifier)
         {
             UnbindId<TContract>(identifier);
             return Bind<TContract>().WithId(identifier);
         }
 
-        public ConcreteBinderNonGeneric Rebind(Type contractType)
+        private ConcreteBinderNonGeneric Rebind(Type contractType)
         {
             return RebindId(contractType, null);
         }
 
-        public ConcreteBinderNonGeneric RebindId(Type contractType, object identifier)
+        private ConcreteBinderNonGeneric RebindId(Type contractType, object identifier)
         {
             UnbindId(contractType, identifier);
             return Bind(contractType).WithId(identifier);
