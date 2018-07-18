@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LoadingProcessPopup : UIAnimator
+public class LoadingPopupAnimator : UIAnimator
 {
 
 	[SerializeField] private GameObject dim;

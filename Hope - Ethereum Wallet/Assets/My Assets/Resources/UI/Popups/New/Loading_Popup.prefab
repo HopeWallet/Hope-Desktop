@@ -39,10 +39,10 @@ GameObject:
   - component: {fileID: 224213536837083970}
   - component: {fileID: 223137929773299430}
   - component: {fileID: 114611245165816768}
-  - component: {fileID: 114112261449245450}
+  - component: {fileID: 114281616425438318}
   - component: {fileID: 114523881895712278}
   m_Layer: 0
-  m_Name: LoadingProcess_Popup
+  m_Name: Loading_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9947c0ed14382484c9dc300323e4e443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114112261449245450
+--- !u!114 &114281616425438318
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1364737141961984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c596b52dc15a0340887bf96a7719d8f, type: 3}
+  m_Script: {fileID: 11500000, guid: bb3d233af0899ef4fbe0f851de2aba10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animateOnEnable: 0
