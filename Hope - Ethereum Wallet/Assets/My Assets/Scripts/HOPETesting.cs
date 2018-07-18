@@ -39,6 +39,21 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Reflection;
+using UnityEditor;
+
+public class Tester
+{
+    [ReflectionProtect]
+    private void DoStuff()
+    {
+    }
+
+    [ReflectionProtect(typeof(int))]
+    private int DoMoreStuff()
+    {
+        return 0;
+    }
+}
 
 public class HOPETesting : MonoBehaviour
 {
@@ -46,29 +61,102 @@ public class HOPETesting : MonoBehaviour
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
+    private const string TEST_CLASS_STRING = @"public class Tester
+{
+    [ReflectionProtect]
+    private void DoStuff()
+    {
+    }
+
+    [ReflectionProtect(typeof(int))]
+    private int DoMoreStuff()
+    {
+        return 0;
+    }
+}";
+
     private void Start()
     {
-        const string text = "this is my piece of text";
+        var list = LoopThroughAssemblies();
+        var dictionary = LoopThroughAssets().Where(p => list.Select(t => t.ToString()).Contains(p.Key));
 
-        byte[] encrypted = Encrypt(text.GetUTF8Bytes());
-        byte[] decrypted = Decrypt(encrypted);
-
-        //DeleteCspKeys();
-
-        ReflectionCall();
-
-        //encrypted.GetBase64String().Log();
-        //decrypted.GetUTF8String().Log();
+        dictionary.ForEach(p => Debug.Log(p.Key + " => " + p.Value));
+        list.ForEach(type => type.Log());
     }
+
+    private Dictionary<string, string> LoopThroughAssets()
+    {
+        Dictionary<string, string> types = new Dictionary<string, string>();
+        foreach (string assetPath in AssetDatabase.GetAllAssetPaths())
+        {
+            if (assetPath.EndsWith(".cs"))
+            {
+                string removedEnd = assetPath.Remove(assetPath.Length - 3, 3);
+                string finalText = removedEnd.Remove(0, removedEnd.LastIndexOf('/') + 1);
+                if (!types.ContainsKey(finalText))
+                    types.Add(finalText, assetPath);
+            }
+        }
+        return types;
+    }
+
+    private List<Type> LoopThroughAssemblies()
+    {
+        List<Type> types = new List<Type>();
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            types.AddItems(GetAttributeTypes<ReflectionProtectAttribute>(assembly).ToArray());
+        }
+
+        //types.ForEach(t => Debug.Log(t.ToString()));
+        return types;
+    }
+
+    private List<Type> GetAttributeTypes<T>(Assembly assembly) where T : Attribute
+    {
+        List<Type> typesContainingAttributes = new List<Type>();
+        foreach (Type type in assembly.GetTypes())
+        {
+            try
+            {
+                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (Attribute.IsDefined(method, typeof(T)) && !typesContainingAttributes.Contains(type))
+                        typesContainingAttributes.Add(type);
+                }
+            }
+            catch (BadImageFormatException e)
+            {
+            }
+        }
+
+        return typesContainingAttributes;
+    }
+
+    //private void Start()
+    //{
+    //    //const string text = "this is my piece of text";
+
+    //    //byte[] encrypted = Encrypt(text.GetUTF8Bytes());
+    //    //byte[] decrypted = Decrypt(encrypted);
+
+    //    //DeleteCspKeys();
+
+    //    //ReflectionCall();
+
+    //    //encrypted.GetBase64String().Log();
+    //    //decrypted.GetUTF8String().Log();
+    //}
 
     private void ReflectionCall()
     {
         Type type = this.GetType();
-        MethodInfo methodInfo = type.GetMethod("DeleteCspKeys");
+        MethodInfo methodInfo = type.GetMethod("DeleteCspKeys", BindingFlags.NonPublic | BindingFlags.Instance);
         methodInfo.Invoke(this, null);
     }
 
-    public void DeleteCspKeys()
+    [ReflectionProtect(typeof(HOPETesting))]
+    private void DeleteCspKeys()
     {
         if (RuntimeMethodSearcher.FindReflectionCalls())
             Debug.Log("REFLECTION CALLED");
