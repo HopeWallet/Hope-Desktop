@@ -1,37 +1,61 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public static class ReflectionProtectionInjector
 {
 
-    private static Dictionary<string, string> OldTextData = new Dictionary<string, string>();
+    private const string PREF_NAME = "ReflectProtect_";
 
     [ModifyCode]
     public static void InjectAttributes()
     {
         var types = AssemblyUtils.GetTypesWithMethodAttribute<ReflectionProtectAttribute>();
+        var paths = GetInjectablePaths(types);
 
-        foreach (var path in GetInjectablePaths(types))
+        for (int i = 0; i < paths.Count; i++)
         {
+            string path = paths[i];
             string text = File.ReadAllText(path);
             string modifiedText = GetModifiedText(types, text);
 
             SaveData(path, modifiedText);
-            OldTextData.Add(path, text);
+
+            PlayerPrefs.SetString(PREF_NAME + i, path);
+            PlayerPrefs.SetString(path, text);
         }
     }
 
     [RestoreCode]
-    public static void RestoreOriginalText(BuildTarget target, string result)
+    public static void RestoreOriginalText()
     {
-        OldTextData.ForEach(pair => SaveData(pair.Key, pair.Value));
+        for (int i = 0; ; i++)
+        {
+            if (!PlayerPrefs.HasKey(PREF_NAME + i))
+                break;
+
+            string path = PlayerPrefs.GetString(PREF_NAME + i);
+            string text = PlayerPrefs.GetString(path);
+
+            SaveData(path, text);
+        }
+
+        ClearPrefs();
+    }
+
+    private static void ClearPrefs()
+    {
+        for (int i = 0; ; i++)
+        {
+            if (!PlayerPrefs.HasKey(PREF_NAME + i))
+                return;
+            else
+                PlayerPrefs.DeleteKey(PREF_NAME + i);
+        }
     }
 
     private static void SaveData(string path, string text)

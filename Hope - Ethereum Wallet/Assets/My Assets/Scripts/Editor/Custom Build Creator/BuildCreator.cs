@@ -13,9 +13,7 @@ public class BuildCreator : EditorWindow
     private const string BUILD_PATH = "C:/Users/Matthew/Downloads/Test";
     private const string BUILD_NAME = "Test";
 
-    private readonly static Stack<Type> codeModificationTypes = new Stack<Type>();
-
-    private static bool shouldBuild;
+    private const string SHOULD_BUILD_PREF_NAME = "build";
 
     [MenuItem("Window/Build Creator")]
     public static void Init()
@@ -32,38 +30,30 @@ public class BuildCreator : EditorWindow
 
     private static void ModifyScripts()
     {
-        shouldBuild = true;
+        PlayerPrefs.SetInt(SHOULD_BUILD_PREF_NAME, 1);
 
-        var types = AssemblyUtils.GetTypesWithMethodAttribute<ModifyCodeAttribute>()
-                                 .Where(ReflectionHelper.HasMethodAttributes<ModifyCodeAttribute, RestoreCodeAttribute>).ToArray();
-                     //.ForEach(type =>
-                     //{
-                     //    codeModificationTypes.Push(type);
-                     //    ReflectionHelper.InvokeAttributeMethod<ModifyCodeAttribute>(type, null);
-                     //});
+        InvokeMethodsWithAttribute<ModifyCodeAttribute>();
 
-        for (int i = 0; i < types.Length; i++)
-        {
-
-        }
-
-        RefreshAssets();
+        AssetDatabase.Refresh();
     }
 
     [DidReloadScripts]
     public static void Build()
     {
-        Debug.Log("RELOADED => " + shouldBuild);
-        Debug.Log(codeModificationTypes.Count);
-        if (!shouldBuild)
+        if (PlayerPrefs.GetInt(SHOULD_BUILD_PREF_NAME) == 0)
             return;
+
+        PlayerPrefs.SetInt(SHOULD_BUILD_PREF_NAME, 0);
 
         EnsureValidDirectory();
         CreateBuild();
-        RestoreCode();
-        RefreshAssets();
+    }
 
-        shouldBuild = false;
+    [PostProcessBuild(0)]
+    public static void Restore(BuildTarget target, string result)
+    {
+        InvokeMethodsWithAttribute<RestoreCodeAttribute>();
+        AssetDatabase.Refresh();
     }
 
     private static void CreateBuild()
@@ -85,14 +75,10 @@ public class BuildCreator : EditorWindow
             Directory.CreateDirectory(BUILD_PATH);
     }
 
-    private static void RestoreCode()
+    private static void InvokeMethodsWithAttribute<T>() where T : Attribute
     {
-        while (codeModificationTypes.Count > 0)
-            ReflectionHelper.InvokeAttributeMethod<RestoreCodeAttribute>(codeModificationTypes.Pop(), null);
-    }
-
-    private static void RefreshAssets()
-    {
-        AssetDatabase.Refresh();
+        AssemblyUtils.GetTypesWithMethodAttribute<ModifyCodeAttribute>()
+                     .Where(ReflectionHelper.HasMethodAttributes<ModifyCodeAttribute, RestoreCodeAttribute>)
+                     .ForEach(type => ReflectionHelper.InvokeAttributeMethod<T>(type, null));
     }
 }
