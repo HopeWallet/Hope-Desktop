@@ -38,6 +38,7 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Reflection;
+using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -45,20 +46,26 @@ public class HOPETesting : MonoBehaviour
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
-    //private void Start()
-    //{
-    //    const string text = "this is my piece of text";
+    public string entropy = "";
 
-    //    byte[] encrypted = Encrypt(text.GetUTF8Bytes());
-    //    byte[] decrypted = Decrypt(encrypted);
+    private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
 
-    //    //DeleteCspKeys();
+    private void Start()
+    {
+        const string text = "this is my piece of text";
 
-    //    ReflectionCall();
+        byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
+        byte[] decrypted = dataEncrypt.Decrypt(encrypted);
+        byte[] decrypted2 = dataEncrypt.Decrypt(encrypted);
 
-    //    //encrypted.GetBase64String().Log();
-    //    //decrypted.GetUTF8String().Log();
-    //
+        //DeleteCspKeys();
+
+        //ReflectionCall();
+
+        encrypted.GetBase64String().Log();
+        decrypted.GetUTF8String().Log();
+        decrypted2.GetUTF8String().Log();
+    }
 
     private void ReflectionCall()
     {
@@ -67,47 +74,6 @@ public class HOPETesting : MonoBehaviour
         MethodInfo methodInfo = type.GetMethod("DeleteCspKeys", BindingFlags.NonPublic | BindingFlags.Instance);
         fieldInfo.GetValue(this).ToString().Log();
         methodInfo.Invoke(this, null);
-    }
-
-    protected void DeleteCspKeys()
-    {
-        var rsa = GetRSA();
-        rsa.PersistKeyInCsp = false;
-        rsa.Clear();
-    }
-
-    private byte[] Encrypt(byte[] plain)
-    {
-        using (var rsa = GetRSA())
-            return rsa.Encrypt(plain, true);
-    }
-
-    private byte[] Decrypt(byte[] encrypted)
-    {
-        using (var rsa = GetRSA())
-            return rsa.Decrypt(encrypted, true);
-    }
-
-    private RSACryptoServiceProvider GetRSA()
-    {
-        CspParameters cspParameters = new CspParameters(1, null, CONTAINER_NAME)
-        {
-            Flags = CspProviderFlags.UseUserProtectedKey
-        };
-
-        return new RSACryptoServiceProvider(KEY_SIZE, cspParameters);
-    }
-
-    //[ContextMenu("Get Hash")]
-    public string GetEncryptionHash()
-    {
-        var process = Process.GetCurrentProcess();
-
-        var idHash = process.Id.ToString().GetSHA384Hash();
-        var moduleHash = process.MainModule.ModuleName.GetHashCode().ToString().GetSHA256Hash();
-        var instanceHash = RuntimeHelpers.GetHashCode(this).ToString().GetSHA384Hash();
-
-        return idHash.CombineAndRandomize(moduleHash).GetSHA384Hash().CombineAndRandomize(instanceHash).GetSHA512Hash();
     }
 
     //private void AnonymousStuff()

@@ -88,11 +88,7 @@ public static class StringModification
     /// <returns></returns>
     public static string CombineAndRandomize(this string str1, string str2)
 	{
-		int total = 0;
-
-		str2.ToList().ForEach(c => total += c);
-
-		return (str1 + str2).Shuffle(total);
+		return string.Concat(str1, str2).Shuffle(str2.Sum(c => c));
 	}
 
 	/// <summary>
@@ -109,7 +105,7 @@ public static class StringModification
 		var length = GetSafeLength(original, modifier);
 
 		for (int i = 0; i < length; i++)
-			result += charLookup[Mathf.Abs((int)(((runOperation(original, modifier, i) * 100) % charLookup.Length)))];
+			result += charLookup[Mathf.Abs((int)((runOperation(original, modifier, i) * 100) % charLookup.Length))];
 
 		return result;
 	}

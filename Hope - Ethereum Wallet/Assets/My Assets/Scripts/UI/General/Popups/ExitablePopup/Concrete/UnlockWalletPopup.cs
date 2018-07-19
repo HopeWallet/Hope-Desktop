@@ -6,7 +6,7 @@ using Zenject;
 /// <summary>
 /// Popup used for entering the password to unlock a specific wallet.
 /// </summary>
-public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup>
+public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup>, IEnterButtonObservable
 {
     public Button unlockWalletButton;
 
@@ -15,6 +15,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     private UIManager uiManager;
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
+    private ButtonClickObserver buttonClickObserver;
 
     /// <summary>
     /// Adds the required dependencies to this popup.
@@ -23,11 +24,12 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     [Inject]
-    public void Construct(UIManager uiManager, UserWalletManager userWalletManager, DynamicDataCache dynamicDataCache)
+    public void Construct(UIManager uiManager, UserWalletManager userWalletManager, DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
     {
         this.uiManager = uiManager;
         this.userWalletManager = userWalletManager;
         this.dynamicDataCache = dynamicDataCache;
+        this.buttonClickObserver = buttonClickObserver;
     }
 
     /// <summary>
@@ -38,12 +40,20 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <summary>
     /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
     /// </summary>
-    private void OnEnable() => UserWallet.OnWalletLoadSuccessful += OnWalletLoad;
+    private void OnEnable()
+    {
+        UserWallet.OnWalletLoadSuccessful += OnWalletLoad;
+        buttonClickObserver.SubscribeObservable(this);
+    }
 
     /// <summary>
     /// Removes the OnWalletLoad method from the UserWallet.OnWalletLoadSuccessful event.
     /// </summary>
-    private void OnDisable() => UserWallet.OnWalletLoadSuccessful -= OnWalletLoad;
+    private void OnDisable()
+    {
+        UserWallet.OnWalletLoadSuccessful -= OnWalletLoad;
+        buttonClickObserver.UnsubscribeObservable(this);
+    }
 
     /// <summary>
     /// Enables the open wallet gui once the user wallet has been successfully loaded.
@@ -57,5 +67,15 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     {
         dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
         userWalletManager.UnlockWallet();
+    }
+
+    /// <summary>
+    /// Attempts to open the wallet when enter is pressed.
+    /// </summary>
+    /// <param name="clickType"> The enter button click type. </param>
+    public void EnterButtonPressed(ClickType clickType)
+    {
+        if (clickType == ClickType.Down && unlockWalletButton.interactable)
+            unlockWalletButton.Press();
     }
 }
