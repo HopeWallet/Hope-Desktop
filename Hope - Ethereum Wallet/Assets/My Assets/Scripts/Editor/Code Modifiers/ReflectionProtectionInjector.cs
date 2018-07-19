@@ -11,6 +11,8 @@ public static class ReflectionProtectionInjector
 
     private const string PREF_NAME = "ReflectProtect_";
 
+    private const string INJECT_TEXT = "if (RuntimeMethodSearcher.FindReflectionCalls()) return ";
+
     [ModifyCode]
     public static void InjectAttributes()
     {
@@ -108,7 +110,7 @@ public static class ReflectionProtectionInjector
                 modifiedText = modifiedText.Insert(attributeStart, " ");
 
             var methodStart = modifiedText.IndexOf('{', attributeEnd, modifiedText.Length - attributeEnd);
-            modifiedText = modifiedText.Insert(methodStart + 1, "if (RuntimeMethodSearcher.FindReflectionCalls()) return " + attribute.ReturnValue + ";");
+            modifiedText = modifiedText.Insert(methodStart + 1, INJECT_TEXT + attribute.ReturnValue + ";");
         }
 
         return modifiedText;

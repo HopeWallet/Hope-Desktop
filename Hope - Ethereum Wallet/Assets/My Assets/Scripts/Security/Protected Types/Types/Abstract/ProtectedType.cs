@@ -63,7 +63,6 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         /// <param name="value"> The value to convert to a <see langword="byte"/>[] array. </param>
         /// <returns> The converted value as a <see langword="byte"/>[] array. </returns>
-        [ReflectionProtect(typeof(byte[]))]
         protected abstract byte[] GetBytes(TType value);
     }
 }
