@@ -45,12 +45,6 @@ public class HOPETesting : MonoBehaviour
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
-    //[ContextMenu("Start")]
-    //public void Start()
-    //{
-    //    ReflectionProtectionInjector.Inject();
-    //}
-
     //private void Start()
     //{
     //    const string text = "this is my piece of text";
@@ -64,7 +58,7 @@ public class HOPETesting : MonoBehaviour
 
     //    //encrypted.GetBase64String().Log();
     //    //decrypted.GetUTF8String().Log();
-    //}
+    //
 
     private void ReflectionCall()
     {

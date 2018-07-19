@@ -13,6 +13,7 @@ public static class ReflectionProtectionInjector
 
     private static Dictionary<string, string> OldTextData = new Dictionary<string, string>();
 
+    [ModifyCode]
     public static void InjectAttributes()
     {
         var types = AssemblyUtils.GetTypesWithMethodAttribute<ReflectionProtectAttribute>();
@@ -27,7 +28,7 @@ public static class ReflectionProtectionInjector
         }
     }
 
-    [PostProcessBuild(0)]
+    [RestoreCode]
     public static void RestoreOriginalText(BuildTarget target, string result)
     {
         OldTextData.ForEach(pair => SaveData(pair.Key, pair.Value));
@@ -36,7 +37,7 @@ public static class ReflectionProtectionInjector
     private static void SaveData(string path, string text)
     {
         File.WriteAllText(path, text);
-        AssetDatabase.ImportAsset(path/*, ImportAssetOptions.ForceSynchronousImport*/);
+        AssetDatabase.ImportAsset(path);
         AssetDatabase.Refresh();
     }
 

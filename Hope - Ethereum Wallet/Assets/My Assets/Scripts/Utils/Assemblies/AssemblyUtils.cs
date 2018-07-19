@@ -18,21 +18,25 @@ public static class AssemblyUtils
     /// <returns> The types with the method attribute. </returns>
     public static List<Type> GetTypesWithMethodAttribute<T>() where T : Attribute
     {
-        Assembly mainAssembly = AppDomain.CurrentDomain.GetAssemblies()
-                                 .Single(assembly => assembly.GetName().Name.EqualsIgnoreCase("Assembly-CSharp"));
-
         List<Type> types = new List<Type>();
+        List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                                       .Where(assembly => assembly.GetName().Name.EqualsIgnoreCase("Assembly-CSharp")
+                                                       || assembly.GetName().Name.EqualsIgnoreCase("Assembly-CSharp-Editor"))
+                                       .ToList();
 
-        foreach (Type type in mainAssembly.GetTypes())
+        foreach (Assembly assembly in assemblies)
         {
-            try
+            foreach (Type type in assembly.GetTypes())
             {
-                foreach (var method in type.GetMethods(REFLECTION_FLAGS))
-                    if (Attribute.IsDefined(method, typeof(T)) && !types.Contains(type))
-                        types.Add(type);
-            }
-            catch
-            {
+                try
+                {
+                    foreach (var method in type.GetMethods(REFLECTION_FLAGS))
+                        if (Attribute.IsDefined(method, typeof(T)) && !types.Contains(type))
+                            types.Add(type);
+                }
+                catch
+                {
+                }
             }
         }
 
