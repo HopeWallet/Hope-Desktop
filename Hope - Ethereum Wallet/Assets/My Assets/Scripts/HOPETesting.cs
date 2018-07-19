@@ -56,7 +56,6 @@ public class HOPETesting : MonoBehaviour
 
         byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
         byte[] decrypted = dataEncrypt.Decrypt(encrypted);
-        byte[] decrypted2 = dataEncrypt.Decrypt(encrypted);
 
         //DeleteCspKeys();
 
@@ -64,7 +63,6 @@ public class HOPETesting : MonoBehaviour
 
         encrypted.GetBase64String().Log();
         decrypted.GetUTF8String().Log();
-        decrypted2.GetUTF8String().Log();
     }
 
     private void ReflectionCall()

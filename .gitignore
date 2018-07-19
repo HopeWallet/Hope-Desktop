@@ -52,3 +52,50 @@ Hope - Ethereum Wallet/.vs/Hope - Ethereum Wallet/DesignTimeBuild/.dtbcache
 .vs/slnx.sqlite
 *.psd
 *.png
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/SkipRenameAttribute.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/SkipRenameAttribute.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/SkipAttribute.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/SkipAttribute.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/ReplaceLiteralsWithName.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/ReplaceLiteralsWithName.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/RenameAttribute.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/RenameAttribute.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/ObfuscateLiterals.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/ObfuscateLiterals.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/DoNotFakeAttribute.cs.meta
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator/DoNotFakeAttribute.cs
+Hope - Ethereum Wallet/Assets/Plugins/Obfuscator.meta
+Hope - Ethereum Wallet/Assets/My Assets/Scripts/HOPETesting.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Postbuild.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Postbuild.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Plugins/obfuscator.dll.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Plugins/obfuscator.dll
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Plugins.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/OptionsManager.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/OptionsManager.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorOptionsImport.asset.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorOptionsImport.asset
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorMenuExample.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorMenuExample.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorExample.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/ObfuscatorExample.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/LICENSE.md.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/LICENSE.md
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Rocks.dll.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Rocks.dll
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Pdb.dll.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Pdb.dll
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Mdb.dll.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.Mdb.dll
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.dll.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil/Beebyte.Cecil.dll
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Mono.Cecil.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/LICENSE.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/LICENSE
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Assembly/AssemblySelector.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Assembly/AssemblySelector.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Assembly/AssemblyReferenceLocator.cs.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Assembly/AssemblyReferenceLocator.cs
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator/Assembly.meta
+Hope - Ethereum Wallet/Assets/Editor/Obfuscator.meta
+Hope - Ethereum Wallet/Assets/Editor.meta
