@@ -50,6 +50,7 @@ public sealed class UserWallet
 
     public void Create() => Load(walletCreator);
 
+    [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader) => walletLoader.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
 
     public string GetAddress(int addressIndex)
