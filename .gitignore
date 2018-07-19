@@ -50,3 +50,5 @@ Crypto Wallet-Exchange/Assets/StreamingAssets/build_info.txt.meta
 Hope - Ethereum Wallet/.vs/Hope - Ethereum Wallet/DesignTimeBuild/.dtbcache
 *.sqlite
 .vs/slnx.sqlite
+*.psd
+*.png
