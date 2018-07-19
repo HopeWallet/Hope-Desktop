@@ -5,24 +5,42 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public static class ReflectionProtectionInjector
 {
 
-    public static void Inject()
-    {
-        var types = GetInjectableTypes();
-        var paths = GetInjectablePaths(types);
+    private static Dictionary<string, string> OldTextData = new Dictionary<string, string>();
 
-        foreach (var path in paths)
+    public static void InjectAttributes()
+    {
+        var types = AssemblyUtils.GetTypesWithMethodAttribute<ReflectionProtectAttribute>();
+
+        foreach (var path in GetInjectablePaths(types))
         {
             string text = File.ReadAllText(path);
-            CheckFileText(types, text);
+            string modifiedText = GetModifiedText(types, text);
+
+            SaveData(path, modifiedText);
+            OldTextData.Add(path, text);
         }
     }
 
-    private static void CheckFileText(List<Type> typeList, string fileText)
+    [PostProcessBuild(0)]
+    public static void RestoreOriginalText(BuildTarget target, string result)
+    {
+        OldTextData.ForEach(pair => SaveData(pair.Key, pair.Value));
+    }
+
+    private static void SaveData(string path, string text)
+    {
+        File.WriteAllText(path, text);
+        AssetDatabase.ImportAsset(path/*, ImportAssetOptions.ForceSynchronousImport*/);
+        AssetDatabase.Refresh();
+    }
+
+    private static string GetModifiedText(List<Type> typeList, string fileText)
     {
         int index = 0;
         string typeName;
@@ -33,7 +51,7 @@ public static class ReflectionProtectionInjector
             fileText = AddReflectionProtection(typeList, typeName, fileText, ref index);
         } while (index < fileText.Length && !string.IsNullOrEmpty(typeName));
 
-        Debug.Log(fileText);
+        return fileText;
     }
 
     private static string AddReflectionProtection(List<Type> typeList, string typeName, string fileText, ref int index)
@@ -106,31 +124,5 @@ public static class ReflectionProtectionInjector
         }
 
         return paths;
-    }
-
-    private static List<Type> GetInjectableTypes()
-    {
-        List<Type> types = new List<Type>();
-        AppDomain.CurrentDomain.GetAssemblies().ForEach(assembly => types.AddItems(GetAttributeTypes<ReflectionProtectAttribute>(assembly).ToArray()));
-        return types;
-    }
-
-    private static List<Type> GetAttributeTypes<T>(Assembly assembly) where T : Attribute
-    {
-        List<Type> typesContainingAttributes = new List<Type>();
-        foreach (Type type in assembly.GetTypes())
-        {
-            try
-            {
-                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                    if (Attribute.IsDefined(method, typeof(T)) && !typesContainingAttributes.Contains(type))
-                        typesContainingAttributes.Add(type);
-            }
-            catch
-            {
-            }
-        }
-
-        return typesContainingAttributes;
     }
 }

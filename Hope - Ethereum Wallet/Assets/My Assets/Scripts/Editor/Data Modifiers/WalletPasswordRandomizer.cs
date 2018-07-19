@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// Class which randomizes the names of the password derivation strings and the order of the operations.
 /// </summary>
-public class WalletPasswordRandomizer
+public static class WalletPasswordRandomizer
 {
 
     private static PlayerPrefPassword PasswordObj;
@@ -18,7 +18,7 @@ public class WalletPasswordRandomizer
     /// <summary>
     /// Replaces the values of the arrays.
     /// </summary>
-    [PostProcessScene(1)]
+    [PostProcessScene(2)]
     public static void ReplaceValues()
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -36,7 +36,7 @@ public class WalletPasswordRandomizer
     /// </summary>
     /// <param name="target"> The target playform of the build. </param>
     /// <param name="result"> The result of the build. </param>
-    [PostProcessBuild(1)]
+    [PostProcessBuild(2)]
     public static void RestoreValues(BuildTarget target, string result)
     {
         Array.Copy(SavedOps, PasswordObj.ops, SavedOps.Length);

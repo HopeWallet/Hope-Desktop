@@ -4,7 +4,7 @@ using UnityEditor.Callbacks;
 /// <summary>
 /// Class which randomizes the name of the company and product on build.
 /// </summary>
-public class BuildNameRandomizer
+public static class BuildNameRandomizer
 {
 
     private static string CompanyName;
@@ -13,7 +13,7 @@ public class BuildNameRandomizer
     /// <summary>
     /// Replaces the names with a random password.
     /// </summary>
-    [PostProcessScene(0)]
+    [PostProcessScene(1)]
     public static void ReplaceBuildNames()
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)
@@ -32,7 +32,7 @@ public class BuildNameRandomizer
     /// </summary>
     /// <param name="target"> The target platform of the build. </param>
     /// <param name="result"> The result of the build. </param>
-    [PostProcessBuild(0)]
+    [PostProcessBuild(1)]
     public static void RestoreNames(BuildTarget target, string result) => SetPlayerSettings(CompanyName, ProductName);
 
     /// <summary>

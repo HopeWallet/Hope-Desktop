@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class ThisOtherTester
@@ -11,7 +11,7 @@ public class ThisOtherTester
     }
 
     [ReflectionProtect]
-    void DoingLotsOfStuff() { }
+    void DoingLotsOfStuff() {}
 
     [ReflectionProtect(typeof(List<GameObject>))]
     private List<GameObject> GetGameObjects()

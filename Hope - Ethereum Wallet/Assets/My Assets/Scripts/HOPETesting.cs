@@ -38,7 +38,6 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Reflection;
-using UnityEditor;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -46,10 +45,11 @@ public class HOPETesting : MonoBehaviour
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
-    private void Start()
-    {
-        ReflectionProtectionInjector.Inject();
-    }
+    //[ContextMenu("Start")]
+    //public void Start()
+    //{
+    //    ReflectionProtectionInjector.Inject();
+    //}
 
     //private void Start()
     //{
@@ -66,7 +66,6 @@ public class HOPETesting : MonoBehaviour
     //    //decrypted.GetUTF8String().Log();
     //}
 
-    [ReflectionProtect]
     private void ReflectionCall()
     {
         Type type = this.GetType();
@@ -76,7 +75,6 @@ public class HOPETesting : MonoBehaviour
         methodInfo.Invoke(this, null);
     }
 
-    [ReflectionProtect]
     protected void DeleteCspKeys()
     {
         var rsa = GetRSA();
@@ -84,14 +82,12 @@ public class HOPETesting : MonoBehaviour
         rsa.Clear();
     }
 
-    [ReflectionProtect(typeof(byte[]))]
     private byte[] Encrypt(byte[] plain)
     {
         using (var rsa = GetRSA())
             return rsa.Encrypt(plain, true);
     }
 
-    [ReflectionProtect(typeof(byte[]))]
     private byte[] Decrypt(byte[] encrypted)
     {
         using (var rsa = GetRSA())
