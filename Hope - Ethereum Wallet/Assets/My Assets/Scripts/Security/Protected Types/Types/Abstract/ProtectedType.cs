@@ -1,6 +1,5 @@
 ﻿using Hope.Security.Encryption.DPAPI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
@@ -50,6 +49,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// This is why it is recommended to use <see cref="CreateDisposableData"/>() within a <see langword="using"/> statement since it is disposed of automatically this way.
         /// </summary>
         /// <param name="value"> The new value to set the <see cref="ProtectedType"/> to. </param>
+        [ReflectionProtect]
         public void SetValue(TType value)
         {
             if (disposableData != null)
@@ -63,6 +63,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         /// <param name="value"> The value to convert to a <see langword="byte"/>[] array. </param>
         /// <returns> The converted value as a <see langword="byte"/>[] array. </returns>
+        [ReflectionProtect(typeof(byte[]))]
         protected abstract byte[] GetBytes(TType value);
     }
 }
