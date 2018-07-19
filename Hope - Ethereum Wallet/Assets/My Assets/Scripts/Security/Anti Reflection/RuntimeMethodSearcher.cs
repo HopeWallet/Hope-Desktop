@@ -1,4 +1,9 @@
-﻿using System.Diagnostics;
+﻿using Hope.Security.HashGeneration;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 
 /// <summary>
 /// Class which is used to search through the StackTrace at runtime and determine certain information about method calls.
@@ -8,7 +13,7 @@ public static class RuntimeMethodSearcher
 
     private static readonly StackTrace StackTrace = new StackTrace();
 
-    private static readonly string[] ReflectionCalls = new string[] { "Invoke", "InternalInvoke" };
+    private static readonly string ReflectionCall = "InternalInvoke";
 
     /// <summary>
     /// Determines if the calling method was called through reflection or not.
@@ -23,9 +28,39 @@ public static class RuntimeMethodSearcher
             if (methodName == null)
                 return false;
 
-            if (ReflectionCalls.ContainsIgnoreCase(methodName))
+            if (ReflectionCall.EqualsIgnoreCase(methodName))
                 return true;
         }
     }
 
+    /// <summary>
+    /// Displays the methods that were called along the current hierarchy.
+    /// </summary>
+    public static void DisplayMethodCallStack()
+    {
+        List<string> methodCalls = new List<string>();
+        string methodCallHash = "";
+        for (int i = 0; ; i++)
+        {
+            string methodName = StackTrace.GetFrame(i)?.GetMethod()?.Name;
+
+            if (methodName == null)
+                break;
+
+            try
+            {
+                MethodBody methodBody = StackTrace.GetFrame(i)?.GetMethod()?.GetMethodBody();
+                if (methodBody != null)
+                    methodCallHash = (methodCallHash + methodBody.GetILAsByteArray().GetBase64String()).GetSHA1Hash();
+            }
+            catch (InvalidOperationException) { }
+
+            methodCalls.Add(methodName);
+        }
+
+        //methodCalls.Reverse();
+        //string.Join(" => ", methodCalls.ToArray()).Log();
+        //methodData.ToArray().GetBase64String().Log();
+        methodCallHash.GetSHA512Hash().Log();
+    }
 }
