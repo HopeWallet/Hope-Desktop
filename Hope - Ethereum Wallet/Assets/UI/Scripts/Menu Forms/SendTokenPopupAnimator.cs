@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using Hope.Utils.EthereumUtils;
 using System.Linq;
+using System.Collections;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
@@ -29,6 +30,7 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	[SerializeField] private GameObject sendButton;
 
+	private int oldValue;
 	private bool advancedMode;
 	private bool validAddress;
 	private bool validAmount;
@@ -127,15 +129,38 @@ public class SendTokenPopupAnimator : UIAnimator
 		else
 			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 2f);
 	}
-	
+
 	/// <summary>
 	/// When a different token is selected to be sent
 	/// </summary>
 	/// <param name="value"> The value of the token options in the token dropdown </param>
 	private void TokenChanged(int value)
 	{
-		//Set token icon
-		//Set token amount
+		if (value != oldValue)
+			oldValue = value;
+		else
+			return;
+
+		tokenSection.transform.GetChild(0).gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, SetTokenIcon);
+		tokenSection.transform.GetChild(1).gameObject.AnimateScaleY(0f, 0.1f, SetTokenAmount);
+	}
+
+	/// <summary>
+	/// Sets the proper token icon and animates it back into view
+	/// </summary>
+	private void SetTokenIcon()
+	{
+		//Set the proper image icon to the corresponding token
+		tokenSection.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, 0.1f);
+	}
+
+	/// <summary>
+	/// Sets the proper token amount and animates it back into view
+	/// </summary>
+	private void SetTokenAmount()
+	{
+		//Set the proper token amount to the right amount in the wallet
+		tokenSection.transform.GetChild(1).gameObject.AnimateScaleY(1f, 0.1f);
 	}
 
 	/// <summary>
@@ -224,24 +249,28 @@ public class SendTokenPopupAnimator : UIAnimator
 		Animating = true;
 
 		if (advancedMode)
-		{
-			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.1f,
-				() => gasLimitSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
-				() => gasPriceSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
-				() => Animating = false)));
-
-			SetSendButtonInteractable();
-		}
+			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(true));
 
 		else
-		{
-			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.1f,
-				() => gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.1f,
-				() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
-				() => Animating = false)));
-		}
+			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(false));
 
 		SetSendButtonInteractable();
+	}
+
+	/// <summary>
+	/// Animates the gas limit section and gas price section together
+	/// </summary>
+	/// <param name="animatingIn"> Checks to see if animating these fields in or out </param>
+	private void AnimateGasLimitAndPrice(bool animatingIn)
+	{
+		gasLimitSection.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.1f);
+
+		if (animatingIn)
+			gasPriceSection.AnimateGraphicAndScale(1f, 1f, 0.1f, () => Animating = false);
+		else
+			gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.1f,
+				() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
+				() => Animating = false));
 	}
 
 	/// <summary>

@@ -13,6 +13,9 @@ public class ContactsPopupAnimator : UIAnimator
 	private List<GameObject> contacts;
 	private Transform contactsTransform;
 
+	/// <summary>
+	/// Initializes the elements
+	/// </summary>
 	private void Awake()
 	{
 		contacts = new List<GameObject>();
@@ -22,6 +25,9 @@ public class ContactsPopupAnimator : UIAnimator
 			contacts.Add(contactsTransform.GetChild(i).gameObject);
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		dim.AnimateGraphic(1f, 0.15f);
@@ -33,11 +39,18 @@ public class ContactsPopupAnimator : UIAnimator
 			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f)));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		FinishedAnimating();
 	}
 
+	/// <summary>
+	/// Animates each individual contact in the contactList
+	/// </summary>
+	/// <param name="index"> The index of the contact in the list being animated </param>
 	private void AnimateContacts(int index)
 	{
 		contacts[index].SetActive(true);
