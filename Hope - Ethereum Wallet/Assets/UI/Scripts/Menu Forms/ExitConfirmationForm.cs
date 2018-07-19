@@ -14,12 +14,11 @@ public class ExitConfirmationForm : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		dim.AnimateGraphic(1f, 0.2f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
-
-		yesButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating));
+		dim.AnimateGraphic(1f, 0.15f);
+		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
+			() => yesButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating))));
 	}
 
 	/// <summary>
@@ -43,8 +42,6 @@ public class ExitConfirmationForm : UIAnimator
 	/// <summary>
 	/// Disables the ExitConfirmation form
 	/// </summary>
-	public void NoButtonClicked()
-    {
-    }
+	public void NoButtonClicked() => AnimateDisable();
 
 }

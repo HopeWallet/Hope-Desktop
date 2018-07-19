@@ -6,9 +6,11 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
-	[SerializeField] private GameObject contactNameSection;
-	[SerializeField] private GameObject addressSection;
+	[SerializeField] private GameObject addContactButton;
+	[SerializeField] private GameObject sortByDropdown;
+	[SerializeField] private GameObject searchSection;
 	[SerializeField] private GameObject contactsList;
+	[SerializeField] private GameObject confirmButton;
 
 	private List<GameObject> contacts;
 	private Transform contactsTransform;
@@ -30,13 +32,16 @@ public class ContactsPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		dim.AnimateGraphic(1f, 0.15f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => contactsList.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => AnimateContacts(0)));
-		title.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
-			() => contactNameSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f)));
+		dim.AnimateGraphic(1f, 0.2f,
+			() => addContactButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => searchSection.AnimateScaleX(1f, 0.15f,
+			() => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.15f))));
+
+		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
+			() => title.AnimateScaleX(1f, 0.15f,
+			() => sortByDropdown.AnimateScaleX(1f, 0.15f,
+			() => contactsList.AnimateScaleX(1f, 0.15f,
+			() => AnimateContacts(0)))));
 	}
 
 	/// <summary>
@@ -48,7 +53,7 @@ public class ContactsPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates each individual contact in the contactList
+	/// Animates each individual contact in the contactList	
 	/// </summary>
 	/// <param name="index"> The index of the contact in the list being animated </param>
 	private void AnimateContacts(int index)
