@@ -38,6 +38,7 @@ using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Reflection;
+using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
@@ -45,20 +46,33 @@ public class HOPETesting : MonoBehaviour
     private const string CONTAINER_NAME = "MyContainer";
     private const int KEY_SIZE = 1024;
 
-    //private void Start()
-    //{
-    //    const string text = "this is my piece of text";
+    public string entropy = "";
 
-    //    byte[] encrypted = Encrypt(text.GetUTF8Bytes());
-    //    byte[] decrypted = Decrypt(encrypted);
+    private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
+    
+    [ContextMenu("Print Password")]
+    public void PrintData()
+    {
+        dataEncrypt.GetEncryptionPassword(entropy).Log();
+    }
 
-    //    //DeleteCspKeys();
+    private void Start()
+    {
+        //const string text = "this is my piece of text";
 
-    //    ReflectionCall();
+        //byte[] encrypted = Encrypt(text.GetUTF8Bytes());
+        //byte[] decrypted = Decrypt(encrypted);
 
-    //    //encrypted.GetBase64String().Log();
-    //    //decrypted.GetUTF8String().Log();
-    //
+        //DeleteCspKeys();
+
+        //ReflectionCall();
+
+        //encrypted.GetBase64String().Log();
+        //decrypted.GetUTF8String().Log();
+        Type type = dataEncrypt.GetType();
+        MethodInfo methodInfo = type.GetMethod("GetHashCode", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default);
+        methodInfo.Invoke(dataEncrypt, null);
+    }
 
     private void ReflectionCall()
     {

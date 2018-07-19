@@ -39,7 +39,6 @@ public static class RuntimeMethodSearcher
     public static void DisplayMethodCallStack()
     {
         List<string> methodCalls = new List<string>();
-        string methodCallHash = "";
         for (int i = 0; ; i++)
         {
             string methodName = StackTrace.GetFrame(i)?.GetMethod()?.Name;
@@ -47,20 +46,10 @@ public static class RuntimeMethodSearcher
             if (methodName == null)
                 break;
 
-            try
-            {
-                MethodBody methodBody = StackTrace.GetFrame(i)?.GetMethod()?.GetMethodBody();
-                if (methodBody != null)
-                    methodCallHash = (methodCallHash + methodBody.GetILAsByteArray().GetBase64String()).GetSHA1Hash();
-            }
-            catch (InvalidOperationException) { }
-
             methodCalls.Add(methodName);
         }
 
-        //methodCalls.Reverse();
-        //string.Join(" => ", methodCalls.ToArray()).Log();
-        //methodData.ToArray().GetBase64String().Log();
-        methodCallHash.GetSHA512Hash().Log();
+        methodCalls.Reverse();
+        string.Join(" => ", methodCalls.ToArray()).Log();
     }
 }

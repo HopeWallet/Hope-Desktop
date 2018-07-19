@@ -37,8 +37,6 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         [ReflectionProtect(typeof(DisposableData<string>))]
         public TDisposable CreateDisposableData()
         {
-            RuntimeMethodSearcher.DisplayMethodCallStack();
-
             protectedData = MemoryProtect.Unprotect(protectedData);
             byte[] data = protectedData?.ToArray();
             protectedData = MemoryProtect.Protect(protectedData);
