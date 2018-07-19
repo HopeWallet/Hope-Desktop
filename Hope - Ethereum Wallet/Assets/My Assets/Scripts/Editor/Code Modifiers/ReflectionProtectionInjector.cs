@@ -87,7 +87,7 @@ public static class ReflectionProtectionInjector
         Type type = typeList.Single(t => t.ToString().EqualsIgnoreCase(typeName));
         List<ReflectionProtectAttribute> reflectionAttributes = new List<ReflectionProtectAttribute>();
 
-        foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
+        foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public))
             if (Attribute.IsDefined(method, typeof(ReflectionProtectAttribute)))
                 reflectionAttributes.Add(method.GetCustomAttribute<ReflectionProtectAttribute>());
 
