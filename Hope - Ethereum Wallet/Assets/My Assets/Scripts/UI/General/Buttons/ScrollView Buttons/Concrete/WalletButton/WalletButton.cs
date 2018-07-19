@@ -37,7 +37,7 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
     /// <param name="info"> The WalletInfo of this WalletButton. </param>
     protected override void OnValueUpdated(WalletInfo info)
     {
-        walletNameText.text = info.WalletName?.LimitEnd(14, "...");
+        walletNameText.text = info.WalletName?.LimitEnd(17, "...");
     }
 
     /// <summary>

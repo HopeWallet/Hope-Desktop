@@ -38,7 +38,7 @@ public class WalletListMenuAnimator : UIAnimator
 		walletList.AnimateGraphicAndScale(0f, 0f, 0.2f);
 
 		for (int i = 0; i < Wallets.Length; i++)
-            Wallets[i].AnimateScaleX(0, 0.2f);
+            Wallets[i].AnimateScaleX(0, 0.2f, () => Wallets[i].SetActive(false));
 
 		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
@@ -50,6 +50,8 @@ public class WalletListMenuAnimator : UIAnimator
 	/// <param name="index"> The wallet number in the array </param>
 	private void AnimateWallets(int index)
 	{
+		Wallets[index].transform.parent.gameObject.SetActive(true);
+
 		if (index == (Wallets.Length - 1))
             Wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
 		else
