@@ -3552,7 +3552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f0130daa3f1db4a8c289c69c2c50cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 0
+  animateOnEnable: 1
   blocker: {fileID: 1618860512982622}
   dim: {fileID: 1787032854652864}
   form: {fileID: 1936820499658470}
@@ -4150,7 +4150,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: S E N D  E T H
+  m_text: SEND ETH
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -4187,7 +4187,7 @@ MonoBehaviour:
   m_fontStyle: 0
   m_textAlignment: 514
   m_isAlignmentEnumConverted: 1
-  m_characterSpacing: 0
+  m_characterSpacing: 19
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4219,10 +4219,10 @@ MonoBehaviour:
   m_margin: {x: -191.9409, y: -13.816819, z: -190.9248, w: 2.405172}
   m_textInfo:
     textComponent: {fileID: 114617055372153738}
-    characterCount: 14
+    characterCount: 8
     spriteCount: 0
-    spaceCount: 7
-    wordCount: 7
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -6597,7 +6597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18, y: 278.8}
+  m_AnchoredPosition: {x: 18, y: 282.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224147490011715746
@@ -6764,7 +6764,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: -0.9549998}
   m_SizeDelta: {x: 60.65, y: 11.25}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6928,7 +6928,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
