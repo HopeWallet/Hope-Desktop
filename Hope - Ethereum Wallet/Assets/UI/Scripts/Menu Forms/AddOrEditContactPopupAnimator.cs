@@ -21,6 +21,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private bool validName;
 	private bool validAddress;
 
+	/// <summary>
+	/// Animates the error icon beside the name input field if it is valid or not
+	/// </summary>
 	private bool ValidName
 	{
 		set
@@ -31,6 +34,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		}
 	}
 
+	/// <summary>
+	/// Animates the error icon beside the address input field if it is valid or not
+	/// </summary>
 	private bool ValidAddress
 	{
 		set
@@ -41,6 +47,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		}
 	}
 
+	/// <summary>
+	/// Initializes the elements
+	/// </summary>
 	private void Awake()
 	{
 		SetAddingContact(true);
@@ -54,6 +63,12 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButtonClicked);
 	}
 
+	/// <summary>
+	/// Sets all the necessary values
+	/// </summary>
+	/// <param name="addingContact"> Checks if adding a new contact or editing an existing one </param>
+	/// <param name="name"> The current contact name being edited, if any </param>
+	/// <param name="address"> The current contact address being edited, if any </param>
 	public void SetAddingContact(bool addingContact, string name = "", string address = "")
 	{
 		this.addingContact = addingContact;
@@ -62,6 +77,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		dim.AnimateGraphic(1f, 0.2f);
@@ -72,10 +90,26 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		() => AnimateMainButton(true)))));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
+	[ContextMenu("Animate Out")]
 	protected override void AnimateOut()
 	{
+		AnimateMainButton(false);
+
+		nameSection.AnimateScaleX(0f, 0.15f,
+			() => title.AnimateScaleX(0f, 0.15f,
+			() => dim.AnimateGraphic(0f, 0.15f)));
+		addressSection.AnimateScaleX(0f, 0.15f,
+			() => addressSection.AnimateScaleX(0f, 0.15f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating)));
 	}
 
+	/// <summary>
+	/// Animates the main button, depending on the boolean addingContact
+	/// </summary>
+	/// <param name="animatingIn"> Checks if animating the button in or out </param>
 	private void AnimateMainButton(bool animatingIn)
 	{
 		if (addingContact)
@@ -86,6 +120,10 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		if (animatingIn) FinishedAnimating();
 	}
 
+	/// <summary>
+	/// Checks if the name hasn't already been taken up by another contact
+	/// </summary>
+	/// <param name="name"> The current string in the name input field </param>
 	private void ContactNameChanged(string name)
 	{
 		ValidName = SecurePlayerPrefs.HasKey(name) ? (addingContact ? false : true) : true;
@@ -93,6 +131,10 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		SetMainButtonInteractable();
 	}
 
+	/// <summary>
+	/// Checks to see if the text is a valid ethereum address
+	/// </summary>
+	/// <param name="address"> The current string in the address input field </param>
 	private void AddressChanged(string address)
 	{
 		if (!AddressUtils.CorrectAddressLength(address))
@@ -105,6 +147,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		SetMainButtonInteractable();
 	}
 
+	/// <summary>
+	/// Sets the main button to interactable depending on if the inputs are not empty, and are valid
+	/// </summary>
 	private void SetMainButtonInteractable()
 	{
 		bool validInputs = !string.IsNullOrEmpty(nameInputField.text) && validName && !string.IsNullOrEmpty(addressInputField.text) && validAddress;
@@ -115,5 +160,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 			confirmButton.GetComponent<Button>().interactable = validInputs;
 	}
 
+	/// <summary>
+	/// Disables the menu
+	/// </summary>
 	private void ConfirmButtonClicked() => AnimateDisable();
 }

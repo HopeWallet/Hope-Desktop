@@ -56,12 +56,11 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the UI elements of the form out of view
 	/// </summary>
-	[ContextMenu("Test")]
 	protected override void AnimateOut()
 	{
 		for (int i = 0; i < contacts.Count; i++)
 			contacts[i].AnimateScaleX(0f, 0.2f);
-		
+
 		contactsList.AnimateScaleX(0f, 0.15f,
 			() => searchSection.AnimateScaleX(0f, 0.15f,
 			() => addContactButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
@@ -69,9 +68,7 @@ public class ContactsPopupAnimator : UIAnimator
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => sortByDropdown.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateScaleX(0f, 0.15f,
-			() => dim.AnimateGraphic(0f, 0.15f))));
-
-		FinishedAnimating();
+			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating))));
 	}
 
 	/// <summary>
@@ -92,11 +89,6 @@ public class ContactsPopupAnimator : UIAnimator
 		//Set the selected button interactable to false
 
 		confirmButton.GetComponent<Button>().interactable = true;
-	}
-
-	private void EditContactClicked()
-	{
-
 	}
 
 	private void ConfirmButtonClicked() => AnimateDisable();
