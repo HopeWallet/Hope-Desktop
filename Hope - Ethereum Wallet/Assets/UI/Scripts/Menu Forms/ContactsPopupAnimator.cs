@@ -9,7 +9,7 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject addContactButton;
-	[SerializeField] private GameObject sortByDropdown;
+	[SerializeField] private GameObject sortBySection;
 	[SerializeField] private GameObject searchSection;
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
@@ -48,7 +48,7 @@ public class ContactsPopupAnimator : UIAnimator
 
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateScaleX(1f, 0.15f,
-			() => sortByDropdown.AnimateScaleX(1f, 0.15f,
+			() => sortBySection.AnimateScaleX(1f, 0.15f,
 			() => contactsList.AnimateScaleX(1f, 0.15f,
 			() => AnimateContacts(0)))));
 	}
@@ -66,7 +66,7 @@ public class ContactsPopupAnimator : UIAnimator
 			() => addContactButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f))));
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => sortByDropdown.AnimateScaleX(0f, 0.15f,
+			() => sortBySection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateScaleX(0f, 0.15f,
 			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating))));
 	}
