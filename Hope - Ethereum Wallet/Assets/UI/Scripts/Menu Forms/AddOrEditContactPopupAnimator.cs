@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using Hope.Utils.EthereumUtils;
+using System;
 
 public class AddOrEditContactPopupAnimator : UIAnimator
 {
@@ -17,21 +18,16 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private TMP_InputField addressInputField;
 
 	private bool addingContact;
+	private bool validName;
 	private bool validAddress;
 
-	public bool AddingContact
+	private bool ValidName
 	{
 		set
 		{
-			addingContact = value;
-
-			//if (!addingContact)
-			//{
-			//	Set the name input field text
-			//	Set the address input field text
-			//}
-
-			title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
+			validName = value;
+			nameSection.transform.GetChild(nameSection.transform.childCount - 1).gameObject
+					.AnimateGraphicAndScale(validName ? 0f : 1f, validName ? 0f : 1f, 0.2f);
 		}
 	}
 
@@ -47,7 +43,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 	private void Awake()
 	{
-		AddingContact = true;
+		SetAddingContact(true);
 
 		nameInputField = nameSection.transform.GetChild(2).GetComponent<TMP_InputField>();
 		addressInputField = addressSection.transform.GetChild(2).GetComponent<TMP_InputField>();
@@ -55,8 +51,15 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		nameInputField.onValueChanged.AddListener(ContactNameChanged);
 		addressInputField.onValueChanged.AddListener(AddressChanged);
 
-		addContactButton.GetComponent<Button>().onClick.AddListener(AddContactButtonClicked);
 		confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButtonClicked);
+	}
+
+	public void SetAddingContact(bool addingContact, string name = "", string address = "")
+	{
+		this.addingContact = addingContact;
+		nameInputField.text = name;
+		addressInputField.text = address;
+		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
 	protected override void AnimateIn()
@@ -83,7 +86,18 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		if (animatingIn) FinishedAnimating();
 	}
 
-	private void ContactNameChanged(string name) => SetMainButtonInteractable();
+	private void ContactNameChanged(string name)
+	{
+		try
+		{
+			SecurePlayerPrefs.GetString(name);
+			ValidName = addingContact ? false : true;
+		}
+
+		catch { ValidName = true; }
+
+		SetMainButtonInteractable();
+	}
 
 	private void AddressChanged(string address)
 	{
@@ -107,11 +121,5 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 			confirmButton.GetComponent<Button>().interactable = validInputs;
 	}
 
-	private void AddContactButtonClicked()
-	{
-	}
-
-	private void ConfirmButtonClicked()
-	{
-	}
+	private void ConfirmButtonClicked() => AnimateDisable();
 }

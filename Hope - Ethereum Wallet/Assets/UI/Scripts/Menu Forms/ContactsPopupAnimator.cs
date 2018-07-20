@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ContactsPopupAnimator : UIAnimator
 {
@@ -13,7 +15,11 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject confirmButton;
 
 	private List<GameObject> contacts;
+
 	private Transform contactsTransform;
+
+	public string selectedContactName { get; private set; }
+	public string selectedContactAddress { get; private set; }
 
 	/// <summary>
 	/// Initializes the elements
@@ -24,7 +30,10 @@ public class ContactsPopupAnimator : UIAnimator
 		contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
 
 		for (int i = 0; i < contactsTransform.childCount; i++)
+		{
 			contacts.Add(contactsTransform.GetChild(i).gameObject);
+			contactsTransform.GetChild(i).GetComponent<Button>().onClick.AddListener(() => ContactClicked(i));
+		}
 	}
 
 	/// <summary>
@@ -65,4 +74,17 @@ public class ContactsPopupAnimator : UIAnimator
 		else
 			contacts[index].AnimateScaleX(1f, 0.15f, () => AnimateContacts(++index));
 	}
+	private void ContactClicked(int index)
+	{
+		//Set the selected button interactable to false
+
+		confirmButton.GetComponent<Button>().interactable = true;
+	}
+
+	private void EditContactClicked()
+	{
+
+	}
+
+	private void ConfirmButtonClicked() => AnimateDisable();
 }
