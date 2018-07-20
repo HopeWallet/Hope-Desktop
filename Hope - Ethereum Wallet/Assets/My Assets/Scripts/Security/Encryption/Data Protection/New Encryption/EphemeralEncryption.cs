@@ -9,6 +9,24 @@ public sealed class EphemeralEncryption : SecureObject
 {
     private const int KEY_SIZE = 1024;
 
+    private readonly SecureObject optionalEncryptor;
+
+    /// <summary>
+    /// Initializes the <see cref="EphemeralEncryption"/> object with no additional encrypting object.
+    /// </summary>
+    public EphemeralEncryption()
+    {
+    }
+
+    /// <summary>
+    /// Initializes the <see cref="EphemeralEncryption"/> object with an additional object used to encrypt data.
+    /// </summary>
+    /// <param name="optionalEncryptor"> The optional instance of <see cref="SecureObject"/> to use to encrypt and decrypt data. </param>
+    public EphemeralEncryption(SecureObject optionalEncryptor)
+    {
+        this.optionalEncryptor = optionalEncryptor;
+    }
+
     [SecureCaller]
     public string Encrypt(string data) => Encrypt(data.GetUTF8Bytes()).GetBase64String();
 
@@ -53,6 +71,7 @@ public sealed class EphemeralEncryption : SecureObject
     private string GetEncryptionPassword(string entropy)
     {
         return GetProcessId().ToString().GetSHA256Hash()
+                    .CombineAndRandomize(optionalEncryptor == null ? "" : optionalEncryptor.GetHashCode().ToString().GetSHA384Hash())
                     .CombineAndRandomize(GetHashCode().ToString().GetSHA256Hash())
                     .CombineAndRandomize(GetProcessModuleHashCode().ToString().GetSHA384Hash())
                     .CombineAndRandomize(entropy.GetSHA256Hash()).GetSHA512Hash();

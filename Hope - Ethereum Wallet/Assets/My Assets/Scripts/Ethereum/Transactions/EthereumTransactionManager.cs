@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEngine;
 
 /// <summary>
 /// Class which manages the loading and updating of ethereum and token transaction data.
 /// </summary>
 public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 {
-
     public static event Action OnTransactionsAdded;
 
     private readonly Queue<AssetToScrape> assetsToScrape = new Queue<AssetToScrape>();
