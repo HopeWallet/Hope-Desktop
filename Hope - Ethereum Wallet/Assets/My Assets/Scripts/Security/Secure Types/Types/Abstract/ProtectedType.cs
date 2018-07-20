@@ -1,6 +1,4 @@
-﻿using Hope.Security.Encryption.DPAPI;
-using System;
-using System.Linq;
+﻿using System;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {
@@ -9,8 +7,10 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     /// </summary>
     /// <typeparam name="TType"> The type of the original data. </typeparam>
     /// <typeparam name="TDisposable"> The <see cref="DisposableData"/> of type TType. </typeparam>
-    public abstract class ProtectedType<TType, TDisposable> where TDisposable : DisposableData<TType>
+    public abstract class ProtectedType<TType, TDisposable> : SecureObject where TDisposable : DisposableData<TType>
     {
+        private readonly EphemeralEncryption ephemeralEncryption;
+
         private TDisposable disposableData;
         private byte[] protectedData;
 
@@ -25,6 +25,8 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// <param name="value"> The value to protect. </param>
         protected ProtectedType(TType value)
         {
+            ephemeralEncryption = new EphemeralEncryption(this);
+
             SetValue(value);
         }
 
@@ -34,12 +36,12 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// Example: <see langword="using"/> (var val = <see cref="CreateDisposableData"/>) { }
         /// </summary>
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
+        [SecureCallEnd]
         [ReflectionProtect(typeof(DisposableData<string>))]
         public TDisposable CreateDisposableData()
         {
-            protectedData = MemoryProtect.Unprotect(protectedData);
-            byte[] data = protectedData?.ToArray();
-            protectedData = MemoryProtect.Protect(protectedData);
+            byte[] data = ephemeralEncryption.Decrypt(protectedData);
+            protectedData = ephemeralEncryption.Encrypt(data);
             return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 
@@ -49,13 +51,14 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// This is why it is recommended to use <see cref="CreateDisposableData"/>() within a <see langword="using"/> statement since it is disposed of automatically this way.
         /// </summary>
         /// <param name="value"> The new value to set the <see cref="ProtectedType"/> to. </param>
+        [SecureCallEnd]
         [ReflectionProtect]
         public void SetValue(TType value)
         {
             if (disposableData != null)
                 throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before settings new data!");
 
-            protectedData = MemoryProtect.Protect(GetBytes(value));
+            protectedData = ephemeralEncryption.Encrypt(GetBytes(value));
         }
 
         /// <summary>

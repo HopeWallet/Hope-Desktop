@@ -42,15 +42,12 @@ using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
-
     public string entropy = "";
 
     private readonly EphemeralEncryption ephemeralEncrypt = new EphemeralEncryption();
 
     // TODO
-    // DataContainer/RefType
-    // private new int GetHashCode()
-    // EphemeralEncrypt instance in each ProtectedType
+    // EphemeralEncryption instance in each ProtectedType
     // Remove DisposableData and use Actions with the DataContainer/RefType instead
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
