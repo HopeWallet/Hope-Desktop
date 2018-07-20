@@ -42,13 +42,25 @@ using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
+
     public string entropy = "";
 
-    private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
+    public static readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
 
+    public static string encryptedString;
+
+    // TODO
+    // DataContainer/RefType
+    // private new int GetHashCode()
+    // MemoryEncrypt instance in each ProtectedType
+    // Remove DisposableData and use Actions with the DataContainer/RefType instead
+    // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
+    // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
+
+    [SecureCallEnd]
     private void Start()
     {
-        //const string text = "this is my piece of text";
+        const string text = "this is my piece of text";
 
         //byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
         //byte[] decrypted = dataEncrypt.Decrypt(encrypted);
@@ -59,6 +71,8 @@ public class HOPETesting : MonoBehaviour
 
         //encrypted.GetBase64String().Log();
         //decrypted.GetUTF8String().Log();
+
+        encryptedString = dataEncrypt.Encrypt(text);
     }
 
     private void ReflectionCall()

@@ -23,6 +23,8 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenHopeWallet()
     {
+        HOPETesting.dataEncrypt.Decrypt(HOPETesting.encryptedString);
+
         if (SecurePlayerPrefs.HasKey("wallet_count") && SecurePlayerPrefs.GetInt("wallet_count") > 0)
             uiManager.OpenMenu<WalletListMenu>();
         else
@@ -32,9 +34,11 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// <summary>
     /// Opens the Ledger wallet.
     /// </summary>
+    [SecureCallEnd]
     private void OpenLedgerWallet()
     {
         // TODO
+        HOPETesting.dataEncrypt.Decrypt(HOPETesting.encryptedString);
     }
 
     /// <summary>
