@@ -9,8 +9,6 @@ using System.Reflection;
 public static class RuntimeMethodSearcher
 {
 
-    private static readonly StackTrace StackTrace = new StackTrace();
-
     private static readonly string ReflectionCall = "InternalInvoke";
 
     /// <summary>
@@ -19,9 +17,11 @@ public static class RuntimeMethodSearcher
     /// <returns> True if any method in the line of methods calling this method was called with reflection. </returns>
     public static bool FindReflectionCalls()
     {
+        StackTrace stackTrace = new StackTrace();
+
         for (int i = 1; ; i++)
         {
-            string methodName = StackTrace.GetFrame(i)?.GetMethod()?.Name;
+            string methodName = stackTrace.GetFrame(i)?.GetMethod()?.Name;
 
             if (methodName == null)
                 return false;
@@ -38,11 +38,12 @@ public static class RuntimeMethodSearcher
     /// <returns> Null if the attribute is not found, otherwise returns the list of methods on the way to the attribute. </returns>
     public static List<MethodBase> WalkUntil<T>() where T : Attribute
     {
+        StackTrace stackTrace = new StackTrace();
         List<MethodBase> methods = new List<MethodBase>();
 
         for (int i = 1; ; i++)
         {
-            MethodBase method = StackTrace.GetFrame(i)?.GetMethod();
+            MethodBase method = stackTrace.GetFrame(i)?.GetMethod();
 
             if (method == null)
                 return null;
@@ -58,10 +59,12 @@ public static class RuntimeMethodSearcher
     /// </summary>
     public static void DisplayMethodCallStack()
     {
+        StackTrace stackTrace = new StackTrace();
         List<string> methodCalls = new List<string>();
+
         for (int i = 0; ; i++)
         {
-            string methodName = StackTrace.GetFrame(i)?.GetMethod()?.Name;
+            string methodName = stackTrace.GetFrame(i)?.GetMethod()?.Name;
 
             if (methodName == null)
                 break;
