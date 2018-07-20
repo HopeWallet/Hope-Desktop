@@ -169,10 +169,12 @@ public class SendTokenPopupAnimator : UIAnimator
 	/// <param name="address"> The address string in the address input field </param>
 	private void AddressChanged(string address)
 	{
-		if (AddressUtils.CorrectAddressLength(address))
+		if (!AddressUtils.CorrectAddressLength(address))
 			addressInputField.text = address.LimitEnd(42);
 
-		ValidAddress = AddressUtils.IsValidEthereumAddress(address);
+		string updatedAddress = addressInputField.text;
+
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress);
 
 		SetSendButtonInteractable();
 	}
