@@ -139,7 +139,9 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<PRPSLockPopup>();
         BindPopupFactory<ConfirmPRPSLockPopup>();
         BindPopupFactory<GeneralTransactionConfirmationPopup>();
-    }
+		BindPopupFactory<ContactsPopup>();
+		BindPopupFactory<AddOrCreateContactPopup>();
+	}
 
     /// <summary>
     /// Binds the factories for the ui menus.

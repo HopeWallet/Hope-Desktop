@@ -37,8 +37,23 @@ public class AddOrCreateContactPopup : ExitablePopupComponent<AddOrCreateContact
 		contacts[previousName] = addressInputField.text;
 		contacts[previousName].Replace(previousName, nameInputField.text);
 
-		//SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contactsPopup.Contacts.Count, nameInputField.text);
-		//SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+		if (SecurePlayerPrefs.HasKey(nameInputField.text))
+			SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+		else
+		{
+			for (int i = 0; i < contacts.Count; i++)
+			{
+				string prefName = ContactsPopup.PREF_NAME + contacts.Count;
+
+				if (SecurePlayerPrefs.GetString(prefName) == previousName)
+				{
+					SecurePlayerPrefs.DeleteKey(previousName);
+
+					SecurePlayerPrefs.SetString(prefName, nameInputField.text);
+					SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+				}
+			}
+		}
 	}
 
 	public void SetPopupLayout(bool addingContact, string name = "", string address = "")

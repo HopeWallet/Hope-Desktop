@@ -88,13 +88,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 	private void ContactNameChanged(string name)
 	{
-		try
-		{
-			SecurePlayerPrefs.GetString(name);
-			ValidName = addingContact ? false : true;
-		}
-
-		catch { ValidName = true; }
+		ValidName = SecurePlayerPrefs.HasKey(name) ? (addingContact ? false : true) : true;
 
 		SetMainButtonInteractable();
 	}
@@ -113,7 +107,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 	private void SetMainButtonInteractable()
 	{
-		bool validInputs = !string.IsNullOrEmpty(nameInputField.text) && !string.IsNullOrEmpty(addressInputField.text) && validAddress;
+		bool validInputs = !string.IsNullOrEmpty(nameInputField.text) && validName && !string.IsNullOrEmpty(addressInputField.text) && validAddress;
 
 		if (addingContact)
 			addContactButton.GetComponent<Button>().interactable = validInputs;

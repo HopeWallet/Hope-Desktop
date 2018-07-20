@@ -56,8 +56,21 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the UI elements of the form out of view
 	/// </summary>
+	[ContextMenu("Test")]
 	protected override void AnimateOut()
 	{
+		for (int i = 0; i < contacts.Count; i++)
+			contacts[i].AnimateScaleX(0f, 0.2f);
+		
+		contactsList.AnimateScaleX(0f, 0.15f,
+			() => searchSection.AnimateScaleX(0f, 0.15f,
+			() => addContactButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f))));
+		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => sortByDropdown.AnimateScaleX(0f, 0.15f,
+			() => title.AnimateScaleX(0f, 0.15f,
+			() => dim.AnimateGraphic(0f, 0.15f))));
+
 		FinishedAnimating();
 	}
 
