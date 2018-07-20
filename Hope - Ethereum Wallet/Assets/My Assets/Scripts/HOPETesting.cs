@@ -42,30 +42,45 @@ using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
-    public string entropy = "";
 
-    private readonly EphemeralEncryption ephemeralEncrypt = new EphemeralEncryption();
+    //private readonly EphemeralEncryption ephemeralEncryption = new EphemeralEncryption();
 
     // TODO
-    // EphemeralEncryption instance in each ProtectedType
     // Remove DisposableData and use Actions with the DataContainer/RefType instead
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
 
-    [SecureCallEnd]
     private void Start()
     {
-        const string text = "this is my piece of text";
+        const string text = "hello this is my piece of text";
 
-        byte[] encrypted = ephemeralEncrypt.Encrypt(text.GetUTF8Bytes());
-        byte[] decrypted = ephemeralEncrypt.Decrypt(encrypted);
+        //string encryptedText = AESEncryption.AESEncrypt(text, "password");
+        //string decryptedText = AESEncryption.AESDecrypt(encryptedText, "password");
 
-        //DeleteCspKeys();
+        //string encryptedText = "NGOFAYIZbHiHDGwX0gmF8Jazp0E1fiO7U9LsYgjgXZxps/nw0Vtuintr8c7+AcZb6BuVJ9/XRbX2g9QcQ8CwqoMUqP0sIo22zbIbqfrmaW9bJVJOCGSH1eTOHbHRTMd/";
+        string encryptedText = RijndaelEncrypt.Encrypt(text, "password");
+        string decryptedText = RijndaelEncrypt.Decrypt(encryptedText, "password");
 
-        //ReflectionCall();
+        Debug.Log(encryptedText);
+        Debug.Log(decryptedText);
+    }
 
-        encrypted.GetBase64String().Log();
-        decrypted.GetUTF8String().Log();
+    public bool encrypt;
+
+    private void Update()
+    {
+        if (encrypt)
+        {
+            encrypt = !encrypt;
+
+            const string text = "hello this is my piece of text";
+
+            string encryptedText = RijndaelEncrypt.Encrypt(text, "password");
+            string decryptedText = RijndaelEncrypt.Decrypt(encryptedText, "password");
+
+            Debug.Log(encryptedText);
+            Debug.Log(decryptedText);
+        }
     }
 
     //private void AnonymousStuff()

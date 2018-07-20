@@ -135,7 +135,5 @@ namespace Hope.Security.Encryption.DPAPI
 
             return byteData;
         }
-
     }
-
 }
