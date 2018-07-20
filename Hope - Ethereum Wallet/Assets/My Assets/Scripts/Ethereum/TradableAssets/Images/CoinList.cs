@@ -2,15 +2,28 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// Class which contains the list of coins from CoinMarketCap.
+/// </summary>
 public class CoinList
 {
     private readonly Dictionary<string, int> coinIDs = new Dictionary<string, int>();
 
+    // https://api.coinmarketcap.com/v2/listings/
+
+    /// <summary>
+    /// Initializes the CoinList.
+    /// </summary>
     public CoinList()
     {
-        GetCoinList();
+        InitializeCoinList();
     }
 
+    /// <summary>
+    /// Gets the coin id given the symbol.
+    /// </summary>
+    /// <param name="symbol"> The symbol of the coin to get the id for. </param>
+    /// <returns> The coin's id on CoinMarketCap. </returns>
     public int? GetCoinID(string symbol)
     {
         if (!coinIDs.ContainsKey(symbol))
@@ -19,12 +32,19 @@ public class CoinList
         return coinIDs[symbol];
     }
 
-    private void GetCoinList()
+    /// <summary>
+    /// Initializes the CoinList by getting the reference to the json data and starting to retrieve the data for ids and symbols.
+    /// </summary>
+    private void InitializeCoinList()
     {
-        CopyData(Resources.Load<TextAsset>("Data/cmcdata").text);
+        RetrieveData(Resources.Load<TextAsset>("Data/cmcdata").text);
     }
 
-    private async void CopyData(string coinList)
+    /// <summary>
+    /// Retrieves the ids and symbols from the json.
+    /// </summary>
+    /// <param name="coinList"> The json string containing all data from CoinMarketCap. </param>
+    private async void RetrieveData(string coinList)
     {
         CMCData cmcData = await Task.Run(() => JsonUtils.GetJsonData<CMCData>(coinList)).ConfigureAwait(false);
 
