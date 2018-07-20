@@ -1,30 +1,34 @@
 ﻿using Hope.Security.HashGeneration;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-public class MemoryEncrypt : SecureObject
+/// <summary>
+/// Class that encrypts data that can only be decrypted by the same EphemeralEncrypt object during the same session of the program running.
+/// </summary>
+public sealed class EphemeralEncryption : SecureObject
 {
+    private const int KEY_SIZE = 1024;
 
     [SecureCaller]
-    public string Encrypt(string data)
-    {
-        return Encrypt(data.GetUTF8Bytes()).GetBase64String();
-    }
+    public string Encrypt(string data) => Encrypt(data.GetUTF8Bytes()).GetBase64String();
 
     [SecureCaller]
-    public byte[] Encrypt(byte[] data)
-    {
-        return Encrypt(data, string.Empty);
-    }
+    public byte[] Encrypt(byte[] data) => Encrypt(data, string.Empty);
 
     [SecureCaller]
-    public string Encrypt(string data, string entropy)
-    {
-        return Encrypt(data.GetUTF8Bytes(), entropy).GetBase64String();
-    }
+    public string Encrypt(string data, string entropy) => Encrypt(data.GetUTF8Bytes(), entropy).GetBase64String();
 
     [SecureCaller]
+    public string Decrypt(string encryptedText) => Decrypt(encryptedText.GetBase64Bytes()).GetUTF8String();
+
+    [SecureCaller]
+    public byte[] Decrypt(byte[] encryptedData) => Decrypt(encryptedData, string.Empty);
+
+    [SecureCaller]
+    public string Decrypt(string encryptedText, string entropy) => Decrypt(encryptedText.GetBase64Bytes(), entropy).GetUTF8String();
+
+    [SecureCaller]
+    [ReflectionProtect(typeof(byte[]))]
     public byte[] Encrypt(byte[] data, string entropy)
     {
         using (var rsa = GetRSA(entropy))
@@ -32,35 +36,20 @@ public class MemoryEncrypt : SecureObject
     }
 
     [SecureCaller]
-    public string Decrypt(string encryptedText)
-    {
-        return Decrypt(encryptedText.GetBase64Bytes()).GetUTF8String();
-    }
-
-    [SecureCaller]
-    public byte[] Decrypt(byte[] encryptedData)
-    {
-        return Decrypt(encryptedData, string.Empty);
-    }
-
-    [SecureCaller]
-    public string Decrypt(string encryptedText, string entropy)
-    {
-        return Decrypt(encryptedText.GetBase64Bytes(), entropy).GetUTF8String();
-    }
-
-    [SecureCaller]
+    [ReflectionProtect(typeof(byte[]))]
     public byte[] Decrypt(byte[] encryptedData, string entropy)
     {
         byte[] decryptedData;
         using (var rsa = GetRSA(entropy))
             decryptedData = rsa.Decrypt(encryptedData, true);
 
+        DeleteRSAKeys(entropy);
+
         return decryptedData;
     }
 
-    [ReflectionProtect(typeof(string))]
     [SecureCaller]
+    [ReflectionProtect(typeof(string))]
     private string GetEncryptionPassword(string entropy)
     {
         return GetProcessId().ToString().GetSHA256Hash()
@@ -81,20 +70,19 @@ public class MemoryEncrypt : SecureObject
         return Process.GetCurrentProcess().MainModule.ModuleName.GetHashCode();
     }
 
-    [ReflectionProtect(typeof(RSACryptoServiceProvider))]
     [SecureCaller]
+    [ReflectionProtect(typeof(RSACryptoServiceProvider))]
     private RSACryptoServiceProvider GetRSA(string rsaEntropy)
     {
-        return new RSACryptoServiceProvider(1024, new CspParameters(1, null, GetEncryptionPassword(rsaEntropy)) { Flags = CspProviderFlags.UseUserProtectedKey });
+        return new RSACryptoServiceProvider(KEY_SIZE, new CspParameters(1, null, GetEncryptionPassword(rsaEntropy)) { Flags = CspProviderFlags.UseUserProtectedKey });
     }
 
-    [ReflectionProtect]
     [SecureCaller]
+    [ReflectionProtect]
     private void DeleteRSAKeys(string rsaEntropy)
     {
         var rsa = GetRSA(rsaEntropy);
         rsa.PersistKeyInCsp = false;
         rsa.Clear();
     }
-
 }

@@ -45,14 +45,12 @@ public class HOPETesting : MonoBehaviour
 
     public string entropy = "";
 
-    private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
-
-    private string encryptedString;
+    private readonly EphemeralEncryption ephemeralEncrypt = new EphemeralEncryption();
 
     // TODO
     // DataContainer/RefType
     // private new int GetHashCode()
-    // MemoryEncrypt instance in each ProtectedType
+    // EphemeralEncrypt instance in each ProtectedType
     // Remove DisposableData and use Actions with the DataContainer/RefType instead
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
@@ -62,26 +60,15 @@ public class HOPETesting : MonoBehaviour
     {
         const string text = "this is my piece of text";
 
-        //byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
-        //byte[] decrypted = dataEncrypt.Decrypt(encrypted);
+        byte[] encrypted = ephemeralEncrypt.Encrypt(text.GetUTF8Bytes());
+        byte[] decrypted = ephemeralEncrypt.Decrypt(encrypted);
 
-        ////DeleteCspKeys();
+        //DeleteCspKeys();
 
-        ////ReflectionCall();
+        //ReflectionCall();
 
-        //encrypted.GetBase64String().Log();
-        //decrypted.GetUTF8String().Log();
-
-        encryptedString = dataEncrypt.Encrypt(text);
-    }
-
-    private void ReflectionCall()
-    {
-        Type type = this.GetType();
-        FieldInfo fieldInfo = type.GetField("KEY_SIZE", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-        MethodInfo methodInfo = type.GetMethod("DeleteCspKeys", BindingFlags.NonPublic | BindingFlags.Instance);
-        fieldInfo.GetValue(this).ToString().Log();
-        methodInfo.Invoke(this, null);
+        encrypted.GetBase64String().Log();
+        decrypted.GetUTF8String().Log();
     }
 
     //private void AnonymousStuff()
