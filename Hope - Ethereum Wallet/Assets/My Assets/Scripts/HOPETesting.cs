@@ -45,9 +45,9 @@ public class HOPETesting : MonoBehaviour
 
     public string entropy = "";
 
-    public static readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
+    private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
 
-    public static string encryptedString;
+    private string encryptedString;
 
     // TODO
     // DataContainer/RefType
