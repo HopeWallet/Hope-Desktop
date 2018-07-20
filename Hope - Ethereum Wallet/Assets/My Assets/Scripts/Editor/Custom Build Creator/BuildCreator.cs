@@ -49,7 +49,7 @@ public class BuildCreator : EditorWindow
         CreateBuild();
     }
 
-    [PostProcessBuild(0)]
+    [PostProcessBuild(99)]
     public static void Restore(BuildTarget target, string result)
     {
         InvokeMethodsWithAttribute<RestoreCodeAttribute>();

@@ -42,27 +42,23 @@ using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
-
-    private const string CONTAINER_NAME = "MyContainer";
-    private const int KEY_SIZE = 1024;
-
     public string entropy = "";
 
     private readonly MemoryEncrypt dataEncrypt = new MemoryEncrypt();
 
     private void Start()
     {
-        const string text = "this is my piece of text";
+        //const string text = "this is my piece of text";
 
-        byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
-        byte[] decrypted = dataEncrypt.Decrypt(encrypted);
+        //byte[] encrypted = dataEncrypt.Encrypt(text.GetUTF8Bytes());
+        //byte[] decrypted = dataEncrypt.Decrypt(encrypted);
 
-        //DeleteCspKeys();
+        ////DeleteCspKeys();
 
-        //ReflectionCall();
+        ////ReflectionCall();
 
-        encrypted.GetBase64String().Log();
-        decrypted.GetUTF8String().Log();
+        //encrypted.GetBase64String().Log();
+        //decrypted.GetUTF8String().Log();
     }
 
     private void ReflectionCall()
