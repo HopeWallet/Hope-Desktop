@@ -35,7 +35,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4573841260455218}
   - component: {fileID: 114528432914745408}
-  - component: {fileID: 114171721902009622}
+  - component: {fileID: 114889006932717256}
   m_Layer: 0
   m_Name: AddOrEditContact_Popup
   m_TagString: Untagged
@@ -791,22 +791,6 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 1
   m_InputValidator: {fileID: 0}
---- !u!114 &114171721902009622
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1005287853241454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc73d1555d06ce445be68421d25ec7d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  exitButton: {fileID: 114824376219971804}
-  addContactButton: {fileID: 114234171057530972}
-  confirmButton: {fileID: 114414793485554112}
-  nameInputField: {fileID: 114167195124459894}
-  addressInputField: {fileID: 114027303664004928}
 --- !u!114 &114190933948115418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1880,6 +1864,22 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114889006932717256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1005287853241454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4a71e49fa3a5a46b684a0f833a7a08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitButton: {fileID: 114824376219971804}
+  addContactButton: {fileID: 114234171057530972}
+  confirmButton: {fileID: 114414793485554112}
+  nameInputField: {fileID: 114167195124459894}
+  addressInputField: {fileID: 114027303664004928}
 --- !u!114 &114896976506753332
 MonoBehaviour:
   m_ObjectHideFlags: 1

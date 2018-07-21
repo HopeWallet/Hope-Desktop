@@ -26,6 +26,12 @@ public abstract class SymmetricEncryptor<T, A> where T : SymmetricEncryptor<T, A
     /// </summary>
     public abstract int SaltIvByteSize { get; }
 
+    /// <summary>
+    /// Encrypts <see langword="string"/> text using the <see cref="SymmetricAlgorithm"/> of the derived class.
+    /// </summary>
+    /// <param name="text"> The <see langword="string"/> text to encrypt. </param>
+    /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
+    /// <returns> The encrypted <see langword="string"/> text. </returns>
     public static string Encrypt(string text, string entropy) => Encrypt(text, entropy, ITERATIONS);
 
     public static string Decrypt(string encryptedText, string entropy) => Decrypt(encryptedText, entropy, ITERATIONS);

@@ -28,7 +28,9 @@ public sealed class PopupManager
         PRPSLockPopup.Factory prpsLockPopupFactory,
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
         GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
-        UnlockWalletPopup.Factory unlockWalletPopupFactory)
+        UnlockWalletPopup.Factory unlockWalletPopupFactory,
+        ContactsPopup.Factory contactsPopupFactory,
+        AddOrEditContactPopup.Factory addOrEditContactPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                           addTokenPopupFactory,
@@ -41,7 +43,9 @@ public sealed class PopupManager
                           prpsLockPopupFactory,
                           confirmPrpsLockPopupFactory,
                           generalConfirmationPopupFactory,
-                          unlockWalletPopupFactory);
+                          unlockWalletPopupFactory,
+                          contactsPopupFactory,
+                          addOrEditContactPopupFactory);
     }
 
     /// <summary>
