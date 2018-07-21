@@ -23,6 +23,5 @@ namespace Hope.Security.HashGeneration
             using (T hash = (T)CryptoConfig.CreateFromName(typeof(T).ToString()))
                 return hash.ComputeHash(input.GetUTF8Bytes()).GetHexString();
         }
-
     }
 }

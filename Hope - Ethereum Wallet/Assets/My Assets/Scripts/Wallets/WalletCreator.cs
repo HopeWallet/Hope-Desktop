@@ -63,15 +63,17 @@ public class WalletCreator : WalletLoaderBase
 
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
+            mnemonic.Value.Log();
             try
             {
                 var wallet = new Wallet(mnemonic.Value, null, WalletUtils.DetermineCorrectPath(mnemonic.Value));
                 AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
                 AsyncTaskScheduler.Schedule(() => EncryptWalletData(wallet.Seed, basePass));
             }
-            catch
+            catch (Exception e)
             {
-                ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again."));
+                dynamicDataCache.SetData("mnemonic", null);
+                ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again. => " + e.Message));
             }
         }
     }

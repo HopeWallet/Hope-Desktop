@@ -43,7 +43,7 @@ public abstract class WalletLoaderBase
 
     private void SetupAddresses(out ProtectedString[] addresses)
     {
-        addresses = new ProtectedString[25];
+        addresses = new ProtectedString[50];
         this.addresses = addresses;
     }
 

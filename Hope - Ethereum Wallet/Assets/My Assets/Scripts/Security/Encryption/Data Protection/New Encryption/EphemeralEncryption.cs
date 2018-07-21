@@ -50,21 +50,23 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Encrypt(byte[] data, string entropy)
     {
-        using (var rsa = GetRSA(entropy))
-            return rsa.Encrypt(data, true);
+        //using (var rsa = GetRSA(entropy))
+        //    return rsa.Encrypt(data, true);
+        return AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
     }
 
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Decrypt(byte[] encryptedData, string entropy)
     {
-        byte[] decryptedData;
-        using (var rsa = GetRSA(entropy))
-            decryptedData = rsa.Decrypt(encryptedData, true);
+        //byte[] decryptedData;
+        //using (var rsa = GetRSA(entropy))
+        //    decryptedData = rsa.Decrypt(encryptedData, true);
 
-        DeleteRSAKeys(entropy);
+        //DeleteRSAKeys(entropy);
 
-        return decryptedData;
+        //return decryptedData;
+        return AesEncryptor.Decrypt(encryptedData, GetEncryptionPassword(entropy));
     }
 
     [SecureCaller]

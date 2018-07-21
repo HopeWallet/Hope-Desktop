@@ -85,7 +85,7 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     private bool CheckCreatedMnemonic()
     {
         var mnemonicData = dynamicDataCache.GetData("mnemonic");
-        var newMnemonic = string.Join(" ", wordFields.Select(field => field.text));
+        var newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
 
         if (mnemonicData == null)
         {
