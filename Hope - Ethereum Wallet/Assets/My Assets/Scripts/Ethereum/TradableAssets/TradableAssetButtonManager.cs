@@ -8,7 +8,6 @@ using Object = UnityEngine.Object;
 /// </summary>
 public sealed class TradableAssetButtonManager
 {
-    private readonly Settings settings;
     private readonly TokenContractManager tokenContractManager;
     private readonly AssetButton.Factory buttonFactory;
 
@@ -19,14 +18,12 @@ public sealed class TradableAssetButtonManager
     /// <summary>
     /// Initializes the TradableAssetButtonManager by injecting the settings and assigning all required methods to events.
     /// </summary>
-    /// <param name="settings"> The settings to use for the button manager. </param>
     /// <param name="buttonFactory"> The factory which creates AssetButtons. </param>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    public TradableAssetButtonManager(Settings settings, AssetButton.Factory buttonFactory, TokenContractManager tokenContractManager)
+    public TradableAssetButtonManager(AssetButton.Factory buttonFactory, TokenContractManager tokenContractManager)
     {
-        this.settings = settings;
-        this.tokenContractManager = tokenContractManager;
         this.buttonFactory = buttonFactory;
+        this.tokenContractManager = tokenContractManager;
 
         TradableAssetManager.OnBalancesUpdated += UpdateButtonBalances;
         TradableAssetManager.OnTradableAssetAdded += AddAssetButton;

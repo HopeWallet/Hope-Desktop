@@ -173,7 +173,6 @@ public class TokenContractManager
 
         string tokenAddress = tokensToInitialize.Dequeue();
         string tokenAbi = SecurePlayerPrefs.GetString(tokenAddress);
-        string tokenSymbol = GetTokenSymbolFromPref(tokenAddress);
 
         InitializeToken(tokenAddress, tokenAbi, (_, asset) => UpdateTradableAssets(asset, () => CheckLoadStatus(onLoadingFinished)));
         LoadTokensFromQueue(onLoadingFinished);
@@ -190,17 +189,6 @@ public class TokenContractManager
 
         OnTokensLoaded?.Invoke();
         onLoadFinished?.Invoke();
-    }
-
-    /// <summary>
-    /// Gets the token symbol from the token player pref.
-    /// </summary>
-    /// <param name="tokenPref"> The player pref of the token. </param>
-    /// <returns> The token symbol of this pref. </returns>
-    private string GetTokenSymbolFromPref(string tokenPref)
-    {
-        int symbolStartIndex = tokenPref.IndexOf("-");
-        return tokenPref.Substring(symbolStartIndex + 1, tokenPref.Length - symbolStartIndex - 1);
     }
 
     /// <summary>
