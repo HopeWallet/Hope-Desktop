@@ -1,4 +1,5 @@
-﻿using Hope.Security.HashGeneration;
+﻿using Hope.Security.Encryption;
+using Hope.Security.HashGeneration;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
@@ -7,7 +8,7 @@ using System.Security.Cryptography;
 /// </summary>
 public sealed class EphemeralEncryption : SecureObject
 {
-    private const int KEY_SIZE = 1024;
+    private const int KEY_SIZE = 512;
 
     private readonly SecureObject optionalEncryptor;
 

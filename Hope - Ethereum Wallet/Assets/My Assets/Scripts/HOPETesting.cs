@@ -42,30 +42,48 @@ using System.Security.Permissions;
 
 public class HOPETesting : MonoBehaviour
 {
-    public string entropy = "";
 
-    private readonly EphemeralEncryption ephemeralEncrypt = new EphemeralEncryption();
+    //private readonly EphemeralEncryption ephemeralEncryption = new EphemeralEncryption();
 
     // TODO
-    // EphemeralEncryption instance in each ProtectedType
     // Remove DisposableData and use Actions with the DataContainer/RefType instead
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
 
-    [SecureCallEnd]
     private void Start()
     {
-        const string text = "this is my piece of text";
+    }
 
-        byte[] encrypted = ephemeralEncrypt.Encrypt(text.GetUTF8Bytes());
-        byte[] decrypted = ephemeralEncrypt.Decrypt(encrypted);
+    public bool encryptRijndael;
+    public bool encryptAes;
 
-        //DeleteCspKeys();
+    private void Update()
+    {
+        if (encryptRijndael)
+        {
+            encryptRijndael = !encryptRijndael;
 
-        //ReflectionCall();
+            const string text = "hello this is my piece of text";
 
-        encrypted.GetBase64String().Log();
-        decrypted.GetUTF8String().Log();
+            string encryptedText = RijndaelEncryptor.Encrypt(text, "password");
+            string decryptedText = RijndaelEncryptor.Decrypt(encryptedText, "password");
+
+            Debug.Log(encryptedText);
+            Debug.Log(decryptedText);
+        }
+
+        if (encryptAes)
+        {
+            encryptAes = !encryptAes;
+
+            const string text = "hello this is my piece of text";
+
+            string encryptedText = AesEncryptor.Encrypt(text, "password");
+            string decryptedText = AesEncryptor.Decrypt(encryptedText, "password");
+
+            Debug.Log(encryptedText);
+            Debug.Log(decryptedText);
+        }
     }
 
     //private void AnonymousStuff()
