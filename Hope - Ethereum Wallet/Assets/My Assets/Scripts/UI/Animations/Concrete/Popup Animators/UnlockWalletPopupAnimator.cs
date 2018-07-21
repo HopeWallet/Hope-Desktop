@@ -97,8 +97,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		if (startingProcess)
 		{
 			loadingIcon.SetActive(true);
-			signInButton.GetComponent<Button>().interactable = false;
-			passwordInputField.GetComponent<TMP_InputField>().interactable = false;
+            Animating = true;
 		}
 
 		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.2f);
@@ -106,7 +105,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		if (!startingProcess)
 		{
 			loadingIcon.SetActive(false);
-			passwordInputField.GetComponent<TMP_InputField>().interactable = true;
+            Animating = false;
 		}
 	}
 
