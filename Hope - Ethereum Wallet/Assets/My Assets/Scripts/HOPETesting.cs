@@ -52,31 +52,34 @@ public class HOPETesting : MonoBehaviour
 
     private void Start()
     {
-        const string text = "hello this is my piece of text";
-
-        //string encryptedText = AESEncryption.AESEncrypt(text, "password");
-        //string decryptedText = AESEncryption.AESDecrypt(encryptedText, "password");
-
-        //string encryptedText = "NGOFAYIZbHiHDGwX0gmF8Jazp0E1fiO7U9LsYgjgXZxps/nw0Vtuintr8c7+AcZb6BuVJ9/XRbX2g9QcQ8CwqoMUqP0sIo22zbIbqfrmaW9bJVJOCGSH1eTOHbHRTMd/";
-        string encryptedText = RijndaelEncrypt.Encrypt(text, "password");
-        string decryptedText = RijndaelEncrypt.Decrypt(encryptedText, "password");
-
-        Debug.Log(encryptedText);
-        Debug.Log(decryptedText);
     }
 
-    public bool encrypt;
+    public bool encryptRijndael;
+    public bool encryptAes;
 
     private void Update()
     {
-        if (encrypt)
+        if (encryptRijndael)
         {
-            encrypt = !encrypt;
+            encryptRijndael = !encryptRijndael;
 
             const string text = "hello this is my piece of text";
 
-            string encryptedText = RijndaelEncrypt.Encrypt(text, "password");
-            string decryptedText = RijndaelEncrypt.Decrypt(encryptedText, "password");
+            string encryptedText = RijndaelEncryptor.Encrypt(text, "password");
+            string decryptedText = RijndaelEncryptor.Decrypt(encryptedText, "password");
+
+            Debug.Log(encryptedText);
+            Debug.Log(decryptedText);
+        }
+
+        if (encryptAes)
+        {
+            encryptAes = !encryptAes;
+
+            const string text = "hello this is my piece of text";
+
+            string encryptedText = AesEncryptor.Encrypt(text, "password");
+            string decryptedText = AesEncryptor.Decrypt(encryptedText, "password");
 
             Debug.Log(encryptedText);
             Debug.Log(decryptedText);
