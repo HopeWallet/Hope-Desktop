@@ -1,15 +1,12 @@
-﻿using Hope.Security.Encryption;
+﻿using Hope.Security.Encryption.Symmetric;
 using Hope.Security.HashGeneration;
 using System.Diagnostics;
-using System.Security.Cryptography;
 
 /// <summary>
 /// Class that encrypts data that can only be decrypted by the same EphemeralEncrypt object during the same session of the program running.
 /// </summary>
 public sealed class EphemeralEncryption : SecureObject
 {
-    private const int KEY_SIZE = 512;
-
     private readonly SecureObject optionalEncryptor;
 
     /// <summary>
@@ -50,8 +47,6 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Encrypt(byte[] data, string entropy)
     {
-        //using (var rsa = GetRSA(entropy))
-        //    return rsa.Encrypt(data, true);
         return AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
     }
 
@@ -59,13 +54,6 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Decrypt(byte[] encryptedData, string entropy)
     {
-        //byte[] decryptedData;
-        //using (var rsa = GetRSA(entropy))
-        //    decryptedData = rsa.Decrypt(encryptedData, true);
-
-        //DeleteRSAKeys(entropy);
-
-        //return decryptedData;
         return AesEncryptor.Decrypt(encryptedData, GetEncryptionPassword(entropy));
     }
 
@@ -90,21 +78,5 @@ public sealed class EphemeralEncryption : SecureObject
     private int GetProcessModuleHashCode()
     {
         return Process.GetCurrentProcess().MainModule.ModuleName.GetHashCode();
-    }
-
-    [SecureCaller]
-    [ReflectionProtect(typeof(RSACryptoServiceProvider))]
-    private RSACryptoServiceProvider GetRSA(string rsaEntropy)
-    {
-        return new RSACryptoServiceProvider(KEY_SIZE, new CspParameters(1, null, GetEncryptionPassword(rsaEntropy)) { Flags = CspProviderFlags.UseUserProtectedKey });
-    }
-
-    [SecureCaller]
-    [ReflectionProtect]
-    private void DeleteRSAKeys(string rsaEntropy)
-    {
-        var rsa = GetRSA(rsaEntropy);
-        rsa.PersistKeyInCsp = false;
-        rsa.Clear();
     }
 }

@@ -80,14 +80,6 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
                                 .Select(word => new ProtectedString(word))
                                 .ToArray();
         }
-        
-        foreach(var word in correctWords)
-        {
-            using (var wordData = word.CreateDisposableData())
-            {
-                Debug.Log(wordData.Value);
-            }
-        }
 
         dynamicDataCache.SetData("confirmation words", correctWords);
     }
