@@ -63,7 +63,6 @@ public class WalletCreator : WalletLoaderBase
 
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
-            mnemonic.Value.Log();
             try
             {
                 var wallet = new Wallet(mnemonic.Value, null, WalletUtils.DetermineCorrectPath(mnemonic.Value));

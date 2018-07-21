@@ -1,4 +1,5 @@
 ﻿using Org.BouncyCastle.Security;
+using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -119,7 +120,7 @@ public abstract class SymmetricEncryptor<T, A> where T : SymmetricEncryptor<T, A
                 cryptoStream.Write(data, 0, data.Length);
                 cryptoStream.FlushFinalBlock();
 
-                symmetricKey.Clear();
+                ClearEncryptionStreams(symmetricKey, memoryStream, cryptoStream);
 
                 return saltStringBytes.Concat(ivStringBytes).ToArray().Concat(memoryStream.ToArray()).ToArray();
             }
@@ -150,14 +151,21 @@ public abstract class SymmetricEncryptor<T, A> where T : SymmetricEncryptor<T, A
             using (var memoryStream = new MemoryStream(cipherTextBytes))
             using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
             {
-                byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                byte[] decryptedData = new byte[cryptoStream.Read(cipherTextBytes, 0, cipherTextBytes.Length)];
 
-                cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                ClearEncryptionStreams(symmetricKey, memoryStream, cryptoStream);
 
-                symmetricKey.Clear();
+                Array.Copy(cipherTextBytes, decryptedData, decryptedData.Length);
 
-                return plainTextBytes;
+                return decryptedData;
             }
         }
+    }
+
+    private void ClearEncryptionStreams(A symmetricAlgorithm, MemoryStream memoryStream, CryptoStream cryptoStream)
+    {
+        symmetricAlgorithm.Clear();
+        memoryStream.Close();
+        cryptoStream.Close();
     }
 }

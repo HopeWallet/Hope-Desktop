@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {

@@ -1,7 +1,4 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -184,7 +181,7 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     {
         using (var word = ((ProtectedString[])dynamicDataCache.GetData("confirmation words"))[wordIndex].CreateDisposableData())
         {
-            if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(word.Value/*((string[])dynamicDataCache.GetData("confirmation words"))[wordIndex]*/))
+            if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(word.Value))
             {
                 if (wordIndex != checkBoxes.Length - 1)
                 {

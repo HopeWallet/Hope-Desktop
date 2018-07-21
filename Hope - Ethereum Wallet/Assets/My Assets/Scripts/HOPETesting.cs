@@ -53,6 +53,21 @@ public class HOPETesting : MonoBehaviour
     public bool encryptRijndael;
     public bool encryptAes;
 
+    private void Start()
+    {
+        string text = "text";
+
+        ProtectedString str = new ProtectedString("text");
+
+        using (var data = str.CreateDisposableData())
+        {
+            var text2 = data.Value;
+            text2.GetUTF8Bytes().LogArray();
+            text.GetUTF8Bytes().LogArray();
+            Debug.Log((text == text2) + " => " + text + " == " + text2);
+        }
+    }
+
     private void Update()
     {
         if (encryptRijndael)
