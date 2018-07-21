@@ -45,6 +45,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// <summary>
     /// Generates the mnemonic words and sets the initial text fields to the text.
     /// </summary>
+    [SecureCallEnd]
     private void OnEnable()
     {
         GenerateMnemonic();
@@ -70,6 +71,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// <summary>
     /// Copies the mnemonic phrase to the clipboard.
     /// </summary>
+    [SecureCallEnd]
     public void CopyMnemonic()
     {
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
@@ -79,6 +81,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     /// <summary>
     /// Updates the word text objects with the initial mnemonic phrase.
     /// </summary>
+    [SecureCaller]
     private void UpdateWordFields()
     {
         for (int i = 0; i < objects.Length; i++)

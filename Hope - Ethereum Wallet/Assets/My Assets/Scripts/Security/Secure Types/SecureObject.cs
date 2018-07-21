@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Security;
+using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -7,6 +8,8 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public abstract class SecureObject
 {
+    private readonly SecureRandom random = new SecureRandom();
+
     /// <summary>
     /// Gets the hashcode of this object.
     /// Cannot get the hashcode if the calling method is not secure or if called through reflection.
@@ -16,7 +19,7 @@ public abstract class SecureObject
     [ReflectionProtect(typeof(int))]
     public override int GetHashCode()
     {
-        return IsSecureCall() ? base.GetHashCode() + RuntimeHelpers.GetHashCode(this) : default(int);
+        return IsSecureCall() ? base.GetHashCode() + RuntimeHelpers.GetHashCode(this) : random.NextInt();
     }
 
     /// <summary>
@@ -28,7 +31,7 @@ public abstract class SecureObject
     [ReflectionProtect(typeof(int))]
     public override string ToString()
     {
-        return IsSecureCall() ? base.ToString() : null;
+        return IsSecureCall() ? base.ToString() : SecureRandom.GetNextBytes(random, 12).GetBase64String();
     }
 
     /// <summary>

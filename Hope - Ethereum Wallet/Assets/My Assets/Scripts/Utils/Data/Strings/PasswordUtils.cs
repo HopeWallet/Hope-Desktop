@@ -16,7 +16,7 @@ public static class PasswordUtils
     public static string GenerateFixedLengthPassword(int length = 12)
     {
         var encryptionPass = EthECKey.GenerateKey().GetPublicAddress();
-        return encryptionPass.Remove(0, (encryptionPass.Length - length));
+        return encryptionPass.Remove(0, encryptionPass.Length - length);
     }
 
     /// <summary>

@@ -71,6 +71,7 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     /// <summary>
     /// Sends a message to the UserWalletManager to create a wallet with the InputField text as the mnemonic phrase.
     /// </summary>
+    [SecureCallEnd]
     public override void LoadWallet()
     {
         if (CheckCreatedMnemonic())
@@ -82,6 +83,7 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     /// If the data is equal to the mnemonic entered in the input fields, display the ConfirmMnemonicMenu.
     /// </summary>
     /// <returns> True if the mnemonic was unique and the wallet can be directly imported. </returns>
+    [SecureCaller]
     private bool CheckCreatedMnemonic()
     {
         var mnemonicData = dynamicDataCache.GetData("mnemonic");
