@@ -34,6 +34,8 @@ public class ContactsPopupAnimator : UIAnimator
 			contacts.Add(contactsTransform.GetChild(i).gameObject);
 			contactsTransform.GetChild(i).GetComponent<Button>().onClick.AddListener(() => ContactClicked(i));
 		}
+
+		sortBySection.transform.GetChild(1).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(ListOrderChanged);
 	}
 
 	/// <summary>
@@ -89,6 +91,14 @@ public class ContactsPopupAnimator : UIAnimator
 		//Set the selected button interactable to false
 
 		confirmButton.GetComponent<Button>().interactable = true;
+	}
+
+	/// <summary>
+	/// List order has been changed
+	/// </summary>
+	/// <param name="value"> The value of the sorting type in the dropdown </param>
+	private void ListOrderChanged(int value)
+	{
 	}
 
 	private void ConfirmButtonClicked() => AnimateDisable();
