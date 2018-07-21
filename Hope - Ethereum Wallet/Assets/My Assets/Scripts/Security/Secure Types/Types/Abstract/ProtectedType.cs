@@ -37,7 +37,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// Example: <see langword="using"/> (var val = <see cref="CreateDisposableData"/>) { }
         /// </summary>
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
-        [SecureCallEnd]
+        [SecureCaller]
         [ReflectionProtect(typeof(DisposableData<string>))]
         public TDisposable CreateDisposableData()
         {

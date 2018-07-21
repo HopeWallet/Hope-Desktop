@@ -21,13 +21,14 @@ public abstract class WalletLoaderBase
         this.dynamicDataCache = dynamicDataCache;
     }
 
+    [SecureCaller]
     public void Load(out ProtectedString[] addresses, Action onWalletLoaded, Action setupAddressAction)
     {
         SetupAddresses(out addresses);
         SetupLoadActions(onWalletLoaded, setupAddressAction);
         SetupPopup();
 
-        using (var pass = dynamicDataCache.GetData("pass").CreateDisposableData())
+        using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
             LoadWallet(pass.Value);
     }
 
@@ -55,5 +56,6 @@ public abstract class WalletLoaderBase
 
     protected abstract void SetupPopup();
 
+    [SecureCaller]
     protected abstract void LoadWallet(string userPass);
 }

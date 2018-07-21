@@ -17,6 +17,7 @@ public class WalletCreator : WalletLoaderBase
     {
     }
 
+    [SecureCaller]
     protected override void LoadWallet(string userPass)
     {
         CreateWalletCountPref();
@@ -53,6 +54,7 @@ public class WalletCreator : WalletLoaderBase
     /// Attempts to create a wallet given a mnemonic phrase.
     /// </summary>
     /// <param name="basePass"> The password that was entered by the user. </param>
+    [SecureCaller]
     private void TryCredentials(string basePass)
     {
         if (string.IsNullOrEmpty(basePass) || basePass.Length < AESEncryption.MIN_PASSWORD_LENGTH)

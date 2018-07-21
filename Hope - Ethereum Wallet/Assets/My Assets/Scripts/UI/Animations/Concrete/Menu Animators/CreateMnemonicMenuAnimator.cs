@@ -118,6 +118,8 @@ public class CreateMnemonicMenuAnimator : UIAnimator
     /// <summary>
     /// Initializes the randomized list of words and starts the series of random word animations
     /// </summary>
+    [SecureCallEnd]
+    [ReflectionProtect]
     private void StartWordAnimation()
     {
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())

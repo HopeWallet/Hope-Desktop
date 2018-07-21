@@ -1,5 +1,4 @@
-﻿using Hope.Security.ProtectedTypes.Types;
-using Nethereum.Hex.HexTypes;
+﻿using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 
@@ -10,8 +9,7 @@ public class UserWalletManager
 {
     private readonly UserWallet userWallet;
 
-    private readonly ProtectedInt walletNumber = new ProtectedInt(0);
-    private readonly ProtectedInt accountNumber = new ProtectedInt(0);
+    private int walletNumber, accountNumber;
 
     /// <summary>
     /// The address of the main UserWallet.
@@ -71,10 +69,15 @@ public class UserWalletManager
         userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, transactionInput);
     }
 
-    public void SwitchWallet(int walletNum, int accountNum)
+    public void SwitchWallet(int walletNumber, int accountNumber)
     {
-        walletNumber.SetValue(walletNum);
-        accountNumber.SetValue(accountNum);
+        this.walletNumber = walletNumber;
+        this.accountNumber = accountNumber;
+    }
+
+    public void SwitchAccount(int accountNumber)
+    {
+        this.accountNumber = accountNumber;
     }
 
     /// <summary>

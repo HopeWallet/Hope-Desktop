@@ -8,7 +8,6 @@ using System;
 /// </summary>
 public sealed class UserWallet
 {
-
     public static event Action OnWalletLoadSuccessful;
 
     private readonly PopupManager popupManager;
@@ -46,24 +45,28 @@ public sealed class UserWallet
     /// Unlocks a wallet if the password is correct.
     /// </summary>
     /// <param name="walletNum"> The number of the wallet to unlock. </param>
+    [SecureCallEnd]
     [ReflectionProtect]
     public void Unlock()
     {
         Load(walletUnlocker);
     }
 
+    [SecureCallEnd]
     [ReflectionProtect]
     public void Create()
     {
         Load(walletCreator);
     }
 
+    [SecureCaller]
     [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
     {
         walletLoader.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
     }
 
+    [SecureCallEnd]
     [ReflectionProtect(typeof(string))]
     public string GetAddress(int addressIndex)
     {
@@ -85,6 +88,7 @@ public sealed class UserWallet
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
     /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    [SecureCallEnd]
     [ReflectionProtect]
     public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>

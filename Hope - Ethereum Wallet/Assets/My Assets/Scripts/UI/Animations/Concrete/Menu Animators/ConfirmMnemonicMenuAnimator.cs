@@ -177,6 +177,8 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     /// <summary>
     /// The nextButton has been clicked
     /// </summary>
+    [SecureCallEnd]
+    [ReflectionProtect]
     private void NextButtonClicked()
     {
         using (var word = ((ProtectedString[])dynamicDataCache.GetData("confirmation words"))[wordIndex].CreateDisposableData())

@@ -33,7 +33,7 @@ public class WalletUnlocker : WalletLoaderBase
 
     protected override void SetupPopup()
     {
-        (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator).VerifyingPassword();
+        (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator)?.VerifyingPassword();
     }
 
     private async Task TryPassword(int walletNum, string password, string saltedHash)
