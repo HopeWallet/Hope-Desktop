@@ -39,63 +39,15 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Reflection;
 using System.Security.Permissions;
+using Hope.Security.Encryption.Symmetric;
 
 public class HOPETesting : MonoBehaviour
 {
-
-    //private readonly EphemeralEncryption ephemeralEncryption = new EphemeralEncryption();
 
     // TODO
     // Remove DisposableData and use Actions with the DataContainer/RefType instead
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
-
-    public bool encryptRijndael;
-    public bool encryptAes;
-
-    private void Start()
-    {
-        string text = "text";
-
-        ProtectedString str = new ProtectedString("text");
-
-        using (var data = str.CreateDisposableData())
-        {
-            var text2 = data.Value;
-            text2.GetUTF8Bytes().LogArray();
-            text.GetUTF8Bytes().LogArray();
-            Debug.Log((text == text2) + " => " + text + " == " + text2);
-        }
-    }
-
-    private void Update()
-    {
-        if (encryptRijndael)
-        {
-            encryptRijndael = !encryptRijndael;
-
-            const string text = "hello this is my piece of text";
-
-            string encryptedText = RijndaelEncryptor.Encrypt(text, "password");
-            string decryptedText = RijndaelEncryptor.Decrypt(encryptedText, "password");
-
-            Debug.Log(encryptedText);
-            Debug.Log(decryptedText);
-        }
-
-        if (encryptAes)
-        {
-            encryptAes = !encryptAes;
-
-            const string text = "hello this is my piece of text";
-
-            string encryptedText = AesEncryptor.Encrypt(text, "password");
-            string decryptedText = AesEncryptor.Decrypt(encryptedText, "password");
-
-            Debug.Log(encryptedText);
-            Debug.Log(decryptedText);
-        }
-    }
 
     //private void AnonymousStuff()
     //{
