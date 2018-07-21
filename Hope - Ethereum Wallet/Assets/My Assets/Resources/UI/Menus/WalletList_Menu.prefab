@@ -517,6 +517,7 @@ MonoBehaviour:
   title: {fileID: 1878389192737506}
   walletList: {fileID: 1051990768108308}
   newWalletButton: {fileID: 1934045875058518}
+  scrollbar: {fileID: 114632771777356878}
 --- !u!114 &114455334767583872
 MonoBehaviour:
   m_ObjectHideFlags: 1

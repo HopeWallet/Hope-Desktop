@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class which animates the WalletListMenu.
 /// </summary>
 public class WalletListMenuAnimator : UIAnimator
 {
-
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject walletList;
 	[SerializeField] private GameObject newWalletButton;
+    [SerializeField] private Scrollbar scrollbar;
 
     /// <summary>
     /// The wallet gameobjects to animate.
@@ -51,6 +52,7 @@ public class WalletListMenuAnimator : UIAnimator
 	private void AnimateWallets(int index)
 	{
 		Wallets[index].transform.parent.gameObject.SetActive(true);
+        scrollbar.value = 1f;
 
 		if (index == (Wallets.Length - 1))
             Wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
