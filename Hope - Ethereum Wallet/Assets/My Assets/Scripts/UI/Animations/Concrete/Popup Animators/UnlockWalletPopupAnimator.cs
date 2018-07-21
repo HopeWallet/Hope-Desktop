@@ -19,7 +19,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	private bool errorIconVisible;
 
 	/// <summary>
-	/// Makes button interactable if the errorIcon is set to visible
+	/// Makes button interactable if the errorIcon is set to visible.
 	/// </summary>
 	private bool ErrorIconVisible
 	{
@@ -31,7 +31,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// Initializes the necessary variables that haven't already been initialized in the inspector.
 	/// </summary>
 	private void Awake()
 	{
@@ -40,7 +40,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// Animates the UI elements of the form into view.
 	/// </summary>
 	protected override void AnimateIn()
 	{
@@ -52,7 +52,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form out of view
+	/// Animates the UI elements of the form out of view.
 	/// </summary>
 	protected override void AnimateOut()
 	{
@@ -67,9 +67,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Sets the button to interactable if the input field is not empty
+	/// Sets the button to interactable if the input field is not empty.
 	/// </summary>
-	/// <param name="str"> The current string in the password input field </param>
+	/// <param name="str"> The current string in the password input field. </param>
 	private void InputFieldChanged(string str)
 	{
 		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
@@ -87,9 +87,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the loadingIcon while starting and finished the verify password
+	/// Animates the loadingIcon while starting and finished the verify password.
 	/// </summary>
-	/// <param name="startingProcess"> Checks if animating in or out </param>
+	/// <param name="startingProcess"> Checks if animating in or out. </param>
 	public void VerifyingPassword()
 	{
 		bool startingProcess = !loadingIcon.activeInHierarchy;
@@ -111,9 +111,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the error icon on or off screen
+	/// Animates the error icon on or off screen.
 	/// </summary>
-	/// <param name="animatingIn"> Checks if animating the error icon in or out </param>
+	/// <param name="animatingIn"> Checks if animating the error icon in or out. </param>
 	private void AnimateErrorIcon(bool animatingIn)
 	{
 		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f);

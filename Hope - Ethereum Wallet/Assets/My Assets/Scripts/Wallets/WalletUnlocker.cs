@@ -48,7 +48,9 @@ public class WalletUnlocker : WalletLoaderBase
 
     private void IncorrectPassword()
     {
-        MainThreadExecutor.QueueAction(() => (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator).PasswordIncorrect());
+        var unlockWalletPopup = popupManager.GetPopup<UnlockWalletPopup>();
+        unlockWalletPopup.DisableClosing = false;
+        MainThreadExecutor.QueueAction(() => (unlockWalletPopup.Animator as UnlockWalletPopupAnimator)?.PasswordIncorrect());
     }
 
     private void CorrectPassword(int walletNum, string password)

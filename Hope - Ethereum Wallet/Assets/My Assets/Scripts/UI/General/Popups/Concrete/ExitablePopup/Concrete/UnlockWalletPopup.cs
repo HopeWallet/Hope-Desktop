@@ -36,7 +36,10 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <summary>
     /// Adds the button listener.
     /// </summary>
-    protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
+    protected override void OnStart()
+    {
+        unlockWalletButton.onClick.AddListener(LoadWallet);
+    }
 
     /// <summary>
     /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
@@ -59,13 +62,17 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <summary>
     /// Enables the open wallet gui once the user wallet has been successfully loaded.
     /// </summary>
-    private void OnWalletLoad() => uiManager.OpenMenu<OpenWalletMenu>();
+    private void OnWalletLoad()
+    {
+        uiManager.OpenMenu<OpenWalletMenu>();
+    }
 
     /// <summary>
     /// Attempts to unlock the wallet with the password entered in the field.
     /// </summary>
     private void LoadWallet()
     {
+        DisableClosing = true;
         dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
         userWalletManager.UnlockWallet();
     }

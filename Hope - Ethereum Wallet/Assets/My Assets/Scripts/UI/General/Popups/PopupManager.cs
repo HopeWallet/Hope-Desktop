@@ -10,7 +10,7 @@ public sealed class PopupManager
 {
 
     private readonly List<object> factoryPopups = new List<object>();
-    private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
+    private readonly Stack<KeyValuePair<PopupBase, Action>> activePopups = new Stack<KeyValuePair<PopupBase, Action>>();
 
     /// <summary>
     /// Whether a popup is currently being animated.
@@ -66,8 +66,13 @@ public sealed class PopupManager
         if (activePopups.Count == 0)
             return false;
 
+        PopupBase popup = activePopups.Peek().Key;
+
+        if (popup.Animator.Animating || popup.DisableClosing)
+            return false;
+
         foreach (Type type in typesToIgnore)
-            if (activePopups.Peek().Key.GetType() == type)
+            if (popup.GetType() == type)
                 return false;
 
         activePopups.Pop().Value?.Invoke();
@@ -99,7 +104,7 @@ public sealed class PopupManager
             return null;
 
         TPopup newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().Single().Create();
-        activePopups.Push(new KeyValuePair<object, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Object.Destroy(newPopup.gameObject))));
+        activePopups.Push(new KeyValuePair<PopupBase, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Object.Destroy(newPopup.gameObject))));
 
         AnimatePopup(newPopup, true, null);
 
