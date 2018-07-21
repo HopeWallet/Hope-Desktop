@@ -130,7 +130,7 @@ public class TokenContractManager
         var popup = popupManager.GetPopup<LoadingPopup>();
         popup.Text = "Loading wallet";
 
-        var loadAction = (() => popupManager.CloseActivePopup()) + onTokensLoaded;
+        var loadAction = (() => popupManager.CloseAllPopups()) + onTokensLoaded;
 
         new EtherAsset(asset => UpdateTradableAssets(asset, () => CheckLoadStatus(loadAction)), tradableAssetImageManager, userWalletManager);
 

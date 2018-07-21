@@ -760,8 +760,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c0e0490d1030e4cb3fb54af9f4e25a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  encryptRijndael: 0
-  encryptAes: 0
 --- !u!1001 &1471925129
 Prefab:
   m_ObjectHideFlags: 0

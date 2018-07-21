@@ -12,7 +12,15 @@ public sealed class PopupManager
     private readonly List<object> factoryPopups = new List<object>();
     private readonly Stack<KeyValuePair<object, Action>> activePopups = new Stack<KeyValuePair<object, Action>>();
 
+    /// <summary>
+    /// Whether a popup is currently being animated.
+    /// </summary>
     public bool AnimatingPopup { get; private set; }
+
+    /// <summary>
+    /// Whether an active popup currently exists.
+    /// </summary>
+    public bool ActivePopupExists { get { return activePopups.Count > 0; } }
 
     /// <summary>
     /// Initializes the PopupManager by adding all required factories.

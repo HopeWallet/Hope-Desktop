@@ -23,6 +23,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <param name="uiManager"> The active UIManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
     [Inject]
     public void Construct(UIManager uiManager, UserWalletManager userWalletManager, DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
     {
