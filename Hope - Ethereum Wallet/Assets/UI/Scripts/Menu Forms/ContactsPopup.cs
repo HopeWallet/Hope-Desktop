@@ -39,7 +39,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void AddContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrCreateContactPopup>();
+		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>();
 
 		addOrCreateContactPopup.SetPopupLayout(true);
 		addOrCreateContactPopup.SetDictionary(contacts);
@@ -47,7 +47,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void EditContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrCreateContactPopup>();
+		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>();
 
 		addOrCreateContactPopup.SetPopupLayout(false, contactsPopupAnimator.selectedContactName, contactsPopupAnimator.selectedContactAddress);
 		addOrCreateContactPopup.SetDictionary(contacts);

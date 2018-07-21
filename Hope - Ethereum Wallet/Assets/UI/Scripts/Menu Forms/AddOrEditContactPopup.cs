@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AddOrCreateContactPopup : ExitablePopupComponent<AddOrCreateContactPopup>
+public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
 
 	private string previousName, previousAddress;
