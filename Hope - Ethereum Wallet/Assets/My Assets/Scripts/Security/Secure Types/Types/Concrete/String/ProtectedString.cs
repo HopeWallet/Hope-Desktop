@@ -18,6 +18,15 @@ namespace Hope.Security.ProtectedTypes.Types
         }
 
         /// <summary>
+        /// Initializes the <see cref="ProtectedString"/> with the <see langword="string"/> value and additional <see cref="SecureObject"/> instances to encrypt the data with.
+        /// </summary>
+        /// <param name="value"> The starting <see langword="string"/> value. </param>
+        /// <param name="encryptionObjects"> The additional <see cref="SecureObject"/> instances to encrypt the <see langword="string"/> data with. </param>
+        public ProtectedString(string value, params SecureObject[] encryptionObjects) : base(value, encryptionObjects)
+        {
+        }
+
+        /// <summary>
         /// Gets the <see langword="byte"/>[] data representation of the <see langword="string"/>.
         /// </summary>
         /// <param name="value"> The <see langword="string"/> value to convert to <see langword="byte"/>[] data. </param>

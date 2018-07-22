@@ -1,6 +1,7 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
+using Hope.Security.ProtectedTypes.Types;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System;
@@ -78,6 +79,7 @@ public class WalletUnlocker : WalletLoaderBase
         byte[] decryptedSeed = await Task.Run(() => unprotectedSeed.AESDecrypt(hashLvls[0].AESDecrypt(lvl12string.Item1.GetSHA512Hash()) + hashLvls[1].Unprotect()).HexToByteArray()).ConfigureAwait(false);
 
         await GetAddresses(new Wallet(decryptedSeed)).ConfigureAwait(false);
+        await Task.Run(() => dynamicDataCache.SetData("pass", new ProtectedString(password, this))).ConfigureAwait(false);
 
         MainThreadExecutor.QueueAction(onWalletLoaded);
     }

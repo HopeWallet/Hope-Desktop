@@ -96,6 +96,9 @@ public class WalletCreator : WalletLoaderBase
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(basePass)).ConfigureAwait(false);
         string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.Item1.GetSHA512Hash()), h2.Protect(), h3.Protect(), h4.AESEncrypt(lvl34string.Item2.GetSHA512Hash()) }).ConfigureAwait(false);
 
+        dynamicDataCache.SetData("pass", new ProtectedString(basePass, this));
+        dynamicDataCache.SetData("mnemonic", null);
+
         MainThreadExecutor.QueueAction(() => SetWalletPlayerPrefs(encryptedHashLvls, saltedPasswordHash, encryptedSeed));
     }
 }
