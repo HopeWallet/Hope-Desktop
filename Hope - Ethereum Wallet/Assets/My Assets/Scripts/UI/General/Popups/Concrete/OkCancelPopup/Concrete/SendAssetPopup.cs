@@ -320,7 +320,7 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
         if (clickType != ClickType.Down)
             return;
 
-        (advancedModeToggle.isOn ? advancedModeFields : simpleModeFields).MoveToNextInputField();
+        (advancedModeToggle.isOn ? advancedModeFields : simpleModeFields).MoveToNextSelectable();
     }
 
     /// <summary>

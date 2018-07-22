@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,27 +10,6 @@ public static class InputFieldUtils
 {
 
     private const int MAX_BALANCE_FIELD_LENGTH = 30;
-
-    /// <summary>
-    /// Moves the current selection to the next input field in a list.
-    /// </summary>
-    /// <param name="inputFields"> The list of input fields to use for the switching. </param>
-    public static void MoveToNextInputField(this IList<InputField> inputFields)
-    {
-        var system = EventSystem.current;
-        var selectedField = system.currentSelectedGameObject.GetComponent<InputField>();
-
-        if (selectedField?.interactable != true)
-            return;
-
-        do {
-            var index = inputFields.IndexOf(selectedField) + 1;
-            selectedField = inputFields[index >= inputFields.Count ? 0 : index];
-        } while (!selectedField.interactable);
-
-        selectedField.OnPointerClick(new PointerEventData(system));
-        system.SetSelectedGameObject(selectedField.gameObject, new BaseEventData(system));
-    }
 
     /// <summary>
     /// Restricts the field to not go over the tradable asset's decimal limit or the overall decimal limit.
