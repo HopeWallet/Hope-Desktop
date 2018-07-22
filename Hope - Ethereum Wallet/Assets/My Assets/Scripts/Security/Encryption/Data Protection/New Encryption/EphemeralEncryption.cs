@@ -1,13 +1,14 @@
 ﻿using Hope.Security.Encryption.Symmetric;
 using Hope.Security.HashGeneration;
 using System.Diagnostics;
+using System.Linq;
 
 /// <summary>
 /// Class that encrypts data that can only be decrypted by the same EphemeralEncrypt object during the same session of the program running.
 /// </summary>
 public sealed class EphemeralEncryption : SecureObject
 {
-    private readonly SecureObject optionalEncryptor;
+    private readonly SecureObject[] optionalEncryptors;
 
     /// <summary>
     /// Initializes the <see cref="EphemeralEncryption"/> object with no additional encrypting object.
@@ -19,10 +20,10 @@ public sealed class EphemeralEncryption : SecureObject
     /// <summary>
     /// Initializes the <see cref="EphemeralEncryption"/> object with an additional object used to encrypt data.
     /// </summary>
-    /// <param name="optionalEncryptor"> The optional instance of <see cref="SecureObject"/> to use to encrypt and decrypt data. </param>
-    public EphemeralEncryption(SecureObject optionalEncryptor)
+    /// <param name="optionalEncryptors"> The optional instances of <see cref="SecureObject"/> to use to encrypt and decrypt data. </param>
+    public EphemeralEncryption(params SecureObject[] optionalEncryptors)
     {
-        this.optionalEncryptor = optionalEncryptor;
+        this.optionalEncryptors = optionalEncryptors;
     }
 
     /// <summary>
@@ -114,10 +115,14 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(string))]
     private string GetEncryptionPassword(string entropy)
     {
+        string optionalEncryptionData = string.Empty;
+        foreach (var obj in optionalEncryptors)
+            optionalEncryptionData = optionalEncryptionData.CombineAndRandomize(obj.GetHashCode().ToString().GetSHA1Hash());
+
         Process process = Process.GetCurrentProcess();
 
         return process.Id.ToString().GetSHA256Hash()
-                    .CombineAndRandomize(optionalEncryptor == null ? "" : optionalEncryptor.GetHashCode().ToString().GetSHA384Hash())
+                    .CombineAndRandomize(optionalEncryptionData.GetSHA384Hash())
                     .CombineAndRandomize(GetHashCode().ToString().GetSHA256Hash())
                     .CombineAndRandomize(process.MainModule.ModuleName.GetHashCode().ToString().GetSHA384Hash())
                     .CombineAndRandomize(entropy.GetSHA256Hash()).GetSHA512Hash();

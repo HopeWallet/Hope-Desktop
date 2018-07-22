@@ -43,6 +43,9 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             byte[] data = ephemeralEncryption.Decrypt(protectedData);
             protectedData = ephemeralEncryption.Encrypt(data);
+
+            GC.Collect();
+
             return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 
