@@ -84,6 +84,7 @@ public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnter
     /// </summary>
     /// <returns> True if the mnemonic was unique and the wallet can be directly imported. </returns>
     [SecureCaller]
+    [ReflectionProtect(typeof(bool))]
     private bool CheckCreatedMnemonic()
     {
         var mnemonicData = dynamicDataCache.GetData("mnemonic");
