@@ -6,12 +6,14 @@ public sealed class InfoIcon : InfoIconBase
 {
 	public string titleText;
 	public string bodyText;
+	public bool infoIcon;
 
 	public override void OnPointerEnter(PointerEventData eventData)
 	{
 		Debug.Log("ENTERED");
 		Debug.Log(popupManager);
-		popupManager.GetPopup<InfoPopup>().SetUIElements(titleText, bodyText, true, transform.localPosition);
+
+		popupManager.GetPopup<InfoPopup>().SetUIElements(titleText, bodyText, infoIcon, transform.localPosition);
 		popupManager.GetPopup<InfoPopup>().AnimateForm(true);
 		AnimateIconScale(true);
 	}
