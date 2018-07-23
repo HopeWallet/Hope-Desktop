@@ -842,7 +842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4760407126302690}
   - component: {fileID: 114836135890462588}
-  - component: {fileID: 114215058813318980}
+  - component: {fileID: 114112184209369380}
   m_Layer: 0
   m_Name: SendToken_Popup
   m_TagString: Untagged
@@ -1731,6 +1731,28 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 1
   m_InputValidator: {fileID: 0}
+--- !u!114 &114112184209369380
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538487205334220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b2b67c580262f4fb163ad7a661c37b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 0}
+  cancelButton: {fileID: 0}
+  addressField: {fileID: 0}
+  amountField: {fileID: 0}
+  gasLimitField: {fileID: 0}
+  gasPriceField: {fileID: 0}
+  advancedModeToggle: {fileID: 0}
+  assetImage: {fileID: 0}
+  assetSymbol: {fileID: 0}
+  assetBalance: {fileID: 0}
+  speedDropdown: {fileID: 0}
 --- !u!114 &114115428774453880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2264,18 +2286,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114215058813318980
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538487205334220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0119482c0f7e704187853f87c1d3e70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  exitButton: {fileID: 114870232362552372}
 --- !u!114 &114223424530932108
 MonoBehaviour:
   m_ObjectHideFlags: 1

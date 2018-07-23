@@ -54,7 +54,6 @@ public class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IGasPriceO
                  updating,
                  updatedBefore;
 
-    private const int MAX_AMOUNT_FIELD_LENGTH = 30;
     private const int MAX_ADDRESS_FIELD_LENGTH = 42;
     private const int MAX_BALANCE_TEXT_LENGTH = 20;
 

@@ -31,11 +31,11 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 		AnimateIconScale(false);
 	}
 
-	/// <summary>
-	/// Animates the scale X and Y of the icon
-	/// </summary>
-	/// <param name="animateIn"> Checks if animating it bigger, or smaller </param>
-	private void AnimateIconScale(bool animateBigger)
+    /// <summary>
+    /// Animates the scale X and Y of the icon
+    /// </summary>
+    /// <param name="animateBigger"> Checks if animating it bigger, or smaller </param>
+    private void AnimateIconScale(bool animateBigger)
 	{
 		transform.DOScaleX(animateBigger ? 1.3f : 1f, 0.1f);
 		transform.DOScaleY(animateBigger ? 1.3f : 1f, 0.1f);
