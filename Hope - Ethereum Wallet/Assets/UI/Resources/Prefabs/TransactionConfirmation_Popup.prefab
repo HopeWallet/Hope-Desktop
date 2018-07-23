@@ -223,6 +223,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4524567577522864}
+  - component: {fileID: 114118794959718230}
   m_Layer: 0
   m_Name: TransactionConfirmation_Popup
   m_TagString: Untagged
@@ -593,6 +594,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114118794959718230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1613204647990572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f479ff2ad4fb184fbaae0e969033955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 0}
+  timerText: {fileID: 1337503657067922}
 --- !u!114 &114185192668768240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -742,7 +757,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 114762716255165034}
   m_OnClick:
     m_PersistentCalls:
@@ -1084,16 +1099,16 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: ac49192ff510172458c8c0136f29170f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 0da948a880df111479d17eb4bc251ca8,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: dca76fd183a973641864aa34b3e44ee3, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: b22fd239cdbd15e4ca013a4c2e78eed6, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: e70c875071ad5324691f499eff5a1e74, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 0e644fe97f25af84ca27f6ac992492f6, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 114940200122966378}
   m_OnClick:
     m_PersistentCalls:
@@ -1599,8 +1614,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1799,7 +1814,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 58fb6ee5b7dceba4baed65fe9c3a045b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 750fee6b1894a674e9f9fae8d56868d9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1931,7 +1946,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -4.499878, y: -293.7}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 10.51}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224062839336337276
 RectTransform:
