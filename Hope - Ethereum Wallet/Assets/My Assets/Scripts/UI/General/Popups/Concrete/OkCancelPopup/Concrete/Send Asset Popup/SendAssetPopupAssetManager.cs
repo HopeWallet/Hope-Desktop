@@ -24,5 +24,17 @@ public sealed class SendAssetPopupAssetManager
         this.assetSymbol = assetSymbol;
         this.assetBalance = assetBalance;
         this.assetImage = assetImage;
+
+        SetValues();
     }
+
+    private void SetValues()
+    {
+        var activeAsset = tradableAssetManager.ActiveTradableAsset;
+
+        assetBalance.text = StringUtils.LimitEnd(activeAsset.AssetBalance.ToString(), 14, "...");
+        assetSymbol.text = activeAsset.AssetSymbol;
+        tradableAssetImageManager.LoadImage(activeAsset.AssetSymbol, img => assetImage.sprite = img);
+    }
+
 }

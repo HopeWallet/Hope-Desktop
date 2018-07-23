@@ -61,9 +61,6 @@ public class SendTokenPopupAnimator : UIAnimator
 		}
 	}
 
-	//DEMO VARIABLE TO BE REPLACED
-	private readonly decimal DEMO_TOKEN_AMOUNT = 355.5994235643m;
-
 	/// <summary>
 	/// Initializes the button and input field listeners
 	/// </summary>
@@ -76,15 +73,7 @@ public class SendTokenPopupAnimator : UIAnimator
 
 		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 		maxToggle.transform.GetComponent<Toggle>().AddToggleListener(MaxClicked);
-
-		SetTokenAmount(DEMO_TOKEN_AMOUNT);
 	}
-
-	/// <summary>
-	/// Sets the token amount 
-	/// </summary>
-	/// <param name="tokenAmount"> The value of the token amount on the wallet </param>
-	public void SetTokenAmount(decimal tokenAmount) => tokenSection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tokenAmount.ToString();
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -109,7 +98,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	{
 		sendButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => dim.AnimateGraphic(0f, 2f, FinishedAnimating)));
+			() => dim.AnimateGraphic(0f, 0.2f, FinishedAnimating)));
 		amountSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => tokenSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f)));
@@ -262,12 +251,12 @@ public class SendTokenPopupAnimator : UIAnimator
 	private void MaxClicked()
 	{
 		TMP_InputField inputField = amountInputField.transform.GetComponent<TMP_InputField>();
-		string tokenAmountText = DEMO_TOKEN_AMOUNT.ToString();
-		bool maxToggledOn = maxToggle.transform.GetComponent<Toggle>().IsToggledOn;
+		//string tokenAmountText = DEMO_TOKEN_AMOUNT.ToString();
+		//bool maxToggledOn = maxToggle.transform.GetComponent<Toggle>().IsToggledOn;
 
-		inputField.interactable = maxToggledOn ? false : true;
+		inputField.interactable = !maxToggle.transform.GetComponent<Toggle>().IsToggledOn;
 
-		inputField.placeholder.GetComponent<TextMeshProUGUI>().text = maxToggledOn ? tokenAmountText + " (Max)" : "Enter amount...";
-		inputField.text = maxToggledOn ? "" : tokenAmountText;
+		//inputField.placeholder.GetComponent<TextMeshProUGUI>().text = maxToggledOn ? tokenAmountText + " (Max)" : "Enter amount...";
+		//inputField.text = maxToggledOn ? "" : tokenAmountText;
 	}
 }
