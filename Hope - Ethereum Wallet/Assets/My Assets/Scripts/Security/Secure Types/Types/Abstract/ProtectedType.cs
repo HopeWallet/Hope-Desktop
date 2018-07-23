@@ -24,10 +24,20 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// Initializes the <see cref="ProtectedType"/> with type TType.
         /// </summary>
         /// <param name="value"> The value to protect. </param>
-        protected ProtectedType(TType value)
+        protected ProtectedType(TType value) : this(value, null)
         {
-            ephemeralEncryption = new EphemeralEncryption(this);
+        }
 
+        /// <summary>
+        /// Initializes the <see cref="ProtectedType"/> with the TType and additional <see cref="SecureObject"/> instances to use to encrypt the data.
+        /// </summary>
+        /// <param name="value"> The value to protect. </param>
+        /// <param name="encryptionObjects"> The additional <see cref="SecureObject"/> instances to apply to the encryption. </param>
+        protected ProtectedType(TType value, params SecureObject[] encryptionObjects)
+        {
+            SecureObject[] currentEncryptionObj = new SecureObject[] { this };
+
+            ephemeralEncryption = new EphemeralEncryption(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
             SetValue(value);
         }
 

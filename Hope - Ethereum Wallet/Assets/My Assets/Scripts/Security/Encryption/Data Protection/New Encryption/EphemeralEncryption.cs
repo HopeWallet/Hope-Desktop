@@ -1,7 +1,6 @@
 ﻿using Hope.Security.Encryption.Symmetric;
 using Hope.Security.HashGeneration;
 using System.Diagnostics;
-using System.Linq;
 
 /// <summary>
 /// Class that encrypts data that can only be decrypted by the same EphemeralEncrypt object during the same session of the program running.

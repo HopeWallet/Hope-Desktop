@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-public abstract class WalletLoaderBase
+public abstract class WalletLoaderBase : SecureObject
 {
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPassword playerPrefPassword;
@@ -39,6 +39,8 @@ public abstract class WalletLoaderBase
             popupManager.CloseAllPopups();
             setupAddressAction?.Invoke();
             onWalletLoaded?.Invoke();
+
+            GC.Collect(); // Collect any remnants of important data
         };
     }
 
