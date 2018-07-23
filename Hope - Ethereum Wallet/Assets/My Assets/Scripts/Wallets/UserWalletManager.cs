@@ -84,12 +84,14 @@ public class UserWalletManager
     /// Attempts to load a wallet given a password.
     /// Calls the action if the wallet loaded successfully.
     /// </summary>
+    [SecureCallEnd]
     public void UnlockWallet() => userWallet.Unlock();
 
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// Calls the action with the state of successful or unsuccessful wallet creation.
     /// </summary>
+    [SecureCallEnd]
     public void CreateWallet() => userWallet.Create();
 
     /// <summary>

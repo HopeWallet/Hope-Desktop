@@ -45,14 +45,14 @@ public sealed class UserWallet
     /// Unlocks a wallet if the password is correct.
     /// </summary>
     /// <param name="walletNum"> The number of the wallet to unlock. </param>
-    [SecureCallEnd]
+    [SecureCaller]
     [ReflectionProtect]
     public void Unlock()
     {
         Load(walletUnlocker);
     }
 
-    [SecureCallEnd]
+    [SecureCaller]
     [ReflectionProtect]
     public void Create()
     {
