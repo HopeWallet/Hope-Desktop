@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using Hope.Utils.EthereumUtils;
 using System.Linq;
-using System.Collections;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
@@ -30,7 +29,6 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	[SerializeField] private GameObject sendButton;
 
-	private int oldValue;
 	private bool advancedMode;
 	private bool validAddress;
 	private bool validAmount;
@@ -79,8 +77,6 @@ public class SendTokenPopupAnimator : UIAnimator
 		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 		maxToggle.transform.GetComponent<Toggle>().AddToggleListener(MaxClicked);
 
-		tokenSection.transform.GetChild(2).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(TokenChanged);
-
 		SetTokenAmount(DEMO_TOKEN_AMOUNT);
 	}
 
@@ -128,21 +124,6 @@ public class SendTokenPopupAnimator : UIAnimator
 
 		else
 			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 2f);
-	}
-
-	/// <summary>
-	/// When a different token is selected to be sent
-	/// </summary>
-	/// <param name="value"> The value of the token options in the token dropdown </param>
-	private void TokenChanged(int value)
-	{
-		if (value != oldValue)
-			oldValue = value;
-		else
-			return;
-
-		tokenSection.transform.GetChild(0).gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, SetTokenIcon);
-		tokenSection.transform.GetChild(1).gameObject.AnimateScaleY(0f, 0.1f, SetTokenAmount);
 	}
 
 	/// <summary>

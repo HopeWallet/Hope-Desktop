@@ -17,17 +17,26 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
                           gasLimitField,
                           gasPriceField;
 
+    public TMP_Text assetBalance,
+                    assetSymbol;
+
     public Toggle advancedModeToggle;
-
     public Image assetImage;
-
-    public TMP_Text assetBalance;
-
     public Slider transactionSpeedSlider;
+
+    private SendAssetPopupAssetManager assetManager;
 
     public GasPrice StandardGasPrice { get; set; }
 
     public dynamic EtherBalance { get; set; }
+
+    [Inject]
+    public void Construct(
+        TradableAssetManager tradableAssetManager,
+        TradableAssetImageManager tradableAssetImageManager)
+    {
+        assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, assetSymbol, assetBalance, assetImage);
+    }
 
     protected override void OnStart()
     {
