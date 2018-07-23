@@ -38,7 +38,8 @@ public sealed class PopupManager
         GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
         UnlockWalletPopup.Factory unlockWalletPopupFactory,
         ContactsPopup.Factory contactsPopupFactory,
-        AddOrEditContactPopup.Factory addOrEditContactPopupFactory)
+        AddOrEditContactPopup.Factory addOrEditContactPopupFactory,
+		InfoPopup.Factory infoPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                           addTokenPopupFactory,
@@ -53,7 +54,8 @@ public sealed class PopupManager
                           generalConfirmationPopupFactory,
                           unlockWalletPopupFactory,
                           contactsPopupFactory,
-                          addOrEditContactPopupFactory);
+                          addOrEditContactPopupFactory,
+						  infoPopupFactory);
     }
 
     /// <summary>

@@ -141,6 +141,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<GeneralTransactionConfirmationPopup>();
 		BindPopupFactory<ContactsPopup>();
 		BindPopupFactory<AddOrEditContactPopup>();
+		BindPopupFactory<InfoPopup>();
 	}
 
     /// <summary>
