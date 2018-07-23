@@ -417,7 +417,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4961396220324114}
-  - component: {fileID: 114661592186528680}
+  - component: {fileID: 114338446119812900}
   m_Layer: 0
   m_Name: Max_Toggle
   m_TagString: Untagged
@@ -549,7 +549,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4207266109267470}
-  - component: {fileID: 114282696401322268}
+  - component: {fileID: 114772791688704820}
   m_Layer: 0
   m_Name: AdvancedMode_Toggle
   m_TagString: Untagged
@@ -842,9 +842,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4760407126302690}
   - component: {fileID: 114836135890462588}
-  - component: {fileID: 114112184209369380}
+  - component: {fileID: 114240595639640014}
   m_Layer: 0
-  m_Name: SendToken_Popup
+  m_Name: SendAsset_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1731,28 +1731,6 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 1
   m_InputValidator: {fileID: 0}
---- !u!114 &114112184209369380
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538487205334220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40b2b67c580262f4fb163ad7a661c37b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  okButton: {fileID: 0}
-  cancelButton: {fileID: 0}
-  addressField: {fileID: 0}
-  amountField: {fileID: 0}
-  gasLimitField: {fileID: 0}
-  gasPriceField: {fileID: 0}
-  advancedModeToggle: {fileID: 0}
-  assetImage: {fileID: 0}
-  assetSymbol: {fileID: 0}
-  assetBalance: {fileID: 0}
-  speedDropdown: {fileID: 0}
 --- !u!114 &114115428774453880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2388,6 +2366,27 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 1
   m_InputValidator: {fileID: 0}
+--- !u!114 &114240595639640014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538487205334220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b2b67c580262f4fb163ad7a661c37b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114960000031078782}
+  cancelButton: {fileID: 114870232362552372}
+  addressField: {fileID: 114631005458636982}
+  amountField: {fileID: 114184388491262814}
+  gasLimitField: {fileID: 114223424530932108}
+  gasPriceField: {fileID: 114084049358666468}
+  advancedModeToggle: {fileID: 114772791688704820}
+  assetImage: {fileID: 114155704206949664}
+  assetBalance: {fileID: 114972956831463810}
+  transactionSpeedSlider: {fileID: 114247633352688526}
 --- !u!114 &114245874906713646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2560,19 +2559,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114282696401322268
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1298930853387788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea12991ba0988a04d9c5f852ffd4928e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toggleBackground: {fileID: 1816822680566996}
-  toggleCircle: {fileID: 1812614954304764}
 --- !u!114 &114290783660281200
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2897,6 +2883,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114338446119812900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1220179074603582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978a2c1804ed4484eaca4af844bc777c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleBackground: {fileID: 1346633980271186}
+  toggleCircle: {fileID: 1035634086152908}
 --- !u!114 &114348298059734220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4582,19 +4581,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: TMPro.TMP_Dropdown+DropdownEvent, TextMeshPro-2017.3-Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114661592186528680
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1220179074603582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea12991ba0988a04d9c5f852ffd4928e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toggleBackground: {fileID: 1346633980271186}
-  toggleCircle: {fileID: 1035634086152908}
 --- !u!114 &114663924715183974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5132,6 +5118,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114772791688704820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1298930853387788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978a2c1804ed4484eaca4af844bc777c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleBackground: {fileID: 1816822680566996}
+  toggleCircle: {fileID: 1812614954304764}
 --- !u!114 &114773542731793846
 MonoBehaviour:
   m_ObjectHideFlags: 1

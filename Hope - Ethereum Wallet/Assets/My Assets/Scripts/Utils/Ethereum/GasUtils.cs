@@ -57,7 +57,7 @@ namespace Hope.Utils.EthereumUtils
         /// </summary>
         /// <param name="gasPrice"> The gas price in wei to convert to the form used in transaction input. </param>
         /// <returns> The functional gas price. </returns>
-        public static BigInteger GetFunctionalGasPrice(double gasPrice) => UnitConversion.Convert.ToWei(gasPrice, UnitConversion.EthUnit.Gwei);
+        public static BigInteger GetFunctionalGasPrice(decimal gasPrice) => UnitConversion.Convert.ToWei(gasPrice, UnitConversion.EthUnit.Gwei);
 
         /// <summary>
         /// Calculates the maximum gas cost of a transaction given the gas price and the gas limit.

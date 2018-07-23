@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
-public class ToggleAnimator : MonoBehaviour
+public class Toggle : MonoBehaviour
 {
 
 	[SerializeField] private GameObject toggleBackground;
@@ -13,11 +13,6 @@ public class ToggleAnimator : MonoBehaviour
 	private readonly Color fadedColor = new Color(1f, 1f, 1f);
 
 	private Action toggleClick;
-
-	public Action ToggleClick
-	{
-		set { toggleClick = value; }
-	}
 
 	public bool IsToggledOn { get; private set; }
 
@@ -30,6 +25,14 @@ public class ToggleAnimator : MonoBehaviour
 		toggleCircle.GetComponent<Button>().onClick.AddListener(ToggleClicked);
 	}
 
+    public void AddToggleListener(Action action)
+    {
+        if (toggleClick == null)
+            toggleClick = action;
+        else
+            toggleClick += action;
+    }
+
 	/// <summary>
 	/// Animates the Circle over to the left or right, and animates the colors of the circle and background image
 	/// </summary>
@@ -40,6 +43,6 @@ public class ToggleAnimator : MonoBehaviour
 		toggleBackground.GetComponent<Image>().DOColor(IsToggledOn ? fadedColor : blueColor, 0.1f);
 		IsToggledOn = !IsToggledOn;
 
-		toggleClick();
+		toggleClick?.Invoke();
 	}
 }

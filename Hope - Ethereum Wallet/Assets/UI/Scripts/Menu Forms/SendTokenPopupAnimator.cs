@@ -76,8 +76,8 @@ public class SendTokenPopupAnimator : UIAnimator
 		gasLimitInputField.onValueChanged.AddListener(GasLimitChanged);
 		gasPriceInputField.onValueChanged.AddListener(GasPriceChanged);
 
-		advancedModeToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = AdvancedModeClicked;
-		maxToggle.transform.GetComponent<ToggleAnimator>().ToggleClick = MaxClicked;
+		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
+		maxToggle.transform.GetComponent<Toggle>().AddToggleListener(MaxClicked);
 
 		tokenSection.transform.GetChild(2).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(TokenChanged);
 
@@ -282,7 +282,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	{
 		TMP_InputField inputField = amountInputField.transform.GetComponent<TMP_InputField>();
 		string tokenAmountText = DEMO_TOKEN_AMOUNT.ToString();
-		bool maxToggledOn = maxToggle.transform.GetComponent<ToggleAnimator>().IsToggledOn;
+		bool maxToggledOn = maxToggle.transform.GetComponent<Toggle>().IsToggledOn;
 
 		inputField.interactable = maxToggledOn ? false : true;
 
