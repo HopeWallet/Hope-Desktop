@@ -13,6 +13,9 @@ public class OpenWalletForm : UIAnimator
 	[SerializeField] private GameObject buyButton;
 	[SerializeField] private GameObject sellButton;
 
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
 		background.AnimateGraphic(1f, 0.15f,
@@ -27,6 +30,9 @@ public class OpenWalletForm : UIAnimator
 		AnimateList(taskBarButtons.transform, 0);
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		FinishedAnimating();

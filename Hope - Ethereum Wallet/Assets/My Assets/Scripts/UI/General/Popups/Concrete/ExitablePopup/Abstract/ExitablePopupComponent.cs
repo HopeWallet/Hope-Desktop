@@ -1,5 +1,4 @@
 ﻿using UnityEngine.UI;
-using Zenject;
 
 /// <summary>
 /// Class which represents a popup with displays information and has an exit button.
@@ -9,8 +8,6 @@ public abstract class ExitablePopupComponent<T> : FactoryPopup<T> where T : Fact
 {
 
     public Button exitButton;
-
-    protected PopupManager popupManager;
 
     /// <summary>
     /// Initializes the exit button of the ExitablePopup.
@@ -29,13 +26,6 @@ public abstract class ExitablePopupComponent<T> : FactoryPopup<T> where T : Fact
         ExitPopup();
         OnExitClicked();
     }
-
-    /// <summary>
-    /// Injects the PopupManager dependencies into this popup.
-    /// </summary>
-    /// <param name="popupManager"> The active PopupManager to use. </param>
-    [Inject]
-    public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
 
     /// <summary>
     /// Exits the popup by destroying this popup object.

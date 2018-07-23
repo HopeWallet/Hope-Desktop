@@ -7,10 +7,19 @@
 public abstract class FactoryPopup<T> : PopupBase where T : FactoryPopup<T>
 {
 
-    /// <summary>
-    /// Class which represents the factory for popups.
-    /// </summary>
-    public class Factory : Factory<T>
+	protected PopupManager popupManager;
+
+	/// <summary>
+	/// Injects the PopupManager dependencies into this popup.
+	/// </summary>
+	/// <param name="popupManager"> The active PopupManager to use. </param>
+	[Inject]
+	public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
+
+	/// <summary>
+	/// Class which represents the factory for popups.
+	/// </summary>
+	public class Factory : Factory<T>
     {
     }
 }

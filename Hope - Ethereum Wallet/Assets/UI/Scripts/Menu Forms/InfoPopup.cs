@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class InfoPopup : FactoryPopup<InfoPopup>
@@ -10,14 +9,19 @@ public class InfoPopup : FactoryPopup<InfoPopup>
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	public void AnimateForm(bool animateIn) => transform.DOScaleX(animateIn ? 1f : 0f, 0.1f);
-
-	public void SetUIElements(string titleText, string bodyText, bool infoMessage, Vector2 iconPosition)
+	/// <summary>
+	/// Sets the UI elements of the info popup
+	/// </summary>
+	/// <param name="titleText"> The title text string being set </param>
+	/// <param name="bodyText"> The body text string being set </param>
+	/// <param name="isInfoIcon"> Checks if the user is hovering over an info icon or error icon </param>
+	/// <param name="iconPosition"> The icon so that the popup can animate next to it </param>
+	public void SetUIElements(string titleText, string bodyText, bool isInfoIcon, Vector2 iconPosition)
 	{
 		title.text = titleText;
 		body.text = bodyText;
-		infoIcon.SetActive(infoMessage);
-		errorIcon.SetActive(!infoMessage);
-		transform.localPosition = iconPosition;
+		infoIcon.SetActive(isInfoIcon);
+		errorIcon.SetActive(!isInfoIcon);
+		transform.localPosition = new Vector2(iconPosition.x + 13f, iconPosition.y);
 	}
 }

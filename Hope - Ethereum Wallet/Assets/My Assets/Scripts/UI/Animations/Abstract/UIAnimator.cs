@@ -7,10 +7,10 @@ public abstract class UIAnimator : MonoBehaviour
 	[SerializeField]
 	private bool animateOnEnable;
 
-    [SerializeField]
+	[SerializeField]
 	private GameObject blocker;
 
-    private Action onAnimationFinished;
+	private Action onAnimationFinished;
 
 	private bool animating;
 
@@ -26,35 +26,37 @@ public abstract class UIAnimator : MonoBehaviour
 		protected set { ChangeAnimationState(value); }
 	}
 
-    public void AnimateEnable(Action onAnimationFinished = null)
-    {
-        this.onAnimationFinished = onAnimationFinished;
+	public void AnimateEnable(Action onAnimationFinished = null)
+	{
+		this.onAnimationFinished = onAnimationFinished;
 
-        ChangeAnimationState(true);
-        AnimateIn();
-    }
+		ChangeAnimationState(true);
+		AnimateIn();
+	}
 
-    public void AnimateDisable(Action onAnimationFinished = null)
-    {
-        this.onAnimationFinished = onAnimationFinished;
+	public void AnimateDisable(Action onAnimationFinished = null)
+	{
+		this.onAnimationFinished = onAnimationFinished;
 
-        ChangeAnimationState(true);
-        AnimateOut();
-    }
+		ChangeAnimationState(true);
+		AnimateOut();
+	}
 
 	protected abstract void AnimateIn();
 
 	protected abstract void AnimateOut();
 
-    protected void FinishedAnimating()
-    {
-        ChangeAnimationState(false);
-        onAnimationFinished?.Invoke();
-    }
+	protected void FinishedAnimating()
+	{
+		ChangeAnimationState(false);
+		onAnimationFinished?.Invoke();
+	}
 
 	private void ChangeAnimationState(bool state)
 	{
-		blocker.SetActive(state);
+		if (blocker != null)
+			blocker.SetActive(state);
+
 		animating = state;
 	}
 
