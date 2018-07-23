@@ -116,24 +116,6 @@ public class SendTokenPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Sets the proper token icon and animates it back into view
-	/// </summary>
-	private void SetTokenIcon()
-	{
-		//Set the proper image icon to the corresponding token
-		tokenSection.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, 0.1f);
-	}
-
-	/// <summary>
-	/// Sets the proper token amount and animates it back into view
-	/// </summary>
-	private void SetTokenAmount()
-	{
-		//Set the proper token amount to the right amount in the wallet
-		tokenSection.transform.GetChild(1).gameObject.AnimateScaleY(1f, 0.1f);
-	}
-
-	/// <summary>
 	/// Checks to see if the address is the correct length, and a valid address
 	/// </summary>
 	/// <param name="address"> The address string in the address input field </param>

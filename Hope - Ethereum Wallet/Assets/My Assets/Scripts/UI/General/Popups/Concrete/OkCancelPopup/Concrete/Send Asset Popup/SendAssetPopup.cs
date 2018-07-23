@@ -10,7 +10,7 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IStandardGasPriceObservable, IEtherBalanceObservable
+public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IStandardGasPriceObservable
 {
     public TMP_InputField addressField,
                           amountField,
@@ -28,19 +28,24 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
 
     public GasPrice StandardGasPrice { get; set; }
 
-    public dynamic EtherBalance { get; set; }
-
     [Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
-        TradableAssetImageManager tradableAssetImageManager)
+        TradableAssetImageManager tradableAssetImageManager,
+        EtherBalanceObserver etherBalanceObserver,
+        UpdateManager updateManager)
     {
-        assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, assetSymbol, assetBalance, assetImage);
+        assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
     }
 
     protected override void OnStart()
     {
 
+    }
+
+    private void OnDestroy()
+    {
+        assetManager.Close();
     }
 
     public void OnGasPricesUpdated()
