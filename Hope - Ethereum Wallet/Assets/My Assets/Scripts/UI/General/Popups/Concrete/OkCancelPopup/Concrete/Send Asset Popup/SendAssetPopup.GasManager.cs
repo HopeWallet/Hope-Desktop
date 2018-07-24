@@ -9,10 +9,11 @@ using UnityEngine.UI;
 
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
-    public sealed class GasManager : IStandardGasPriceObservable
+    public sealed class GasManager : IStandardGasPriceObservable, IPeriodicUpdater
     {
         private readonly TradableAssetManager tradableAssetManager;
         private readonly GasPriceObserver gasPriceObserver;
+        private readonly PeriodicUpdateManager periodicUpdateManager;
 
         private readonly Toggle advancedModeToggle;
 
@@ -51,9 +52,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         public BigInteger EnteredGasLimit => _enteredGasLimit;
 
+        public float UpdateInterval => 10f;
+
         public GasManager(
             TradableAssetManager tradableAssetManager,
             GasPriceObserver gasPriceObserver,
+            PeriodicUpdateManager periodicUpdateManager,
             Toggle advancedModeToggle,
             Slider transactionSpeedSlider,
             TMP_InputField gasLimitField,
@@ -61,6 +65,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         {
             this.tradableAssetManager = tradableAssetManager;
             this.gasPriceObserver = gasPriceObserver;
+            this.periodicUpdateManager = periodicUpdateManager;
             this.advancedModeToggle = advancedModeToggle;
             this.transactionSpeedSlider = transactionSpeedSlider;
             this.gasLimitField = gasLimitField;
@@ -71,9 +76,15 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             CheckTransactionSpeedSlider(0.5f);
         }
 
+        public void PeriodicUpdate()
+        {
+            EstimateGasLimit();
+        }
+
         public void Destroy()
         {
             gasPriceObserver.UnsubscribeObservable(this);
+            periodicUpdateManager.RemovePeriodicUpdater(this);
         }
 
         public void OnGasPricesUpdated()
@@ -85,6 +96,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private void AddListenersAndObservables()
         {
             gasPriceObserver.SubscribeObservable(this);
+            periodicUpdateManager.AddPeriodicUpdater(this);
 
             transactionSpeedSlider.onValueChanged.AddListener(CheckTransactionSpeedSlider);
             gasLimitField.onValueChanged.AddListener(CheckGasLimitField);
@@ -93,8 +105,16 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckGasLimitField(string gasLimit)
         {
-            gasLimitField.text = RestrictToNumbers(gasLimit);
-            BigInteger.TryParse(gasLimitField.text, out _enteredGasLimit);
+            gasLimit = RestrictToNumbers(gasLimit);
+
+            BigInteger newGasLimit;
+            BigInteger.TryParse(gasLimit, out newGasLimit);
+
+            if (!string.IsNullOrEmpty(gasLimitField.text) && advancedModeToggle.IsToggledOn && newGasLimit <= _enteredGasLimit)
+                return;
+
+            gasLimitField.text = gasLimit;
+            _enteredGasLimit = newGasLimit;
         }
 
         private void CheckGasPriceField(string gasPrice)
