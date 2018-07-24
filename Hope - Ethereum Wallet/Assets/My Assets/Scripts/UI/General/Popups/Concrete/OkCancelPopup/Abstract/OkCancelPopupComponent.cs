@@ -24,7 +24,7 @@ public abstract class OkCancelPopupComponent<T> : FactoryPopup<T> where T : Fact
     /// <summary>
     /// Called when the Ok button is clicked.
     /// </summary>
-    public void OkButton()
+    public virtual void OkButton()
     {
         ExitPopup();
         OnOkClicked();
@@ -33,7 +33,7 @@ public abstract class OkCancelPopupComponent<T> : FactoryPopup<T> where T : Fact
     /// <summary>
     /// Called when the Cancel button is clicked.
     /// </summary>
-    public void CancelButton()
+    public virtual void CancelButton()
     {
         ExitPopup();
         OnCancelClicked();

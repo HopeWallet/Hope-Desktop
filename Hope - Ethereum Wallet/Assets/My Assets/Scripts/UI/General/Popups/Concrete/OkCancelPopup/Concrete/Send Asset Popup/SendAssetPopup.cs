@@ -1,8 +1,4 @@
-﻿using Hope.Utils.EthereumUtils;
-using Nethereum.Hex.HexTypes;
-using System.Linq;
-using System.Numerics;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -25,6 +21,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
     [SerializeField] private Image assetImage;
     [SerializeField] private Slider transactionSpeedSlider;
+    [SerializeField] private Button contactsButton;
 
     public AssetManager Asset { get; private set; }
 
@@ -49,10 +46,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Amount = new AmountManager(this, maxToggle, amountField);
     }
 
+    private void Start()
+    {
+        contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true));
+    }
+
     private void Update()
     {
-        //bool isValid = Gas.IsValid && Address.IsValid && Amount.IsValid;
-        //Debug.Log(isValid);
+        okButton.interactable = Gas.IsValid && Address.IsValid && Amount.IsValid;
     }
 
     private void OnDestroy()

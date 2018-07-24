@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class SendTokenPopupAnimator : UIAnimator
@@ -112,6 +111,11 @@ public class SendTokenPopupAnimator : UIAnimator
 				() => Animating = false));
 	}
 
+    /// <summary>
+    /// Animates the error icon for the given input field.
+    /// </summary>
+    /// <param name="sectionObj"> The gameobject that holds the input field. </param>
+    /// <param name="isValidField"> Checks if valid input or not. </param>
     private void AnimateFieldError(GameObject sectionObj, bool isValidField)
     {
         sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValidField ? 0f : 1f, isValidField ? 0f : 1f, 0.2f);

@@ -2236,6 +2236,7 @@ MonoBehaviour:
   maxToggle: {fileID: 114338446119812900}
   assetImage: {fileID: 114155704206949664}
   transactionSpeedSlider: {fileID: 114247633352688526}
+  contactsButton: {fileID: 114250894831834018}
 --- !u!114 &114245874906713646
 MonoBehaviour:
   m_ObjectHideFlags: 1

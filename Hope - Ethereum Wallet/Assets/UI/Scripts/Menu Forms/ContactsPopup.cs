@@ -10,9 +10,9 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private ContactsPopupAnimator contactsPopupAnimator;
 
-	public const string PREF_NAME = "contact_";
+    private readonly Dictionary<string, string> contacts = new Dictionary<string, string>();
 
-	private Dictionary<string, string> contacts { get; } = new Dictionary<string, string>();
+    public const string PREF_NAME = "contact_";
 
 	protected override void OnStart()
 	{
@@ -21,15 +21,15 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		contactsPopupAnimator = transform.GetComponent<ContactsPopupAnimator>();
 
 		addContactButton.onClick.AddListener(AddContact);
-		editContactButton.onClick.AddListener(EditContact);
-		deleteContactButton.onClick.AddListener(DeleteContact);
+		//editContactButton.onClick.AddListener(EditContact);
+		//deleteContactButton.onClick.AddListener(DeleteContact);
 	}
 
 	private void PopulateContacts()
 	{
 		for (int i = 0; ; i++)
 		{
-			if (SecurePlayerPrefs.HasKey(PREF_NAME + i))
+			if (!SecurePlayerPrefs.HasKey(PREF_NAME + i))
 				return;
 
 			string name = SecurePlayerPrefs.GetString(PREF_NAME + i);
@@ -39,7 +39,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void AddContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>();
+		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>(true);
 
 		addOrCreateContactPopup.SetPopupLayout(true);
 		addOrCreateContactPopup.SetDictionary(contacts);
@@ -47,7 +47,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void EditContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>();
+		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>(true);
 
 		addOrCreateContactPopup.SetPopupLayout(false, contactsPopupAnimator.selectedContactName, contactsPopupAnimator.selectedContactAddress);
 		addOrCreateContactPopup.SetDictionary(contacts);
