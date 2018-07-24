@@ -22,37 +22,25 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private readonly TMP_InputField gasLimitField,
                                         gasPriceField;
 
-        private BigInteger _estimatedGasPrice;
-        private BigInteger _enteredGasPrice;
-        private BigInteger _estimatedGasLimit;
-        private BigInteger _enteredGasLimit;
+        private GasPrice estimatedGasPrice,
+                         enteredGasPrice;
+
+        private BigInteger estimatedGasLimit,
+                           enteredGasLimit;
 
         private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
-        public decimal TransactionCost
-        {
-            get
-            {
-                BigInteger gasLimit = advancedModeToggle.IsToggledOn ? EnteredGasLimit : EstimatedGasLimit;
-                BigInteger gasPrice = advancedModeToggle.IsToggledOn ? EnteredGasPrice.FunctionalGasPrice.Value : EstimatedGasPrice.FunctionalGasPrice.Value;
+        public float UpdateInterval => 10f;
 
-                return UnitConversion.Convert.FromWei(gasLimit * gasPrice);
-            }
-        }
+        public decimal TransactionCost => UnitConversion.Convert.FromWei(TransactionGasLimit * TransactionGasPrice.FunctionalGasPrice.Value);
 
         public bool IsValid => TransactionCost != 0;
 
+        public GasPrice TransactionGasPrice => advancedModeToggle.IsToggledOn ? enteredGasPrice : estimatedGasPrice;
+
+        public BigInteger TransactionGasLimit => advancedModeToggle.IsToggledOn ? enteredGasLimit : estimatedGasLimit;
+
         public GasPrice StandardGasPrice { get; set; }
-
-        public GasPrice EstimatedGasPrice => new GasPrice(_estimatedGasPrice);
-
-        public GasPrice EnteredGasPrice => new GasPrice(_enteredGasPrice);
-
-        public BigInteger EstimatedGasLimit => _estimatedGasLimit;
-
-        public BigInteger EnteredGasLimit => _enteredGasLimit;
-
-        public float UpdateInterval => 10f;
 
         public GasManager(
             TradableAssetManager tradableAssetManager,
@@ -90,7 +78,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         public void OnGasPricesUpdated()
         {
             if (!advancedModeToggle.IsToggledOn)
-                gasPriceField.text = EstimatedGasPrice.ReadableGasPrice.ToString();
+                gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
         }
 
         private void AddListenersAndObservables()
@@ -110,11 +98,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             BigInteger newGasLimit;
             BigInteger.TryParse(gasLimit, out newGasLimit);
 
-            if (!string.IsNullOrEmpty(gasLimitField.text) && advancedModeToggle.IsToggledOn && newGasLimit <= _enteredGasLimit)
+            if (!string.IsNullOrEmpty(gasLimitField.text) && advancedModeToggle.IsToggledOn && newGasLimit <= enteredGasLimit)
                 return;
 
             gasLimitField.text = gasLimit;
-            _enteredGasLimit = newGasLimit;
+            enteredGasLimit = newGasLimit;
         }
 
         private void CheckGasPriceField(string gasPrice)
@@ -124,13 +112,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             decimal price;
             decimal.TryParse(gasPriceField.text, out price);
 
-            _enteredGasPrice = GasUtils.GetFunctionalGasPrice(price);
+            enteredGasPrice = new GasPrice(GasUtils.GetFunctionalGasPrice(price));
         }
 
         private void CheckTransactionSpeedSlider(float value)
         {
             decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.5f, 1.5f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.5f), 2, MidpointRounding.AwayFromZero);
-            _estimatedGasPrice = new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value);
+            estimatedGasPrice = new GasPrice(new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value));
 
             OnGasPricesUpdated();
         }
@@ -142,7 +130,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void OnGasLimitReceived(BigInteger limit)
         {
-            _estimatedGasLimit = limit;
+            estimatedGasLimit = limit;
             CheckGasLimitField(limit.ToString());
         }
 

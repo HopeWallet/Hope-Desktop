@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEngine.UI;
 
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
@@ -15,6 +16,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private readonly Toggle maxToggle;
 
+        private readonly Slider transactionSpeedSlider;
+
         private readonly TMP_InputField amountInputField;
 
         public bool IsValid { get; private set; }
@@ -25,11 +28,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             SendAssetPopup sendAssetPopup,
             TradableAssetManager tradableAssetManager,
             Toggle maxToggle,
+            Slider transactionSpeedSlider,
             TMP_InputField amountInputField)
         {
             this.sendAssetPopup = sendAssetPopup;
             this.tradableAssetManager = tradableAssetManager;
             this.maxToggle = maxToggle;
+            this.transactionSpeedSlider = transactionSpeedSlider;
             this.amountInputField = amountInputField;
 
             SetupListeners();
@@ -51,7 +56,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             var activeAsset = tradableAssetManager.ActiveTradableAsset;
 
             amountInputField.RestrictToBalance(activeAsset);
-
         }
     }
 }

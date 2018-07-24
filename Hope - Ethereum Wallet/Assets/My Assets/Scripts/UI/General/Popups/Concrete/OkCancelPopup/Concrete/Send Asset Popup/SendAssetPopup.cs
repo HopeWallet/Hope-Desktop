@@ -46,13 +46,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField);
         Address = new AddressManager(addressField);
-        Amount = new AmountManager(this, tradableAssetManager, maxToggle, amountField);
+        Amount = new AmountManager(this, tradableAssetManager, maxToggle, transactionSpeedSlider, amountField);
     }
 
     private void Update()
     {
-        bool isValid = Gas.IsValid && Address.IsValid && Amount.IsValid;
-        Debug.Log(isValid);
+        //bool isValid = Gas.IsValid && Address.IsValid && Amount.IsValid;
+        //Debug.Log(isValid);
     }
 
     private void OnDestroy()
