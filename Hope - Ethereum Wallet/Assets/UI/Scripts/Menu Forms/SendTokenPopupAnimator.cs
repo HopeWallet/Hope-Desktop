@@ -29,6 +29,8 @@ public class SendTokenPopupAnimator : UIAnimator
 
 	[SerializeField] private GameObject sendButton;
 
+    private SendAssetPopup sendAssetPopup;
+
 	private bool advancedMode;
 	private bool validAddress;
 	private bool validAmount;
@@ -64,8 +66,10 @@ public class SendTokenPopupAnimator : UIAnimator
 	/// <summary>
 	/// Initializes the button and input field listeners
 	/// </summary>
-	private void Awake()
+	private void Start()
 	{
+        sendAssetPopup = GetComponent<SendAssetPopup>();
+
 		addressInputField.onValueChanged.AddListener(AddressChanged);
 		amountInputField.onValueChanged.AddListener(AmountChanged);
 		gasLimitInputField.onValueChanged.AddListener(GasLimitChanged);

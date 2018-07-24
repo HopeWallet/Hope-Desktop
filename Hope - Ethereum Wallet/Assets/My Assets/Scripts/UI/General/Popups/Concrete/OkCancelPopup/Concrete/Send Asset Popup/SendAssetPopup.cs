@@ -10,8 +10,16 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IStandardGasPriceObservable
+public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
+
+    // TODO
+    // Create new classes
+    // SendAssetPopupAddressManager
+    // SendAssetPopupAmountManager
+    // Move validation logic to each class
+    // Remove validation logic from SendTokenPopupAnimator
+
     public TMP_InputField addressField,
                           amountField,
                           gasLimitField,
@@ -24,12 +32,13 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
     public Image assetImage;
     public Slider transactionSpeedSlider;
 
-    private SendTokenPopupAnimator sendAssetPopupAnimator;
+    public AssetManager Asset { get; private set; }
 
-    private SendAssetPopupAssetManager assetManager;
-    private SendAssetPopupGasManager gasManager;
+    public AmountManager Amount { get; private set; }
 
-    public GasPrice StandardGasPrice { get; set; }
+    public AddressManager Address { get; private set; }
+
+    public GasManager Gas { get; private set; }
 
     [Inject]
     public void Construct(
@@ -39,23 +48,21 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
         GasPriceObserver gasPriceObserver,
         UpdateManager updateManager)
     {
-        assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-        gasManager = new SendAssetPopupGasManager(gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
+        Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
+        Gas = new GasManager(gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
 
     }
 
-    protected override void OnStart()
+    protected override void Awake()
     {
-        sendAssetPopupAnimator = GetComponent<SendTokenPopupAnimator>();
+        base.Awake();
+
+
     }
 
     private void OnDestroy()
     {
-        assetManager.Destroy();
-        gasManager.Destroy();
-    }
-
-    public void OnGasPricesUpdated()
-    {
+        Asset.Destroy();
+        Gas.Destroy();
     }
 }
