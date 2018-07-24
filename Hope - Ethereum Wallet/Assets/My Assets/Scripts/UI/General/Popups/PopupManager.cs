@@ -70,7 +70,7 @@ public sealed class PopupManager
 
         PopupBase popup = activePopups.Peek().Key;
 
-        if (popup.Animator.Animating || popup.DisableClosing)
+        if (popup.Animator?.Animating != false || popup.DisableClosing)
             return false;
 
         foreach (Type type in typesToIgnore)

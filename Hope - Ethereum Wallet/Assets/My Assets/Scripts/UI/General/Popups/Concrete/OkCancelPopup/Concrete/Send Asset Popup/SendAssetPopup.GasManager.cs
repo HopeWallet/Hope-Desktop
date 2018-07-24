@@ -20,11 +20,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private readonly TMP_InputField gasLimitField,
                                         gasPriceField;
 
-        private BigInteger gasLimit;
-
         private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
         public GasPrice StandardGasPrice { get; set; }
+
+        public BigInteger EstimatedGasPrice { get; private set; }
+
+        public BigInteger EnteredGasPrice { get; private set; }
+
+        public BigInteger EstimatedGasLimit { get; private set; }
+
+        public BigInteger EnteredGasLimit { get; private set; }
+
+        public bool IsValid { get; private set; }
 
         public GasManager(
             TradableAssetManager tradableAssetManager,
@@ -39,15 +47,38 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             this.gasLimitField = gasLimitField;
             this.gasPriceField = gasPriceField;
 
+            AddListenersAndObservables();
             EstimateGasLimit();
+            CheckTransactionSpeedSlider(0.5f);
         }
 
         public void Destroy()
         {
-
+            gasPriceObserver.UnsubscribeObservable(this);
         }
 
         public void OnGasPricesUpdated()
+        {
+        }
+
+        private void AddListenersAndObservables()
+        {
+            gasPriceObserver.SubscribeObservable(this);
+
+            transactionSpeedSlider.onValueChanged.AddListener(CheckTransactionSpeedSlider);
+            gasLimitField.onValueChanged.AddListener(CheckGasLimitField);
+            gasPriceField.onValueChanged.AddListener(CheckGasPriceField);
+        }
+
+        private void CheckGasLimitField(string gasLimit)
+        {
+        }
+
+        private void CheckGasPriceField(string gasPrice)
+        {
+        }
+
+        private void CheckTransactionSpeedSlider(float value)
         {
         }
 
@@ -58,8 +89,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void OnGasLimitReceived(BigInteger limit)
         {
-            gasLimit = limit;
-            UnityEngine.Debug.Log(gasLimit);
+            EstimatedGasLimit = limit;
         }
     }
 }
