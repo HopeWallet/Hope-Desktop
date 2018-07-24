@@ -69,7 +69,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             SendableAmount = maxToggle.IsToggledOn ? MaxSendableAmount : SendableAmount;
 
             amountPlaceholderText.text = maxToggle.IsToggledOn ? SendableAmount.ToString() + " (Max)" : "Enter amount...";
-            amountInputField.text = maxToggle.IsToggledOn || SendableAmount == 0 || string.IsNullOrEmpty(amountInputField.text) ? "" : SendableAmount.ToString();
+            amountInputField.text = SendableAmount.ToString();
+
+            amountInputField.textComponent.enabled = !maxToggle.IsToggledOn;
+            amountPlaceholderText.enabled = maxToggle.IsToggledOn;
 
             amountInputField.interactable = !maxToggle.IsToggledOn;
 
