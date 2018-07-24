@@ -49,17 +49,6 @@ public class HOPETesting : MonoBehaviour
     // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
     // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
 
-    private void Start()
-    {
-        string text = "this is some text";
-        byte[] data = text.GetUTF8Bytes();
-
-        byte[] protectedData = MemoryProtect.Protect(data);
-        byte[] unprotectedData = MemoryProtect.Unprotect(protectedData);
-
-        unprotectedData.GetUTF8String().Log();
-    }
-
     //private void AnonymousStuff()
     //{
     //    var thing = new { Name = "Something", Age = 50 };

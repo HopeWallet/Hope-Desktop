@@ -1,4 +1,5 @@
 ﻿using Org.BouncyCastle.Security;
+using System;
 using System.Security.Cryptography;
 
 namespace Hope.Security.Encryption.DPAPI
@@ -18,8 +19,11 @@ namespace Hope.Security.Encryption.DPAPI
         /// </summary>
         static MemoryProtect()
         {
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+                return;
+
             SecureRandom secureRandom = new SecureRandom();
-            Entropy = SecureRandom.GetNextBytes(secureRandom, 256);
+            Entropy = SecureRandom.GetNextBytes(secureRandom, 128);
 
             ProtectedMemory.Protect(Entropy, MemoryProtectionScope.SameProcess);
         }

@@ -1,5 +1,7 @@
-﻿using Hope.Security.Encryption.Symmetric;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.Encryption.Symmetric;
 using Hope.Security.HashGeneration;
+using System;
 using System.Diagnostics;
 
 /// <summary>
@@ -8,19 +10,21 @@ using System.Diagnostics;
 public sealed class EphemeralEncryption : SecureObject
 {
     private readonly SecureObject[] optionalEncryptors;
+    private readonly bool isWindows;
 
     /// <summary>
     /// Initializes the <see cref="EphemeralEncryption"/> object with no additional encrypting object.
     /// </summary>
     public EphemeralEncryption()
     {
+        isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
     }
 
     /// <summary>
     /// Initializes the <see cref="EphemeralEncryption"/> object with an additional object used to encrypt data.
     /// </summary>
     /// <param name="optionalEncryptors"> The optional instances of <see cref="SecureObject"/> to use to encrypt and decrypt data. </param>
-    public EphemeralEncryption(params SecureObject[] optionalEncryptors)
+    public EphemeralEncryption(params SecureObject[] optionalEncryptors) : this()
     {
         this.optionalEncryptors = optionalEncryptors;
     }
@@ -88,7 +92,8 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Encrypt(byte[] data, string entropy)
     {
-        return AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
+        byte[] aesEncryptedData = AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
+        return isWindows ? MemoryProtect.Protect(aesEncryptedData) : aesEncryptedData;
     }
 
     /// <summary>
@@ -102,6 +107,7 @@ public sealed class EphemeralEncryption : SecureObject
     [ReflectionProtect(typeof(byte[]))]
     public byte[] Decrypt(byte[] encryptedData, string entropy)
     {
+        encryptedData = isWindows ? MemoryProtect.Unprotect(encryptedData) : encryptedData;
         return AesEncryptor.Decrypt(encryptedData, GetEncryptionPassword(entropy));
     }
 
