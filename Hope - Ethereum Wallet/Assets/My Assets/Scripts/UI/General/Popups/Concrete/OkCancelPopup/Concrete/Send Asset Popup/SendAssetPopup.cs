@@ -55,6 +55,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
     }
 
+    private void Update()
+    {
+        bool isValid = Gas.IsValid && Address.IsValid;
+        Debug.Log(isValid);
+    }
+
     private void OnDestroy()
     {
         Asset.Destroy();

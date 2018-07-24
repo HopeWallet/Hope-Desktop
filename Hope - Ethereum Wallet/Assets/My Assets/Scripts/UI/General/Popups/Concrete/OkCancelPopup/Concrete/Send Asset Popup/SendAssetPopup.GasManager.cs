@@ -1,4 +1,5 @@
-﻿using Nethereum.Util;
+﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Util;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -99,8 +100,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckGasPriceField(string gasPrice)
         {
-            gasPriceField.text = RestrictToNumbersAndDots(gasPrice);
-            BigInteger.TryParse(gasPriceField.text, out _enteredGasPrice);
+            gasPriceField.text = RestrictToNumbersAndDots(gasPrice).LimitEnd(8);
+
+            decimal price;
+            decimal.TryParse(gasPriceField.text, out price);
+
+            _enteredGasPrice = GasUtils.GetFunctionalGasPrice(price);
         }
 
         private void CheckTransactionSpeedSlider(float value)
