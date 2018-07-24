@@ -27,7 +27,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         {
             addressField.text = address.LimitEnd(VALID_ADDRESS_LENGTH);
 
-            IsValid = AddressUtils.IsValidEthereumAddress(address);
+            IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
         }
 
     }

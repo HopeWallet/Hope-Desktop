@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
-
     public sealed class AssetManager : IUpdater, IEtherBalanceObservable
     {
         private readonly TradableAssetManager tradableAssetManager;

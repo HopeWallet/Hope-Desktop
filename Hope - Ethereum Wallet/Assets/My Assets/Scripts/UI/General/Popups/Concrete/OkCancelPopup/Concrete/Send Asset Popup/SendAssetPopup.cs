@@ -12,25 +12,17 @@ using Zenject;
 /// </summary>
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
+    [SerializeField] private TMP_InputField addressField;
+    [SerializeField] private TMP_InputField amountField;
+    [SerializeField] private TMP_InputField gasLimitField;
+    [SerializeField] private TMP_InputField gasPriceField;
 
-    // TODO
-    // Create new classes
-    // SendAssetPopupAddressManager
-    // SendAssetPopupAmountManager
-    // Move validation logic to each class
-    // Remove validation logic from SendTokenPopupAnimator
+    [SerializeField] private TMP_Text assetBalance;
+    [SerializeField] private TMP_Text assetSymbol;
 
-    public TMP_InputField addressField,
-                          amountField,
-                          gasLimitField,
-                          gasPriceField;
-
-    public TMP_Text assetBalance,
-                    assetSymbol;
-
-    public Toggle advancedModeToggle;
-    public Image assetImage;
-    public Slider transactionSpeedSlider;
+    [SerializeField] private Toggle advancedModeToggle;
+    [SerializeField] private Image assetImage;
+    [SerializeField] private Slider transactionSpeedSlider;
 
     public AssetManager Asset { get; private set; }
 
@@ -50,7 +42,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     {
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
-
+        Address = new AddressManager(addressField);
+        Amount = new AmountManager();
     }
 
     protected override void Awake()

@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Hope.Utils.EthereumUtils;
 using System.Linq;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
-
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -32,22 +30,7 @@ public class SendTokenPopupAnimator : UIAnimator
     private SendAssetPopup sendAssetPopup;
 
 	private bool advancedMode;
-	private bool validAddress;
 	private bool validAmount;
-
-	/// <summary>
-	/// If the address is valid or not, it animates the error icon in or out
-	/// </summary>
-	public bool ValidAddress
-	{
-		get { return validAddress; }
-		set
-		{
-			validAddress = value;
-			addressSection.transform.GetChild(addressSection.transform.childCount - 1).gameObject
-					.AnimateGraphicAndScale(validAddress ? 0f : 1f, validAddress ? 0f : 1f, 0.2f);
-		}
-	}
 
 	/// <summary>
 	/// If the transaction amount is valid or not, it animates the error icon in or out
@@ -70,7 +53,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	{
         sendAssetPopup = GetComponent<SendAssetPopup>();
 
-		addressInputField.onValueChanged.AddListener(AddressChanged);
+		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid));
 		amountInputField.onValueChanged.AddListener(AmountChanged);
 		gasLimitInputField.onValueChanged.AddListener(GasLimitChanged);
 		gasPriceInputField.onValueChanged.AddListener(GasPriceChanged);
@@ -120,22 +103,6 @@ public class SendTokenPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Checks to see if the address is the correct length, and a valid address
-	/// </summary>
-	/// <param name="address"> The address string in the address input field </param>
-	private void AddressChanged(string address)
-	{
-		if (!AddressUtils.CorrectAddressLength(address))
-			addressInputField.text = address.LimitEnd(42);
-
-		string updatedAddress = addressInputField.text;
-
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
-
-		SetSendButtonInteractable();
-	}
-
-	/// <summary>
 	/// Limits the user from typing anything other than numbers and/or a dot
 	/// </summary>
 	/// <param name="amount"> The string in the amount input field </param>
@@ -176,7 +143,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	/// </summary>
 	private void SetSendButtonInteractable()
 	{
-		bool interactable = !string.IsNullOrEmpty(addressInputField.text) && !string.IsNullOrEmpty(amountInputField.text) && validAddress && validAmount;
+		bool interactable = !string.IsNullOrEmpty(addressInputField.text) && !string.IsNullOrEmpty(amountInputField.text) && sendAssetPopup.Address.IsValid && validAmount;
 
 		if (advancedMode && (string.IsNullOrEmpty(gasLimitInputField.text) || string.IsNullOrEmpty(gasPriceInputField.text)))
 			interactable = false;
@@ -230,6 +197,11 @@ public class SendTokenPopupAnimator : UIAnimator
 				() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
 				() => Animating = false));
 	}
+
+    private void AnimateFieldError(GameObject sectionObj, bool isValidField)
+    {
+        sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValidField ? 0f : 1f, isValidField ? 0f : 1f, 0.2f);
+    }
 
 	/// <summary>
 	/// Maximum amount is toggled
