@@ -32,19 +32,11 @@ public abstract class ConfirmTransactionRequestPopup<T> : OkCancelPopupComponent
         InternalSetConfirmationValues(transactionInput);
     }
 
-    /// <summary>
-    /// Passes the transaction input to the class inheriting this ConfirmTransactionRequestPopup so the confirmation can be displayed.
-    /// </summary>
-    /// <param name="transactionInput"> The transaction input to confirm. </param>
-    protected abstract void InternalSetConfirmationValues(object[] transactionInput);
-
-    /// <summary>
-    /// Initializes the component by getting all required components used to display the transaction info.
-    /// </summary>
-    protected override void OnStart()
-    {
-        new CountdownTimer(time => timerText.text = time.ToString(), () => { okButton.interactable = true; timerText.text = ""; }, 5f, 1f).StartCountdown();
-    }
+	/// <summary>
+	/// Passes the transaction input to the class inheriting this ConfirmTransactionRequestPopup so the confirmation can be displayed.
+	/// </summary>
+	/// <param name="transactionInput"> The transaction input to confirm. </param>
+	protected abstract void InternalSetConfirmationValues(object[] transactionInput);
 
     /// <summary>
     /// Called when the confirm button is clicked, which executes the transfer of the asset.
