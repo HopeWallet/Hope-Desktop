@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Nethereum.Util;
+using System;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +28,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
+        public decimal TransactionCost
+        {
+            get
+            {
+                BigInteger gasLimit = advancedModeToggle.IsToggledOn ? EnteredGasLimit : EstimatedGasLimit;
+                BigInteger gasPrice = advancedModeToggle.IsToggledOn ? EnteredGasPrice.FunctionalGasPrice.Value : EstimatedGasPrice.FunctionalGasPrice.Value;
+
+                return UnitConversion.Convert.FromWei(gasLimit * gasPrice);
+            }
+        }
+
+        public bool IsValid => TransactionCost != 0;
+
         public GasPrice StandardGasPrice { get; set; }
 
         public GasPrice EstimatedGasPrice => new GasPrice(_estimatedGasPrice);
@@ -39,8 +50,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         public BigInteger EstimatedGasLimit => _estimatedGasLimit;
 
         public BigInteger EnteredGasLimit => _enteredGasLimit;
-
-        public bool IsValid { get; private set; }
 
         public GasManager(
             TradableAssetManager tradableAssetManager,
@@ -96,8 +105,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckTransactionSpeedSlider(float value)
         {
-            _estimatedGasPrice = new BigInteger((decimal)Mathf.Lerp(0.25f, 4f, value) * (decimal)StandardGasPrice.FunctionalGasPrice.Value);
-            Debug.Log(EstimatedGasPrice.ReadableGasPrice + " Gwei => " + StandardGasPrice.ReadableGasPrice + " Gwei");
+            decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.5f, 1.5f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.5f), 2, MidpointRounding.AwayFromZero);
+            _estimatedGasPrice = new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value);
+
             OnGasPricesUpdated();
         }
 
