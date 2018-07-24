@@ -1,9 +1,4 @@
 ﻿using Hope.Utils.EthereumUtils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
@@ -29,6 +24,5 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
             IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
         }
-
     }
 }

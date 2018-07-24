@@ -2233,6 +2233,7 @@ MonoBehaviour:
   assetBalance: {fileID: 114821952128224854}
   assetSymbol: {fileID: 114972956831463810}
   advancedModeToggle: {fileID: 114772791688704820}
+  maxToggle: {fileID: 114338446119812900}
   assetImage: {fileID: 114155704206949664}
   transactionSpeedSlider: {fileID: 114247633352688526}
 --- !u!114 &114245874906713646

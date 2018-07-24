@@ -8,5 +8,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 {
     public sealed class AmountManager
     {
+
+        private Toggle maxToggle;
+
+        public AmountManager(Toggle maxToggle)
+        {
+            this.maxToggle = maxToggle;
+        }
+
     }
 }

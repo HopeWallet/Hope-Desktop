@@ -21,6 +21,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private TMP_Text assetSymbol;
 
     [SerializeField] private Toggle advancedModeToggle;
+    [SerializeField] private Toggle maxToggle;
+
     [SerializeField] private Image assetImage;
     [SerializeField] private Slider transactionSpeedSlider;
 
@@ -41,9 +43,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         UpdateManager updateManager)
     {
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-        Gas = new GasManager(tradableAssetManager, gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
+        Gas = new GasManager(tradableAssetManager, gasPriceObserver, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField);
         Address = new AddressManager(addressField);
-        Amount = new AmountManager();
+        Amount = new AmountManager(maxToggle);
     }
 
     protected override void Awake()
