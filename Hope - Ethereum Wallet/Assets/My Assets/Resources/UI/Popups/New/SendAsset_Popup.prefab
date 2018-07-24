@@ -4768,11 +4768,7 @@ MonoBehaviour:
   gasPriceSection: {fileID: 1191577394885134}
   transactionSpeedSection: {fileID: 1102910242910042}
   addressInputField: {fileID: 114631005458636982}
-  amountInputField: {fileID: 114184388491262814}
-  gasLimitInputField: {fileID: 114223424530932108}
-  gasPriceInputField: {fileID: 114084049358666468}
   advancedModeToggle: {fileID: 1298930853387788}
-  maxToggle: {fileID: 1220179074603582}
   sendButton: {fileID: 1850029874131590}
 --- !u!114 &114837457906426732
 MonoBehaviour:
