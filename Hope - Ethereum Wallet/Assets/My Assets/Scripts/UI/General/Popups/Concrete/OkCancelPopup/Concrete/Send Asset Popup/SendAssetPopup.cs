@@ -41,7 +41,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         UpdateManager updateManager)
     {
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-        Gas = new GasManager(gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
+        Gas = new GasManager(tradableAssetManager, gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
         Address = new AddressManager(addressField);
         Amount = new AmountManager();
     }
