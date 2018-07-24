@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Linq;
 
 public class SendTokenPopupAnimator : UIAnimator
 {
@@ -30,21 +29,6 @@ public class SendTokenPopupAnimator : UIAnimator
     private SendAssetPopup sendAssetPopup;
 
 	private bool advancedMode;
-	private bool validAmount;
-
-	/// <summary>
-	/// If the transaction amount is valid or not, it animates the error icon in or out
-	/// </summary>
-	public bool ValidAmount
-	{
-		get { return validAmount; }
-		set
-		{
-			validAmount = value;
-			amountSection.transform.GetChild(amountSection.transform.childCount - 1).gameObject
-				.AnimateGraphicAndScale(validAmount ? 0f : 1f, validAmount ? 0f : 1f, 0.2f);
-		}
-	}
 
 	/// <summary>
 	/// Initializes the button and input field listeners
@@ -54,9 +38,7 @@ public class SendTokenPopupAnimator : UIAnimator
         sendAssetPopup = GetComponent<SendAssetPopup>();
 
 		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid));
-		amountInputField.onValueChanged.AddListener(AmountChanged);
-		gasLimitInputField.onValueChanged.AddListener(GasLimitChanged);
-		gasPriceInputField.onValueChanged.AddListener(GasPriceChanged);
+		amountInputField.onValueChanged.AddListener(_ => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid));
 
 		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 		maxToggle.transform.GetComponent<Toggle>().AddToggleListener(MaxClicked);
@@ -92,78 +74,31 @@ public class SendTokenPopupAnimator : UIAnimator
 		addressSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f));
 
-		if (advancedMode)
-		{
-			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-			gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-		}
+        if (advancedMode)
+        {
+            gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+            gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+        }
 
-		else
-			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-	}
-
-	/// <summary>
-	/// Limits the user from typing anything other than numbers and/or a dot
-	/// </summary>
-	/// <param name="amount"> The string in the amount input field </param>
-	private void AmountChanged(string amount)
-	{
-		amountInputField.text = GetNumbersAndDotsOnly(amountInputField.text);
-
-		if (!string.IsNullOrEmpty(amount))
-			ValidAmount = amount.Substring(0, 1) != "." && amount.Count(c => c == '.') <= 1 && amount.Substring(amount.Length - 1, 1) != ".";
-		else
-			ValidAmount = true;
-
-		SetSendButtonInteractable();
-	}
-
-    /// <summary>
-    /// Limits the user from typing anything other than numbers
-    /// </summary>
-    /// <param name="gasLimit"> The string in the gas limit input field </param>
-    private void GasLimitChanged(string gasLimit)
-	{
-		gasLimitInputField.text = GetNumbersOnly(gasLimitInputField.text);
-		SetSendButtonInteractable();
-	}
-
-    /// <summary>
-    /// Limits the user from typing anything other than numbers
-    /// </summary>
-    /// <param name="gasPrice"> The string in the gas price input field </param>
-    private void GasPriceChanged(string gasPrice)
-	{
-		gasPriceInputField.text = GetNumbersAndDotsOnly(gasPriceInputField.text);
-		SetSendButtonInteractable();
-	}
+        else
+        {
+            transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+        }
+    }
 
 	/// <summary>
 	/// Sets the send button to interactable if all the input fields are filled in and valid
 	/// </summary>
 	private void SetSendButtonInteractable()
 	{
-		bool interactable = !string.IsNullOrEmpty(addressInputField.text) && !string.IsNullOrEmpty(amountInputField.text) && sendAssetPopup.Address.IsValid && validAmount;
+		bool interactable = !string.IsNullOrEmpty(addressInputField.text) && !string.IsNullOrEmpty(amountInputField.text)
+            && sendAssetPopup.Address.IsValid && sendAssetPopup.Amount.IsValid;
 
 		if (advancedMode && (string.IsNullOrEmpty(gasLimitInputField.text) || string.IsNullOrEmpty(gasPriceInputField.text)))
 			interactable = false;
 
 		sendButton.GetComponent<Button>().interactable = interactable;
 	}
-
-	/// <summary>
-	/// Returns a string with only digits
-	/// </summary>
-	/// <param name="oldString"> The string being changed </param>
-	/// <returns></returns>
-	private string GetNumbersOnly(string oldString) => new string(oldString.Where(c => char.IsDigit(c)).ToArray());
-
-	/// <summary>
-	/// Returns a string with only digits and periods
-	/// </summary>
-	/// <param name="oldString"> The string being changed </param>
-	/// <returns></returns>
-	private string GetNumbersAndDotsOnly(string oldString) => new string(oldString.Where(c => char.IsDigit(c) || c == '.').ToArray());
 
 	/// <summary>
 	/// Advanced mode is toggled

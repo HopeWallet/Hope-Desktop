@@ -45,19 +45,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField);
         Address = new AddressManager(addressField);
-        Amount = new AmountManager(maxToggle);
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-
+        Amount = new AmountManager(this, tradableAssetManager, maxToggle, amountField);
     }
 
     private void Update()
     {
-        bool isValid = Gas.IsValid && Address.IsValid;
+        bool isValid = Gas.IsValid && Address.IsValid && Amount.IsValid;
         Debug.Log(isValid);
     }
 

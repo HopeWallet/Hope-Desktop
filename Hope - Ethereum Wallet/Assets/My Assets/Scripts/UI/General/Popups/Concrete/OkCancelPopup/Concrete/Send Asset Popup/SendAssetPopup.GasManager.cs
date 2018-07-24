@@ -11,7 +11,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 {
     public sealed class GasManager : IStandardGasPriceObservable
     {
-
         private readonly TradableAssetManager tradableAssetManager;
         private readonly GasPriceObserver gasPriceObserver;
 
