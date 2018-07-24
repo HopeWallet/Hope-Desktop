@@ -126,7 +126,7 @@ public class SendTokenPopupAnimator : UIAnimator
 
 		string updatedAddress = addressInputField.text;
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress);
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 
 		SetSendButtonInteractable();
 	}
@@ -137,7 +137,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	/// <param name="amount"> The string in the amount input field </param>
 	private void AmountChanged(string amount)
 	{
-		amountInputField.text = NumbersAndDotsOnly(amountInputField.text);
+		amountInputField.text = GetNumbersAndDotsOnly(amountInputField.text);
 
 		if (!string.IsNullOrEmpty(amount))
 			ValidAmount = amount.Substring(0, 1) != "." && amount.Count(c => c == '.') <= 1 && amount.Substring(amount.Length - 1, 1) != ".";
@@ -147,23 +147,23 @@ public class SendTokenPopupAnimator : UIAnimator
 		SetSendButtonInteractable();
 	}
 
-	/// <summary>
-	/// Limits the user from typing anything other than numbers
-	/// </summary>
-	/// <param name="amount"> The string in the gas limit input field </param>
-	private void GasLimitChanged(string gasLimit)
+    /// <summary>
+    /// Limits the user from typing anything other than numbers
+    /// </summary>
+    /// <param name="gasLimit"> The string in the gas limit input field </param>
+    private void GasLimitChanged(string gasLimit)
 	{
 		gasLimitInputField.text = GetNumbersOnly(gasLimitInputField.text);
 		SetSendButtonInteractable();
 	}
 
-	/// <summary>
-	/// Limits the user from typing anything other than numbers
-	/// </summary>
-	/// <param name="amount"> The string in the gas price input field </param>
-	private void GasPriceChanged(string gasPrice)
+    /// <summary>
+    /// Limits the user from typing anything other than numbers
+    /// </summary>
+    /// <param name="gasPrice"> The string in the gas price input field </param>
+    private void GasPriceChanged(string gasPrice)
 	{
-		gasPriceInputField.text = GetNumbersOnly(gasPriceInputField.text);
+		gasPriceInputField.text = GetNumbersAndDotsOnly(gasPriceInputField.text);
 		SetSendButtonInteractable();
 	}
 
@@ -192,7 +192,7 @@ public class SendTokenPopupAnimator : UIAnimator
 	/// </summary>
 	/// <param name="oldString"> The string being changed </param>
 	/// <returns></returns>
-	private string NumbersAndDotsOnly(string oldString) => new string(oldString.Where(c => char.IsDigit(c) || c == '.').ToArray());
+	private string GetNumbersAndDotsOnly(string oldString) => new string(oldString.Where(c => char.IsDigit(c) || c == '.').ToArray());
 
 	/// <summary>
 	/// Advanced mode is toggled

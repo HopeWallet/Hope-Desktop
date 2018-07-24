@@ -17,6 +17,8 @@ public sealed class SendAssetPopupAssetManager : IUpdater, IEtherBalanceObservab
 
     public dynamic ActiveAssetBalance { get { return tradableAssetManager.ActiveTradableAsset.AssetBalance; } }
 
+    public TradableAsset ActiveAsset { get { return tradableAssetManager.ActiveTradableAsset; } }
+
     public SendAssetPopupAssetManager(
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
@@ -42,7 +44,7 @@ public sealed class SendAssetPopupAssetManager : IUpdater, IEtherBalanceObservab
         UpdateBalance();
     }
 
-    public void Close()
+    public void Destroy()
     {
         updateManager.RemoveUpdater(this);
         etherBalanceObserver.UnsubscribeObservable(this);

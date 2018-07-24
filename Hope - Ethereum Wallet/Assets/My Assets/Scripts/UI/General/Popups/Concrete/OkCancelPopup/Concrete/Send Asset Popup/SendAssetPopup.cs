@@ -24,7 +24,10 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
     public Image assetImage;
     public Slider transactionSpeedSlider;
 
+    private SendTokenPopupAnimator sendAssetPopupAnimator;
+
     private SendAssetPopupAssetManager assetManager;
+    private SendAssetPopupGasManager gasManager;
 
     public GasPrice StandardGasPrice { get; set; }
 
@@ -33,19 +36,23 @@ public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ISt
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         EtherBalanceObserver etherBalanceObserver,
+        GasPriceObserver gasPriceObserver,
         UpdateManager updateManager)
     {
         assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
+        gasManager = new SendAssetPopupGasManager(gasPriceObserver, transactionSpeedSlider, gasLimitField, gasPriceField);
+
     }
 
     protected override void OnStart()
     {
-
+        sendAssetPopupAnimator = GetComponent<SendTokenPopupAnimator>();
     }
 
     private void OnDestroy()
     {
-        assetManager.Close();
+        assetManager.Destroy();
+        gasManager.Destroy();
     }
 
     public void OnGasPricesUpdated()
