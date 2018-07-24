@@ -28,6 +28,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private BigInteger estimatedGasLimit,
                            enteredGasLimit;
 
+        private Action onGasChanged;
+
+        private const int GAS_FIELD_MAX_LENGTH = 8;
         private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
         public float UpdateInterval => 10f;
@@ -79,6 +82,16 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         {
             if (!advancedModeToggle.IsToggledOn)
                 gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
+
+            onGasChanged?.Invoke();
+        }
+
+        public void AddGasListener(Action gasChanged)
+        {
+            if (onGasChanged == null)
+                onGasChanged = gasChanged;
+            else
+                onGasChanged += gasChanged;
         }
 
         private void AddListenersAndObservables()
@@ -93,26 +106,22 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckGasLimitField(string gasLimit)
         {
-            gasLimit = RestrictToNumbers(gasLimit);
+            BigInteger.TryParse(gasLimit, out enteredGasLimit);
+            gasLimitField.text = RestrictToNumbers(gasLimit).LimitEnd(GAS_FIELD_MAX_LENGTH);
 
-            BigInteger newGasLimit;
-            BigInteger.TryParse(gasLimit, out newGasLimit);
-
-            if (!string.IsNullOrEmpty(gasLimitField.text) && advancedModeToggle.IsToggledOn && newGasLimit <= enteredGasLimit)
-                return;
-
-            gasLimitField.text = gasLimit;
-            enteredGasLimit = newGasLimit;
+            onGasChanged?.Invoke();
         }
 
         private void CheckGasPriceField(string gasPrice)
         {
-            gasPriceField.text = RestrictToNumbersAndDots(gasPrice).LimitEnd(8);
+            gasPriceField.text = RestrictToNumbersAndDots(gasPrice).LimitEnd(GAS_FIELD_MAX_LENGTH);
 
             decimal price;
             decimal.TryParse(gasPriceField.text, out price);
 
             enteredGasPrice = new GasPrice(GasUtils.GetFunctionalGasPrice(price));
+
+            onGasChanged?.Invoke();
         }
 
         private void CheckTransactionSpeedSlider(float value)
@@ -131,7 +140,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private void OnGasLimitReceived(BigInteger limit)
         {
             estimatedGasLimit = limit;
-            CheckGasLimitField(limit.ToString());
+
+            if (string.IsNullOrEmpty(gasLimitField.text) || !advancedModeToggle.IsToggledOn || limit > enteredGasLimit)
+                CheckGasLimitField(limit.ToString());
         }
 
         private string RestrictToNumbers(string str) => new string(str.Where(c => char.IsDigit(c)).ToArray());

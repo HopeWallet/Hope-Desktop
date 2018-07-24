@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine.UI;
 
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
@@ -15,11 +16,16 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private readonly Image assetImage;
 
+        private dynamic lastEtherBalance,
+                        lastAssetBalance;
+
+        private Action onAssetBalanceChanged;
+
         public dynamic EtherBalance { get; set; }
 
-        public dynamic ActiveAssetBalance { get { return tradableAssetManager.ActiveTradableAsset.AssetBalance; } }
+        public dynamic ActiveAssetBalance => ActiveAsset.AssetBalance;
 
-        public TradableAsset ActiveAsset { get { return tradableAssetManager.ActiveTradableAsset; } }
+        public TradableAsset ActiveAsset => tradableAssetManager.ActiveTradableAsset;
 
         public AssetManager(
             TradableAssetManager tradableAssetManager,
@@ -52,6 +58,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             etherBalanceObserver.UnsubscribeObservable(this);
         }
 
+        public void AddAssetBalanceListener(Action onBalanceChanged)
+        {
+            if (onAssetBalanceChanged == null)
+                onAssetBalanceChanged = onBalanceChanged;
+            else
+                onAssetBalanceChanged += onBalanceChanged;
+        }
+
         private void Start()
         {
             StartUpdaters();
@@ -66,7 +80,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             etherBalanceObserver.SubscribeObservable(this);
         }
 
-        private void UpdateBalance() => assetBalance.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance.ToString(), 14, "...");
+        private void UpdateBalance()
+        {
+            var newAssetBalance = tradableAssetManager.ActiveTradableAsset.AssetBalance;
+            var newEtherBalance = EtherBalance;
+
+            assetBalance.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance.ToString(), 14, "...");
+
+            if (lastAssetBalance != newAssetBalance || lastEtherBalance != newEtherBalance)
+                onAssetBalanceChanged?.Invoke();
+
+            lastAssetBalance = newAssetBalance;
+            lastEtherBalance = newEtherBalance;
+        }
 
         private void UpdateSymbol() => assetSymbol.text = tradableAssetManager.ActiveTradableAsset.AssetSymbol;
 
