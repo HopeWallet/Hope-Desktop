@@ -301,12 +301,7 @@
   },
   {
     "address": "0xd94F2778e2B3913C53637Ae60647598bE588c570",
-    "symbol": "PRPS (1)",
-    "decimal": 18
-  },
-  {
-    "address": "0x7641b2Ca9DDD58adDf6e3381c1F994Aac5f1A32f",
-    "symbol": "PRPS (2)",
+    "symbol": "PRPS",
     "decimal": 18
   },
   {
@@ -750,13 +745,8 @@
     "decimal": 12
   },
   {
-    "address": "0xD4CffeeF10F60eCA581b5E1146B5Aca4194a4C3b",
-    "symbol": "DUBI (1)",
-    "decimal": 18
-  },
-  {
     "address": "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c",
-    "symbol": "DUBI (2)",
+    "symbol": "DUBI",
     "decimal": 18
   },
   {

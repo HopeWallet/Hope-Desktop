@@ -51,6 +51,13 @@ public class HOPETesting : MonoBehaviour
 
     private void Start()
     {
+        string text = "this is some text";
+        byte[] data = text.GetUTF8Bytes();
+
+        byte[] protectedData = MemoryProtect.Protect(data);
+        byte[] unprotectedData = MemoryProtect.Unprotect(protectedData);
+
+        unprotectedData.GetUTF8String().Log();
     }
 
     //private void AnonymousStuff()
