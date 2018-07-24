@@ -10,40 +10,54 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public sealed class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, IStandardGasPriceObservable, IEtherBalanceObservable
+public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
-    public TMP_InputField addressField,
-                          amountField,
-                          gasLimitField,
-                          gasPriceField;
+    [SerializeField] private TMP_InputField addressField;
+    [SerializeField] private TMP_InputField amountField;
+    [SerializeField] private TMP_InputField gasLimitField;
+    [SerializeField] private TMP_InputField gasPriceField;
 
-    public TMP_Text assetBalance,
-                    assetSymbol;
+    [SerializeField] private TMP_Text assetBalance;
+    [SerializeField] private TMP_Text assetSymbol;
 
-    public Toggle advancedModeToggle;
-    public Image assetImage;
-    public Slider transactionSpeedSlider;
+    [SerializeField] private Toggle advancedModeToggle;
+    [SerializeField] private Toggle maxToggle;
 
-    private SendAssetPopupAssetManager assetManager;
+    [SerializeField] private Image assetImage;
+    [SerializeField] private Slider transactionSpeedSlider;
 
-    public GasPrice StandardGasPrice { get; set; }
+    public AssetManager Asset { get; private set; }
 
-    public dynamic EtherBalance { get; set; }
+    public AmountManager Amount { get; private set; }
+
+    public AddressManager Address { get; private set; }
+
+    public GasManager Gas { get; private set; }
 
     [Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
-        TradableAssetImageManager tradableAssetImageManager)
+        TradableAssetImageManager tradableAssetImageManager,
+        EtherBalanceObserver etherBalanceObserver,
+        GasPriceObserver gasPriceObserver,
+        UpdateManager updateManager,
+        PeriodicUpdateManager periodicUpdateManager)
     {
-        assetManager = new SendAssetPopupAssetManager(tradableAssetManager, tradableAssetImageManager, assetSymbol, assetBalance, assetImage);
+        Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
+        Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField);
+        Address = new AddressManager(addressField);
+        Amount = new AmountManager(this, tradableAssetManager, maxToggle, transactionSpeedSlider, amountField);
     }
 
-    protected override void OnStart()
+    private void Update()
     {
-
+        //bool isValid = Gas.IsValid && Address.IsValid && Amount.IsValid;
+        //Debug.Log(isValid);
     }
 
-    public void OnGasPricesUpdated()
+    private void OnDestroy()
     {
+        Asset.Destroy();
+        Gas.Destroy();
     }
 }

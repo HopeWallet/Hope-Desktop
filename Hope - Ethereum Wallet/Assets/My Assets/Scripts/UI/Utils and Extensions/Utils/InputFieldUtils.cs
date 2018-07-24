@@ -47,26 +47,26 @@ public static class InputFieldUtils
     /// <param name="activeTradableAsset"> The active tradable asset. </param>
     public static void RestrictToBalance(this TMP_InputField inputField, TradableAsset activeTradableAsset)
     {
-        var sendAmount = inputField.text;
+        string amount = inputField.text;
 
-        if (sendAmount == null)
+        if (amount == null)
             return;
 
-        sendAmount = new string(sendAmount.Where(c => char.IsDigit(c) || c == '.').ToArray());
-        inputField.text = sendAmount;
+        amount = new string(amount.Where(c => char.IsDigit(c) || c == '.').ToArray());
+        inputField.text = amount;
 
         var decimals = activeTradableAsset.AssetDecimals;
-        var decimalIndex = sendAmount.IndexOf(".");
+        var decimalIndex = amount.IndexOf(".");
         var assetDecimalLength = decimals + decimalIndex + 1;
 
         if (decimals == 0 && decimalIndex != -1)
-            sendAmount = sendAmount.Substring(0, sendAmount.Length - 1);
+            amount = amount.Substring(0, amount.Length - 1);
 
         var substringLength = assetDecimalLength > MAX_BALANCE_FIELD_LENGTH || decimalIndex == -1 ? MAX_BALANCE_FIELD_LENGTH : assetDecimalLength;
-        if (sendAmount.Length > substringLength)
-            sendAmount = sendAmount.Substring(0, substringLength);
+        if (amount.Length > substringLength)
+            amount = amount.Substring(0, substringLength);
 
-        inputField.text = sendAmount;
+        inputField.text = amount;
     }
 
     /// <summary>

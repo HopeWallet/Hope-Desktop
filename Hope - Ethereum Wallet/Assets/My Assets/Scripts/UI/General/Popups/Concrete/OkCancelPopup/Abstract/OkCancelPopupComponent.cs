@@ -1,16 +1,14 @@
-﻿using UnityEngine.UI;
-using Zenject;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class which is a base for all popups that have the Ok/Yes and Cancel/No options, or any variation of those words.
 /// </summary>
+/// <typeparam name="T"> The type of the OkCancelPopupComponent. </typeparam>
 public abstract class OkCancelPopupComponent<T> : FactoryPopup<T> where T : FactoryPopup<T>
 {
-
-    public Button okButton,
-              cancelButton;
-
-    protected PopupManager popupManager;
+    [SerializeField] protected Button okButton;
+    [SerializeField] protected Button cancelButton;
 
     /// <summary>
     /// Initializes the popup by getting the button components and setting up their click events.
@@ -40,13 +38,6 @@ public abstract class OkCancelPopupComponent<T> : FactoryPopup<T> where T : Fact
         ExitPopup();
         OnCancelClicked();
     }
-
-    /// <summary>
-    /// Injects the PopupManager dependencies into this popup.
-    /// </summary>
-    /// <param name="popupManager"> The active PopupManager to use. </param>
-    [Inject]
-    public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
 
     /// <summary>
     /// Exits the popup by destroying this popup object.
