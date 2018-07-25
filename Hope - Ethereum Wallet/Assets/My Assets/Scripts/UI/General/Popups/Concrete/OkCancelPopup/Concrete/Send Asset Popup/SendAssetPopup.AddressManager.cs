@@ -11,6 +11,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         public bool IsValid { get; private set; }
 
+        public string SendAddress { get { return addressField.text; } }
+
         public AddressManager(TMP_InputField addressField)
         {
             this.addressField = addressField;

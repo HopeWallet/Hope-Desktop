@@ -97,6 +97,5 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private void UpdateSymbol() => assetSymbol.text = tradableAssetManager.ActiveTradableAsset.AssetSymbol;
 
         private void UpdateImage() => tradableAssetImageManager.LoadImage(tradableAssetManager.ActiveTradableAsset.AssetSymbol, img => assetImage.sprite = img);
-
     }
 }
