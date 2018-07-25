@@ -136,13 +136,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <param name="newMenu"> The new menu to enable. </param>
     private void EnableNewMenu(Menu newMenu)
     {
-        if (menus.Count > 0)
-        {
-            var topCanvas = newMenu.GetComponent<Canvas>();
-            var previousCanvas = menus.Peek().GetComponent<Canvas>();
-            topCanvas.sortingOrder = previousCanvas.sortingOrder + 1;
-        }
-
         menus.Push(newMenu);
 
         newMenu.gameObject.SetActive(true);

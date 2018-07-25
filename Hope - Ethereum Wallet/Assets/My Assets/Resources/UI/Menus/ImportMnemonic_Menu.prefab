@@ -7177,7 +7177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91eae7bf275500a48b04c8efa7c0fb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1099519179730166}
   form1: {fileID: 1549816745511152}
   backButton1: {fileID: 1442137658739292}

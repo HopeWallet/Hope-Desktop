@@ -4,6 +4,7 @@ using Zenject;
 /// <summary>
 /// Base class for different GUI components used to unlock or create the wallet.
 /// </summary>
+/// <typeparam name="T"> The type of the class responsible for loading the wallet via create or unlock. </typeparam>
 public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
 {
 

@@ -44,7 +44,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 			wordInputFields[i] = passphrase.transform.GetChild(i).gameObject;
 			wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(1).gameObject;
 
-			wordInputFields[i].GetComponent<TMP_InputField>().onValueChanged.AddListener((str) => SetButtonInteractable());
+			wordInputFields[i].GetComponent<TMP_InputField>().onValueChanged.AddListener(_ => SetButtonInteractable());
 		}
 
 		dropdownComponent = wordCountDropdown.GetComponent<TMP_Dropdown>();
@@ -214,7 +214,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		for (int i = 0; i < wordCount; i++)
 		{
-			if (wordInputFields[i].GetComponent<TMP_InputField>().text == "")
+			if (string.IsNullOrEmpty(wordInputFields[i].GetComponent<TMP_InputField>().text))
 			{
 				importButtonComponent.interactable = false;
 				return;
