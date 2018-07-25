@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
+public class ConfirmSendAssetPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
@@ -11,6 +11,7 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject toAddressSection;
 	[SerializeField] private GameObject transactionSection;
 	[SerializeField] private GameObject feeSection;
+	[SerializeField] private GameObject loadingIcon;
 
 	/// <summary>
 	/// Initializes the button listeners
@@ -55,6 +56,20 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 			() => toAddressSection.AnimateScaleX(0f, 0.15f,
 			() => tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)))));
+
+		if (loadingIcon.activeInHierarchy)
+		{
+			loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
+			loadingIcon.SetActive(false);
+		}
 	}
 
+	/// <summary>
+	/// Confirm button is clicked and it animates the loading icon
+	/// </summary>
+	private void ConfirmButtonClicked()
+	{
+		loadingIcon.SetActive(true);
+		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
+	}
 }
