@@ -36,12 +36,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224757384362255162}
-  - component: {fileID: 114070044521840954}
-  - component: {fileID: 114958510323873022}
   - component: {fileID: 223806836458041950}
   - component: {fileID: 114563858186012590}
+  - component: {fileID: 114070044521840954}
+  - component: {fileID: 114543169484528198}
   m_Layer: 0
-  m_Name: ConfirmTransaction_Popup
+  m_Name: SendAssetConfirmation_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1476,6 +1476,26 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114543169484528198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062839745798890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc318f2e11b12ee459b16a302d50ba92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114818847430707120}
+  cancelButton: {fileID: 114271476612975718}
+  assetImage: {fileID: 114045478672242322}
+  amountText: {fileID: 114825318455265160}
+  fromAddress: {fileID: 114436476729827620}
+  toAddress: {fileID: 114569377988228752}
+  walletName: {fileID: 114594866939872716}
+  contactName: {fileID: 114394375747942628}
+  feeText: {fileID: 114362594219329786}
 --- !u!114 &114563858186012590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2160,24 +2180,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114958510323873022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1062839745798890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ca36a8abdd2cc748a602eec6f880db2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walletName: {fileID: 114594866939872716}
-  fromAddress: {fileID: 114436476729827620}
-  contactName: {fileID: 114394375747942628}
-  toAddress: {fileID: 114569377988228752}
-  transaction: {fileID: 114825318455265160}
-  fee: {fileID: 114845359083868652}
-  confirmButton: {fileID: 114818847430707120}
 --- !u!222 &222039278916148502
 CanvasRenderer:
   m_ObjectHideFlags: 1

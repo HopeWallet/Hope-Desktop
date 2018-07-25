@@ -109,24 +109,6 @@ namespace Hope.Utils.EthereumUtils
 
             signedUnityRequest.CheckTransactionRequest(() => signedUnityRequest.WaitForTransactionMining(network, onTransactionMined));
         }
-
-        /// <summary>
-        /// Estimates the gas limit of a certain function of a contract.
-        /// </summary>
-        /// <param name="function"> The function to estimate the gas limit for. </param>
-        /// <param name="callerAddress"> The address of the one calling this function. </param>
-        /// <param name="onGasReceived"> Callback which executes an action with the gas limit as a parameter. </param>
-        /// <param name="input"> The input of the function. </param>
-        /// <returns> The time taken to retrieve the estimated gas limit. </returns>
-        private static IEnumerator _EstimateGasCoroutine(Function function, string callerAddress, Action<HexBigInteger> onGasReceived, params object[] input)
-        {
-            var request = new EthEstimateGasUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
-
-            yield return request.SendRequest(function.CreateTransactionInput(callerAddress, input));
-
-            request.CheckTransactionRequest(() => onGasReceived(request.Result));
-        }
-
     }
 
 }

@@ -1,6 +1,5 @@
 ﻿using Nethereum.Hex.HexTypes;
 using System;
-using UnityEngine.UI;
 
 /// <summary>
 /// Base class used for confirming transaction requests.
@@ -8,8 +7,6 @@ using UnityEngine.UI;
 /// <typeparam name="T"> The type of the request to confirm. </typeparam>
 public abstract class ConfirmTransactionRequestPopup<T> : OkCancelPopupComponent<T> where T : FactoryPopup<T>
 {
-
-    public Text timerText;
 
     private Action onConfirmPressed;
 

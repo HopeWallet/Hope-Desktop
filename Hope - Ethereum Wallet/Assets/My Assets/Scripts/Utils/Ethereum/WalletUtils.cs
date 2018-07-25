@@ -101,7 +101,5 @@ namespace Hope.Utils.EthereumUtils
             signedUnityRequest.CheckTransactionRequest(() => signedUnityRequest.WaitForTransactionMining(networkUrl, ()
                 => Debug.Log("Successfully sent " + amount + " Ether to address " + addressTo)));
         }
-
     }
-
 }

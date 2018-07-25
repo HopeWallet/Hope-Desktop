@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <returns> True if the string is of correct length. </returns>
-        public static bool CorrectAddressLength(string address) => address.Length == 42;
+        public static bool CorrectAddressLength(string address) => address.Length == ADDRESS_LENGTH;
 
         /// <summary>
         /// Checks if the input <see langword="string"/> has the correct beginning characters to be an ethereum address.
@@ -43,16 +43,16 @@
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <returns> True if the <see langword="string"/> has all hex characters. </returns>
-        private static bool CorrectAddressCharacters(string contractAddress)
+        private static bool CorrectAddressCharacters(string address)
         {
-            for (int i = CORRECT_ADDRESS_START.Length; i < contractAddress.Length; i++)
+            for (int i = CORRECT_ADDRESS_START.Length; i < address.Length; i++)
             {
-                var c = contractAddress[i];
+                var c = address[i];
 
-                if (!(c >= '0' && c <= '9' ||
-                      c >= 'a' && c <= 'f' ||
-                      c >= 'A' && c <= 'F'))
+                if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+                {
                     return false;
+                }
             }
 
             return true;

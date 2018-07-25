@@ -28,6 +28,8 @@ namespace Hope.Utils.EthereumUtils
         /// </summary>
         /// <typeparam name="T"> The type of the return value of the transaction result. </typeparam>
         /// <param name="unityRequest"> The transaction request. </param>
+        /// <param name="onSuccessfulTransaction"> Action called if the transaction was successful. </param>
+        /// <param name="readExceptionMessage"> Whether the exception message should be displayed. </param>
         public static void CheckTransactionRequest<T>(this UnityRequest<T> unityRequest, Action onSuccessfulTransaction, bool readExceptionMessage = true)
         {
             var exception = unityRequest.Exception;
@@ -88,7 +90,5 @@ namespace Hope.Utils.EthereumUtils
 
             onTxReceived?.Invoke(request.Result);
         }
-
     }
-
 }
