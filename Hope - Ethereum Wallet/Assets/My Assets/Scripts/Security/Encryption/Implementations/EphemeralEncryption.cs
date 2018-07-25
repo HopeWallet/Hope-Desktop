@@ -127,9 +127,9 @@ public sealed class EphemeralEncryption : SecureObject
         Process process = Process.GetCurrentProcess();
 
         return process.Id.ToString().GetSHA256Hash()
-                    .CombineAndRandomize(optionalEncryptionData.GetSHA384Hash())
+                    .CombineAndRandomize(optionalEncryptionData.GetSHA256Hash())
                     .CombineAndRandomize(GetHashCode().ToString().GetSHA256Hash())
-                    .CombineAndRandomize(process.MainModule.ModuleName.GetHashCode().ToString().GetSHA384Hash())
+                    .CombineAndRandomize(process.MainModule.ModuleName.GetHashCode().ToString().GetSHA256Hash())
                     .CombineAndRandomize(entropy.GetSHA256Hash()).GetSHA512Hash();
     }
 }

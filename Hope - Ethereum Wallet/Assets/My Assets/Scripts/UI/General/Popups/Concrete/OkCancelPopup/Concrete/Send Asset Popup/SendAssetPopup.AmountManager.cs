@@ -16,6 +16,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         public bool IsValid { get; private set; }
 
+        public bool AmountChanged { get; private set; }
+
         public decimal SendableAmount { get; private set; }
 
         public decimal MaxSendableAmount
@@ -55,8 +57,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         {
             sendAssetPopup.Asset.AddAssetBalanceListener(MaxChanged);
             sendAssetPopup.Gas.AddGasListener(MaxChanged);
-            amountInputField.onValueChanged.AddListener(OnAmountChanged);
             maxToggle.AddToggleListener(MaxChanged);
+            amountInputField.onValueChanged.AddListener(OnAmountChanged);
         }
 
         private void MaxChanged()
@@ -64,10 +66,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             SendableAmount = maxToggle.IsToggledOn ? MaxSendableAmount : SendableAmount;
 
             amountPlaceholderText.text = maxToggle.IsToggledOn ? SendableAmount.ToString() + " (Max)" : "Enter amount...";
-            amountInputField.text = SendableAmount.ToString();
+            amountInputField.text = string.IsNullOrEmpty(amountInputField.text) && !maxToggle.IsToggledOn ? "" : SendableAmount.ToString();
 
             amountInputField.textComponent.enabled = !maxToggle.IsToggledOn;
-            amountPlaceholderText.enabled = maxToggle.IsToggledOn;
+            amountPlaceholderText.enabled = string.IsNullOrEmpty(amountInputField.text) || maxToggle.IsToggledOn;
 
             amountInputField.interactable = !maxToggle.IsToggledOn;
 
@@ -88,7 +90,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckIfValidAmount()
         {
-            IsValid = SendableAmount <= MaxSendableAmount;
+            IsValid = SendableAmount <= MaxSendableAmount && SendableAmount > 0;
             onAmountChanged?.Invoke();
         }
     }

@@ -15,8 +15,11 @@ public class EtherAsset : TradableAsset
     /// Initializes this TradableAsset with the address of 0x0 and the symbol ETH.
     /// </summary>
     /// <param name="onAssetCreated"> Callback to execute once this asset has been created and the current balance received. </param>
-    public EtherAsset(Action<TradableAsset> onAssetCreated, 
-        TradableAssetImageManager tradableAssetImageManager, 
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    public EtherAsset(
+        Action<TradableAsset> onAssetCreated,
+        TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager) : base(ETHER_ADDRESS, "ETH", "Ether", 18, tradableAssetImageManager, userWalletManager)
     {
         InitializeBasicInfo(onAssetCreated);

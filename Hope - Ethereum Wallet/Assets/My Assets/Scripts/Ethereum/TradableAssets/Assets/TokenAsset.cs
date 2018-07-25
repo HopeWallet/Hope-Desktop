@@ -12,17 +12,20 @@ public class TokenAsset : TradableAsset
     /// <summary>
     /// The TokenContract of this asset.
     /// </summary>
-    public TokenContract TokenContract { get; private set; }
+    public TokenContract TokenContract { get; }
 
     /// <summary>
     /// Initializes this TradableAsset with the TokenContract of the token.
     /// </summary>
     /// <param name="tokenContract"> The TokenContract of this asset. </param>
     /// <param name="onAssetCreated"> Callback to execute once the asset has been initialized and the current balance received. </param>
-    public TokenAsset(TokenContract tokenContract, 
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    public TokenAsset(
+        TokenContract tokenContract, 
         Action<TradableAsset> onAssetCreated,
-        TradableAssetImageManager tradableAssetImageManager, 
-        UserWalletManager userWalletManager) : 
+        TradableAssetImageManager tradableAssetImageManager,
+        UserWalletManager userWalletManager) :
         base(tokenContract.ContractAddress, tokenContract.TokenSymbol, tokenContract.TokenName, tokenContract.TokenDecimals, tradableAssetImageManager, userWalletManager)
     {
         TokenContract = tokenContract;
