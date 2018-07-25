@@ -49,7 +49,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>(true);
 
-		addOrCreateContactPopup.SetPopupLayout(false, contactsPopupAnimator.selectedContactName, contactsPopupAnimator.selectedContactAddress);
+		addOrCreateContactPopup.SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
 		addOrCreateContactPopup.SetDictionary(contacts);
 	}
 

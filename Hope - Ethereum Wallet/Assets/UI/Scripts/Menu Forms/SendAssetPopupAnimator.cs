@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class SendTokenPopupAnimator : UIAnimator
+public class SendAssetPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;

@@ -38,6 +38,11 @@ public class OpenWalletForm : UIAnimator
 		FinishedAnimating();
 	}
 
+	/// <summary>
+	/// Animates a given list of objects one by one
+	/// </summary>
+	/// <param name="objectTransform"> The parent object of the entire list of objects </param>
+	/// <param name="index"> The index of object in the list </param>
 	private void AnimateList(Transform objectTransform, int index)
 	{
 		if (index == objectTransform.childCount - 1)

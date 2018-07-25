@@ -18,8 +18,9 @@ public class ContactsPopupAnimator : UIAnimator
 
 	private Transform contactsTransform;
 
-	public string selectedContactName { get; private set; }
-	public string selectedContactAddress { get; private set; }
+	public string SelectedContactName { get; private set; }
+
+	public string SelectedContactAddress { get; private set; }
 
 	/// <summary>
 	/// Initializes the elements
