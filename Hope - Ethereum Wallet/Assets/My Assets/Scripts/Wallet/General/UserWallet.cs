@@ -111,8 +111,8 @@ public sealed class UserWallet : SecureObject
                                            gasLimit,
                                            gasPrice,
                                            transactionInput);
-
-            GC.Collect();
         }
+
+        GC.Collect();
     }
 }

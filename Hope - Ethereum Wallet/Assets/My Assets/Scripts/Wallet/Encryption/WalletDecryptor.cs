@@ -5,11 +5,19 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using System;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Class used for decrypting wallet data.
+/// </summary>
 public sealed class WalletDecryptor : SecureObject
 {
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
 
+    /// <summary>
+    /// Initializes the <see cref="WalletDecryptor"/> with the references to needed objects.
+    /// </summary>
+    /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPassword"/> object used to encrypt the wallet data. </param>
+    /// <param name="dynamicDataCache"> The <see cref="DynamicDataCache"/> used for retrieving the number of the wallet we are decrypting. </param>
     public WalletDecryptor(
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache)
@@ -18,6 +26,11 @@ public sealed class WalletDecryptor : SecureObject
         this.dynamicDataCache = dynamicDataCache;
     }
 
+    /// <summary>
+    /// Decrypts the wallet given the user's password.
+    /// </summary>
+    /// <param name="password"> The user's password to the wallet. </param>
+    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
     public void DecryptWallet(string password, Action<byte[]> onWalletDecrypted)
     {
         int walletNum = (int)dynamicDataCache.GetData("walletnum");
@@ -34,6 +47,14 @@ public sealed class WalletDecryptor : SecureObject
         });
     }
 
+    /// <summary>
+    /// Decrypts the wallet asynchronously.
+    /// </summary>
+    /// <param name="hashLvls"> Different hash levels used for multi level encryption of the wallet seed. </param>
+    /// <param name="encryptedSeed"> The encrypted seed of the wallet. </param>
+    /// <param name="password"> The user's password to the wallet. </param>
+    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
+    /// <returns> Task returned which represents the decryption processing. </returns>
     private async Task AsyncDecryptWallet(string[] hashLvls, string encryptedSeed, string password, Action<byte[]> onWalletDecrypted)
     {
         var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password).GetSHA256Hash()).ConfigureAwait(false);
