@@ -5,7 +5,7 @@ using Zenject;
 /// <summary>
 /// Class which is used as a monobehaviour component for the SendAssetPopupConfirmation.
 /// </summary>
-public sealed class ConfirmSendAssetPopup : ConfirmTransactionRequestPopup<ConfirmSendAssetPopup>
+public sealed class ConfirmTransactionPopup : ConfirmTransactionRequestPopup<ConfirmTransactionPopup>
 {
     public Image assetImage;
 

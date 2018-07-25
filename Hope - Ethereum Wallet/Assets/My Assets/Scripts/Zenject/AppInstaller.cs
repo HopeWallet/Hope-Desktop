@@ -131,7 +131,7 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         BindPopupFactory<LoadingPopup>();
         BindPopupFactory<AddTokenPopup>();
         BindPopupFactory<SendAssetPopup>();
-        BindPopupFactory<ConfirmSendAssetPopup>();
+        BindPopupFactory<ConfirmTransactionPopup>();
         BindPopupFactory<HideAssetPopup>();
         BindPopupFactory<ConfirmHideAssetPopup>();
         BindPopupFactory<ReceiveAssetPopup>();

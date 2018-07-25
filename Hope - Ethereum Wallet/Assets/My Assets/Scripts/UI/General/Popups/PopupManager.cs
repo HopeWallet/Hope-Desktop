@@ -28,7 +28,7 @@ public sealed class PopupManager
     public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
-        ConfirmSendAssetPopup.Factory confirmSendAssetPopupFactory,
+        ConfirmTransactionPopup.Factory confirmSendAssetPopupFactory,
         HideAssetPopup.Factory hideAssetPopupFactory,
         ConfirmHideAssetPopup.Factory confirmHideAssetPopupFactory,
         ReceiveAssetPopup.Factory receiveAssetPopupFactory,

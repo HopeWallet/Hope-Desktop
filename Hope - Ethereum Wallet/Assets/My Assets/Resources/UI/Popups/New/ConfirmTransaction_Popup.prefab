@@ -38,10 +38,10 @@ GameObject:
   - component: {fileID: 224757384362255162}
   - component: {fileID: 223806836458041950}
   - component: {fileID: 114563858186012590}
-  - component: {fileID: 114279148654451532}
-  - component: {fileID: 114543169484528198}
+  - component: {fileID: 114118010966144926}
+  - component: {fileID: 114575987381073086}
   m_Layer: 0
-  m_Name: SendAssetConfirmation_Popup
+  m_Name: ConfirmTransaction_Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 222888469642193470}
   - component: {fileID: 114394375747942628}
   m_Layer: 0
-  m_Name: Contact Name
+  m_Name: Contact_Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -777,6 +777,31 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114118010966144926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062839745798890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f66a2df3d8874a347b14abb21a35609a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1770147059065634}
+  timerText: {fileID: 1347740901878196}
+  confirmButton: {fileID: 1340001275404532}
+  cancelButton: {fileID: 1860594637604522}
+  dim: {fileID: 1649976338318372}
+  form: {fileID: 1224930428793392}
+  title: {fileID: 1682868860239068}
+  tokenIcon: {fileID: 1340966430302080}
+  fromAddressSection: {fileID: 1652613014689216}
+  toAddressSection: {fileID: 1268294549640814}
+  transactionSection: {fileID: 1290507730292600}
+  feeSection: {fileID: 1299648684512638}
+  loadingIcon: {fileID: 1167216157251106}
 --- !u!114 &114200041093583464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -987,31 +1012,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114279148654451532
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1062839745798890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdb90a04002e1c41b3e68ab8996040f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animateOnEnable: 0
-  blocker: {fileID: 1770147059065634}
-  timerText: {fileID: 1347740901878196}
-  confirmButton: {fileID: 1340001275404532}
-  cancelButton: {fileID: 1860594637604522}
-  dim: {fileID: 1649976338318372}
-  form: {fileID: 1224930428793392}
-  title: {fileID: 1682868860239068}
-  tokenIcon: {fileID: 1340966430302080}
-  fromAddressSection: {fileID: 1652613014689216}
-  toAddressSection: {fileID: 1268294549640814}
-  transactionSection: {fileID: 1290507730292600}
-  feeSection: {fileID: 1299648684512638}
-  loadingIcon: {fileID: 1167216157251106}
 --- !u!114 &114347058049599334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1495,26 +1495,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114543169484528198
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1062839745798890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc318f2e11b12ee459b16a302d50ba92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  okButton: {fileID: 114818847430707120}
-  cancelButton: {fileID: 114271476612975718}
-  assetImage: {fileID: 114045478672242322}
-  amountText: {fileID: 114825318455265160}
-  fromAddress: {fileID: 114436476729827620}
-  toAddress: {fileID: 114569377988228752}
-  walletName: {fileID: 114594866939872716}
-  contactName: {fileID: 114394375747942628}
-  feeText: {fileID: 114845359083868652}
 --- !u!114 &114563858186012590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1645,6 +1625,26 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114575987381073086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062839745798890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f9a05f312d4257408393b46cdaff92d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114818847430707120}
+  cancelButton: {fileID: 114271476612975718}
+  assetImage: {fileID: 114045478672242322}
+  amountText: {fileID: 114825318455265160}
+  fromAddress: {fileID: 114436476729827620}
+  toAddress: {fileID: 114569377988228752}
+  walletName: {fileID: 114594866939872716}
+  contactName: {fileID: 114394375747942628}
+  feeText: {fileID: 114845359083868652}
 --- !u!114 &114588552597259290
 MonoBehaviour:
   m_ObjectHideFlags: 1

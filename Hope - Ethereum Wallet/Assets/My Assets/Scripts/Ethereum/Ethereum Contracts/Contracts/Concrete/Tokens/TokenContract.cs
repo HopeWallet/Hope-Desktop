@@ -70,7 +70,7 @@ public class TokenContract : ContractBase
     /// <param name="amount"> The amount of tokens to transfer. </param>
     public void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransaction<ConfirmSendAssetPopup>(request =>
+        userWallet.SignTransaction<ConfirmTransactionPopup>(request =>
         {
             this.ExecuteContractFunction(this[FUNC_TRANSFER],
                                          request,

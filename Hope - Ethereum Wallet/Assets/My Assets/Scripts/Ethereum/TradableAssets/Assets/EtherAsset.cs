@@ -39,7 +39,7 @@ public class EtherAsset : TradableAsset
     /// <param name="amount"> The amount of ether to send. </param>
     public override void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransaction<ConfirmSendAssetPopup>(request => WalletUtils.SendEther(request, userWallet.Address, gasLimit, gasPrice, address, amount),
+        userWallet.SignTransaction<ConfirmTransactionPopup>(request => WalletUtils.SendEther(request, userWallet.Address, gasLimit, gasPrice, address, amount),
                                                           gasLimit,
                                                           gasPrice,
                                                           address,

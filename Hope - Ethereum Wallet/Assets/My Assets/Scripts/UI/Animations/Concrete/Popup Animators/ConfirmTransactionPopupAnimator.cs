@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfirmSendAssetPopupAnimator : CountdownTimerAnimator
+public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
