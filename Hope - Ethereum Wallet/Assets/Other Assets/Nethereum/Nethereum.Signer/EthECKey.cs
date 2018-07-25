@@ -63,7 +63,7 @@ namespace Nethereum.Signer
                 if (rec != null)
                 {
                     var k = rec.GetPubKey(false);
-                    if (k != null && k.SequenceEqual(thisKey))
+                    if (k?.SequenceEqual(thisKey) == true)
                     {
                         recId = i;
                         break;
@@ -90,11 +90,6 @@ namespace Nethereum.Signer
         public byte[] GetPrivateKeyAsBytes()
         {
             return _ecKey.PrivateKey.D.ToByteArray();
-        }
-
-        public string GetPrivateKey()
-        {
-            return GetPrivateKeyAsBytes().ToHex(true);
         }
 
         public byte[] GetPubKey()
@@ -129,7 +124,6 @@ namespace Nethereum.Signer
         {
             return GetRecIdFromV(v[0]);
         }
-
 
         public static int GetRecIdFromV(byte v)
         {

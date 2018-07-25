@@ -4,27 +4,24 @@ using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Hex.HexTypes;
 using System.Collections;
 using System;
+using Nethereum.Web3.Accounts;
 
 namespace Nethereum.JsonRpc.UnityClient
 {
 
     public class TransactionSignedUnityRequest:UnityRequest<string>
     {
-        private string _url;
-        private readonly string _privateKey;
-        private readonly string _account;
+        private readonly string _url;
 
-        private readonly DynamicDataCache _dynamicDataCache;
+        private readonly Account _account;
         private readonly TransactionSigner _transactionSigner;
         private readonly EthGetTransactionCountUnityRequest _transactionCountRequest;
         private readonly EthSendRawTransactionUnityRequest _ethSendTransactionRequest;
 
-        public TransactionSignedUnityRequest(DynamicDataCache dynamicDataCache, string url, string privateKey, string account)
+        public TransactionSignedUnityRequest(Account account, string url)
         {
             _url = url;
             _account = account;
-            _privateKey = privateKey;
-            _dynamicDataCache = dynamicDataCache;
             _transactionSigner = new TransactionSigner(); 
             _ethSendTransactionRequest = new EthSendRawTransactionUnityRequest(_url);
             _transactionCountRequest = new EthGetTransactionCountUnityRequest(_url);
@@ -38,7 +35,7 @@ namespace Nethereum.JsonRpc.UnityClient
             
             if (nonce == null)
             {   
-                yield return _transactionCountRequest.SendRequest(_account, Nethereum.RPC.Eth.DTOs.BlockParameter.CreateLatest());
+                yield return _transactionCountRequest.SendRequest(_account.Address, Nethereum.RPC.Eth.DTOs.BlockParameter.CreateLatest());
             
                 if(_transactionCountRequest.Exception == null) 
                 {
@@ -63,14 +60,16 @@ namespace Nethereum.JsonRpc.UnityClient
             if (value == null)
                 value = new HexBigInteger(0);
 
-            var signedTransaction = _transactionSigner.SignTransaction(_privateKey, transactionInput.To, value.Value, nonce,
+            var signedTransaction = _transactionSigner.SignTransaction(_account.PrivateKey, transactionInput.To, value.Value, nonce,
                 gasPrice.Value, gasLimit.Value, transactionInput.Data);
 
-            
-            
             yield return _ethSendTransactionRequest.SendRequest(signedTransaction);
-            
-            if(_ethSendTransactionRequest.Exception == null) 
+
+            // Clear sensitive data
+            _account.PrivateKey.ClearBytes();
+            GC.Collect();
+
+            if(_ethSendTransactionRequest.Exception == null)
             {
                 this.Result = _ethSendTransactionRequest.Result;
             }

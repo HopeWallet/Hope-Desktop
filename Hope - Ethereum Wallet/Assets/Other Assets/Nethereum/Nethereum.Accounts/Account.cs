@@ -29,7 +29,7 @@ namespace Nethereum.Web3.Accounts
             return new Account(key, chainId);
         }
 
-        public string PrivateKey { get; private set; }
+        public byte[] PrivateKey { get; private set; }
 
         public Account(EthECKey key, BigInteger? chainId = null)
         {
@@ -51,22 +51,19 @@ namespace Nethereum.Web3.Accounts
 
         public Account(EthECKey key, Chain chain) : this(key, (int)chain)
         {
-            
         }
 
         public Account(string privateKey, Chain chain) : this(privateKey, (int)chain)
         {
-            
         }
 
         public Account(byte[] privateKey, Chain chain) : this(privateKey, (int)chain)
         {
-
         }
 
         private void Initialise(EthECKey key)
         {
-            PrivateKey = key.GetPrivateKey();
+            PrivateKey = key.GetPrivateKeyAsBytes();
             Address = key.GetPublicAddress();
             InitialiseDefaultTransactionManager();
         }
