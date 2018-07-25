@@ -85,7 +85,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (clickType == ClickType.Down && unlockWalletButton.interactable)
+        if (clickType == ClickType.Down && unlockWalletButton.interactable && !DisableClosing)
             unlockWalletButton.Press();
     }
 }

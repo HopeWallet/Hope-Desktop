@@ -52,7 +52,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Amount = new AmountManager(this, maxToggle, amountField);
     }
 
-    private void Start()
+    protected override void OnStart()
     {
         contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true));
     }
