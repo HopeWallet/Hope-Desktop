@@ -1,19 +1,18 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
-using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Security.ProtectedTypes.Types;
 using Nethereum.HdWallet;
-using Nethereum.Hex.HexConvertors.Extensions;
 using System;
 using System.Threading.Tasks;
 
-public class WalletUnlocker : WalletLoaderBase
+public sealed class WalletUnlocker : WalletLoaderBase
 {
+    private readonly WalletDecryptor walletDecryptor;
+
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
     {
+        walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache);
     }
 
     protected override void LoadWallet(string userPass)
@@ -28,7 +27,7 @@ public class WalletUnlocker : WalletLoaderBase
         else
         {
             string saltedHash = SecurePlayerPrefs.GetString("password_" + walletNum);
-            AsyncTaskScheduler.Schedule(() => TryPassword(walletNum, userPass, saltedHash));
+            AsyncTaskScheduler.Schedule(() => TryPassword(userPass, saltedHash));
         }
     }
 
@@ -37,14 +36,14 @@ public class WalletUnlocker : WalletLoaderBase
         (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator)?.VerifyingPassword();
     }
 
-    private async Task TryPassword(int walletNum, string password, string saltedHash)
+    private async Task TryPassword(string password, string saltedHash)
     {
         bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
 
         if (!correctPassword)
             IncorrectPassword();
         else
-            CorrectPassword(walletNum, password);
+            CorrectPassword(password);
     }
 
     private void IncorrectPassword()
@@ -54,35 +53,16 @@ public class WalletUnlocker : WalletLoaderBase
         MainThreadExecutor.QueueAction(() => (unlockWalletPopup.Animator as UnlockWalletPopupAnimator)?.PasswordIncorrect());
     }
 
-    private void CorrectPassword(int walletNum, string password)
+    private void CorrectPassword(string password)
     {
-        MainThreadExecutor.QueueAction(() =>
+        walletDecryptor.DecryptWallet(password, async seed =>
         {
-            playerPrefPassword.PopulatePrefDictionary(walletNum);
+            await GetAddresses(new Wallet(seed)).ConfigureAwait(false);
+            await Task.Run(() => dynamicDataCache.SetData("pass", new ProtectedString(password, this))).ConfigureAwait(false);
 
-            string[] hashLvls = new string[4];
-            for (int i = 0; i < hashLvls.Length; i++)
-                hashLvls[i] = SecurePlayerPrefs.GetString("wallet_" + walletNum + "_h" + (i + 1));
+            MainThreadExecutor.QueueAction(onWalletLoaded);
 
-            AsyncTaskScheduler.Schedule(() => UnlockWalletAsync(hashLvls, SecurePlayerPrefs.GetString("wallet_" + walletNum), password));
+            seed.ClearBytes();
         });
-    }
-
-    private async Task UnlockWalletAsync(string[] hashLvls, string encryptedSeed, string password)
-    {
-        var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password).GetSHA256Hash()).ConfigureAwait(false);
-        var splitPass = encryptionPassword.SplitHalf();
-        var lvl12string = splitPass.Item1.SplitHalf();
-        var lvl34string = splitPass.Item2.SplitHalf();
-
-        string unprotectedSeed = await Task.Run(() => encryptedSeed.Unprotect(hashLvls[2].Unprotect() + hashLvls[3].AESDecrypt(lvl34string.Item2.GetSHA512Hash()))).ConfigureAwait(false);
-        byte[] decryptedSeed = await Task.Run(() => unprotectedSeed.AESDecrypt(hashLvls[0].AESDecrypt(lvl12string.Item1.GetSHA512Hash()) + hashLvls[1].Unprotect()).HexToByteArray()).ConfigureAwait(false);
-
-        await GetAddresses(new Wallet(decryptedSeed)).ConfigureAwait(false);
-        await Task.Run(() => dynamicDataCache.SetData("pass", new ProtectedString(password, this))).ConfigureAwait(false);
-
-        decryptedSeed.ClearBytes();
-
-        MainThreadExecutor.QueueAction(onWalletLoaded);
     }
 }

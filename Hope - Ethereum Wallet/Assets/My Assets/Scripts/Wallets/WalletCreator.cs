@@ -1,16 +1,11 @@
 ﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.EthereumUtils;
 using Nethereum.HdWallet;
 using System;
-using System.Threading.Tasks;
-using SecureRandom = Org.BouncyCastle.Security.SecureRandom;
 
-public class WalletCreator : WalletLoaderBase
+public sealed class WalletCreator : WalletLoaderBase
 {
-
     private readonly WalletEncryptor walletEncryptor;
 
     public WalletCreator(

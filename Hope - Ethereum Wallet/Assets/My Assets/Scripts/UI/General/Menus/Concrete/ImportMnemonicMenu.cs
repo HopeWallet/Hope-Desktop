@@ -7,7 +7,7 @@ using Zenject;
 /// <summary>
 /// Menu for importing an ethereum wallet.
 /// </summary>
-public class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
+public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
 {
     public Button importButton,
                   backButton1,

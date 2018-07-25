@@ -22,10 +22,10 @@ public sealed class WalletEncryptor : SecureObject
 
     public void EncryptWallet(byte[] seed, string passwordBase, Action<string[], string, string> onWalletEncrypted)
     {
-        AsyncTaskScheduler.Schedule(() => EncryptWalletData(seed, passwordBase, onWalletEncrypted));
+        AsyncTaskScheduler.Schedule(() => AsyncEncryptWallet(seed, passwordBase, onWalletEncrypted));
     }
 
-    private async Task EncryptWalletData(byte[] seed, string passwordBase, Action<string[], string, string> onWalletEncrypted)
+    private async Task AsyncEncryptWallet(byte[] seed, string passwordBase, Action<string[], string, string> onWalletEncrypted)
     {
         SecureRandom secureRandom = new SecureRandom();
 
