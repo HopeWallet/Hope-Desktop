@@ -110,8 +110,8 @@ public class CreateMnemonicMenuAnimator : UIAnimator
         checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
         checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => checkMarkIcon.AnimateScaleX(1.01f, 1f,
-            () => checkMarkIcon.AnimateGraphic(0f, 1f,
+            () => checkMarkIcon.AnimateScaleX(1.01f, 0.5f,
+            () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
             () => copyButtonComponent.interactable = true)));
     }
 

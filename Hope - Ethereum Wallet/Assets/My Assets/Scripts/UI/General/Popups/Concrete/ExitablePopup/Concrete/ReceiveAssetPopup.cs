@@ -1,5 +1,6 @@
 ﻿using UnityEngine.UI;
 using Zenject;
+using TMPro;
 
 /// <summary>
 /// Class which displays the information for a ReceiveAssetPopup.
@@ -9,12 +10,9 @@ public class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 
     public Button copyAddressButton;
 
-    public Image assetImage,
-                  qrImage;
+    public Image qrImage;
 
-    public Text assetAddressDisplayText,
-                 assetAddressText,
-                 assetQRAddressDisplayText;
+    public TextMeshProUGUI addressText;
 
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -44,11 +42,8 @@ public class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
         var tradableAsset = tradableAssetManager.ActiveTradableAsset;
         var symbol = tradableAsset.AssetSymbol;
 
-        assetAddressDisplayText.text = symbol + " Address";
-        assetAddressText.text = walletAddress;
-        assetQRAddressDisplayText.text = symbol + " QR Code Address";
+		addressText.text = walletAddress;
         qrImage.sprite = QRUtils.GenerateQRCode(walletAddress);
-        tradableAssetImageManager.LoadImage(symbol, img => assetImage.sprite = img);
 
         copyAddressButton.onClick.AddListener(CopyAddressClicked);
     }
