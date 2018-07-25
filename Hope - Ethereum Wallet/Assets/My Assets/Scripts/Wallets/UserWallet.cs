@@ -6,16 +6,20 @@ using System;
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
 /// </summary>
-public sealed class UserWallet
+public sealed class UserWallet : SecureObject
 {
     public static event Action OnWalletLoadSuccessful;
+
+    private readonly EphemeralEncryption passwordEncryptor;
 
     private readonly PopupManager popupManager;
     private readonly EthereumNetwork ethereumNetwork;
     private readonly PlayerPrefPassword prefPassword;
+    private readonly DynamicDataCache dynamicDataCache;
 
     private readonly WalletCreator walletCreator;
     private readonly WalletUnlocker walletUnlocker;
+    private readonly WalletTransactionSigner walletTransactionSigner;
 
     private ProtectedString[] addresses;
 
@@ -36,9 +40,12 @@ public sealed class UserWallet
         this.prefPassword = prefPassword;
         this.popupManager = popupManager;
         this.ethereumNetwork = ethereumNetwork;
+        this.dynamicDataCache = dynamicDataCache;
 
+        passwordEncryptor = new EphemeralEncryption(this);
         walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache);
         walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache);
+        walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor);
     }
 
     /// <summary>
@@ -90,14 +97,22 @@ public sealed class UserWallet
     /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
     [SecureCallEnd]
     [ReflectionProtect]
-    public void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
-        HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+    public void SignTransaction<T>(
+        Action<TransactionSignedUnityRequest> onTransactionSigned,
+        HexBigInteger gasLimit,
+        HexBigInteger gasPrice,
+        params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
     {
-        //popupManager.GetPopup<T>(true)
-        //            .SetConfirmationValues(() => onTransactionSigned(new TransactionSignedUnityRequest(protectedStringDataCache, ethereumNetwork.NetworkUrl, account.PrivateKey, account.Address)),
-        //                                   gasLimit,
-        //                                   gasPrice,
-        //                                   transactionInput);
-        
+        using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
+        {
+            string encryptedPassword = passwordEncryptor.Encrypt(pass.Value);
+            popupManager.GetPopup<T>(true)
+                    .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(Address, encryptedPassword, onTransactionSigned),
+                                           gasLimit,
+                                           gasPrice,
+                                           transactionInput);
+
+            GC.Collect();
+        }
     }
 }

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 public sealed class WalletEncryptor : SecureObject
 {
-
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
 

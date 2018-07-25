@@ -7,7 +7,6 @@ using System;
 /// <typeparam name="T"> The type of the request to confirm. </typeparam>
 public abstract class ConfirmTransactionRequestPopup<T> : OkCancelPopupComponent<T> where T : FactoryPopup<T>
 {
-
     private Action onConfirmPressed;
 
     private HexBigInteger gasLimit,
@@ -38,6 +37,9 @@ public abstract class ConfirmTransactionRequestPopup<T> : OkCancelPopupComponent
     /// <summary>
     /// Called when the confirm button is clicked, which executes the transfer of the asset.
     /// </summary>
-    protected override void OnOkClicked() => onConfirmPressed?.Invoke();
-
+    public override void OkButton()
+    {
+        onConfirmPressed?.Invoke();
+        popupManager.CloseAllPopups();
+    }
 }

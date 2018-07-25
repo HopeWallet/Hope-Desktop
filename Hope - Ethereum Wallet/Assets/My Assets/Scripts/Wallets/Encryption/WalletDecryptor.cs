@@ -1,18 +1,12 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
-using Hope.Security.ProtectedTypes.Types;
-using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 public sealed class WalletDecryptor : SecureObject
 {
-
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
 
