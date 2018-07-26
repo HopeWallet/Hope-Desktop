@@ -39,21 +39,19 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void AddContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>(true);
-
-		addOrCreateContactPopup.SetPopupLayout(true);
-		addOrCreateContactPopup.SetDictionary(contacts);
+		//popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
 	}
 
 	private void EditContact()
 	{
-		var addOrCreateContactPopup = popupManager.GetPopup<AddOrEditContactPopup>(true);
-
-		addOrCreateContactPopup.SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
-		addOrCreateContactPopup.SetDictionary(contacts);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
 	}
 
 	private void DeleteContact()
 	{
+		//Open up the DeleteContactPopup
 	}
 }

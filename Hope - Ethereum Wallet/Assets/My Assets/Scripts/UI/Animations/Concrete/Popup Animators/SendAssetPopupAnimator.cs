@@ -21,7 +21,9 @@ public class SendAssetPopupAnimator : UIAnimator
 
 	[SerializeField] private GameObject sendButton;
 
-    private SendAssetPopup sendAssetPopup;
+	[SerializeField] private GameObject contactName;
+
+	private SendAssetPopup sendAssetPopup;
 
 	private bool advancedMode;
 

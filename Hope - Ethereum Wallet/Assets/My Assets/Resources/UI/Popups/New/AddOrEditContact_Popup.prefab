@@ -1504,7 +1504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00748f071689beb4f84cd3738b953bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1739605925257890}
   dim: {fileID: 1959627367157078}
   form: {fileID: 1149969681636900}
@@ -1513,6 +1513,7 @@ MonoBehaviour:
   addressSection: {fileID: 1001844950228236}
   addContactButton: {fileID: 1818807391257548}
   confirmButton: {fileID: 1507123239003392}
+  addingContact: 0
 --- !u!114 &114542522999934596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1880,6 +1881,7 @@ MonoBehaviour:
   confirmButton: {fileID: 114414793485554112}
   nameInputField: {fileID: 114167195124459894}
   addressInputField: {fileID: 114027303664004928}
+  title: {fileID: 114009938055225034}
 --- !u!114 &114896976506753332
 MonoBehaviour:
   m_ObjectHideFlags: 1

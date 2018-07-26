@@ -9,6 +9,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	private string previousName, previousAddress;
 	public Button addContactButton, confirmButton;
 	public TMP_InputField nameInputField, addressInputField;
+	public TextMeshProUGUI title;
 
 	private AddOrEditContactPopupAnimator addOrEditContactPopupAnimator;
 
@@ -16,8 +17,6 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 
 	protected override void OnStart()
 	{
-		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
-
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
 	}
@@ -26,44 +25,55 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 
 	private void AddContactClicked()
 	{
-		contacts.Add(nameInputField.text, addressInputField.text);
+		contacts.Add(addressInputField.text, nameInputField.text);
 
-		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contacts.Count, nameInputField.text);
-		SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contacts.Count, addressInputField.text);
+		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 	}
 
 	private void ConfirmClicked()
 	{
-		contacts[previousName] = addressInputField.text;
-		contacts[previousName].Replace(previousName, nameInputField.text);
+		contacts[previousAddress] = nameInputField.text;
+		contacts[previousAddress].Replace(previousAddress, addressInputField.text);
 
-		if (SecurePlayerPrefs.HasKey(nameInputField.text))
-			SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+		if (SecurePlayerPrefs.HasKey(addressInputField.text))
+			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 		else
 		{
 			for (int i = 0; i < contacts.Count; i++)
 			{
 				string prefName = ContactsPopup.PREF_NAME + contacts.Count;
 
-				if (SecurePlayerPrefs.GetString(prefName) == previousName)
+				if (SecurePlayerPrefs.GetString(prefName) == previousAddress)
 				{
-					SecurePlayerPrefs.DeleteKey(previousName);
+					SecurePlayerPrefs.DeleteKey(previousAddress);
 
-					SecurePlayerPrefs.SetString(prefName, nameInputField.text);
-					SecurePlayerPrefs.SetString(nameInputField.text, addressInputField.text);
+					SecurePlayerPrefs.SetString(prefName, addressInputField.text);
+					SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 				}
 			}
 		}
 	}
-
+	
+	/// <summary>
+	/// Sets all the necessary popup text elements
+	/// </summary>
+	/// <param name="addingContact"> Checks if adding a contact or editing an existing one </param>
+	/// <param name="name"> The current name of the contact </param>
+	/// <param name="address"> The current address of the contact </param>
 	public void SetPopupLayout(bool addingContact, string name = "", string address = "")
 	{
+		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
+		addOrEditContactPopupAnimator.addingContact = addingContact;
+
 		if (!addingContact)
 		{
 			previousName = name;
 			previousAddress = address;
 		}
 
-		addOrEditContactPopupAnimator.SetAddingContact(addingContact, name, address);
+		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
+		nameInputField.text = name;
+		addressInputField.text = address;
 	}
 }
