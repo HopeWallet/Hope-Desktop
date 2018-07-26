@@ -26,6 +26,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
     /// </summary>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
     public void Construct(TradableAssetManager tradableAssetManager, 
         TradableAssetImageManager tradableAssetImageManager, 

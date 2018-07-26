@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Class for managing the ethereum wallet of the user.
 /// </summary>
-public class UserWalletManager
+public sealed class UserWalletManager
 {
     private readonly UserWallet userWallet;
 
