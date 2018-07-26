@@ -101,7 +101,7 @@ public sealed class UserWallet : SecureObject
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit,
         HexBigInteger gasPrice,
-        params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+        params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
         using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
         {
@@ -112,7 +112,5 @@ public sealed class UserWallet : SecureObject
                                            gasPrice,
                                            transactionInput);
         }
-
-        GC.Collect();
     }
 }

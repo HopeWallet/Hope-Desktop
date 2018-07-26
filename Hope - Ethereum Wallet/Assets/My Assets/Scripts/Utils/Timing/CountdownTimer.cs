@@ -45,22 +45,15 @@ public class CountdownTimer
     /// </summary>
     private void Countdown()
     {
-        try
-        {
-            onTimeChanged?.Invoke(countdownTime--);
-        }
-        catch (Exception e)
-        {
-            ExceptionManager.DisplayException(e);
-            return;
-        }
+        try { onTimeChanged?.Invoke(countdownTime--); }
+        catch { return; }
 
         CoroutineUtils.ExecuteAfterWait(countdownInterval, () =>
         {
             if (countdownTime <= 0)
             {
                 try { onTimerFinished?.Invoke(); }
-                catch (Exception e) { ExceptionManager.DisplayException(e); }
+                catch { }
             }
             else
             {

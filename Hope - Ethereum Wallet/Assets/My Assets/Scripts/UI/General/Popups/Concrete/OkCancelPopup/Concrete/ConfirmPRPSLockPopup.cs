@@ -3,7 +3,7 @@
 /// <summary>
 /// Class used for displaying the confirmation to lock purpose.
 /// </summary>
-public class ConfirmPRPSLockPopup : ConfirmTransactionRequestPopup<ConfirmPRPSLockPopup>
+public class ConfirmPRPSLockPopup : ConfirmTransactionPopupBase<ConfirmPRPSLockPopup>
 {
 
     public Text lockPeriodText,

@@ -3,7 +3,7 @@
 /// <summary>
 /// Class used as a general transaction confirmation when the action being performed is not very sensitive.
 /// </summary>
-public class GeneralTransactionConfirmationPopup : ConfirmTransactionRequestPopup<GeneralTransactionConfirmationPopup>
+public class GeneralTransactionConfirmationPopup : ConfirmTransactionPopupBase<GeneralTransactionConfirmationPopup>
 {
 
     public Text transactionText;

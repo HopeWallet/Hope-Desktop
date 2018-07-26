@@ -5,7 +5,7 @@ using System;
 /// Base class used for confirming transaction requests.
 /// </summary>
 /// <typeparam name="T"> The type of the request to confirm. </typeparam>
-public abstract class ConfirmTransactionRequestPopup<T> : OkCancelPopupComponent<T> where T : FactoryPopup<T>
+public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T> where T : FactoryPopup<T>
 {
     private Action onConfirmPressed;
 

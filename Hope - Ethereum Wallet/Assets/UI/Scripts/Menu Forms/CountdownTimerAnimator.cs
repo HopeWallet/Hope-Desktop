@@ -2,16 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CountdownTimerAnimator : UIAnimator
+public abstract class CountdownTimerAnimator : UIAnimator
 {
 
-	[SerializeField] private GameObject timerText;
+	[SerializeField] protected GameObject timerText;
 	[SerializeField] protected GameObject confirmButton;
 	[SerializeField] protected GameObject cancelButton;
-
-	protected override void AnimateIn() { }
-
-	protected override void AnimateOut() { }
 
 	/// <summary>
 	/// Starts the countdown timer animation
@@ -39,6 +35,5 @@ public class CountdownTimerAnimator : UIAnimator
 	private void SetButtonInteractables()
 	{
 		confirmButton.GetComponent<Button>().interactable = true;
-		cancelButton.GetComponent<Button>().interactable = true;
 	}
 }

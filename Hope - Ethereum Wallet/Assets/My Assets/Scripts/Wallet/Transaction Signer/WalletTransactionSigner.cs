@@ -24,7 +24,6 @@ public sealed class WalletTransactionSigner
         walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache);
     }
 
-    //[SecureCaller]
     [SecureCallEnd]
     public void SignTransaction(string walletAddress, string encryptedPassword, Action<TransactionSignedUnityRequest> onRequestReceived)
     {

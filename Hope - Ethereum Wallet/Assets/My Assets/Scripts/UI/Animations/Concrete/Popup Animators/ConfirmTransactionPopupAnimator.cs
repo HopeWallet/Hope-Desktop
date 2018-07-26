@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
@@ -11,16 +10,6 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject toAddressSection;
 	[SerializeField] private GameObject transactionSection;
 	[SerializeField] private GameObject feeSection;
-	[SerializeField] private GameObject loadingIcon;
-
-	/// <summary>
-	/// Initializes the button listeners
-	/// </summary>
-	private void Awake()
-	{
-		confirmButton.GetComponent<Button>().onClick.AddListener(() => AnimateDisable());
-		cancelButton.GetComponent<Button>().onClick.AddListener(() => AnimateDisable());
-	}
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -28,11 +17,11 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	protected override void AnimateIn()
 	{
 		dim.AnimateGraphic(1f, 0.15f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => toAddressSection.AnimateScaleX(1f, 0.15f,
-			() => feeSection.AnimateScaleX(1f, 0.15f,
-			() => cancelButton.AnimateGraphicAndScale(1f, 1f, 0.15f, StartTimerAnimation)))));
+        form.AnimateGraphicAndScale(1f, 1f, 0.15f,
+            () => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
+            () => toAddressSection.AnimateScaleX(1f, 0.15f,
+            () => feeSection.AnimateScaleX(1f, 0.15f,
+            () => cancelButton.AnimateGraphicAndScale(1f, 1f, 0.15f, StartTimerAnimation)))));
 
 		title.AnimateGraphicAndScale(1f, 0.85f, 0.15f,
 			() => fromAddressSection.AnimateScaleX(1f, 0.15f,
@@ -45,6 +34,7 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+        timerText.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => transactionSection.AnimateScaleX(0f, 0.15f,
 			() => fromAddressSection.AnimateScaleX(0f, 0.15f,
@@ -56,20 +46,5 @@ public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 			() => toAddressSection.AnimateScaleX(0f, 0.15f,
 			() => tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)))));
-
-		if (loadingIcon.activeInHierarchy)
-		{
-			loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
-			loadingIcon.SetActive(false);
-		}
-	}
-
-	/// <summary>
-	/// Confirm button is clicked and it animates the loading icon
-	/// </summary>
-	private void ConfirmButtonClicked()
-	{
-		loadingIcon.SetActive(true);
-		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
 	}
 }

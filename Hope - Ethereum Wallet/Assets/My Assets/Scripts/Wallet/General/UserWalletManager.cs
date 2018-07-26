@@ -64,7 +64,7 @@ public class UserWalletManager
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit,
         HexBigInteger gasPrice,
-        params object[] transactionInput) where T : ConfirmTransactionRequestPopup<T>
+        params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
         userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, transactionInput);
     }

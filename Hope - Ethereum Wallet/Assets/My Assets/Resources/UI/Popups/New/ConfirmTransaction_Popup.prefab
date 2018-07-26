@@ -801,7 +801,6 @@ MonoBehaviour:
   toAddressSection: {fileID: 1268294549640814}
   transactionSection: {fileID: 1290507730292600}
   feeSection: {fileID: 1299648684512638}
-  loadingIcon: {fileID: 1167216157251106}
 --- !u!114 &114200041093583464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1005,7 +1004,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114269506153193906}
   m_OnClick:
     m_PersistentCalls:
