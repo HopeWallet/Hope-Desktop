@@ -22,6 +22,6 @@ public class InfoPopup : FactoryPopup<InfoPopup>
 		body.text = bodyText;
 		infoIcon.SetActive(isInfoIcon);
 		errorIcon.SetActive(!isInfoIcon);
-		transform.position = new Vector2(iconPosition.x + 13f, iconPosition.y);
+		transform.position = new Vector2(iconPosition.x + 10f, iconPosition.y);
 	}
 }

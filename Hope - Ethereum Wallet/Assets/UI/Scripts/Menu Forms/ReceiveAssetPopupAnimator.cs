@@ -34,6 +34,8 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		checkmarkIcon.AnimateGraphic(0f, 0.3f);
+
 		qrCodeSection.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => addressSection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
