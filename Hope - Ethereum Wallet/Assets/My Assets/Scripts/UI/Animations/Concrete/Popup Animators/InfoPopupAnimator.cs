@@ -9,8 +9,6 @@ public class InfoPopupAnimator : UIAnimator
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	private bool animatingIn;
-
 	/// <summary>
 	/// Animates the UI elements of the form into view
 	/// </summary>

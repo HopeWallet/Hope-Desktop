@@ -12,10 +12,13 @@ public class EthereumAPI
     private const string TOKEN_TRANSFER_START = "module=logs&action=getLogs&fromBlock=0&toBlock=latest";
     private const string TOKEN_TRANSFER_TOPIC = "&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
+    private const string TOKEN_BALANCE_START = "module=account&action=tokenbalance&contractaddress=";
+
     private readonly string contractApiUrl;
     private readonly string transactionListUrl;
     private readonly string internalTransactionListUrl;
     private readonly string tokenTransfersUrl;
+    private readonly string getTokenBalanceUrl;
 
     /// <summary>
     /// Initializes the EthereumAPI with the api url.
@@ -27,6 +30,7 @@ public class EthereumAPI
         transactionListUrl = apiUrl + TRANSACTION_LIST_START;
         internalTransactionListUrl = apiUrl + INTERNAL_TRANSACTION_LIST_START;
         tokenTransfersUrl = apiUrl + TOKEN_TRANSFER_START;
+        getTokenBalanceUrl = apiUrl + TOKEN_BALANCE_START;
     }
 
     /// <summary>
@@ -78,4 +82,11 @@ public class EthereumAPI
     public string GetTokenTransfersFromAndToUrl(string tokenAddress, string fromAddress, string toAddress)
         => tokenTransfersUrl + "&address=" + tokenAddress + TOKEN_TRANSFER_TOPIC + "&topic1=0x000000000000000000000000" + fromAddress.Remove(0, 2) + "&topic2=0x000000000000000000000000" + toAddress.Remove(0, 2);
 
+    /// <summary>
+    /// Gets the api url for retrieving the token balance of a wallet.
+    /// </summary>
+    /// <param name="tokenAddress"> The token address to get the balance of. </param>
+    /// <param name="walletAddress"> The wallet to get the token balance of. </param>
+    /// <returns> The api url to use to retrieve the token balance of a wallet address. </returns>
+    public string GetTokenBalanceUrl(string tokenAddress, string walletAddress) => getTokenBalanceUrl + tokenAddress + "&address=" + walletAddress;
 }
