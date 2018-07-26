@@ -132,7 +132,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     /// </summary>
     private void StartNewItemSearch()
     {
-        HttpUtils.DownloadString(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
+        UnityWebUtils.DownloadString(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
                                                                                     userWalletManager.WalletAddress,
                                                                                     hodlerContract.ContractAddress),
                                                                                     txList => ProcessTxList(txList));

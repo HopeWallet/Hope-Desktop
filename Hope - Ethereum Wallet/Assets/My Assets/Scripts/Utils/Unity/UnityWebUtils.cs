@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 public static class UnityWebUtils
@@ -12,7 +8,12 @@ public static class UnityWebUtils
 
     private static IEnumerator DownloadStringWebRequest(string url, Action<string> onStringDataReceived)
     {
-        yield return SendUnityWebRequest(url, webRequest => onStringDataReceived?.Invoke(webRequest.downloadHandler.text));
+        yield return SendUnityWebRequest(url, webRequest =>
+        {
+            if (webRequest.isHttpError || webRequest.isNetworkError)
+                UnityEngine.Debug.Log(webRequest.error);
+            onStringDataReceived?.Invoke(webRequest.downloadHandler.text);
+        });
     }
 
     private static IEnumerator SendUnityWebRequest(string url, Action<UnityWebRequest> onDataReceived)

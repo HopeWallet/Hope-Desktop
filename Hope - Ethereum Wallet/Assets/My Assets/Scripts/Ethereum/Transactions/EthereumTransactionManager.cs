@@ -141,7 +141,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="onAssetScraped"> Action to call once the transactions have been scraped. </param>
     private void ScrapeAsset(AssetToScrape assetToScrape, Action onAssetScraped)
     {
-        HttpUtils.DownloadString(assetToScrape.Url,
+        UnityWebUtils.DownloadString(assetToScrape.Url,
             txList => assetToScrape.ProcessTransactionList(txList, assetToScrape.AssetAddress, assetToScrape.IgnoreReceipt, onAssetScraped));
     }
 

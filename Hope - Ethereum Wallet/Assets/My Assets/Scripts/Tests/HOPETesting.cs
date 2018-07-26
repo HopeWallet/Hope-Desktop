@@ -54,7 +54,7 @@ public class HOPETesting : MonoBehaviour
     private EthereumNetworkManager ethereumNetworkManager;
 
     private static int counter = 0;
-    private const int ITR = 500;
+    private const int ITR = 380;
 
     // individual unity = 286ms
     // individual regular = 514ms
@@ -73,28 +73,7 @@ public class HOPETesting : MonoBehaviour
             UnityWebUtils.DownloadString(url, str =>
             {
                 counter++;
-                //Debug.Log("Done... #" + (counter));
-                if (counter == ITR - 1)
-                {
-                    counter = 0;
-                    stopwatch.Stop();
-                    Debug.Log(str + " => " + stopwatch.ElapsedMilliseconds);
-                }
-            });
-        }
-    }
-
-    [ContextMenu("Download String Regular")]
-    public void DownloadStringRegular()
-    {
-        string url = ethereumNetworkManager.CurrentNetwork.Api.GetTokenBalanceUrl("0x5831819C84C05DdcD2568dE72963AC9f1e6831b6", "0xb332Feee826BF44a431Ea3d65819e31578f30446");
-        Stopwatch stopwatch = Stopwatch.StartNew();
-        for (int i = 0; i < ITR; i++)
-        {
-            HttpUtils.DownloadString(url, str =>
-            {
-                counter++;
-                //Debug.Log("Done... #" + (counter));
+                //Debug.Log("Done... #" + (counter) + " => " + str);
                 if (counter == ITR - 1)
                 {
                     counter = 0;
