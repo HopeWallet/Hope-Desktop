@@ -55,7 +55,6 @@ GameObject:
   - component: {fileID: 224047955647532014}
   - component: {fileID: 222573688120664996}
   - component: {fileID: 114931878745059336}
-  - component: {fileID: 114054553490388078}
   m_Layer: 5
   m_Name: ReceiveAssetPopup
   m_TagString: Untagged
@@ -201,22 +200,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114054553490388078
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1419036711245744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ded31fb4afb645747bec9955dcce31ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  exitButton: {fileID: 114078237734914694}
-  copyAddressButton: {fileID: 114433364576405652}
-  qrImage: {fileID: 114319506176499288}
-  addressText: {fileID: 0}
-  infoMessage: {fileID: 0}
 --- !u!114 &114078237734914694
 MonoBehaviour:
   m_ObjectHideFlags: 1

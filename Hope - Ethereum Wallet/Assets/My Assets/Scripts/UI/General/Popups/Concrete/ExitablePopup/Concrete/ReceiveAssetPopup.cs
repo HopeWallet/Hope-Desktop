@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 /// Class which displays the information for a ReceiveAssetPopup.
 /// </summary>
-public class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
+public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 {
 
 	[SerializeField] private Button copyAddressButton;

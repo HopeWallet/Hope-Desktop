@@ -6,7 +6,7 @@ using ZXing.QrCode;
 /// <summary>
 /// Class used to help with the creation and displaying of qr codes.
 /// </summary>
-public class QRUtils
+public static class QRUtils
 {
 
     private static readonly Dictionary<string, Texture2D> QrCodes = new Dictionary<string, Texture2D>();
@@ -45,7 +45,7 @@ public class QRUtils
         {
             var color = colors[i];
 
-            if (color.r == 255 && color.g == 255 && color.b == 255 && color.a == 255)
+            if (color.r != 0 && color.g != 0 && color.b != 0)
                 colors[i] = new Color32(255, 255, 255, 0);
         }
     }
@@ -78,5 +78,4 @@ public class QRUtils
     /// <param name="texture"> The texture to create a sprite from. </param>
     /// <returns> The sprite created from the texture. </returns>
     private static Sprite CreateSprite(Texture2D texture) => Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), Pivot);
-
 }
