@@ -67,7 +67,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             this.gasPriceField = gasPriceField;
             this.transactionFeeText = transactionFeeText;
 
-            AddGasListener(() => this.transactionFeeText.text = TransactionFee.ToString() + " ETH");
+            AddGasListener(() => this.transactionFeeText.text = "~ " + TransactionFee.ToString() + " ETH");
 
             AddListenersAndObservables();
             EstimateGasLimit();
@@ -133,7 +133,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void CheckTransactionSpeedSlider(float value)
         {
-            decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.5f, 1.5f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.5f), 2, MidpointRounding.AwayFromZero);
+            decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.6f, 1.4f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.45f), 2, MidpointRounding.AwayFromZero);
             estimatedGasPrice = new GasPrice(new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value));
 
             OnGasPricesUpdated();

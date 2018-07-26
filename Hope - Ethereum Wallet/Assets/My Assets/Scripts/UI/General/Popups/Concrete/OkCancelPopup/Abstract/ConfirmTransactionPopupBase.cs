@@ -16,7 +16,7 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
     /// Sets the transaction request values that need to be confirmed.
     /// </summary>
     /// <param name="onConfirmPressed"> Action to call if the transaction is confirmed to be sent through. </param>
-    /// <param name="gasLimit"> The gas limit of the transaction reqeust. </param>
+    /// <param name="gasLimit"> The gas limit of the transaction request. </param>
     /// <param name="gasPrice"> The gas price of the transaction request. </param>
     /// <param name="transactionInput"> The transaction input of the request being called. </param>
     public void SetConfirmationValues(Action onConfirmPressed, HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput)
