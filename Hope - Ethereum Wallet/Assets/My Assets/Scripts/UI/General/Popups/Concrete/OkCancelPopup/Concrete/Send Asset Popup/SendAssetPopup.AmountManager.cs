@@ -78,6 +78,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private void OnAmountChanged(string amountText)
         {
+            AmountChanged = true;
+
             amountInputField.RestrictToBalance(sendAssetPopup.Asset.ActiveAsset);
 
             decimal newSendAmount;

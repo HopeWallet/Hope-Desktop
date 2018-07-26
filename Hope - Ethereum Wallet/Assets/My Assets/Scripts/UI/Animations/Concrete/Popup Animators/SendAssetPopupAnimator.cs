@@ -33,7 +33,7 @@ public class SendAssetPopupAnimator : UIAnimator
         sendAssetPopup = GetComponent<SendAssetPopup>();
 
 		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid));
-        sendAssetPopup.Amount.AddSendAmountListener(() => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid));
+        sendAssetPopup.Amount.AddSendAmountListener(() => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid || !sendAssetPopup.Amount.AmountChanged));
 
 		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 	}
