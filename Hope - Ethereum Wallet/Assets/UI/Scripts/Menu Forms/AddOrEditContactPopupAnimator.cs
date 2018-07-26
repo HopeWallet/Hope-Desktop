@@ -18,6 +18,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
 
+	public string previousName;
+
 	public bool addingContact;
 	private bool validName;
 	private bool validAddress;
@@ -121,7 +123,12 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedAddress = addressInputField.text;
 
-		ValidAddress = (string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress)) && !SecurePlayerPrefs.HasKey(updatedAddress);
+		//Check if address has been used already somewhere in the contacts
+
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress);
+
+		if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != previousName)
+			ValidAddress = false;
 
 		SetMainButtonInteractable();
 	}
@@ -146,7 +153,6 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="isValid"> Checks if the input is valid or not </param>
 	private void AnimateErrorIcon(GameObject objectSection, bool isValid)
 	{
-		objectSection.transform.GetChild(objectSection.transform.childCount - 1).gameObject
-			.AnimateGraphicAndScale(isValid ? 0f : 1f, isValid ? 0f : 1f, 0.2f);
+		objectSection.transform.GetChild(objectSection.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValid ? 0f : 1f, isValid ? 0f : 1f, 0.2f);
 	}
 }

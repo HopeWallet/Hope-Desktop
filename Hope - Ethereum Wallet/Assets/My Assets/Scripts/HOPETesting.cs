@@ -51,8 +51,13 @@ public class HOPETesting : MonoBehaviour
 
     private void Start()
     {
-        //PlayerPrefs.DeleteAll();
     }
+
+	[ContextMenu("Delete Player Prefs")]
+	public void DeletePrefs()
+	{
+		PlayerPrefs.DeleteAll();
+	}
 
     //private void AnonymousStuff()
     //{

@@ -39,7 +39,6 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void AddContact()
 	{
-		//popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
 	}

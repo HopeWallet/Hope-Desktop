@@ -214,11 +214,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitButton: {fileID: 114078237734914694}
   copyAddressButton: {fileID: 114433364576405652}
-  assetImage: {fileID: 114271697764348958}
   qrImage: {fileID: 114319506176499288}
-  assetAddressDisplayText: {fileID: 114111984699796082}
-  assetAddressText: {fileID: 114501803206044596}
-  assetQRAddressDisplayText: {fileID: 114803611586470354}
+  addressText: {fileID: 0}
+  infoMessage: {fileID: 0}
 --- !u!114 &114078237734914694
 MonoBehaviour:
   m_ObjectHideFlags: 1

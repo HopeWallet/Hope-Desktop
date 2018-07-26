@@ -17,7 +17,7 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		PopupManager.GetPopup<InfoPopup>(true).SetUIElements(titleText, bodyText, infoIcon, transform.localPosition);
+		PopupManager.GetPopup<InfoPopup>(true).SetUIElements(titleText, bodyText, infoIcon, transform.position);
 		AnimateIconScale(true);
 	}
 

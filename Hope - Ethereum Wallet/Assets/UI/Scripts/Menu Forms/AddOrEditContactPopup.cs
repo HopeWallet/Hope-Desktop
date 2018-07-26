@@ -15,26 +15,41 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 
 	private Dictionary<string, string> contacts;
 
+	/// <summary>
+	/// Adds the button listeners
+	/// </summary>
 	protected override void OnStart()
 	{
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
 	}
 
+	/// <summary>
+	/// Sets the contacts dictionary
+	/// </summary>
+	/// <param name="contacts"> The contacts dictionary </param>
 	public void SetDictionary(Dictionary<string, string> contacts) => this.contacts = contacts;
 
+	/// <summary>
+	/// Adds a new contact according to the given inputs
+	/// </summary>
 	private void AddContactClicked()
 	{
 		contacts.Add(addressInputField.text, nameInputField.text);
 
 		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contacts.Count, addressInputField.text);
 		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
+
+		popupManager.CloseActivePopup();
 	}
 
+	/// <summary>
+	/// Edits the existing contact and replaces it with the new values
+	/// </summary>
 	private void ConfirmClicked()
 	{
-		contacts[previousAddress] = nameInputField.text;
-		contacts[previousAddress].Replace(previousAddress, addressInputField.text);
+		contacts.Remove(previousAddress);
+		contacts.Add(addressInputField.text, nameInputField.text);
 
 		if (SecurePlayerPrefs.HasKey(addressInputField.text))
 			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
@@ -42,7 +57,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 		{
 			for (int i = 0; i < contacts.Count; i++)
 			{
-				string prefName = ContactsPopup.PREF_NAME + contacts.Count;
+				string prefName = ContactsPopup.PREF_NAME + i;
 
 				if (SecurePlayerPrefs.GetString(prefName) == previousAddress)
 				{
@@ -53,6 +68,8 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 				}
 			}
 		}
+
+		popupManager.CloseActivePopup();
 	}
 	
 	/// <summary>
@@ -65,6 +82,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	{
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
 		addOrEditContactPopupAnimator.addingContact = addingContact;
+		addOrEditContactPopupAnimator.previousName = name;
 
 		if (!addingContact)
 		{
@@ -72,8 +90,8 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 			previousAddress = address;
 		}
 
-		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 		nameInputField.text = name;
 		addressInputField.text = address;
+		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 }
