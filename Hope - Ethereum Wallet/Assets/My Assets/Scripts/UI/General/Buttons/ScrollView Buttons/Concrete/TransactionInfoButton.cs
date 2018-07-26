@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.EthereumUtils;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -12,21 +13,25 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     public TMP_Text amountText,
                     timeFromNowText,
                     addressText,
-                    dateText;
+                    dateText,
+					directionText;
 
-    public Image assetImage;
+    public Image assetImage, circle;
 
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
 
-    /// <summary>
-    /// Adds the required dependencies to this class.
-    /// </summary>
-    /// <param name="popupManager"> The active PopupManager. </param>
-    /// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
-    [Inject]
+	private readonly Color RED_CIRCLE_COLOR = new Color(0.58f, 0f, 0f);
+	private readonly Color GREEN_CIRCLE_COLOR = new Color(0f, 0.58f, 0f);
+
+	/// <summary>
+	/// Adds the required dependencies to this class.
+	/// </summary>
+	/// <param name="popupManager"> The active PopupManager. </param>
+	/// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
+	/// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
+	[Inject]
     public void Construct(PopupManager popupManager, TradableAssetManager tradableAssetManager, TradableAssetImageManager tradableAssetImageManager)
     {
         this.popupManager = popupManager;
@@ -57,7 +62,20 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
         SetDate(info);
         SetTimeFromNow(info);
         SetImage(info, tradableAsset);
+		SetDirection(info);
     }
+
+	/// <summary>
+	/// Sets the direction label beside the date
+	/// </summary>
+	/// <param name="transaction"> The info of this transaction. </param>
+	private void SetDirection(TransactionInfo transaction)
+	{
+		var sending = transaction.Type == TransactionInfo.TransactionType.Send;
+
+		circle.color = sending ? RED_CIRCLE_COLOR : GREEN_CIRCLE_COLOR;
+		directionText.text = sending ? "OUT" : "IN";
+	}
 
     /// <summary>
     /// Sets the amount of the asset that was traded in this transaction.
@@ -82,7 +100,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     private void SetAddress(TransactionInfo transaction)
     {
         var address = transaction.Type == TransactionInfo.TransactionType.Send ? transaction.To : transaction.From;
-        addressText.SetText(address.LimitEnd(6) + "..." + address.Substring(address.Length - 4, 4));
+        addressText.SetText(address.LimitEnd(10) + "..." + address.Substring(address.Length - 10, 10));
     }
 
     /// <summary>
