@@ -51,7 +51,6 @@ public sealed class UserWallet : SecureObject
     /// <summary>
     /// Unlocks a wallet if the password is correct.
     /// </summary>
-    /// <param name="walletNum"> The number of the wallet to unlock. </param>
     [SecureCaller]
     [ReflectionProtect]
     public void Unlock()
@@ -59,6 +58,9 @@ public sealed class UserWallet : SecureObject
         Load(walletUnlocker);
     }
 
+    /// <summary>
+    /// Creates a new wallet.
+    /// </summary>
     [SecureCaller]
     [ReflectionProtect]
     public void Create()

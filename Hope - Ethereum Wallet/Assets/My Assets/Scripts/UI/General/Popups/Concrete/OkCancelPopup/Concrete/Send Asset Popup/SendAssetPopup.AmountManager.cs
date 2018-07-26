@@ -1,8 +1,14 @@
 ﻿using System;
 using TMPro;
 
+/// <summary>
+/// Class which displays the popup for sending a TradableAsset.
+/// </summary>
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
+    /// <summary>
+    /// Class which manages the sendable amount entered in the input field.
+    /// </summary>
     public sealed class AmountManager
     {
         private readonly SendAssetPopup sendAssetPopup;
@@ -14,13 +20,25 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private Action onAmountChanged;
 
+        /// <summary>
+        /// Whether the amount entered in the input field is a valid sendable amount.
+        /// </summary>
         public bool IsValid { get; private set; }
 
+        /// <summary>
+        /// Whether the amount input field has been edited since the <see cref="SendAssetPopup"/> has been created.
+        /// </summary>
         public bool AmountChanged { get; private set; }
 
+        /// <summary>
+        /// The amount that will be sent.
+        /// </summary>
         public decimal SendableAmount { get; private set; }
 
-        public decimal MaxSendableAmount
+        /// <summary>
+        /// The max sendable amount given the current asset balance.
+        /// </summary>
+        private decimal MaxSendableAmount
         {
             get
             {
@@ -32,6 +50,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             }
         }
 
+        /// <summary>
+        /// Initializes the <see cref="AmountManager"/> by assigning the references to the popup, max toggle, and amount input field.
+        /// </summary>
+        /// <param name="sendAssetPopup"> The active <see cref="SendAssetPopup"/>. </param>
+        /// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
+        /// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
         public AmountManager(
             SendAssetPopup sendAssetPopup,
             Toggle maxToggle,
@@ -45,6 +69,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             SetupListeners();
         }
 
+        /// <summary>
+        /// Adds an action which will be called once the send amount is changed.
+        /// </summary>
+        /// <param name="amountChanged"> Action to call once the send amount is changed. </param>
         public void AddSendAmountListener(Action amountChanged)
         {
             if (onAmountChanged == null)
@@ -53,6 +81,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
                 onAmountChanged += amountChanged;
         }
 
+        /// <summary>
+        /// Sets up all listeners.
+        /// </summary>
         private void SetupListeners()
         {
             sendAssetPopup.Asset.AddAssetBalanceListener(MaxChanged);
@@ -61,6 +92,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             amountInputField.onValueChanged.AddListener(OnAmountChanged);
         }
 
+        /// <summary>
+        /// Called when the maximum sendable amount is changed or activated through the toggle.
+        /// </summary>
         private void MaxChanged()
         {
             SendableAmount = maxToggle.IsToggledOn ? MaxSendableAmount : SendableAmount;
@@ -76,6 +110,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             CheckIfValidAmount();
         }
 
+        /// <summary>
+        /// Called once the amount input field is edited and changed.
+        /// </summary>
+        /// <param name="amountText"> The text entered in the amount input field. </param>
         private void OnAmountChanged(string amountText)
         {
             AmountChanged = true;
@@ -90,6 +128,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             CheckIfValidAmount();
         }
 
+        /// <summary>
+        /// Checks if the amount entered in the input field is valid and updates the amount changed listeners.
+        /// </summary>
         private void CheckIfValidAmount()
         {
             IsValid = SendableAmount <= MaxSendableAmount && SendableAmount > 0;

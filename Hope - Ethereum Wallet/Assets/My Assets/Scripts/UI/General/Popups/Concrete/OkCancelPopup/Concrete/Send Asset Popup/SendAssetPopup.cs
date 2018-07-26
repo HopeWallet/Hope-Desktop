@@ -30,14 +30,37 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
 
+    /// <summary>
+    /// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
+    /// </summary>
     public AssetManager Asset { get; private set; }
 
+    /// <summary>
+    /// The <see cref="AmountManager"/> of this <see cref="SendAssetPopup"/>.
+    /// </summary>
     public AmountManager Amount { get; private set; }
 
+    /// <summary>
+    /// The <see cref="AddressManager"/> of this <see cref="SendAssetPopup"/>.
+    /// </summary>
     public AddressManager Address { get; private set; }
 
+    /// <summary>
+    /// The <see cref="GasManager"/> of this <see cref="SendAssetPopup"/>.
+    /// </summary>
     public GasManager Gas { get; private set; }
 
+    /// <summary>
+    /// Adds the required dependencies to the SendAssetPopup.
+    /// </summary>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
+    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+    /// <param name="updateManager"> The active UpdateManager. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
     [Inject]
     public void Construct(
         UserWalletManager userWalletManager,
@@ -58,17 +81,26 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Amount = new AmountManager(this, maxToggle, amountField);
     }
 
+    /// <summary>
+    /// Sets up the contacts button and info message.
+    /// </summary>
     protected override void OnStart()
     {
         contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true));
 		infoMessage.PopupManager = popupManager;
 	}
 
+    /// <summary>
+    /// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.
+    /// </summary>
     private void Update()
     {
         okButton.interactable = Gas.IsValid && Address.IsValid && Amount.IsValid;
     }
 
+    /// <summary>
+    /// Starts the asset transfer.
+    /// </summary>
     public override void OkButton()
     {
         dynamicDataCache.SetData("txfee", Gas.TransactionFee.ToString());
@@ -79,6 +111,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
                                         Amount.SendableAmount);
     }
 
+    /// <summary>
+    /// Destroys the AssetManager and GasManager.
+    /// </summary>
     private void OnDestroy()
     {
         Asset.Destroy();

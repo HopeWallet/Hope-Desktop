@@ -2,8 +2,14 @@
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class which displays the popup for sending a TradableAsset.
+/// </summary>
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
+    /// <summary>
+    /// Class which manages the asset that will be sent.
+    /// </summary>
     public sealed class AssetManager : IUpdater, IEtherBalanceObservable
     {
         private readonly TradableAssetManager tradableAssetManager;
@@ -21,12 +27,31 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private Action onAssetBalanceChanged;
 
+        /// <summary>
+        /// The current ether balance of this wallet.
+        /// </summary>
         public dynamic EtherBalance { get; set; }
 
+        /// <summary>
+        /// The current balance of the active asset.
+        /// </summary>
         public dynamic ActiveAssetBalance => ActiveAsset.AssetBalance;
 
+        /// <summary>
+        /// The active TradableAsset.
+        /// </summary>
         public TradableAsset ActiveAsset => tradableAssetManager.ActiveTradableAsset;
 
+        /// <summary>
+        /// Initializes the <see cref="AssetManager"/> by assigning all required references.
+        /// </summary>
+        /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
+        /// <param name="tradableAssetImageManager"> The active <see cref="TradableAssetImageManager"/>. </param>
+        /// <param name="etherBalanceObserver"> The active <see cref="EtherBalanceObserver"/>. </param>
+        /// <param name="updateManager"> The active <see cref="UpdateManager"/>. </param>
+        /// <param name="assetSymbol"> The asset symbol text component. </param>
+        /// <param name="assetBalance"> The asset balance text component. </param>
+        /// <param name="assetImage"> The image component used for assigning the asset image. </param>
         public AssetManager(
             TradableAssetManager tradableAssetManager,
             TradableAssetImageManager tradableAssetImageManager,
@@ -47,17 +72,27 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             Start();
         }
 
+        /// <summary>
+        /// Gets the current balance of the active tradable asset.
+        /// </summary>
         public void UpdaterUpdate()
         {
             UpdateBalance();
         }
 
+        /// <summary>
+        /// Removes the observable and updater for updating the balances of the active asset.
+        /// </summary>
         public void Destroy()
         {
             updateManager.RemoveUpdater(this);
             etherBalanceObserver.UnsubscribeObservable(this);
         }
 
+        /// <summary>
+        /// Adds listeners which are called when the asset or ether balance changes.
+        /// </summary>
+        /// <param name="onBalanceChanged"> Action to call once the asset balance or ether balance changes. </param>
         public void AddAssetBalanceListener(Action onBalanceChanged)
         {
             if (onAssetBalanceChanged == null)
@@ -66,6 +101,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
                 onAssetBalanceChanged += onBalanceChanged;
         }
 
+        /// <summary>
+        /// Starts the updaters and sets the initial data of the active tradable asset.
+        /// </summary>
         private void Start()
         {
             StartUpdaters();
@@ -74,12 +112,18 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             UpdateImage();
         }
 
+        /// <summary>
+        /// Starts the updater and observable.
+        /// </summary>
         private void StartUpdaters()
         {
             updateManager.AddUpdater(this);
             etherBalanceObserver.SubscribeObservable(this);
         }
 
+        /// <summary>
+        /// Updates the balance of the active asset and invokes the onAssetBalanceChanged action if the active asset or ether balance changed.
+        /// </summary>
         private void UpdateBalance()
         {
             var newAssetBalance = tradableAssetManager.ActiveTradableAsset.AssetBalance;
@@ -94,8 +138,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             lastEtherBalance = newEtherBalance;
         }
 
+        /// <summary>
+        /// Updates the symbol of the active tradable asset.
+        /// </summary>
         private void UpdateSymbol() => assetSymbol.text = tradableAssetManager.ActiveTradableAsset.AssetSymbol;
 
+        /// <summary>
+        /// Updates the image of the active tradable asset.
+        /// </summary>
         private void UpdateImage() => tradableAssetImageManager.LoadImage(tradableAssetManager.ActiveTradableAsset.AssetSymbol, img => assetImage.sprite = img);
     }
 }

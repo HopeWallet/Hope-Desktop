@@ -8,7 +8,6 @@ public sealed class WalletTransactionSigner
 
     private readonly WalletDecryptor walletDecryptor;
 
-    private readonly DynamicDataCache dynamicDataCache;
     private readonly EthereumNetwork ethereumNetwork;
 
     public WalletTransactionSigner(
@@ -17,7 +16,6 @@ public sealed class WalletTransactionSigner
         EthereumNetwork ethereumNetwork,
         EphemeralEncryption passwordEncryptor)
     {
-        this.dynamicDataCache = dynamicDataCache;
         this.ethereumNetwork = ethereumNetwork;
         this.passwordEncryptor = passwordEncryptor;
 
