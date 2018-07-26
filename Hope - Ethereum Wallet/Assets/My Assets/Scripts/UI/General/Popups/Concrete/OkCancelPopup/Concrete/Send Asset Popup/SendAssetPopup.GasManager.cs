@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Hex.HexTypes;
 using Nethereum.Util;
 using System;
 using System.Linq;
@@ -22,6 +23,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private readonly TMP_InputField gasLimitField,
                                         gasPriceField;
 
+        private readonly TMP_Text transactionFeeText;
+
         private GasPrice estimatedGasPrice,
                          enteredGasPrice;
 
@@ -35,9 +38,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         public float UpdateInterval => 10f;
 
-        public decimal TransactionCost => UnitConversion.Convert.FromWei(TransactionGasLimit * TransactionGasPrice.FunctionalGasPrice.Value);
+        public decimal TransactionFee => UnitConversion.Convert.FromWei(TransactionGasLimit * (TransactionGasPrice.FunctionalGasPrice == null ? 0 : TransactionGasPrice.FunctionalGasPrice.Value));
 
-        public bool IsValid => TransactionCost != 0;
+        public bool IsValid => TransactionFee != 0;
 
         public GasPrice TransactionGasPrice => advancedModeToggle.IsToggledOn ? enteredGasPrice : estimatedGasPrice;
 
@@ -52,7 +55,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             Toggle advancedModeToggle,
             Slider transactionSpeedSlider,
             TMP_InputField gasLimitField,
-            TMP_InputField gasPriceField)
+            TMP_InputField gasPriceField,
+            TMP_Text transactionFeeText)
         {
             this.tradableAssetManager = tradableAssetManager;
             this.gasPriceObserver = gasPriceObserver;
@@ -61,6 +65,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             this.transactionSpeedSlider = transactionSpeedSlider;
             this.gasLimitField = gasLimitField;
             this.gasPriceField = gasPriceField;
+            this.transactionFeeText = transactionFeeText;
+
+            AddGasListener(() => this.transactionFeeText.text = TransactionFee.ToString() + " ETH");
 
             AddListenersAndObservables();
             EstimateGasLimit();

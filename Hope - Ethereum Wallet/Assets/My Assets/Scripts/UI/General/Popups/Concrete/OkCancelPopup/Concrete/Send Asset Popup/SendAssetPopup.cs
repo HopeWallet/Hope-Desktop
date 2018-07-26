@@ -16,6 +16,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
     [SerializeField] private TMP_Text assetBalance;
     [SerializeField] private TMP_Text assetSymbol;
+    [SerializeField] private TMP_Text transactionFee;
 
     [SerializeField] private Toggle advancedModeToggle;
     [SerializeField] private Toggle maxToggle;
@@ -27,6 +28,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	[SerializeField] private InfoMessage infoMessage;
 
     private UserWalletManager userWalletManager;
+    private DynamicDataCache dynamicDataCache;
 
     public AssetManager Asset { get; private set; }
 
@@ -44,12 +46,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         EtherBalanceObserver etherBalanceObserver,
         GasPriceObserver gasPriceObserver,
         UpdateManager updateManager,
+        DynamicDataCache dynamicDataCache,
         PeriodicUpdateManager periodicUpdateManager)
     {
         this.userWalletManager = userWalletManager;
+        this.dynamicDataCache = dynamicDataCache;
 
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-        Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField);
+        Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
         Address = new AddressManager(addressField);
         Amount = new AmountManager(this, maxToggle, amountField);
     }
@@ -67,6 +71,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
     public override void OkButton()
     {
+        dynamicDataCache.SetData("txfee", Gas.TransactionFee.ToString());
         userWalletManager.TransferAsset(Asset.ActiveAsset,
                                         new HexBigInteger(Gas.TransactionGasLimit),
                                         Gas.TransactionGasPrice.FunctionalGasPrice,

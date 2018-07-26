@@ -80,7 +80,7 @@ public class TokenContract : ContractBase
                                          () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address),
                                          address,
                                          SolidityUtils.ConvertToUInt(amount, TokenDecimals));
-        }, gasLimit, gasPrice, address, ContractAddress, amount);
+        }, gasLimit, gasPrice, address, ContractAddress, amount, TokenSymbol);
     }
 
     /// <summary>

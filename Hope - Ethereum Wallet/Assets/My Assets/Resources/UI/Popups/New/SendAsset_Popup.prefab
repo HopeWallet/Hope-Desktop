@@ -2277,6 +2277,7 @@ MonoBehaviour:
   gasPriceField: {fileID: 114084049358666468}
   assetBalance: {fileID: 114821952128224854}
   assetSymbol: {fileID: 114972956831463810}
+  transactionFee: {fileID: 114446133645063434}
   advancedModeToggle: {fileID: 114772791688704820}
   maxToggle: {fileID: 114338446119812900}
   assetImage: {fileID: 114155704206949664}

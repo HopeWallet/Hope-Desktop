@@ -47,7 +47,8 @@ public class EtherAsset : TradableAsset
                                                           gasPrice,
                                                           address,
                                                           AssetAddress,
-                                                          amount);
+                                                          amount,
+                                                          "ETH");
     }
 
     /// <summary>
