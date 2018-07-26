@@ -725,7 +725,7 @@ GameObject:
   - component: {fileID: 224423760791244756}
   - component: {fileID: 222713732008964632}
   - component: {fileID: 114320695318602676}
-  - component: {fileID: 114475645789252190}
+  - component: {fileID: 114346386510195404}
   m_Layer: 5
   m_Name: Info_Icon
   m_TagString: Untagged
@@ -1816,6 +1816,7 @@ MonoBehaviour:
   addressInputField: {fileID: 114631005458636982}
   advancedModeToggle: {fileID: 1298930853387788}
   sendButton: {fileID: 1850029874131590}
+  contactName: {fileID: 1526021395411992}
 --- !u!114 &114155704206949664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2281,6 +2282,7 @@ MonoBehaviour:
   assetImage: {fileID: 114155704206949664}
   transactionSpeedSlider: {fileID: 114247633352688526}
   contactsButton: {fileID: 114250894831834018}
+  infoMessage: {fileID: 114346386510195404}
 --- !u!114 &114245874906713646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2649,6 +2651,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggleBackground: {fileID: 1346633980271186}
   toggleCircle: {fileID: 1035634086152908}
+--- !u!114 &114346386510195404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490896751880576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleText: Transaction Speed
+  bodyText: Your transaction speed determines how long it will take your transaction
+    to go through. The cheaper you spend on gas, the slower it will be, and vice versa.
+  infoIcon: 1
 --- !u!114 &114348298059734220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3463,20 +3480,6 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114475645789252190
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1490896751880576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd75bdfc616f44c469ba290a26d11553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: Transaction Speed Info
-  bodyText: blah blah blah blah blah h blah blah blah blahh blah blah blah blahh blah
-    blah blah blah
 --- !u!114 &114479382002274798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4308,7 +4311,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}

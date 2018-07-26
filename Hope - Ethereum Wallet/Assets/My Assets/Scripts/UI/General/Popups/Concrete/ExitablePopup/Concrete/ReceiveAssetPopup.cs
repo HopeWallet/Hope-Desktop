@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using TMPro;
 
@@ -8,13 +9,15 @@ using TMPro;
 public class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 {
 
-    public Button copyAddressButton;
+	[SerializeField] private Button copyAddressButton;
 
-    public Image qrImage;
+	[SerializeField] private Image qrImage;
 
-    public TextMeshProUGUI addressText;
+	[SerializeField] private TextMeshProUGUI addressText;
 
-    private TradableAssetManager tradableAssetManager;
+	[SerializeField] private InfoMessage infoMessage;
+
+	private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
 
@@ -45,7 +48,9 @@ public class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 		addressText.text = walletAddress;
         qrImage.sprite = QRUtils.GenerateQRCode(walletAddress);
 
-        copyAddressButton.onClick.AddListener(CopyAddressClicked);
+		infoMessage.PopupManager = popupManager;
+
+		copyAddressButton.onClick.AddListener(CopyAddressClicked);
     }
 
     /// <summary>

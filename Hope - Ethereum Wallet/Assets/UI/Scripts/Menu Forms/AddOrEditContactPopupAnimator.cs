@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using Hope.Utils.EthereumUtils;
 using System;
+using System.Collections.Generic;
 
 public class AddOrEditContactPopupAnimator : UIAnimator
 {
@@ -17,33 +18,25 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
 
-	private bool addingContact;
+	public bool addingContact;
 	private bool validName;
 	private bool validAddress;
 
-	/// <summary>
-	/// Animates the error icon beside the name input field if it is valid or not
-	/// </summary>
 	private bool ValidName
 	{
 		set
 		{
 			validName = value;
-			nameSection.transform.GetChild(nameSection.transform.childCount - 1).gameObject
-					.AnimateGraphicAndScale(validName ? 0f : 1f, validName ? 0f : 1f, 0.2f);
+			AnimateErrorIcon(nameSection, validName);
 		}
 	}
 
-	/// <summary>
-	/// Animates the error icon beside the address input field if it is valid or not
-	/// </summary>
 	private bool ValidAddress
 	{
 		set
 		{
 			validAddress = value;
-			addressSection.transform.GetChild(addressSection.transform.childCount - 1).gameObject
-					.AnimateGraphicAndScale(validAddress ? 0f : 1f, validAddress ? 0f : 1f, 0.2f);
+			AnimateErrorIcon(addressSection, validAddress);
 		}
 	}
 
@@ -52,29 +45,11 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// </summary>
 	private void Awake()
 	{
-		SetAddingContact(true);
-
 		nameInputField = nameSection.transform.GetChild(2).GetComponent<TMP_InputField>();
 		addressInputField = addressSection.transform.GetChild(2).GetComponent<TMP_InputField>();
 
 		nameInputField.onValueChanged.AddListener(ContactNameChanged);
 		addressInputField.onValueChanged.AddListener(AddressChanged);
-
-		confirmButton.GetComponent<Button>().onClick.AddListener(ConfirmButtonClicked);
-	}
-
-	/// <summary>
-	/// Sets all the necessary values
-	/// </summary>
-	/// <param name="addingContact"> Checks if adding a new contact or editing an existing one </param>
-	/// <param name="name"> The current contact name being edited, if any </param>
-	/// <param name="address"> The current contact address being edited, if any </param>
-	public void SetAddingContact(bool addingContact, string name = "", string address = "")
-	{
-		this.addingContact = addingContact;
-		nameInputField.text = name;
-		addressInputField.text = address;
-		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
 	/// <summary>
@@ -93,7 +68,6 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the UI elements of the form out of view
 	/// </summary>
-	[ContextMenu("Animate Out")]
 	protected override void AnimateOut()
 	{
 		AnimateMainButton(false);
@@ -126,7 +100,12 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="name"> The current string in the name input field </param>
 	private void ContactNameChanged(string name)
 	{
-		ValidName = SecurePlayerPrefs.HasKey(name) ? (addingContact ? false : true) : true;
+		if (name.Length > 19)
+			nameInputField.text = name.LimitEnd(19);
+
+		string updatedName = nameInputField.text;
+
+		ValidName = string.IsNullOrWhiteSpace(updatedName) ? string.IsNullOrEmpty(updatedName) : true;
 
 		SetMainButtonInteractable();
 	}
@@ -142,7 +121,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedAddress = addressInputField.text;
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress);
+		ValidAddress = (string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress)) && !SecurePlayerPrefs.HasKey(updatedAddress);
 
 		SetMainButtonInteractable();
 	}
@@ -159,9 +138,15 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		else
 			confirmButton.GetComponent<Button>().interactable = validInputs;
 	}
-
+	
 	/// <summary>
-	/// Disables the menu
+	/// Animates the error icon in a given section
 	/// </summary>
-	private void ConfirmButtonClicked() => AnimateDisable();
+	/// <param name="objectSection"> THe GameObject parent of the section </param>
+	/// <param name="isValid"> Checks if the input is valid or not </param>
+	private void AnimateErrorIcon(GameObject objectSection, bool isValid)
+	{
+		objectSection.transform.GetChild(objectSection.transform.childCount - 1).gameObject
+			.AnimateGraphicAndScale(isValid ? 0f : 1f, isValid ? 0f : 1f, 0.2f);
+	}
 }
