@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
+public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;

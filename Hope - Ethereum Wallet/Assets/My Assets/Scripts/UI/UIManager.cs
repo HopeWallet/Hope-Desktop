@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         if (clickType != ClickType.Down)
             return;
 
-        if (popupManager.CloseActivePopup(typeof(LoadingPopup)) || popupManager.ActivePopupExists || popupManager.AnimatingPopup)
+        if (popupManager.AnimatingPopup || popupManager.CloseActivePopup(typeof(LoadingPopup)) || popupManager.ActivePopupExists)
             return;
 
         if (closingMenu?.Animator.Animating != true)
