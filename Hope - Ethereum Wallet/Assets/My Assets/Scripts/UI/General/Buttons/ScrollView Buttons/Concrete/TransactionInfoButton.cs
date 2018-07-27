@@ -10,13 +10,16 @@ using Zenject;
 public class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
 
-    public TMP_Text amountText,
-                    timeFromNowText,
-                    addressText,
-                    dateText,
+	public TMP_Text amountText,
+					timeFromNowText,
+					addressText,
+					dateText,
+					statusText,
 					directionText;
 
     public Image assetImage, circle;
+
+	public GameObject loadingLine;
 
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
@@ -74,7 +77,9 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
 		var sending = transaction.Type == TransactionInfo.TransactionType.Send;
 
 		circle.color = sending ? RED_CIRCLE_COLOR : GREEN_CIRCLE_COLOR;
-		directionText.text = sending ? "OUT" : "IN";
+		statusText.text = sending ? "OUT" : "IN";
+		directionText.text = sending ? "To:" : "From:";
+		addressText.transform.localPosition = new Vector2(sending ? -400f : -370f, addressText.transform.localPosition.y);
 	}
 
     /// <summary>

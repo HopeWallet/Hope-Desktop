@@ -589,7 +589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleText: Sign-In Error
+  titleText: Sign In Error
   bodyText: The password you entered was incorrect
   infoIcon: 0
 --- !u!114 &114221500978124820
