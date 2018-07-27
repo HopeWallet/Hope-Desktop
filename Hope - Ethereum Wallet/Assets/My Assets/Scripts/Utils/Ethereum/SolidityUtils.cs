@@ -43,7 +43,7 @@ namespace Hope.Utils.EthereumUtils
         /// </summary>
         /// <param name="number"> The number to convert to solidity uint format. </param>
         /// <param name="decimals"> The number of decimal places the value converting will have. </param>
-        /// <returns> The number converted to the BigInteger range. </returns>
+        /// <returns> The number converted to the <see cref="BigInteger"/> range. </returns>
         public static BigInteger ConvertToUInt(dynamic number, int decimals) => new BigInteger((decimal)number * (decimal)GetBigIntegerValue(decimals));
 
         /// <summary>
@@ -51,8 +51,16 @@ namespace Hope.Utils.EthereumUtils
         /// </summary>
         /// <param name="number"> The number to convert to readable format. </param>
         /// <param name="decimals"> The number of decimal places to convert to. </param>
-        /// <returns> The number converted from the BigInteger range to a readable decimal </returns>
+        /// <returns> The number converted from the <see cref="BigInteger"/> range to a readable decimal </returns>
         public static decimal ConvertFromUInt(dynamic number, int decimals) => (decimal)number / (decimal)GetBigIntegerValue(decimals);
+
+        /// <summary>
+        /// Converts the output uint value from a solidity function to a readable representation in decimal format.
+        /// </summary>
+        /// <param name="uintOutput"> The <see cref="SimpleOutputs.UIntBase"/> output to convert to decimal format. </param>
+        /// <param name="decimals"> The number of decimal places to convert the value to. </param>
+        /// <returns> The uint converted from <see cref="BigInteger"/> range to a readable decimal. </returns>
+        public static decimal ConvertFromUInt(SimpleOutputs.UIntBase uintOutput, int decimals) => ConvertFromUInt(uintOutput.Value, decimals);
 
         /// <summary>
         /// Gets the BigInteger value corresponding to the number of decimal places needed.
