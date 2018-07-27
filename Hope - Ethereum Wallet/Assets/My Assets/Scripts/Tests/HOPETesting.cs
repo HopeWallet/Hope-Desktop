@@ -42,6 +42,11 @@ using System.Security.Permissions;
 using Hope.Security.Encryption.Symmetric;
 using Nethereum.Contracts;
 using Nethereum.ABI.FunctionEncoding.Attributes;
+using Nethereum.Contracts.Extensions;
+using Nethereum.ABI.Model;
+using Nethereum.RPC.Eth.DTOs;
+using System.Collections;
+using Nethereum.JsonRpc.UnityClient;
 
 
 // TODO
@@ -51,8 +56,39 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 
 public class HOPETesting : MonoBehaviour
 {
+    [Function("totalSupply", "uint256")]
+    public sealed class TotalSupplyFunction : FunctionMessage
+    {
+    }
+
+    [Function("balanceOf", "uint256")]
+    public sealed class BalanceOfFunction : FunctionMessage
+    {
+        [Parameter("address", "_owner", 1)]
+        public string Owner { get; set; }
+    }
+
+    [FunctionOutput]
+    public sealed class UInt256OutputType : IFunctionOutputDTO
+    {
+        [Parameter("uint256", 1)]
+        public dynamic Value { get; set; }
+    }
+
+    [Inject]
+    private EthereumNetworkManager ethereumNetworkManager;
+
     private void Start()
     {
+        Testing("0x132962ed7C55326217C390176E053d1a6d335B62", ethereumNetworkManager.CurrentNetwork.NetworkUrl, "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c").StartCoroutine();
+    }
+
+    private IEnumerator Testing(string account, string url, string contractAddress)
+    {
+        var queryRequest = new QueryUnityRequest<BalanceOfFunction, UInt256OutputType>(url, account);
+        yield return queryRequest.Query(new BalanceOfFunction() { Owner = account }, contractAddress);
+
+        Debug.Log(queryRequest.Result.Value);
     }
 
     [ContextMenu("Delete Player Prefs")]
