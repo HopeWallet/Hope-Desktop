@@ -160,7 +160,6 @@ GameObject:
   - component: {fileID: 224374389474366048}
   - component: {fileID: 222989242163103904}
   - component: {fileID: 114880202869802940}
-  - component: {fileID: 114079817072152848}
   m_Layer: 5
   m_Name: AddTokenPopup
   m_TagString: Untagged
@@ -228,20 +227,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Confirm
---- !u!114 &114079817072152848
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1643188915786944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4add934fd7af500479aa315e48abaae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  okButton: {fileID: 114498740991733970}
-  cancelButton: {fileID: 114261407713873832}
-  inputField: {fileID: 114289082257382264}
 --- !u!114 &114087792478280718
 MonoBehaviour:
   m_ObjectHideFlags: 1

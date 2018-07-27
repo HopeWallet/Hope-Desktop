@@ -1,20 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
-public class ModifyTokenListPopupAnimator : UIAnimator
+public sealed class ModifyTokenListPopupAnimator : UIAnimator
 {
-
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject tokenList;
 	[SerializeField] private GameObject customTokenButton;
-	[SerializeField] private GameObject addTokenForm;
-
-	/// <summary>
-	/// Initializes the button listeners
-	/// </summary>
-	private void Awake() => customTokenButton.GetComponent<Button>().onClick.AddListener(CustomTokenClicked);
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -84,22 +76,5 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1.183325f, 0.15f, FinishedAnimating);
 		else
 			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1.183325f, 0.15f, () => AnimateTokens(++index));
-	}
-
-	/// <summary>
-	/// customTokenButton is clicked and opens up the addTokenForm
-	/// </summary>
-	private void CustomTokenClicked() => addTokenForm.SetActive(true);
-
-	/// <summary>
-	/// Animates the checkmark in or out if user has clicked on the checkbox for the desired token
-	/// </summary>
-	/// <param name="index"> The index of the checkbox in the tokenList </param>
-	/// <param name="animatingIn"> Checks if animating the checkmark in or out </param>
-	private void CheckboxClicked(int index, bool animatingIn)
-	{
-		float endValue = animatingIn ? 1f : 0f;
-
-		tokenList.transform.GetChild(0).GetChild(0).GetChild(index).GetChild(2).GetChild(0).gameObject.AnimateGraphicAndScale(endValue, endValue, 0.1f);
 	}
 }

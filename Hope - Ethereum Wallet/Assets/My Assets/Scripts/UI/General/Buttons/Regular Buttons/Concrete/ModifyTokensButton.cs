@@ -3,9 +3,8 @@
 /// <summary>
 /// Class which handles the AddToken button and what happens on click.
 /// </summary>
-public class AddTokenButton : ButtonBase
+public sealed class ModifyTokensButton : ButtonBase
 {
-
     private PopupManager popupManager;
 
     /// <summary>
@@ -18,6 +17,5 @@ public class AddTokenButton : ButtonBase
     /// <summary>
     /// Instantiates the popup to add a token.
     /// </summary>
-    public override void ButtonLeftClicked() => popupManager.GetPopup<AddTokenPopup>();
-
+    public override void ButtonLeftClicked() => popupManager.GetPopup<ModifyTokensPopup>();
 }

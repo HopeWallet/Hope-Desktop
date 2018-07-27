@@ -1,16 +1,23 @@
 ﻿using Hope.Utils.EthereumUtils;
-using UnityEngine.UI;
+using TMPro;
 using Zenject;
 
 /// <summary>
 /// Class which is manages the popup for adding a token to the list of tokens.
 /// </summary>
-public class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
+public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 {
 
-    public InputField inputField;
+    public TMP_InputField inputField;
 
     private TokenContractManager tokenContractManager;
+
+    /// <summary> 
+    /// Injects more dependencies into this popup.
+    /// </summary>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    [Inject]
+    public void Construct(TokenContractManager tokenContractManager) => this.tokenContractManager = tokenContractManager;
 
     /// <summary>
     /// Gets the input field in the children and makes sure the ok button is disabled.
@@ -31,13 +38,5 @@ public class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// Sets the button to interactable if the text is a valid ethereum address.
     /// </summary>
     /// <param name="text"> The text of the input field. </param>
-    public void OnTextChanged(string text) => okButton.interactable = AddressUtils.IsValidEthereumAddress(text);
-
-    /// <summary> 
-    /// Injects more dependencies into this popup.
-    /// </summary>
-    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    [Inject]
-    public void Construct(TokenContractManager tokenContractManager) => this.tokenContractManager = tokenContractManager;
-
+    private void OnTextChanged(string text) => okButton.interactable = AddressUtils.IsValidEthereumAddress(text);
 }

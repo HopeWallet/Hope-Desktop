@@ -64,7 +64,7 @@ MonoBehaviour:
       - {fileID: 1928204962434420, guid: ab281cfd370a64b40832f35d5ea1bc00, type: 2}
       - {fileID: 1586119722272208, guid: d8f8f0502b424744f90627b25ee94f2a, type: 2}
       popups:
-      - {fileID: 1643188915786944, guid: 5aa72b1feab2208499177ee7baa29dd2, type: 2}
+      - {fileID: 1120657717184104, guid: b13e683ad7d232746a6a33077e53025e, type: 2}
       - {fileID: 1566284343427046, guid: b9a83c3b7d485c8499d9133fbb7ac799, type: 2}
       - {fileID: 1840495807225606, guid: 20737e47891268e468d1dbf2e6f4dd86, type: 2}
       - {fileID: 1040657794818106, guid: fa9b4dbeb39f96d4693e3458b5f85d1e, type: 2}
@@ -79,3 +79,4 @@ MonoBehaviour:
       - {fileID: 1005287853241454, guid: f7d43cddbe4f15a4fb24f33a58a45ac1, type: 2}
       - {fileID: 1792955184907624, guid: 1967757afcd281a4481096f1e87c28b0, type: 2}
       - {fileID: 1214643471925612, guid: 32a5190669c319e42baab7ab1c196730, type: 2}
+      - {fileID: 1733899067655964, guid: 1c7146e337c02844389ce825402de907, type: 2}
