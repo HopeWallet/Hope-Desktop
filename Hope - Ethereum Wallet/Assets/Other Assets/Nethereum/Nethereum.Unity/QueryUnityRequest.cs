@@ -8,7 +8,7 @@ using Nethereum.Contracts.Extensions;
 namespace Nethereum.JsonRpc.UnityClient
 {
     public class QueryUnityRequest<TFunctionMessage, TResponse> : UnityRequest<TResponse>
-        where TFunctionMessage : FunctionMessage, new()
+        where TFunctionMessage : FunctionMessage
         where TResponse : IFunctionOutputDTO, new()
 
     {
@@ -43,12 +43,6 @@ namespace Nethereum.JsonRpc.UnityClient
                 this.Exception = _ethCallUnityRequest.Exception;
                 yield break;
             }
-        }
-
-        public IEnumerator Query(string contractAddress,
-            BlockParameter blockParameter = null)
-        {
-            yield return Query(new TFunctionMessage(), contractAddress, blockParameter);
         }
     }
 }

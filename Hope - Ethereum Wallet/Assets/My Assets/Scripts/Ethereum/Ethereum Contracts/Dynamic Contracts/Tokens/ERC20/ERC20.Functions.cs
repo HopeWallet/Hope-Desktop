@@ -9,43 +9,51 @@ using System.Threading.Tasks;
 
 public partial class ERC20
 {
-    public static class Functions
+    public sealed class Functions
     {
         [Function("name", "string")]
-        public sealed class Name : FunctionMessage
+        public sealed class Name : ConstructedFunction
         {
         }
 
         [Function("symbol", "string")]
-        public sealed class Symbol : FunctionMessage
+        public sealed class Symbol : ConstructedFunction
         {
         }
 
         [Function("decimals", "string")]
-        public sealed class Decimals : FunctionMessage
+        public sealed class Decimals : ConstructedFunction
         {
         }
 
         [Function("totalSupply", "uint256")]
-        public sealed class TotalSupply : FunctionMessage
+        public sealed class TotalSupply : ConstructedFunction
         {
         }
 
         [Function("balanceOf", "uint256")]
-        public sealed class BalanceOf : FunctionMessage
+        public sealed class BalanceOf : ConstructedFunction
         {
             [Parameter("address", "_owner", 1)]
-            public string Owner { get; set; }
+            public string Owner => (string)input[0];
+
+            public BalanceOf(params object[] functionInput) : base(functionInput)
+            {
+            }
         }
 
         [Function("transfer", "bool")]
-        public sealed class Transfer : FunctionMessage
+        public sealed class Transfer : ConstructedFunction
         {
             [Parameter("address", "_to", 1)]
             public string To { get; set; }
 
             [Parameter("uint256", "_value", 2)]
             public BigInteger Value { get; set; }
+
+            public Transfer(params object[] functionInput) : base(functionInput)
+            {
+            }
         }
     }
 }

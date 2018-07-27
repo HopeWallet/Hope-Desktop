@@ -56,40 +56,33 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class HOPETesting : MonoBehaviour
 {
-    [Function("totalSupply", "uint256")]
-    public sealed class TotalSupplyFunction : FunctionMessage
+    public string contractAddress;
+
+    [ContextMenu("Query")]
+    public void Query()
     {
+        //Testing("0x132962ed7C55326217C390176E053d1a6d335B62", ethereumNetworkManager.CurrentNetwork.NetworkUrl, "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c").StartCoroutine();
+
+        //if (!AddressUtils.IsValidEthereumAddress(contractAddress))
+        //    return;
+
+        ContractUtils.QueryContract<ERC20.Functions.BalanceOf, SimpleOutputs.UInt256>(contractAddress,
+                                                                                      "0x132962ed7C55326217C390176E053d1a6d335B62",
+                                                                                      OnBalanceReceived,
+                                                                                      "0x132962ed7C55326217C390176E053d1a6d335B62");
+
+        ContractUtils.QueryContract<ERC20.Functions.Name, SimpleOutputs.String>(contractAddress,
+                                                                                "0x132962ed7C55326217C390176E053d1a6d335B62",
+                                                                                OnTextReceived);
+
+        ContractUtils.QueryContract<ERC20.Functions.Symbol, SimpleOutputs.String>(contractAddress,
+                                                                                  "0x132962ed7C55326217C390176E053d1a6d335B62",
+                                                                                  OnTextReceived);
     }
 
-    [Function("balanceOf", "uint256")]
-    public sealed class BalanceOfFunction : FunctionMessage
-    {
-        [Parameter("address", "_owner", 1)]
-        public string Owner { get; set; }
-    }
+    private void OnBalanceReceived(SimpleOutputs.UInt256 uintOutput) => Debug.Log(uintOutput.Value);
 
-    [FunctionOutput]
-    public sealed class UInt256OutputType : IFunctionOutputDTO
-    {
-        [Parameter("uint256", 1)]
-        public dynamic Value { get; set; }
-    }
-
-    [Inject]
-    private EthereumNetworkManager ethereumNetworkManager;
-
-    private void Start()
-    {
-        Testing("0x132962ed7C55326217C390176E053d1a6d335B62", ethereumNetworkManager.CurrentNetwork.NetworkUrl, "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c").StartCoroutine();
-    }
-
-    private IEnumerator Testing(string account, string url, string contractAddress)
-    {
-        var queryRequest = new QueryUnityRequest<BalanceOfFunction, UInt256OutputType>(url, account);
-        yield return queryRequest.Query(new BalanceOfFunction() { Owner = account }, contractAddress);
-
-        Debug.Log(queryRequest.Result.Value);
-    }
+    private void OnTextReceived(SimpleOutputs.String stringOutput) => Debug.Log(stringOutput.Value);
 
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
