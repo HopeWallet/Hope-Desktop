@@ -8,7 +8,7 @@ using Nethereum.Contracts.Extensions;
 namespace Nethereum.JsonRpc.UnityClient
 {
     public class QueryUnityRequest<TFunctionMessage, TResponse> : UnityRequest<TResponse>
-        where TFunctionMessage : QueryFunction
+        where TFunctionMessage : ContractFunction
         where TResponse : IFunctionOutputDTO, new()
 
     {

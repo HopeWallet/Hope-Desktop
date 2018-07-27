@@ -1,11 +1,11 @@
 ﻿using Nethereum.Contracts;
 using System.Collections.Generic;
 
-public abstract class QueryFunction : FunctionMessage
+public abstract class ContractFunction : FunctionMessage
 {
     protected readonly List<object> input = new List<object>();
 
-    protected QueryFunction(params object[] functionInput)
+    protected ContractFunction(params object[] functionInput)
     {
         if (functionInput == null)
             return;

@@ -46,7 +46,7 @@ namespace Hope.Utils.EthereumUtils
             string contractAddress,
             string senderAddress,
             Action<TOut> onQueryCompleted,
-            params object[] functionInput) where TFunc : QueryFunction where TOut : IFunctionOutputDTO, new()
+            params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
             _QueryContractCoroutine<TFunc, TOut>(contractAddress, senderAddress, onQueryCompleted, functionInput).StartCoroutine();
         }
@@ -55,7 +55,7 @@ namespace Hope.Utils.EthereumUtils
             string contractAddress,
             string senderAddress,
             Action<TOut> onQueryCompleted,
-            params object[] functionInput) where TFunc : QueryFunction where TOut : IFunctionOutputDTO, new()
+            params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
             var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, senderAddress);
             yield return queryRequest.Query((TFunc)Activator.CreateInstance(typeof(TFunc), functionInput), contractAddress);
