@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class ModifyTokenListPopupAnimator : UIAnimator
 {
@@ -34,7 +33,6 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the UI elements of the form out of view
 	/// </summary>
-	[ContextMenu("Animate out")]
 	protected override void AnimateOut()
 	{
 		for (int i = 0; i < tokenTransform.childCount; i++)
@@ -60,6 +58,8 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 
 			FinishedAnimating();
 		}
+		else if (index == tokenTransform.childCount - 1)
+			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
 		else
 			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateTokens(++index));
 	}

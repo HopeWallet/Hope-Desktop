@@ -84,14 +84,10 @@ public class ContactsPopupAnimator : UIAnimator
 
 			FinishedAnimating();
 		}
+		else if (index == contactsTransform.childCount - 1)
+			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
 		else
 			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateContacts(++index));
-	}
-	private void ContactClicked(int index)
-	{
-		//Set the selected button interactable to false
-
-		confirmButton.GetComponent<Button>().interactable = true;
 	}
 
 	/// <summary>
@@ -100,7 +96,19 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <param name="value"> The value of the sorting type in the dropdown </param>
 	private void ListOrderChanged(int value)
 	{
-	}
+		if (value == 0)
+		{
+			//sort by oldest
+		}
 
-	private void ConfirmButtonClicked() => AnimateDisable();
+		else if (value == 1)
+		{
+			//Sort by newest
+		}
+
+		else
+		{
+			//Sort by alphabetical
+		}
+	}
 }
