@@ -56,20 +56,6 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class HOPETesting : MonoBehaviour
 {
-    public string contractAddress;
-    public string walletAddress = "0xb332Feee826BF44a431Ea3d65819e31578f30446";
-
-    [ContextMenu("Query")]
-    public void Query()
-    {
-        ContractUtils.QueryContract<ERC20.Functions.BalanceOf, SimpleOutputs.UInt256>(contractAddress, walletAddress, OnBalanceReceived, walletAddress);
-        ContractUtils.QueryContract<ERC20.Functions.Name, SimpleOutputs.String>(contractAddress, walletAddress, OnTextReceived);
-        ContractUtils.QueryContract<ERC20.Functions.Symbol, SimpleOutputs.String>(contractAddress, walletAddress, OnTextReceived);
-    }
-
-    private void OnBalanceReceived(SimpleOutputs.UInt256 uintOutput) => Debug.Log(uintOutput.Value);
-
-    private void OnTextReceived(SimpleOutputs.String stringOutput) => Debug.Log(stringOutput.Value);
 
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
