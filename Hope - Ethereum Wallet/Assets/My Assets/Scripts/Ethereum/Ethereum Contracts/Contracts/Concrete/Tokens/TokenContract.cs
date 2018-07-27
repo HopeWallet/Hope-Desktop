@@ -51,8 +51,8 @@ public class TokenContract : ContractBase
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
     public void BalanceOf(string address, Action<dynamic> onBalanceReceived)
     {
-        SimpleOutputQueries.QueryUInt256Output<ERC20.Functions.BalanceOf>(ContractAddress, address, 
-            balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance.Value, TokenDecimals)), address);
+        SimpleOutputQueries.QueryUInt256Output<ERC20.Functions.BalanceOf>(ContractAddress, address,
+            balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, TokenDecimals)), address);
     }
 
     /// <summary>

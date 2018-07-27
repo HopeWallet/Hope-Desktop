@@ -7,18 +7,23 @@ using System.Threading.Tasks;
 
 public static class SimpleOutputs
 {
-    [FunctionOutput]
-    public sealed class UInt256 : IFunctionOutputDTO
+    public abstract class UIntBase : IFunctionOutputDTO
     {
-        [Parameter("uint256", 1)]
-        public dynamic Value { get; set; }
+        public abstract dynamic Value { get; set; }
     }
 
     [FunctionOutput]
-    public sealed class UInt8 : IFunctionOutputDTO
+    public sealed class UInt256 : UIntBase
+    {
+        [Parameter("uint256", 1)]
+        public override dynamic Value { get; set; }
+    }
+
+    [FunctionOutput]
+    public sealed class UInt8 : UIntBase
     {
         [Parameter("uint8", 1)]
-        public dynamic Value { get; set; }
+        public override dynamic Value { get; set; }
     }
 
     [FunctionOutput]
