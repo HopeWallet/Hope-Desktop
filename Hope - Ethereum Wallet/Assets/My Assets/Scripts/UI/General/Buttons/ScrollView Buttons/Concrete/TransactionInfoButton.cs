@@ -79,7 +79,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
 		circle.color = sending ? RED_CIRCLE_COLOR : GREEN_CIRCLE_COLOR;
 		statusText.text = sending ? "OUT" : "IN";
 		directionText.text = sending ? "To:" : "From:";
-		addressText.transform.localPosition = new Vector2(sending ? -400f : -370f, addressText.transform.localPosition.y);
+		addressText.transform.localPosition = new Vector2(sending ? -215f : -185f, addressText.transform.localPosition.y);
 	}
 
     /// <summary>

@@ -20,10 +20,15 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// </summary>
         public bool IsValid { get; private set; }
 
-        /// <summary>
-        /// The address the asset should be sent to.
-        /// </summary>
-        public string SendAddress { get { return addressField.text; } }
+		/// <summary>
+		/// Whether the address input field is empty or not.
+		/// </summary>
+		public bool IsEmpty { get { return string.IsNullOrEmpty(addressField.text); } }
+
+		/// <summary>
+		/// The address the asset should be sent to.
+		/// </summary>
+		public string SendAddress { get { return addressField.text; } }
 
         /// <summary>
         /// Initializes the <see cref="AddressManager"/> by assigning the send address input field.

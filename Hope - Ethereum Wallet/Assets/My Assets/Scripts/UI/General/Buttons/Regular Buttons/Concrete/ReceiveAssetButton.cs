@@ -14,9 +14,9 @@ public class ReceiveAssetButton : ButtonBase
     [Inject]
     public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
 
-    /// <summary>
-    /// Opens the ReceiveAssetPopup.
-    /// </summary>
-    public override void ButtonLeftClicked() => popupManager.GetPopup<ReceiveAssetPopup>();
+	/// <summary>
+	/// Opens the ReceiveAssetPopup.
+	/// </summary>
+	public override void ButtonLeftClicked() => popupManager.GetPopup<ReceiveAssetPopup>();
 
 }

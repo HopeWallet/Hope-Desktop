@@ -25,10 +25,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// </summary>
         public bool IsValid { get; private set; }
 
-        /// <summary>
-        /// Whether the amount input field has been edited since the <see cref="SendAssetPopup"/> has been created.
-        /// </summary>
-        public bool AmountChanged { get; private set; }
+		/// <summary>
+		/// Whether the amount input field is empty or not.
+		/// </summary>
+		public bool IsEmpty { get { return string.IsNullOrEmpty(amountInputField.text); } }
 
         /// <summary>
         /// The amount that will be sent.
@@ -116,8 +116,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="amountText"> The text entered in the amount input field. </param>
         private void OnAmountChanged(string amountText)
         {
-            AmountChanged = true;
-
             amountInputField.RestrictToBalance(sendAssetPopup.Asset.ActiveAsset);
 
             decimal newSendAmount;

@@ -19,6 +19,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
     public Image assetImage;
 
+	public InfoMessage infoMessage;
+
     public DropdownButton optionsDropdownButton;
 
     private TokenContractManager tokenContractManager;
@@ -35,11 +37,16 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     /// <param name="uiSettings"> The ui settings. </param>
     [Inject]
-    public void Construct(TokenContractManager tokenContractManager, TradableAssetManager tradableAssetManager, UIManager.Settings uiSettings)
+    public void Construct(
+		TokenContractManager tokenContractManager,
+		TradableAssetManager tradableAssetManager,
+		UIManager.Settings uiSettings,
+		PopupManager popupManager)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
         uiDropdowns = uiSettings.generalSettings.dropdowns;
+		infoMessage.PopupManager = popupManager;
     }
 
     /// <summary>

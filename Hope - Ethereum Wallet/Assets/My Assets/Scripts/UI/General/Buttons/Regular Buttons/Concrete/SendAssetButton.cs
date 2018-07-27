@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using UnityEngine.UI;
+using Zenject;
 /// <summary>
 /// Class used for opening the SendAssetPopup.
 /// </summary>
@@ -14,9 +15,9 @@ public class SendAssetButton : ButtonBase
     [Inject]
     public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
 
-    /// <summary>
-    /// Executed when the button is clicked to send the current asset.
-    /// </summary>
-    public override void ButtonLeftClicked() => popupManager.GetPopup<SendAssetPopup>();
+	/// <summary>
+	/// Executed when the button is clicked to send the current asset.
+	/// </summary>
+	public override void ButtonLeftClicked() => popupManager.GetPopup<SendAssetPopup>();
 
 }
