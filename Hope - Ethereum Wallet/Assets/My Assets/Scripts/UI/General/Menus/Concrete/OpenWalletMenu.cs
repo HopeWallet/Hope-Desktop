@@ -13,8 +13,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
     public GameObject backgroundVignette;
 
-    public TMP_Text assetText,
-                    balanceText,
+	public TMP_Text assetText,
+					balanceText,
 					currentTokenNetWorthText;
 
     public Image assetImage;
