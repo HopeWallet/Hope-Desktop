@@ -8,25 +8,31 @@ namespace Nethereum.Contracts
 {
     public abstract class FunctionBuilderBase
     {
-        private readonly ContractBuilder _contract;
-
-        protected FunctionBuilderBase(ContractBuilder contract, FunctionABI functionAbi)
+        protected FunctionBuilderBase(string contractAddress, FunctionABI functionAbi):this(contractAddress)
         {
-            FunctionABI = functionAbi;
-            _contract = contract;
+            FunctionABI = functionAbi;   
+        }
+
+        protected FunctionBuilderBase(string contractAddress)
+        {
+            ContractAddress = contractAddress;
             FunctionCallDecoder = new FunctionCallDecoder();
             FunctionCallEncoder = new FunctionCallEncoder();
         }
+    
 
-        // public BlockParameter DefaultBlock => _contract.DefaultBlock;
-
-        public string ContractAddress => _contract.Address;
+        public string ContractAddress { get; set; }
 
         protected FunctionCallDecoder FunctionCallDecoder { get; set; }
 
         protected FunctionCallEncoder FunctionCallEncoder { get; set; }
 
         public FunctionABI FunctionABI { get; protected set; }
+
+        public bool IsTransactionInputDataForFunction(string data)
+        {
+            return FunctionCallDecoder.IsDataForFunction(FunctionABI.Sha3Signature, data);
+        }
 
         public List<ParameterOutput> DecodeInput(string data)
         {

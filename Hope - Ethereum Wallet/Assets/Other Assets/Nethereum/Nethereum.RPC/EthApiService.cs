@@ -11,7 +11,8 @@ namespace Nethereum.RPC
         private BlockParameter defaultBlock;
         private ITransactionManager _transactionManager;
 
-        public EthApiService(IClient client) : this(client, new TransactionManager(client))
+        public EthApiService(IClient client) : this(client, 
+            new TransactionManager(client))
         {
            
         }
@@ -38,6 +39,7 @@ namespace Nethereum.RPC
 
             DefaultBlock = BlockParameter.CreateLatest();
             TransactionManager = transactionManager;
+            TransactionManager.Client = client; //Ensure is the same
         }
 
         public BlockParameter DefaultBlock
@@ -75,7 +77,12 @@ namespace Nethereum.RPC
         public EthApiFilterService Filters { get; private set; }
 
         public EthApiCompilerService Compile { get; private set; }
-
+#if !DOTNET35
+        public virtual IEtherTransferService  GetEtherTransferService()
+        {
+            return new EtherTransferService(TransactionManager);
+        }
+#endif
         public virtual ITransactionManager TransactionManager
         {
             get { return _transactionManager; }

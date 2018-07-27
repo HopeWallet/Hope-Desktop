@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Nethereum.Contracts.Services;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.Client;
 using Nethereum.RPC.TransactionManagers;

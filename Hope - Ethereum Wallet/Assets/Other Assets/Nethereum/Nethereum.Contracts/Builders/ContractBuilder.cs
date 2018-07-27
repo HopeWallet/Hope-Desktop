@@ -31,39 +31,26 @@ namespace Nethereum.Contracts
 
         public ContractABI ContractABI { get; set; }
 
-        public BlockParameter DefaultBlock { get; set; }
-
         public string Address { get; set; }
 
         public NewFilterInput GetDefaultFilterInput(BlockParameter fromBlock = null, BlockParameter toBlock = null)
         {
-            var ethFilterInput = new NewFilterInput
-            {
-                FromBlock = fromBlock,
-                ToBlock = toBlock ?? BlockParameter.CreateLatest(),
-                Address = new[] {Address}
-            };
-            return ethFilterInput;
-        }
-
-        public EventBuilder GetEventBuilder(string name)
-        {
-            return new EventBuilder(this, GetEventAbi(name));
+            return FilterInputBuilder.GetDefaultFilterInput(Address, fromBlock, toBlock);
         }
 
         public FunctionBuilder<TFunction> GetFunctionBuilder<TFunction>()
         {
             var function = FunctionAttribute.GetAttribute<TFunction>();
             if (function == null) throw new Exception("Invalid TFunction required a Function Attribute");
-            return new FunctionBuilder<TFunction>(this, GetFunctionAbi(function.Name));
+            return new FunctionBuilder<TFunction>(Address, GetFunctionAbi(function.Name));
         }
 
         public FunctionBuilder GetFunctionBuilder(string name)
         {
-            return new FunctionBuilder(this, GetFunctionAbi(name));
+            return new FunctionBuilder(Address, GetFunctionAbi(name));
         }
 
-        private EventABI GetEventAbi(string name)
+        public EventABI GetEventAbi(string name)
         {
             if (ContractABI == null) throw new Exception("Contract abi not initialised");
             var eventAbi = ContractABI.Events.FirstOrDefault(x => x.Name == name);
@@ -71,7 +58,7 @@ namespace Nethereum.Contracts
             return eventAbi;
         }
 
-        private FunctionABI GetFunctionAbi(string name)
+        public FunctionABI GetFunctionAbi(string name)
         {
             if (ContractABI == null) throw new Exception("Contract abi not initialised");
             var functionAbi = ContractABI.Functions.FirstOrDefault(x => x.Name == name);

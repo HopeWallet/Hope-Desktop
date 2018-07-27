@@ -141,10 +141,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1876843087142884}
-  dim: {fileID: 1761106594595056}
-  form: {fileID: 1534111880457628}
-  text: {fileID: 1697144743846782}
-  loadingIcon: {fileID: 1198707539821814}
 --- !u!114 &114353076853818284
 MonoBehaviour:
   m_ObjectHideFlags: 1

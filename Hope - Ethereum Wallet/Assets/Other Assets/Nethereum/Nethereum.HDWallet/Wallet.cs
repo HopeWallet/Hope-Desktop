@@ -3,11 +3,9 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Nethereum.Web3.Accounts;
-using System;
 
 namespace Nethereum.HdWallet
 {
-	[Serializable]
     public class Wallet
     {
         public const string DEFAULT_PATH = "m/44'/60'/0'/0/x";
@@ -39,13 +37,18 @@ namespace Nethereum.HdWallet
 
         private IRandom Random
         {
-            get { return NBitcoin.RandomUtils.Random; }
-            set { NBitcoin.RandomUtils.Random = value; }
+            get { return RandomUtils.Random; }
+            set { RandomUtils.Random = value; }
         }
 
         public byte[] Seed { get; private set; }
+
         public string[] Words { get; private set; }
-		public string Phrase { get { return string.Join(" ", Words); } }
+
+        public string Phrase => string.Join(" ", Words).Trim();
+
+        public bool IsMneumonicValidChecksum { get; private set; }
+
         public string Path { get; }
 
         private void InitialiseSeed(Wordlist wordlist, WordCount wordCount, string seedPassword = null)
@@ -53,6 +56,7 @@ namespace Nethereum.HdWallet
             var mneumonic = new Mnemonic(wordlist, wordCount);
             Seed = mneumonic.DeriveSeed(seedPassword);
             Words = mneumonic.Words;
+            IsMneumonicValidChecksum = mneumonic.IsValidChecksum;
         }
 
         private void InitialiseSeed(string words, string seedPassword = null)
@@ -60,6 +64,7 @@ namespace Nethereum.HdWallet
             var mneumonic = new Mnemonic(words);
             Seed = mneumonic.DeriveSeed(seedPassword);
             Words = mneumonic.Words;
+            IsMneumonicValidChecksum = mneumonic.IsValidChecksum;
         }
 
         private string GetIndexPath(int index)

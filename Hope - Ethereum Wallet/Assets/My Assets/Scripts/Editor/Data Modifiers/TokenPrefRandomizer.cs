@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Hope.Utils.Misc;
+using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public static class TokenPrefRandomizer
 {
-
     private static AppSettingsInstaller AppSettings;
 
     private static string OldTokenPrefName;
@@ -35,5 +35,4 @@ public static class TokenPrefRandomizer
     /// <param name="result"> The result of the build. </param>
     [PostProcessBuild(3)]
     public static void RestoreValues(BuildTarget target, string result) => AppSettings.tokenContractSettings.tokenPrefName = OldTokenPrefName;
-
 }

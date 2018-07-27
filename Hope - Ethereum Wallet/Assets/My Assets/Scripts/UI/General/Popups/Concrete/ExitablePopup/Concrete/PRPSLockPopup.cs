@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
+using Hope.Utils.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

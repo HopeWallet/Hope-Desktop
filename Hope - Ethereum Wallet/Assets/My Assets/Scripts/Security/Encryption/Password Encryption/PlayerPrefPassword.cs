@@ -5,6 +5,7 @@ using System.Globalization;
 using System;
 using System.Threading.Tasks;
 using Zenject;
+using Hope.Utils.Misc;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.

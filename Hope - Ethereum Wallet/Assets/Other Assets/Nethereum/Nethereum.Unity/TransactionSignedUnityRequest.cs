@@ -4,19 +4,22 @@ using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Hex.HexTypes;
 using System.Collections;
 using System;
+using Nethereum.Contracts;
+using Nethereum.Contracts.Extensions;
 using Nethereum.Web3.Accounts;
 
 namespace Nethereum.JsonRpc.UnityClient
 {
-
     public class TransactionSignedUnityRequest:UnityRequest<string>
     {
         private readonly string _url;
-
         private readonly Account _account;
         private readonly TransactionSigner _transactionSigner;
         private readonly EthGetTransactionCountUnityRequest _transactionCountRequest;
         private readonly EthSendRawTransactionUnityRequest _ethSendTransactionRequest;
+        private readonly EthEstimateGasUnityRequest _ethEstimateGasUnityRequest;
+        private readonly EthGasPriceUnityRequest _ethGasPriceUnityRequest;
+        public bool EstimateGas { get; set; } = true;
 
         public TransactionSignedUnityRequest(Account account, string url)
         {
@@ -25,11 +28,72 @@ namespace Nethereum.JsonRpc.UnityClient
             _transactionSigner = new TransactionSigner(); 
             _ethSendTransactionRequest = new EthSendRawTransactionUnityRequest(_url);
             _transactionCountRequest = new EthGetTransactionCountUnityRequest(_url);
+            _ethEstimateGasUnityRequest = new EthEstimateGasUnityRequest(_url);
+            _ethGasPriceUnityRequest = new EthGasPriceUnityRequest(_url);
+        }
+
+        public IEnumerator SignAndSendTransaction<TContractFunction>(TContractFunction function, string contractAdress) where TContractFunction : FunctionMessage
+        {
+            var transactionInput = function.CreateTransactionInput(contractAdress);
+            yield return SignAndSendTransaction(transactionInput);
+        }
+
+        public IEnumerator SignAndSendDeploymentContractTransaction<TDeploymentMessage>(TDeploymentMessage deploymentMessage)
+            where TDeploymentMessage : ContractDeploymentMessage
+        {
+            var transactionInput = deploymentMessage.CreateTransactionInput();
+            yield return SignAndSendTransaction(transactionInput);
+        }
+
+        public IEnumerator SignAndSendDeploymentContractTransaction<TDeploymentMessage>()
+            where TDeploymentMessage : ContractDeploymentMessage, new()
+        {
+            var deploymentMessage = new TDeploymentMessage();
+            yield return SignAndSendDeploymentContractTransaction(deploymentMessage);
         }
 
         public IEnumerator SignAndSendTransaction(TransactionInput transactionInput)
         {
             if (transactionInput == null) throw new ArgumentNullException("transactionInput");
+
+            if (transactionInput.Gas == null)
+            {
+                if (EstimateGas)
+                {
+                    yield return _ethEstimateGasUnityRequest.SendRequest(transactionInput);
+
+                    if (_ethEstimateGasUnityRequest.Exception == null)
+                    {
+                        var gas = _ethEstimateGasUnityRequest.Result;
+                        transactionInput.Gas = gas;
+                    }
+                    else
+                    {
+                        this.Exception = _ethEstimateGasUnityRequest.Exception;
+                        yield break;
+                    }
+                }
+                else
+                {
+                    transactionInput.Gas = new HexBigInteger(Transaction.DEFAULT_GAS_LIMIT);
+                }
+            }
+
+            if (transactionInput.GasPrice == null)
+            {
+                yield return _ethGasPriceUnityRequest.SendRequest();
+
+                if (_ethGasPriceUnityRequest.Exception == null)
+                {
+                    var gasPrice = _ethGasPriceUnityRequest.Result;
+                    transactionInput.GasPrice = gasPrice;
+                }
+                else
+                {
+                    this.Exception = _ethGasPriceUnityRequest.Exception;
+                    yield break;
+                }
+            }
 
             var nonce = transactionInput.Nonce;
             
@@ -48,28 +112,19 @@ namespace Nethereum.JsonRpc.UnityClient
                 }
             }
 
-            var gasPrice = transactionInput.GasPrice;
-            if (gasPrice == null)
-                gasPrice = new HexBigInteger(Transaction.DEFAULT_GAS_PRICE);
-
-            var gasLimit = transactionInput.Gas;
-            if (gasLimit == null)
-                gasLimit = new HexBigInteger(Transaction.DEFAULT_GAS_LIMIT);
-
             var value = transactionInput.Value;
             if (value == null)
                 value = new HexBigInteger(0);
 
             var signedTransaction = _transactionSigner.SignTransaction(_account.PrivateKey, transactionInput.To, value.Value, nonce,
-                gasPrice.Value, gasLimit.Value, transactionInput.Data);
+                transactionInput.GasPrice.Value, transactionInput.Gas.Value, transactionInput.Data);
 
             yield return _ethSendTransactionRequest.SendRequest(signedTransaction);
 
-            // Clear sensitive data
             _account.PrivateKey.ClearBytes();
             GC.Collect();
 
-            if(_ethSendTransactionRequest.Exception == null)
+            if(_ethSendTransactionRequest.Exception == null) 
             {
                 this.Result = _ethSendTransactionRequest.Result;
             }

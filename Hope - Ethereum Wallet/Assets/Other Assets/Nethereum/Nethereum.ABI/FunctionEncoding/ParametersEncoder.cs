@@ -11,13 +11,64 @@ using Nethereum.Util;
 
 namespace Nethereum.ABI.FunctionEncoding
 {
+
+    public static class PropertyInfoExtensions
+    {
+#if DOTNET35
+        public static bool IsHidingMember(this PropertyInfo self)
+        {
+            Type baseType = self.DeclaringType.GetTypeInfo().BaseType;
+            PropertyInfo baseProperty = baseType.GetProperty(self.Name);
+
+            if (baseProperty == null)
+            {
+                return false;
+            }
+
+            if (baseProperty.DeclaringType == self.DeclaringType)
+            {
+                return false;
+            }
+
+            var baseMethodDefinition = baseProperty.GetGetMethod().GetBaseDefinition();
+            var thisMethodDefinition = self.GetGetMethod().GetBaseDefinition();
+
+
+            return baseMethodDefinition.DeclaringType != thisMethodDefinition.DeclaringType;
+        }
+#else
+        public static bool IsHidingMember(this PropertyInfo self)
+        {
+            Type baseType = self.DeclaringType.GetTypeInfo().BaseType;
+            PropertyInfo baseProperty = baseType.GetRuntimeProperty(self.Name);
+
+            if (baseProperty == null)
+            {
+                return false;
+            }
+
+            if (baseProperty.DeclaringType == self.DeclaringType)
+            {
+                return false;
+            }
+
+            var baseMethodDefinition = baseProperty.GetMethod.GetRuntimeBaseDefinition();
+            var thisMethodDefinition = self.GetMethod.GetRuntimeBaseDefinition();
+
+            return baseMethodDefinition.DeclaringType != thisMethodDefinition.DeclaringType;
+        }
+#endif
+    }
+
     public class ParametersEncoder
     {
         private readonly IntTypeEncoder intTypeEncoder;
+        private readonly AttributesToABIExtractor attributesToABIExtractor;
 
         public ParametersEncoder()
         {
             intTypeEncoder = new IntTypeEncoder();
+            attributesToABIExtractor = new AttributesToABIExtractor();
         }
 
         public byte[] EncodeParameters(Parameter[] parameters, params object[] values)
@@ -25,7 +76,7 @@ namespace Nethereum.ABI.FunctionEncoding
             if ((values == null) && (parameters.Length > 0))
                 throw new ArgumentNullException(nameof(values), "No values specified for encoding");
 
-            if (values == null) return new byte[] {};
+            if (values == null) return new byte[] { };
 
             if (values.Length > parameters.Length)
                 throw new Exception("Too many arguments: " + values.Length + " > " + parameters.Length);
@@ -68,31 +119,36 @@ namespace Nethereum.ABI.FunctionEncoding
             return ByteUtil.Merge(encodedBytes);
         }
 
+
+
         public byte[] EncodeParametersFromTypeAttributes(Type type, object instanceValue)
         {
 
-#if DOTNET35
-            var properties = type.GetTypeInfo().DeclaredProperties();
-#else
-            var properties = type.GetTypeInfo().DeclaredProperties;
-#endif
+            var properties = PropertiesExtractor.GetPropertiesWithParameterAttribute(type);
             var parameterObjects = new List<ParameterAttributeValue>();
 
             foreach (var property in properties)
-                if (property.IsDefined(typeof(ParameterAttribute), false))
-                {
-                    var parameterAttribute = property.GetCustomAttribute<ParameterAttribute>();
+            {
+                var parameterAttribute = property.GetCustomAttribute<ParameterAttribute>(true);
 #if DOTNET35
                     var propertyValue = property.GetValue(instanceValue, null);
 #else
-                     var propertyValue = property.GetValue(instanceValue);
+                var propertyValue = property.GetValue(instanceValue);
 #endif
-                    parameterObjects.Add(new ParameterAttributeValue
-                    {
-                        ParameterAttribute = parameterAttribute,
-                        Value = propertyValue
-                    });
+
+                TupleType tupleType;
+                if ((tupleType = parameterAttribute.Parameter.ABIType as TupleType) != null)
+                {
+                    attributesToABIExtractor.InitTupleComponentsFromTypeAttributes(property.PropertyType, tupleType);
+                    propertyValue = GetTupleComponentValuesFromTypeAttributes(property.PropertyType, propertyValue);
                 }
+
+                parameterObjects.Add(new ParameterAttributeValue
+                {
+                    ParameterAttribute = parameterAttribute,
+                    Value = propertyValue
+                });
+            }
 
             var abiParameters =
                 parameterObjects.OrderBy(x => x.ParameterAttribute.Order)
@@ -101,5 +157,38 @@ namespace Nethereum.ABI.FunctionEncoding
             var objectValues = parameterObjects.OrderBy(x => x.ParameterAttribute.Order).Select(x => x.Value).ToArray();
             return EncodeParameters(abiParameters, objectValues);
         }
+
+        public object[] GetTupleComponentValuesFromTypeAttributes(Type type, object instanceValue)
+        {
+            var properties = PropertiesExtractor.GetPropertiesWithParameterAttribute(type);
+
+            var propertiesInOrder = properties.Where(x => x.IsDefined(typeof(ParameterAttribute), true))
+                .OrderBy(x => x.GetCustomAttribute<ParameterAttribute>(true).Order);
+
+            var parameterObjects = new List<object>();
+
+            foreach (var property in propertiesInOrder)
+            {
+                var parameterAttribute = property.GetCustomAttribute<ParameterAttribute>(true);
+
+#if DOTNET35
+                var propertyValue = property.GetValue(instanceValue, null);
+#else
+                var propertyValue = property.GetValue(instanceValue);
+#endif
+
+                if (parameterAttribute.Parameter.ABIType is TupleType)
+                {
+                    propertyValue = GetTupleComponentValuesFromTypeAttributes(property.PropertyType, propertyValue);
+                }
+
+                parameterObjects.Add(propertyValue);
+            }
+
+            return parameterObjects.ToArray();
+        }
+
+
     }
 }
+

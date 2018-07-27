@@ -8,16 +8,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using RpcError = Nethereum.JsonRpc.Client.RpcError;
 using RpcRequest = Nethereum.JsonRpc.Client.RpcRequest;
-using Nethereum.RPC.Eth.Transactions;
-using Zenject;
 
 namespace Nethereum.JsonRpc.UnityClient
 {
-    public class UnityRpcClient<TResult>:UnityRequest<TResult>
+    public class UnityRpcClient<TResult> : UnityRequest<TResult>
     {
-
         private readonly string _url;
-        
+
         public UnityRpcClient(string url, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (jsonSerializerSettings == null)
@@ -37,31 +34,31 @@ namespace Nethereum.JsonRpc.UnityClient
             return null;
         }
 
-        public IEnumerator SendRequest(RpcRequest request) 
+        public IEnumerator SendRequest(RpcRequest request)
         {
             var requestFormatted = new Unity.RpcModel.RpcRequest(request.Id, request.Method, request.RawParameters);
-        
+
             var rpcRequestJson = JsonConvert.SerializeObject(requestFormatted, JsonSerializerSettings);
             var requestBytes = Encoding.UTF8.GetBytes(rpcRequestJson);
             var unityRequest = new UnityWebRequest(_url, "POST");
             var uploadHandler = new UploadHandlerRaw(requestBytes);
             unityRequest.SetRequestHeader("Content-Type", "application/json");
-            uploadHandler.contentType= "application/json";
+            uploadHandler.contentType = "application/json";
             unityRequest.uploadHandler = uploadHandler;
 
             unityRequest.downloadHandler = new DownloadHandlerBuffer();
 
             yield return unityRequest.SendWebRequest();
-            
-            if(unityRequest.error != null) 
+
+            if (unityRequest.error != null)
             {
                 this.Exception = new Exception(unityRequest.error);
 #if DEBUG
                 if (DebugManager.Instance.settings.displayNethereumDebugStatements)
                     Debug.Log(unityRequest.error);
 #endif
-            } 
-            else 
+            }
+            else
             {
                 try
                 {
@@ -73,10 +70,10 @@ namespace Nethereum.JsonRpc.UnityClient
 #endif
                     var responseObject = JsonConvert.DeserializeObject<RpcResponse>(responseJson, JsonSerializerSettings);
                     this.Result = responseObject.GetResult<TResult>(true, JsonSerializerSettings);
-                    this.Exception = HandleRpcError(responseObject); 
+                    this.Exception = HandleRpcError(responseObject);
                 }
                 catch (Exception ex)
-                { 
+                {
                     this.Exception = new Exception(ex.Message);
 #if DEBUG
                     if (DebugManager.Instance.settings.displayNethereumDebugStatements)
@@ -86,4 +83,4 @@ namespace Nethereum.JsonRpc.UnityClient
             }
         }
     }
-}  
+}
