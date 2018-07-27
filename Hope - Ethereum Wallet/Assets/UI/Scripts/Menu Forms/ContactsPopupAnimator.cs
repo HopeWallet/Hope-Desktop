@@ -14,8 +14,6 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
 
-	private List<GameObject> contacts;
-
 	private Transform contactsTransform;
 
 	public string SelectedContactName { get; private set; }
@@ -27,14 +25,7 @@ public class ContactsPopupAnimator : UIAnimator
 	/// </summary>
 	private void Awake()
 	{
-		contacts = new List<GameObject>();
 		contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
-
-		for (int i = 0; i < contactsTransform.childCount; i++)
-		{
-			contacts.Add(contactsTransform.GetChild(i).gameObject);
-			contactsTransform.GetChild(i).GetComponent<Button>().onClick.AddListener(() => ContactClicked(i));
-		}
 
 		sortBySection.transform.GetChild(1).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(ListOrderChanged);
 
@@ -67,8 +58,8 @@ public class ContactsPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		for (int i = 0; i < contacts.Count; i++)
-			contacts[i].AnimateScaleX(0f, 0.2f);
+		for (int i = 0; i < contactsTransform.childCount; i++)
+			contactsTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.2f);
 
 		contactsList.AnimateScaleX(0f, 0.15f,
 			() => searchSection.AnimateScaleX(0f, 0.15f,
@@ -86,12 +77,15 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <param name="index"> The index of the contact in the list being animated </param>
 	private void AnimateContacts(int index)
 	{
-		contacts[index].SetActive(true);
+		if (index == 6)
+		{
+			for (int i = 6; i < contactsTransform.childCount; i++)
+				contactsTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
 
-		if (index == contactsTransform.childCount - 1)
-			contacts[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
+			FinishedAnimating();
+		}
 		else
-			contacts[index].AnimateScaleX(1f, 0.15f, () => AnimateContacts(++index));
+			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateContacts(++index));
 	}
 	private void ContactClicked(int index)
 	{
