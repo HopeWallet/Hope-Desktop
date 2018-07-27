@@ -13,7 +13,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 
 	[SerializeField] private Image qrImage;
 
-	[SerializeField] private TextMeshProUGUI addressText;
+	[SerializeField] private TMP_InputField addressText;
 
 	[SerializeField] private InfoMessage infoMessage;
 
