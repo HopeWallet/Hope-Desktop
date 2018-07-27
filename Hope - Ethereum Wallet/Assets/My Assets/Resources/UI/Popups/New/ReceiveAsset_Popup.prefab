@@ -443,9 +443,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 6d20e2ae5bb65c44a8354ed9fa6b8db6,
+    m_HighlightedSprite: {fileID: 21300000, guid: 0eed9a8d5658f4e4e8642b4675e0aef3,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 6d20e2ae5bb65c44a8354ed9fa6b8db6, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 0eed9a8d5658f4e4e8642b4675e0aef3, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -505,9 +505,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: TMPro.TMP_InputField+OnChangeEvent, TextMeshPro-2017.3-Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_CaretColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
+  m_CaretColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 0}
   m_CustomCaretColor: 1
-  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_SelectionColor: {r: 0.77254903, g: 0.87058824, b: 1, a: 0.38431373}
   m_Text: 
   m_CaretBlinkRate: 1.1
   m_CaretWidth: 1
@@ -1099,7 +1099,6 @@ MonoBehaviour:
   checkmarkIcon: {fileID: 1136954847518568}
   qrCodeSection: {fileID: 1038319605908572}
   copyAddressButton: {fileID: 1693754116231282}
-  taskBarButton: {fileID: 0}
 --- !u!114 &114897517919386780
 MonoBehaviour:
   m_ObjectHideFlags: 1
