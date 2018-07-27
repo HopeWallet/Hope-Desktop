@@ -7,32 +7,32 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class ERC20
+public static partial class ERC20
 {
-    public sealed class Functions
+    public static class Functions
     {
         [Function("name", "string")]
-        public sealed class Name : ConstructedFunction
+        public sealed class Name : QueryFunction
         {
         }
 
         [Function("symbol", "string")]
-        public sealed class Symbol : ConstructedFunction
+        public sealed class Symbol : QueryFunction
         {
         }
 
-        [Function("decimals", "string")]
-        public sealed class Decimals : ConstructedFunction
+        [Function("decimals", "uint256")]
+        public sealed class Decimals : QueryFunction
         {
         }
 
         [Function("totalSupply", "uint256")]
-        public sealed class TotalSupply : ConstructedFunction
+        public sealed class TotalSupply : QueryFunction
         {
         }
 
         [Function("balanceOf", "uint256")]
-        public sealed class BalanceOf : ConstructedFunction
+        public sealed class BalanceOf : QueryFunction
         {
             [Parameter("address", "_owner", 1)]
             public string Owner => (string)input[0];
@@ -43,7 +43,7 @@ public partial class ERC20
         }
 
         [Function("transfer", "bool")]
-        public sealed class Transfer : ConstructedFunction
+        public sealed class Transfer : QueryFunction
         {
             [Parameter("address", "_to", 1)]
             public string To { get; set; }

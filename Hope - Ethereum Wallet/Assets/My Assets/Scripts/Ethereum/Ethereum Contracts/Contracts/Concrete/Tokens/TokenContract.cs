@@ -50,15 +50,19 @@ public class TokenContract : ContractBase
     /// <param name="address"> The address to check the balance of. </param>
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
     public void BalanceOf(string address, Action<dynamic> onBalanceReceived)
-        => this.ContractViewCall<dynamic>(this[FUNC_BALANCEOF],
-            balance => onBalanceReceived?.Invoke(balance == null ? 0 : SolidityUtils.ConvertFromUInt(balance, TokenDecimals)), address);
+    {
+        SimpleOutputQueries.QueryUInt256Output<ERC20.Functions.BalanceOf>(ContractAddress, address, 
+            balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance.Value, TokenDecimals)), address);
+    }
 
     /// <summary>
     /// Gets the total supply of this ERC20 token contract.
     /// </summary>
     /// <param name="onSupplyReceived"> Callback action which should pass in the total supply of this token. </param>
     public void TotalSupply(Action<dynamic> onSupplyReceived)
-        => this.ContractViewCall<dynamic>(this[FUNC_TOTALSUPPLY], supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, TokenDecimals)));
+    {
+        SimpleOutputQueries.QueryUInt256Output<ERC20.Functions.TotalSupply>(ContractAddress, null, supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, TokenDecimals)));
+    }
 
     /// <summary>
     /// Transfers a certain number of tokens of this contract from a wallet to another address.
@@ -89,12 +93,13 @@ public class TokenContract : ContractBase
     /// <param name="onContractInitialized"> Action to call when the contract has been fully initialized. </param>
     protected override void InitializeExtra(Action<ContractBase, string> onContractInitialized)
     {
-        this.ContractViewCall<string>(this[FUNC_NAME], tokenName => this.ContractViewCall<string>(this[FUNC_SYMBOL], tokenSymbol =>
-        this.ContractViewCall<dynamic>(this[FUNC_DECIMALS], tokenDecimals =>
+        SimpleOutputQueries.QueryStringOutput<ERC20.Functions.Name>(ContractAddress, null, name =>
+        SimpleOutputQueries.QueryStringOutput<ERC20.Functions.Symbol>(ContractAddress, null, symbol =>
+        SimpleOutputQueries.QueryUInt256Output<ERC20.Functions.Decimals>(ContractAddress, null, decimals =>
         {
-            TokenName = string.IsNullOrEmpty(tokenName) ? tokenSymbol : tokenName;
-            TokenSymbol = tokenSymbol;
-            TokenDecimals = tokenDecimals == null ? 0 : (int)tokenDecimals;
+            TokenName = string.IsNullOrEmpty(name.Value) ? symbol.Value : name.Value;
+            TokenSymbol = symbol.Value;
+            TokenDecimals = decimals.Value == null ? 0 : (int)decimals.Value;
 
             onContractInitialized?.Invoke(this, ContractABI);
         })));

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class ERC20
+public static partial class ERC20
 {
-
 }

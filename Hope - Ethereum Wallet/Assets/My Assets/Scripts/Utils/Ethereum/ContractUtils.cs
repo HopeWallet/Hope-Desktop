@@ -15,17 +15,6 @@ namespace Hope.Utils.EthereumUtils
     public static class ContractUtils
     {
         /// <summary>
-        /// Calls a "view" or "constant" function which returns a value.
-        /// </summary>
-        /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
-        /// <param name="contract"> The contract you are executing this function from. </param>
-        /// <param name="function"> The function to execute. </param>
-        /// <param name="onValueReceived"> The callback to execute when the value(s) is received, and passed as a parameter. </param>
-        /// <param name="input"> The input parameters to pass into the function. </param>
-        public static void ContractViewCall<T>(this ContractBase contract, Function function, Action<T> onValueReceived, params object[] input)
-            => _ContractViewFunctionCoroutine(function, onValueReceived, input).StartCoroutine();
-
-        /// <summary>
         /// Calls a "view" or "constant" function which returns multiple values or a struct.
         /// </summary>
         /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
@@ -57,38 +46,21 @@ namespace Hope.Utils.EthereumUtils
             string contractAddress,
             string senderAddress,
             Action<TOut> onQueryCompleted,
-            params object[] functionParameters) where TFunc : ConstructedFunction where TOut : IFunctionOutputDTO, new()
+            params object[] functionInput) where TFunc : QueryFunction where TOut : IFunctionOutputDTO, new()
         {
-            _QueryContractCoroutine<TFunc, TOut>(contractAddress, senderAddress, onQueryCompleted, functionParameters).StartCoroutine();
+            _QueryContractCoroutine<TFunc, TOut>(contractAddress, senderAddress, onQueryCompleted, functionInput).StartCoroutine();
         }
 
         private static IEnumerator _QueryContractCoroutine<TFunc, TOut>(
             string contractAddress,
             string senderAddress,
             Action<TOut> onQueryCompleted,
-            params object[] functionParameters) where TFunc : ConstructedFunction where TOut : IFunctionOutputDTO, new()
+            params object[] functionInput) where TFunc : QueryFunction where TOut : IFunctionOutputDTO, new()
         {
             var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, senderAddress);
-            yield return queryRequest.Query((TFunc)Activator.CreateInstance(typeof(TFunc), functionParameters), contractAddress);
+            yield return queryRequest.Query((TFunc)Activator.CreateInstance(typeof(TFunc), functionInput), contractAddress);
 
             queryRequest.CheckTransactionRequest(() => onQueryCompleted?.Invoke(queryRequest.Result));
-        }
-
-        /// <summary>
-        /// Calls a "view" or "constant" function which returns a value.
-        /// </summary>
-        /// <typeparam name="T"> The value returned from the solidity contract function. </typeparam>
-        /// <param name="function"> The function to execute. </param>
-        /// <param name="onValueReceived"> The callback to execute when the value is received, and passed as a parameter. </param>
-        /// <param name="input"> The input parameters to pass into the function. </param>
-        /// <returns> The time waited for the request to complete. </returns>
-        private static IEnumerator _ContractViewFunctionCoroutine<T>(Function function, Action<T> onValueReceived, params object[] input)
-        {
-            var request = new EthCallUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
-
-            yield return request.SendRequest(function.CreateCallInput(input), BlockParameter.CreateLatest());
-
-            request.CheckTransactionRequest(() => onValueReceived(function.DecodeSimpleTypeOutput<T>(request.Result)));
         }
 
         /// <summary>

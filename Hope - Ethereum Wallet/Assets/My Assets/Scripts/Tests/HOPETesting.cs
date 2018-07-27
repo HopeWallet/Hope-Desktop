@@ -57,27 +57,14 @@ using Nethereum.JsonRpc.UnityClient;
 public class HOPETesting : MonoBehaviour
 {
     public string contractAddress;
+    public string walletAddress = "0xb332Feee826BF44a431Ea3d65819e31578f30446";
 
     [ContextMenu("Query")]
     public void Query()
     {
-        //Testing("0x132962ed7C55326217C390176E053d1a6d335B62", ethereumNetworkManager.CurrentNetwork.NetworkUrl, "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c").StartCoroutine();
-
-        //if (!AddressUtils.IsValidEthereumAddress(contractAddress))
-        //    return;
-
-        ContractUtils.QueryContract<ERC20.Functions.BalanceOf, SimpleOutputs.UInt256>(contractAddress,
-                                                                                      "0x132962ed7C55326217C390176E053d1a6d335B62",
-                                                                                      OnBalanceReceived,
-                                                                                      "0x132962ed7C55326217C390176E053d1a6d335B62");
-
-        ContractUtils.QueryContract<ERC20.Functions.Name, SimpleOutputs.String>(contractAddress,
-                                                                                "0x132962ed7C55326217C390176E053d1a6d335B62",
-                                                                                OnTextReceived);
-
-        ContractUtils.QueryContract<ERC20.Functions.Symbol, SimpleOutputs.String>(contractAddress,
-                                                                                  "0x132962ed7C55326217C390176E053d1a6d335B62",
-                                                                                  OnTextReceived);
+        ContractUtils.QueryContract<ERC20.Functions.BalanceOf, SimpleOutputs.UInt256>(contractAddress, walletAddress, OnBalanceReceived, walletAddress);
+        ContractUtils.QueryContract<ERC20.Functions.Name, SimpleOutputs.String>(contractAddress, walletAddress, OnTextReceived);
+        ContractUtils.QueryContract<ERC20.Functions.Symbol, SimpleOutputs.String>(contractAddress, walletAddress, OnTextReceived);
     }
 
     private void OnBalanceReceived(SimpleOutputs.UInt256 uintOutput) => Debug.Log(uintOutput.Value);
