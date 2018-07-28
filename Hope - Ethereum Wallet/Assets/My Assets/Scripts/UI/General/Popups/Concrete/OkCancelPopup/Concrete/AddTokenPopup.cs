@@ -7,7 +7,6 @@ using Zenject;
 /// </summary>
 public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 {
-
     public TMP_InputField inputField;
 
     private TokenContractManager tokenContractManager;
