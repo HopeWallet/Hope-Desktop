@@ -51,10 +51,10 @@ namespace Hope.Utils.EthereumUtils
             Action onMessageExecuted,
             params object[] functionInput) where TFunc : ContractFunction
         {
-            _SendContractMessage<TFunc>(contractAddress, signedUnityRequest, gasPrice, gasLimit, onMessageExecuted, functionInput).StartCoroutine();
+            _SendContractMessageCoroutine<TFunc>(contractAddress, signedUnityRequest, gasPrice, gasLimit, onMessageExecuted, functionInput).StartCoroutine();
         }
 
-        private static IEnumerator _SendContractMessage<TFunc>(
+        private static IEnumerator _SendContractMessageCoroutine<TFunc>(
             string contractAddress,
             TransactionSignedUnityRequest signedUnityRequest,
             HexBigInteger gasPrice,
