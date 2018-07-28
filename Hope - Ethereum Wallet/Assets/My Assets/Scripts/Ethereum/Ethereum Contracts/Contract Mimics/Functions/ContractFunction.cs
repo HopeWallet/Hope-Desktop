@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Base class to use for all ethereum contract functions that need will be executed.
+/// Base class to use for all ethereum contract functions that will be executed.
 /// </summary>
 public abstract class ContractFunction : FunctionMessage
 {
