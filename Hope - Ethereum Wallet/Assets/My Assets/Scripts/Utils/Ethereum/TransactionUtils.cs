@@ -7,13 +7,11 @@ using UnityEngine;
 
 namespace Hope.Utils.EthereumUtils
 {
-
     /// <summary>
     /// Class which extends the nethereum unity transactions to allow for more actions on successful transactions and unsuccessful ones.
     /// </summary>
     public static class TransactionUtils
     {
-
         private static readonly WaitForSeconds Waiter = new WaitForSeconds(WAIT_INTERVAL);
         private const float WAIT_INTERVAL = 5f;
 

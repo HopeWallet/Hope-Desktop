@@ -7,19 +7,28 @@ using System.Numerics;
 
 namespace Hope.Utils.EthereumUtils
 {
-
     /// <summary>
     /// Class used for anything related to ethereum transaction gas.
     /// </summary>
-    public static class GasUtils
+    public class GasUtils
     {
-
         /// <summary>
         /// Enum for the type of gas price to aim for.
         /// </summary>
         public enum GasPriceTarget { Slow, Standard, Fast };
 
-        private const int ETH_SEND_LIMIT = 21000;
+        private static EthereumNetwork EthereumNetwork;
+
+        private const int ETH_GAS_LIMIT = 21000;
+
+        /// <summary>
+        /// Initializes the <see cref="GasUtils"/> by assigning the reference to the active network.
+        /// </summary>
+        /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
+        public GasUtils(EthereumNetworkManager ethereumNetworkManager)
+        {
+            EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+        }
 
         /// <summary>
         /// Estimates the gas limit for a contract function.
@@ -35,7 +44,7 @@ namespace Hope.Utils.EthereumUtils
         /// Estimates the gas limit for a basic ether transaction.
         /// </summary>
         /// <param name="onGasReceived"> Action to execute once the eth gas limit has been received. </param>
-        public static void EstimateGasLimit(Action<BigInteger> onGasReceived) => onGasReceived(new BigInteger(ETH_SEND_LIMIT));
+        public static void EstimateGasLimit(Action<BigInteger> onGasReceived) => onGasReceived(new BigInteger(ETH_GAS_LIMIT));
 
         /// <summary>
         /// Estimates the gas price given the GasPriceTarget.
@@ -96,8 +105,7 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
         private static IEnumerator _EstimateGasLimitCoroutine(Function function, string callerAddress, Action<BigInteger> onGasReceived, params object[] input)
         {
-            var request = new EthEstimateGasUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
-
+            var request = new EthEstimateGasUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(function.CreateTransactionInput(callerAddress, input));
 
             request.CheckTransactionResult(() => onGasReceived((request.Result.Value * 100) / 95));
@@ -111,13 +119,10 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
         private static IEnumerator _EstimateGasPriceCoroutine(GasPriceTarget gasPriceTarget, Action<BigInteger> onGasPriceReceived)
         {
-            var request = new EthGasPriceUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
-
+            var request = new EthGasPriceUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest();
 
             request.CheckTransactionResult(() => onGasPriceReceived(ModifyGasPrice(gasPriceTarget, request.Result.Value)));
         }
-
     }
-
 }

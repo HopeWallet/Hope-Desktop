@@ -75,7 +75,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
             List<int> randomIntList = numbers.ToList();
-            List<string> words = mnemonic.Value.GetMnemonicWords().ToList();
+            List<string> words = WalletUtils.GetMnemonicWords(mnemonic.Value).ToList();
 
             correctWords = words.Where(word => numbers.Contains(words.IndexOf(word) + 1))
                                 .OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1))

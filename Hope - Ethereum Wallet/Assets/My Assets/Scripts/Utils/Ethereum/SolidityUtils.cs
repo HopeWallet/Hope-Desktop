@@ -19,7 +19,7 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The compiled array of strings which contain the data of each parameter. The name of the function is in the first index, parameters are in the rest. </returns>
         public static string[] ExtractFunctionParameters(string inputData)
         {
-            string[] funcParams = new string[1 + inputData.Length / 64];
+            string[] funcParams = new string[1 + (inputData.Length / 64)];
 
             for (int i = inputData.Length; i > 0; i -= 64)
             {

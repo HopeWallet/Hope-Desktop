@@ -8,15 +8,24 @@ using UnityEngine;
 
 namespace Hope.Utils.EthereumUtils
 {
-
     /// <summary>
-    /// Class with a bunch of extensions which allow for smoother wallet functionality.
+    /// Class with a bunch of utility methods which relate to general wallet info and ethereum info of the wallet.
     /// </summary>
-    public static class WalletUtils
+    public class WalletUtils
     {
+        private static EthereumNetwork EthereumNetwork;
 
         private const string PATH_TWELVE_WORDS = "m/44'/60'/0'/0/x";
         private const string PATH_TWENTYFOUR_WORDS = "m/44'/60'/0'/x";
+
+        /// <summary>
+        /// Initializes the <see cref="WalletUtils"/> by assigning the reference to the active network.
+        /// </summary>
+        /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
+        public WalletUtils(EthereumNetworkManager ethereumNetworkManager)
+        {
+            EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+        }
 
         /// <summary>
         /// Determines the correct path to use with the wallet derivation based on how many words are in the mnemonic phrase.
@@ -25,7 +34,7 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The correct path to derive the wallet from. </returns>
         public static string DetermineCorrectPath(string mnemonicPhrase)
         {
-            var wordCount = mnemonicPhrase.GetMnemonicWords().Length;
+            var wordCount = GetMnemonicWords(mnemonicPhrase).Length;
 
             if (wordCount == 12)
                 return PATH_TWELVE_WORDS;
@@ -40,15 +49,14 @@ namespace Hope.Utils.EthereumUtils
 		/// </summary>
 		/// <param name="str"> The string which contains the words. </param>
 		/// <returns> The array of individual words. </returns>
-		public static string[] GetMnemonicWords(this string str) => str.Trim().Split(' ', '\t', '\n');
+		public static string[] GetMnemonicWords(string str) => str.Trim().Split(' ', '\t', '\n');
 
 		/// <summary>
 		/// Gets the amount of ether in a user's wallet.
 		/// </summary>
 		/// <param name="wallet"> The wallet to check for the ether amount. </param>
 		/// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
-		public static void GetEthBalance(UserWallet wallet, Action<dynamic> onBalanceReceived)
-            => _AddressEthBalanceCoroutine(wallet.Address, onBalanceReceived).StartCoroutine();
+		public static void GetEthBalance(UserWallet wallet, Action<dynamic> onBalanceReceived) => _AddressEthBalanceCoroutine(wallet.Address, onBalanceReceived).StartCoroutine();
 
         /// <summary>
         /// Sends ether from this wallet to a given address.
@@ -59,8 +67,13 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="gasPrice"> The gas price of the ether send transaction. </param>
         /// <param name="address"> The address to send the ether to. </param>
         /// <param name="amount"> The amount of ether to send. </param>
-        public static void SendEther(TransactionSignedUnityRequest signedUnityRequest, string walletAddress,
-            HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
+        public static void SendEther(
+            TransactionSignedUnityRequest signedUnityRequest,
+            string walletAddress,
+            HexBigInteger gasLimit,
+            HexBigInteger gasPrice,
+            string address,
+            decimal amount)
         {
             _SendEtherCoroutine(signedUnityRequest, walletAddress, gasLimit, gasPrice, address, amount).StartCoroutine();
         }
@@ -73,7 +86,7 @@ namespace Hope.Utils.EthereumUtils
         /// <returns> The time waited for the request to complete. </returns>
         private static IEnumerator _AddressEthBalanceCoroutine(string address, Action<dynamic> onBalanceReceived)
         {
-            var request = new EthGetBalanceUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+            var request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
 
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
@@ -90,15 +103,18 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="addressTo"> The address to send the ether to. </param>
         /// <param name="amount"> The amount to send in ether. </param>
         /// <returns> The time waited for the request to be broadcast ot the network. </returns>
-        private static IEnumerator _SendEtherCoroutine(TransactionSignedUnityRequest signedUnityRequest, string walletAddress,
-            HexBigInteger gasLimit, HexBigInteger gasPrice, string addressTo, dynamic amount)
+        private static IEnumerator _SendEtherCoroutine(
+            TransactionSignedUnityRequest signedUnityRequest,
+            string walletAddress,
+            HexBigInteger gasLimit,
+            HexBigInteger gasPrice,
+            string addressTo,
+            dynamic amount)
         {
-            var networkUrl = EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl;
             var transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(UnitConversion.Convert.ToWei(amount)));
-
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
-            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(networkUrl, ()
+            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(EthereumNetwork.NetworkUrl, ()
                 => Debug.Log("Successfully sent " + amount + " Ether to address " + addressTo)));
         }
     }

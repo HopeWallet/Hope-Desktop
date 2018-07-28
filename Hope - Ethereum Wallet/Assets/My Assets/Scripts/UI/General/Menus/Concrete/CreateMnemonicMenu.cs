@@ -89,11 +89,10 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {
-            string[] splitWords = mnemonic.Value.GetMnemonicWords();
+            string[] splitWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
 
             for (int i = 0; i < objects.Length; i++)
                 wordFields[i].text = splitWords[i];
         }
     }
-
 }

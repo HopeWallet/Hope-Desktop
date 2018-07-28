@@ -123,13 +123,13 @@ public class CreateMnemonicMenuAnimator : UIAnimator
     private void StartWordAnimation()
     {
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-            mnemonicWords = mnemonic.Value.GetMnemonicWords();
+            mnemonicWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
 
         Animating = true;
         Random rand = new Random();
 
         List<GameObject> randomizedList = new List<GameObject>(words);
-        randomizedList.Sort((x, y) => rand.Next(-1, 1));
+        randomizedList.Sort((_, __) => rand.Next(-1, 1));
 
         ProcessWordAnimation(randomizedList, 0);
     }

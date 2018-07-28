@@ -65,6 +65,10 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.BindInterfacesAndSelfTo<UpdateManager>().AsSingle().NonLazy();
         Container.Bind<PeriodicUpdateManager>().AsSingle().NonLazy();
 
+        Container.Bind<ContractUtils>().AsSingle().NonLazy();
+        Container.Bind<GasUtils>().AsSingle().NonLazy();
+        Container.Bind<WalletUtils>().AsSingle().NonLazy();
+
         Container.Bind<MainThreadExecutor>().AsSingle().NonLazy();
 
         Container.Bind<DynamicDataCache>().AsSingle().NonLazy();
@@ -100,8 +104,6 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<ButtonClickObserver>().AsSingle().NonLazy();
         Container.Bind<MouseClickObserver>().AsSingle().NonLazy();
         Container.Bind<PopupButtonObserver>().AsSingle().NonLazy();
-
-        Container.Bind<ContractUtils>().AsSingle().NonLazy();
     }
 
     /// <summary>

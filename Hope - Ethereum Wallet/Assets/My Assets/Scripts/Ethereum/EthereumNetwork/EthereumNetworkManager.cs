@@ -5,7 +5,6 @@
 /// </summary>
 public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetworkManager>
 {
-
     private readonly Settings settings;
 
     private readonly EthereumNetwork rinkeby,
@@ -19,6 +18,7 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     /// <summary>
     /// Initializes the network manager by setting up the different networks.
     /// </summary>
+    /// <param name="settings"> The <see cref="Settings"/> to apply to this <see cref="EthereumNetworkManager"/>. </param>
     public EthereumNetworkManager(Settings settings) : base()
     {
         this.settings = settings;
@@ -57,5 +57,4 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     /// </summary>
     [Serializable]
     public enum NetworkType { Mainnet, Rinkeby };
-
 }

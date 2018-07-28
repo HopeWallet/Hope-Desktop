@@ -230,8 +230,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void PastePhraseClicked()
 	{
 		string clipboard = ClipboardUtils.GetClipboardString();
-
-		string[] tempArray = clipboard.GetMnemonicWords();
+		string[] tempArray = WalletUtils.GetMnemonicWords(clipboard);
 
 		wordStrings = new string[24];
 
