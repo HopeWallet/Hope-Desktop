@@ -1532,8 +1532,6 @@ MonoBehaviour:
   addressSection: {fileID: 1001844950228236}
   addContactButton: {fileID: 1818807391257548}
   confirmButton: {fileID: 1507123239003392}
-  previousName: 
-  addingContact: 0
 --- !u!114 &114542522999934596
 MonoBehaviour:
   m_ObjectHideFlags: 1

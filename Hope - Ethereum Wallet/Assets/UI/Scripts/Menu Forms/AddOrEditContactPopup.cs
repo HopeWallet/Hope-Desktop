@@ -81,8 +81,8 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	public void SetPopupLayout(bool addingContact, string name = "", string address = "")
 	{
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
-		addOrEditContactPopupAnimator.addingContact = addingContact;
-		addOrEditContactPopupAnimator.previousName = name;
+		addOrEditContactPopupAnimator.AddingContact = addingContact;
+		addOrEditContactPopupAnimator.PreviousName = name;
 
 		if (!addingContact)
 		{

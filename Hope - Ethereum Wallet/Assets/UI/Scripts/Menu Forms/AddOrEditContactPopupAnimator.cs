@@ -18,13 +18,14 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
 
-	public string previousName;
-
-	public bool addingContact;
 	private bool validName;
 	private bool validAddress;
 
-	private bool ValidName
+    public string PreviousName { get; set; }
+
+    public bool AddingContact { get; set; }
+
+    private bool ValidName
 	{
 		set
 		{
@@ -89,7 +90,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="animatingIn"> Checks if animating the button in or out </param>
 	private void AnimateMainButton(bool animatingIn)
 	{
-		if (addingContact)
+		if (AddingContact)
 			addContactButton.AnimateScaleX(animatingIn ? 1f : 0f, 0.15f);
 		else
 			confirmButton.AnimateScaleX(animatingIn ? 1f : 0f, 0.15f);
@@ -126,9 +127,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		//Check if address has been used already somewhere in the contacts
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) ? true : AddressUtils.IsValidEthereumAddress(updatedAddress);
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 
-		if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != previousName)
+		if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
 			ValidAddress = false;
 
 		SetMainButtonInteractable();
@@ -141,7 +142,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	{
 		bool validInputs = !string.IsNullOrEmpty(nameInputField.text) && validName && !string.IsNullOrEmpty(addressInputField.text) && validAddress;
 
-		if (addingContact)
+		if (AddingContact)
 			addContactButton.GetComponent<Button>().interactable = validInputs;
 		else
 			confirmButton.GetComponent<Button>().interactable = validInputs;
