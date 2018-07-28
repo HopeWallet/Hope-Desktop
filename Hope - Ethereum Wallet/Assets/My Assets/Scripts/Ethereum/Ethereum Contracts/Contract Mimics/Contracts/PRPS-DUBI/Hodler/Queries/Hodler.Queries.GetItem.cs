@@ -6,7 +6,7 @@ public static partial class HodlerMimic
 
     public static partial class Queries
     {
-        [Function("release", typeof(Output.Item))]
+        [Function("getItem", typeof(Output.Item))]
         public sealed class GetItem : ContractFunction
         {
 
