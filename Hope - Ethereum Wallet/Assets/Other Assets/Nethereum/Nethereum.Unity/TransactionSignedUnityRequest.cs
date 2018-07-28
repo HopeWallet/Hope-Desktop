@@ -112,6 +112,9 @@ namespace Nethereum.JsonRpc.UnityClient
                 }
             }
 
+            if (string.IsNullOrEmpty(transactionInput.From))
+                transactionInput.From = _account.Address;
+
             var value = transactionInput.Value;
             if (value == null)
                 value = new HexBigInteger(0);
