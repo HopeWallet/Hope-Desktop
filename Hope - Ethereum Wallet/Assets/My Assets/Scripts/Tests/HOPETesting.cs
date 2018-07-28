@@ -57,6 +57,19 @@ using Nethereum.JsonRpc.UnityClient;
 public class HOPETesting : MonoBehaviour
 {
 
+    private const string CONTRACT = "0x23EdF403e7da17A0BE3E65CB3318638c826dEd23";
+    private const string ADDRESS = "0xb332Feee826BF44a431Ea3d65819e31578f30446";
+
+    private void Start()
+    {
+        ContractUtils.QueryContract<HodlerMimic.Queries.GetItem, HodlerMimic.Output.Item>(CONTRACT, ADDRESS, OnItemReceived, ADDRESS, new BigInteger(1839591564));
+    }
+
+    private void OnItemReceived(HodlerMimic.Output.Item item)
+    {
+        Debug.Log(item.Value + " => " + item.Id + " => " + item.Beneficiary + " => " + item.Fulfilled + " => " + item.ReleaseTime);
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
