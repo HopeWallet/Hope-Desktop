@@ -76,14 +76,12 @@ public class TokenContract : ContractBase
     {
         userWallet.SignTransaction<ConfirmTransactionPopup>(request =>
         {
-            this.ExecuteContractFunction(this[FUNC_TRANSFER],
-                                         request,
-                                         userWallet.Address,
-                                         gasLimit,
-                                         gasPrice,
-                                         () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address),
-                                         address,
-                                         SolidityUtils.ConvertToUInt(amount, TokenDecimals));
+            ContractUtils.SendContractMessage<ERC20.Functions.Transfer>(ContractAddress,
+                                                                        request,
+                                                                        gasPrice,
+                                                                        gasLimit,
+                                                                        () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address), address,
+                                                                        SolidityUtils.ConvertToUInt(amount, TokenDecimals));
         }, gasLimit, gasPrice, address, ContractAddress, amount, TokenSymbol);
     }
 

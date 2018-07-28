@@ -77,7 +77,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
-            request.CheckTransactionRequest(() => onBalanceReceived(UnitConversion.Convert.FromWei(request.Result, 18)));
+            request.CheckTransactionResult(() => onBalanceReceived(UnitConversion.Convert.FromWei(request.Result, 18)));
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
-            signedUnityRequest.CheckTransactionRequest(() => signedUnityRequest.WaitForTransactionMining(networkUrl, ()
+            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(networkUrl, ()
                 => Debug.Log("Successfully sent " + amount + " Ether to address " + addressTo)));
         }
     }

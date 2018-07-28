@@ -1,5 +1,6 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts;
+using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
@@ -42,6 +43,30 @@ namespace Hope.Utils.EthereumUtils
             _ExecuteContractFunctionCoroutine(function, signedUnityRequest, walletAddress, gasLimit, gasPrice, new HexBigInteger(0), onTransactionMined, input).StartCoroutine();
         }
 
+        public static void SendContractMessage<TFunc>(
+            string contractAddress,
+            TransactionSignedUnityRequest signedUnityRequest,
+            HexBigInteger gasPrice,
+            HexBigInteger gasLimit,
+            Action onMessageExecuted,
+            params object[] functionInput) where TFunc : ContractFunction
+        {
+            _SendContractMessage<TFunc>(contractAddress, signedUnityRequest, gasPrice, gasLimit, onMessageExecuted, functionInput).StartCoroutine();
+        }
+
+        private static IEnumerator _SendContractMessage<TFunc>(
+            string contractAddress,
+            TransactionSignedUnityRequest signedUnityRequest,
+            HexBigInteger gasPrice,
+            HexBigInteger gasLimit,
+            Action onMessageExecuted,
+            params object[] functionInput) where TFunc : ContractFunction
+        {
+            yield return signedUnityRequest.SignAndSendTransaction(ContractFunction.CreateFunction<TFunc>(gasPrice, gasLimit, functionInput).CreateTransactionInput(contractAddress));
+
+            signedUnityRequest.PollForTransactionReceipt(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, () => signedUnityRequest.CheckTransactionResult(onMessageExecuted));
+        }
+
         public static void QueryContract<TFunc, TOut>(
             string contractAddress,
             string senderAddress,
@@ -58,9 +83,9 @@ namespace Hope.Utils.EthereumUtils
             params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
             var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, senderAddress);
-            yield return queryRequest.Query((TFunc)Activator.CreateInstance(typeof(TFunc), functionInput), contractAddress);
+            yield return queryRequest.Query(ContractFunction.CreateFunction<TFunc>(functionInput), contractAddress);
 
-            queryRequest.CheckTransactionRequest(() => onQueryCompleted?.Invoke(queryRequest.Result));
+            queryRequest.CheckTransactionResult(() => onQueryCompleted?.Invoke(queryRequest.Result));
         }
 
         /// <summary>
@@ -77,7 +102,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return request.SendRequest(function.CreateCallInput(input), BlockParameter.CreateLatest());
 
-            request.CheckTransactionRequest(() => onValueReceived(function.DecodeDTOTypeOutput<T>(request.Result)));
+            request.CheckTransactionResult(() => onValueReceived(function.DecodeDTOTypeOutput<T>(request.Result)));
         }
 
         /// <summary>
@@ -101,8 +126,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
-            signedUnityRequest.CheckTransactionRequest(() => signedUnityRequest.WaitForTransactionMining(network, onTransactionMined));
+            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(network, onTransactionMined));
         }
     }
-
 }

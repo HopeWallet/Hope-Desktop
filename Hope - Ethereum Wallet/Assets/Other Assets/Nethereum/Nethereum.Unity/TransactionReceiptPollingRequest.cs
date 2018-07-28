@@ -8,7 +8,6 @@ namespace Nethereum.JsonRpc.UnityClient
     {
         private string _url;
         private readonly EthGetTransactionReceiptUnityRequest _ethGetTransactionReceipt;
-        public bool CancelPolling { get; set; } = false;
 
         public TransactionReceiptPollingRequest(string url)
         {
@@ -18,30 +17,28 @@ namespace Nethereum.JsonRpc.UnityClient
 
         public IEnumerator PollForReceipt(string transactionHash, float secondsToWait)
         {
+            if (string.IsNullOrEmpty(transactionHash))
+                yield break;
+
+            WaitForSeconds waiter = new WaitForSeconds(secondsToWait);
             TransactionReceipt receipt = null;
             Result = null;
+
             while (receipt == null)
             {
-                if (!CancelPolling)
-                {
-                    yield return _ethGetTransactionReceipt.SendRequest(transactionHash);
+                yield return _ethGetTransactionReceipt.SendRequest(transactionHash);
 
-                    if (_ethGetTransactionReceipt.Exception == null)
-                    {
-                        receipt = _ethGetTransactionReceipt.Result;
-                    }
-                    else
-                    {
-                        this.Exception = _ethGetTransactionReceipt.Exception;
-                        yield break;
-                    }
+                if (_ethGetTransactionReceipt.Exception == null)
+                {
+                    receipt = _ethGetTransactionReceipt.Result;
                 }
                 else
                 {
+                    Exception = _ethGetTransactionReceipt.Exception;
                     yield break;
                 }
 
-                yield return new WaitForSeconds(secondsToWait);
+                yield return waiter;
             }
 
             Result = receipt;

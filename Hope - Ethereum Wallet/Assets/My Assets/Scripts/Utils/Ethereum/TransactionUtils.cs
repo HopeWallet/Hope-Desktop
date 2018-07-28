@@ -2,6 +2,7 @@
 using Nethereum.RPC.Eth.DTOs;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hope.Utils.EthereumUtils
@@ -30,14 +31,13 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="unityRequest"> The transaction request. </param>
         /// <param name="onSuccessfulTransaction"> Action called if the transaction was successful. </param>
         /// <param name="readExceptionMessage"> Whether the exception message should be displayed. </param>
-        public static void CheckTransactionRequest<T>(this UnityRequest<T> unityRequest, Action onSuccessfulTransaction, bool readExceptionMessage = true)
+        public static void CheckTransactionResult<T>(this UnityRequest<T> unityRequest, Action onSuccessfulTransaction, bool readExceptionMessage = true)
         {
             var exception = unityRequest.Exception;
             var result = unityRequest.Result;
 
-            if (exception == null && result != null)
+            if (exception == null && !EqualityComparer<T>.Default.Equals(result, default(T)))
                 onSuccessfulTransaction?.Invoke();
-
             else if (readExceptionMessage)
                 ExceptionManager.DisplayException(exception);
         }
@@ -48,8 +48,8 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="unityRequest"> The unity request with a tx hash result to wait for mining. </param>
         /// <param name="networkUrl"> The network to listen to the transaction on. </param>
         /// <param name="onMiningFinished"> Action to execute once the transaction has successfully been mined. </param>
-        public static void WaitForTransactionMining(this UnityRequest<string> unityRequest, string networkUrl, Action onMiningFinished)
-            => _WaitForTransactionMiningCoroutine(unityRequest.Result, networkUrl, onMiningFinished).StartCoroutine();
+        public static void PollForTransactionReceipt(this UnityRequest<string> unityRequest, string networkUrl, Action onMiningFinished)
+            => _PollForTransactionReceiptCoroutine(unityRequest.Result, networkUrl, onMiningFinished).StartCoroutine();
 
         /// <summary>
         /// Coroutine which will iteratively check a transaction hash to see if it has been mined or not.
@@ -58,7 +58,7 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="networkUrl"> The network to listen to the transaction on. </param>
         /// <param name="onMiningFinished"> Action to execute once the transaction has successfully been mined. </param>
         /// <returns></returns>
-        private static IEnumerator _WaitForTransactionMiningCoroutine(string txHash, string networkUrl, Action onMiningFinished)
+        private static IEnumerator _PollForTransactionReceiptCoroutine(string txHash, string networkUrl, Action onMiningFinished)
         {
             var request = new EthGetTransactionReceiptUnityRequest(networkUrl);
             var mined = false;
@@ -67,7 +67,7 @@ namespace Hope.Utils.EthereumUtils
             {
                 yield return Waiter;
                 yield return request.SendRequest(txHash);
-                request.CheckTransactionRequest(() => mined = true, false);
+                request.CheckTransactionResult(() => mined = true, false);
             }
 
             if (request.Result?.Status?.Value == 1)
