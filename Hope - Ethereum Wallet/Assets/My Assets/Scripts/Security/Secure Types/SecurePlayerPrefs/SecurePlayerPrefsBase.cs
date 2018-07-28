@@ -1,8 +1,6 @@
 ﻿using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
+using Org.BouncyCastle.Security;
 using UnityEngine;
 
 namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
@@ -12,11 +10,10 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
     /// </summary>
     public abstract class SecurePlayerPrefsBase
     {
-
         /// <summary>
-        /// Initializes the SecurePlayerPrefsBase by getting the base player pref value.
+        /// Initializes the <see cref="SecurePlayerPrefsBase"/> by getting the base player pref value.
         /// </summary>
-        public SecurePlayerPrefsBase()
+        protected SecurePlayerPrefsBase()
         {
             EnsureSeedCreation();
         }
@@ -51,7 +48,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, PasswordUtils.GenerateRandomPassword().GetSHA512Hash().Protect());
+            PlayerPrefs.SetString(seedName, SecureRandom.GetNextBytes(new SecureRandom(), 128).GetBase64String().GetSHA512Hash().Protect());
         }
 
         /// <summary>
@@ -60,10 +57,6 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            //return NetworkInterface.GetAllNetworkInterfaces()
-            //                       .Where(nic => nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet && nic.OperationalStatus == OperationalStatus.Up)
-            //                       .Select(nic => GetKeyHash(Encoding.UTF8.GetBytes(nic.Id).Concat(nic.GetPhysicalAddress().GetAddressBytes()).ToArray().GetHexString()))
-            //                       .Single();
             return ("TEST").GetSHA512Hash();
         }
     }
