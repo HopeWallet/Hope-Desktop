@@ -24,7 +24,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1.25f, 0.15f);
+		blur.AnimateMaterialBlur(1f, 0.15f);
 		dim.AnimateGraphic(1f, 0.15f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
@@ -45,7 +45,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 			() => tokenList.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => searchSection.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f, 
-			() => { form.AnimateGraphicAndScale(0f, 0f, 0.2f); blur.AnimateMaterialBlur(0f, 0.2f); dim.AnimateGraphic(0f, 0.2f, FinishedAnimating); }))));
+			() => { form.AnimateGraphicAndScale(0f, 0f, 0.15f); blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
 	}
 
 	/// <summary>

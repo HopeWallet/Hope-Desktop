@@ -47,7 +47,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1.25f, 0.2f);
+		blur.AnimateMaterialBlur(1f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		title.AnimateGraphicAndScale(0.85f, 1f, 0.2f);
@@ -72,7 +72,7 @@ public class SendAssetPopupAnimator : UIAnimator
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f)));
 		addressSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => blur.AnimateMaterialBlur(0f, 0.2f)));
+			() => blur.AnimateMaterialBlur(-1f, 0.2f)));
 
         if (advancedMode)
         {

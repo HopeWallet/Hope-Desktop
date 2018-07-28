@@ -23,7 +23,7 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1.25f, 0.15f);
+		blur.AnimateMaterialBlur(1f, 0.15f);
 		dim.AnimateGraphic(1f, 0.15f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateGraphicAndScale(1f, 0.85f, 0.15f,
@@ -42,7 +42,7 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 			() => addressSection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
+			() => { blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
 	}
 
 	/// <summary>

@@ -60,7 +60,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1.25f, 0.2f);
+		blur.AnimateMaterialBlur(0.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 		() => title.AnimateScaleX(1f, 0.15f,
@@ -78,7 +78,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		nameSection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateScaleX(0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(0f, 0.2f); dim.AnimateGraphic(0f, 0.15f); }));
+			() => { blur.AnimateMaterialBlur(-0.25f, 0.2f); dim.AnimateGraphic(0f, 0.15f); }));
 		addressSection.AnimateScaleX(0f, 0.15f,
 			() => addressSection.AnimateScaleX(0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating)));

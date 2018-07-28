@@ -45,7 +45,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1.25f, 0.2f);
+		blur.AnimateMaterialBlur(1f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateScaleX(1f, 0.1f, 
@@ -60,7 +60,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	{
 		title.AnimateScaleX(0f, 0.2f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
+			() => { blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
 
 		passwordInputField.AnimateScaleX(0f, 0.15f);
 		signInButton.AnimateScaleX(0f, 0.15f);
