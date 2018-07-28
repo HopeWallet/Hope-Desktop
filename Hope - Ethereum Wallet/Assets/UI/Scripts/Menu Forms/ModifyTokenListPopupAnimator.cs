@@ -56,7 +56,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	{
 		if (index == 6)
 		{
-			for (int i = 6; i < tokenTransform.childCount; i++)
+			for (int i = index; i < tokenTransform.childCount; i++)
 				tokenTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
 
 			FinishedAnimating();

@@ -1,9 +1,12 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TransactionTabsManager : MonoBehaviour
 {
+
+	public static event Action<TabType> OnTabChanged;
 
 	[SerializeField] private Button[] transactionTabs;
 
@@ -24,12 +27,21 @@ public class TransactionTabsManager : MonoBehaviour
 
 	public void TabClicked(int activeIndex)
 	{
-		transactionTabs[previouslyActiveTab].interactable = true;
-		buttonTextElements[previouslyActiveTab].color = INACTIVE_TAB_COLOR;
-
-		transactionTabs[activeIndex].interactable = false;
-		buttonTextElements[activeIndex].color = ACTIVE_TAB_COLOR;
+		ChangeTabLook(previouslyActiveTab, false);
+		ChangeTabLook(activeIndex, true);
 
 		previouslyActiveTab = activeIndex;
+
+		OnTabChanged?.Invoke((TabType)activeIndex);
 	}
+
+	private void ChangeTabLook(int tab, bool activeTab)
+	{
+		transactionTabs[tab].interactable = !activeTab;
+		buttonTextElements[tab].color = activeTab ? ACTIVE_TAB_COLOR : INACTIVE_TAB_COLOR;
+		transactionTabs[tab].transform.localScale = new Vector2(transactionTabs[tab].transform.localScale.x, activeTab ? 1.25f : 1f);
+		buttonTextElements[tab].transform.localScale = new Vector2(buttonTextElements[tab].transform.localScale.x, activeTab ? 0.85f : 1f);
+	}
+
+	public enum TabType { All, Sent, Received, Pending };
 }

@@ -55,12 +55,12 @@ public class AddTokenPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		title.AnimateScaleX(0f, 0.1f,
+		title.AnimateScaleX(0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => { blur.AnimateMaterialBlur(-0.25f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
 
-		addTokenButton.AnimateScaleX(0f, 0.1f,
-			() => addressField.AnimateScaleX(0f, 0.1f));
+		addTokenButton.AnimateScaleX(0f, 0.15f,
+			() => addressField.AnimateScaleX(0f, 0.15f));
 	}
 
 	/// <summary>

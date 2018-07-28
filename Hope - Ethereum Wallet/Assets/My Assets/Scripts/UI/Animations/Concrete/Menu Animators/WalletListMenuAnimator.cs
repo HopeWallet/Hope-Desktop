@@ -51,9 +51,15 @@ public class WalletListMenuAnimator : UIAnimator
 	/// <param name="index"> The wallet number in the array </param>
 	private void AnimateWallets(int index)
 	{
-		Wallets[index].transform.parent.gameObject.SetActive(true);
         scrollbar.value = 1f;
 
+		if (index == 4)
+		{
+			for (int i = index; i < Wallets.Length; i++)
+				Wallets[i].transform.localScale = new Vector2(1f, 1f);
+
+			FinishedAnimating();
+		}
 		if (index == (Wallets.Length - 1))
             Wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
 		else

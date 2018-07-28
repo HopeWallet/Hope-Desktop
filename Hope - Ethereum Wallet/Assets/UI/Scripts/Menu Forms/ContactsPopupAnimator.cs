@@ -82,7 +82,7 @@ public class ContactsPopupAnimator : UIAnimator
 	{
 		if (index == 6)
 		{
-			for (int i = 6; i < contactsTransform.childCount; i++)
+			for (int i = index; i < contactsTransform.childCount; i++)
 				contactsTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
 
 			FinishedAnimating();
