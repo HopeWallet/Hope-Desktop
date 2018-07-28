@@ -6,7 +6,7 @@ using Zenject;
 /// <summary>
 /// Class which manages each locked purpose item that is displayed.
 /// </summary>
-public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
+public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>
 {
 
     public Text purposeAmountText,
@@ -73,7 +73,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerItem>
     /// Updates the ui elements and the transaction info whenever the HodlerItem is changed/updated.
     /// </summary>
     /// <param name="info"> The item that holds the info on the purpose locked in the contract. </param>
-    protected override void OnValueUpdated(HodlerItem info)
+    protected override void OnValueUpdated(HodlerMimic.Output.Item info)
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(info.Value, 18);
         id = info.Id;

@@ -75,7 +75,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     /// <summary>
     /// Sets the text of the purpose display as well as starts the LockPurposeEstimator.
     /// </summary>
-    private void Awake() => OnPurposeUpdated();
+    protected override void Awake()
+    {
+        base.Awake();
+        OnPurposeUpdated();
+    }
 
     /// <summary>
     /// Adds all required callbacks to the events, managers, and buttons.
@@ -186,7 +190,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     /// </summary>
     /// <param name="item"> The item found and still unclaimed. </param>
     /// <param name="timeStamp"> The timestamp the purpose was locked in. </param>
-    private void UpdateList(HodlerItem item, BigInteger timeStamp)
+    private void UpdateList(HodlerMimic.Output.Item item, BigInteger timeStamp)
     {
         item.LockedTimeStamp = timeStamp;
 
@@ -228,11 +232,11 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     /// Removes an item button from the current list.
     /// </summary>
     /// <param name="item"> The item to remove. </param>
-    private void RemoveItemButton(HodlerItem item)
+    private void RemoveItemButton(HodlerMimic.Output.Item item)
     {
         var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
 
-        if (sameItems.Count() > 0)
+        if (sameItems.Any())
         {
             var sameItem = sameItems.Single();
             items.Remove(sameItem);
@@ -250,7 +254,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
     /// </summary>
     /// <param name="item"> The item found still unclaimed and locked in the smart contract. </param>
     /// <returns> The newly created item object. </returns>
-    private LockedPRPSItemButton CreateItemButton(HodlerItem item)
+    private LockedPRPSItemButton CreateItemButton(HodlerMimic.Output.Item item)
     {
         var newItem = lockedPRPSItemFactory.Create();
         var rectTransform = newItem.GetComponent<RectTransform>();
@@ -273,9 +277,9 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         purposeToLock = string.IsNullOrEmpty(lockAmountField.text) ? 0 : decimal.Parse(lockAmountField.text);
         rewardAmountField.text = (purposeToLock * Math.Round(((decimal)(lockPeriodDropdown.value + 1) / 100) * (decimal)1.2, 2)).ToString();
 
-        lockButton.interactable = lockPurposeEstimator.CanExecuteTransaction &&
-                                  (purposeToLock >= (decimal)0.0000000000000001 &&
-                                  purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
+        lockButton.interactable = lockPurposeEstimator.CanExecuteTransaction
+                                  && (purposeToLock >= (decimal)0.0000000000000001
+                                  && purposeToLock <= tradableAssetManager.ActiveTradableAsset.AssetBalance);
     }
 
     /// <summary>
