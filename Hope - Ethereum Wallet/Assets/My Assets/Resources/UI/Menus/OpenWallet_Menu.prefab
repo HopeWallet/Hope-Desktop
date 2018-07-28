@@ -820,6 +820,7 @@ GameObject:
   - component: {fileID: 223244604500764324}
   - component: {fileID: 114033238578421206}
   - component: {fileID: 114026699628265170}
+  - component: {fileID: 114829522702546806}
   m_Layer: 5
   m_Name: OpenWallet_Menu
   m_TagString: Untagged
@@ -2394,7 +2395,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114845575797236654}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114829522702546806}
+        m_MethodName: TabClicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114489986849943284
@@ -2856,7 +2868,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114331803211281916}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114829522702546806}
+        m_MethodName: TabClicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114590544440696826
@@ -3093,7 +3116,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114565089020754816}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114829522702546806}
+        m_MethodName: TabClicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114631997620217972
@@ -3481,7 +3515,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114121923202464452}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114829522702546806}
+        m_MethodName: TabClicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114812495613199592
@@ -3652,6 +3697,22 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114829522702546806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928204962434420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d896c6449378a7146a6b8831c7cd8d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transactionTabs:
+  - {fileID: 114622301296840042}
+  - {fileID: 114802994807013838}
+  - {fileID: 114574313769393542}
+  - {fileID: 114477170138694292}
 --- !u!114 &114845575797236654
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -19,7 +19,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
 
     public Image assetImage, circle;
 
-	public GameObject loadingLine;
+	public GameObject loadingLine, newText;
 
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
