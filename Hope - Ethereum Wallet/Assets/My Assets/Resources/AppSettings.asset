@@ -80,3 +80,7 @@ MonoBehaviour:
       - {fileID: 1792955184907624, guid: 1967757afcd281a4481096f1e87c28b0, type: 2}
       - {fileID: 1214643471925612, guid: 32a5190669c319e42baab7ab1c196730, type: 2}
       - {fileID: 1733899067655964, guid: 1c7146e337c02844389ce825402de907, type: 2}
+  contractManagerSettings:
+    hodlerSettings:
+      mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75
+      rinkebyAddress: 0x23EdF403e7da17A0BE3E65CB3318638c826dEd23
