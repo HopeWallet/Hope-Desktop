@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public class ExceptionManager
 {
-
     private static PopupManager PopupManager;
 
     /// <summary>

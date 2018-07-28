@@ -100,7 +100,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return request.SendRequest(function.CreateTransactionInput(callerAddress, input));
 
-            request.CheckTransactionRequest(() => onGasReceived((request.Result.Value * 100) / 95));
+            request.CheckTransactionResult(() => onGasReceived((request.Result.Value * 100) / 95));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Hope.Utils.EthereumUtils
 
             yield return request.SendRequest();
 
-            request.CheckTransactionRequest(() => onGasPriceReceived(ModifyGasPrice(gasPriceTarget, request.Result.Value)));
+            request.CheckTransactionResult(() => onGasPriceReceived(ModifyGasPrice(gasPriceTarget, request.Result.Value)));
         }
 
     }
