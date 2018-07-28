@@ -20,7 +20,6 @@ public class TransactionTabsManager : MonoBehaviour
 
 		for (int i = 0; i < transactionTabs.Length; i++)
 			buttonTextElements[i] = transactionTabs[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-		
 	}
 
 	public void TabClicked(int activeIndex)

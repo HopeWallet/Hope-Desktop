@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class SendAssetPopupAnimator : UIAnimator
 {
+
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -20,8 +24,6 @@ public class SendAssetPopupAnimator : UIAnimator
 	[SerializeField] private GameObject advancedModeToggle;
 
 	[SerializeField] private GameObject sendButton;
-
-	[SerializeField] private GameObject contactName;
 
 	private SendAssetPopup sendAssetPopup;
 
@@ -45,6 +47,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		title.AnimateGraphicAndScale(0.85f, 1f, 0.2f);
@@ -68,7 +71,8 @@ public class SendAssetPopupAnimator : UIAnimator
 			() => tokenSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f)));
 		addressSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f));
+			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
+			() => blur.AnimateMaterialBlur(0f, 0.2f)));
 
         if (advancedMode)
         {

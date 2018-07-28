@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UnlockWalletPopupAnimator : UIAnimator
 {
 
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -44,6 +45,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateScaleX(1f, 0.1f, 
@@ -57,7 +59,8 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	protected override void AnimateOut()
 	{
 		title.AnimateScaleX(0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating));
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
 
 		passwordInputField.AnimateScaleX(0f, 0.15f);
 		signInButton.AnimateScaleX(0f, 0.15f);

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ContactsPopupAnimator : UIAnimator
 {
+
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -41,6 +43,7 @@ public class ContactsPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f,
 			() => addContactButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => searchSection.AnimateScaleX(1f, 0.15f,
@@ -68,7 +71,7 @@ public class ContactsPopupAnimator : UIAnimator
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => sortBySection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateScaleX(0f, 0.15f,
-			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating))));
+			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); })));
 	}
 
 	/// <summary>

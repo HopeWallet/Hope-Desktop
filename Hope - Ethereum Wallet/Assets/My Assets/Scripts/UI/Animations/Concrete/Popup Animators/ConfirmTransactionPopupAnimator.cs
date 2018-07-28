@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
+
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -16,6 +19,7 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.15f);
 		dim.AnimateGraphic(1f, 0.15f);
         form.AnimateGraphicAndScale(1f, 1f, 0.15f,
             () => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
@@ -45,6 +49,6 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 			() => feeSection.AnimateScaleX(0f, 0.15f,
 			() => toAddressSection.AnimateScaleX(0f, 0.15f,
 			() => tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)))));
+			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
 	}
 }

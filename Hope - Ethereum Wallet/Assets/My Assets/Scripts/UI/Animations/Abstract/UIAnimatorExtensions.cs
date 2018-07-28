@@ -36,4 +36,9 @@ public static class UIAnimatorExtensions
 	{
 		gameObject.transform.DOLocalMoveX(endValue, duration);
 	}
+
+	public static void AnimateMaterialBlur(this Image image, float endValue, float duration)
+	{
+		image.material.DOFloat(endValue, "_Size", duration);
+	}
 }

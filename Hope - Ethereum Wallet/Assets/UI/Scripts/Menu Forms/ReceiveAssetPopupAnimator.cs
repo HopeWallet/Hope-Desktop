@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class ReceiveAssetPopupAnimator : UIAnimator
 {
 
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -22,6 +23,7 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.15f);
 		dim.AnimateGraphic(1f, 0.15f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateGraphicAndScale(1f, 0.85f, 0.15f,
@@ -40,7 +42,7 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 			() => addressSection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)))));
+			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
 	}
 
 	/// <summary>

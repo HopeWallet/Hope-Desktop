@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class AddTokenPopupAnimator : UIAnimator
 {
 
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
@@ -41,6 +42,7 @@ public class AddTokenPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => title.AnimateScaleX(1f, 0.1f,
@@ -55,7 +57,7 @@ public class AddTokenPopupAnimator : UIAnimator
 	{
 		title.AnimateScaleX(0f, 0.1f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => dim.AnimateGraphic(0f, 0.15f, FinishedAnimating)));
+			() => { blur.AnimateMaterialBlur(0f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
 
 		addTokenButton.AnimateScaleX(0f, 0.1f,
 			() => addressField.AnimateScaleX(0f, 0.1f));
