@@ -1,4 +1,5 @@
 using Hope.Security.Injection;
+using Hope.Utils.EthereumUtils;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -99,6 +100,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<ButtonClickObserver>().AsSingle().NonLazy();
         Container.Bind<MouseClickObserver>().AsSingle().NonLazy();
         Container.Bind<PopupButtonObserver>().AsSingle().NonLazy();
+
+        Container.Bind<ContractUtils>().AsSingle().NonLazy();
     }
 
     /// <summary>

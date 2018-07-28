@@ -52,15 +52,14 @@ public class HodlerContract : ContractBase
     {
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
-            this.ExecuteContractFunction(this[FUNC_HODL],
-                                         request,
-                                         userWalletManager.WalletAddress,
-                                         gasLimit,
-                                         gasPrice,
-                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
-                                         id,
-                                         SolidityUtils.ConvertToUInt(value, 18),
-                                         monthsToLock);
+            ContractUtils.SendContractMessage<HodlerMimic.Messages.Hodl>(ContractAddress,
+                                                                         request,
+                                                                         gasPrice,
+                                                                         gasLimit,
+                                                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
+                                                                         id,
+                                                                         SolidityUtils.ConvertToUInt(value, 18),
+                                                                         monthsToLock);
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 
@@ -76,14 +75,12 @@ public class HodlerContract : ContractBase
     {
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {
-            this.ExecuteContractFunction(this[FUNC_RELEASE],
-                                         request,
-                                         userWalletManager.WalletAddress,
-                                         gasLimit,
-                                         gasPrice,
-                                         () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose."),
-                                         id);
+            ContractUtils.SendContractMessage<HodlerMimic.Messages.Release>(ContractAddress,
+                                                                            request,
+                                                                            gasPrice,
+                                                                            gasLimit,
+                                                                            () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"),
+                                                                            id);
         }, gasLimit, gasPrice, "Release Purpose Confirmation");
     }
-
 }

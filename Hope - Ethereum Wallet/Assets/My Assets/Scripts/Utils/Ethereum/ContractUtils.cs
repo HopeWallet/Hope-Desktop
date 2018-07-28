@@ -1,9 +1,7 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
-using Nethereum.Contracts;
 using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
-using Nethereum.RPC.Eth.DTOs;
 using System;
 using System.Collections;
 
@@ -11,27 +9,31 @@ namespace Hope.Utils.EthereumUtils
 {
 
     /// <summary>
-    /// Class which has extension methods for executing certain actions on contracts.
+    /// Class which contains useful utility methods for sending messages to smart contracts or querying data from them.
     /// </summary>
-    public static class ContractUtils
+    public class ContractUtils
     {
+        private static EthereumNetwork EthereumNetwork;
+
         /// <summary>
-        /// Executes the function of a given smart contract.
+        /// Initializes the <see cref="ContractUtils"/> by assigning the reference to the active network.
         /// </summary>
-        /// <param name="contract"> The contract the function exists on. </param>
-        /// <param name="function"> The function to execute. </param>
-        /// <param name="signedUnityRequest"> The signed unity request to execute the contract function with. </param>
-        /// <param name="walletAddress"> The address of the wallet sending the request. </param>
-        /// <param name="gasLimit"> The gas limit to use when executing this contract function. </param>
-        /// <param name="gasPrice"> The gas price to use when executing this contract function. </param>
-        /// <param name="onTransactionMined"> Action to execute when the transaction has been mined. </param>
-        /// <param name="input"> The function input arguments. </param>
-        public static void ExecuteContractFunction(this ContractBase contract, Function function, TransactionSignedUnityRequest signedUnityRequest,
-            string walletAddress, HexBigInteger gasLimit, HexBigInteger gasPrice, Action onTransactionMined, params object[] input)
+        /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
+        public ContractUtils(EthereumNetworkManager ethereumNetworkManager)
         {
-            _ExecuteContractFunctionCoroutine(function, signedUnityRequest, walletAddress, gasLimit, gasPrice, new HexBigInteger(0), onTransactionMined, input).StartCoroutine();
+            EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
         }
 
+        /// <summary>
+        /// Sends a message to an ethereum smart contract with the intent to change a part of the contract on the blockchain.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute on the blockchain given the contract address. </typeparam>
+        /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
+        /// <param name="signedUnityRequest"> The <see cref="TransactionSignedUnityRequest"/> to use to send the message. </param>
+        /// <param name="gasPrice"> The <see cref="HexBigInteger"/> gas price to use with the transaction. </param>
+        /// <param name="gasLimit"> The <see cref="HexBigInteger"/> gas limit to use with the transaction. </param>
+        /// <param name="onMessageExecuted"> Action called if the message is successfully executed on the blockchain. </param>
+        /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         public static void SendContractMessage<TFunc>(
             string contractAddress,
             TransactionSignedUnityRequest signedUnityRequest,
@@ -43,6 +45,16 @@ namespace Hope.Utils.EthereumUtils
             _SendContractMessageCoroutine<TFunc>(contractAddress, signedUnityRequest, gasPrice, gasLimit, onMessageExecuted, functionInput).StartCoroutine();
         }
 
+        /// <summary>
+        /// Coroutine which sends a message to an ethereum smart contract.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute on the blockchain given the contract address. </typeparam>
+        /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
+        /// <param name="signedUnityRequest"> The <see cref="TransactionSignedUnityRequest"/> to use to send the message. </param>
+        /// <param name="gasPrice"> The <see cref="HexBigInteger"/> gas price to use with the transaction. </param>
+        /// <param name="gasLimit"> The <see cref="HexBigInteger"/> gas limit to use with the transaction. </param>
+        /// <param name="onMessageExecuted"> Action called if the message is successfully executed on the blockchain. </param>
+        /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         private static IEnumerator _SendContractMessageCoroutine<TFunc>(
             string contractAddress,
             TransactionSignedUnityRequest signedUnityRequest,
@@ -53,9 +65,18 @@ namespace Hope.Utils.EthereumUtils
         {
             yield return signedUnityRequest.SignAndSendTransaction(ContractFunction.CreateFunction<TFunc>(gasPrice, gasLimit, functionInput).CreateTransactionInput(contractAddress));
 
-            signedUnityRequest.PollForTransactionReceipt(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, () => signedUnityRequest.CheckTransactionResult(onMessageExecuted));
+            signedUnityRequest.PollForTransactionReceipt(EthereumNetwork.NetworkUrl, () => signedUnityRequest.CheckTransactionResult(onMessageExecuted));
         }
 
+        /// <summary>
+        /// Queries some data from an ethereum smart contract which is active on the blockchain.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> of the smart contract to execute which will return us some data. </typeparam>
+        /// <typeparam name="TOut"> The <see cref="IFunctionOutputDTO"/> which represents the data which was returned from the <see cref="ContractFunction"/>. </typeparam>
+        /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
+        /// <param name="senderAddress"> The address of the sender requesting this data. </param>
+        /// <param name="onQueryCompleted"> Action called once the query is completed successfully, passing in <typeparamref name="TOut"/>. </param>
+        /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         public static void QueryContract<TFunc, TOut>(
             string contractAddress,
             string senderAddress,
@@ -65,40 +86,25 @@ namespace Hope.Utils.EthereumUtils
             _QueryContractCoroutine<TFunc, TOut>(contractAddress, senderAddress, onQueryCompleted, functionInput).StartCoroutine();
         }
 
+        /// <summary>
+        /// Coroutine which queries some data from an ethereum smart contract.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> of the smart contract to execute which will return us some data. </typeparam>
+        /// <typeparam name="TOut"> The <see cref="IFunctionOutputDTO"/> which represents the data which was returned from the <see cref="ContractFunction"/>. </typeparam>
+        /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
+        /// <param name="senderAddress"> The address of the sender requesting this data. </param>
+        /// <param name="onQueryCompleted"> Action called once the query is completed successfully, passing in <typeparamref name="TOut"/>. </param>
+        /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         private static IEnumerator _QueryContractCoroutine<TFunc, TOut>(
             string contractAddress,
             string senderAddress,
             Action<TOut> onQueryCompleted,
             params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
-            var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl, senderAddress);
+            var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetwork.NetworkUrl, senderAddress);
             yield return queryRequest.Query(ContractFunction.CreateFunction<TFunc>(functionInput), contractAddress);
 
             queryRequest.CheckTransactionResult(() => onQueryCompleted?.Invoke(queryRequest.Result));
-        }
-
-        /// <summary>
-        /// Executes a function from a contract.
-        /// This function execution will actually change stuff on the blockchain, so it requires a signature to perform the transaction.
-        /// </summary>
-        /// <param name="function"> The function to execute. </param>
-        /// <param name="signedUnityRequest"> The signed unity request to execute the contract function with. </param>
-        /// <param name="walletAddress"> The address of the wallet sending the request. </param>
-        /// <param name="gasLimit"> The gas limit to send the transaction with. </param>
-        /// <param name="gasPrice"> The gas price to send the transaction with. </param>
-        /// <param name="payableAmount"> The amount of ether to send to the function along with the regular function input. </param>
-        /// <param name="onTransactionMined"> Action to execute when the transaction has been mined. </param>
-        /// <param name="input"> The input of the function. </param>
-        /// <returns> The time taken to send the transaction. </returns>
-        private static IEnumerator _ExecuteContractFunctionCoroutine(Function function, TransactionSignedUnityRequest signedUnityRequest, string walletAddress,
-            HexBigInteger gasLimit, HexBigInteger gasPrice, HexBigInteger payableAmount, Action onTransactionMined, params object[] input)
-        {
-            var network = EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl;
-            var transactionInput = function.CreateTransactionInput(walletAddress, gasLimit, gasPrice, payableAmount, input);
-
-            yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
-
-            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(network, onTransactionMined));
         }
     }
 }

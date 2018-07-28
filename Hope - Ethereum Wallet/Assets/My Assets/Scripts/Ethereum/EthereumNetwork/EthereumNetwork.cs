@@ -10,12 +10,12 @@ public class EthereumNetwork
     /// <summary>
     /// The infura link of this EthereumNetwork.
     /// </summary>
-    public string NetworkUrl { get; private set; }
+    public string NetworkUrl { get; }
 
     /// <summary>
     /// The EthereumAPI object of this network.
     /// </summary>
-    public EthereumAPI Api { get; private set; }
+    public EthereumAPI Api { get; }
 
     /// <summary>
     /// Initializes this network with the infura link and website used for the api.
