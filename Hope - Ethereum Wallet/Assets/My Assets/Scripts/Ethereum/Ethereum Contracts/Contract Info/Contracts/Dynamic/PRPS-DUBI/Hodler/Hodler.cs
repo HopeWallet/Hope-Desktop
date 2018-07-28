@@ -3,27 +3,12 @@ using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
-/// <summary>
-/// Contract which is used for locking purpose and receiving dubi.
-/// </summary>
-public class HodlerContract : ContractBase
+public sealed partial class HodlerMimic : FixedSmartContract
 {
 
-    public const string FUNC_HODL = "hodl";
-    public const string FUNC_RELEASE = "release";
-    public const string FUNC_GETITEM = "getItem";
-
-    /// <summary>
-    /// The function names associated with the Hodler contract.
-    /// </summary>
-    protected override string[] FunctionNames => new string[] { FUNC_HODL, FUNC_RELEASE, FUNC_GETITEM };
-
-    /// <summary>
-    /// Initializes the contract with the address and abi.
-    /// </summary>
-    /// <param name="contractAddress"> The contract address. </param>
-    /// <param name="abi"> The contract abi. </param>
-    public HodlerContract(string contractAddress, string abi) : base(contractAddress, abi)
+    public HodlerMimic(
+        EthereumNetworkManager.Settings ethereumNetworkSettings,
+        Settings settings) : base(ethereumNetworkSettings, settings)
     {
     }
 
@@ -33,9 +18,9 @@ public class HodlerContract : ContractBase
     /// <param name="address"> The address to check for the item. </param>
     /// <param name="id"> The id which holds an item in the mapping. </param>
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
-    public void GetItem(string address, BigInteger id, Action<HodlerMimic.Output.Item> onItemReceived)
+    public void GetItem(string address, BigInteger id, Action<Output.Item> onItemReceived)
     {
-        ContractUtils.QueryContract<HodlerMimic.Queries.GetItem, HodlerMimic.Output.Item>(ContractAddress, address, onItemReceived, address, id);
+        ContractUtils.QueryContract<Queries.GetItem, Output.Item>(ContractAddress, address, onItemReceived, address, id);
     }
 
     /// <summary>
@@ -51,7 +36,7 @@ public class HodlerContract : ContractBase
     {
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
-            ContractUtils.SendContractMessage<HodlerMimic.Messages.Hodl>(ContractAddress,
+            ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
                                                                          request,
                                                                          gasPrice,
                                                                          gasLimit,
@@ -74,12 +59,17 @@ public class HodlerContract : ContractBase
     {
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {
-            ContractUtils.SendContractMessage<HodlerMimic.Messages.Release>(ContractAddress,
+            ContractUtils.SendContractMessage<Messages.Release>(ContractAddress,
                                                                             request,
                                                                             gasPrice,
                                                                             gasLimit,
                                                                             () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"),
                                                                             id);
         }, gasLimit, gasPrice, "Release Purpose Confirmation");
+    }
+
+    [Serializable]
+    public sealed class Settings : SettingsBase
+    {
     }
 }

@@ -7,9 +7,8 @@ using Zenject;
 /// <summary>
 /// Class which installs all dependencies.
 /// </summary>
-public class AppInstaller : MonoInstaller<AppInstaller>
+public sealed class AppInstaller : MonoInstaller<AppInstaller>
 {
-
     public AppSettingsInstaller appSettings;
     public TradableAssetButtonManager.Settings tradableAssetButtonSettings;
     public EthereumTransactionButtonManager.Settings transactionButtonSettings;
@@ -104,6 +103,8 @@ public class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<ButtonClickObserver>().AsSingle().NonLazy();
         Container.Bind<MouseClickObserver>().AsSingle().NonLazy();
         Container.Bind<PopupButtonObserver>().AsSingle().NonLazy();
+
+        Container.Bind<HodlerMimic>().AsSingle().NonLazy();
     }
 
     /// <summary>

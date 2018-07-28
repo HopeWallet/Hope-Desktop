@@ -1,7 +1,7 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 using System.Numerics;
 
-public static partial class HodlerMimic
+public sealed partial class HodlerMimic : FixedSmartContract
 {
 
     public static partial class Output

@@ -91,8 +91,8 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         TradableAssetManager.OnBalancesUpdated += OnPurposeUpdated;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
 
-        lockAmountField.onValueChanged.AddListener(val => UpdateLockFields());
-        lockPeriodDropdown.onValueChanged.AddListener(val => UpdateLockFields());
+        lockAmountField.onValueChanged.AddListener(_ => UpdateLockFields());
+        lockPeriodDropdown.onValueChanged.AddListener(_ => UpdateLockFields());
         lockButton.onClick.AddListener(LockPurpose);
     }
 
@@ -140,7 +140,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         UnityWebUtils.DownloadString(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(tradableAssetManager.ActiveTradableAsset.AssetAddress,
                                                                                     userWalletManager.WalletAddress,
                                                                                     hodlerContract.ContractAddress),
-                                                                                    txList => ProcessTxList(txList));
+                                                                                    ProcessTxList);
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         if (transactionsJson == null)
             return;
 
-        transactionsJson.result.Reverse().ForEach(json => GetTransactionInputData(json));
+        transactionsJson.result.Reverse().ForEach(GetTransactionInputData);
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
 
         releasePurposeEstimator.Estimate(hodlerContract[HodlerContract.FUNC_RELEASE],
                                           UpdateItemTransactionDetails,
-                                          items.First().ButtonInfo.Id);
+                                          items[0].ButtonInfo.Id);
     }
 
     /// <summary>
