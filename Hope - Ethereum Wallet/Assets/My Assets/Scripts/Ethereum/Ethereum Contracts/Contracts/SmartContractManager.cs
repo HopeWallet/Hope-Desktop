@@ -12,5 +12,6 @@ public static class SmartContractManager
     public sealed class Settings
     {
         public HodlerMimic.Settings hodlerSettings;
+        public PRPS.Settings prpsSettings;
     }
 }

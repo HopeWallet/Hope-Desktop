@@ -15,7 +15,7 @@ public abstract class StaticSmartContract
     /// <param name="settings"> The settings of this smart contract. </param>
     protected StaticSmartContract(EthereumNetworkManager.Settings ethereumNetworkSettings, SettingsBase settings)
     {
-        ContractAddress = ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? settings.mainnetAddress : settings.rinkebyAddress;
+        ContractAddress = ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? settings.mainnetAddress.ToLower() : settings.rinkebyAddress.ToLower();
     }
 
     /// <summary>

@@ -99,7 +99,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasPriceField = gasPriceField;
 			this.transactionFeeText = transactionFeeText;
 
-            OnGasChanged += () => this.transactionFeeText.text = "~ " + TransactionFee + " ETH";
+            OnGasChanged += () => this.transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
 
             AddListenersAndObservables();
 			EstimateGasLimit();

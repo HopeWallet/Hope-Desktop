@@ -85,3 +85,6 @@ MonoBehaviour:
     hodlerSettings:
       mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75
       rinkebyAddress: 0x23EdF403e7da17A0BE3E65CB3318638c826dEd23
+    prpsSettings:
+      mainnetAddress: 0xd94F2778e2B3913C53637Ae60647598bE588c570
+      rinkebyAddress: 0x5831819C84C05DdcD2568dE72963AC9f1e6831b6
