@@ -3,7 +3,7 @@ using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
-public sealed partial class HodlerMimic : FixedSmartContract
+public sealed partial class HodlerMimic : StaticSmartContract
 {
 
     public HodlerMimic(

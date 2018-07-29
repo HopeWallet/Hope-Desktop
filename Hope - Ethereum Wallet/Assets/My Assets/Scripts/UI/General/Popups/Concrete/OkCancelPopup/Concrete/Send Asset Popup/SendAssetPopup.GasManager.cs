@@ -1,7 +1,6 @@
 ﻿using Hope.Utils.EthereumUtils;
 using Nethereum.Util;
 using System;
-using System.Linq;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
@@ -17,7 +16,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// </summary>
 	public sealed class GasManager : IStandardGasPriceObservable, IPeriodicUpdater
 	{
-		private readonly TradableAssetManager tradableAssetManager;
+        public event Action OnGasChanged;
+
+        private readonly TradableAssetManager tradableAssetManager;
 		private readonly GasPriceObserver gasPriceObserver;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
@@ -36,9 +37,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private BigInteger estimatedGasLimit,
 						   enteredGasLimit;
 
-		private Action onGasChanged;
-
-		//private const int GAS_FIELD_MAX_LENGTH = 8;
 		private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
 		/// <summary>
@@ -101,9 +99,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasPriceField = gasPriceField;
 			this.transactionFeeText = transactionFeeText;
 
-			AddGasListener(() => this.transactionFeeText.text = "~ " + TransactionFee + " ETH");
+            OnGasChanged += () => this.transactionFeeText.text = "~ " + TransactionFee + " ETH";
 
-			AddListenersAndObservables();
+            AddListenersAndObservables();
 			EstimateGasLimit();
 			UpdateGasPriceEstimate(0.5f);
 		}
@@ -133,19 +131,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			if (!advancedModeToggle.IsToggledOn)
 				gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
 
-			onGasChanged?.Invoke();
-		}
-
-		/// <summary>
-		/// Adds a listener which is called once the gas price or gas limit is changed.
-		/// </summary>
-		/// <param name="gasChanged"> Action to call once the gas price or gas limit is changed. </param>
-		public void AddGasListener(Action gasChanged)
-		{
-			if (onGasChanged == null)
-				onGasChanged = gasChanged;
-			else
-				onGasChanged += gasChanged;
+			OnGasChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -170,7 +156,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			BigInteger.TryParse(gasLimit, out enteredGasLimit);
             gasLimitField.text = gasLimit;
 
-			onGasChanged?.Invoke();
+			OnGasChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -186,7 +172,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			enteredGasPrice = new GasPrice(GasUtils.GetFunctionalGasPrice(price));
 
-			onGasChanged?.Invoke();
+			OnGasChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -220,19 +206,5 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			if (string.IsNullOrEmpty(gasLimitField.text) || !advancedModeToggle.IsToggledOn || limit > enteredGasLimit)
 				CheckGasLimitField(limit.ToString());
 		}
-
-		/// <summary>
-		/// Restricts a string value to numbers only.
-		/// </summary>
-		/// <param name="str"> The string to restrict the values for. </param>
-		/// <returns> The entered string restricted to only numbers. </returns>
-		private string RestrictToNumbers(string str) => new string(str.Where(c => char.IsDigit(c)).ToArray());
-
-		/// <summary>
-		/// Restricts a string value to numbers and dots only.
-		/// </summary>
-		/// <param name="str"> The string to restrict the values for. </param>
-		/// <returns> The entered string restricted to numbers and dots. </returns>
-		private string RestrictToNumbersAndDots(string str) => new string(str.Where(c => char.IsDigit(c) || c == '.').ToArray());
 	}
 }
