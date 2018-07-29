@@ -37,10 +37,10 @@ public static class UIAnimatorExtensions
 		gameObject.transform.DOLocalMoveX(endValue, duration);
 	}
 
-	public static void AnimateMaterialBlur(this Image image, float incrementBlur, float duration)
+	public static void AnimateMaterialBlur(this Image image, float incrementBlur, float duration, TweenCallback callback = null)
 	{
 		Material imageMaterial = image.material;
 
-		imageMaterial.DOFloat(imageMaterial.GetFloat("_Size") + incrementBlur, "_Size", duration);
+		imageMaterial.DOFloat(imageMaterial.GetFloat("_Size") + incrementBlur, "_Size", duration).OnComplete(() => callback?.Invoke());
 	}
 }
