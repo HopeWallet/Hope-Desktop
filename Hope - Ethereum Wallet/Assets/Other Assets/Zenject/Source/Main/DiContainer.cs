@@ -2221,6 +2221,11 @@ namespace Zenject
             return BindFactoryInternal<TContract, IFactory<TContract>, Factory<TContract>>();
         }
 
+        public FactoryToChoiceIdBinder<TContract> BindSimpleFactory<TContract>()
+        {
+            return BindFactoryInternal<TContract, Factory<TContract>, Factory<TContract>>();
+        }
+
         public FactoryToChoiceIdBinder<TContract> BindFactory<TContract, TFactory>()
             where TFactory : Factory<TContract>
         {
@@ -2280,19 +2285,6 @@ namespace Zenject
                 bindInfo, factoryBindInfo);
         }
 
-        public FactoryToChoiceIdBinder<TParam1, TContract> BindIFactory<TParam1, TContract>()
-        {
-            return BindFactoryInternal<
-                TParam1, TContract, IFactory<TParam1, TContract>, Factory<TParam1, TContract>>();
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TContract> BindFactory<TParam1, TContract, TFactory>()
-            where TFactory : Factory<TParam1, TContract>
-        {
-            return BindFactoryInternal<
-                TParam1, TContract, TFactory, TFactory>();
-        }
-
         public FactoryToChoiceIdBinder<TParam1, TContract> BindFactoryContract<TParam1, TContract, TFactoryContract, TFactoryConcrete>()
             where TFactoryConcrete : Factory<TParam1, TContract>, TFactoryContract
             where TFactoryContract : IFactory
@@ -2312,19 +2304,6 @@ namespace Zenject
 
             return new FactoryToChoiceIdBinder<TParam1, TParam2, TContract>(
                 bindInfo, factoryBindInfo);
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TContract> BindIFactory<TParam1, TParam2, TContract>()
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TContract, IFactory<TParam1, TParam2, TContract>, Factory<TParam1, TParam2, TContract>>();
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TContract> BindFactory<TParam1, TParam2, TContract, TFactory>()
-            where TFactory : Factory<TParam1, TParam2, TContract>
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TContract, TFactory, TFactory>();
         }
 
         public FactoryToChoiceIdBinder<TParam1, TParam2, TContract> BindFactoryContract<TParam1, TParam2, TContract, TFactoryContract, TFactoryConcrete>()
@@ -2348,19 +2327,6 @@ namespace Zenject
                 bindInfo, factoryBindInfo);
         }
 
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TContract> BindIFactory<TParam1, TParam2, TParam3, TContract>()
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TContract, IFactory<TParam1, TParam2, TParam3, TContract>, Factory<TParam1, TParam2, TParam3, TContract>>();
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TContract> BindFactory<TParam1, TParam2, TParam3, TContract, TFactory>()
-            where TFactory : Factory<TParam1, TParam2, TParam3, TContract>
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TContract, TFactory, TFactory>();
-        }
-
         public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TContract> BindFactoryContract<TParam1, TParam2, TParam3, TContract, TFactoryContract, TFactoryConcrete>()
             where TFactoryConcrete : Factory<TParam1, TParam2, TParam3, TContract>, TFactoryContract
             where TFactoryContract : IFactory
@@ -2382,19 +2348,6 @@ namespace Zenject
                 bindInfo, factoryBindInfo);
         }
 
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TContract> BindIFactory<TParam1, TParam2, TParam3, TParam4, TContract>()
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TParam4, TContract, IFactory<TParam1, TParam2, TParam3, TParam4, TContract>, Factory<TParam1, TParam2, TParam3, TParam4, TContract>>();
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TContract> BindFactory<TParam1, TParam2, TParam3, TParam4, TContract, TFactory>()
-            where TFactory : Factory<TParam1, TParam2, TParam3, TParam4, TContract>
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TParam4, TContract, TFactory, TFactory>();
-        }
-
         public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TContract> BindFactoryContract<TParam1, TParam2, TParam3, TParam4, TContract, TFactoryContract, TFactoryConcrete>()
             where TFactoryConcrete : Factory<TParam1, TParam2, TParam3, TParam4, TContract>, TFactoryContract
             where TFactoryContract : IFactory
@@ -2414,19 +2367,6 @@ namespace Zenject
 
             return new FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>(
                 bindInfo, factoryBindInfo);
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TParam5, TContract> BindIFactory<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>()
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TParam4, TParam5, TContract, IFactory<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>, Factory<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>>();
-        }
-
-        public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TParam5, TContract> BindFactory<TParam1, TParam2, TParam3, TParam4, TParam5, TContract, TFactory>()
-            where TFactory : Factory<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>
-        {
-            return BindFactoryInternal<
-                TParam1, TParam2, TParam3, TParam4, TParam5, TContract, TFactory, TFactory>();
         }
 
         public FactoryToChoiceIdBinder<TParam1, TParam2, TParam3, TParam4, TParam5, TContract> BindFactoryContract<TParam1, TParam2, TParam3, TParam4, TParam5, TContract, TFactoryContract, TFactoryConcrete>()

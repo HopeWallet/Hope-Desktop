@@ -1,6 +1,8 @@
 using Hope.Security.Injection;
 using Hope.Utils.EthereumUtils;
+using System;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Zenject;
 
@@ -133,22 +135,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindPopupFactories()
     {
-        BindPopupFactory<UnlockWalletPopup>();
-        BindPopupFactory<LoadingPopup>();
-        BindPopupFactory<AddTokenPopup>();
-        BindPopupFactory<SendAssetPopup>();
-        BindPopupFactory<ConfirmTransactionPopup>();
-        BindPopupFactory<HideAssetPopup>();
-        BindPopupFactory<ConfirmHideAssetPopup>();
-        BindPopupFactory<ReceiveAssetPopup>();
-        BindPopupFactory<TransactionInfoPopup>();
-        BindPopupFactory<PRPSLockPopup>();
-        BindPopupFactory<ConfirmPRPSLockPopup>();
-        BindPopupFactory<GeneralTransactionConfirmationPopup>();
-		BindPopupFactory<ContactsPopup>();
-		BindPopupFactory<AddOrEditContactPopup>();
-		BindPopupFactory<InfoPopup>();
-        BindPopupFactory<ModifyTokensPopup>();
+        appSettings.uiSettings.menuSettings.popups.ForEach(popup => InvokeGenericMethod(this, "BindPopupFactory", popup.GetComponent<PopupBase>().GetType()));
 	}
 
     /// <summary>
@@ -156,39 +143,36 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindMenuFactories()
     {
-        BindMenuFactory<ChooseWalletMenu>();
-        BindMenuFactory<CreateWalletMenu>();
-        BindMenuFactory<WalletListMenu>();
-
-        BindMenuFactory<ImportOrCreateMnemonicMenu>();
-        BindMenuFactory<CreateMnemonicMenu>();
-        BindMenuFactory<ImportMnemonicMenu>();
-        BindMenuFactory<ConfirmMnemonicMenu>();
-
-        BindMenuFactory<OpenWalletMenu>();
+        appSettings.uiSettings.menuSettings.menus.ForEach(menu => InvokeGenericMethod(this, "BindMenuFactory", menu.GetComponent<Menu>().GetType()));
     }
 
     /// <summary>
     /// Binds the types for a menu factory.
     /// </summary>
     /// <typeparam name="TMenu"> The type of the menu. </typeparam>
-    private void BindMenuFactory<TMenu>() where TMenu : Menu<TMenu> 
-        => BindFactory<TMenu, Menu<TMenu>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.menus);
-
-    /// <summary>
-    /// Binds the types for a button factory.
-    /// </summary>
-    /// <typeparam name="TButton"> The type of the button. </typeparam>
-    /// <param name="spawnTransform"> The spawn transform to have the factory create the buttons under. </param>
-    private void BindButtonFactory<TButton>(Transform spawnTransform) where TButton : FactoryButton<TButton> 
-        => BindFactory<TButton, FactoryButton<TButton>.Factory>(spawnTransform, appSettings.uiSettings.menuSettings.factoryButtons);
+    private void BindMenuFactory<TMenu>() where TMenu : Menu<TMenu>
+    {
+        BindFactory<TMenu, Menu<TMenu>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.menus);
+    }
 
     /// <summary>
     /// Binds the types for a popup factory.
     /// </summary>
     /// <typeparam name="TPopup"> The type of the popup. </typeparam>
     private void BindPopupFactory<TPopup>() where TPopup : FactoryPopup<TPopup>
-        => BindFactory<TPopup, FactoryPopup<TPopup>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.popups);
+    {
+        BindFactory<TPopup, FactoryPopup<TPopup>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.popups);
+    }
+
+    /// <summary>
+    /// Binds the types for a button factory.
+    /// </summary>
+    /// <typeparam name="TButton"> The type of the button. </typeparam>
+    /// <param name="spawnTransform"> The spawn transform to have the factory create the buttons under. </param>
+    private void BindButtonFactory<TButton>(Transform spawnTransform) where TButton : FactoryButton<TButton>
+    {
+        BindFactory<TButton, FactoryButton<TButton>.Factory>(spawnTransform, appSettings.uiSettings.menuSettings.factoryButtons);
+    }
 
     /// <summary>
     /// Binds a certain factory type under a spawn transform.
@@ -201,6 +185,20 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     {
         Container.BindFactory<TType, TFactory>()
                  .FromComponentInNewPrefab(objectsToSearch.Select(obj => obj.GetComponentInChildren<TType>()).Single(type => type != null).gameObject.SelectParent())
-                 .UnderObject(spawnTransform);
+                 .UnderObjectTransform(spawnTransform);
+    }
+
+    /// <summary>
+    /// Invokes a generic method using reflection.
+    /// </summary>
+    /// <param name="instance"> The instance of the object to invoke the generic method with. </param>
+    /// <param name="methodName"> The name of the generic method to invoke. </param>
+    /// <param name="genericParams"> The generic parameters of the method. </param>
+    /// <param name="methodParams"> The actual parameters of the method. </param>
+    private void InvokeGenericMethod(object instance, string methodName, params Type[] genericParams)
+    {
+        instance.GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance)
+                          .MakeGenericMethod(genericParams)
+                          .Invoke(instance, null);
     }
 }

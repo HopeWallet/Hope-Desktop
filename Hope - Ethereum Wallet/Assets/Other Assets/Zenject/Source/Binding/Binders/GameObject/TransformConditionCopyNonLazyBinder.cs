@@ -20,10 +20,10 @@ namespace Zenject
 
         public ConditionCopyNonLazyBinder UnderObject(GameObject parent)
         {
-            return UnderObject(parent.transform);
+            return UnderObjectTransform(parent.transform);
         }
 
-        public ConditionCopyNonLazyBinder UnderObject(Transform parent)
+        public ConditionCopyNonLazyBinder UnderObjectTransform(Transform parent)
         {
             GameObjectInfo.ParentTransform = parent;
             return this;
