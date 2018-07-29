@@ -48,7 +48,6 @@ using Nethereum.RPC.Eth.DTOs;
 using System.Collections;
 using Nethereum.JsonRpc.UnityClient;
 
-
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
 // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()

@@ -38,7 +38,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private Action onGasChanged;
 
-		private const int GAS_FIELD_MAX_LENGTH = 8;
+		//private const int GAS_FIELD_MAX_LENGTH = 8;
 		private const string RAND_ADDRESS = "0x0278018340138741034781903741800348314013";
 
 		/// <summary>
@@ -168,7 +168,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void CheckGasLimitField(string gasLimit)
 		{
 			BigInteger.TryParse(gasLimit, out enteredGasLimit);
-			gasLimitField.text = RestrictToNumbers(gasLimit).LimitEnd(GAS_FIELD_MAX_LENGTH);
+            gasLimitField.text = gasLimit;
 
 			onGasChanged?.Invoke();
 		}
@@ -179,7 +179,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="gasPrice"> The entered gas price. </param>
 		private void CheckGasPriceField(string gasPrice)
 		{
-			gasPriceField.text = RestrictToNumbersAndDots(gasPrice).LimitEnd(GAS_FIELD_MAX_LENGTH);
+            gasPriceField.text = gasPrice;
 
 			decimal price;
 			decimal.TryParse(gasPriceField.text, out price);

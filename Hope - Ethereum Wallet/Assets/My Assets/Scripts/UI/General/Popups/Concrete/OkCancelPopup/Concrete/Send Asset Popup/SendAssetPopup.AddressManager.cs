@@ -13,8 +13,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     {
         private readonly TMP_InputField addressField;
 
-        private const int VALID_ADDRESS_LENGTH = 42;
-
         /// <summary>
         /// Whether the send address is valid.
         /// </summary>
@@ -47,8 +45,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="address"> The string entered in the address field. </param>
         private void CheckAddress(string address)
         {
-            addressField.text = address.LimitEnd(VALID_ADDRESS_LENGTH);
-
             IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
         }
     }
