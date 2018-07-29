@@ -11,14 +11,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// </summary>
     public sealed class AmountManager
     {
+        public event Action OnAmountChanged;
+
         private readonly SendAssetPopup sendAssetPopup;
 
         private readonly Toggle maxToggle;
 
         private readonly TMP_InputField amountInputField;
         private readonly TextMeshProUGUI amountPlaceholderText;
-
-        private Action onAmountChanged;
 
         /// <summary>
         /// Whether the amount entered in the input field is a valid sendable amount.
@@ -70,26 +70,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         }
 
         /// <summary>
-        /// Adds an action which will be called once the send amount is changed.
-        /// </summary>
-        /// <param name="amountChanged"> Action to call once the send amount is changed. </param>
-        public void AddSendAmountListener(Action amountChanged)
-        {
-            if (onAmountChanged == null)
-                onAmountChanged = amountChanged;
-            else
-                onAmountChanged += amountChanged;
-        }
-
-        /// <summary>
         /// Sets up all listeners.
         /// </summary>
         private void SetupListeners()
         {
-            sendAssetPopup.Asset.AddAssetBalanceListener(MaxChanged);
-            sendAssetPopup.Gas.AddGasListener(MaxChanged);
+            sendAssetPopup.Asset.OnAssetBalanceChanged += MaxChanged;
+            sendAssetPopup.Gas.OnGasChanged += MaxChanged;
             maxToggle.AddToggleListener(MaxChanged);
-            amountInputField.onValueChanged.AddListener(OnAmountChanged);
+            amountInputField.onValueChanged.AddListener(AmountFieldChanged);
         }
 
         /// <summary>
@@ -114,7 +102,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// Called once the amount input field is edited and changed.
         /// </summary>
         /// <param name="amountText"> The text entered in the amount input field. </param>
-        private void OnAmountChanged(string amountText)
+        private void AmountFieldChanged(string amountText)
         {
             amountInputField.RestrictToBalance(sendAssetPopup.Asset.ActiveAsset);
 
@@ -132,7 +120,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private void CheckIfValidAmount()
         {
             IsValid = SendableAmount <= MaxSendableAmount && SendableAmount > 0;
-            onAmountChanged?.Invoke();
+            OnAmountChanged?.Invoke();
         }
     }
 }

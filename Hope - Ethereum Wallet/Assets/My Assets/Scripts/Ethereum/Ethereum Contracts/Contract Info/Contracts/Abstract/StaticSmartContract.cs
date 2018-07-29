@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Base class for all fixed smart contracts to inherit.
 /// </summary>
-public abstract class FixedSmartContract
+public abstract class StaticSmartContract
 {
     /// <summary>
     /// The address of this smart contract.
@@ -9,13 +9,11 @@ public abstract class FixedSmartContract
     public string ContractAddress { get; }
 
     /// <summary>
-    /// Initializes the <see cref="FixedSmartContract"/> by assigning the references to the required settings.
+    /// Initializes the <see cref="StaticSmartContract"/> by assigning the references to the required settings.
     /// </summary>
     /// <param name="ethereumNetworkSettings"> The current <see cref="EthereumNetworkManager.Settings"/> instance. </param>
     /// <param name="settings"> The settings of this smart contract. </param>
-    protected FixedSmartContract(
-        EthereumNetworkManager.Settings ethereumNetworkSettings,
-        SettingsBase settings)
+    protected StaticSmartContract(EthereumNetworkManager.Settings ethereumNetworkSettings, SettingsBase settings)
     {
         ContractAddress = ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? settings.mainnetAddress : settings.rinkebyAddress;
     }

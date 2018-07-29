@@ -12,6 +12,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// </summary>
     public sealed class AssetManager : IUpdater, IEtherBalanceObservable
     {
+        public event Action OnAssetBalanceChanged;
+
         private readonly TradableAssetManager tradableAssetManager;
         private readonly TradableAssetImageManager tradableAssetImageManager;
         private readonly EtherBalanceObserver etherBalanceObserver;
@@ -24,8 +26,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private dynamic lastEtherBalance,
                         lastAssetBalance;
-
-        private Action onAssetBalanceChanged;
 
         /// <summary>
         /// The current ether balance of this wallet.
@@ -90,18 +90,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         }
 
         /// <summary>
-        /// Adds listeners which are called when the asset or ether balance changes.
-        /// </summary>
-        /// <param name="onBalanceChanged"> Action to call once the asset balance or ether balance changes. </param>
-        public void AddAssetBalanceListener(Action onBalanceChanged)
-        {
-            if (onAssetBalanceChanged == null)
-                onAssetBalanceChanged = onBalanceChanged;
-            else
-                onAssetBalanceChanged += onBalanceChanged;
-        }
-
-        /// <summary>
         /// Starts the updaters and sets the initial data of the active tradable asset.
         /// </summary>
         private void Start()
@@ -132,7 +120,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             assetBalance.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance.ToString(), 14, "...");
 
             if (lastAssetBalance != newAssetBalance || lastEtherBalance != newEtherBalance)
-                onAssetBalanceChanged?.Invoke();
+                OnAssetBalanceChanged?.Invoke();
 
             lastAssetBalance = newAssetBalance;
             lastEtherBalance = newEtherBalance;
