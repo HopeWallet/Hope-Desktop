@@ -17,13 +17,16 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     private const string PRPS_MAINNET_ADDRESS = "0xd94F2778e2B3913C53637Ae60647598bE588c570";
     private const string PRPS_RINKEBY_ADDRESS = "0x5831819C84C05DdcD2568dE72963AC9f1e6831b6";
 
+    private int updateCount;
+    private int updateCounter;
+
     public float UpdateInterval => 10f;
 
     public string PRPSAddress { get; }
 
     public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled).ToList();
 
-    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => !item.Fulfilled && item.ReleaseTime > DateTimeUtils.GetCurrentUnixTime()).ToList();
+    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => !item.Fulfilled && item.ReleaseTime < DateTimeUtils.GetCurrentUnixTime()).ToList();
 
     public LockedPRPSManager(
         UserWalletManager userWalletManager,
@@ -67,6 +70,9 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         if (transactionsJson == null)
             return;
 
+        updateCount = transactionsJson.result.Length;
+        updateCounter = 0;
+
         transactionsJson.result.Reverse().ForEach(GetTransactionInputData);
     }
 
@@ -87,11 +93,25 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     private void UpdateItemList(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
     {
+        AddNewItem(item, lockedTimeStamp);
+        CheckItemUpdateCounter();
+    }
+
+    private void AddNewItem(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
+    {
         item.LockedTimeStamp = lockedTimeStamp;
 
         if (!lockedItems.Select(lockedItem => lockedItem.LockedTimeStamp).Contains(lockedTimeStamp))
         {
             lockedItems.Add(item);
+            lockedItems.Sort((i1, i2) => i1.LockedTimeStamp.CompareTo(i2.LockedTimeStamp));
         }
     }
+
+    private void CheckItemUpdateCounter()
+    {
+        if (++updateCounter == updateCount)
+            OnLockedPRPSUpdated?.Invoke();
+    }
+
 }
