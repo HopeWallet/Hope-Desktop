@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class DeleteContactPopupAnimator : UIAnimator
 {
 
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject mainText;
@@ -16,6 +18,7 @@ public class DeleteContactPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(0.25f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f,
 			() => contactName.AnimateScaleX(1f, 0.15f,
 			() => contactAddress.AnimateScaleX(1f, 0.15f,
@@ -35,7 +38,7 @@ public class DeleteContactPopupAnimator : UIAnimator
 
 		yesButton.AnimateGraphicAndScale(0f, 0f, 0.1f,
 			() => contactAddress.AnimateScaleX(0f, 0.1f,
-			() => dim.AnimateGraphic(0f, 0.2f)));
+			() => { blur.AnimateMaterialBlur(-0.25f, 0.2f); dim.AnimateGraphic(0f, 0.2f); }));
 
 		noButton.AnimateGraphicAndScale(0f, 0f, 0.1f,
 			() => mainText.AnimateScaleX(0f, 0.1f,

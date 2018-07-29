@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LockedPRPSPopupAnimator : UIAnimator
@@ -12,12 +13,25 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	[SerializeField] private GameObject lockedPRPSList;
 	[SerializeField] private GameObject lockPRPSButton;
 
+	[SerializeField] private GameObject pendingIcon;
+
 	private Transform listTransform;
 
-	private void Awake()
+	private bool pending;
+
+	public bool Pending
 	{
-		listTransform = lockedPRPSList.transform.GetChild(0).GetChild(0);
+		set
+		{
+			pending = value;
+			SetPendingIcon(pending);
+		}
 	}
+
+	/// <summary>
+	/// Initializes the listTransform
+	/// </summary>
+	private void Awake() => listTransform = lockedPRPSList.transform.GetChild(0).GetChild(0);
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -30,6 +44,8 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			() => title.AnimateScaleX(1f, 0.15f,
 			() => topText.AnimateScaleX(1f, 0.15f,
 			() => { lockedPRPSList.AnimateScaleX(1f, 0.15f, () => AnimateList(0)); lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.15f); })));
+
+		if (pending) SetPendingIcon(true);
 	}
 
 	/// <summary>
@@ -46,6 +62,8 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			() => title.AnimateScaleX(0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => { blur.AnimateMaterialBlur(-0.75f, 0.2f); dim.AnimateGraphic(0f, 0.2f, FinishedAnimating); })))));
+
+		if (pending) SetPendingIcon(false);
 	}
 
 	/// <summary>
@@ -67,4 +85,18 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateList(++index));
 	}
 
+	/// <summary>
+	/// Animates the pending icon in or out
+	/// </summary>
+	/// <param name="active"> Checks if animating icon in or out </param>
+	private void SetPendingIcon(bool active)
+	{
+		if (active)
+			pendingIcon.SetActive(active);
+
+		pendingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.2f);
+
+		if (!active)
+			pendingIcon.SetActive(false);
+	}
 }

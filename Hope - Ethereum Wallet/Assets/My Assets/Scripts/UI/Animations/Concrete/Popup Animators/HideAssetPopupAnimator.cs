@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class HideAssetPopupAnimator : UIAnimator
 {
 
+	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject mainText;
@@ -27,6 +28,7 @@ public class HideAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		blur.AnimateMaterialBlur(1f, 0.2f);
 		dim.AnimateGraphic(1f, 0.2f,
 			() => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => tokenSymbol.AnimateGraphicAndScale(1f, 0.85f, 0.15f,
@@ -44,7 +46,8 @@ public class HideAssetPopupAnimator : UIAnimator
 	protected override void AnimateOut()
 	{
 		subText.AnimateScaleX(0f, 0.1f,
-			() => mainText.AnimateScaleX(0f, 0.1f));
+			() => mainText.AnimateScaleX(0f, 0.1f,
+			() => blur.AnimateMaterialBlur(-1f, 0.2f)));
 
 		yesButton.AnimateGraphicAndScale(0f, 0f, 0.1f,
 			() => tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.1f,
