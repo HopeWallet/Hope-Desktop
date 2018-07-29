@@ -29,14 +29,17 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="menuFactoryManager"> The active MenuFactoryManager which is used to create menus of certain types. </param>
+    /// <param name="settings"> The settings for the ui. </param>
     [Inject]
     public void Construct(ButtonClickObserver buttonObserver,
         PopupManager popupManager,
-        MenuFactoryManager menuFactoryManager)
+        MenuFactoryManager menuFactoryManager,
+        Settings settings)
     {
         this.popupManager = popupManager;
         this.menuFactoryManager = menuFactoryManager;
 
+        settings.generalSettings.blurMaterial.SetFloat("_Size", 0f);
         buttonObserver.SubscribeObservable(this);
     }
 

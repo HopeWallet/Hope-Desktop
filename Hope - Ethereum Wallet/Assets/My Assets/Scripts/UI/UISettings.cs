@@ -10,6 +10,7 @@ namespace UISettings
     [Serializable]
     public class GeneralSettings
     {
+        public Material blurMaterial;
         public Dropdowns dropdowns;
     }
 
