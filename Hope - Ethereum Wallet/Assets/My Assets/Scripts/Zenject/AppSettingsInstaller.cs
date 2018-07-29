@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using System.Reflection;
+using Zenject;
 
 /// <summary>
 /// Class which contains the settings for certain classes.
@@ -32,7 +33,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     /// </summary>
     private void InstallContractSettings()
     {
-        Container.BindInstance(contractManagerSettings.hodlerSettings).AsSingle().NonLazy();
+        typeof(SmartContractManager.Settings).GetFields(BindingFlags.Instance | BindingFlags.GetField | BindingFlags.Public)
+                                             .ForEach(field => Container.BindInstance(field.GetValue(contractManagerSettings)).AsSingle().NonLazy());
     }
-
 }
