@@ -12,17 +12,13 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     private readonly UserWalletManager userWalletManager;
     private readonly HodlerMimic hodlerContract;
+    private readonly PRPS prpsContract;
     private readonly EthereumNetwork ethereumNetwork;
-
-    private const string PRPS_MAINNET_ADDRESS = "0xd94F2778e2B3913C53637Ae60647598bE588c570";
-    private const string PRPS_RINKEBY_ADDRESS = "0x5831819C84C05DdcD2568dE72963AC9f1e6831b6";
 
     private int updateCount;
     private int updateCounter;
 
     public float UpdateInterval => 10f;
-
-    public string PRPSAddress { get; }
 
     public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled).ToList();
 
@@ -31,15 +27,14 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     public LockedPRPSManager(
         UserWalletManager userWalletManager,
         HodlerMimic hodlerContract,
+        PRPS prpsContract,
         EthereumNetworkManager ethereumNetworkManager,
-        EthereumNetworkManager.Settings ethereumNetworkSettings,
         PeriodicUpdateManager periodicUpdateManager)
     {
         this.userWalletManager = userWalletManager;
         this.hodlerContract = hodlerContract;
+        this.prpsContract = prpsContract;
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
-
-        PRPSAddress = ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? PRPS_MAINNET_ADDRESS : PRPS_RINKEBY_ADDRESS;
 
         UserWallet.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
@@ -54,10 +49,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// </summary>
     private void StartNewItemSearch()
     {
-        UnityWebUtils.DownloadString(ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(PRPSAddress,
-                                                                                       userWalletManager.WalletAddress,
-                                                                                       hodlerContract.ContractAddress),
-                                                                                       ProcessTxList);
+        string apiUrl = ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(prpsContract.ContractAddress, userWalletManager.WalletAddress, hodlerContract.ContractAddress);
+        UnityWebUtils.DownloadString(apiUrl, ProcessTxList);
     }
 
     /// <summary>

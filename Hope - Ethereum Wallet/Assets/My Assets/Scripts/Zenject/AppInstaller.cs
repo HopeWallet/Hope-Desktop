@@ -108,6 +108,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<PopupButtonObserver>().AsSingle().NonLazy();
 
         Container.Bind<HodlerMimic>().AsSingle().NonLazy();
+        Container.Bind<PRPS>().AsSingle().NonLazy();
     }
 
     /// <summary>
