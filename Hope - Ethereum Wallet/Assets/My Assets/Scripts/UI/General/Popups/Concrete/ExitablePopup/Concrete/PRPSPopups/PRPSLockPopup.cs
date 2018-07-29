@@ -195,7 +195,7 @@ public class PRPSLockPopup : ExitablePopupComponent<PRPSLockPopup>, IPeriodicUpd
         item.LockedTimeStamp = timeStamp;
 
         var sameItems = items.Where(i => i.ButtonInfo.ReleaseTime == item.ReleaseTime);
-        var currentItemButton = sameItems.Count() == 0 ? CreateItemButton(item) : sameItems.Single();
+        var currentItemButton = !sameItems.Any() ? CreateItemButton(item) : sameItems.Single();
 
         currentItemButton.SetButtonInfo(item);
 
