@@ -19,9 +19,12 @@ public class LockedPRPSPopupAnimator : UIAnimator
 		listTransform = lockedPRPSList.transform.GetChild(0).GetChild(0);
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form into view
+	/// </summary>
 	protected override void AnimateIn()
 	{
-		blur.AnimateMaterialBlur(1f, 0.15f);
+		blur.AnimateMaterialBlur(0.75f, 0.15f);
 		dim.AnimateGraphic(1f, 0.2f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateScaleX(1f, 0.15f,
@@ -29,11 +32,26 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			() => { lockedPRPSList.AnimateScaleX(1f, 0.15f, () => AnimateList(0)); lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.15f); })));
 	}
 
+	/// <summary>
+	/// Animates the UI elements of the form out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
-		throw new System.NotImplementedException();
+		for (int i = 0; i < listTransform.childCount; i++)
+			listTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.15f);
+
+		lockPRPSButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => lockedPRPSList.AnimateScaleX(0f, 0.15f,
+			() => topText.AnimateScaleX(0f, 0.15f,
+			() => title.AnimateScaleX(0f, 0.15f,
+			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
+			() => { blur.AnimateMaterialBlur(-0.75f, 0.2f); dim.AnimateGraphic(0f, 0.2f, FinishedAnimating); })))));
 	}
 
+	/// <summary>
+	/// Animates the items in the main list one by one
+	/// </summary>
+	/// <param name="index"> The index of the item being animated </param>
 	private void AnimateList(int index)
 	{
 		if (index == 6)

@@ -32,8 +32,5 @@ public abstract class CountdownTimerAnimator : UIAnimator
 	/// <summary>
 	/// Sets the confirm and cancel button to interactable
 	/// </summary>
-	private void SetButtonInteractables()
-	{
-		confirmButton.GetComponent<Button>().interactable = true;
-	}
+	private void SetButtonInteractables() => confirmButton.GetComponent<Button>().interactable = true;
 }
