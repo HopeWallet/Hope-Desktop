@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 222059738508506734}
   - component: {fileID: 114812495613199592}
   - component: {fileID: 114948652733704502}
+  - component: {fileID: 114942225647389056}
   m_Layer: 5
   m_Name: LockPRPS_Button
   m_TagString: Untagged
@@ -4199,6 +4200,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114942225647389056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1187215074320998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1e721afec2bb8d4887411e07cb358a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114948652733704502
 MonoBehaviour:
   m_ObjectHideFlags: 1
