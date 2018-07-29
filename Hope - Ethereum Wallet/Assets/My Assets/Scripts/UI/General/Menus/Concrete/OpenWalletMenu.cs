@@ -11,7 +11,8 @@ using Zenject;
 public class OpenWalletMenu : Menu<OpenWalletMenu>
 {
 
-    public GameObject backgroundVignette;
+    public GameObject backgroundVignette,
+                      lockPurposeSection;
 
 	public TMP_Text assetText,
 					balanceText,
@@ -25,6 +26,8 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
+    private PRPS prpsContract;
+
     private Dropdowns uiDropdowns;
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
@@ -40,11 +43,14 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     public void Construct(
 		TokenContractManager tokenContractManager,
 		TradableAssetManager tradableAssetManager,
+        PRPS prpsContract,
 		UIManager.Settings uiSettings,
 		PopupManager popupManager)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
+        this.prpsContract = prpsContract;
+
         uiDropdowns = uiSettings.generalSettings.dropdowns;
 		infoMessage.PopupManager = popupManager;
     }
@@ -77,7 +83,9 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
         if (tradableAsset == null)
             return;
 
-        var assetBalance = "" + tradableAsset.AssetBalance;
+        string assetBalance = tradableAsset.AssetBalance.ToString();
+
+        lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
         optionsDropdownButton.dropdownButtons = uiDropdowns.extraOptionsDropdowns
                                                            .Where(dropdown => dropdown.assetAddresses.ContainsIgnoreCase(tradableAsset.AssetAddress, true))
