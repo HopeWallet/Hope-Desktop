@@ -2221,11 +2221,6 @@ namespace Zenject
             return BindFactoryInternal<TContract, IFactory<TContract>, Factory<TContract>>();
         }
 
-        public FactoryToChoiceIdBinder<TContract> BindSimpleFactory<TContract>()
-        {
-            return BindFactoryInternal<TContract, Factory<TContract>, Factory<TContract>>();
-        }
-
         public FactoryToChoiceIdBinder<TContract> BindFactory<TContract, TFactory>()
             where TFactory : Factory<TContract>
         {
