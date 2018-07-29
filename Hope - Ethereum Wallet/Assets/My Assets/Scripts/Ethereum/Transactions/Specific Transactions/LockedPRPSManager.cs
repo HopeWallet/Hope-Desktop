@@ -106,5 +106,4 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         if (++updateCounter == updateCount)
             OnLockedPRPSUpdated?.Invoke();
     }
-
 }
