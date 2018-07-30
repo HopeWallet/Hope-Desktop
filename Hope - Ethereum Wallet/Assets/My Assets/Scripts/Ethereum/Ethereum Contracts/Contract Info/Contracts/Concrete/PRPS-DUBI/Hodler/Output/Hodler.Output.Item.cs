@@ -10,7 +10,7 @@ public sealed partial class HodlerMimic : StaticSmartContract
         /// Class which contains the info for purpose locked into the hodler smart contract.
         /// </summary>
         [FunctionOutput]
-        public class Item : IFunctionOutputDTO
+        public sealed class Item : IFunctionOutputDTO
         {
             /// <summary>
             /// The id of this hodl'd item.

@@ -33,7 +33,8 @@ public sealed class PopupManager
         ConfirmHideAssetPopup.Factory confirmHideAssetPopupFactory,
         ReceiveAssetPopup.Factory receiveAssetPopupFactory,
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
-        PRPSLockPopup.Factory prpsLockPopupFactory,
+        LockedPRPSPopup.Factory lockedPrpsPopupFactory,
+        LockPRPSPopup.Factory lockPrpsPopupFactory,
         ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
         GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
         UnlockWalletPopup.Factory unlockWalletPopupFactory,
@@ -43,21 +44,22 @@ public sealed class PopupManager
         ModifyTokensPopup.Factory modifyTokensPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
-                          addTokenPopupFactory,
-                          sendAssetPopupFactory,
-                          confirmSendAssetPopupFactory,
-                          hideAssetPopupFactory,
-                          confirmHideAssetPopupFactory,
-                          receiveAssetPopupFactory,
-                          transactionInfoPopupFactory,
-                          prpsLockPopupFactory,
-                          confirmPrpsLockPopupFactory,
-                          generalConfirmationPopupFactory,
-                          unlockWalletPopupFactory,
-                          contactsPopupFactory,
-                          addOrEditContactPopupFactory,
-						  infoPopupFactory,
-                          modifyTokensPopupFactory);
+                               addTokenPopupFactory,
+                               sendAssetPopupFactory,
+                               confirmSendAssetPopupFactory,
+                               hideAssetPopupFactory,
+                               confirmHideAssetPopupFactory,
+                               receiveAssetPopupFactory,
+                               transactionInfoPopupFactory,
+                               lockedPrpsPopupFactory,
+                               lockPrpsPopupFactory,
+                               confirmPrpsLockPopupFactory,
+                               generalConfirmationPopupFactory,
+                               unlockWalletPopupFactory,
+                               contactsPopupFactory,
+                               addOrEditContactPopupFactory,
+					 	       infoPopupFactory,
+                               modifyTokensPopupFactory);
     }
 
     /// <summary>

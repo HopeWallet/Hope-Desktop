@@ -20,9 +20,9 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     public float UpdateInterval => 10f;
 
-    public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled).ToList();
+    public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled)?.ToList();
 
-    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => !item.Fulfilled && item.ReleaseTime < DateTimeUtils.GetCurrentUnixTime()).ToList();
+    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => !item.Fulfilled && item.ReleaseTime < DateTimeUtils.GetCurrentUnixTime())?.ToList();
 
     public LockedPRPSManager(
         UserWalletManager userWalletManager,

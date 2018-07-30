@@ -71,7 +71,7 @@ MonoBehaviour:
       - {fileID: 1040657794818106, guid: fa9b4dbeb39f96d4693e3458b5f85d1e, type: 2}
       - {fileID: 1364737141961984, guid: 56a531c57a4831a43a98f6f5e61c7b57, type: 2}
       - {fileID: 1510163508908382, guid: 8dac450746a7f5241a83824fe1690c21, type: 2}
-      - {fileID: 1289950225011174, guid: 5ba108fded341144f960c73ae6741a88, type: 2}
+      - {fileID: 1890875510333406, guid: 96c655e600abb1248a641dc4abf8d3ab, type: 2}
       - {fileID: 1278914086285386, guid: 02fa998716780da44a791bbb62944c30, type: 2}
       - {fileID: 1062839745798890, guid: aac29134581656745a0f537dfa2b1ccd, type: 2}
       - {fileID: 1538487205334220, guid: 9f5a284e8df3f56448be991a2d864383, type: 2}
@@ -81,6 +81,7 @@ MonoBehaviour:
       - {fileID: 1792955184907624, guid: 1967757afcd281a4481096f1e87c28b0, type: 2}
       - {fileID: 1214643471925612, guid: 32a5190669c319e42baab7ab1c196730, type: 2}
       - {fileID: 1733899067655964, guid: 1c7146e337c02844389ce825402de907, type: 2}
+      - {fileID: 1200313821591180, guid: adf7f14f77ea5e345b2d0780878f84fa, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75

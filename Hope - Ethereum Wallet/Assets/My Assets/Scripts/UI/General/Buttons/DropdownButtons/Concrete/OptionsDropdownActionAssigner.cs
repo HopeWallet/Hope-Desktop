@@ -11,6 +11,6 @@ public class OptionsDropdownActionAssigner
     /// <param name="popupManager"> The active PopupManager. </param>
     public OptionsDropdownActionAssigner(UIManager.Settings uiSettings, PopupManager popupManager)
     {
-        uiSettings.generalSettings.dropdowns.extraOptionsDropdowns[0].onClickAction = () => popupManager.GetPopup<PRPSLockPopup>();
+        uiSettings.generalSettings.dropdowns.extraOptionsDropdowns[0].onClickAction = () => popupManager.GetPopup<LockedPRPSPopup>();
     }
 }

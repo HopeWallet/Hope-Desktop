@@ -25,5 +25,9 @@ public sealed class LockPRPSButton : ButtonBase
     /// </summary>
     public override void ButtonLeftClicked()
     {
+        if (lockedPRPSManager.UnfulfilledItems?.Count > 0)
+            popupManager.GetPopup<LockedPRPSPopup>();
+        else
+            popupManager.GetPopup<LockPRPSPopup>();
     }
 }
