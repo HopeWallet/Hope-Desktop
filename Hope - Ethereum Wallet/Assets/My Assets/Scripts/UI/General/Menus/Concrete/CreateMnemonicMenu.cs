@@ -42,10 +42,15 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
         generateNewWords.onClick.AddListener(GenerateMnemonic);
     }
 
-    /// <summary>
-    /// Generates the mnemonic words and sets the initial text fields to the text.
-    /// </summary>
-    [SecureCallEnd]
+	/// <summary>
+	/// Opens the exit confirmation popup and enables the note text
+	/// </summary>
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetNoteText(true);
+
+	/// <summary>
+	/// Generates the mnemonic words and sets the initial text fields to the text.
+	/// </summary>
+	[SecureCallEnd]
     private void OnEnable()
     {
         GenerateMnemonic();

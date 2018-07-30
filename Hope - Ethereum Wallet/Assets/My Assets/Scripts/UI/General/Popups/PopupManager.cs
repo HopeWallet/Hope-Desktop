@@ -41,7 +41,8 @@ public sealed class PopupManager
         ContactsPopup.Factory contactsPopupFactory,
         AddOrEditContactPopup.Factory addOrEditContactPopupFactory,
 		InfoPopup.Factory infoPopupFactory,
-        ModifyTokensPopup.Factory modifyTokensPopupFactory)
+        ModifyTokensPopup.Factory modifyTokensPopupFactory,
+		ExitConfirmationPopup.Factory exitConfirmationPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -59,7 +60,8 @@ public sealed class PopupManager
                                contactsPopupFactory,
                                addOrEditContactPopupFactory,
 					 	       infoPopupFactory,
-                               modifyTokensPopupFactory);
+                               modifyTokensPopupFactory,
+							   exitConfirmationPopupFactory);
     }
 
     /// <summary>

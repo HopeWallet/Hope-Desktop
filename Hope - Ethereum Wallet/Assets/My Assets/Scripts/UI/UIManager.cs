@@ -163,9 +163,4 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         public GeneralSettings generalSettings;
         public MenuSettings menuSettings;
     }
-
-	public void OnApplicationQuit()
-	{
-		Application.CancelQuit();
-	}
 }

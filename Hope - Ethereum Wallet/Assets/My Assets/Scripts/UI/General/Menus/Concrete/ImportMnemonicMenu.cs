@@ -49,10 +49,15 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
         buttonObserver.SubscribeObservable(this);
     }
 
-    /// <summary>
-    /// Unsubscribes this IEnterButtonObserver.
-    /// </summary>
-    protected override void OnDisable()
+	/// <summary>
+	/// Opens the exit confirmation popup and enables the note text
+	/// </summary>
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetNoteText(true);
+
+	/// <summary>
+	/// Unsubscribes this IEnterButtonObserver.
+	/// </summary>
+	protected override void OnDisable()
     {
         base.OnDisable();
         buttonObserver.UnsubscribeObservable(this);

@@ -31,10 +31,15 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         GetConfirmationWords();
     }
 
-    /// <summary>
-    /// Adds the back button listener.
-    /// </summary>
-    private void Start()
+	/// <summary>
+	/// Opens the exit confirmation popup and enables the note text.
+	/// </summary>
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetNoteText(true);
+
+	/// <summary>
+	/// Adds the back button listener.
+	/// </summary>
+	private void Start()
     {
         backButton.onClick.AddListener(GoBack);
     }

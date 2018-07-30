@@ -9,18 +9,24 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 {
 
     protected UIManager uiManager;
+	protected PopupManager popupManager;
 
-    /// <summary>
-    /// Adds the UIManager dependency to this menu.
-    /// </summary>
-    /// <param name="uiManager"> The active UIManager. </param>
-    [Inject]
-    public void Construct(UIManager uiManager) => this.uiManager = uiManager;
+	/// <summary>
+	/// Adds the UIManager dependency to this menu.
+	/// </summary>
+	/// <param name="uiManager"> The active UIManager. </param>
+	/// <param name="popupManager"> The active PopupManager. </param>
+	[Inject]
+	public void Construct(UIManager uiManager, PopupManager popupManager)
+	{
+		this.uiManager = uiManager;
+		this.popupManager = popupManager;
+	}
 
-    /// <summary>
-    /// Calls the OnBackPressed method when this menu is not animating.
-    /// </summary>
-    public override void GoBack()
+	/// <summary>
+	/// Calls the OnBackPressed method when this menu is not animating.
+	/// </summary>
+	public override void GoBack()
     {
         if (!Animator.Animating)
             OnBackPressed();
@@ -31,10 +37,24 @@ public abstract class Menu<T> : Menu where T : Menu<T>
     /// </summary>
     protected virtual void OnBackPressed() => uiManager.CloseMenu();
 
-    /// <summary>
-    /// Class used for creating menus dynamically.
-    /// </summary>
-    public class Factory : Factory<T>
+	/// <summary>
+	/// Opens up the exit confirmation popup before closing.
+	/// </summary>
+	public void OnApplicationQuit()
+	{
+		Application.CancelQuit();
+		OpenExitConfirmationPopup();
+	}
+
+	/// <summary>
+	/// Opens up the exit confirmation popup.
+	/// </summary>
+	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true);
+
+	/// <summary>
+	/// Class used for creating menus dynamically.
+	/// </summary>
+	public class Factory : Factory<T>
     {
     }
 }
