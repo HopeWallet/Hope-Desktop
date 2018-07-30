@@ -1,13 +1,7 @@
-﻿using Hope.Utils.EthereumUtils;
-using Hope.Utils.Misc;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
-using Vector3 = UnityEngine.Vector3;
 
 /// <summary>
 /// Class which represents the popup used for displaying current locked purpose.

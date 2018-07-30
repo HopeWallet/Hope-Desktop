@@ -1236,7 +1236,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: L O C K E D   P R P S
+  m_text: 'L O C K E D   P U R P O S E
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -1305,10 +1307,10 @@ MonoBehaviour:
   m_margin: {x: -85.121056, y: -18.846506, z: -85.61589, w: -19.10491}
   m_textInfo:
     textComponent: {fileID: 114689488965585456}
-    characterCount: 21
+    characterCount: 28
     spriteCount: 0
-    spaceCount: 11
-    wordCount: 10
+    spaceCount: 15
+    wordCount: 13
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1966,7 +1968,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 192}
-  m_SizeDelta: {x: 316.65, y: 50}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224234371934866908
 RectTransform:
