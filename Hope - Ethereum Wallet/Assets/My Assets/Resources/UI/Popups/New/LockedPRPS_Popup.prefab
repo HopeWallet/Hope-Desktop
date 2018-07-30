@@ -1217,6 +1217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exitButton: {fileID: 114920130455676484}
   itemSpawnTransform: {fileID: 224771168584083524}
+  lockPRPSButton: {fileID: 114117066426497506}
 --- !u!114 &114689488965585456
 MonoBehaviour:
   m_ObjectHideFlags: 1

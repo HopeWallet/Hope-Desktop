@@ -90,5 +90,4 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
         timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
     }
-
 }

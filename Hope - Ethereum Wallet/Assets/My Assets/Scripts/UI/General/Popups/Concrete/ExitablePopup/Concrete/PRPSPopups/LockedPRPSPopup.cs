@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
 /// Class which represents the popup used for displaying current locked purpose.
 /// </summary>
-public class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
+public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
 {
     public Transform itemSpawnTransform;
+    public Button lockPRPSButton;
 
     private readonly List<LockedPRPSItemButton> lockedPRPSItems = new List<LockedPRPSItemButton>();
 
@@ -27,6 +29,7 @@ public class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     protected override void Awake()
     {
         base.Awake();
+        lockPRPSButton.onClick.AddListener(() => popupManager.GetPopup<LockPRPSPopup>(true));
 
         CreateInitialItemList();
         (Animator as LockedPRPSPopupAnimator).LockedPurposeItems = lockedPRPSItems.Select(item => item.gameObject).ToArray();
