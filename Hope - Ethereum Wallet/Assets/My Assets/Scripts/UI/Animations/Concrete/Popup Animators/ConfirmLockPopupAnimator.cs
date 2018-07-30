@@ -10,6 +10,7 @@ public class ConfirmLockPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject prpsSection;
 	[SerializeField] private GameObject dubiSection;
+	[SerializeField] private GameObject noteText;
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -22,7 +23,8 @@ public class ConfirmLockPopupAnimator : CountdownTimerAnimator
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
 			() => prpsSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => dubiSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => { confirmButton.AnimateScaleX(1f, 0.15f, StartTimerAnimation); cancelButton.AnimateScaleX(1f, 0.15f, FinishedAnimating); }))));
+			() => noteText.AnimateScaleX(1f, 0.15f,
+			() => { confirmButton.AnimateScaleX(1f, 0.15f, StartTimerAnimation); cancelButton.AnimateScaleX(1f, 0.15f, FinishedAnimating); })))));
 	}
 
 	/// <summary>
@@ -32,6 +34,7 @@ public class ConfirmLockPopupAnimator : CountdownTimerAnimator
 	{
 		timerText.AnimateGraphicAndScale(0f, 0f, 0.2f);
 
+		noteText.AnimateScaleX(0f, 0.2f);
 		cancelButton.AnimateScaleX(0f, 0.2f,
 			() => prpsSection.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
