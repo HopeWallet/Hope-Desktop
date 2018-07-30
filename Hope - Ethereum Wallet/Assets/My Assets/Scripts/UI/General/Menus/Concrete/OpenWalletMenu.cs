@@ -20,8 +20,6 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
     public Image assetImage;
 
-	public InfoMessage infoMessage;
-
     public DropdownButton optionsDropdownButton;
 
     private TokenContractManager tokenContractManager;
@@ -44,15 +42,13 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 		TokenContractManager tokenContractManager,
 		TradableAssetManager tradableAssetManager,
         PRPS prpsContract,
-		UIManager.Settings uiSettings,
-		PopupManager popupManager)
+		UIManager.Settings uiSettings)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
         this.prpsContract = prpsContract;
 
         uiDropdowns = uiSettings.generalSettings.dropdowns;
-		infoMessage.PopupManager = popupManager;
     }
 
     /// <summary>

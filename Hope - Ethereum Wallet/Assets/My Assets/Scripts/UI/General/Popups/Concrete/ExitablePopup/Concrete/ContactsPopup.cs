@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UI;
 
 public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
@@ -53,4 +54,9 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		//Open up the DeleteContactPopup
 	}
+
+	//private void SearchBarChanged(string str)
+	//{
+	//	var contactsContainingSearch = contacts.Where(s => s.Key.StartsWith(str) || s.Value.Contains(str)).ToDictionary(k => k.Key, v => v.Value);
+	//}
 }
