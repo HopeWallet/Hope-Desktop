@@ -14,7 +14,42 @@ using Vector3 = UnityEngine.Vector3;
 /// </summary>
 public class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
 {
+    public Transform itemSpawnTransform;
 
+    private readonly List<LockedPRPSItemButton> lockedPRPSItems = new List<LockedPRPSItemButton>();
+
+    private LockedPRPSManager lockedPRPSManager;
+    private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
+
+    [Inject]
+    public void Construct(
+        LockedPRPSManager lockedPRPSManager,
+        LockedPRPSItemButton.Factory lockedPRPSItemFactory)
+    {
+        this.lockedPRPSManager = lockedPRPSManager;
+        this.lockedPRPSItemFactory = lockedPRPSItemFactory;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        CreateInitialItemList();
+        (Animator as LockedPRPSPopupAnimator).LockedPurposeItems = lockedPRPSItems.Select(item => item.gameObject).ToArray();
+    }
+
+    private void CreateInitialItemList()
+    {
+        lockedPRPSManager.UnfulfilledItems.ForEach(CreateItem);
+    }
+
+    private void CreateItem(HodlerMimic.Output.Item item)
+    {
+        LockedPRPSItemButton itemButton = lockedPRPSItemFactory.Create().SetButtonInfo(item);
+        itemButton.transform.parent = itemSpawnTransform;
+
+        lockedPRPSItems.Add(itemButton);
+    }
 }
 
 //public Transform itemSpawnTransform;

@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.EthereumUtils;
 using System.Numerics;
+using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
@@ -9,10 +10,10 @@ using Zenject;
 public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>
 {
 
-    public Text purposeAmountText,
-                dubiAmountText,
-                lockPeriodText,
-                timeLeftText;
+    public TMP_Text purposeAmountText,
+                    dubiAmountText,
+                    lockPeriodText,
+                    timeLeftText;
 
     public Button releasePurposeButton;
 

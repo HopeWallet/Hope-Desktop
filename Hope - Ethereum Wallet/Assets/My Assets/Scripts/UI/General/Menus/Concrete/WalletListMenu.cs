@@ -38,9 +38,10 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
         List<GameObject> walletObjects = new List<GameObject>();
 
         for (int i = 1; i <= SecurePlayerPrefs.GetInt("wallet_count"); i++)
-            walletObjects.Add(walletButtonFactory.Create().SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString("wallet_" + i + "_name"), i)).gameObject.transform.GetChild(0).gameObject);
-
-        (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
+        {
+            walletObjects.Add(walletButtonFactory.Create()
+                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString("wallet_" + i + "_name"), i)).gameObject.transform.GetChild(0).gameObject);
+        } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
     }
 
     /// <summary>
