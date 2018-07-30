@@ -43,7 +43,9 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     private void CreateItem(HodlerMimic.Output.Item item)
     {
         LockedPRPSItemButton itemButton = lockedPRPSItemFactory.Create().SetButtonInfo(item);
-        itemButton.transform.parent = itemSpawnTransform;
+        itemButton.transform.parent.parent = itemSpawnTransform;
+        itemButton.transform.parent.localScale = Vector3.one;
+        itemButton.transform.localScale = Vector3.one;
 
         lockedPRPSItems.Add(itemButton);
     }
