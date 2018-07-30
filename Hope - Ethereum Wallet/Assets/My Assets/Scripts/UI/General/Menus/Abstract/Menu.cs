@@ -8,7 +8,7 @@ using Zenject;
 public abstract class Menu<T> : Menu where T : Menu<T>
 {
 
-    protected UIManager uiManager;
+	protected UIManager uiManager;
 	protected PopupManager popupManager;
 
 	/// <summary>
@@ -27,22 +27,24 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	/// Calls the OnBackPressed method when this menu is not animating.
 	/// </summary>
 	public override void GoBack()
-    {
-        if (!Animator.Animating)
-            OnBackPressed();
-    }
+	{
+		if (!Animator.Animating)
+			OnBackPressed();
+	}
 
-    /// <summary>
-    /// Closes the menu when the back button is pressed and the menu isn't animating.
-    /// </summary>
-    protected virtual void OnBackPressed() => uiManager.CloseMenu();
+	/// <summary>
+	/// Closes the menu when the back button is pressed and the menu isn't animating.
+	/// </summary>
+	protected virtual void OnBackPressed() => uiManager.CloseMenu();
 
 	/// <summary>
 	/// Opens up the exit confirmation popup before closing.
 	/// </summary>
 	public void OnApplicationQuit()
 	{
-		Application.CancelQuit();
+		if (popupManager.ActivePopupType != typeof(ExitConfirmationPopup))
+			Application.CancelQuit();
+
 		OpenExitConfirmationPopup();
 	}
 
@@ -55,8 +57,8 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	/// Class used for creating menus dynamically.
 	/// </summary>
 	public class Factory : Factory<T>
-    {
-    }
+	{
+	}
 }
 
 /// <summary>
@@ -67,27 +69,27 @@ public abstract class Menu : MonoBehaviour
 	[Tooltip("Destroy the menu's gameobject when it is closed.")]
 	public bool DestroyWhenClosed = true;
 
-    /// <summary>
-    /// The class responsible for animating this menu.
-    /// </summary>
-    public UIAnimator Animator { get; private set; }
+	/// <summary>
+	/// The class responsible for animating this menu.
+	/// </summary>
+	public UIAnimator Animator { get; private set; }
 
-    /// <summary>
-    /// Gets the Menus animation component.
-    /// </summary>
-    private void Awake()
-    {
-        Animator = GetComponent<UIAnimator>();
-        OnAwake();
-    }
+	/// <summary>
+	/// Gets the Menus animation component.
+	/// </summary>
+	private void Awake()
+	{
+		Animator = GetComponent<UIAnimator>();
+		OnAwake();
+	}
 
-    /// <summary>
-    /// Called during <see cref="Awake"/>.
-    /// </summary>
-    protected virtual void OnAwake() { }
+	/// <summary>
+	/// Called during <see cref="Awake"/>.
+	/// </summary>
+	protected virtual void OnAwake() { }
 
-    /// <summary>
-    /// Called when the back button is pressed.
-    /// </summary>
-    public abstract void GoBack();
+	/// <summary>
+	/// Called when the back button is pressed.
+	/// </summary>
+	public abstract void GoBack();
 }

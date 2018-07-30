@@ -16,15 +16,20 @@ public sealed class PopupManager
     /// </summary>
     public bool AnimatingPopup { get; private set; }
 
-    /// <summary>
-    /// Whether an active popup currently exists.
-    /// </summary>
-    public bool ActivePopupExists { get { return activePopups.Count > 0; } }
+	/// <summary>
+	/// Whether an active popup currently exists.
+	/// </summary>
+	public bool ActivePopupExists => activePopups.Count > 0;
 
-    /// <summary>
-    /// Initializes the PopupManager by adding all required factories.
-    /// </summary>
-    public PopupManager(LoadingPopup.Factory loadingPopupFactory,
+	/// <summary>
+	/// The type of the active popup.
+	/// </summary>
+	public Type ActivePopupType => activePopups.Count == 0 ? null : activePopups.Peek().Key.GetType();
+
+	/// <summary>
+	/// Initializes the PopupManager by adding all required factories.
+	/// </summary>
+	public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
         ConfirmTransactionPopup.Factory confirmSendAssetPopupFactory,
@@ -105,6 +110,7 @@ public sealed class PopupManager
     public TPopup GetPopup<TPopup>(bool stackPopups = false) where TPopup : FactoryPopup<TPopup>
     {
         var popupsOfType = activePopups.Where(popup => popup.Key.GetType() == typeof(TPopup));
+
         if (popupsOfType.Any())
             return popupsOfType.Single().Key as TPopup;
         else if (activePopups.Count > 0 && !stackPopups)

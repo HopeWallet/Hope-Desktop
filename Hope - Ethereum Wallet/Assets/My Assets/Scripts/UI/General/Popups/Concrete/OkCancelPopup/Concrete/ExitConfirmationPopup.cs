@@ -5,7 +5,7 @@ public sealed class ExitConfirmationPopup : OkCancelPopupComponent<ExitConfirmat
 
 	public GameObject noteText;
 
-	protected override void OnOkClicked() => Application.Quit();
+	public override void OkButton() => Application.Quit();
 
 	/// <summary>
 	/// Sets the note text to be active or not
