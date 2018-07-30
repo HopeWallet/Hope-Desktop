@@ -7,12 +7,10 @@ using Zenject;
 
 public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>
 {
-
 	public InfoMessage infoMessage;
 
-	[Inject]
-	public void Construct(PopupManager popupManager)
-	{
-		infoMessage.PopupManager = popupManager;
-	}
+    protected override void OnStart()
+    {
+        infoMessage.PopupManager = popupManager;
+    }
 }

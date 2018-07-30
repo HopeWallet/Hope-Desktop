@@ -6,7 +6,6 @@ using System.Linq;
 /// </summary>
 public class MenuFactoryManager
 {
-
     private readonly List<object> menuFactories = new List<object>();
 
     /// <summary>
@@ -39,5 +38,4 @@ public class MenuFactoryManager
     /// <typeparam name="T"> The type of menu to create. </typeparam>
     /// <returns> The newly created menu. </returns>
     public T CreateMenu<T>() where T : Menu<T> => menuFactories.OfType<Menu<T>.Factory>().First().Create();
-
 }

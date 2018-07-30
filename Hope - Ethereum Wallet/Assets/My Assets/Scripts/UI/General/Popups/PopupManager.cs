@@ -8,7 +8,6 @@ using Object = UnityEngine.Object;
 /// </summary>
 public sealed class PopupManager
 {
-
     private readonly List<object> factoryPopups = new List<object>();
     private readonly Stack<KeyValuePair<PopupBase, Action>> activePopups = new Stack<KeyValuePair<PopupBase, Action>>();
 

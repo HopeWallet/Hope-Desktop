@@ -1,10 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class LockedPRPSPopupAnimator : UIAnimator
 {
-
 	[SerializeField] private Image blur;
 	[SerializeField] private GameObject dim;
 	[SerializeField] private GameObject form;
@@ -18,6 +16,11 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	private Transform listTransform;
 
 	private bool pending;
+
+    /// <summary>
+    /// Array of initial locked purpose items.
+    /// </summary>
+    public GameObject[] LockedPurposeItems { get; set; }
 
 	public bool Pending
 	{
