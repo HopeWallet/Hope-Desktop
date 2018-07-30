@@ -5,6 +5,9 @@ public sealed class ExitConfirmationPopup : OkCancelPopupComponent<ExitConfirmat
 
 	public GameObject noteText;
 
+	/// <summary>
+	/// Closes the wallet
+	/// </summary>
 	public override void OkButton() => Application.Quit();
 
 	/// <summary>
