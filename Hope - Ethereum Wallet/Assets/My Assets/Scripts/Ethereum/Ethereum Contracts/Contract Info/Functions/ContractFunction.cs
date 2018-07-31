@@ -22,6 +22,20 @@ public abstract class ContractFunction : FunctionMessage
     }
 
     /// <summary>
+    /// Creates an instance of a <see cref="ContractFunction"/> of type <typeparamref name="T"/> to use for gas limit estimates.
+    /// </summary>
+    /// <typeparam name="T"> The concrete type of <see cref="ContractFunction"/>. </typeparam>
+    /// <param name="callerAddress"> The address of the function caller. </param>
+    /// <param name="functionInput"> The input parameters to pass through the function. </param>
+    /// <returns> The newly created instance of <see cref="ContractFunction"/> of type <typeparamref name="T"/>. </returns>
+    public static T CreateFunction<T>(string callerAddress, params object[] functionInput) where T : ContractFunction
+    {
+        T func = CreateFunction<T>(functionInput);
+        func.FromAddress = callerAddress;
+        return func;
+    }
+
+    /// <summary>
     /// Creates an instance of a <see cref="ContractFunction"/> of type <typeparamref name="T"/> to use to send a contract message.
     /// </summary>
     /// <typeparam name="T"> The concrete type of <see cref="ContractFunction"/>. </typeparam>

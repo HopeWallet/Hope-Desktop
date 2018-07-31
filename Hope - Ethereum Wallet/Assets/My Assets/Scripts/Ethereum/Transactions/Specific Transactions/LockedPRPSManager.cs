@@ -22,7 +22,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled)?.ToList();
 
-    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => !item.Fulfilled && item.ReleaseTime < DateTimeUtils.GetCurrentUnixTime())?.ToList();
+    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => item.Unlockable)?.ToList();
 
     public LockedPRPSManager(
         UserWalletManager userWalletManager,
@@ -92,12 +92,24 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     private void AddNewItem(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
     {
-        item.LockedTimeStamp = lockedTimeStamp;
-
         if (!lockedItems.Select(lockedItem => lockedItem.LockedTimeStamp).Contains(lockedTimeStamp))
         {
+            UpdateItemInfo(item, lockedTimeStamp);
+
             lockedItems.Add(item);
             lockedItems.Sort((i1, i2) => i1.LockedTimeStamp.CompareTo(i2.LockedTimeStamp));
+        }
+    }
+
+    private void UpdateItemInfo(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
+    {
+        item.LockedTimeStamp = lockedTimeStamp;
+        if (item.Unlockable)
+        {
+            GasUtils.EstimateGasLimit<HodlerMimic.Messages.Release>(hodlerContract.ContractAddress,
+                                                                    userWalletManager.WalletAddress,
+                                                                    limit => item.UnlockableGasLimit = limit,
+                                                                    item.Id);
         }
     }
 

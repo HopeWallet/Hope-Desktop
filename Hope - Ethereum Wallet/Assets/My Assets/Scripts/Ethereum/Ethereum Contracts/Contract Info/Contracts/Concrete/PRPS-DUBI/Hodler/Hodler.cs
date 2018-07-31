@@ -37,13 +37,13 @@ public sealed partial class HodlerMimic : StaticSmartContract
         userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
         {
             ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
-                                                                         request,
-                                                                         gasPrice,
-                                                                         gasLimit,
-                                                                         () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
-                                                                         id,
-                                                                         SolidityUtils.ConvertToUInt(value, 18),
-                                                                         monthsToLock);
+                                                             request,
+                                                             gasPrice,
+                                                             gasLimit,
+                                                             () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
+                                                             id,
+                                                             SolidityUtils.ConvertToUInt(value, 18),
+                                                             monthsToLock);
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 
@@ -60,11 +60,11 @@ public sealed partial class HodlerMimic : StaticSmartContract
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {
             ContractUtils.SendContractMessage<Messages.Release>(ContractAddress,
-                                                                            request,
-                                                                            gasPrice,
-                                                                            gasLimit,
-                                                                            () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"),
-                                                                            id);
+                                                                request,
+                                                                gasPrice,
+                                                                gasLimit,
+                                                                () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"),
+                                                                id);
         }, gasLimit, gasPrice, "Release Purpose Confirmation");
     }
 

@@ -1,5 +1,7 @@
 ﻿using Nethereum.Contracts;
+using Nethereum.Contracts.Extensions;
 using Nethereum.JsonRpc.UnityClient;
+using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
 using System;
 using System.Collections;
@@ -37,8 +39,23 @@ namespace Hope.Utils.EthereumUtils
         /// <param name="callerAddress"> The address of the function caller. (msg.sender) </param>
         /// <param name="onGasReceived"> Action to execute once the gas limit has been received. </param>
         /// <param name="input"> The function input. </param>
-        public static void EstimateGasLimit(Function function, string callerAddress,
-            Action<BigInteger> onGasReceived, params object[] input) => _EstimateGasLimitCoroutine(function, callerAddress, onGasReceived, input).StartCoroutine();
+        public static void EstimateGasLimit(
+            Function function,
+            string callerAddress,
+            Action<BigInteger> onGasReceived,
+            params object[] input)
+        {
+            _EstimateGasLimitCoroutine(function.CreateTransactionInput(callerAddress, input), onGasReceived).StartCoroutine();
+        }
+
+        public static void EstimateGasLimit<TFunc>(
+            string contractAddress,
+            string callerAddress,
+            Action<BigInteger> onGasReceived,
+            params object[] input) where TFunc : ContractFunction
+        {
+            _EstimateGasLimitCoroutine(ContractFunction.CreateFunction<TFunc>(callerAddress, input).CreateTransactionInput(contractAddress), onGasReceived).StartCoroutine();
+        }
 
         /// <summary>
         /// Estimates the gas limit for a basic ether transaction.
@@ -98,15 +115,13 @@ namespace Hope.Utils.EthereumUtils
         /// <summary>
         /// Estimates the gas limit of a certain function of a contract.
         /// </summary>
-        /// <param name="function"> The function to estimate the gas limit for. </param>
-        /// <param name="callerAddress"> The address of the one calling this function. </param>
+        /// <param name="transactionInput"> The transaction input to estimate the gas limit for. </param>
         /// <param name="onGasReceived"> Callback which executes an action with the gas limit as a parameter. </param>
-        /// <param name="input"> The input of the function. </param>
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
-        private static IEnumerator _EstimateGasLimitCoroutine(Function function, string callerAddress, Action<BigInteger> onGasReceived, params object[] input)
+        private static IEnumerator _EstimateGasLimitCoroutine(TransactionInput transactionInput, Action<BigInteger> onGasReceived)
         {
             var request = new EthEstimateGasUnityRequest(EthereumNetwork.NetworkUrl);
-            yield return request.SendRequest(function.CreateTransactionInput(callerAddress, input));
+            yield return request.SendRequest(transactionInput);
 
             request.CheckTransactionResult(() => onGasReceived((request.Result.Value * 100) / 95));
         }

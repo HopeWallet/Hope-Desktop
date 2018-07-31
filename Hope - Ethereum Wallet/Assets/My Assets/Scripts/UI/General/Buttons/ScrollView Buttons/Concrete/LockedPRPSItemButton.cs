@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
+using Nethereum.Hex.HexTypes;
 using System.Numerics;
 using TMPro;
 using UnityEngine.UI;
@@ -7,9 +8,8 @@ using Zenject;
 /// <summary>
 /// Class which manages each locked purpose item that is displayed.
 /// </summary>
-public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>
+public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>
 {
-
     public TMP_Text purposeAmountText,
                     dubiAmountText,
                     lockPeriodText,
@@ -20,7 +20,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic
     private EthereumNetworkManager.Settings networkSettings;
     private HodlerContract hodlerContract;
     private UserWalletManager userWalletManager;
-    private FunctionGasEstimator releasePurposeHelper;
+    private HodlerMimic.Output.Item item;
 
     private BigInteger id;
     private decimal lockedPurpose;
@@ -36,7 +36,10 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic
     /// <param name="hodlerContract"> The active HodlerContract. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
-    public void DetermineDUBIPercentage(EthereumNetworkManager.Settings networkSettings, HodlerContract hodlerContract, UserWalletManager userWalletManager)
+    public void DetermineDUBIPercentage(
+        EthereumNetworkManager.Settings networkSettings,
+        HodlerContract hodlerContract,
+        UserWalletManager userWalletManager)
     {
         this.networkSettings = networkSettings;
         this.hodlerContract = hodlerContract;
@@ -53,21 +56,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic
     /// </summary>
     private void ReleasePurpose()
     {
-        hodlerContract.Release(userWalletManager, releasePurposeHelper.GasLimit, releasePurposeHelper.StandardGasPrice.FunctionalGasPrice, id, lockedPurpose);
-    }
-
-    /// <summary>
-    /// Updates the details of the transaction.
-    /// </summary>
-    /// <param name="releasePurposeHelper"> The helper which is responsible for knowing the transaction limit and price of the hodler release function. </param>
-    public void UpdateTransactionDetails(FunctionGasEstimator releasePurposeHelper)
-    {
-        this.releasePurposeHelper = releasePurposeHelper;
-
-        if (releasePurposeButton == null)
-            return;
-
-        releasePurposeButton.interactable = lockPeriodDone && releasePurposeHelper.CanExecuteTransaction;
+        hodlerContract.Release(userWalletManager, new HexBigInteger(item.UnlockableGasLimit.Value), new HexBigInteger(0), id, lockedPurpose);
     }
 
     /// <summary>
@@ -77,6 +66,7 @@ public class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic
     protected override void OnValueUpdated(HodlerMimic.Output.Item info)
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(info.Value, 18);
+        item = info;
         id = info.Id;
 
         var minPercentageTime = networkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? MIN_PERCENTAGE_TIME_MAINNET : MIN_PERCENTAGE_TIME_RINKEBY;

@@ -46,6 +46,16 @@ public sealed partial class HodlerMimic : StaticSmartContract
             /// The unix time stamp when the purpose was locked.
             /// </summary>
             public BigInteger LockedTimeStamp { get; set; }
+
+            /// <summary>
+            /// The gas limit needed to unlock the item from the hodler contract.
+            /// </summary>
+            public BigInteger? UnlockableGasLimit { get; set; }
+
+            /// <summary>
+            /// Whether the locked purpose is unlockable.
+            /// </summary>
+            public bool Unlockable => !Fulfilled && ReleaseTime < DateTimeUtils.GetCurrentUnixTime();
         }
     }
 }
