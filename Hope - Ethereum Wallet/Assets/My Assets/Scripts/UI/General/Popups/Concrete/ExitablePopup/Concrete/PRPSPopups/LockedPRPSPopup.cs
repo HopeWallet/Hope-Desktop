@@ -32,12 +32,30 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         lockPRPSButton.onClick.AddListener(() => popupManager.GetPopup<LockPRPSPopup>(true));
 
         CreateInitialItemList();
-        (Animator as LockedPRPSPopupAnimator).LockedPurposeItems = lockedPRPSItems.Select(item => item.gameObject).ToArray();
+        (Animator as LockedPRPSPopupAnimator).LockedPurposeItems = lockedPRPSItems.Select(item => item.transform.parent.gameObject).ToArray();
+
+        lockedPRPSManager.OnLockedPRPSUpdated += UpdateList;
     }
 
     private void OnDestroy()
     {
         lockedPRPSItems.ForEach(item => item.EndButtonUpdates());
+    }
+
+    private void UpdateList()
+    {
+        var unfulfilledItems = lockedPRPSManager.UnfulfilledItems;
+        var ids = unfulfilledItems.Select(item => item.Id);
+        lockedPRPSItems.SafeForEach(button =>
+        {
+            if (!ids.Contains(button.ButtonInfo.Id))
+            {
+                Destroy(button.transform.parent.gameObject);
+                lockedPRPSItems.Remove(button);
+            }
+        });
+
+        unfulfilledItems.Where(item => !lockedPRPSItems.Select(button => button.ButtonInfo).Contains(item))?.ForEach(item => CreateItem(item));
     }
 
     private void CreateInitialItemList()
@@ -51,7 +69,7 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         itemButton.StartButtonUpdates();
 
         itemButton.transform.parent.parent = itemSpawnTransform;
-        itemButton.transform.parent.localScale = Vector3.one;
+        itemButton.transform.parent.localScale = new Vector3(0f, 1f, 1f);
         itemButton.transform.localScale = Vector3.one;
 
         lockedPRPSItems.Add(itemButton);
