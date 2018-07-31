@@ -7,9 +7,8 @@ using System.Numerics;
 /// <summary>
 /// Class used for estimating the gas for a function and determining if the wallet has enough ether to execute it.
 /// </summary>
-public class FunctionGasEstimator : IStandardGasPriceObservable, IEtherBalanceObservable
+public sealed class FunctionGasEstimator : IStandardGasPriceObservable, IEtherBalanceObservable
 {
-
     private readonly UserWalletManager userWalletManager;
     private readonly TradableAssetManager tradableAssetManager;
     private readonly GasPriceObserver gasPriceObserver;

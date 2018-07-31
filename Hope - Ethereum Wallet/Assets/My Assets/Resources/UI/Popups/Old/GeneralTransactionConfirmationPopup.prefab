@@ -392,7 +392,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114177157280947532}
   cancelButton: {fileID: 114342857117869514}
-  timerText: {fileID: 114726794379427084}
   transactionText: {fileID: 114161669942814390}
 --- !u!114 &114726794379427084
 MonoBehaviour:

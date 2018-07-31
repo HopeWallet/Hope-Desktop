@@ -3,7 +3,6 @@
 /// </summary>
 public interface IEtherBalanceObservable
 {
-
     /// <summary>
     /// The current ether balance of this wallet.
     /// </summary>

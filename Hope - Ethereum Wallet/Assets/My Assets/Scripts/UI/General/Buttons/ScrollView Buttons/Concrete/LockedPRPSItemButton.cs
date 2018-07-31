@@ -1,6 +1,5 @@
 ﻿using Hope.Utils.EthereumUtils;
 using Nethereum.Hex.HexTypes;
-using System.Numerics;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
@@ -8,7 +7,7 @@ using Zenject;
 /// <summary>
 /// Class which manages each locked purpose item that is displayed.
 /// </summary>
-public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>
+public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>, IStandardGasPriceObservable, IEtherBalanceObservable
 {
     public TMP_Text purposeAmountText,
                     dubiAmountText,
@@ -18,45 +17,74 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     public Button releasePurposeButton;
 
     private EthereumNetworkManager.Settings networkSettings;
-    private HodlerContract hodlerContract;
     private UserWalletManager userWalletManager;
+    private GasPriceObserver gasPriceObserver;
+    private EtherBalanceObserver etherBalanceObserver;
+    private HodlerMimic hodlerContract;
     private HodlerMimic.Output.Item item;
 
-    private BigInteger id;
+    private dynamic etherBalance;
     private decimal lockedPurpose;
     private bool lockPeriodDone;
 
     private const int MIN_PERCENTAGE_TIME_RINKEBY = 3600; // For use with the rinkeby hodler where the lock period minimum is 1 hour.
     private const int MIN_PERCENTAGE_TIME_MAINNET = 7884000; // For use with the mainnet hodler where the lock period minimum is 3 months.
 
+    public GasPrice StandardGasPrice { get; set; }
+
     /// <summary>
-    /// Determines the dubi percentage given the active ethereum network.
+    /// The current ether balance of the wallet.
+    /// </summary>
+    public dynamic EtherBalance
+    {
+        get { return etherBalance; }
+        set
+        {
+            etherBalance = value;
+            RecheckIfFunctionCanBeSent();
+        }
+    }
+
+    /// <summary>
+    /// Adds the required dependencies to this class.
     /// </summary>
     /// <param name="networkSettings"> The active ethereum network settings. </param>
     /// <param name="hodlerContract"> The active HodlerContract. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
     [Inject]
-    public void DetermineDUBIPercentage(
+    public void Construct(
         EthereumNetworkManager.Settings networkSettings,
-        HodlerContract hodlerContract,
-        UserWalletManager userWalletManager)
+        HodlerMimic hodlerContract,
+        UserWalletManager userWalletManager,
+        GasPriceObserver gasPriceObserver,
+        EtherBalanceObserver etherBalanceObserver)
     {
         this.networkSettings = networkSettings;
         this.hodlerContract = hodlerContract;
         this.userWalletManager = userWalletManager;
+        this.gasPriceObserver = gasPriceObserver;
+        this.etherBalanceObserver = etherBalanceObserver;
     }
 
-    /// <summary>
-    /// Adds the release purpose method to the button listener.
-    /// </summary>
-    private void OnEnable() => releasePurposeButton.onClick.AddListener(ReleasePurpose);
+    public void StartButtonUpdates()
+    {
+        releasePurposeButton.onClick.AddListener(ReleasePurpose);
+        ObserverHelpers.SubscribeObservables(this, gasPriceObserver, etherBalanceObserver);
+    }
+
+    public void EndButtonUpdates()
+    {
+        ObserverHelpers.UnsubscribeObservables(this, gasPriceObserver, etherBalanceObserver);
+    }
 
     /// <summary>
     /// Releases the purpose held in the item represented by this button.
     /// </summary>
     private void ReleasePurpose()
     {
-        hodlerContract.Release(userWalletManager, new HexBigInteger(item.UnlockableGasLimit.Value), new HexBigInteger(0), id, lockedPurpose);
+        hodlerContract.Release(userWalletManager, new HexBigInteger(item.UnlockableGasLimit.Value), StandardGasPrice.FunctionalGasPrice, item.Id, lockedPurpose);
     }
 
     /// <summary>
@@ -67,7 +95,6 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(info.Value, 18);
         item = info;
-        id = info.Id;
 
         var minPercentageTime = networkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? MIN_PERCENTAGE_TIME_MAINNET : MIN_PERCENTAGE_TIME_RINKEBY;
         var releaseTimeDifference = info.ReleaseTime - info.LockedTimeStamp;
@@ -79,5 +106,22 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         dubiAmountText.text = (multiplier * lockedPurpose).ToString().LimitEnd(15, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
         timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
+    }
+
+    /// <summary>
+    /// Called when the gas prices have changed.
+    /// </summary>
+    public void OnGasPricesUpdated() => RecheckIfFunctionCanBeSent();
+
+    /// <summary>
+    /// Rechecks if the function can be executed once the ether balance changes, the gas price changes, or the gas limit is received.
+    /// </summary>
+    private void RecheckIfFunctionCanBeSent()
+    {
+        if (!item.UnlockableGasLimit.HasValue)
+            return;
+
+        releasePurposeButton.interactable = item.UnlockableGasLimit.HasValue
+            && etherBalance > GasUtils.CalculateMaximumGasCost(StandardGasPrice.FunctionalGasPrice.Value, item.UnlockableGasLimit.Value);
     }
 }

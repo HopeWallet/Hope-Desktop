@@ -48,6 +48,14 @@ namespace Hope.Utils.EthereumUtils
             _EstimateGasLimitCoroutine(function.CreateTransactionInput(callerAddress, input), onGasReceived).StartCoroutine();
         }
 
+        /// <summary>
+        /// Estimates the gas limit of a <see cref="ContractFunction"/>.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to estimate the gas limit for. </typeparam>
+        /// <param name="contractAddress"> The address of the contract function to estimate. </param>
+        /// <param name="callerAddress"> The address of the sender. </param>
+        /// <param name="onGasReceived"> Action called with the estimated gas limit. </param>
+        /// <param name="input"> The input parameters of the function. </param>
         public static void EstimateGasLimit<TFunc>(
             string contractAddress,
             string callerAddress,
