@@ -118,6 +118,8 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     /// </summary>
     private void RecheckIfFunctionCanBeSent()
     {
+        OnValueUpdated(item);
+
         if (!item.UnlockableGasLimit.HasValue)
             return;
 

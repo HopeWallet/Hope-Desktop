@@ -95,16 +95,22 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         if (!lockedItems.Select(lockedItem => lockedItem.LockedTimeStamp).Contains(lockedTimeStamp))
         {
             UpdateItemInfo(item, lockedTimeStamp);
-
             lockedItems.Add(item);
             lockedItems.Sort((i1, i2) => i1.LockedTimeStamp.CompareTo(i2.LockedTimeStamp));
+        }
+        else
+        {
+            var oldItem = lockedItems.Single(lockedItem => lockedItem.Id == item.Id);
+            oldItem.Fulfilled = item.Fulfilled;
+            UpdateItemInfo(oldItem, lockedTimeStamp);
         }
     }
 
     private void UpdateItemInfo(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
     {
         item.LockedTimeStamp = lockedTimeStamp;
-        if (item.Unlockable)
+
+        if (item.Unlockable && !item.UnlockableGasLimit.HasValue)
         {
             GasUtils.EstimateGasLimit<HodlerMimic.Messages.Release>(hodlerContract.ContractAddress,
                                                                     userWalletManager.WalletAddress,

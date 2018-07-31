@@ -16,6 +16,7 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
 
     private LockedPRPSManager lockedPRPSManager;
     private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
+    private LockedPRPSPopupAnimator lockedPRPSAnimator;
 
     [Inject]
     public void Construct(
@@ -29,11 +30,12 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     protected override void Awake()
     {
         base.Awake();
-        lockPRPSButton.onClick.AddListener(() => popupManager.GetPopup<LockPRPSPopup>(true));
 
         CreateInitialItemList();
-        (Animator as LockedPRPSPopupAnimator).LockedPurposeItems = lockedPRPSItems.Select(item => item.transform.parent.gameObject).ToArray();
+        lockedPRPSAnimator = Animator as LockedPRPSPopupAnimator;
+        lockedPRPSAnimator.LockedPurposeItems = lockedPRPSItems.Select(item => item.transform.parent.gameObject).ToArray();
 
+        lockPRPSButton.onClick.AddListener(() => popupManager.GetPopup<LockPRPSPopup>(true));
         lockedPRPSManager.OnLockedPRPSUpdated += UpdateList;
     }
 
@@ -50,27 +52,35 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         {
             if (!ids.Contains(button.ButtonInfo.Id))
             {
-                Destroy(button.transform.parent.gameObject);
+                GameObject objToDestroy = button.transform.parent.gameObject;
+                lockedPRPSAnimator.AnimateWalletOut(objToDestroy, () => Destroy(objToDestroy));
                 lockedPRPSItems.Remove(button);
             }
         });
 
-        unfulfilledItems.Where(item => !lockedPRPSItems.Select(button => button.ButtonInfo).Contains(item))?.ForEach(item => CreateItem(item));
+        unfulfilledItems.Where(item => !lockedPRPSItems.Select(button => button.ButtonInfo).Contains(item))?.ForEach(item => CreateItem(item, false));
     }
 
     private void CreateInitialItemList()
     {
-        lockedPRPSManager.UnfulfilledItems.ForEach(CreateItem);
+        lockedPRPSManager.UnfulfilledItems.ForEach(item => CreateItem(item));
     }
 
-    private void CreateItem(HodlerMimic.Output.Item item)
+    private void CreateItem(HodlerMimic.Output.Item item, bool initialWalletLoad = true)
     {
         LockedPRPSItemButton itemButton = lockedPRPSItemFactory.Create().SetButtonInfo(item);
+        Transform componentTransform = itemButton.transform;
+        Transform parentTransform = componentTransform.parent;
         itemButton.StartButtonUpdates();
 
-        itemButton.transform.parent.parent = itemSpawnTransform;
-        itemButton.transform.parent.localScale = new Vector3(0f, 1f, 1f);
-        itemButton.transform.localScale = Vector3.one;
+        parentTransform.parent = itemSpawnTransform;
+        parentTransform.localScale = new Vector3(0f, 1f, 1f);
+        componentTransform.localScale = Vector3.one;
+
+        if (!initialWalletLoad)
+            lockedPRPSAnimator.AnimateWalletIn(parentTransform.gameObject);
+
+        UnityEngine.Debug.Log(item.Id + " => " + item.Value);
 
         lockedPRPSItems.Add(itemButton);
     }

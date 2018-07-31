@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LockedPRPSPopupAnimator : UIAnimator
@@ -68,6 +69,16 @@ public class LockedPRPSPopupAnimator : UIAnimator
 
 		if (pending) SetPendingIcon(false);
 	}
+
+    public void AnimateWalletIn(GameObject walletToAnimate)
+    {
+        walletToAnimate.AnimateScaleX(1f, 0.15f);
+    }
+
+    public void AnimateWalletOut(GameObject walletToAnimate, Action onAnimateFinished)
+    {
+        walletToAnimate.AnimateScaleX(0f, 0.15f, () => onAnimateFinished?.Invoke());
+    }
 
 	/// <summary>
 	/// Animates the items in the main list one by one
