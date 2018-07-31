@@ -51,14 +51,6 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     }
 
     /// <summary>
-    /// Binds unique instances of all the types to the classes that need them.
-    /// </summary>
-    private void BindUniqueInstances()
-    {
-        Container.Bind<FunctionGasEstimator>().AsTransient();
-    }
-
-    /// <summary>
     /// Binds all singleton types to their required dependencies.
     /// </summary>
     private void BindSingletonTypes()
