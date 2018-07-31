@@ -24,7 +24,6 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindSettings();
         BindSingletonTypes();
-        BindUniqueInstances();
         BindScriptableObjectTypes();
         BindFactories();
     }
