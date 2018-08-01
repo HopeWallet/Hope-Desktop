@@ -80,7 +80,7 @@ public class TransactionInfoPopupAnimator : UIAnimator
 		arrowButton.interactable = false;
 		Animating = true;
 
-		adjustViewButton.AnimateTransformY(showAdvancedDetails ? -328.6f : -228.6f, 0.15f,
+		adjustViewButton.AnimateTransformY(showAdvancedDetails ? -350f : -228.6f, 0.15f,
 			() => adjustViewButton.AnimateRotateZ(showAdvancedDetails ? 180f : 0f, 0.15f,
 			() => { arrowButton.interactable = true; Animating = false; }));
 	}
@@ -90,6 +90,11 @@ public class TransactionInfoPopupAnimator : UIAnimator
 	/// </summary>
 	private void AnimatePopupView()
 	{
+		form1.AnimateGraphic(showAdvancedDetails ? 0f : 1f, 0.15f);
+		form2.AnimateGraphic(showAdvancedDetails ? 1f : 0f, 0.15f);
+		form2.AnimateScaleY(showAdvancedDetails ? 1f : 0f, 0.15f);
 
+		title.AnimateTransformY(showAdvancedDetails ? 258f : 173.5f, 0.15f);
+		tokenIcon.AnimateTransformY(showAdvancedDetails ? 258f : 173.5f, 0.15f);
 	}
 }
