@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dbf29887acb477418f2ef4bad9f97fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animateOnEnable: 1
+  animateOnEnable: 0
   blocker: {fileID: 1237393750155546}
   blur: {fileID: 114304858934082940}
   dim: {fileID: 1179466260703116}
@@ -3516,7 +3516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -282.5, y: 173}
+  m_AnchoredPosition: {x: -282.5, y: 173.5}
   m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224834864314477176
@@ -3553,7 +3553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 174.2}
+  m_AnchoredPosition: {x: 0, y: 173.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224854710057646898
