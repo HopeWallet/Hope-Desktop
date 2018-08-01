@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public abstract class TradableAsset
 {
+    public event Action<dynamic> OnAssetBalanceChanged;
 
     protected readonly TradableAssetImageManager tradableAssetImageManager;
     protected readonly UserWalletManager userWalletManager;
@@ -49,8 +50,15 @@ public abstract class TradableAsset
     /// <param name="symbol"> The symbol of this asset. </param>
     /// <param name="name"> The name of this asset. </param>
     /// <param name="decimals"> The number of decimal places of the asset. </param>
-    public TradableAsset(string address, string symbol, string name, int decimals, 
-        TradableAssetImageManager tradableAssetImageManager, UserWalletManager userWalletManager)
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    protected TradableAsset(
+        string address,
+        string symbol,
+        string name,
+        int decimals,
+        TradableAssetImageManager tradableAssetImageManager,
+        UserWalletManager userWalletManager)
     {
         AssetAddress = address.ToLower();
         AssetSymbol = symbol;
@@ -68,6 +76,8 @@ public abstract class TradableAsset
     {
         userWalletManager.GetAssetBalance(this, balance =>
         {
+            if (balance != AssetBalance)
+                OnAssetBalanceChanged?.Invoke(balance);
             AssetBalance = balance;
             onBalanceReceived?.Invoke();
         });

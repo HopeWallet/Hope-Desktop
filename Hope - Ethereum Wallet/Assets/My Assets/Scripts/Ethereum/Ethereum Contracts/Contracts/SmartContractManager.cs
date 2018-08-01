@@ -13,5 +13,6 @@ public static class SmartContractManager
     {
         public HodlerMimic.Settings hodlerSettings;
         public PRPS.Settings prpsSettings;
+        public DUBI.Settings dubiSettings;
     }
 }
