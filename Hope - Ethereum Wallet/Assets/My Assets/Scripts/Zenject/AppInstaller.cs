@@ -24,7 +24,6 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindSettings();
         BindSingletonTypes();
-        BindScriptableObjectTypes();
         BindFactories();
     }
 
@@ -37,16 +36,6 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.BindInstance(transactionButtonSettings).AsSingle().NonLazy();
         Container.BindInstance(walletListMenuSettings).AsSingle().NonLazy();
         Container.BindInstance(uiProvider).AsSingle().NonLazy();
-    }
-
-    /// <summary>
-    /// Binds all scriptable object types.
-    /// </summary>
-    private void BindScriptableObjectTypes()
-    {
-        // Bind all contracts.
-        Resources.LoadAll<FixedContractBase>("").Where(contract => contract.NetworkType == appSettings.ethereumNetworkSettings.networkType)
-                                                .ForEach(contract => Container.BindInstance(contract.CreateContract()).AsSingle().NonLazy());
     }
 
     /// <summary>
@@ -98,8 +87,9 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<MouseClickObserver>().AsSingle().NonLazy();
         Container.Bind<PopupButtonObserver>().AsSingle().NonLazy();
 
-        Container.Bind<HodlerMimic>().AsSingle().NonLazy();
+        Container.Bind<Hodler>().AsSingle().NonLazy();
         Container.Bind<PRPS>().AsSingle().NonLazy();
+        Container.Bind<DUBI>().AsSingle().NonLazy();
     }
 
     /// <summary>

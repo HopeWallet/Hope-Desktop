@@ -66,7 +66,7 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         lockedPRPSManager.UnfulfilledItems.ForEach(item => CreateItem(item));
     }
 
-    private void CreateItem(HodlerMimic.Output.Item item, bool initialWalletLoad = true)
+    private void CreateItem(Hodler.Output.Item item, bool initialWalletLoad = true)
     {
         LockedPRPSItemButton itemButton = lockedPRPSItemFactory.Create().SetButtonInfo(item);
         Transform componentTransform = itemButton.transform;

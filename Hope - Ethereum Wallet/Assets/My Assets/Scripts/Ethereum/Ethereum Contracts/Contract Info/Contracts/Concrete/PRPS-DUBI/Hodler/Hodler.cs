@@ -3,10 +3,9 @@ using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
-public sealed partial class HodlerMimic : StaticSmartContract
+public sealed partial class Hodler : StaticSmartContract
 {
-
-    public HodlerMimic(
+    public Hodler(
         EthereumNetworkManager.Settings ethereumNetworkSettings,
         Settings settings) : base(ethereumNetworkSettings, settings)
     {

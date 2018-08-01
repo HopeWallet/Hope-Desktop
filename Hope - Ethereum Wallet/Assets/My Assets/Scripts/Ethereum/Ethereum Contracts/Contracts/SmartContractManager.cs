@@ -11,7 +11,7 @@ public static class SmartContractManager
     [Serializable]
     public sealed class Settings
     {
-        public HodlerMimic.Settings hodlerSettings;
+        public Hodler.Settings hodlerSettings;
         public PRPS.Settings prpsSettings;
         public DUBI.Settings dubiSettings;
     }

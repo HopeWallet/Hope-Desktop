@@ -7,7 +7,7 @@ using Zenject;
 /// <summary>
 /// Class which manages each locked purpose item that is displayed.
 /// </summary>
-public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, HodlerMimic.Output.Item>, IStandardGasPriceObservable, IEtherBalanceObservable
+public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodler.Output.Item>, IStandardGasPriceObservable, IEtherBalanceObservable
 {
     public TMP_Text purposeAmountText,
                     dubiAmountText,
@@ -20,8 +20,8 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     private UserWalletManager userWalletManager;
     private GasPriceObserver gasPriceObserver;
     private EtherBalanceObserver etherBalanceObserver;
-    private HodlerMimic hodlerContract;
-    private HodlerMimic.Output.Item item;
+    private Hodler hodlerContract;
+    private Hodler.Output.Item item;
 
     private dynamic etherBalance;
     private decimal lockedPurpose;
@@ -56,7 +56,7 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     [Inject]
     public void Construct(
         EthereumNetworkManager.Settings networkSettings,
-        HodlerMimic hodlerContract,
+        Hodler hodlerContract,
         UserWalletManager userWalletManager,
         GasPriceObserver gasPriceObserver,
         EtherBalanceObserver etherBalanceObserver)
@@ -91,7 +91,7 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     /// Updates the ui elements and the transaction info whenever the HodlerItem is changed/updated.
     /// </summary>
     /// <param name="info"> The item that holds the info on the purpose locked in the contract. </param>
-    protected override void OnValueUpdated(HodlerMimic.Output.Item info)
+    protected override void OnValueUpdated(Hodler.Output.Item info)
     {
         lockedPurpose = SolidityUtils.ConvertFromUInt(info.Value, 18);
         item = info;

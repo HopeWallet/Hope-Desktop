@@ -8,10 +8,10 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 {
     public event Action OnLockedPRPSUpdated;
 
-    private readonly List<HodlerMimic.Output.Item> lockedItems = new List<HodlerMimic.Output.Item>();
+    private readonly List<Hodler.Output.Item> lockedItems = new List<Hodler.Output.Item>();
 
     private readonly UserWalletManager userWalletManager;
-    private readonly HodlerMimic hodlerContract;
+    private readonly Hodler hodlerContract;
     private readonly PRPS prpsContract;
     private readonly EthereumNetwork ethereumNetwork;
 
@@ -20,13 +20,13 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     public float UpdateInterval => 10f;
 
-    public List<HodlerMimic.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled)?.ToList();
+    public List<Hodler.Output.Item> UnfulfilledItems => lockedItems.Where(item => !item.Fulfilled)?.ToList();
 
-    public List<HodlerMimic.Output.Item> UnlockableItems => lockedItems.Where(item => item.Unlockable)?.ToList();
+    public List<Hodler.Output.Item> UnlockableItems => lockedItems.Where(item => item.Unlockable)?.ToList();
 
     public LockedPRPSManager(
         UserWalletManager userWalletManager,
-        HodlerMimic hodlerContract,
+        Hodler hodlerContract,
         PRPS prpsContract,
         EthereumNetworkManager ethereumNetworkManager,
         PeriodicUpdateManager periodicUpdateManager)
@@ -84,13 +84,13 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item => UpdateItemList(item, lockedTimeStamp));
     }
 
-    private void UpdateItemList(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
+    private void UpdateItemList(Hodler.Output.Item item, BigInteger lockedTimeStamp)
     {
         AddNewItem(item, lockedTimeStamp);
         CheckItemUpdateCounter();
     }
 
-    private void AddNewItem(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
+    private void AddNewItem(Hodler.Output.Item item, BigInteger lockedTimeStamp)
     {
         if (!lockedItems.Select(lockedItem => lockedItem.LockedTimeStamp).Contains(lockedTimeStamp))
         {
@@ -106,13 +106,13 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         }
     }
 
-    private void UpdateItemInfo(HodlerMimic.Output.Item item, BigInteger lockedTimeStamp)
+    private void UpdateItemInfo(Hodler.Output.Item item, BigInteger lockedTimeStamp)
     {
         item.LockedTimeStamp = lockedTimeStamp;
 
         if (item.Unlockable && !item.UnlockableGasLimit.HasValue)
         {
-            GasUtils.EstimateGasLimit<HodlerMimic.Messages.Release>(hodlerContract.ContractAddress,
+            GasUtils.EstimateGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
                                                                     userWalletManager.WalletAddress,
                                                                     limit => item.UnlockableGasLimit = limit,
                                                                     item.Id);
