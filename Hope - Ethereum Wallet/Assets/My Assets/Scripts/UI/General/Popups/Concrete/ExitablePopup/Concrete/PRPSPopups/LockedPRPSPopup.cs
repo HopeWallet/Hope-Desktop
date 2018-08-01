@@ -80,8 +80,6 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         if (!initialWalletLoad)
             lockedPRPSAnimator.AnimateWalletIn(parentTransform.gameObject);
 
-        UnityEngine.Debug.Log(item.Id + " => " + item.Value);
-
         lockedPRPSItems.Add(itemButton);
     }
 }
