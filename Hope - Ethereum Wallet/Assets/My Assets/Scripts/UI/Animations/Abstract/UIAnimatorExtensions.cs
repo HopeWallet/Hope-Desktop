@@ -27,19 +27,14 @@ public static class UIAnimatorExtensions
 		gameObject.transform.DOScaleY(endValue, duration).OnComplete(() => callback?.Invoke());
 	}
 
-	public static void AnimateTransformY(this GameObject gameObject, float endValue, float duration, TweenCallback callback = null)
+	public static void AnimateTransformY(this GameObject gameObject, float endValue, float duration)
 	{
-		gameObject.transform.DOLocalMoveY(endValue, duration).OnComplete(() => callback?.Invoke());
+		gameObject.transform.DOLocalMoveY(endValue, duration);
 	}
 
-	public static void AnimateTransformX(this GameObject gameObject, float endValue, float duration, TweenCallback callback = null)
+	public static void AnimateTransformX(this GameObject gameObject, float endValue, float duration)
 	{
-		gameObject.transform.DOLocalMoveX(endValue, duration).OnComplete(() => callback?.Invoke());
-	}
-
-	public static void AnimateRotateZ(this GameObject gameObject, float endValue, float duration, TweenCallback callback = null)
-	{
-		gameObject.transform.DORotate(new Vector3(0f, 0f, endValue), duration).OnComplete(() => callback?.Invoke());
+		gameObject.transform.DOLocalMoveX(endValue, duration);
 	}
 
 	public static void AnimateMaterialBlur(this Image image, float incrementBlur, float duration, TweenCallback callback = null)
