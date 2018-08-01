@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Zenject;
+﻿using Zenject;
 
-public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>, IStandardGasPriceObservable, IEtherBalanceObservable
+public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>, IEtherBalanceObservable
 {
 	public InfoMessage infoMessage;
 
@@ -27,12 +21,8 @@ public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>, IStan
         infoMessage.PopupManager = popupManager;
     }
 
-    private void EstimateGasLimit(dynamic assetBalance)
+    private void OnDestroy()
     {
 
-    }
-
-    public void OnGasPricesUpdated()
-    {
     }
 }

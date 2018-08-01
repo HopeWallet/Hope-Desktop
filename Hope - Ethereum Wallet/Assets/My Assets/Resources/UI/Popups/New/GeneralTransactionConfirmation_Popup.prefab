@@ -39,6 +39,8 @@ GameObject:
   - component: {fileID: 224503836459961044}
   - component: {fileID: 223256889292096496}
   - component: {fileID: 114742485823833254}
+  - component: {fileID: 114004700640616868}
+  - component: {fileID: 114540002233849704}
   m_Layer: 0
   m_Name: GeneralTransactionConfirmation_Popup
   m_TagString: Untagged
@@ -166,6 +168,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114004700640616868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1282295889785612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7886e5ae978b2841bcd118adbea5d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1472406010460584}
 --- !u!114 &114017808146973204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -528,6 +543,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114540002233849704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1282295889785612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ca67df1db25d34fba4aa023b988ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114376268059602730}
+  cancelButton: {fileID: 114819276848479398}
+  transactionText: {fileID: 114412541695417324}
 --- !u!114 &114569408322218384
 MonoBehaviour:
   m_ObjectHideFlags: 1

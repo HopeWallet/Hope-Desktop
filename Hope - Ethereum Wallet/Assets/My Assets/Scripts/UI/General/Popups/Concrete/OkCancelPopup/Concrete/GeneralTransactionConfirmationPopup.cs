@@ -1,12 +1,11 @@
-﻿using UnityEngine.UI;
+﻿using TMPro;
 
 /// <summary>
 /// Class used as a general transaction confirmation when the action being performed is not very sensitive.
 /// </summary>
-public class GeneralTransactionConfirmationPopup : ConfirmTransactionPopupBase<GeneralTransactionConfirmationPopup>
+public sealed class GeneralTransactionConfirmationPopup : ConfirmTransactionPopupBase<GeneralTransactionConfirmationPopup>
 {
-
-    public Text transactionText;
+    public TMP_Text transactionText;
 
     /// <summary>
     /// Sets the transaction text to display what the confirmation popup is for.

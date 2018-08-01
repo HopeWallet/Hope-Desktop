@@ -41,6 +41,7 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
 
     private void OnDestroy()
     {
+        lockedPRPSManager.OnLockedPRPSUpdated -= UpdateList;
         lockedPRPSItems.ForEach(item => item.EndButtonUpdates());
     }
 
