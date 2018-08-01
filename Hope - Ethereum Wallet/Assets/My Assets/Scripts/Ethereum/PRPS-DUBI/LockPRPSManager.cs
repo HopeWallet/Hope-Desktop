@@ -18,7 +18,7 @@ public sealed class LockPRPSManager : IPeriodicUpdater
 
     public dynamic PRPSBalance { get; private set; }
 
-    public BigInteger LockPRPSGasLimit { get; private set; }
+    public BigInteger GasLimit { get; private set; }
 
     public LockPRPSManager(
         PeriodicUpdateManager periodicUpdateManager,
@@ -58,7 +58,7 @@ public sealed class LockPRPSManager : IPeriodicUpdater
         object[] funcParams = new object[] { estimationId, prpsBalance.Value, estimationMonths };
         GasUtils.EstimateGasLimit<Hodler.Messages.Hodl>(hodlerContract.ContractAddress,
                                                         userWalletManager.WalletAddress,
-                                                        limit => LockPRPSGasLimit = limit,
+                                                        limit => GasLimit = limit,
                                                         funcParams);
     }
 }

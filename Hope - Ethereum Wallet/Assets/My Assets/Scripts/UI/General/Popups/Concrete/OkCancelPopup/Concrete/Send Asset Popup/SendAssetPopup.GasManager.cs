@@ -3,7 +3,6 @@ using Nethereum.Util;
 using System;
 using System.Numerics;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,7 +13,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// <summary>
 	/// Class used for managing the gas of the <see cref="SendAssetPopup"/>.
 	/// </summary>
-	public sealed class GasManager : IStandardGasPriceObservable, IPeriodicUpdater
+	public sealed class GasManager : IPeriodicUpdater
 	{
         public event Action OnGasChanged;
 
@@ -24,7 +23,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private readonly Toggle advancedModeToggle;
 
-		private readonly Slider transactionSpeedSlider;
+        private readonly TransactionSpeedSlider transactionSpeedSlider;
 
 		private readonly TMP_InputField gasLimitField,
 										gasPriceField;
@@ -64,28 +63,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		public BigInteger TransactionGasLimit => advancedModeToggle.IsToggledOn ? enteredGasLimit : estimatedGasLimit;
 
-		/// <summary>
-		/// The current estimated standard gas price.
-		/// </summary>
-		public GasPrice StandardGasPrice { get; set; }
-
-		/// <summary>
-		/// Initializes the <see cref="GasManager"/> by assigning all required references.
-		/// </summary>
-		/// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
-		/// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
-		/// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
-		/// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
-		/// <param name="transactionSpeedSlider"> The slider for the transaction speed. </param>
-		/// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
-		/// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
-		/// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
-		public GasManager(
+        /// <summary>
+        /// Initializes the <see cref="GasManager"/> by assigning all required references.
+        /// </summary>
+        /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
+        /// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
+        /// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
+        /// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
+        /// <param name="slider"> The slider used to control transaction speed. </param>
+        /// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
+        /// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
+        /// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
+        public GasManager(
 			TradableAssetManager tradableAssetManager,
 			GasPriceObserver gasPriceObserver,
 			PeriodicUpdateManager periodicUpdateManager,
 			Toggle advancedModeToggle,
-			Slider transactionSpeedSlider,
+			Slider slider,
 			TMP_InputField gasLimitField,
 			TMP_InputField gasPriceField,
 			TMP_Text transactionFeeText)
@@ -94,16 +88,17 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasPriceObserver = gasPriceObserver;
 			this.periodicUpdateManager = periodicUpdateManager;
 			this.advancedModeToggle = advancedModeToggle;
-			this.transactionSpeedSlider = transactionSpeedSlider;
 			this.gasLimitField = gasLimitField;
 			this.gasPriceField = gasPriceField;
 			this.transactionFeeText = transactionFeeText;
+
+            transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
             OnGasChanged += () => this.transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
 
             AddListenersAndObservables();
 			EstimateGasLimit();
-			UpdateGasPriceEstimate(0.5f);
+            transactionSpeedSlider.Start();
 		}
 
 		/// <summary>
@@ -119,19 +114,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		public void Destroy()
 		{
-			gasPriceObserver.UnsubscribeObservable(this);
 			periodicUpdateManager.RemovePeriodicUpdater(this);
-		}
-
-		/// <summary>
-		/// Called once the gas prices were updated again from the <see cref="GasPriceObserver"/>/
-		/// </summary>
-		public void OnGasPricesUpdated()
-		{
-			if (!advancedModeToggle.IsToggledOn)
-				gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
-
-			OnGasChanged?.Invoke();
+            transactionSpeedSlider.Stop();
 		}
 
 		/// <summary>
@@ -139,10 +123,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void AddListenersAndObservables()
 		{
-			gasPriceObserver.SubscribeObservable(this);
 			periodicUpdateManager.AddPeriodicUpdater(this);
 
-			transactionSpeedSlider.onValueChanged.AddListener(UpdateGasPriceEstimate);
 			gasLimitField.onValueChanged.AddListener(CheckGasLimitField);
 			gasPriceField.onValueChanged.AddListener(CheckGasPriceField);
 		}
@@ -175,17 +157,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			OnGasChanged?.Invoke();
 		}
 
-		/// <summary>
-		/// Updates the estimated gas price based on the current progress of the transaction speed slider.
-		/// </summary>
-		/// <param name="value"> The current value of the transaction speed slider. </param>
-		private void UpdateGasPriceEstimate(float value)
+        /// <summary>
+        /// Updates the estimated gas price based on the current progress of the transaction speed slider.
+        /// </summary>
+        /// <param name="newEstimate"> The new estimated gas price. </param>
+        private void UpdateGasPriceEstimate(GasPrice newEstimate)
 		{
-			decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.6f, 1.4f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.45f), 2, MidpointRounding.AwayFromZero);
-			estimatedGasPrice = new GasPrice(new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value));
+            estimatedGasPrice = newEstimate;
 
-			OnGasPricesUpdated();
-		}
+            if (!advancedModeToggle.IsToggledOn)
+                gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
+
+            OnGasChanged?.Invoke();
+        }
 
 		/// <summary>
 		/// Estimates the gas limit for the current <see cref="TradableAsset"/>.

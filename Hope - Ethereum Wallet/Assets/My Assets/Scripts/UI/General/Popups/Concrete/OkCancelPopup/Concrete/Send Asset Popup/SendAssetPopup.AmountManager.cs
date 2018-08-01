@@ -104,7 +104,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="amountText"> The text entered in the amount input field. </param>
         private void AmountFieldChanged(string amountText)
         {
-            amountInputField.RestrictToBalance(sendAssetPopup.Asset.ActiveAsset);
+            amountInputField.RestrictDecimalValue(sendAssetPopup.Asset.ActiveAsset.AssetDecimals);
 
             decimal newSendAmount;
             decimal.TryParse(amountInputField.text, out newSendAmount);
