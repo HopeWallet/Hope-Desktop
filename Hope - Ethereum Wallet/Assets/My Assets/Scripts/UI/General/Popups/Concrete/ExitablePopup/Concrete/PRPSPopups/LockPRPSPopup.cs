@@ -10,15 +10,16 @@ public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>, IStan
 {
 	public InfoMessage infoMessage;
 
-    private BigInteger gasLimit;
+    private LockPRPSManager lockPRPSManager;
 
     public dynamic EtherBalance { get; set; }
 
     public GasPrice StandardGasPrice { get; set; }
 
     [Inject]
-    public void Construct(TradableAssetManager tradableAssetManager)
+    public void Construct(LockPRPSManager lockPRPSManager)
     {
+        this.lockPRPSManager = lockPRPSManager;
     }
 
     protected override void OnStart()
@@ -33,6 +34,5 @@ public sealed class LockPRPSPopup : ExitablePopupComponent<LockPRPSPopup>, IStan
 
     public void OnGasPricesUpdated()
     {
-        throw new NotImplementedException();
     }
 }
