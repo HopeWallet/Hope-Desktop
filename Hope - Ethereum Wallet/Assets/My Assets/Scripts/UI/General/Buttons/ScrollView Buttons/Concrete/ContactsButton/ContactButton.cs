@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine.UI;
 using Zenject;
-using System.Collections.Generic;
 
 public class ContactButton : InfoButton<ContactButton, ContactInfo>
 {
@@ -10,28 +9,24 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 	public Button editButton, deleteButton;
 
 	private PopupManager popupManager;
+	private ContactsManager contactsManager;
 
 	private string realContactName, realContactAddress;
 
-	private Dictionary<string, string> contacts;
-
 	[Inject]
-	public void Construct(PopupManager popupManager)
+	public void Construct(PopupManager popupManager, ContactsManager contactsManager)
 	{
 		this.popupManager = popupManager;
+		this.contactsManager = contactsManager;
 	}
 
 	protected override void OnAwake()
 	{
-		Button.onClick.AddListener(ContactClicked);
-		editButton.onClick.AddListener(EditContact);
+		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
+		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress));
+		//deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress));
+		deleteButton.onClick.AddListener(DeleteContact);
 	}
-
-	/// <summary>
-	/// Sets the contacts dictionary
-	/// </summary>
-	/// <param name="contacts"> The contacts dictionary </param>
-	public void SetDictionary(Dictionary<string, string> contacts) => this.contacts = contacts;
 
 	protected override void OnValueUpdated(ContactInfo info)
 	{
@@ -42,16 +37,11 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 		contactAddress.text = realContactAddress?.Substring(0, 8) + "...." + info.ContactAddress.Substring(info.ContactAddress.Length - 8, 8);
 	}
 
-	private void ContactClicked() => ButtonInfo.ContactsPopup.EnableNewContactButton(this);
-
-	private void EditContact()
-	{
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress);
-		//popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
-	}
-
 	private void DeleteContact()
 	{
+		realContactName.Log();
+		realContactAddress.Log();
 
+		popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress);
 	}
 }
