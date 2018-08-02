@@ -8,6 +8,8 @@ public sealed class WalletCreator : WalletLoaderBase
 {
     private readonly WalletEncryptor walletEncryptor;
 
+    private string derivationPath;
+
     public WalletCreator(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
@@ -33,6 +35,7 @@ public sealed class WalletCreator : WalletLoaderBase
         int walletNum = SecurePlayerPrefs.GetInt("wallet_count") + 1;
 
         SecurePlayerPrefs.SetInt("wallet_count", walletNum);
+        SecurePlayerPrefs.SetString("derivation_" + walletNum, derivationPath);
         SecurePlayerPrefs.SetString("password_" + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString("wallet_" + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString("wallet_" + walletNum + "_name", dynamicDataCache.GetData("name"));
@@ -66,7 +69,8 @@ public sealed class WalletCreator : WalletLoaderBase
         {
             try
             {
-                var wallet = new Wallet(mnemonic.Value, null, WalletUtils.DetermineCorrectPath(mnemonic.Value));
+                derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
+                var wallet = new Wallet(mnemonic.Value, null, derivationPath);
                 AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
                 walletEncryptor.EncryptWallet(wallet.Seed, basePass, SetWalletPlayerPrefs);
             }

@@ -41,9 +41,9 @@ public sealed class WalletTransactionSigner
     [SecureCallEnd]
     public void SignTransaction(string walletAddress, string encryptedPassword, Action<TransactionSignedUnityRequest> onRequestReceived)
     {
-        walletDecryptor.DecryptWallet(passwordEncryptor.Decrypt(encryptedPassword), seed =>
+        walletDecryptor.DecryptWallet(passwordEncryptor.Decrypt(encryptedPassword), (seed, derivation) =>
         {
-            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
+            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, derivation).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
             MainThreadExecutor.QueueAction(() => onRequestReceived?.Invoke(request));
             ClearData(seed);
         });
