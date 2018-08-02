@@ -11,6 +11,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     private readonly List<Hodler.Output.Item> lockedItems = new List<Hodler.Output.Item>();
 
     private readonly UserWalletManager userWalletManager;
+    private readonly PeriodicUpdateManager periodicUpdateManager;
     private readonly Hodler hodlerContract;
     private readonly PRPS prpsContract;
     private readonly EthereumNetwork ethereumNetwork;
@@ -34,17 +35,32 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         PeriodicUpdateManager periodicUpdateManager)
     {
         this.userWalletManager = userWalletManager;
+        this.periodicUpdateManager = periodicUpdateManager;
         this.hodlerContract = hodlerContract;
         this.prpsContract = prpsContract;
+
         ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
 
-        UserWallet.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this, true);
+        TradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
+        TradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
     }
 
     /// <summary>
     /// Searches for any new locked items, or any locked items that are now unlocked.
     /// </summary>
     public void PeriodicUpdate() => StartNewItemSearch();
+
+    private void CheckIfPRPSAdded(TradableAsset tradableAsset)
+    {
+        if (tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress))
+            periodicUpdateManager.AddPeriodicUpdater(this, true);
+    }
+
+    private void CheckIfPRPSRemoved(TradableAsset tradableAsset)
+    {
+        if (tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress))
+            periodicUpdateManager.RemovePeriodicUpdater(this);
+    }
 
     /// <summary>
     /// Searches for any token transfers from the user's address to the hodl contract.

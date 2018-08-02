@@ -470,6 +470,7 @@ MonoBehaviour:
   lockPeriodText: {fileID: 114957870353807308}
   prpsAmountText: {fileID: 114598165327305648}
   dubiAmountText: {fileID: 114770421396573186}
+  noteText: {fileID: 114557203375098098}
 --- !u!114 &114120626957307112
 MonoBehaviour:
   m_ObjectHideFlags: 1

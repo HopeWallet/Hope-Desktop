@@ -25,6 +25,6 @@ public class ExceptionManager
     public static void DisplayException(Exception exception)
     {
         Debug.Log(exception.Message);
-        PopupManager?.CloseActivePopup();
+        //PopupManager?.CloseActivePopup();
     }
 }
