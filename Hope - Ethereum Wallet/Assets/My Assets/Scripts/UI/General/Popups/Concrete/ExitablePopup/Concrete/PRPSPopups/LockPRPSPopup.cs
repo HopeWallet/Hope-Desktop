@@ -1,13 +1,12 @@
 ﻿using Hope.Utils.Misc;
 using Nethereum.Hex.HexTypes;
-using System.Numerics;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
 public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable
 {
-	public InfoMessage infoMessage;
+    public InfoMessage infoMessage;
 
     public TMP_InputField amountInputField;
     public Slider slider;
@@ -23,18 +22,18 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
                     dubiBalanceText,
                     dubiRewardText;
 
-    private GasManager gasManager;
-    private AmountManager amountManager;
-    private TimeManager timeManager;
-
     private LockedPRPSManager lockedPRPSManager;
     private EtherBalanceObserver etherBalanceObserver;
     private UserWalletManager userWalletManager;
     private Hodler hodlerContract;
 
-    public dynamic EtherBalance { get; set; }
+    public GasManager Gas { get; private set; }
 
-    public GasPrice StandardGasPrice { get; set; }
+    public AmountManager Amount { get; private set; }
+
+    public TimeManager Time { get; private set; }
+
+    public dynamic EtherBalance { get; set; }
 
     [Inject]
     public void Construct(
@@ -51,9 +50,9 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         this.hodlerContract = hodlerContract;
         etherBalanceObserver.SubscribeObservable(this);
 
-        gasManager = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText);
-        amountManager = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
-        timeManager = new TimeManager(amountManager, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
+        Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText);
+        Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
+        Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
     }
 
     protected override void OnStart()
@@ -63,26 +62,25 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
     private void OnDestroy()
     {
-        gasManager.Stop();
-        amountManager.Stop();
-        timeManager.Stop();
+        Gas.Stop();
+        Amount.Stop();
+        Time.Stop();
 
         etherBalanceObserver.UnsubscribeObservable(this);
     }
 
     private void Update()
     {
-        lockPRPSButton.interactable = EtherBalance >= gasManager.TransactionFee && gasManager.IsValid && amountManager.IsValid && timeManager.IsValid;
+        lockPRPSButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && Amount.IsValid && Time.IsValid;
     }
 
     public override void OkButton()
     {
-        UnityEngine.Debug.Log(timeManager.MonthsToLock + " => " + amountManager.AmountToLock);
         hodlerContract.Hodl(userWalletManager,
-                            new HexBigInteger(gasManager.TransactionGasLimit),
-                            gasManager.TransactionGasPrice.FunctionalGasPrice,
+                            new HexBigInteger(Gas.TransactionGasLimit),
+                            Gas.TransactionGasPrice.FunctionalGasPrice,
                             RandomUtils.GenerateRandomBigInteger(lockedPRPSManager.UsedIds),
-                            amountManager.AmountToLock,
-                            timeManager.MonthsToLock);
+                            Amount.AmountToLock,
+                            Time.MonthsToLock);
     }
 }

@@ -8,7 +8,6 @@ using System.Text;
 /// </summary>
 public static class StringUtils
 {
-
     /// <summary>
     /// Checks if two strings characters are equal, ignoring uppercase or lowercase differences.
     /// </summary>
@@ -45,23 +44,15 @@ public static class StringUtils
     }
 
     /// <summary>
-    /// Iterates through each element of the string and performs an action with each character.
+    /// Converts a <see langword="decimal"/> value to a <see langword="string"/> value.
     /// </summary>
-    /// <param name="str"> The string to iterate through. </param>
-    /// <param name="action"> The action to perform with each character. </param>
-    public static void Foreach(this string str, Action<char> action)
+    /// <param name="value"> The <see langword="decimal"/> value to convert to a <see langword="string"/>. </param>
+    /// <returns> The <see langword="string"/> representation of the value. </returns>
+    public static string ConvertDecimalToString(this decimal value)
     {
-        foreach (char c in str)
-            action?.Invoke(c);
+        string decimalString = value.ToString();
+        return !decimalString.Contains(".") ? decimalString : decimalString.TrimEnd('0').TrimEnd('.');
     }
-
-    /// <summary>
-    /// Converts a string value to a different type.
-    /// </summary>
-    /// <typeparam name="T"> The type to convert the string to. </typeparam>
-    /// <param name="str"> The string value to convert. </param>
-    /// <returns> The newly converted string now of type T. </returns>
-    public static T ConvertTo<T>(this string str) => TypeConversion.ChangeType<T>(str);
 
     /// <summary>
     /// Converts a Base64 string to a byte array.
@@ -116,5 +107,4 @@ public static class StringUtils
 
         return new Tuple<string, string>(str.Substring(0, halfLength), str.Substring(halfLength, fixedLength));
     }
-
 }

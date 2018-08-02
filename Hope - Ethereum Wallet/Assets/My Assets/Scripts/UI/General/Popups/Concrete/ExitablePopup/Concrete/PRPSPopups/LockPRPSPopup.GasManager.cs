@@ -31,7 +31,6 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         public BigInteger TransactionGasLimit => lockPRPSManager.GasLimit;
 
-
         public GasManager(
             LockPRPSManager lockPRPSManager,
             GasPriceObserver gasPriceObserver,

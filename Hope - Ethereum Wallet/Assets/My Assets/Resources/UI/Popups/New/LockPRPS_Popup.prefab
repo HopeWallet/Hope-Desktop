@@ -3798,6 +3798,7 @@ MonoBehaviour:
   timePeriodSection: {fileID: 1703276064400756}
   noteText: {fileID: 1104521864626898}
   lockPRPSButton: {fileID: 1468875886644998}
+  errorIcon: {fileID: 1649311376582286}
 --- !u!114 &114842760414198258
 MonoBehaviour:
   m_ObjectHideFlags: 1

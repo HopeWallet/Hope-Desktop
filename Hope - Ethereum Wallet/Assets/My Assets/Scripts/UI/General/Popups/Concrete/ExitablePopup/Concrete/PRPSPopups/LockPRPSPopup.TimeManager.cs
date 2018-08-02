@@ -72,7 +72,7 @@ public sealed partial class LockPRPSPopup
             }
             else
             {
-                dubiRewardText.text = "(+" + (amountManager.AmountToLock * multiplier).ToString().LimitEnd(10, "...") + ")";
+                dubiRewardText.text = "(+" + (amountManager.AmountToLock * multiplier).ConvertDecimalToString().LimitEnd(10, "...") + ")";
                 dubiRewardText.gameObject.SetActive(true);
             }
         }

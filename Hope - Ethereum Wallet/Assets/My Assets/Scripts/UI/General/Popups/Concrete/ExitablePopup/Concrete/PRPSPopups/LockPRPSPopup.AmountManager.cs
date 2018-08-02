@@ -119,8 +119,8 @@ public sealed partial class LockPRPSPopup
 
         private void BalancesUpdated()
         {
-            prpsBalanceText.text = StringUtils.LimitEnd(lockPRPSManager.PRPSBalance.ToString(), 10, "...");
-            dubiBalanceText.text = StringUtils.LimitEnd(lockPRPSManager.DUBIBalance.ToString(), 10, "...");
+            prpsBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.PRPSBalance), 10, "...");
+            dubiBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.DUBIBalance), 10, "...");
         }
     }
 }

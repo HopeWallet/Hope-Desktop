@@ -24,8 +24,6 @@ public class SendAssetPopupAnimator : UIAnimator
 
 	[SerializeField] private GameObject sendButton;
 
-	private SendAssetPopup sendAssetPopup;
-
 	private bool advancedMode;
 
 	/// <summary>
@@ -33,7 +31,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	private void Start()
 	{
-        sendAssetPopup = GetComponent<SendAssetPopup>();
+        SendAssetPopup sendAssetPopup = GetComponent<SendAssetPopup>();
 
 		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid || sendAssetPopup.Address.IsEmpty));
         sendAssetPopup.Amount.OnAmountChanged += () => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid || sendAssetPopup.Amount.IsEmpty);
