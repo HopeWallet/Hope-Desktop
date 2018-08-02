@@ -18,7 +18,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         public event Action OnGasChanged;
 
         private readonly TradableAssetManager tradableAssetManager;
-		private readonly GasPriceObserver gasPriceObserver;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
 		private readonly Toggle advancedModeToggle;
@@ -27,8 +26,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private readonly TMP_InputField gasLimitField,
 										gasPriceField;
-
-		private readonly TMP_Text transactionFeeText;
 
 		private GasPrice estimatedGasPrice,
 						 enteredGasPrice;
@@ -85,16 +82,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			TMP_Text transactionFeeText)
 		{
 			this.tradableAssetManager = tradableAssetManager;
-			this.gasPriceObserver = gasPriceObserver;
 			this.periodicUpdateManager = periodicUpdateManager;
 			this.advancedModeToggle = advancedModeToggle;
 			this.gasLimitField = gasLimitField;
 			this.gasPriceField = gasPriceField;
-			this.transactionFeeText = transactionFeeText;
 
             transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
-            OnGasChanged += () => this.transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
+            OnGasChanged += () => transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
 
             AddListenersAndObservables();
 			EstimateGasLimit();

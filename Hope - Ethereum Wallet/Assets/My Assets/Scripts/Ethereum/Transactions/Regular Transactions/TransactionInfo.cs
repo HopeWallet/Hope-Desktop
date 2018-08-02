@@ -3,7 +3,7 @@
 /// <summary>
 /// Class which contains all necessary info of an ethereum transaction.
 /// </summary>
-public class TransactionInfo
+public sealed class TransactionInfo
 {
 
     public enum TransactionType { Send, Receive };
@@ -11,47 +11,47 @@ public class TransactionInfo
     /// <summary>
     /// The type of the transaction.
     /// </summary>
-    public TransactionType Type { get; private set; }
+    public TransactionType Type { get; }
 
     /// <summary>
     /// The address that sent the transaction.
     /// </summary>
-    public string From { get; private set; }
+    public string From { get; }
 
     /// <summary>
     /// The destination address of the transaction.
     /// </summary>
-    public string To { get; private set; }
+    public string To { get; }
 
     /// <summary>
     /// The asset address of the transaction.
     /// </summary>
-    public string AssetAddress { get; private set; }
+    public string AssetAddress { get; }
 
     /// <summary>
     /// The transaction hash of the transaction.
     /// </summary>
-    public string TxHash { get; private set; }
+    public string TxHash { get; }
 
     /// <summary>
     /// The value that was sent with the transaction.
     /// </summary>
-    public BigInteger Value { get; private set; }
+    public BigInteger Value { get; }
 
     /// <summary>
     /// The gas price of the transaction.
     /// </summary>
-    public BigInteger GasPrice { get; private set; }
+    public BigInteger GasPrice { get; }
 
     /// <summary>
     /// The amount of gas used for the transaction.
     /// </summary>
-    public int GasUsed { get; private set; }
+    public int GasUsed { get; }
 
     /// <summary>
     /// The unix time stamp when this transaction was sent.
     /// </summary>
-    public int TimeStamp { get; private set; }
+    public int TimeStamp { get; }
 
     /// <summary>
     /// Initializes the TransactionInfo by assigning all properties.
@@ -65,8 +65,16 @@ public class TransactionInfo
     /// <param name="gasPrice"> The gas price used to send the transaction. </param>
     /// <param name="gasUsed"> The amount of gas used sending the transaction. </param>
     /// <param name="timeStamp"> The unix time stamp of the transaction. </param>
-    public TransactionInfo(TransactionType type, string from, string to, string assetAddress, string txHash, 
-        BigInteger value, BigInteger gasPrice, int gasUsed, int timeStamp)
+    public TransactionInfo(
+        TransactionType type,
+        string from,
+        string to,
+        string assetAddress,
+        string txHash,
+        BigInteger value,
+        BigInteger gasPrice,
+        int gasUsed,
+        int timeStamp)
     {
         Type = type;
         From = from;
