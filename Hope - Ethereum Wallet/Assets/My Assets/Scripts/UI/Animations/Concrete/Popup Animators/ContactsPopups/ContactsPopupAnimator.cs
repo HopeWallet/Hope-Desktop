@@ -25,7 +25,7 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <summary>
 	/// Initializes the elements
 	/// </summary>
-	private void Awake()
+	private void Start()
 	{
 		contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
 
@@ -80,6 +80,7 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <param name="index"> The index of the contact in the list being animated </param>
 	private void AnimateContacts(int index)
 	{
+		FinishedAnimating();
 		if (index == 6)
 		{
 			for (int i = index; i < contactsTransform.childCount; i++)

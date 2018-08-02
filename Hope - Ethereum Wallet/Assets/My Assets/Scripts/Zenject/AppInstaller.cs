@@ -112,6 +112,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         BindButtonFactory<AssetButton>(tradableAssetButtonSettings.spawnTransform);
         BindButtonFactory<WalletButton>(walletListMenuSettings.walletButtonSpawnTransform);
         BindButtonFactory<LockedPRPSItemButton>(null);
+		BindButtonFactory<ContactButton>(null);
     }
 
     /// <summary>

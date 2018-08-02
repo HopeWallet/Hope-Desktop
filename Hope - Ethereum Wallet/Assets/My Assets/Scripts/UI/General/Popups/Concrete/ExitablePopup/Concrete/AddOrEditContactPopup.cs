@@ -37,6 +37,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	{
 		contacts.Add(addressInputField.text, nameInputField.text);
 
+		SecurePlayerPrefs.SetInt("Contacts", contacts.Count);
 		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contacts.Count, addressInputField.text);
 		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 
@@ -71,7 +72,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 
 		popupManager.CloseActivePopup();
 	}
-	
+
 	/// <summary>
 	/// Sets all the necessary popup text elements
 	/// </summary>

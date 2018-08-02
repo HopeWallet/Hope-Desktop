@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222819911233177276}
   - component: {fileID: 114628048045952864}
   - component: {fileID: 114815526163602542}
+  - component: {fileID: 114339150730024248}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -339,6 +340,21 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114339150730024248
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1459420336853920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db14d7f65c9e8434f9d3ba4220a63701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contactName: {fileID: 114661702609220460}
+  contactAddress: {fileID: 114019274697191916}
+  editButton: {fileID: 114293159874713646}
+  deleteButton: {fileID: 114267791754895984}
 --- !u!114 &114341908672849714
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -689,6 +705,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 51.1, y: -49.9}
+  m_AnchoredPosition: {x: 50, y: -50}
   m_SizeDelta: {x: 574.6, y: 38.2}
   m_Pivot: {x: 0.5, y: 0.5}
