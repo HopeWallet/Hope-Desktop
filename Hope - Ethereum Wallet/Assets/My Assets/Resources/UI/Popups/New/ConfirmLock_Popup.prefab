@@ -325,6 +325,7 @@ GameObject:
   - component: {fileID: 223633399657952164}
   - component: {fileID: 114993663931461794}
   - component: {fileID: 114587844490550100}
+  - component: {fileID: 114105387581180772}
   m_Layer: 0
   m_Name: ConfirmLock_Popup
   m_TagString: Untagged
@@ -453,6 +454,22 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114105387581180772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1911524679015626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccab24db995289842bfba9db55e5300e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114005006171411136}
+  cancelButton: {fileID: 114248256784403284}
+  lockPeriodText: {fileID: 114957870353807308}
+  prpsAmountText: {fileID: 114598165327305648}
+  dubiAmountText: {fileID: 114770421396573186}
 --- !u!114 &114120626957307112
 MonoBehaviour:
   m_ObjectHideFlags: 1

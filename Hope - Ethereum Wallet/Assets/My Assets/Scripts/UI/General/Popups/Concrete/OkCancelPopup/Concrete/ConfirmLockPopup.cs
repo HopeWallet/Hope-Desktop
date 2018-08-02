@@ -1,14 +1,13 @@
-﻿using UnityEngine.UI;
+﻿using TMPro;
 
 /// <summary>
 /// Class used for displaying the confirmation to lock purpose.
 /// </summary>
-public class ConfirmPRPSLockPopup : ConfirmTransactionPopupBase<ConfirmPRPSLockPopup>
+public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPopup>
 {
-
-    public Text lockPeriodText,
-                prpsAmountText,
-                dubiAmountText;
+    public TMP_Text lockPeriodText,
+                    prpsAmountText,
+                    dubiAmountText;
 
     /// <summary>
     /// Passes the amount of purpose being locked through to display.
@@ -24,8 +23,7 @@ public class ConfirmPRPSLockPopup : ConfirmTransactionPopupBase<ConfirmPRPSLockP
     private void SetLockPrpsValues(int lockPeriod, decimal lockAmount)
     {
         lockPeriodText.text = lockPeriod + " Month Lock";
-        prpsAmountText.text = lockAmount.ToString().LimitEnd(20, "...");
-        dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ToString().LimitEnd(20, "...");
+        prpsAmountText.text = lockAmount.ConvertDecimalToString().LimitEnd(13, "...");
+        dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ConvertDecimalToString().LimitEnd(13, "...");
     }
-
 }

@@ -31,7 +31,6 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         public BigInteger TransactionGasLimit => lockPRPSManager.GasLimit;
 
-
         public GasManager(
             LockPRPSManager lockPRPSManager,
             GasPriceObserver gasPriceObserver,
@@ -53,7 +52,7 @@ public sealed partial class LockPRPSPopup
         private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
-            transactionFeeText.text = "~ " + gasPrice.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
+            transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
         }
     }
 }

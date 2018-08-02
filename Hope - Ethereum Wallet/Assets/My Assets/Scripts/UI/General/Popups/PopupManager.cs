@@ -39,7 +39,7 @@ public sealed class PopupManager
         TransactionInfoPopup.Factory transactionInfoPopupFactory,
         LockedPRPSPopup.Factory lockedPrpsPopupFactory,
         LockPRPSPopup.Factory lockPrpsPopupFactory,
-        ConfirmPRPSLockPopup.Factory confirmPrpsLockPopupFactory,
+        ConfirmLockPopup.Factory confirmPrpsLockPopupFactory,
         GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
         UnlockWalletPopup.Factory unlockWalletPopupFactory,
         ContactsPopup.Factory contactsPopupFactory,

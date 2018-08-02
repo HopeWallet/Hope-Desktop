@@ -3045,8 +3045,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f268f7f9502194fbdaa452fc687f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exitButton: {fileID: 114237503292394762}
+  okButton: {fileID: 114190642194656240}
+  cancelButton: {fileID: 114237503292394762}
   infoMessage: {fileID: 114515338780119670}
+  amountInputField: {fileID: 114000531705171084}
+  slider: {fileID: 114004171531926536}
+  maxToggle: {fileID: 114675470125886244}
+  lockPRPSButton: {fileID: 114190642194656240}
+  threeMonthsButton: {fileID: 114720095926320704}
+  sixMonthsButton: {fileID: 114732066562494346}
+  twelveMonthsButton: {fileID: 114032537705720140}
+  transactionFeeText: {fileID: 114845755308998654}
+  prpsBalanceText: {fileID: 114220270093468036}
+  dubiBalanceText: {fileID: 114381802767292856}
+  dubiRewardText: {fileID: 114261162030162700}
 --- !u!114 &114578638491832318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3786,6 +3798,7 @@ MonoBehaviour:
   timePeriodSection: {fileID: 1703276064400756}
   noteText: {fileID: 1104521864626898}
   lockPRPSButton: {fileID: 1468875886644998}
+  errorIcon: {fileID: 1649311376582286}
 --- !u!114 &114842760414198258
 MonoBehaviour:
   m_ObjectHideFlags: 1

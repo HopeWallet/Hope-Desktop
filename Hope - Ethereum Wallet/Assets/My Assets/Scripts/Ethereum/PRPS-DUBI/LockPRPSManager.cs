@@ -63,5 +63,7 @@ public sealed class LockPRPSManager : IPeriodicUpdater
                                                         userWalletManager.WalletAddress,
                                                         limit => GasLimit = limit,
                                                         funcParams);
+
+        OnAmountsUpdated?.Invoke();
     }
 }
