@@ -90,11 +90,7 @@ public sealed class EphemeralEncryption : SecureObject
     /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
-    public byte[] Encrypt(byte[] data, string entropy)
-    {
-        byte[] aesEncryptedData = AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
-        return isWindows ? MemoryProtect.Protect(aesEncryptedData) : aesEncryptedData;
-    }
+    public byte[] Encrypt(byte[] data, string entropy) => isWindows ? MemoryProtect.Protect(data) : AesEncryptor.Encrypt(data, GetEncryptionPassword(entropy));
 
     /// <summary>
     /// Decrypts <see langword="byte"/>[] data which was encrypted using <see cref="Encrypt(byte[], string)"/>.
@@ -105,11 +101,7 @@ public sealed class EphemeralEncryption : SecureObject
     /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
-    public byte[] Decrypt(byte[] encryptedData, string entropy)
-    {
-        encryptedData = isWindows ? MemoryProtect.Unprotect(encryptedData) : encryptedData;
-        return AesEncryptor.Decrypt(encryptedData, GetEncryptionPassword(entropy));
-    }
+    public byte[] Decrypt(byte[] encryptedData, string entropy) => isWindows ? MemoryProtect.Unprotect(encryptedData) : AesEncryptor.Decrypt(encryptedData, GetEncryptionPassword(entropy));
 
     /// <summary>
     /// Gets the encryption password used to encrypt/decrypt data.

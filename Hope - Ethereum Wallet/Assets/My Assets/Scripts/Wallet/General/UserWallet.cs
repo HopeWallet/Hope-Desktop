@@ -13,8 +13,6 @@ public sealed class UserWallet : SecureObject
     private readonly EphemeralEncryption passwordEncryptor;
 
     private readonly PopupManager popupManager;
-    private readonly EthereumNetwork ethereumNetwork;
-    private readonly PlayerPrefPassword prefPassword;
     private readonly DynamicDataCache dynamicDataCache;
 
     private readonly WalletCreator walletCreator;
@@ -35,9 +33,7 @@ public sealed class UserWallet : SecureObject
         EthereumNetwork ethereumNetwork,
         DynamicDataCache dynamicDataCache)
     {
-        this.prefPassword = prefPassword;
         this.popupManager = popupManager;
-        this.ethereumNetwork = ethereumNetwork;
         this.dynamicDataCache = dynamicDataCache;
 
         passwordEncryptor = new EphemeralEncryption(this);
