@@ -104,8 +104,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="name"> The current string in the name input field </param>
 	private void ContactNameChanged(string name)
 	{
-		if (name.Length > 19)
-			nameInputField.text = name.LimitEnd(19);
+		if (name.Length > 30)
+			nameInputField.text = name.LimitEnd(30);
 
 		string updatedName = nameInputField.text;
 

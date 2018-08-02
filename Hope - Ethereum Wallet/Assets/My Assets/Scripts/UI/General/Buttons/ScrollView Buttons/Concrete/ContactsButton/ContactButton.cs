@@ -24,8 +24,7 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 	{
 		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
 		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress));
-		//deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress));
-		deleteButton.onClick.AddListener(DeleteContact);
+		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress));
 	}
 
 	protected override void OnValueUpdated(ContactInfo info)
@@ -35,13 +34,5 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 
 		contactName.text = realContactName?.LimitEnd(18, "...");
 		contactAddress.text = realContactAddress?.Substring(0, 8) + "...." + info.ContactAddress.Substring(info.ContactAddress.Length - 8, 8);
-	}
-
-	private void DeleteContact()
-	{
-		realContactName.Log();
-		realContactAddress.Log();
-
-		popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress);
 	}
 }

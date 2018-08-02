@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption;
+﻿using System;
+using Hope.Security.Encryption;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,9 +37,20 @@ public class CreateWalletMenuAnimator : UIAnimator
 		InitializeVariable(ref password2Field);
 
 		password1Field.GetComponent<TMP_InputField>().onValueChanged.AddListener(GetPasswordStrength);
+		walletNameField.GetComponent<TMP_InputField>().onValueChanged.AddListener(WalletNameFieldChanged);
 
 		progressBarFull = passwordStrengthProgressBar.transform.GetChild(1).gameObject;
 		passwordStrengthText = passwordStrength.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+	}
+
+	/// <summary>
+	/// Limits the wallet name to a maximum of 30 characters
+	/// </summary>
+	/// <param name="name"> The current string input in the walletNameField </param>
+	private void WalletNameFieldChanged(string name)
+	{
+		if (name.Length > 30)
+			walletNameField.GetComponent<TextMeshProUGUI>().text = name.LimitEnd(30);
 	}
 
 	/// <summary>

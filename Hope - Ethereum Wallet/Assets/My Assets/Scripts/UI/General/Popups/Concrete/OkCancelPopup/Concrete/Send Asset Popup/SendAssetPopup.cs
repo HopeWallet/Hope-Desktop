@@ -14,7 +14,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private TMP_InputField gasLimitField;
     [SerializeField] private TMP_InputField gasPriceField;
 
-    [SerializeField] private TMP_Text assetBalance;
+	[SerializeField] private TMP_Text assetBalance;
     [SerializeField] private TMP_Text assetSymbol;
     [SerializeField] private TMP_Text transactionFee;
 
