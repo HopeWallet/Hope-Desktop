@@ -11,6 +11,8 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 
 	private PopupManager popupManager;
 
+	private string realContactName, realContactAddress;
+
 	private Dictionary<string, string> contacts;
 
 	[Inject]
@@ -33,15 +35,18 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 
 	protected override void OnValueUpdated(ContactInfo info)
 	{
-		contactName.text = info.ContactName?.LimitEnd(18, "...");
-		contactAddress.text = info.ContactAddress?.Substring(0, 8) + "...." + info.ContactAddress.Substring(info.ContactAddress.Length - 8, 8);
+		realContactName = info.ContactName;
+		realContactAddress = info.ContactAddress;
+
+		contactName.text = realContactName?.LimitEnd(18, "...");
+		contactAddress.text = realContactAddress?.Substring(0, 8) + "...." + info.ContactAddress.Substring(info.ContactAddress.Length - 8, 8);
 	}
 
 	private void ContactClicked() => ButtonInfo.ContactsPopup.EnableNewContactButton(this);
 
 	private void EditContact()
 	{
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, contactName.text, contactAddress.text);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress);
 		//popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
 	}
 

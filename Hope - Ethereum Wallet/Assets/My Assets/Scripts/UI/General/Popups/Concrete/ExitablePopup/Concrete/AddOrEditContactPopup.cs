@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
@@ -15,6 +17,10 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 
 	private Dictionary<string, string> contacts;
 
+	private ContactButton.Factory contactButtonFactory;
+
+	private ContactsPopup contactsPopup;
+
 	/// <summary>
 	/// Adds the button listeners
 	/// </summary>
@@ -24,11 +30,23 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 		confirmButton.onClick.AddListener(ConfirmClicked);
 	}
 
+	[Inject]
+	public void Construct(ContactButton.Factory contactButtonFactory)
+	{
+		this.contactButtonFactory = contactButtonFactory;
+	}
+
 	/// <summary>
 	/// Sets the contacts dictionary
 	/// </summary>
 	/// <param name="contacts"> The contacts dictionary </param>
 	public void SetDictionary(Dictionary<string, string> contacts) => this.contacts = contacts;
+
+	/// <summary>
+	/// Sets this ContactsPopup to the original instance
+	/// </summary>
+	/// <param name="contactsPopup"> The ContactsPopup </param>
+	public void SetContactsPopup(ContactsPopup contactsPopup) => this.contactsPopup = contactsPopup;
 
 	/// <summary>
 	/// Adds a new contact according to the given inputs
@@ -41,7 +59,19 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contacts.Count, addressInputField.text);
 		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 
+		CreateNewContactObjectInList();
+
 		popupManager.CloseActivePopup();
+	}
+
+	private void CreateNewContactObjectInList()
+	{
+		var button = contactButtonFactory.Create();
+
+		button.SetButtonInfo(new ContactInfo(contactsPopup, nameInputField.text, addressInputField.text));
+		Transform buttonParent = button.transform.parent;
+		buttonParent.parent = contactsPopup.contactsListTransform;
+		buttonParent.localScale = new Vector3(1f, 1f, 1f);
 	}
 
 	/// <summary>

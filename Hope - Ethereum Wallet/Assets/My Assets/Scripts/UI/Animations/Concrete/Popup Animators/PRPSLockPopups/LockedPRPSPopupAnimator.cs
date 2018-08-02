@@ -86,6 +86,12 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	/// <param name="index"> The index of the item being animated </param>
 	private void AnimateList(int index)
 	{
+		if (listTransform.childCount == 0)
+		{
+			FinishedAnimating();
+			return;
+		}
+
 		if (index == 6)
 		{
 			for (int i = index; i < listTransform.childCount; i++)

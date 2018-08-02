@@ -129,8 +129,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 
-		if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
-			ValidAddress = false;
+		//if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
+		//	ValidAddress = false;
 
 		SetMainButtonInteractable();
 	}

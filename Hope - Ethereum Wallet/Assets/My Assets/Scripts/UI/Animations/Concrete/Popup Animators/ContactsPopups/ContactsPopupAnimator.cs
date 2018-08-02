@@ -80,7 +80,12 @@ public class ContactsPopupAnimator : UIAnimator
 	/// <param name="index"> The index of the contact in the list being animated </param>
 	private void AnimateContacts(int index)
 	{
-		FinishedAnimating();
+		if (contactsTransform.childCount == 0)
+		{
+			FinishedAnimating();
+			return;
+		}
+
 		if (index == 6)
 		{
 			for (int i = index; i < contactsTransform.childCount; i++)

@@ -54,6 +54,12 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	/// <param name="index"> The token index being animated </param>
 	private void AnimateTokens(int index)
 	{
+		if (tokenTransform.childCount == 0)
+		{
+			FinishedAnimating();
+			return;
+		}
+
 		if (index == 6)
 		{
 			for (int i = index; i < tokenTransform.childCount; i++)

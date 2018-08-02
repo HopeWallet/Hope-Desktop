@@ -39,13 +39,17 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		if (!SecurePlayerPrefs.HasKey("Contacts"))
 			return;
 
-		UnityEngine.Debug.Log(SecurePlayerPrefs.GetInt("Contacts"));
-		for (int i = 0; i < SecurePlayerPrefs.GetInt("Contacts"); i++)
+		Debug.Log(contacts[SecurePlayerPrefs.GetString(PREF_NAME + 1)]);
+
+		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
 			var button = contactButtonFactory.Create();
 			var address = SecurePlayerPrefs.GetString(PREF_NAME + i);
 			button.SetButtonInfo(new ContactInfo(this, SecurePlayerPrefs.GetString(address), address));
-			button.transform.parent.parent = contactsListTransform;
+
+			Transform buttonParent = button.transform.parent;
+			buttonParent.parent = contactsListTransform;
+			buttonParent.localScale = new Vector3(1f, 1f, 1f);
 		}
 	}
 
@@ -68,7 +72,7 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 	private void PopulateContacts()
 	{
-		for (int i = 0; ; i++)
+		for (int i = 1; ; i++)
 		{
 			if (!SecurePlayerPrefs.HasKey(PREF_NAME + i))
 				return;
@@ -82,11 +86,6 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
-	}
-
-	private void EditContact()
-	{
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, contactsPopupAnimator.SelectedContactName, contactsPopupAnimator.SelectedContactAddress);
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetDictionary(contacts);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this);
 	}
 }

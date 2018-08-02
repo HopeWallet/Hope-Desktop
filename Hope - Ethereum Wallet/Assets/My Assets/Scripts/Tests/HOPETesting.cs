@@ -65,19 +65,34 @@ public class HOPETesting : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
-    //private void AnonymousStuff()
-    //{
-    //    var thing = new { Name = "Something", Age = 50 };
-    //    var things = new[] { new { Name = "Something1", Age = 25 }, new { Name = "Something2", Age = 35 } };
+	[ContextMenu("Delete Saved Contacts")]
+	public void DeleteContacts()
+	{
+		SecurePlayerPrefs.DeleteKey("Contacts");
 
-    //    dynamic obj = new ExpandoObject();
-    //    obj.Stuff = new ExpandoObject[20];
-    //    obj.Stuff[0].Something = "wow";
-    //    obj.Name = "MyName";
-    //    obj.Age = 22;
+		for (int i = 1; ; i++)
+		{
+			if (!SecurePlayerPrefs.HasKey("contact_" + i))
+				return;
 
-    //    Debug.Log(obj.Name);
+			SecurePlayerPrefs.DeleteKey(SecurePlayerPrefs.GetString("contact_" + i));
+			SecurePlayerPrefs.DeleteKey("contact_" + i);
+		}
+	}
 
-    //}
+	//private void AnonymousStuff()
+	//{
+	//    var thing = new { Name = "Something", Age = 50 };
+	//    var things = new[] { new { Name = "Something1", Age = 25 }, new { Name = "Something2", Age = 35 } };
+
+	//    dynamic obj = new ExpandoObject();
+	//    obj.Stuff = new ExpandoObject[20];
+	//    obj.Stuff[0].Something = "wow";
+	//    obj.Name = "MyName";
+	//    obj.Age = 22;
+
+	//    Debug.Log(obj.Name);
+
+	//}
 
 }
