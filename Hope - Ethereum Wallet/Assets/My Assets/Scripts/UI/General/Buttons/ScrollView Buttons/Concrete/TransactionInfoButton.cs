@@ -7,7 +7,7 @@ using Zenject;
 /// <summary>
 /// Class which represents the button which holds the transaction info.
 /// </summary>
-public class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
+public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
 
 	public TMP_Text amountText,
@@ -64,7 +64,7 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
         SetAddress(info);
         SetDate(info);
         SetTimeFromNow(info);
-        SetImage(info, tradableAsset);
+        SetImage(tradableAsset);
 		SetDirection(info);
     }
 
@@ -129,9 +129,8 @@ public class TransactionInfoButton : InfoButton<TransactionInfoButton, Transacti
     /// <summary>
     /// Sets the image of this transaction to the asset's image.
     /// </summary>
-    /// <param name="transaction"> The info of this transaction. </param>
     /// <param name="tradableAsset"> The asset to use to set the image. </param>
-    private void SetImage(TransactionInfo transaction, TradableAsset tradableAsset)
+    private void SetImage(TradableAsset tradableAsset)
     {
         tradableAssetImageManager.LoadImage(tradableAsset.AssetSymbol, img => assetImage.sprite = img);
     }

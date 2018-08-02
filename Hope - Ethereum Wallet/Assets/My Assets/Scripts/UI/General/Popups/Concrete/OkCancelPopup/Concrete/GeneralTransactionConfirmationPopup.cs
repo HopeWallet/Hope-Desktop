@@ -12,5 +12,4 @@ public sealed class GeneralTransactionConfirmationPopup : ConfirmTransactionPopu
     /// </summary>
     /// <param name="transactionInput"> The transaction input array containing the string to display. </param>
     protected override void InternalSetConfirmationValues(object[] transactionInput) => transactionText.text = transactionInput[0].ToString();
-
 }

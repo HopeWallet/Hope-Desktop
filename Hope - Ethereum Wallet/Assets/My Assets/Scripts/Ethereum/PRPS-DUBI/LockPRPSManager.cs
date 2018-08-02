@@ -1,8 +1,11 @@
 ﻿using Hope.Utils.EthereumUtils;
+using System;
 using System.Numerics;
 
 public sealed class LockPRPSManager : IPeriodicUpdater
 {
+    public event Action OnAmountsUpdated;
+
     private readonly PRPS prpsContract;
     private readonly DUBI dubiContract;
     private readonly Hodler hodlerContract;
