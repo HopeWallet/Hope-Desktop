@@ -5,7 +5,6 @@
 /// </summary>
 public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPopup>
 {
-
     public TMP_Text lockPeriodText,
                     prpsAmountText,
                     dubiAmountText;
@@ -24,8 +23,7 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     private void SetLockPrpsValues(int lockPeriod, decimal lockAmount)
     {
         lockPeriodText.text = lockPeriod + " Month Lock";
-        prpsAmountText.text = lockAmount.ToString().LimitEnd(20, "...");
-        dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ToString().LimitEnd(20, "...");
+        prpsAmountText.text = lockAmount.ToString().LimitEnd(13, "...");
+        dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ToString().TrimEnd('0', '.').LimitEnd(13, "...");
     }
-
 }

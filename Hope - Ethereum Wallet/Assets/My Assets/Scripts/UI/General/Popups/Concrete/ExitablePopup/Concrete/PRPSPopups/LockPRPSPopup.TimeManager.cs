@@ -63,11 +63,18 @@ public sealed partial class LockPRPSPopup
 
         private void UpdateDUBIReward()
         {
-            if (multiplier < 0.01m || amountManager.AmountToLock <= 0.0000000000000001m)
+            if (multiplier < 0.01m)
                 return;
 
-            dubiRewardText.text = "(" + (amountManager.AmountToLock * multiplier).ToString().LimitEnd(6, "...") + ")";
-            dubiRewardText.gameObject.SetActive(true);
+            if (amountManager.AmountToLock <= 0.0000000000000001m)
+            {
+                dubiRewardText.gameObject.SetActive(false);
+            }
+            else
+            {
+                dubiRewardText.text = "(+" + (amountManager.AmountToLock * multiplier).ToString().LimitEnd(10, "...") + ")";
+                dubiRewardText.gameObject.SetActive(true);
+            }
         }
     }
 }

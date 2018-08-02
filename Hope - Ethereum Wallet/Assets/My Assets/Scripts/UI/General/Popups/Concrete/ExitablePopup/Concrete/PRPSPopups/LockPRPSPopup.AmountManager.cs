@@ -114,6 +114,7 @@ public sealed partial class LockPRPSPopup
         private void CheckIfValidAmount()
         {
             IsValid = AmountToLock <= MaxSendableAmount && AmountToLock >= 0.0000000000000001m;
+            OnLockAmountChanged?.Invoke();
         }
 
         private void BalancesUpdated()

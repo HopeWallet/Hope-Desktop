@@ -42,7 +42,7 @@ public sealed partial class Hodler : StaticSmartContract
                                                              () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
                                                              id,
                                                              SolidityUtils.ConvertToUInt(value, 18),
-                                                             monthsToLock);
+                                                             new BigInteger(monthsToLock));
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 

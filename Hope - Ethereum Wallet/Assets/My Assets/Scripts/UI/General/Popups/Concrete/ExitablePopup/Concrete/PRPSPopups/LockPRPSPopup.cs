@@ -77,6 +77,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
     public override void OkButton()
     {
+        UnityEngine.Debug.Log(timeManager.MonthsToLock + " => " + amountManager.AmountToLock);
         hodlerContract.Hodl(userWalletManager,
                             new HexBigInteger(gasManager.TransactionGasLimit),
                             gasManager.TransactionGasPrice.FunctionalGasPrice,
