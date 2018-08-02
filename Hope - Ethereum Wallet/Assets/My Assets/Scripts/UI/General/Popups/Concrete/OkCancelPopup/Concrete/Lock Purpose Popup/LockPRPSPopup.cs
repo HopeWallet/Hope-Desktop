@@ -6,21 +6,20 @@ using Zenject;
 
 public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable
 {
-    public InfoMessage infoMessage;
+    public Button threeMonthsButton,
+                  sixMonthsButton,
+                  twelveMonthsButton;
 
     public TMP_InputField amountInputField;
     public Slider slider;
-    public Toggle maxToggle;
-
-    public Button lockPRPSButton,
-                  threeMonthsButton,
-                  sixMonthsButton,
-                  twelveMonthsButton;
 
     public TMP_Text transactionFeeText,
                     prpsBalanceText,
                     dubiBalanceText,
                     dubiRewardText;
+
+    public Toggle maxToggle;
+    public InfoMessage infoMessage;
 
     private LockedPRPSManager lockedPRPSManager;
     private EtherBalanceObserver etherBalanceObserver;
@@ -71,7 +70,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
     private void Update()
     {
-        lockPRPSButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && Amount.IsValid && Time.IsValid;
+        okButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && Amount.IsValid && Time.IsValid;
     }
 
     public override void OkButton()

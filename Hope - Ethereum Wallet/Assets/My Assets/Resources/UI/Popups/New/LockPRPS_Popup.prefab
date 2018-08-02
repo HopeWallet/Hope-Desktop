@@ -836,7 +836,7 @@ GameObject:
   - component: {fileID: 223080154014992642}
   - component: {fileID: 114053551743937978}
   - component: {fileID: 114840442334377166}
-  - component: {fileID: 114564454849021084}
+  - component: {fileID: 114205761862148918}
   m_Layer: 5
   m_Name: LockPRPS_Popup
   m_TagString: Untagged
@@ -1537,6 +1537,30 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114205761862148918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1890875510333406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1918fd9386310a8448559809d5d588a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  okButton: {fileID: 114190642194656240}
+  cancelButton: {fileID: 114237503292394762}
+  threeMonthsButton: {fileID: 114720095926320704}
+  sixMonthsButton: {fileID: 114732066562494346}
+  twelveMonthsButton: {fileID: 114032537705720140}
+  amountInputField: {fileID: 114000531705171084}
+  slider: {fileID: 114004171531926536}
+  transactionFeeText: {fileID: 114845755308998654}
+  prpsBalanceText: {fileID: 114220270093468036}
+  dubiBalanceText: {fileID: 114381802767292856}
+  dubiRewardText: {fileID: 114261162030162700}
+  maxToggle: {fileID: 114675470125886244}
+  infoMessage: {fileID: 114515338780119670}
 --- !u!114 &114220270093468036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3034,31 +3058,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114564454849021084
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1890875510333406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f268f7f9502194fbdaa452fc687f1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  okButton: {fileID: 114190642194656240}
-  cancelButton: {fileID: 114237503292394762}
-  infoMessage: {fileID: 114515338780119670}
-  amountInputField: {fileID: 114000531705171084}
-  slider: {fileID: 114004171531926536}
-  maxToggle: {fileID: 114675470125886244}
-  lockPRPSButton: {fileID: 114190642194656240}
-  threeMonthsButton: {fileID: 114720095926320704}
-  sixMonthsButton: {fileID: 114732066562494346}
-  twelveMonthsButton: {fileID: 114032537705720140}
-  transactionFeeText: {fileID: 114845755308998654}
-  prpsBalanceText: {fileID: 114220270093468036}
-  dubiBalanceText: {fileID: 114381802767292856}
-  dubiRewardText: {fileID: 114261162030162700}
 --- !u!114 &114578638491832318
 MonoBehaviour:
   m_ObjectHideFlags: 1
