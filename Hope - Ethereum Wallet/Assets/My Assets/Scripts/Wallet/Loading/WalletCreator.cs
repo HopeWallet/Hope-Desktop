@@ -33,6 +33,7 @@ public sealed class WalletCreator : WalletLoaderBase
     private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
     {
         int walletNum = SecurePlayerPrefs.GetInt("wallet_count") + 1;
+        dynamicDataCache.SetData("walletnum", walletNum);
 
         SecurePlayerPrefs.SetInt("wallet_count", walletNum);
         SecurePlayerPrefs.SetString("derivation_" + walletNum, derivationPath);

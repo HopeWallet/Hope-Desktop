@@ -52,16 +52,16 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
         if (price == null)
             return;
 
-        UpdateObservable<ISlowGasPriceObservable>(ref slowGasPrice, 
-                                                  new GasPrice(new HexBigInteger((price.Value * 2) / 3)), 
+        UpdateObservable<ISlowGasPriceObservable>(ref slowGasPrice,
+                                                  new GasPrice(new HexBigInteger((price.Value * 2) / 3)),
                                                   observable => observable.SlowGasPrice = slowGasPrice);
 
-        UpdateObservable<IStandardGasPriceObservable>(ref standardGasPrice, 
-                                                      new GasPrice(price), 
+        UpdateObservable<IStandardGasPriceObservable>(ref standardGasPrice,
+                                                      new GasPrice(price),
                                                       observable => observable.StandardGasPrice = standardGasPrice);
 
-        UpdateObservable<IFastGasPriceObservable>(ref fastGasPrice, 
-                                                  new GasPrice(new HexBigInteger(price.Value * 2)), 
+        UpdateObservable<IFastGasPriceObservable>(ref fastGasPrice,
+                                                  new GasPrice(new HexBigInteger(price.Value * 2)),
                                                   observable => observable.FastGasPrice = fastGasPrice);
 
         observables.SafeForEach(observable => observable.OnGasPricesUpdated());

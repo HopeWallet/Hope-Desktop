@@ -109,10 +109,10 @@ public sealed class UserWallet : SecureObject
         {
             string encryptedPassword = passwordEncryptor.Encrypt(pass.Value);
             popupManager.GetPopup<T>(true)
-                    .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(Address, encryptedPassword, onTransactionSigned),
-                                           gasLimit,
-                                           gasPrice,
-                                           transactionInput);
+                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(Address, encryptedPassword, onTransactionSigned),
+                                               gasLimit,
+                                               gasPrice,
+                                               transactionInput);
         }
     }
 }
