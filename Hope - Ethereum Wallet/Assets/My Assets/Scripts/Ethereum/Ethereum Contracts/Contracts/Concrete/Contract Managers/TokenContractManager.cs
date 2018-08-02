@@ -60,14 +60,16 @@ public class TokenContractManager
     /// Adds a token to the list of tokens in the ContractManager.
     /// </summary>
     /// <param name="tokenAddress"> The token address of the token to add to the ContractManager. </param>
-    public void AddToken(string tokenAddress)
+    /// <param name="ignorePopup"> Whether the loading popup should be ignored. </param>
+    public void AddToken(string tokenAddress, bool ignorePopup = false)
     {
         var tokenPref = tokenAddress.ToLower();
 
         if (SecurePlayerPrefs.HasKey(tokenPref))
             return;
 
-        popupManager.GetPopup<LoadingPopup>();
+        if (!ignorePopup)
+            popupManager.GetPopup<LoadingPopup>();
 
         InitializeToken(tokenPref, null, (abi, asset) =>
         {
@@ -198,7 +200,7 @@ public class TokenContractManager
     /// <param name="contractAbi"> The abi of the contract. </param>
     /// <param name="onTokenAssetCreated"> Action called once the TokenContract and TokenAsset have finished being created. String param is abi, TradableAsset param is the TokenAsset. </param>
     private void InitializeToken(string contractAddress, string contractAbi, Action<string, TradableAsset> onTokenAssetCreated)
-        => new TokenContract(contractAddress, contractAbi, (contract, abi) 
+        => new TokenContract(contractAddress, contractAbi, (contract, abi)
             => new TokenAsset(contract as TokenContract, asset => onTokenAssetCreated?.Invoke(abi, asset), tradableAssetImageManager, userWalletManager));
 
     /// <summary>

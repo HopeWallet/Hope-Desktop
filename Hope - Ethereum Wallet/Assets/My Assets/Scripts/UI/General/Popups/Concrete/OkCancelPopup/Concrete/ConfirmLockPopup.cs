@@ -46,6 +46,6 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     protected override void OnOkClicked()
     {
         if (!tradableAssetManager.TradableAssets.Any(pair => pair.Value.AssetAddress.EqualsIgnoreCase(dubiContract.ContractAddress)))
-            tokenContractManager.AddToken(dubiContract.ContractAddress);
+            tokenContractManager.AddToken(dubiContract.ContractAddress, true);
     }
 }

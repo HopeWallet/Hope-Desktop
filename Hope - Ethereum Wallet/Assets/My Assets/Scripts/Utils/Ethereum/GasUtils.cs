@@ -131,7 +131,7 @@ namespace Hope.Utils.EthereumUtils
             var request = new EthEstimateGasUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(transactionInput);
 
-            request.CheckTransactionResult(() => onGasReceived((request.Result.Value * 100) / 95));
+            request.CheckTransactionResult(() => onGasReceived((request.Result.Value * 100) / 90));
         }
 
         /// <summary>
