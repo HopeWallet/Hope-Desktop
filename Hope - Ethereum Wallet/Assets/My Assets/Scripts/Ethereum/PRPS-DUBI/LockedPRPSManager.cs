@@ -24,6 +24,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     public List<Hodler.Output.Item> UnlockableItems => lockedItems.Where(item => item.Unlockable)?.ToList();
 
+    public List<BigInteger> UsedIds { get; } = new List<BigInteger>();
+
     public LockedPRPSManager(
         UserWalletManager userWalletManager,
         Hodler hodlerContract,
@@ -97,6 +99,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
             UpdateItemInfo(item, lockedTimeStamp);
             lockedItems.Add(item);
             lockedItems.Sort((i1, i2) => i1.LockedTimeStamp.CompareTo(i2.LockedTimeStamp));
+            UsedIds.Add(item.Id);
         }
         else
         {

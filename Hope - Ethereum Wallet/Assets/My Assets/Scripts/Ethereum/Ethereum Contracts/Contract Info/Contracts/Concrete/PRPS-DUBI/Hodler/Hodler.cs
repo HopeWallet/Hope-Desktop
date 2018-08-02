@@ -33,7 +33,7 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="monthsToLock"> How many months the purpose should be locked for. </param>
     public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
-        userWalletManager.SignTransaction<ConfirmPRPSLockPopup>(request =>
+        userWalletManager.SignTransaction<ConfirmLockPopup>(request =>
         {
             ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
                                                              request,

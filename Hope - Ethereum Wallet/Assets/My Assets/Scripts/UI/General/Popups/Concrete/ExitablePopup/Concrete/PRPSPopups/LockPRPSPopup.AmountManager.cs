@@ -1,9 +1,12 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 
 public sealed partial class LockPRPSPopup
 {
     public sealed class AmountManager
     {
+        public event Action OnLockAmountChanged;
+
         private readonly LockPRPSManager lockPRPSManager;
 
         private readonly Toggle maxToggle;
@@ -28,7 +31,7 @@ public sealed partial class LockPRPSPopup
         /// <summary>
         /// The amount that will be sent.
         /// </summary>
-        public decimal LockableAmount { get; private set; }
+        public decimal AmountToLock { get; private set; }
 
         /// <summary>
         /// The max sendable amount given the current asset balance.
@@ -60,8 +63,10 @@ public sealed partial class LockPRPSPopup
 
             lockPRPSManager.OnAmountsUpdated += BalancesUpdated;
 
-            //maxToggle.AddToggleListener(MaxChanged);
+            maxToggle.AddToggleListener(MaxChanged);
             amountInputField.onValueChanged.AddListener(AmountFieldChanged);
+
+            BalancesUpdated();
         }
 
         public void Stop()
@@ -74,10 +79,10 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         private void MaxChanged()
         {
-            LockableAmount = maxToggle.IsToggledOn ? MaxSendableAmount : LockableAmount;
+            AmountToLock = maxToggle.IsToggledOn ? MaxSendableAmount : AmountToLock;
 
-            amountPlaceholderText.text = maxToggle.IsToggledOn ? LockableAmount.ToString() + " (Max)" : "Enter amount...";
-            amountInputField.text = string.IsNullOrEmpty(amountInputField.text) && !maxToggle.IsToggledOn ? "" : LockableAmount.ToString();
+            amountPlaceholderText.text = maxToggle.IsToggledOn ? AmountToLock.ToString() + " (Max)" : "Enter amount...";
+            amountInputField.text = string.IsNullOrEmpty(amountInputField.text) && !maxToggle.IsToggledOn ? "" : AmountToLock.ToString();
 
             amountInputField.textComponent.enabled = !maxToggle.IsToggledOn;
             amountPlaceholderText.enabled = string.IsNullOrEmpty(amountInputField.text) || maxToggle.IsToggledOn;
@@ -98,7 +103,7 @@ public sealed partial class LockPRPSPopup
             decimal newLockableAmount;
             decimal.TryParse(amountInputField.text, out newLockableAmount);
 
-            LockableAmount = newLockableAmount;
+            AmountToLock = newLockableAmount;
 
             CheckIfValidAmount();
         }
@@ -108,13 +113,13 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         private void CheckIfValidAmount()
         {
-            IsValid = LockableAmount <= MaxSendableAmount && LockableAmount > 0;
+            IsValid = AmountToLock <= MaxSendableAmount && AmountToLock >= 0.0000000000000001m;
         }
 
         private void BalancesUpdated()
         {
-            prpsBalanceText.text = lockPRPSManager.PRPSBalance.ToString();
-            dubiBalanceText.text = lockPRPSManager.DUBIBalance.ToString();
+            prpsBalanceText.text = StringUtils.LimitEnd(lockPRPSManager.PRPSBalance.ToString(), 10, "...");
+            dubiBalanceText.text = StringUtils.LimitEnd(lockPRPSManager.DUBIBalance.ToString(), 10, "...");
         }
     }
 }
