@@ -34,14 +34,6 @@ public sealed class UserWalletManager
     }
 
     /// <summary>
-    /// Wrapper method for getting a specific asset balance of the user's ethereum wallet.
-    /// </summary>
-    /// <param name="tradableAsset"> The asset to check the balance of. </param>
-    /// <param name="onBalanceReceived"> Called when the balnace has been received. </param>
-    public void GetAssetBalance(TradableAsset tradableAsset, Action<dynamic> onBalanceReceived)
-        => tradableAsset.GetBalance(userWallet, onBalanceReceived);
-
-    /// <summary>
     /// Wrapper method for transferring a specified asset from the user's wallet to another ethereum address.
     /// </summary>
     /// <param name="tradableAsset"> The asset to transfer from the user's wallet. </param>
@@ -50,7 +42,7 @@ public sealed class UserWalletManager
     /// <param name="address"> The address to transfer the asset to. </param>
     /// <param name="amount"> The amount of the specified asset to send. </param>
     public void TransferAsset(TradableAsset tradableAsset, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, dynamic amount)
-        => tradableAsset.Transfer(userWallet, gasLimit, gasPrice, address, amount);
+        => tradableAsset.Transfer(this, gasLimit, gasPrice, address, amount);
 
     /// <summary>
     /// Signs a transaction using the main UserWallet.
@@ -60,13 +52,14 @@ public sealed class UserWalletManager
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
     /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    [SecureCallEnd]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit,
         HexBigInteger gasPrice,
         params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
-        userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, transactionInput);
+        userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, transactionInput);
     }
 
     public void SwitchWallet(int walletNumber, int accountNumber)

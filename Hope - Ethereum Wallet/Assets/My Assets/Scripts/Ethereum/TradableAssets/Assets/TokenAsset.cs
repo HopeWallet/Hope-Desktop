@@ -35,20 +35,20 @@ public class TokenAsset : TradableAsset
     /// <summary>
     /// Gets the balance of this token of a specified UserWallet.
     /// </summary>
-    /// <param name="userWallet"> The wallet to get the balance for. </param>
+    /// <param name="userWalletManager"> The wallet to get the balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the balance as a parameter. </param>
-    public override void GetBalance(UserWallet userWallet, Action<dynamic> onBalanceReceived) => TokenContract.BalanceOf(userWallet.Address, onBalanceReceived);
+    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => TokenContract.BalanceOf(userWalletManager.WalletAddress, onBalanceReceived);
 
     /// <summary>
     /// Transfers a specified amount of this token from a wallet to another ethereum address.
     /// </summary>
-    /// <param name="userWallet"> The wallet to transfer tokens from. </param>
+    /// <param name="userWalletManager"> The wallet to transfer tokens from. </param>
     /// <param name="gasLimit"> The gas limit to use for sending the token asset. </param>
     /// <param name="gasPrice"> The gas price to use for sending the token asset. </param>
     /// <param name="address"> The address to transfer the tokens to. </param>
     /// <param name="amount"> The amount of tokens to transfer. </param>
-    public override void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount) 
-        => TokenContract.Transfer(userWallet, gasLimit, gasPrice, address, amount);
+    public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount) 
+        => TokenContract.Transfer(userWalletManager, gasLimit, gasPrice, address, amount);
 
     /// <summary>
     /// Gets the gas limit for the transfer of this token from the user's address to another address.

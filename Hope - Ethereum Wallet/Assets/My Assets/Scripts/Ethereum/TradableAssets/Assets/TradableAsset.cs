@@ -16,22 +16,22 @@ public abstract class TradableAsset
     /// <summary>
     /// The ethereum address of this asset. Using address(0) for ether.
     /// </summary>
-    public string AssetAddress { get; private set; }
+    public string AssetAddress { get; }
 
     /// <summary>
     /// The symbol of this asset.
     /// </summary>
-    public string AssetSymbol { get; private set; }
+    public string AssetSymbol { get; }
 
     /// <summary>
     /// The name of this asset.
     /// </summary>
-    public string AssetName { get; private set; }
+    public string AssetName { get; }
 
     /// <summary>
     /// The number of decimal places for this asset.
     /// </summary>
-    public int AssetDecimals { get; private set; }
+    public int AssetDecimals { get; }
 
     /// <summary>
     /// The balance of this asset type existing in the user's wallet.
@@ -74,10 +74,11 @@ public abstract class TradableAsset
     /// <param name="onBalanceReceived"> Called when the balance has successfully been retrieved. </param>
     public void UpdateBalance(Action onBalanceReceived = null)
     {
-        userWalletManager.GetAssetBalance(this, balance =>
+        GetBalance(userWalletManager, balance =>
         {
             if (balance != AssetBalance)
                 OnAssetBalanceChanged?.Invoke(balance);
+
             AssetBalance = balance;
             onBalanceReceived?.Invoke();
         });
@@ -105,19 +106,19 @@ public abstract class TradableAsset
     /// <summary>
     /// Gets the balance of this asset currently in a UserWallet.
     /// </summary>
-    /// <param name="userWallet"> The walletto get the balance for. </param>
+    /// <param name="userWalletManager"> The wallet to get the balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balnce has been received, with the amount as a param. </param>
-    public abstract void GetBalance(UserWallet userWallet, Action<dynamic> onBalanceReceived);
+    public abstract void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived);
 
     /// <summary>
     /// Transfers a certain number of this asset from a UserWallet to a specified ethereum address.
     /// </summary>
-    /// <param name="userWallet"> The UserWallet to transfer the asset from. </param>
+    /// <param name="userWalletManager"> The wallet to transfer the asset from. </param>
     /// <param name="gasLimit"> The gas limit to use for this transfer transaction. </param>
     /// <param name="gasPrice"> The gas price to use for this transfer transaction. </param>
     /// <param name="address"> The address to send the asset to. </param>
     /// <param name="amount"> The amount of this asset to send to the address. </param>
-    public abstract void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount);
+    public abstract void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount);
 
     /// <summary>
     /// Gets the gas limit of transferring this asset from the user's address to another.

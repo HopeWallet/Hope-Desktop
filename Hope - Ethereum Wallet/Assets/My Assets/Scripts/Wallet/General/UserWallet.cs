@@ -23,8 +23,6 @@ public sealed class UserWallet : SecureObject
 
     private string[] addresses;
 
-    public string Address { get; private set; }
-
     /// <summary>
     /// Initializes the UserWallet with the PlayerPrefPassword object.
     /// </summary>
@@ -89,20 +87,22 @@ public sealed class UserWallet : SecureObject
     /// <param name="onTransactionSigned"> The action to call if the transaction is confirmed and signed. </param>
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
+    /// <param name="signerAddress"> The address of the wallet signing the transaction. </param>
     /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
-    [SecureCallEnd]
+    [SecureCaller]
     [ReflectionProtect]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         HexBigInteger gasLimit,
         HexBigInteger gasPrice,
+        string signerAddress,
         params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
         using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
         {
             string encryptedPassword = passwordEncryptor.Encrypt(pass.Value);
             popupManager.GetPopup<T>(true)
-                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(Address, encryptedPassword, onTransactionSigned),
+                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(signerAddress, encryptedPassword, onTransactionSigned),
                                                gasLimit,
                                                gasPrice,
                                                transactionInput);

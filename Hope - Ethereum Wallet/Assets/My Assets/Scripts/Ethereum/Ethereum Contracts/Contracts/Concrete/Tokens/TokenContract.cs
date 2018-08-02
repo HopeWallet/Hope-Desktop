@@ -67,14 +67,14 @@ public class TokenContract : ContractBase
     /// <summary>
     /// Transfers a certain number of tokens of this contract from a wallet to another address.
     /// </summary>
-    /// <param name="userWallet"> The wallet to transfer the tokens from. </param>
+    /// <param name="userWalletManager"> The wallet to transfer the tokens from. </param>
     /// <param name="gasLimit"> The gas limit to use when sending the tokens. </param>
     /// <param name="gasPrice"> The gas price to use when sending the tokens. </param>
     /// <param name="address"> The address to transfer the tokens to. </param>
     /// <param name="amount"> The amount of tokens to transfer. </param>
-    public void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
+    public void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransaction<ConfirmTransactionPopup>(request =>
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request =>
         {
             ContractUtils.SendContractMessage<ERC20.Messages.Transfer>(ContractAddress,
                                                                         request,

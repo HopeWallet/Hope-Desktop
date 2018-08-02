@@ -28,21 +28,21 @@ public class EtherAsset : TradableAsset
     /// <summary>
     /// Gets the ether balance of a UserWallet using the WalletExtensions method for getting ether balances.
     /// </summary>
-    /// <param name="userWallet"> The UserWallet to get the current amount of ether for. </param>
+    /// <param name="userWalletManager"> The wallet to get the current amount of ether for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the amount as a parameter. </param>
-    public override void GetBalance(UserWallet userWallet, Action<dynamic> onBalanceReceived) => WalletUtils.GetEthBalance(userWallet, onBalanceReceived);
+    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => WalletUtils.GetEthBalance(userWalletManager, onBalanceReceived);
 
     /// <summary>
     /// Transfers a specified amount of ether from the input UserWallet to a specified address.
     /// </summary>
-    /// <param name="userWallet"> The UserWallet to send the ether from. </param>
+    /// <param name="userWalletManager"> The wallet to send the ether from. </param>
     /// <param name="gasLimit"> The gas limit to use for this ether send transaction. </param>
     /// <param name="gasPrice"> The gas price to use for this ether send transaction. </param>
     /// <param name="address"> The address to send the ether to. </param>
     /// <param name="amount"> The amount of ether to send. </param>
-    public override void Transfer(UserWallet userWallet, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
+    public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWallet.SignTransaction<ConfirmTransactionPopup>(request => WalletUtils.SendEther(request, userWallet.Address, gasLimit, gasPrice, address, amount),
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request => WalletUtils.SendEther(request, userWalletManager.WalletAddress, gasLimit, gasPrice, address, amount),
                                                           gasLimit,
                                                           gasPrice,
                                                           address,

@@ -51,12 +51,15 @@ namespace Hope.Utils.EthereumUtils
 		/// <returns> The array of individual words. </returns>
 		public static string[] GetMnemonicWords(string str) => str.Trim().Split(' ', '\t', '\n');
 
-		/// <summary>
-		/// Gets the amount of ether in a user's wallet.
-		/// </summary>
-		/// <param name="wallet"> The wallet to check for the ether amount. </param>
-		/// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
-		public static void GetEthBalance(UserWallet wallet, Action<dynamic> onBalanceReceived) => _AddressEthBalanceCoroutine(wallet.Address, onBalanceReceived).StartCoroutine();
+        /// <summary>
+        /// Gets the amount of ether in a user's wallet.
+        /// </summary>
+        /// <param name="wallet"> The wallet to check for the ether amount. </param>
+        /// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
+        public static void GetEthBalance(UserWalletManager wallet, Action<dynamic> onBalanceReceived)
+        {
+            _AddressEthBalanceCoroutine(wallet.WalletAddress, onBalanceReceived).StartCoroutine();
+        }
 
         /// <summary>
         /// Sends ether from this wallet to a given address.
