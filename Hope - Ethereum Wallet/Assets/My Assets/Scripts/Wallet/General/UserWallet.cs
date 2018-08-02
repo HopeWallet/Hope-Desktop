@@ -21,7 +21,7 @@ public sealed class UserWallet : SecureObject
     private readonly WalletUnlocker walletUnlocker;
     private readonly WalletTransactionSigner walletTransactionSigner;
 
-    private ProtectedString[] addresses;
+    private string[] addresses;
 
     public string Address { get; private set; }
 
@@ -72,21 +72,14 @@ public sealed class UserWallet : SecureObject
     [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
     {
-        walletLoader.Load(out addresses, OnWalletLoadSuccessful, () => Address = GetAddress(0));
+        walletLoader.Load(out addresses, OnWalletLoadSuccessful);
     }
 
     [SecureCallEnd]
     [ReflectionProtect(typeof(string))]
     public string GetAddress(int addressIndex)
     {
-        if (addresses?.Length == 0)
-        {
-            ExceptionManager.DisplayException(new Exception("Wallet not created/unlocked yet!"));
-            return null;
-        }
-
-        using (var address = addresses[addressIndex].CreateDisposableData())
-            return address.Value;
+        return addresses[addressIndex];
     }
 
     /// <summary>

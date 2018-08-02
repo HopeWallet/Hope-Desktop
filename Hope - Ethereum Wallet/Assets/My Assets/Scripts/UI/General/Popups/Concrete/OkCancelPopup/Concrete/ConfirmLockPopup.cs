@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System.Linq;
+using TMPro;
+using Zenject;
 
 /// <summary>
 /// Class used for displaying the confirmation to lock purpose.
@@ -9,6 +11,18 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
                     prpsAmountText,
                     dubiAmountText,
                     noteText;
+
+    private TradableAssetManager tradableAssetManager;
+    private TokenContractManager tokenContractManager;
+    private DUBI dubiContract;
+
+    [Inject]
+    public void Construct(TradableAssetManager tradableAssetManager, TokenContractManager tokenContractManager, DUBI dubiContract)
+    {
+        this.tradableAssetManager = tradableAssetManager;
+        this.tokenContractManager = tokenContractManager;
+        this.dubiContract = dubiContract;
+    }
 
     /// <summary>
     /// Passes the amount of purpose being locked through to display.
@@ -27,5 +41,11 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
         prpsAmountText.text = lockAmount.ConvertDecimalToString().LimitEnd(13, "...");
         dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ConvertDecimalToString().LimitEnd(13, "...");
         noteText.text = "You will be able to release your locked purpose after " + lockPeriod + " months have passed.";
+    }
+
+    protected override void OnOkClicked()
+    {
+        if (!tradableAssetManager.TradableAssets.Any(pair => pair.Value.AssetAddress.EqualsIgnoreCase(dubiContract.ContractAddress)))
+            tokenContractManager.AddToken(dubiContract.ContractAddress);
     }
 }

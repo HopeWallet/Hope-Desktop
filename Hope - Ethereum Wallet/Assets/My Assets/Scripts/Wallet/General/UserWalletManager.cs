@@ -14,7 +14,7 @@ public sealed class UserWalletManager
     /// <summary>
     /// The address of the main UserWallet.
     /// </summary>
-    public string WalletAddress => userWallet.Address;
+    public string WalletAddress => userWallet.GetAddress(accountNumber);
 
     /// <summary>
     /// Initializes the UserWallet given the settings to apply.

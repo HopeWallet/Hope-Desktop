@@ -72,7 +72,7 @@ public sealed class WalletCreator : WalletLoaderBase
             {
                 derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
                 var wallet = new Wallet(mnemonic.Value, null, derivationPath);
-                AsyncTaskScheduler.Schedule(() => GetAddresses(wallet));
+                GetAddresses(wallet);
                 walletEncryptor.EncryptWallet(wallet.Seed, basePass, SetWalletPlayerPrefs);
             }
             catch (Exception e)

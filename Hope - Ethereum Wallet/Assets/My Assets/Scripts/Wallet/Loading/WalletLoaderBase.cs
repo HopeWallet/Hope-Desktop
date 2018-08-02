@@ -12,7 +12,7 @@ public abstract class WalletLoaderBase : SecureObject
 
     protected Action onWalletLoaded;
 
-    protected ProtectedString[] addresses;
+    protected string[] addresses;
 
     protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, DynamicDataCache dynamicDataCache)
     {
@@ -22,38 +22,36 @@ public abstract class WalletLoaderBase : SecureObject
     }
 
     [SecureCaller]
-    public void Load(out ProtectedString[] addresses, Action onWalletLoaded, Action setupAddressAction)
+    public void Load(out string[] addresses, Action onWalletLoaded)
     {
         SetupAddresses(out addresses);
-        SetupLoadActions(onWalletLoaded, setupAddressAction);
+        SetupLoadActions(onWalletLoaded);
         SetupPopup();
 
         using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
             LoadWallet(pass.Value);
     }
 
-    private void SetupLoadActions(Action onWalletLoaded, Action setupAddressAction)
+    private void SetupLoadActions(Action onWalletLoaded)
     {
         this.onWalletLoaded = () =>
         {
             popupManager.CloseAllPopups();
-            setupAddressAction?.Invoke();
             onWalletLoaded?.Invoke();
 
             GC.Collect(); // Collect any remnants of important data
         };
     }
 
-    private void SetupAddresses(out ProtectedString[] addresses)
+    private void SetupAddresses(out string[] addresses)
     {
-        addresses = new ProtectedString[50];
+        addresses = new string[50];
         this.addresses = addresses;
     }
 
-    protected async Task GetAddresses(Wallet wallet)
+    protected void GetAddresses(Wallet wallet)
     {
-        var addressesToCopy = await Task.Run(() => wallet.GetAddresses(50).Select(str => new ProtectedString(str)).ToArray()).ConfigureAwait(false);
-        Array.Copy(addressesToCopy, addresses, addresses.Length);
+        Array.Copy(wallet.GetAddresses(50), addresses, addresses.Length);
     }
 
     protected abstract void SetupPopup();

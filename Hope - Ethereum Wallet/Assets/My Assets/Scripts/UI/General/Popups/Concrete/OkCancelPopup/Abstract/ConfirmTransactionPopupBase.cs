@@ -41,5 +41,6 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
     {
         onConfirmPressed?.Invoke();
         popupManager.CloseAllPopups();
+        OnOkClicked();
     }
 }

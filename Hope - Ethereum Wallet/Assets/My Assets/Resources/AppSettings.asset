@@ -29,7 +29,7 @@ MonoBehaviour:
   tokenContractSettings:
     tokenPrefName: Token_
   ethereumNetworkSettings:
-    networkType: 0
+    networkType: 1
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
