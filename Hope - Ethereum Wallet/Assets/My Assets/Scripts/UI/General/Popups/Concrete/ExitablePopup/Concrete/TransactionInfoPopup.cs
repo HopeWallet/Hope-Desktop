@@ -1,7 +1,6 @@
 ﻿using Hope.Utils.EthereumUtils;
 using Nethereum.Util;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -10,7 +9,6 @@ using Zenject;
 /// </summary>
 public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 {
-
 	public TMP_InputField transactionHash,
 						  fromAddress,
 						  toAddress;
@@ -68,12 +66,12 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         transactionHash.text = transactionInfo.TxHash;
-        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals), 23, "...");
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 23, "...");
         fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).ToString();
         gasUsedText.text = transactionInfo.GasUsed.ToString();
-        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
+        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + " Ether";
 
         TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
         {
@@ -81,22 +79,4 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
             gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }
-
-    /// <summary>
-    /// Switches the detailed transaction info to active or inactive.
-    /// </summary>
-    /// <param name="active"> The new state of the detailed transaction options. </param>
-    private void SwitchDetailedOptions(bool active)
-    {
-        if (transactionInfo.GasUsed > 0)
-        {
-            gasUsedText.transform.parent.gameObject.SetActive(active);
-            txCostText.transform.parent.gameObject.SetActive(active);
-        }
-
-        gasLimitText.transform.parent.gameObject.SetActive(active);
-        gasPriceText.transform.parent.gameObject.SetActive(active);
-        (transform as RectTransform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, active ? 300f : 225f);
-    }
-
 }
