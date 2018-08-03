@@ -21,7 +21,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private bool validName;
 	private bool validAddress;
 
-    public string PreviousName { get; set; }
+    public string PreviousAddress { get; set; }
 
     public bool AddingContact { get; set; }
 
@@ -125,12 +125,10 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedAddress = addressInputField.text;
 
-		//Check if address has been used already somewhere in the contacts
+		//Check that if editing a contact, address does not equal to another address from another contact, with exception of the PreviousAddress, which is allowed
+		//If adding a contact, check that the address does not queal to any other address from a contact
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) || (AddressUtils.IsValidEthereumAddress(updatedAddress) && !SecurePlayerPrefs.HasKey(updatedAddress));
-
-		//if ( && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
-		//	ValidAddress = false;
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) || (AddressUtils.IsValidEthereumAddress(updatedAddress) && (!SecurePlayerPrefs.HasKey(updatedAddress) ? true : !AddingContact));
 
 		SetMainButtonInteractable();
 	}

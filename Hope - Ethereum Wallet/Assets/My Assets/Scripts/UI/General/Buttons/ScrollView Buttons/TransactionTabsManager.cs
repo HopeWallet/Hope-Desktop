@@ -39,8 +39,6 @@ public class TransactionTabsManager : MonoBehaviour
 	{
 		transactionTabs[tab].interactable = !activeTab;
 		buttonTextElements[tab].color = activeTab ? ACTIVE_TAB_COLOR : INACTIVE_TAB_COLOR;
-		transactionTabs[tab].transform.localScale = new Vector2(transactionTabs[tab].transform.localScale.x, activeTab ? 1.2f : 1f);
-		buttonTextElements[tab].transform.localScale = new Vector2(buttonTextElements[tab].transform.localScale.x, activeTab ? 0.835f : 1f);
 	}
 
 	public enum TabType { All, Sent, Received, Pending };

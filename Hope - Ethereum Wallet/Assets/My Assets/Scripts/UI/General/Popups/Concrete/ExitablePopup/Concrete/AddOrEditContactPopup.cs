@@ -107,7 +107,7 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	{
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
 		addOrEditContactPopupAnimator.AddingContact = addingContact;
-		addOrEditContactPopupAnimator.PreviousName = name;
+		addOrEditContactPopupAnimator.PreviousAddress = address;
 
 		if (!addingContact)
 		{
