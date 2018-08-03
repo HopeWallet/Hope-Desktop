@@ -127,9 +127,9 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		//Check if address has been used already somewhere in the contacts
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
+		ValidAddress = string.IsNullOrEmpty(updatedAddress) || (AddressUtils.IsValidEthereumAddress(updatedAddress) && !SecurePlayerPrefs.HasKey(updatedAddress));
 
-		//if (SecurePlayerPrefs.HasKey(updatedAddress) && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
+		//if ( && SecurePlayerPrefs.GetString(updatedAddress) != PreviousName)
 		//	ValidAddress = false;
 
 		SetMainButtonInteractable();

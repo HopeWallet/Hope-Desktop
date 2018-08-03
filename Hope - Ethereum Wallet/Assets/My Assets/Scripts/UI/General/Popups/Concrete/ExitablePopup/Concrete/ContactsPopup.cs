@@ -30,8 +30,10 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 
-		if (!SecurePlayerPrefs.HasKey("Contacts"))
+		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
 			return;
+
+		DebugAllContactsData();
 
 		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
@@ -67,5 +69,50 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this);
+	}
+
+	private void DebugAllContactsData()
+	{
+		Debug.Log("Number of contacts: " + SecurePlayerPrefs.GetInt("Contacts"));
+
+		try
+		{
+			Debug.Log("SPP Contact 1: " + SecurePlayerPrefs.GetString(SecurePlayerPrefs.GetString("contact_" + 1)) + ", " + SecurePlayerPrefs.GetString("contact_" + 1));
+		}
+
+		catch
+		{
+			Debug.Log("Can't find SPP contact 1");
+		}
+
+		try
+		{
+			Debug.Log("Dictionary Contact 1 Name: " + contactsManager.Contacts[SecurePlayerPrefs.GetString("contact_" + 1)]);
+		}
+
+		catch
+		{
+			Debug.Log("Can't find dictionary contact 1");
+		}
+
+		try
+		{
+			Debug.Log("SPP Contact 2: " + SecurePlayerPrefs.GetString(SecurePlayerPrefs.GetString("contact_" + 2)) + ", " + SecurePlayerPrefs.GetString("contact_" + 2));
+		}
+
+		catch
+		{
+			Debug.Log("Can't find SPP contact 2");
+		}
+
+		try
+		{
+			Debug.Log("Dictionary Contact 2 Name: " + contactsManager.Contacts[SecurePlayerPrefs.GetString("contact_" + 2)]);
+		}
+
+		catch
+		{
+			Debug.Log("Can't find dictionary contact 2");
+		}
 	}
 }

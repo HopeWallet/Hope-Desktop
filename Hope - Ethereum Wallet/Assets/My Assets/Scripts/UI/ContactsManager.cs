@@ -21,7 +21,10 @@ public sealed class ContactsManager
 
 	private void SetContacts()
 	{
-		for (int i = 1; i < SecurePlayerPrefs.GetInt("Contacts"); i++)
+		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
+			return;
+
+		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
 			string address = SecurePlayerPrefs.GetString("contact_" + i);
 			Contacts.Add(address, SecurePlayerPrefs.GetString(address));

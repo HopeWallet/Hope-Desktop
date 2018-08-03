@@ -2320,7 +2320,6 @@ MonoBehaviour:
   amountField: {fileID: 114184388491262814}
   gasLimitField: {fileID: 114223424530932108}
   gasPriceField: {fileID: 114084049358666468}
-  contactName: {fileID: 0}
   assetBalance: {fileID: 114821952128224854}
   assetSymbol: {fileID: 114972956831463810}
   transactionFee: {fileID: 114446133645063434}

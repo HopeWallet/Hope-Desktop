@@ -68,16 +68,13 @@ public class HOPETesting : MonoBehaviour
 	[ContextMenu("Delete Saved Contacts")]
 	public void DeleteContacts()
 	{
-		SecurePlayerPrefs.DeleteKey("Contacts");
-
-		for (int i = 1; ; i++)
+		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
-			if (!SecurePlayerPrefs.HasKey("contact_" + i))
-				return;
-
 			SecurePlayerPrefs.DeleteKey(SecurePlayerPrefs.GetString("contact_" + i));
 			SecurePlayerPrefs.DeleteKey("contact_" + i);
 		}
+
+		SecurePlayerPrefs.DeleteKey("Contacts");
 	}
 
 	//private void AnonymousStuff()

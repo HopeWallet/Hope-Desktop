@@ -17,18 +17,21 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 
 	protected override void OnOkClicked()
 	{
-		string address = contactAddress.text;
+		string addressInObject = contactAddress.text;
 
 		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
-			if (SecurePlayerPrefs.GetString("contact_" + i) == address)
+			string currentAddressInLoop = SecurePlayerPrefs.GetString("contact_" + i);
+
+			if (currentAddressInLoop == addressInObject)
 			{
+				SecurePlayerPrefs.DeleteKey(currentAddressInLoop);
 				SecurePlayerPrefs.DeleteKey("contact_" + i);
 				break;
 			}
 		}
 
-		contactsManager.Contacts.Remove(address);
+		contactsManager.Contacts.Remove(addressInObject);
 		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
 
 		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
