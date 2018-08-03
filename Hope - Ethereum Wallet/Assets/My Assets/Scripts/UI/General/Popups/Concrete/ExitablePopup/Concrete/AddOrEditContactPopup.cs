@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
+public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
 
 	private string previousName, previousAddress;
 	public Button addContactButton, confirmButton;
 	public TMP_InputField nameInputField, addressInputField;
 	public TextMeshProUGUI title;
+
+	public InfoMessage nameError, addressError;
 
 	private AddOrEditContactPopupAnimator addOrEditContactPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
@@ -25,6 +25,9 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	{
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
+
+		nameError.PopupManager = popupManager;
+		addressError.PopupManager = popupManager;
 	}
 
 	[Inject]
@@ -119,4 +122,6 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 		addressInputField.text = address;
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
+
+	public void SetAddressErrorBodyText(string bodyText) => addressError.bodyText = bodyText;
 }

@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using TMPro;
 
-public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
+public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;

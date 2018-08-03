@@ -15,6 +15,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	[SerializeField] private GameObject addContactButton;
 	[SerializeField] private GameObject confirmButton;
 
+	private AddOrEditContactPopup addOrEditContactPopup;
+
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
 
@@ -48,6 +50,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// </summary>
 	private void Awake()
 	{
+		addOrEditContactPopup = transform.GetComponent<AddOrEditContactPopup>();
+
 		nameInputField = nameSection.transform.GetChild(2).GetComponent<TMP_InputField>();
 		addressInputField = addressSection.transform.GetChild(2).GetComponent<TMP_InputField>();
 
@@ -125,10 +129,16 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedAddress = addressInputField.text;
 
-		//Check that if editing a contact, address does not equal to another address from another contact, with exception of the PreviousAddress, which is allowed
-		//If adding a contact, check that the address does not queal to any other address from a contact
+		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
+		bool notOverridingOtherContactAddresses = !SecurePlayerPrefs.HasKey(updatedAddress) ? true : !AddingContact && updatedAddress == PreviousAddress;
 
-		ValidAddress = string.IsNullOrEmpty(updatedAddress) || (AddressUtils.IsValidEthereumAddress(updatedAddress) && (!SecurePlayerPrefs.HasKey(updatedAddress) ? true : !AddingContact));
+		ValidAddress = realEthereumAddress && notOverridingOtherContactAddresses;
+
+		if (!realEthereumAddress)
+			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address");
+
+		else if (!notOverridingOtherContactAddresses)
+			addOrEditContactPopup.SetAddressErrorBodyText("The address has been used under another saved contact");
 
 		SetMainButtonInteractable();
 	}

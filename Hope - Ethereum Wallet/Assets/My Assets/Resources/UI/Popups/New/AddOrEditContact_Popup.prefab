@@ -103,8 +103,9 @@ GameObject:
   - component: {fileID: 224192563345970176}
   - component: {fileID: 222579223052126904}
   - component: {fileID: 114896976506753332}
+  - component: {fileID: 114106875403721796}
   m_Layer: 5
-  m_Name: Error_Icon
+  m_Name: NameError_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,8 +308,9 @@ GameObject:
   - component: {fileID: 224546365231704352}
   - component: {fileID: 222223634619336488}
   - component: {fileID: 114542522999934596}
+  - component: {fileID: 114922210922958858}
   m_Layer: 5
-  m_Name: Error_Icon
+  m_Name: AddressError_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,8 +464,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 224257815557137726}
   - {fileID: 224473535863323524}
+  - {fileID: 224257815557137726}
   - {fileID: 224382676344673686}
   - {fileID: 224778693463447968}
   - {fileID: 4982178436045820}
@@ -707,6 +709,20 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 0
   m_isRichTextEditingAllowed: 1
   m_InputValidator: {fileID: 0}
+--- !u!114 &114106875403721796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158080064340712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleText: Name Error
+  bodyText: The inputted text is not a compatible contact name
+  infoIcon: 0
 --- !u!114 &114167195124459894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1927,6 +1943,8 @@ MonoBehaviour:
   nameInputField: {fileID: 114167195124459894}
   addressInputField: {fileID: 114027303664004928}
   title: {fileID: 114009938055225034}
+  nameError: {fileID: 114106875403721796}
+  addressError: {fileID: 114922210922958858}
 --- !u!114 &114896976506753332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1992,6 +2010,21 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114922210922958858
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1603139053435624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleText: Address Error
+  bodyText: The inputted text is not a valid ethereum address, or this address has
+    been used in another contact
+  infoIcon: 0
 --- !u!114 &114952185648833146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2216,7 +2249,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4573841260455218}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2328,7 +2361,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4573841260455218}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
