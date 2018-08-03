@@ -1,12 +1,10 @@
-﻿
-/// <summary>
+﻿/// <summary>
 /// Class which is a button that contains info at the same time.
 /// </summary>
 /// <typeparam name="TButton"> The type which is of ButtonBase. </typeparam>
 /// <typeparam name="TValue"> The value this button should hold. </typeparam>
 public abstract class InfoButton<TButton, TValue> : FactoryButton<TButton> where TButton : ButtonBase
 {
-
     /// <summary>
     /// The info of this button.
     /// </summary>
@@ -29,5 +27,4 @@ public abstract class InfoButton<TButton, TValue> : FactoryButton<TButton> where
     /// </summary>
     /// <param name="info"> The new value to use in the assignment. </param>
     protected virtual void OnValueUpdated(TValue info) { }
-
 }

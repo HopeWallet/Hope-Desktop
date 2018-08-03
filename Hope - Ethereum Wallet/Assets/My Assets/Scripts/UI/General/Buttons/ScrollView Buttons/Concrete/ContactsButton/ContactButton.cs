@@ -23,16 +23,21 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 	protected override void OnAwake()
 	{
 		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
-		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress));
+		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress, this));
 		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress, transform.parent.gameObject));
 	}
 
 	protected override void OnValueUpdated(ContactInfo info)
 	{
-		realContactName = info.ContactName;
-		realContactAddress = info.ContactAddress;
+		string name = info.ContactName;
+		string address = info.ContactAddress;
 
-		contactName.text = realContactName?.LimitEnd(18, "...");
-		contactAddress.text = realContactAddress?.Substring(0, 8) + "...." + info.ContactAddress.Substring(info.ContactAddress.Length - 8, 8);
+		realContactName = name;
+		realContactAddress = address;
+
+		contactName.text = name?.LimitEnd(18, "...");
+		contactAddress.text = address?.Substring(0, 8) + "...." + address.Substring(address.Length - 8, 8);
 	}
+
+	public void UpdateContactDetails(string name, string address) => SetButtonInfo(new ContactInfo(ButtonInfo.ContactsPopup, name, address));
 }

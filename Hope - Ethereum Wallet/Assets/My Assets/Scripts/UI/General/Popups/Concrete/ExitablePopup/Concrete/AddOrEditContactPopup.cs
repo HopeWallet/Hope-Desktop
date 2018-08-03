@@ -6,12 +6,14 @@ using Zenject;
 public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
 
-	private string previousName, previousAddress;
 	public Button addContactButton, confirmButton;
 	public TMP_InputField nameInputField, addressInputField;
 	public TextMeshProUGUI title;
 
 	public InfoMessage nameError, addressError;
+
+	private string previousName, previousAddress;
+	private ContactButton contactButton;
 
 	private AddOrEditContactPopupAnimator addOrEditContactPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
@@ -97,6 +99,8 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 			}
 		}
 
+		contactButton.UpdateContactDetails(nameInputField.text, addressInputField.text);
+
 		popupManager.CloseActivePopup();
 	}
 
@@ -106,7 +110,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// <param name="addingContact"> Checks if adding a contact or editing an existing one </param>
 	/// <param name="name"> The current name of the contact </param>
 	/// <param name="address"> The current address of the contact </param>
-	public void SetPopupLayout(bool addingContact, string name = "", string address = "")
+	public void SetPopupLayout(bool addingContact, string name = "", string address = "", ContactButton contactButton = null)
 	{
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
 		addOrEditContactPopupAnimator.AddingContact = addingContact;
@@ -120,6 +124,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 
 		nameInputField.text = name;
 		addressInputField.text = address;
+		this.contactButton = contactButton;
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
