@@ -16,20 +16,6 @@ public class TransactionInfoPopupAnimator : UIAnimator
 	[SerializeField] private GameObject setGasSection;
 	[SerializeField] private GameObject actualGasSection;
 
-	[SerializeField] private TMP_InputField transactionHash;
-	[SerializeField] private TMP_InputField fromAddress;
-	[SerializeField] private TMP_InputField toAddress;
-
-	/// <summary>
-	/// Initializes the elements
-	/// </summary>
-	private void Awake()
-	{
-		transactionHash.text = "0x93f01a7933d74acb10fc95fddc4584534d5f6304782766211610b6b4e707af62";
-		fromAddress.text = "0xbF203720DaA26c88114273471cC5f3C83c7A0246";
-		toAddress.text = "0x1192cDf96D594083BeCCc264fE58Df6E75c966f6";
-	}
-
 	/// <summary>
 	/// Animates the UI elements of the form into view
 	/// </summary>
@@ -57,7 +43,7 @@ public class TransactionInfoPopupAnimator : UIAnimator
 			() => valueAndTimeSection.AnimateScaleX(0f, 0.15f,
 			() => fromAddressSection.AnimateScaleX(0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => blur.AnimateMaterialBlur(0f, 0.15f)))));
+			() => blur.AnimateMaterialBlur(-1f, 0.15f)))));
 
 		setGasSection.AnimateScaleX(0f, 0.15f,
 			() => toAddressSection.AnimateScaleX(0f, 0.15f,

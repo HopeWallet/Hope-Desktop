@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.EthereumUtils;
 using Nethereum.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -10,22 +11,18 @@ using Zenject;
 public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 {
 
-    public Text transactionInfoText,
-                txHashText,
-                valueText,
-                sendingAddressText,
-                receivingAddressText,
-                timestampText,
-                gasLimitText,
-                gasPriceText,
-                gasUsedText,
-                txCostText;
+	public TMP_InputField transactionHash,
+						  fromAddress,
+						  toAddress;
 
-    public Button copyTxHashButton,
-                  copyFromAddressButton,
-                  copyToAddressButton,
-                  moreInfoButton,
-                  lessInfoButton;
+	public TextMeshProUGUI valueText,
+						   timestampText,
+						   gasLimitText,
+						   gasPriceText,
+						   gasUsedText,
+						   txCostText,
+						   fromAddressName,
+						   toAddressName;
 
     public Image assetImage;
 
@@ -52,31 +49,15 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     /// <param name="transactionInfo"> The transaction info for this popup to display. </param>
     public void SetTransactionInfo(TransactionInfo transactionInfo) => this.transactionInfo = transactionInfo;
 
-    /// <summary>
-    /// Initializes the popup by setting up the popup info.
-    /// </summary>
-    protected override void OnStart()
-    {
-        AssignButtonCallbacks();
-        AssignTransactionInfo();
-    }
+	/// <summary>
+	/// Initializes the popup by setting up the popup info.
+	/// </summary>
+	protected override void OnStart() => AssignTransactionInfo();
 
-    /// <summary>
-    /// Assigns the on click callbacks for the buttons.
-    /// </summary>
-    private void AssignButtonCallbacks()
-    {
-        copyTxHashButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.TxHash));
-        copyFromAddressButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.From));
-        copyToAddressButton.onClick.AddListener(() => ClipboardUtils.CopyToClipboard(transactionInfo.To));
-        moreInfoButton.onClick.AddListener(() => SwitchDetailedOptions(true));
-        lessInfoButton.onClick.AddListener(() => SwitchDetailedOptions(false));
-    }
-
-    /// <summary>
-    /// Assigns the transaction info to all elements in this popup.
-    /// </summary>
-    private void AssignTransactionInfo()
+	/// <summary>
+	/// Assigns the transaction info to all elements in this popup.
+	/// </summary>
+	private void AssignTransactionInfo()
     {
         var sendTransaction = transactionInfo.Type == TransactionInfo.TransactionType.Send;
         var valSymbol = sendTransaction ? "-" : "+";
@@ -86,11 +67,10 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
-        transactionInfoText.text = tradableAsset.AssetSymbol + " Transaction Info";
-        txHashText.text = transactionInfo.TxHash.LimitEnd(46, "...");
+        transactionHash.text = transactionInfo.TxHash;
         valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals), 23, "...");
-        sendingAddressText.text = transactionInfo.From;
-        receivingAddressText.text = transactionInfo.To;
+        fromAddress.text = transactionInfo.From;
+        toAddress.text = transactionInfo.To;
         timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).ToString();
         gasUsedText.text = transactionInfo.GasUsed.ToString();
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed) + " Ether";
@@ -116,8 +96,6 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
         gasLimitText.transform.parent.gameObject.SetActive(active);
         gasPriceText.transform.parent.gameObject.SetActive(active);
-        moreInfoButton.gameObject.SetActive(!active);
-        lessInfoButton.gameObject.SetActive(active);
         (transform as RectTransform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, active ? 300f : 225f);
     }
 

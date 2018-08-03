@@ -37,7 +37,7 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     /// <param name="lockAmount"> The amount of purpose to lock. </param>
     private void SetLockPrpsValues(int lockPeriod, decimal lockAmount)
     {
-        lockPeriodText.text = lockPeriod + " Month Lock";
+        lockPeriodText.text = lockPeriod + " MONTH LOCK";
         prpsAmountText.text = lockAmount.ConvertDecimalToString().LimitEnd(13, "...");
         dubiAmountText.text = (lockAmount * ((decimal)lockPeriod / 300)).ConvertDecimalToString().LimitEnd(13, "...");
         noteText.text = "You will be able to release your locked purpose after " + lockPeriod + " months have passed.";

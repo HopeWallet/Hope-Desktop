@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 222531816497124730}
   - component: {fileID: 114078981920476964}
   m_Layer: 0
-  m_Name: Name_Text
+  m_Name: ToAddressName_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 222313415762426224}
   - component: {fileID: 114132870710365264}
   m_Layer: 0
-  m_Name: Name_Text
+  m_Name: FromAddressName_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -577,6 +577,7 @@ GameObject:
   - component: {fileID: 223064972562390782}
   - component: {fileID: 114107891302929772}
   - component: {fileID: 114324675211388604}
+  - component: {fileID: 114053257557930990}
   m_Layer: 0
   m_Name: TransactionInfo_Popup
   m_TagString: Untagged
@@ -1125,6 +1126,30 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114053257557930990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1832384359003056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fddc326da5876847a3126589ca43d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitButton: {fileID: 114713766028519960}
+  transactionHash: {fileID: 114119279103379510}
+  fromAddress: {fileID: 114023892916207170}
+  toAddress: {fileID: 114512260539178916}
+  valueText: {fileID: 114048659352746912}
+  timestampText: {fileID: 114080188793625666}
+  gasLimitText: {fileID: 114759178624461368}
+  gasPriceText: {fileID: 114011083024913916}
+  gasUsedText: {fileID: 114027177074125762}
+  txCostText: {fileID: 114140503536833094}
+  fromAddressName: {fileID: 114132870710365264}
+  toAddressName: {fileID: 114078981920476964}
+  assetImage: {fileID: 114979464888796774}
 --- !u!114 &114064250801857040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2728,9 +2753,6 @@ MonoBehaviour:
   valueAndTimeSection: {fileID: 1142303140970734}
   setGasSection: {fileID: 1133033784221638}
   actualGasSection: {fileID: 1470154197269682}
-  transactionHash: {fileID: 114119279103379510}
-  fromAddress: {fileID: 114023892916207170}
-  toAddress: {fileID: 114512260539178916}
 --- !u!114 &114331342072466220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3970,7 +3992,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1212853113808576}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224874024104201930}
