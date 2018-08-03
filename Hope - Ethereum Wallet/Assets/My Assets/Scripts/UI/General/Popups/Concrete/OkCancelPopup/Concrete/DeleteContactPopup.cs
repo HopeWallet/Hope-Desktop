@@ -8,6 +8,8 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	public TextMeshProUGUI contactName;
 	public TextMeshProUGUI contactAddress;
 
+	private GameObject contactObject;
+
 	private ContactsManager contactsManager;
 
 	[Inject]
@@ -26,13 +28,16 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 			}
 		}
 
-		contactsManager.contacts.Remove(address);
-		SecurePlayerPrefs.SetInt("Contacts", contactsManager.contacts.Count);
+		contactsManager.Contacts.Remove(address);
+		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
+
+		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
 	}
 
-	public void SetContactDetails(string name, string address)
+	public void SetContactDetails(string name, string address, GameObject contactObject)
 	{
 		contactName.text = name;
 		contactAddress.text = address;
+		this.contactObject = contactObject;
 	}
 }

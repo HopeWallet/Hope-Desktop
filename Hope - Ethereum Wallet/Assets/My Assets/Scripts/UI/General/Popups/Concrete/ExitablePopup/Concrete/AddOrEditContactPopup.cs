@@ -45,10 +45,10 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	/// </summary>
 	private void AddContactClicked()
 	{
-		contactsManager.contacts.Add(addressInputField.text, nameInputField.text);
+		contactsManager.Contacts.Add(addressInputField.text, nameInputField.text);
 
-		SecurePlayerPrefs.SetInt("Contacts", contactsManager.contacts.Count);
-		SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + contactsManager.contacts.Count, addressInputField.text);
+		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
+		SecurePlayerPrefs.SetString("contact_" + contactsManager.Contacts.Count, addressInputField.text);
 		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 
 		CreateNewContactObjectInList();
@@ -61,9 +61,11 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 		var button = contactButtonFactory.Create();
 
 		button.SetButtonInfo(new ContactInfo(contactsPopup, nameInputField.text, addressInputField.text));
-		Transform buttonParent = button.transform.parent;
-		buttonParent.parent = contactsPopup.contactsListTransform;
-		buttonParent.localScale = new Vector3(1f, 1f, 1f);
+
+		Transform contactObject = button.transform.parent;
+		contactObject.parent = contactsPopup.contactsListTransform;
+		contactObject.localScale = new Vector3(0f, 1f, 1f);
+		contactObject.gameObject.AnimateScaleX(1f, 0.1f);
 	}
 
 	/// <summary>
@@ -71,16 +73,16 @@ public class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopu
 	/// </summary>
 	private void ConfirmClicked()
 	{
-		contactsManager.contacts.Remove(previousAddress);
-		contactsManager.contacts.Add(addressInputField.text, nameInputField.text);
+		contactsManager.Contacts.Remove(previousAddress);
+		contactsManager.Contacts.Add(addressInputField.text, nameInputField.text);
 
 		if (SecurePlayerPrefs.HasKey(addressInputField.text))
 			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 		else
 		{
-			for (int i = 0; i < contactsManager.contacts.Count; i++)
+			for (int i = 0; i < contactsManager.Contacts.Count; i++)
 			{
-				string prefName = ContactsPopup.PREF_NAME + i;
+				string prefName = "contact_" + i;
 
 				if (SecurePlayerPrefs.GetString(prefName) == previousAddress)
 				{

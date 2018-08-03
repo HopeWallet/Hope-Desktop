@@ -14,8 +14,6 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private ContactsManager contactsManager;
 	private ContactButton activeContactButton;
 
-	public const string PREF_NAME = "contact_";
-
 	[Inject]
 	public void Construct(ContactButton.Factory contactButtonFactory, ContactsManager contactsManager)
 	{
@@ -26,8 +24,6 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	protected override void Awake()
 	{
 		base.Awake();
-
-		PopulateContacts();
 
 		contactsPopupAnimator = transform.GetComponent<ContactsPopupAnimator>();
 
@@ -40,12 +36,12 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 		{
 			var button = contactButtonFactory.Create();
-			var address = SecurePlayerPrefs.GetString(PREF_NAME + i);
+			var address = SecurePlayerPrefs.GetString("contact_" + i);
 			button.SetButtonInfo(new ContactInfo(this, SecurePlayerPrefs.GetString(address), address));
 
 			Transform buttonParent = button.transform.parent;
 			buttonParent.parent = contactsListTransform;
-			buttonParent.localScale = new Vector3(1f, 1f, 1f);
+			buttonParent.localScale = new Vector3(0f, 1f, 1f);
 		}
 	}
 
@@ -65,18 +61,6 @@ public class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		contactButton.Button.interactable = false;
 		activeContactButton = contactButton;
 		confirmButton.interactable = true;
-	}
-
-	private void PopulateContacts()
-	{
-		for (int i = 1; ; i++)
-		{
-			if (!SecurePlayerPrefs.HasKey(PREF_NAME + i))
-				return;
-
-			string address = SecurePlayerPrefs.GetString(PREF_NAME + i);
-			contactsManager.contacts.Add(address, SecurePlayerPrefs.GetString(address));
-		}
 	}
 
 	private void AddContact()

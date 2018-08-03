@@ -24,7 +24,7 @@ public class ContactButton : InfoButton<ContactButton, ContactInfo>
 	{
 		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
 		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress));
-		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress));
+		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress, transform.parent.gameObject));
 	}
 
 	protected override void OnValueUpdated(ContactInfo info)
