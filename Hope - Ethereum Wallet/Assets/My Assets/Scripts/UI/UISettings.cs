@@ -32,9 +32,5 @@ namespace UISettings
     public class Dropdowns
     {
         public DropdownButtonInfo[] optionsDropdowns;
-        public AssetDropdownButtonInfo[] extraOptionsDropdowns;
     }
-
-
-
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using TMPro;
+﻿using TMPro;
 using UISettings;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +7,8 @@ using Zenject;
 /// <summary>
 /// Class which manages the opened wallet ui.
 /// </summary>
-public class OpenWalletMenu : Menu<OpenWalletMenu>
+public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-
     public GameObject backgroundVignette,
                       lockPurposeSection;
 
@@ -26,8 +24,6 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     private TradableAssetManager tradableAssetManager;
     private PRPS prpsContract;
 
-    private Dropdowns uiDropdowns;
-
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
@@ -36,6 +32,7 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
     /// </summary>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="prpsContract"> The active PRPS contract. </param>
     /// <param name="uiSettings"> The ui settings. </param>
     [Inject]
     public void Construct(
@@ -48,7 +45,7 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
         this.tradableAssetManager = tradableAssetManager;
         this.prpsContract = prpsContract;
 
-        uiDropdowns = uiSettings.generalSettings.dropdowns;
+        optionsDropdownButton.dropdownButtons = uiSettings.generalSettings.dropdowns.optionsDropdowns;
     }
 
     /// <summary>
@@ -83,18 +80,14 @@ public class OpenWalletMenu : Menu<OpenWalletMenu>
 
         lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
-        optionsDropdownButton.dropdownButtons = uiDropdowns.extraOptionsDropdowns
-                                                           .Where(dropdown => dropdown.assetAddresses.ContainsIgnoreCase(tradableAsset.AssetAddress, true))
-                                                           .Concat(uiDropdowns.optionsDropdowns)
-                                                           .ToArray();
-
-        assetText.text = StringUtils.LimitEnd(tradableAsset.AssetName, MAX_ASSET_NAME_LENGTH, "...");
-        balanceText.text = StringUtils.LimitEnd(assetBalance, MAX_ASSET_BALANCE_LENGTH, "...");
+        assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
+        balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH, "...");
 
         assetImage.sprite = tradableAsset.AssetImage;
     }
 
     public override void GoBack()
     {
+        // Logout popup
     }
 }

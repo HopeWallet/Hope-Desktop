@@ -3,8 +3,16 @@ using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
 
+/// <summary>
+/// Class which represents the Hodler smart contract used for locking purpose and receiving dubi.
+/// </summary>
 public sealed partial class Hodler : StaticSmartContract
 {
+    /// <summary>
+    /// Initializes the <see cref="Hodler"/> contract given the ethereum network settings and settings of this contract.
+    /// </summary>
+    /// <param name="ethereumNetworkSettings"> The active <see cref="EthereumNetworkManager.Settings"/>. </param>
+    /// <param name="settings"> The active <see cref="Hodler.Settings"/>. </param>
     public Hodler(
         EthereumNetworkManager.Settings ethereumNetworkSettings,
         Settings settings) : base(ethereumNetworkSettings, settings)
@@ -67,6 +75,9 @@ public sealed partial class Hodler : StaticSmartContract
         }, gasLimit, gasPrice, "Release Purpose Confirmation");
     }
 
+    /// <summary>
+    /// Class which holds the contract addresses for this smart contract.
+    /// </summary>
     [Serializable]
     public sealed class Settings : SettingsBase
     {

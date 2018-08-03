@@ -1,9 +1,14 @@
 ﻿using Nethereum.ABI.FunctionEncoding.Attributes;
 using System.Numerics;
 
+/// <summary>
+/// Class which represents the Hodler smart contract used for locking purpose and receiving dubi.
+/// </summary>
 public sealed partial class Hodler : StaticSmartContract
 {
-
+    /// <summary>
+    /// Class which represents unique output for the Hodler smart contract.
+    /// </summary>
     public static partial class Output
     {
         /// <summary>
