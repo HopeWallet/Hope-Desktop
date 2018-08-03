@@ -62,17 +62,6 @@ public sealed class UserWalletManager
         userWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, transactionInput);
     }
 
-    public void SwitchWallet(int walletNumber, int accountNumber)
-    {
-        this.walletNumber = walletNumber;
-        this.accountNumber = accountNumber;
-    }
-
-    public void SwitchAccount(int accountNumber)
-    {
-        this.accountNumber = accountNumber;
-    }
-
     /// <summary>
     /// Attempts to load a wallet given a password.
     /// Calls the action if the wallet loaded successfully.

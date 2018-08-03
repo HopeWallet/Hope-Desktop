@@ -16,6 +16,12 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     private TokenContractManager tokenContractManager;
     private DUBI dubiContract;
 
+    /// <summary>
+    /// Adds required dependencies to this class.
+    /// </summary>
+    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    /// <param name="dubiContract"> The active DUBI contract. </param>
     [Inject]
     public void Construct(TradableAssetManager tradableAssetManager, TokenContractManager tokenContractManager, DUBI dubiContract)
     {
@@ -43,6 +49,9 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
         noteText.text = "You will be able to release your locked purpose after " + lockPeriod + " months have passed.";
     }
 
+    /// <summary>
+    /// Adds DUBI to the <see cref="TokenContractManager"/> if it is not already added.
+    /// </summary>
     protected override void OnOkClicked()
     {
         if (!tradableAssetManager.TradableAssets.Any(pair => pair.Value.AssetAddress.EqualsIgnoreCase(dubiContract.ContractAddress)))

@@ -762,6 +762,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1491621425}
     m_Modifications:
+    - target: {fileID: 114327414604029792, guid: ab281cfd370a64b40832f35d5ea1bc00,
+        type: 2}
+      propertyPath: dropdownButtons.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224063981933358800, guid: ab281cfd370a64b40832f35d5ea1bc00,
         type: 2}
       propertyPath: m_LocalPosition.x

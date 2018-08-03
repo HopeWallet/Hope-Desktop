@@ -62,6 +62,10 @@ public sealed class UserWallet : SecureObject
         Load(walletCreator);
     }
 
+    /// <summary>
+    /// Loads a wallet given the type of wallet loader to use.
+    /// </summary>
+    /// <param name="walletLoader"> The wallet loader to use, whether it is the <see cref="WalletCreator"/> or <see cref="WalletUnlocker"/>. </param>
     [SecureCaller]
     [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
@@ -69,6 +73,11 @@ public sealed class UserWallet : SecureObject
         walletLoader.Load(out addresses, OnWalletLoadSuccessful);
     }
 
+    /// <summary>
+    /// Gets the address of the wallet given the index of the address.
+    /// </summary>
+    /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>
+    /// <returns> Returns the address found at the index. </returns>
     [SecureCallEnd]
     [ReflectionProtect(typeof(string))]
     public string GetAddress(int addressIndex)
