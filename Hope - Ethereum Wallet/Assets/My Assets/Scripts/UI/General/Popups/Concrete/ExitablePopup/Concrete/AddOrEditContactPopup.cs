@@ -85,7 +85,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 		else
 		{
-			for (int i = 1; i <= contactsManager.Contacts.Count; i++)
+			for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
 			{
 				string prefName = "contact_" + i;
 
