@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using Zenject;
 
-public class ContactButton : InfoButton<ContactButton, ContactInfo>
+public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 {
 
 	public TextMeshProUGUI contactName, contactAddress;

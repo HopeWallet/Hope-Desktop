@@ -27,6 +27,7 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 			{
 				SecurePlayerPrefs.DeleteKey(currentAddressInLoop);
 				SecurePlayerPrefs.DeleteKey("contact_" + i);
+				MoveContacts(i);
 				break;
 			}
 		}
@@ -35,6 +36,15 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
 
 		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
+	}
+
+	private void MoveContacts(int index)
+	{
+		if (SecurePlayerPrefs.HasKey("contact_" + (index + 1)))
+		{
+			SecurePlayerPrefs.SetString("contact_" + index, SecurePlayerPrefs.GetString("contact_" + (index + 1)));
+			MoveContacts(index + 1);
+		}
 	}
 
 	public void SetContactDetails(string name, string address, GameObject contactObject)

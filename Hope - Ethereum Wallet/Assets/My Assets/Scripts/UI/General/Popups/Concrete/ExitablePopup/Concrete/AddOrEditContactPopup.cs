@@ -81,11 +81,11 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		contactsManager.Contacts.Remove(previousAddress);
 		contactsManager.Contacts.Add(addressInputField.text, nameInputField.text);
 
-		if (SecurePlayerPrefs.HasKey(addressInputField.text))
+		if (addressInputField.text == previousAddress)
 			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
 		else
 		{
-			for (int i = 0; i < contactsManager.Contacts.Count; i++)
+			for (int i = 1; i <= contactsManager.Contacts.Count; i++)
 			{
 				string prefName = "contact_" + i;
 

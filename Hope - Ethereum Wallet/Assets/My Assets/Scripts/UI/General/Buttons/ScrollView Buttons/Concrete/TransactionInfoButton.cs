@@ -105,7 +105,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
     private void SetAddress(TransactionInfo transaction)
     {
         var address = transaction.Type == TransactionInfo.TransactionType.Send ? transaction.To : transaction.From;
-        addressText.SetText(address.LimitEnd(10) + "..." + address.Substring(address.Length - 10, 10));
+        addressText.SetText(address.LimitEnd(10) + "...." + address.Substring(address.Length - 10, 10));
     }
 
     /// <summary>
