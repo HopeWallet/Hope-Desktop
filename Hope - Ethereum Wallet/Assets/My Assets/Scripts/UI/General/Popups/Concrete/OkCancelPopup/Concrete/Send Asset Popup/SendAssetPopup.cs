@@ -17,8 +17,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	[SerializeField] private TMP_Text assetBalance;
     [SerializeField] private TMP_Text assetSymbol;
     [SerializeField] private TMP_Text transactionFee;
+	[SerializeField] private TMP_Text contactName;
 
-    [SerializeField] private Toggle advancedModeToggle;
+	[SerializeField] private Toggle advancedModeToggle;
     [SerializeField] private Toggle maxToggle;
 
     [SerializeField] private Image assetImage;
@@ -77,7 +78,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
-        Address = new AddressManager(addressField);
+        Address = new AddressManager(addressField, contactName);
         Amount = new AmountManager(this, maxToggle, amountField);
     }
 
