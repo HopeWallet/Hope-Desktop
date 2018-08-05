@@ -1860,6 +1860,7 @@ MonoBehaviour:
   gasPriceSection: {fileID: 1191577394885134}
   transactionSpeedSection: {fileID: 1102910242910042}
   addressInputField: {fileID: 114631005458636982}
+  contactNameObject: {fileID: 1526021395411992}
   advancedModeToggle: {fileID: 1298930853387788}
   sendButton: {fileID: 1850029874131590}
 --- !u!114 &114155704206949664

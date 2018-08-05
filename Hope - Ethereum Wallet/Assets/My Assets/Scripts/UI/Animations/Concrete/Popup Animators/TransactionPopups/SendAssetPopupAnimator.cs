@@ -19,6 +19,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	[SerializeField] private GameObject transactionSpeedSection;
 
 	[SerializeField] private TMP_InputField addressInputField;
+	[SerializeField] private GameObject contactNameObject;
 
 	[SerializeField] private GameObject advancedModeToggle;
 
@@ -34,6 +35,7 @@ public class SendAssetPopupAnimator : UIAnimator
         SendAssetPopup sendAssetPopup = GetComponent<SendAssetPopup>();
 
 		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid || sendAssetPopup.Address.IsEmpty));
+		addressInputField.onValueChanged.AddListener(_ => AnimateContactName(!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text)));
         sendAssetPopup.Amount.OnAmountChanged += () => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid || sendAssetPopup.Amount.IsEmpty);
 
         advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
@@ -121,4 +123,10 @@ public class SendAssetPopupAnimator : UIAnimator
     {
         sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValidField ? 0f : 1f, isValidField ? 0f : 1f, 0.2f);
     }
+
+	/// <summary>
+	/// Animates the contact name in or out of sight
+	/// </summary>
+	/// <param name="animateIn"> Checks if animating in or out </param>
+	private void AnimateContactName(bool animateIn) => contactNameObject.AnimateGraphic(animateIn ? 0.647f : 0f, 0.15f);
 }

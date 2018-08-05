@@ -16,11 +16,7 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
 
-	private Transform contactsTransform;
-
-	public string SelectedContactName { get; private set; }
-
-	public string SelectedContactAddress { get; private set; }
+	public Transform contactsTransform;
 
 	/// <summary>
 	/// Initializes the elements

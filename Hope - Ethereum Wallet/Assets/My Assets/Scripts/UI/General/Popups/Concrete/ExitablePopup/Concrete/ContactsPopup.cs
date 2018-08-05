@@ -44,7 +44,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 
-		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
+		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)                     //<< PUT THIS STUFF IN A METHOD: AddContactButtons
 			return;
 
 		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
@@ -56,6 +56,26 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 			Transform buttonParent = button.transform.parent;
 			buttonParent.parent = contactsListTransform;
 			buttonParent.localScale = new Vector3(0f, 1f, 1f);
+		}
+	}
+
+	/// <summary>
+	/// Sets the active contact button if the inputted address is from a saved contact
+	/// </summary>
+	protected override void OnStart()
+	{
+		if (!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text))
+		{
+			string inputtedAddress = sendAssetPopup.Address.addressField.text;
+			Transform contactsTransform = contactsPopupAnimator.contactsTransform;
+
+			for (int i = 0; i < contactsTransform.childCount; i++)
+			{
+				ContactButton contactButton = contactsTransform.GetChild(i).GetChild(0).GetComponent<ContactButton>();
+
+				if (contactButton.RealContactAddress == inputtedAddress)
+					EnableNewContactButton(contactButton);
+			}
 		}
 	}
 

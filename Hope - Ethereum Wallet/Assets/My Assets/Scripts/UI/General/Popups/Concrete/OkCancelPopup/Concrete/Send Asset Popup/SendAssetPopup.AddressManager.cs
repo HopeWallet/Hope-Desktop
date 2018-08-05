@@ -13,8 +13,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	public sealed class AddressManager
 	{
 		public readonly TMP_InputField addressField;
-		private readonly GameObject contactNameObject;
-		private readonly TMP_Text contactName;
+		public readonly TMP_Text contactName;
 
 		/// <summary>
 		/// Whether the send address is valid.
@@ -38,7 +37,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public AddressManager(TMP_InputField addressField, TMP_Text contactName)
 		{
 			this.addressField = addressField;
-			contactNameObject = contactName.gameObject;
 			this.contactName = contactName;
 
 			addressField.onValueChanged.AddListener(CheckAddress);
@@ -55,7 +53,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			if (IsValid && SecurePlayerPrefs.HasKey("Contacts"))
 				CheckIfSavedAddress(address);
 			else
-				AnimateContactName(false);
+				contactName.text = "";
 		}
 
 		/// <summary>
@@ -67,18 +65,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			if (SecurePlayerPrefs.HasKey(address))
 			{
 				contactName.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";
-				AnimateContactName(true);
 			}
 
 			else
-				AnimateContactName(false);
+				contactName.text = "";
 
 		}
-
-		/// <summary>
-		/// Animates the contact name in or out of sight
-		/// </summary>
-		/// <param name="animateIn"> Checks if animating in or out </param>
-		private void AnimateContactName(bool animateIn) => contactNameObject.AnimateGraphic(animateIn ? 0.647f : 0f, 0.1f);
 	}
 }
