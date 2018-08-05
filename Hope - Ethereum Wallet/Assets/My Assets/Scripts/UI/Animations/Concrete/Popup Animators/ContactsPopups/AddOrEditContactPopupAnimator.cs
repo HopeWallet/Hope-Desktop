@@ -20,9 +20,30 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
 
+	private bool validName;
+	private bool validAddress;
+
     public string PreviousAddress { get; set; }
 
     public bool AddingContact { get; set; }
+
+    private bool ValidName
+	{
+		set
+		{
+			validName = value;
+			AnimateErrorIcon(nameSection, validName);
+		}
+	}
+
+	private bool ValidAddress
+	{
+		set
+		{
+			validAddress = value;
+			AnimateErrorIcon(addressSection, validAddress);
+		}
+	}
 
 	/// <summary>
 	/// Initializes the elements
@@ -92,7 +113,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedName = nameInputField.text;
 
-		AnimateErrorIcon(nameSection, string.IsNullOrWhiteSpace(updatedName) ? string.IsNullOrEmpty(updatedName) : true);
+		ValidName = string.IsNullOrWhiteSpace(updatedName) ? string.IsNullOrEmpty(updatedName) : true;
 
 		SetMainButtonInteractable();
 	}
@@ -111,7 +132,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool notOverridingOtherContactAddresses = !SecurePlayerPrefs.HasKey(updatedAddress) ? true : !AddingContact && updatedAddress == PreviousAddress;
 
-		AnimateErrorIcon(addressSection, realEthereumAddress && notOverridingOtherContactAddresses);
+		ValidAddress = realEthereumAddress && notOverridingOtherContactAddresses;
 
 		if (!realEthereumAddress)
 			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address.");
