@@ -1,8 +1,14 @@
 ﻿using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class used for locking purpose.
+/// </summary>
 public sealed partial class LockPRPSPopup
 {
+    /// <summary>
+    /// Class which manages the different time periods for locking purpose.
+    /// </summary>
     public sealed class TimeManager
     {
         private readonly AmountManager amountManager;

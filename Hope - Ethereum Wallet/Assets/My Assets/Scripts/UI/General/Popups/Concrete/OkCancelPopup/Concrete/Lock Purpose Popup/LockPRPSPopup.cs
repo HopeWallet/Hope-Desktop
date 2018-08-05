@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// Class used for locking purpose.
+/// </summary>
 public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable
 {
     public Button threeMonthsButton,

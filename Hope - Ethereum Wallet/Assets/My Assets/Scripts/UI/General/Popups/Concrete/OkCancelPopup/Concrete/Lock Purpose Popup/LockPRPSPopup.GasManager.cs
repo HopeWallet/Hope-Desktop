@@ -3,8 +3,14 @@ using System.Numerics;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class used for locking purpose.
+/// </summary>
 public sealed partial class LockPRPSPopup
 {
+    /// <summary>
+    /// Class used for managing the gas costs for locking purpose.
+    /// </summary>
     public sealed class GasManager
     {
         private readonly LockPRPSManager lockPRPSManager;
@@ -31,6 +37,13 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         public BigInteger TransactionGasLimit => lockPRPSManager.GasLimit;
 
+        /// <summary>
+        /// Initializes the GasMAnager by assigning required dependencies.
+        /// </summary>
+        /// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
+        /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+        /// <param name="slider"> The slider for controlling the gas prices. </param>
+        /// <param name="transactionFeeText"> The text used for displaying the gas cost of the transaction. </param>
         public GasManager(
             LockPRPSManager lockPRPSManager,
             GasPriceObserver gasPriceObserver,
@@ -44,11 +57,18 @@ public sealed partial class LockPRPSPopup
             transactionSpeedSlider.Start();
         }
 
+        /// <summary>
+        /// Stops the GasManager.
+        /// </summary>
         public void Stop()
         {
             transactionSpeedSlider.Stop();
         }
 
+        /// <summary>
+        /// Updates the gas price estimate given the new GasPrice.
+        /// </summary>
+        /// <param name="gasPrice"> The new GasPrice to set. </param>
         private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
