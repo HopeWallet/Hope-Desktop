@@ -10,6 +10,7 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 
 	private PopupManager popupManager;
 	private ContactsManager contactsManager;
+	private ContactsPopup contactsPopup;
 
 	public string RealContactName { get; private set; }
 
@@ -34,7 +35,7 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 	{
 		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
 		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, RealContactName, RealContactAddress, this));
-		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(RealContactName, RealContactAddress, transform.parent.gameObject));
+		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(RealContactName, RealContactAddress, this, contactsPopup));
 	}
 
 	/// <summary>
@@ -48,6 +49,7 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 
 		RealContactName = name;
 		RealContactAddress = address;
+		contactsPopup = info.ContactsPopup;
 
 		contactName.text = name?.LimitEnd(18, "...");
 		contactAddress.text = address?.Substring(0, 8) + "...." + address.Substring(address.Length - 8, 8);

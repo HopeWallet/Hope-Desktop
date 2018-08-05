@@ -9,7 +9,8 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	public TextMeshProUGUI contactAddress;
 
 	private GameObject contactObject;
-
+	private ContactButton contactButton;
+	private ContactsPopup contactsPopup;
 	private ContactsManager contactsManager;
 
 	/// <summary>
@@ -42,6 +43,12 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		contactsManager.Contacts.Remove(addressInObject);
 		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
 
+		if (contactButton == contactsPopup.ActiveContactButton)
+		{
+			contactsPopup.ActiveContactButton = null;
+			contactsPopup.confirmButton.interactable = false;
+		}
+
 		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
 	}
 
@@ -63,11 +70,14 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	/// </summary>
 	/// <param name="name"> The contact name </param>
 	/// <param name="address"> The contact address </param>
-	/// <param name="contactObject"> The contact object </param>
-	public void SetContactDetails(string name, string address, GameObject contactObject)
+	/// <param name="contactButton"> The contactButton </param>
+	/// <param name="contactsPopup"> The ContactsPopup </param>
+	public void SetContactDetails(string name, string address, ContactButton contactButton, ContactsPopup contactsPopup)
 	{
 		contactName.text = name;
 		contactAddress.text = address;
-		this.contactObject = contactObject;
+		this.contactButton = contactButton;
+		contactObject = contactButton.transform.parent.gameObject.gameObject;
+		this.contactsPopup = contactsPopup;
 	}
 }

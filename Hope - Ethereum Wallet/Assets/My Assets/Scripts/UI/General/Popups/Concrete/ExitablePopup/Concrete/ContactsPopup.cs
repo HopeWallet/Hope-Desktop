@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using TMPro;
 
 public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
@@ -12,7 +11,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private ContactsPopupAnimator contactsPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
 	private ContactsManager contactsManager;
-	private ContactButton activeContactButton;
+	public ContactButton ActiveContactButton;
 
 	/// <summary>
 	/// Adds the required dependencies to the ContactsPopup
@@ -44,7 +43,15 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 
-		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)                     //<< PUT THIS STUFF IN A METHOD: AddContactButtons
+		AddContactButtons();
+	}
+
+	/// <summary>
+	/// Adds the contact buttons accourding to all the saved contacts in the SecurePlayerPrefs
+	/// </summary>
+	private void AddContactButtons()
+	{
+		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
 			return;
 
 		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
@@ -84,7 +91,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void ConfirmButtonClicked()
 	{
-		sendAssetPopup.Address.addressField.text = activeContactButton.RealContactAddress;
+		sendAssetPopup.Address.addressField.text = ActiveContactButton.RealContactAddress;
 		popupManager.CloseActivePopup();
 	}
 
@@ -94,11 +101,11 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// <param name="contactButton"> The ContactButton that was just clicked </param>
 	public void EnableNewContactButton(ContactButton contactButton)
 	{
-		if (activeContactButton != null)
-			activeContactButton.Button.interactable = true;
+		if (ActiveContactButton != null)
+			ActiveContactButton.Button.interactable = true;
 
 		contactButton.Button.interactable = false;
-		activeContactButton = contactButton;
+		ActiveContactButton = contactButton;
 		confirmButton.interactable = true;
 	}
 
