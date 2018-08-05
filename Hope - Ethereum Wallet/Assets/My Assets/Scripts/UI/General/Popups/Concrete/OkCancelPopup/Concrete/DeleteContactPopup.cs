@@ -12,9 +12,16 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 
 	private ContactsManager contactsManager;
 
+	/// <summary>
+	/// Sets the required dependency for the DeleteContactPopup
+	/// </summary>
+	/// <param name="contactsManager"> The active ContactsManager </param>
 	[Inject]
 	public void Construct(ContactsManager contactsManager) => this.contactsManager = contactsManager;
 
+	/// <summary>
+	/// Deletes the selected contact from the dictionary, SecurePlayerPrefs and also removes the contactButton from the scene
+	/// </summary>
 	protected override void OnOkClicked()
 	{
 		string addressInObject = contactAddress.text;
@@ -38,6 +45,10 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
 	}
 
+	/// <summary>
+	/// Moves all of the contacts above the current one being deleted
+	/// </summary>
+	/// <param name="index"> The index of the contact being moved </param>
 	private void MoveContacts(int index)
 	{
 		if (SecurePlayerPrefs.HasKey("contact_" + (index + 1)))
@@ -47,6 +58,12 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		}
 	}
 
+	/// <summary>
+	/// Sets the details of the popup to fit the contact being deleted
+	/// </summary>
+	/// <param name="name"> The contact name </param>
+	/// <param name="address"> The contact address </param>
+	/// <param name="contactObject"> The contact object </param>
 	public void SetContactDetails(string name, string address, GameObject contactObject)
 	{
 		contactName.text = name;

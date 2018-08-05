@@ -30,12 +30,6 @@ public class ContactsPopupAnimator : UIAnimator
 		contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
 
 		sortBySection.transform.GetChild(1).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(ListOrderChanged);
-
-		//SelectedContactName = "MY BOi JOEYYY";
-		//SelectedContactAddress = "0xbF203720DaA26c88114273471cC5f3C83c7A0246";
-
-		//SecurePlayerPrefs.SetString(ContactsPopup.PREF_NAME + 0, SelectedContactAddress);
-		//SecurePlayerPrefs.SetString(SelectedContactAddress, SelectedContactName);
 	}
 
 	/// <summary>

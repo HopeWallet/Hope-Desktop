@@ -32,6 +32,11 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		addressError.PopupManager = popupManager;
 	}
 
+	/// <summary>
+	/// Adds the required dependencies to the AddOrEditContatPopup
+	/// </summary>
+	/// <param name="contactButtonFactory"> The active ContactButtonFactory</param>
+	/// <param name="contactsManager"> The active ContactsManager</param>
 	[Inject]
 	public void Construct(ContactButton.Factory contactButtonFactory, ContactsManager contactsManager)
 	{
@@ -61,6 +66,9 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		popupManager.CloseActivePopup();
 	}
 
+	/// <summary>
+	/// Creates a new ContactButton in the current contact list
+	/// </summary>
 	private void CreateNewContactObjectInList()
 	{
 		var button = contactButtonFactory.Create();
@@ -128,5 +136,9 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
+	/// <summary>
+	/// Sets the addressError body message 
+	/// </summary>
+	/// <param name="bodyText"> The custom body message </param>
 	public void SetAddressErrorBodyText(string bodyText) => addressError.bodyText = bodyText;
 }

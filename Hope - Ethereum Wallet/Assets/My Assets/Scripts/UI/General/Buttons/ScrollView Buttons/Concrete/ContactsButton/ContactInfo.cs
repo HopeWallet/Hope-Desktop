@@ -8,6 +8,7 @@ public sealed class ContactInfo
 
 	public string ContactAddress { get; }
 
+	
 	public ContactInfo(ContactsPopup contactsPopup, string contactName, string contactAddress)
 	{
 		ContactsPopup = contactsPopup;

@@ -13,6 +13,11 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private ContactsManager contactsManager;
 	private ContactButton activeContactButton;
 
+	/// <summary>
+	/// Adds the required dependencies to the ContactsPopup
+	/// </summary>
+	/// <param name="contactButtonFactory"> The active ContactButtonFactory </param>
+	/// <param name="contactsManager"> The active ContactsManager </param>
 	[Inject]
 	public void Construct(ContactButton.Factory contactButtonFactory, ContactsManager contactsManager)
 	{
@@ -20,6 +25,9 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		this.contactsManager = contactsManager;
 	}
 
+	/// <summary>
+	/// Adds button listeners and also adds the contact objects for the number of saved contacts
+	/// </summary>
 	protected override void Awake()
 	{
 		base.Awake();
@@ -44,6 +52,9 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		}
 	}
 
+	/// <summary>
+	/// Gets The currently selected contact details and closes the popup
+	/// </summary>
 	private void ConfirmButtonClicked()
 	{
 		contactsManager.SetSelectedContact(activeContactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text,
@@ -52,6 +63,10 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		popupManager.CloseActivePopup();
 	}
 
+	/// <summary>
+	/// Manages the interactables of the newly clicked and old contact button that was pressed
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton that was just clicked </param>
 	public void EnableNewContactButton(ContactButton contactButton)
 	{
 		if (activeContactButton != null)
@@ -62,6 +77,9 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		confirmButton.interactable = true;
 	}
 
+	/// <summary>
+	/// Opens up the AddOrEditContactPopup
+	/// </summary>
 	private void AddContact()
 	{
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);

@@ -13,12 +13,20 @@ public sealed class ContactsManager
 		SetContacts();
 	}
 
+	/// <summary>
+	/// Sets the selected contact details
+	/// </summary>
+	/// <param name="name"> The selected contact name </param>
+	/// <param name="address"> The selected contact address </param>
 	public void SetSelectedContact(string name, string address)
 	{
 		SelectedName = name;
 		SelectedAddress = address;
 	}
 
+	/// <summary>
+	/// Sets all the contacts from the SecurePlayerPrefs to the Contacts dictionary
+	/// </summary>
 	private void SetContacts()
 	{
 		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
