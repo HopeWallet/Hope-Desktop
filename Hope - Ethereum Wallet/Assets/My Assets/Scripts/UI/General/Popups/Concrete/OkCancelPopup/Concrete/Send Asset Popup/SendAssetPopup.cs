@@ -87,7 +87,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// </summary>
     protected override void OnStart()
     {
-        contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true));
+        contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
 		infoMessage.PopupManager = popupManager;
 	}
 

@@ -12,7 +12,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// </summary>
 	public sealed class AddressManager
 	{
-		private readonly TMP_InputField addressField;
+		public readonly TMP_InputField addressField;
 		private readonly GameObject contactNameObject;
 		private readonly TMP_Text contactName;
 
@@ -52,7 +52,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
 
-			if (IsValid)
+			if (IsValid && SecurePlayerPrefs.HasKey("Contacts"))
 				CheckIfSavedAddress(address);
 			else
 				AnimateContactName(false);
@@ -64,9 +64,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="address"> The address in the input field. </param>
 		private void CheckIfSavedAddress(string address)
 		{
-			if (!SecurePlayerPrefs.HasKey("Contacts"))
-				return;
-
 			if (SecurePlayerPrefs.HasKey(address))
 			{
 				contactName.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";

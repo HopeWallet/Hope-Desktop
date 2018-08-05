@@ -2,26 +2,12 @@
 
 public sealed class ContactsManager
 {
-	public string SelectedName { get; private set; }
-
-	public string SelectedAddress { get; private set; }
 
 	public Dictionary<string, string> Contacts { get; } = new Dictionary<string, string>();
 
 	public ContactsManager()
 	{
 		SetContacts();
-	}
-
-	/// <summary>
-	/// Sets the selected contact details
-	/// </summary>
-	/// <param name="name"> The selected contact name </param>
-	/// <param name="address"> The selected contact address </param>
-	public void SetSelectedContact(string name, string address)
-	{
-		SelectedName = name;
-		SelectedAddress = address;
 	}
 
 	/// <summary>

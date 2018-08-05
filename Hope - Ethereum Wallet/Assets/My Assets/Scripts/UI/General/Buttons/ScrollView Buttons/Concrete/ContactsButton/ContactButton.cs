@@ -11,7 +11,9 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 	private PopupManager popupManager;
 	private ContactsManager contactsManager;
 
-	private string realContactName, realContactAddress;
+	public string RealContactName { get; private set; }
+
+	public string RealContactAddress { get; private set; }
 
 	/// <summary>
 	/// Adds the required dependencies to the ContactButton
@@ -31,8 +33,8 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 	protected override void OnAwake()
 	{
 		Button.onClick.AddListener(() => ButtonInfo.ContactsPopup.EnableNewContactButton(this));
-		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, realContactName, realContactAddress, this));
-		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(realContactName, realContactAddress, transform.parent.gameObject));
+		editButton.onClick.AddListener(() => popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(false, RealContactName, RealContactAddress, this));
+		deleteButton.onClick.AddListener(() => popupManager.GetPopup<DeleteContactPopup>(true).SetContactDetails(RealContactName, RealContactAddress, transform.parent.gameObject));
 	}
 
 	/// <summary>
@@ -44,8 +46,8 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 		string name = info.ContactName;
 		string address = info.ContactAddress;
 
-		realContactName = name;
-		realContactAddress = address;
+		RealContactName = name;
+		RealContactAddress = address;
 
 		contactName.text = name?.LimitEnd(18, "...");
 		contactAddress.text = address?.Substring(0, 8) + "...." + address.Substring(address.Length - 8, 8);

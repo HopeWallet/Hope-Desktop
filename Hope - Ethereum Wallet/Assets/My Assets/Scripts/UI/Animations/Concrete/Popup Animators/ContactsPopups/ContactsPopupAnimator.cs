@@ -88,9 +88,9 @@ public class ContactsPopupAnimator : UIAnimator
 			FinishedAnimating();
 		}
 		else if (index == contactsTransform.childCount - 1)
-			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
+			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
-			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateContacts(++index));
+			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, () => AnimateContacts(++index));
 	}
 
 	/// <summary>

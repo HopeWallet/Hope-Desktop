@@ -8,6 +8,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
 
+	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
 	private ContactsManager contactsManager;
@@ -24,6 +25,12 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		this.contactButtonFactory = contactButtonFactory;
 		this.contactsManager = contactsManager;
 	}
+
+	/// <summary>
+	/// Sets the active SendActivePopup
+	/// </summary>
+	/// <param name="sendAssetPopup"> The active SendAssetPopup instance </param>
+	public void SetSendAssetPopup(SendAssetPopup sendAssetPopup) => this.sendAssetPopup = sendAssetPopup;
 
 	/// <summary>
 	/// Adds button listeners and also adds the contact objects for the number of saved contacts
@@ -57,9 +64,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void ConfirmButtonClicked()
 	{
-		contactsManager.SetSelectedContact(activeContactButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text,
-										   activeContactButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
-
+		sendAssetPopup.Address.addressField.text = activeContactButton.RealContactAddress;
 		popupManager.CloseActivePopup();
 	}
 
