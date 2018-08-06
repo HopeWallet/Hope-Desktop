@@ -82,7 +82,7 @@ public abstract class ContractBase
     {
         UnityWebUtils.DownloadString(EthereumNetworkManager.Instance.CurrentNetwork.Api.GetContractAbiUrl(contractAddress), abiJson =>
         {
-            ApiAbi abi = JsonUtils.GetJsonData<ApiAbi>(abiJson);
+            ApiAbi abi = JsonUtils.Deserialize<ApiAbi>(abiJson);
             TryContractSetup(contractAddress, abi.status == 0 ? null : abi.result.Replace("\"", "'").Replace("\\", ""), onContractInitialized);
         });
     }

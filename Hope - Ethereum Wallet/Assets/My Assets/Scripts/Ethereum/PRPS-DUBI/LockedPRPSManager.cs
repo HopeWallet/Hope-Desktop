@@ -77,7 +77,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// <param name="txList"> The list of transactions. </param>
     private void ProcessTxList(string txList)
     {
-        var transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<TokenTransactionJson>>(txList);
+        var transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<TokenTransactionJson>>(txList);
         if (transactionsJson == null)
             return;
 
