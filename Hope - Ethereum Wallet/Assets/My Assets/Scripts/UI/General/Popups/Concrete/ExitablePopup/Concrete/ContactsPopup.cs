@@ -1,17 +1,24 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using System.Linq;
+using System.Collections.Generic;
 
 public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
+	public TMP_Dropdown sortByDropdown;
 
 	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
 	private ContactsManager contactsManager;
-	public ContactButton ActiveContactButton;
+
+	private string selectedContactAddress;
+
+	public ContactButton ActiveContactButton { get; set; }
 
 	/// <summary>
 	/// Adds the required dependencies to the ContactsPopup
@@ -42,8 +49,28 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
+		sortByDropdown.onValueChanged.AddListener(ListOrderChanged);
 
 		AddContactButtons();
+	}
+
+	/// <summary>
+	/// Sets the active contact button if the inputted address is from a saved contact
+	/// </summary>
+	protected override void OnStart()
+	{
+		if (!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text))
+		{
+			string inputtedAddress = sendAssetPopup.Address.addressField.text;
+
+			for (int i = 0; i < contactsListTransform.childCount; i++)
+			{
+				ContactButton contactButton = contactsListTransform.GetChild(i).GetChild(0).GetComponent<ContactButton>();
+
+				if (contactButton.RealContactAddress == inputtedAddress)
+					EnableNewContactButton(contactButton);
+			}
+		}
 	}
 
 	/// <summary>
@@ -51,10 +78,10 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void AddContactButtons()
 	{
-		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
+		if (contactsManager.Contacts.Count == 0)
 			return;
 
-		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
+		for (int i = 1; i <= contactsManager.Contacts.Count; i++)
 		{
 			var button = contactButtonFactory.Create();
 			var address = SecurePlayerPrefs.GetString("contact_" + i);
@@ -67,32 +94,53 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	}
 
 	/// <summary>
-	/// Sets the active contact button if the inputted address is from a saved contact
-	/// </summary>
-	protected override void OnStart()
-	{
-		if (!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text))
-		{
-			string inputtedAddress = sendAssetPopup.Address.addressField.text;
-			Transform contactsTransform = contactsPopupAnimator.contactsTransform;
-
-			for (int i = 0; i < contactsTransform.childCount; i++)
-			{
-				ContactButton contactButton = contactsTransform.GetChild(i).GetChild(0).GetComponent<ContactButton>();
-
-				if (contactButton.RealContactAddress == inputtedAddress)
-					EnableNewContactButton(contactButton);
-			}
-		}
-	}
-
-	/// <summary>
 	/// Gets The currently selected contact details and closes the popup
 	/// </summary>
 	private void ConfirmButtonClicked()
 	{
 		sendAssetPopup.Address.addressField.text = ActiveContactButton.RealContactAddress;
 		popupManager.CloseActivePopup();
+	}
+
+	/// <summary>
+	/// Opens up the AddOrEditContactPopup
+	/// </summary>
+	private void AddContact()
+	{
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this);
+	}
+
+	/// <summary>
+	/// List order has been changed
+	/// </summary>
+	/// <param name="value"> The value of the sorting type in the dropdown </param>
+	private void ListOrderChanged(int value)
+	{
+		if (contactsManager.Contacts.Count == 0)
+			return;
+
+		var orderedList = new List<KeyValuePair<string, int>>();
+		if (ActiveContactButton != null) selectedContactAddress = ActiveContactButton.RealContactAddress;
+
+		if (value == 0) //Sort by oldest
+			orderedList = contactsManager.ContactOrders.OrderBy(p => p.Value).ToList();
+
+		else if (value == 1) //Sort by newest
+			orderedList = contactsManager.ContactOrders.OrderByDescending(p => p.Value).ToList();
+
+		else //Sort by alphabetical
+		{
+			//orderedList = contactsManager.Contacts.OrderBy(p => p.Value).ToList();
+		}
+
+		//orderedList.ForEach(p => Debug.Log(p.Key + " => " + p.Value));
+		SetOrderedList(orderedList);
+	}
+
+	private void DoStuff<T, V>()
+	{
+		var orderedList = new List<KeyValuePair<T, V>>();
 	}
 
 	/// <summary>
@@ -109,12 +157,17 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		confirmButton.interactable = true;
 	}
 
-	/// <summary>
-	/// Opens up the AddOrEditContactPopup
-	/// </summary>
-	private void AddContact()
+	private void SetOrderedList(List<KeyValuePair<string, int>> orderedList)
 	{
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this);
+		for (int i = 0; i < contactsManager.Contacts.Count; i++)
+		{
+			ContactButton currentContactButton = contactsListTransform.GetChild(i).GetChild(0).GetComponent<ContactButton>();
+			string address = orderedList[i].Key;
+
+			currentContactButton.UpdateContactDetails(address, contactsManager.Contacts[address]);
+
+			if (address == selectedContactAddress)
+				EnableNewContactButton(currentContactButton);
+		}
 	}
 }

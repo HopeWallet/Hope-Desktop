@@ -55,11 +55,15 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// </summary>
 	private void AddContactClicked()
 	{
-		contactsManager.Contacts.Add(addressInputField.text, nameInputField.text);
+		string name = nameInputField.text;
+		string address = addressInputField.text;
+		int contactsCount = contactsManager.Contacts.Count + 1;
 
-		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
-		SecurePlayerPrefs.SetString("contact_" + contactsManager.Contacts.Count, addressInputField.text);
-		SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
+		contactsManager.AddContact(address, name);
+		contactsManager.ContactOrders.Add(address, contactsCount);
+
+		SecurePlayerPrefs.SetString("contact_" + contactsCount, address);
+		SecurePlayerPrefs.SetString(address, name);
 
 		CreateNewContactObjectInList();
 
@@ -86,28 +90,27 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// </summary>
 	private void ConfirmClicked()
 	{
-		contactsManager.Contacts.Remove(previousAddress);
-		contactsManager.Contacts.Add(addressInputField.text, nameInputField.text);
+		string newName = nameInputField.text;
+		string newAddress = addressInputField.text;
 
-		if (addressInputField.text == previousAddress)
-			SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
+		contactsManager.EditContact(newAddress, previousAddress, newName);
+
+		if (newAddress == previousAddress)
+			SecurePlayerPrefs.SetString(newAddress, newName);
 		else
 		{
-			for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
-			{
-				string prefName = "contact_" + i;
+			int index = contactsManager.ContactOrders[previousAddress];
 
-				if (SecurePlayerPrefs.GetString(prefName) == previousAddress)
-				{
-					SecurePlayerPrefs.DeleteKey(previousAddress);
+			SecurePlayerPrefs.DeleteKey(previousAddress);
 
-					SecurePlayerPrefs.SetString(prefName, addressInputField.text);
-					SecurePlayerPrefs.SetString(addressInputField.text, nameInputField.text);
-				}
-			}
+			SecurePlayerPrefs.SetString("contact_" + index, newAddress);
+			SecurePlayerPrefs.SetString(newAddress, newName);
+
+			contactsManager.ContactOrders.Remove(previousAddress);
+			contactsManager.ContactOrders.Add(newAddress, index);
 		}
 
-		contactButton.UpdateContactDetails(nameInputField.text, addressInputField.text);
+		contactButton.UpdateContactDetails(newAddress, newName);
 
 		popupManager.CloseActivePopup();
 	}

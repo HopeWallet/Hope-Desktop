@@ -25,23 +25,13 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	/// </summary>
 	protected override void OnOkClicked()
 	{
-		string addressInObject = contactAddress.text;
+		string address = contactAddress.text;
+		int index = contactsManager.ContactOrders[address];
 
-		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
-		{
-			string currentAddressInLoop = SecurePlayerPrefs.GetString("contact_" + i);
-
-			if (currentAddressInLoop == addressInObject)
-			{
-				SecurePlayerPrefs.DeleteKey(currentAddressInLoop);
-				SecurePlayerPrefs.DeleteKey("contact_" + i);
-				MoveContacts(i);
-				break;
-			}
-		}
-
-		contactsManager.Contacts.Remove(addressInObject);
-		SecurePlayerPrefs.SetInt("Contacts", contactsManager.Contacts.Count);
+		SecurePlayerPrefs.DeleteKey(address);
+		contactsManager.ContactOrders.Remove(address);
+		contactsManager.RemoveContact(address);
+		MoveContacts(index);
 
 		if (contactButton == contactsPopup.ActiveContactButton)
 		{
@@ -60,9 +50,16 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	{
 		if (SecurePlayerPrefs.HasKey("contact_" + (index + 1)))
 		{
-			SecurePlayerPrefs.SetString("contact_" + index, SecurePlayerPrefs.GetString("contact_" + (index + 1)));
-			MoveContacts(index + 1);
+			string nextAddress = SecurePlayerPrefs.GetString("contact_" + (index + 1));
+
+			contactsManager.ContactOrders.Remove(nextAddress);
+			contactsManager.ContactOrders.Add(nextAddress, index);
+			SecurePlayerPrefs.SetString("contact_" + index, nextAddress);
+			MoveContacts(++index);
 		}
+
+		else
+			SecurePlayerPrefs.DeleteKey("contact_" + index);
 	}
 
 	/// <summary>

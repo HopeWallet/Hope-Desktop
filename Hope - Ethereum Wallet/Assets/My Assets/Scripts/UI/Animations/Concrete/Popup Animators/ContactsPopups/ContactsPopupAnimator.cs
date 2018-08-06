@@ -15,17 +15,12 @@ public class ContactsPopupAnimator : UIAnimator
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
 
-	public Transform contactsTransform;
+	private Transform contactsTransform;
 
 	/// <summary>
 	/// Initializes the elements
 	/// </summary>
-	private void Start()
-	{
-		contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
-
-		sortBySection.transform.GetChild(1).GetComponent<TMP_Dropdown>().onValueChanged.AddListener(ListOrderChanged);
-	}
+	private void Start() => contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -86,27 +81,5 @@ public class ContactsPopupAnimator : UIAnimator
 			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
 			contactsTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, () => AnimateContacts(++index));
-	}
-
-	/// <summary>
-	/// List order has been changed
-	/// </summary>
-	/// <param name="value"> The value of the sorting type in the dropdown </param>
-	private void ListOrderChanged(int value)
-	{
-		if (value == 0)
-		{
-			//sort by oldest
-		}
-
-		else if (value == 1)
-		{
-			//Sort by newest
-		}
-
-		else
-		{
-			//Sort by alphabetical
-		}
 	}
 }

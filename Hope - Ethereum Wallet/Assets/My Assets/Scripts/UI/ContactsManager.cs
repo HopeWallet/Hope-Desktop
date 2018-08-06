@@ -5,9 +5,29 @@ public sealed class ContactsManager
 
 	public Dictionary<string, string> Contacts { get; } = new Dictionary<string, string>();
 
+	public Dictionary<string, int> ContactOrders { get; } = new Dictionary<string, int>();
+
 	public ContactsManager()
 	{
 		SetContacts();
+	}
+
+	public void AddContact(string contactAddress, string contactName)
+	{
+		Contacts.Add(contactAddress, contactName);
+		
+	}
+
+	public void RemoveContact(string contactAddress)
+	{
+		Contacts.Remove(contactAddress);
+		//ContactOrders.Remove(contactAddress);
+	}
+
+	public void EditContact(string newContactAddress, string previousAddress, string newContactName)
+	{
+		Contacts.Remove(previousAddress);
+		Contacts.Add(newContactAddress, newContactName);
 	}
 
 	/// <summary>
@@ -15,13 +35,14 @@ public sealed class ContactsManager
 	/// </summary>
 	private void SetContacts()
 	{
-		if (!SecurePlayerPrefs.HasKey("Contacts") || SecurePlayerPrefs.GetInt("Contacts") == 0)
-			return;
-
-		for (int i = 1; i <= SecurePlayerPrefs.GetInt("Contacts"); i++)
+		for (int i = 1; ; i++)
 		{
+			if (!SecurePlayerPrefs.HasKey("contact_" + i))
+				return;
+
 			string address = SecurePlayerPrefs.GetString("contact_" + i);
 			Contacts.Add(address, SecurePlayerPrefs.GetString(address));
+			ContactOrders.Add(address, i);
 		}
 	}
 }

@@ -50,7 +50,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
 
-			if (IsValid && SecurePlayerPrefs.HasKey("Contacts"))
+			if (IsValid)
 				CheckIfSavedAddress(address);
 			else
 				contactName.text = "";
@@ -63,9 +63,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void CheckIfSavedAddress(string address)
 		{
 			if (SecurePlayerPrefs.HasKey(address))
-			{
 				contactName.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";
-			}
+			
 
 			else
 				contactName.text = "";

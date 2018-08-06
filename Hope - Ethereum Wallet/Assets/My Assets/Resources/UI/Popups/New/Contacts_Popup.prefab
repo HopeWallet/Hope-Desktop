@@ -2132,7 +2132,7 @@ MonoBehaviour:
   addContactButton: {fileID: 114624928932154440}
   confirmButton: {fileID: 114126943363835902}
   contactsListTransform: {fileID: 224468492234351710}
-  ActiveContactButton: {fileID: 0}
+  sortByDropdown: {fileID: 114937954510528154}
 --- !u!114 &114891721660476332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2487,7 +2487,6 @@ MonoBehaviour:
   searchSection: {fileID: 1236938208971320}
   contactsList: {fileID: 1184842143659122}
   confirmButton: {fileID: 1571029723280496}
-  contactsTransform: {fileID: 0}
 --- !u!222 &222026854114912346
 CanvasRenderer:
   m_ObjectHideFlags: 1

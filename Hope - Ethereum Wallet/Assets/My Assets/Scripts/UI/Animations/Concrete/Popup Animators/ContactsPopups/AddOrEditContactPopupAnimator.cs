@@ -130,7 +130,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		string updatedAddress = addressInputField.text;
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
-		bool notOverridingOtherContactAddresses = !SecurePlayerPrefs.HasKey(updatedAddress) ? true : !AddingContact && updatedAddress == PreviousAddress;
+		bool notOverridingOtherContactAddresses = !SecurePlayerPrefs.HasKey(updatedAddress) || (!AddingContact && updatedAddress == PreviousAddress);
 
 		ValidAddress = realEthereumAddress && notOverridingOtherContactAddresses;
 
