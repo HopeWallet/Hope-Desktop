@@ -30,6 +30,9 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     private const int MIN_PERCENTAGE_TIME_RINKEBY = 3600; // For use with the rinkeby hodler where the lock period minimum is 1 hour.
     private const int MIN_PERCENTAGE_TIME_MAINNET = 7884000; // For use with the mainnet hodler where the lock period minimum is 3 months.
 
+    /// <summary>
+    /// The standard estimated gas price.
+    /// </summary>
     public GasPrice StandardGasPrice { get; set; }
 
     /// <summary>
@@ -68,12 +71,18 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         this.etherBalanceObserver = etherBalanceObserver;
     }
 
+    /// <summary>
+    /// Starts the updates for gas prices and the current ether balance.
+    /// </summary>
     public void StartButtonUpdates()
     {
         releasePurposeButton.onClick.AddListener(ReleasePurpose);
         ObserverHelpers.SubscribeObservables(this, gasPriceObserver, etherBalanceObserver);
     }
 
+    /// <summary>
+    /// Stops all observable updates.
+    /// </summary>
     public void EndButtonUpdates()
     {
         ObserverHelpers.UnsubscribeObservables(this, gasPriceObserver, etherBalanceObserver);
