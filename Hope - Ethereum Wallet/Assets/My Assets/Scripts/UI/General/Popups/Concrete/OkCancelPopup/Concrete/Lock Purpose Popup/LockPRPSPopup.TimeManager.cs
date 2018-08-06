@@ -21,10 +21,24 @@ public sealed partial class LockPRPSPopup
 
         private decimal multiplier;
 
+        /// <summary>
+        /// Whether the time period to lock for is valid.
+        /// </summary>
         public bool IsValid => multiplier >= 0.01m;
 
+        /// <summary>
+        /// The integer number of months to lock purpose for.
+        /// </summary>
         public int MonthsToLock => (int)(multiplier * 300);
 
+        /// <summary>
+        /// Initializes the TimeManager by assigning all buttons and other dependencies.
+        /// </summary>
+        /// <param name="amountManager"> The LockPRPSPopup.AmountManager. </param>
+        /// <param name="threeMonthsButton"> The button used to represent a three month purpose lock. </param>
+        /// <param name="sixMonthsButton"> The button used to represent a six month purpose lock. </param>
+        /// <param name="twelveMonthsButton"> The button used to represent a twelve month purpose lock. </param>
+        /// <param name="dubiRewardText"> The text component used for displaying the dubi reward. </param>
         public TimeManager(
             AmountManager amountManager,
             Button threeMonthsButton,
@@ -44,11 +58,18 @@ public sealed partial class LockPRPSPopup
             twelveMonthsButton.onClick.AddListener(() => ButtonPressed(twelveMonthsButton));
         }
 
+        /// <summary>
+        /// Stops the TimeManager.
+        /// </summary>
         public void Stop()
         {
             amountManager.OnLockAmountChanged -= UpdateDUBIReward;
         }
 
+        /// <summary>
+        /// Called when a new monthly lock button is pressed.
+        /// </summary>
+        /// <param name="button"> The monthly lock button which was pressed. </param>
         private void ButtonPressed(Button button)
         {
             threeMonthsButton.interactable = true;
@@ -67,6 +88,9 @@ public sealed partial class LockPRPSPopup
             UpdateDUBIReward();
         }
 
+        /// <summary>
+        /// Updates the dubi reward text based on the button that was pressed.
+        /// </summary>
         private void UpdateDUBIReward()
         {
             if (multiplier < 0.01m)
