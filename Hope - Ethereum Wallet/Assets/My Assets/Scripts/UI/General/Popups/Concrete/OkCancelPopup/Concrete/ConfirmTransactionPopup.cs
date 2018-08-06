@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
@@ -52,7 +53,21 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         toAddress.text = transactionInput[0].ToString();
         fromAddress.text = userWalletManager.WalletAddress;
         feeText.text = dynamicDataCache.GetData("txfee") + " ETH";
-        // walletName
-        // contactName (empty string if nothing)
+		CheckIfSendingToContact();
+		//Wallet name
     }
+
+	/// <summary>
+	/// Checks if sending a transaction to a saved contact
+	/// </summary>
+	private void CheckIfSendingToContact()
+	{
+		if (SecurePlayerPrefs.HasKey(toAddress.text))
+			contactName.text = "[ " + SecurePlayerPrefs.GetString(toAddress.text) + " ]";
+
+		else
+			contactName.text = "";
+
+		contactName.gameObject.SetActive(string.IsNullOrEmpty(contactName.text) ? false : true);
+	}
 }

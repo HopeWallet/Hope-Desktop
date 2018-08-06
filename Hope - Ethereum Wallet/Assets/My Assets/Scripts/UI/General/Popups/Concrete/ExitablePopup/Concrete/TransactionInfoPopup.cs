@@ -72,11 +72,29 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + " Ether";
+		CheckIfContact(transactionInfo.From, fromAddressName);
+		CheckIfContact(transactionInfo.To, toAddressName);
 
-        TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
+		TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
         {
             gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + " Gwei");
             gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }
+
+	/// <summary>
+	/// Checks if the address is also from a saved contact
+	/// </summary>
+	/// <param name="address"> The address string </param>
+	/// <param name="nameTextObject"> The name text object </param>
+	private void CheckIfContact(string address, TextMeshProUGUI nameTextObject)
+	{
+		if (SecurePlayerPrefs.HasKey(address))
+			nameTextObject.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";
+
+		else
+			nameTextObject.text = "";
+
+		nameTextObject.gameObject.SetActive(string.IsNullOrEmpty(nameTextObject.text) ? false : true);
+	}
 }
