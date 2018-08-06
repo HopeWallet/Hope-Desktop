@@ -7,7 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class ContractBase
 {
-
     protected Dictionary<string, Function> functions;
     protected Contract contract;
 
@@ -140,5 +139,4 @@ public abstract class ContractBase
     /// </summary>
     /// <param name="onContractInitialized"> Action to call when the contract has been initialized. </param>
     protected virtual void InitializeExtra(Action<ContractBase, string> onContractInitialized) { }
-
 }
