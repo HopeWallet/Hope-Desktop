@@ -4,7 +4,7 @@ using System.Numerics;
 /// <summary>
 /// Class which mimics the ethereum ERC20 token standard and contains most functions which are active in the token standard.
 /// </summary>
-public static partial class ERC20
+public sealed partial class ERC20
 {
     /// <summary>
     /// Class which contains the different messages which interact/change the ERC20 token contract values on the blockchain.

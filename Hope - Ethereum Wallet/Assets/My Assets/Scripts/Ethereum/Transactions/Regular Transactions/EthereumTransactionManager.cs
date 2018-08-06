@@ -205,7 +205,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
     private void ReadJsonData<T>(string transactionList, string assetAddress, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
-        EtherscanAPIJson<T> transactionsJson = JsonUtils.GetJsonData<EtherscanAPIJson<T>>(transactionList);
+        EtherscanAPIJson<T> transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
 
         if (transactionsJson == null)
             return;

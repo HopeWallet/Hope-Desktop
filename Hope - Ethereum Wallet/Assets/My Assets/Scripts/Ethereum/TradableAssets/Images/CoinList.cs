@@ -46,7 +46,7 @@ public class CoinList
     /// <param name="coinList"> The json string containing all data from CoinMarketCap. </param>
     private async void RetrieveData(string coinList)
     {
-        CMCData cmcData = await Task.Run(() => JsonUtils.GetJsonData<CMCData>(coinList)).ConfigureAwait(false);
+        CMCData cmcData = await Task.Run(() => JsonUtils.Deserialize<CMCData>(coinList)).ConfigureAwait(false);
 
         await Task.Run(() => cmcData.data.ForEach(coin =>
         {
