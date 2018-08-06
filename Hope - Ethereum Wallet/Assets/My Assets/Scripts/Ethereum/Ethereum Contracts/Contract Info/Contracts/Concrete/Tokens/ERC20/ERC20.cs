@@ -1,15 +1,11 @@
 ﻿using Hope.Utils.EthereumUtils;
 using Nethereum.Hex.HexTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public sealed partial class ERC20 : DynamicSmartContract
+public sealed partial class ERC20 : Token
 {
-    public ERC20(string contractAddress) : base(contractAddress)
+    public ERC20(string contractAddress, Action onTokenInitialized) : base(contractAddress, onTokenInitialized)
     {
     }
 
@@ -20,8 +16,10 @@ public sealed partial class ERC20 : DynamicSmartContract
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
     public void BalanceOf(string address, Action<dynamic> onBalanceReceived)
     {
-        SimpleContractQueries.QueryUInt256Output<Queries.BalanceOf>(ContractAddress, address,
-            balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, TokenDecimals)), address);
+        SimpleContractQueries.QueryUInt256Output<Queries.BalanceOf>(ContractAddress,
+                                                                    address,
+                                                                    balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, Decimals.Value)), 
+                                                                    address);
     }
 
     /// <summary>
@@ -30,7 +28,9 @@ public sealed partial class ERC20 : DynamicSmartContract
     /// <param name="onSupplyReceived"> Callback action which should pass in the total supply of this token. </param>
     public void TotalSupply(Action<dynamic> onSupplyReceived)
     {
-        SimpleContractQueries.QueryUInt256Output<Queries.TotalSupply>(ContractAddress, null, supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, TokenDecimals)));
+        SimpleContractQueries.QueryUInt256Output<Queries.TotalSupply>(ContractAddress,
+                                                                      null,
+                                                                      supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, Decimals.Value)));
     }
 
     /// <summary>
@@ -46,12 +46,26 @@ public sealed partial class ERC20 : DynamicSmartContract
         userWalletManager.SignTransaction<ConfirmTransactionPopup>(request =>
         {
             ContractUtils.SendContractMessage<Messages.Transfer>(ContractAddress,
-                                                                        request,
-                                                                        gasPrice,
-                                                                        gasLimit,
-                                                                        () => Debug.Log("Successfully sent " + amount + " " + TokenSymbol + " to address " + address), address,
-                                                                        SolidityUtils.ConvertToUInt(amount, TokenDecimals));
-        }, gasLimit, gasPrice, address, ContractAddress, amount, TokenSymbol);
+                                                                 request,
+                                                                 gasPrice,
+                                                                 gasLimit,
+                                                                 () => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address), address,
+                                                                 SolidityUtils.ConvertToUInt(amount, Decimals.Value));
+        }, gasLimit, gasPrice, address, ContractAddress, amount, Symbol);
     }
 
+    protected override void GetTokenName(Action<string> onTokenNameReceived)
+    {
+        SimpleContractQueries.QueryStringOutput<Queries.Name>(ContractAddress, null, o => onTokenNameReceived?.Invoke(o.Value));
+    }
+
+    protected override void GetTokenSymbol(Action<string> onTokenSymbolReceived)
+    {
+        SimpleContractQueries.QueryStringOutput<Queries.Symbol>(ContractAddress, null, o => onTokenSymbolReceived?.Invoke(o.Value));
+    }
+
+    protected override void GetTokenDecimals(Action<dynamic> onTokenDecimalsReceived)
+    {
+        SimpleContractQueries.QueryUInt256Output<Queries.Decimals>(ContractAddress, null, o => onTokenDecimalsReceived?.Invoke(o.Value));
+    }
 }

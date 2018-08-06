@@ -55,10 +55,6 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class HOPETesting : MonoBehaviour
 {
-    private void Start()
-    {
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
