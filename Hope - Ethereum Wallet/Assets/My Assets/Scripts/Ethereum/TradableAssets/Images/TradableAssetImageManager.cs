@@ -29,7 +29,7 @@ public sealed class TradableAssetImageManager
 
         imagePath = Application.streamingAssetsPath + "/";
         pivot = new Vector2(0.5f, 0.5f);
-        defaultSprite = CreateSprite(Resources.Load("UI/Graphics/Icons/AssetLogos/DEFAULT") as Texture2D);
+        defaultSprite = CreateSprite(Resources.Load("UI/Graphics/Textures/Other/Icons/AssetLogos/DEFAULT") as Texture2D);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public sealed class TradableAssetImageManager
     {
         Texture2D image;
 
-        if ((image = Resources.Load("UI/Graphics/Icons/AssetLogos/" + assetSymbol) as Texture2D) == null)
+        if ((image = Resources.Load("UI/Graphics/Textures/Other/Icons/AssetLogos/" + assetSymbol) as Texture2D) == null)
             return false;
 
         SaveImageToDictionary(image, assetSymbol, onImageReceived);
