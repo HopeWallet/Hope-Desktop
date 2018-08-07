@@ -98,24 +98,22 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void StartWordAnimation()
 	{
+		Animating = true;
 		AnimateIcon(checkMarkIcon);
-		CrunchWord(0);
+		AnimateWord(0);
 	}
 
 	/// <summary>
-	/// Scales the word's X value to zero
+	/// Animates the word object and sets the input field to the pasted word
 	/// </summary>
 	/// <param name="index"> The index that is being animated </param>
-	private void CrunchWord(int index) => wordTextObjects[index].AnimateScaleX(0f, 0.05f, () => ExpandWord(index));
-
-	/// <summary>
-	/// Scales the word's X value back to 1
-	/// </summary>
-	/// <param name="index"> The index that is being animated </param>
-	private void ExpandWord(int index)
+	private void AnimateWord(int index)
 	{
-		wordInputFields[index].GetComponent<TMP_InputField>().text = wordStrings[index];
-		wordTextObjects[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(++index));
+		wordTextObjects[index].AnimateScaleX(0f, 0.05f, () =>
+		{
+			wordInputFields[index].GetComponent<TMP_InputField>().text = wordStrings[index];
+			wordTextObjects[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(++index));
+		});
 	}
 
 	/// <summary>
@@ -124,8 +122,19 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="index"> The index that is being animated </param>
 	private void ProcessWordAnimation(int index)
 	{
-		if (index < wordStrings.Length)
-			CrunchWord(index);
+		if (index < wordStrings.Length && !string.IsNullOrEmpty(wordStrings[index]))
+		{
+			AnimateWord(index);
+		}
+
+		else
+		{
+			for (int i = index; i < 24; i++)
+				wordInputFields[i].GetComponent<TMP_InputField>().text = "";
+
+			Animating = false;
+			SetButtonInteractable();
+		}
 	}
 
 	/// <summary>
@@ -134,14 +143,11 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="gameObject"> The GameObject that is being animated </param>
 	private void AnimateIcon(GameObject gameObject)
 	{
-		Animating = true;
-
         gameObject.transform.localScale = new Vector3(0, 0, 1);
 
         gameObject.AnimateGraphicAndScale(1f, 1f, 0.2f,
 			() => gameObject.AnimateScaleX(1.01f, 1f,
-			() => gameObject.AnimateGraphic(0f, 0.5f,
-			() => Animating = false)));
+			() => gameObject.AnimateGraphic(0f, 0.5f)));
 	}
 
 	/// <summary>
@@ -150,17 +156,10 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="value"> The value of the dropdown </param>
 	private void PassphraseWordCountChanged(int value)
 	{
-		if (value == 0)
-		{
-			wordCount = 12;
-			AnimateFormChange(false);
-		}
+		wordCount = value == 0 ? 12 : 24;
+		AnimateFormChange(value == 0 ? false : true);
 
-		else
-		{
-			wordCount = 24;
-			AnimateFormChange(true);
-		}
+		SetButtonInteractable();
 	}
 
 	/// <summary>
@@ -210,6 +209,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void SetButtonInteractable()
 	{
+		if (Animating) return;
+
 		Button importButtonComponent = importButton.GetComponent<Button>();
 
 		for (int i = 0; i < wordCount; i++)
