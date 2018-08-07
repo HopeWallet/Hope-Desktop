@@ -4,19 +4,19 @@ using UnityEngine.UI;
 using Zenject;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
 	public TMP_Dropdown sortByDropdown;
+	public TMP_InputField searchField;
 
 	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
 	private ContactsManager contactsManager;
-
-	private string selectedContactAddress;
 
 	public ContactButton ActiveContactButton { get; set; }
 
@@ -50,6 +50,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 		sortByDropdown.onValueChanged.AddListener(ListOrderChanged);
+		searchField.onValueChanged.AddListener(SearchBarChanged);
 
 		AddContactButtons();
 	}
@@ -112,35 +113,32 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	}
 
 	/// <summary>
+	/// Deactivates the contact objects that do not contain information compatible with what is being searched for
+	/// </summary>
+	/// <param name="search"></param>
+	private void SearchBarChanged(string search)
+	{
+		search = search.ToLower();
+
+		var buttons = contactsListTransform.GetChildrenTransformList().Select(b => b.GetChild(0).GetComponent<ContactButton>()).ToList();
+		buttons.Where(b => !b.ButtonInfo.ContactName.ToLower().Contains(search) || !b.ButtonInfo.ContactAddress.ToLower().StartsWith(search)).ForEach(b => b.transform.parent.gameObject.SetActive(false));
+		buttons.Where(b => b.ButtonInfo.ContactName.ToLower().Contains(search) || b.ButtonInfo.ContactAddress.ToLower().StartsWith(search)).ForEach(b => b.transform.parent.gameObject.SetActive(true));
+	}
+	
+	/// <summary>
 	/// List order has been changed
 	/// </summary>
 	/// <param name="value"> The value of the sorting type in the dropdown </param>
 	private void ListOrderChanged(int value)
 	{
-		if (contactsManager.Contacts.Count == 0)
-			return;
+		if (value == 0)
+			ChangeListOrder((b1, b2) => contactsManager.ContactOrders[b1.ButtonInfo.ContactAddress].CompareTo(contactsManager.ContactOrders[b2.ButtonInfo.ContactAddress]));
 
-		var orderedList = new List<KeyValuePair<string, int>>();
-		if (ActiveContactButton != null) selectedContactAddress = ActiveContactButton.RealContactAddress;
+		else if (value == 1)
+			ChangeListOrder((b1, b2) => contactsManager.ContactOrders[b2.ButtonInfo.ContactAddress].CompareTo(contactsManager.ContactOrders[b1.ButtonInfo.ContactAddress]));
 
-		if (value == 0) //Sort by oldest
-			orderedList = contactsManager.ContactOrders.OrderBy(p => p.Value).ToList();
-
-		else if (value == 1) //Sort by newest
-			orderedList = contactsManager.ContactOrders.OrderByDescending(p => p.Value).ToList();
-
-		else //Sort by alphabetical
-		{
-			//orderedList = contactsManager.Contacts.OrderBy(p => p.Value).ToList();
-		}
-
-		//orderedList.ForEach(p => Debug.Log(p.Key + " => " + p.Value));
-		SetOrderedList(orderedList);
-	}
-
-	private void DoStuff<T, V>()
-	{
-		var orderedList = new List<KeyValuePair<T, V>>();
+		else
+			ChangeListOrder((b1, b2) => contactsManager.Contacts[b1.ButtonInfo.ContactAddress].CompareTo(contactsManager.Contacts[b2.ButtonInfo.ContactAddress]));
 	}
 
 	/// <summary>
@@ -157,17 +155,14 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		confirmButton.interactable = true;
 	}
 
-	private void SetOrderedList(List<KeyValuePair<string, int>> orderedList)
+	/// <summary>
+	/// Changes the contact list order based on a comparison.
+	/// </summary>
+	/// <param name="comparison"> The comparison to use to sort the button list. </param>
+	private void ChangeListOrder(Comparison<ContactButton> comparison)
 	{
-		for (int i = 0; i < contactsManager.Contacts.Count; i++)
-		{
-			ContactButton currentContactButton = contactsListTransform.GetChild(i).GetChild(0).GetComponent<ContactButton>();
-			string address = orderedList[i].Key;
-
-			currentContactButton.UpdateContactDetails(address, contactsManager.Contacts[address]);
-
-			if (address == selectedContactAddress)
-				EnableNewContactButton(currentContactButton);
-		}
+		var buttons = contactsListTransform.GetChildrenTransformList().Select(b => b.GetChild(0).GetComponent<ContactButton>()).ToList();
+		buttons.Sort(comparison);
+		buttons.Select(b => b.transform.parent).ForEach(b => b.SetAsLastSibling());
 	}
 }

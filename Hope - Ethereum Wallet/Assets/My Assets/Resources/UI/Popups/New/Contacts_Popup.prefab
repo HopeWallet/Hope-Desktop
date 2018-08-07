@@ -2133,6 +2133,7 @@ MonoBehaviour:
   confirmButton: {fileID: 114126943363835902}
   contactsListTransform: {fileID: 224468492234351710}
   sortByDropdown: {fileID: 114937954510528154}
+  searchField: {fileID: 114043242409095962}
 --- !u!114 &114891721660476332
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -59,9 +59,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		string address = addressInputField.text;
 		int contactsCount = contactsManager.Contacts.Count + 1;
 
-		contactsManager.AddContact(address, name);
-		contactsManager.ContactOrders.Add(address, contactsCount);
-
+		contactsManager.AddContact(address, name, contactsCount);
 		SecurePlayerPrefs.SetString("contact_" + contactsCount, address);
 		SecurePlayerPrefs.SetString(address, name);
 
@@ -92,22 +90,18 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		string newName = nameInputField.text;
 		string newAddress = addressInputField.text;
+		int index = contactsManager.ContactOrders[previousAddress];
 
-		contactsManager.EditContact(newAddress, previousAddress, newName);
+		contactsManager.EditContact(newAddress, previousAddress, newName, index);
 
 		if (newAddress == previousAddress)
 			SecurePlayerPrefs.SetString(newAddress, newName);
 		else
 		{
-			int index = contactsManager.ContactOrders[previousAddress];
-
 			SecurePlayerPrefs.DeleteKey(previousAddress);
 
 			SecurePlayerPrefs.SetString("contact_" + index, newAddress);
 			SecurePlayerPrefs.SetString(newAddress, newName);
-
-			contactsManager.ContactOrders.Remove(previousAddress);
-			contactsManager.ContactOrders.Add(newAddress, index);
 		}
 
 		contactButton.UpdateContactDetails(newAddress, newName);

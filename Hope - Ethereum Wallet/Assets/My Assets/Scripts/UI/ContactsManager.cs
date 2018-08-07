@@ -12,22 +12,24 @@ public sealed class ContactsManager
 		SetContacts();
 	}
 
-	public void AddContact(string contactAddress, string contactName)
+	public void AddContact(string contactAddress, string contactName, int contactsCount)
 	{
 		Contacts.Add(contactAddress, contactName);
-		
+		ContactOrders.Add(contactAddress, contactsCount);
 	}
 
 	public void RemoveContact(string contactAddress)
 	{
 		Contacts.Remove(contactAddress);
-		//ContactOrders.Remove(contactAddress);
+		ContactOrders.Remove(contactAddress);
 	}
 
-	public void EditContact(string newContactAddress, string previousAddress, string newContactName)
+	public void EditContact(string newContactAddress, string previousAddress, string newContactName, int index)
 	{
 		Contacts.Remove(previousAddress);
+		ContactOrders.Remove(previousAddress);
 		Contacts.Add(newContactAddress, newContactName);
+		ContactOrders.Add(newContactAddress, index);
 	}
 
 	/// <summary>

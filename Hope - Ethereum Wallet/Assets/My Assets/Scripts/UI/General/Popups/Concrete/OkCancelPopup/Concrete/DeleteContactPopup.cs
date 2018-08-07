@@ -29,7 +29,6 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		int index = contactsManager.ContactOrders[address];
 
 		SecurePlayerPrefs.DeleteKey(address);
-		contactsManager.ContactOrders.Remove(address);
 		contactsManager.RemoveContact(address);
 		MoveContacts(index);
 
