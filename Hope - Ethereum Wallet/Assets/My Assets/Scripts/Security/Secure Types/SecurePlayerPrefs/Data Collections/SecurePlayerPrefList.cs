@@ -29,6 +29,8 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         var items = JsonUtils.Deserialize<ItemArray>(jsonString).items;
         itemList.AddItems(items);
         serializedItemList.AddItems(items.Select(item => JsonUtils.Serialize(item)).ToArray());
+
+        UnityEngine.Debug.Log(jsonString);
     }
 
     private void UpdatePlayerPrefs()
@@ -37,6 +39,8 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         jsonString = JsonUtils.Serialize(array);
 
         SecurePlayerPrefs.SetString(keyName, jsonString);
+        UnityEngine.Debug.Log(jsonString);
+
     }
 
     public T this[int index]
@@ -102,19 +106,14 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         UpdatePlayerPrefs();
     }
 
-    public bool Remove(T item)
+    public bool Remove(string textToSearch)
     {
-        string serializedItem = JsonUtils.Serialize(item);
+        string itemToRemove = serializedItemList.First(item => item.Contains(textToSearch));
 
-        if (!jsonString.Contains(serializedItem))
+        if (string.IsNullOrEmpty(itemToRemove))
             return false;
 
-        int index = IndexOf(item);
-
-        itemList.RemoveAt(index);
-        serializedItemList.RemoveAt(index);
-
-        UpdatePlayerPrefs();
+        RemoveAt(serializedItemList.IndexOf(itemToRemove));
 
         return true;
     }
@@ -130,9 +129,23 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         UpdatePlayerPrefs();
     }
 
-    public bool Contains(T item) => jsonString.Contains(JsonUtils.Serialize(item));
+    public int IndexOf(string textToSearch)
+    {
+        string locatedItem = serializedItemList.First(i => i.Contains(textToSearch));
 
-    public int IndexOf(T item) => serializedItemList.IndexOf(serializedItemList.First(i => i.Equals(JsonUtils.Serialize(item))));
+        if (string.IsNullOrEmpty(locatedItem))
+            return -1;
+
+        return serializedItemList.IndexOf(locatedItem);
+    }
+
+    public bool Contains(string textToSearch) => jsonString.Contains(textToSearch);
+
+    public bool Contains(T item) => Contains(JsonUtils.Serialize(item));
+
+    public bool Remove(T item) => Remove(JsonUtils.Serialize(item));
+
+    public int IndexOf(T item) => IndexOf(JsonUtils.Serialize(item));
 
     public void CopyTo(T[] array, int arrayIndex) => itemList.ToArray().CopyTo(array, arrayIndex);
 
