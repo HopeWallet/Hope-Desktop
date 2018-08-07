@@ -235,21 +235,17 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		wordStrings = new string[24];
 
-		for (int i = 0; i < wordStrings.Length; i++)
+		for (int i = 0; i < 24; i++)
 		{
 			try { wordStrings[i] = tempArray[i]; }
 
 			catch { wordStrings[i] = ""; }
 		}
 
-		if (tempArray.Length <= 24)
+		if (clipboard != null && tempArray.Length <= 24)
 		{
 			dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
-			wordCount = dropdownComponent.value == 0 ? 12 : 24;
-		}
 
-		if (clipboard != null && tempArray.Length <= wordInputFields.Length)
-		{
 			AnimateFormChange(wordCount != 12);
 			StartWordAnimation();
 		}
