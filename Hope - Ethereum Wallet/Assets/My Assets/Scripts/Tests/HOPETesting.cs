@@ -55,6 +55,16 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class HOPETesting : MonoBehaviour
 {
+    private SecurePlayerPrefList<TokenInfoJson> tokenList;
+
+    private void Start()
+    {
+        tokenList = new SecurePlayerPrefList<TokenInfoJson>("tkns");
+
+        //tokenList.Add(new TokenInfoJson("0x5831819C84C05DdcD2568dE72963AC9f1e6831b6", "Purpose", "PRPS", 18));
+        //tokenList.Add(new TokenInfoJson("0x904a34858B7A8714B2459309A004A96F8E092cB2", "Gold", "GLD2", 0));
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
