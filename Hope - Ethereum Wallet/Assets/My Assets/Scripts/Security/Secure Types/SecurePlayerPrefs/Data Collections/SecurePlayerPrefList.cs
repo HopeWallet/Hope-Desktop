@@ -62,14 +62,14 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     {
         get
         {
-            if (itemList.Count > index && index > 0)
+            if (itemList.Count > index && index >= 0)
                 return itemList[index];
 
             throw new IndexOutOfRangeException("Index out of the bounds of SecurePlayerPrefList!");
         }
         set
         {
-            if (itemList.Count > index && index > 0)
+            if (itemList.Count > index && index >= 0)
             {
                 itemList[index] = value;
                 serializedItemList[index] = JsonUtils.Serialize(value);
@@ -157,6 +157,9 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// <returns> True if the item which contained the string value was removed successfully, false otherwise. </returns>
     public bool Remove(string textToSearch)
     {
+		if (string.IsNullOrEmpty(textToSearch.Trim()))
+			return false;
+
         string[] items = serializedItemList.Where(item => item.Contains(textToSearch)).ToArray();
 
         if (items.Length == 0)
@@ -189,6 +192,9 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// <returns> Returns -1 if the text was not found, otherwise returns the index of the item which contained the <see langword="string"/> value. </returns>
     public int IndexOf(string textToSearch)
     {
+		if (string.IsNullOrEmpty(textToSearch.Trim()))
+			return -1;
+
         string[] items = serializedItemList.Where(item => item.Contains(textToSearch)).ToArray();
 
         if (items.Length == 0)
@@ -202,7 +208,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// </summary>
     /// <param name="textToSearch"> The <see langword="string"/> to search for in the <see cref="SecurePlayerPrefList"/>. </param>
     /// <returns> True if this <see cref="SecurePlayerPrefList"/> contains the item. </returns>
-    public bool Contains(string textToSearch) => jsonString.Contains(textToSearch);
+    public bool Contains(string textToSearch) => string.IsNullOrEmpty(textToSearch.Trim()) ? false : jsonString.Contains(textToSearch);
 
     /// <summary>
     /// Checks if the <see cref="SecurePlayerPrefList"/> contains an item.

@@ -20,26 +20,30 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
+	private ContactsManager contactsManager;
 
-    /// <summary>
-    /// Adds the required dependencies to this popup.
-    /// </summary>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    [Inject]
+	/// <summary>
+	/// Adds the required dependencies to this popup.
+	/// </summary>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="contactsManager"> The active ContactsManager </param>
+	[Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager,
-        DynamicDataCache dynamicDataCache)
+        DynamicDataCache dynamicDataCache,
+		ContactsManager contactsManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
         this.dynamicDataCache = dynamicDataCache;
-    }
+		this.contactsManager = contactsManager;
+	}
 
     /// <summary>
     /// Displays the asset transfer request details.
@@ -61,8 +65,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	/// </summary>
 	private void CheckIfSendingToContact()
 	{
-		if (SecurePlayerPrefs.HasKey(toAddress.text))
-			contactName.text = "[ " + SecurePlayerPrefs.GetString(toAddress.text) + " ]";
+		if (contactsManager.ContactList.Contains(toAddress.text))
+			contactName.text = "[ " + contactsManager.ContactList[toAddress.text].name + " ]";
 		else
 			contactName.text = string.Empty;
 

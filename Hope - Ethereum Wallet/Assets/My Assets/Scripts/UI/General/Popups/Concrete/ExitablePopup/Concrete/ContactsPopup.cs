@@ -79,14 +79,14 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void AddContactButtons()
 	{
-		if (contactsManager.Contacts.Count == 0)
+		if (contactsManager.ContactList.Count == 0)
 			return;
 
-		for (int i = 1; i <= contactsManager.Contacts.Count; i++)
+		for (int i = 0; i < contactsManager.ContactList.Count; i++)
 		{
 			var button = contactButtonFactory.Create();
-			var address = SecurePlayerPrefs.GetString("contact_" + i);
-			button.SetButtonInfo(new ContactInfo(this, SecurePlayerPrefs.GetString(address), address));
+			var contactInfoJson = contactsManager.ContactList[i];
+			button.SetButtonInfo(new ContactInfo(this, contactInfoJson.address, contactInfoJson.name));
 
 			Transform buttonParent = button.transform.parent;
 			buttonParent.parent = contactsListTransform;
@@ -155,14 +155,28 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private void ListOrderChanged(int value)
 	{
 		if (value == 0)
-			ChangeListOrder((b1, b2) => contactsManager.ContactOrders[b1.ButtonInfo.ContactAddress].CompareTo(contactsManager.ContactOrders[b2.ButtonInfo.ContactAddress]));
+			ChangeListOrder((b1, b2) => GetAddressNum(b1).CompareTo(GetAddressNum(b2)));
 
 		else if (value == 1)
-			ChangeListOrder((b1, b2) => contactsManager.ContactOrders[b2.ButtonInfo.ContactAddress].CompareTo(contactsManager.ContactOrders[b1.ButtonInfo.ContactAddress]));
+			ChangeListOrder((b1, b2) => GetAddressNum(b2).CompareTo(GetAddressNum(b1)));
 
 		else
-			ChangeListOrder((b1, b2) => contactsManager.Contacts[b1.ButtonInfo.ContactAddress].CompareTo(contactsManager.Contacts[b2.ButtonInfo.ContactAddress]));
+			ChangeListOrder((b1, b2) => GetContactName(b1).CompareTo(GetContactName(b2)));
 	}
+
+	/// <summary>
+	/// Returns the contact number at the contact button's address
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton being checked </param>
+	/// <returns></returns>
+	private int GetAddressNum(ContactButton contactButton) => contactsManager.ContactList.IndexOf(contactButton.ButtonInfo.ContactAddress);
+
+	/// <summary>
+	/// Returns the name string at the contactButton's address
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton being checked </param>
+	/// <returns></returns>
+	private string GetContactName(ContactButton contactButton) => contactsManager.ContactList[contactButton.ButtonInfo.ContactAddress].name;
 
 	/// <summary>
 	/// Manages the interactables of the newly clicked and old contact button that was pressed

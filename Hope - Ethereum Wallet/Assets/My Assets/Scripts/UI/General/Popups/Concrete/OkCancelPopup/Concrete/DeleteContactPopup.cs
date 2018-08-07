@@ -26,11 +26,9 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 	protected override void OnOkClicked()
 	{
 		string address = contactAddress.text;
-		int index = contactsManager.ContactOrders[address];
+		int index = contactsManager.ContactList.IndexOf(address);
 
-		SecurePlayerPrefs.DeleteKey(address);
 		contactsManager.RemoveContact(address);
-		MoveContacts(index);
 
 		if (contactButton == contactsPopup.ActiveContactButton)
 		{
@@ -39,26 +37,6 @@ public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPop
 		}
 
 		contactObject.AnimateScaleX(0f, 0.1f, () => DestroyImmediate(contactObject));
-	}
-
-	/// <summary>
-	/// Moves all of the contacts above the current one being deleted
-	/// </summary>
-	/// <param name="index"> The index of the contact being moved </param>
-	private void MoveContacts(int index)
-	{
-		if (SecurePlayerPrefs.HasKey("contact_" + (index + 1)))
-		{
-			string nextAddress = SecurePlayerPrefs.GetString("contact_" + (index + 1));
-
-			contactsManager.ContactOrders.Remove(nextAddress);
-			contactsManager.ContactOrders.Add(nextAddress, index);
-			SecurePlayerPrefs.SetString("contact_" + index, nextAddress);
-			MoveContacts(++index);
-		}
-
-		else
-			SecurePlayerPrefs.DeleteKey("contact_" + index);
 	}
 
 	/// <summary>

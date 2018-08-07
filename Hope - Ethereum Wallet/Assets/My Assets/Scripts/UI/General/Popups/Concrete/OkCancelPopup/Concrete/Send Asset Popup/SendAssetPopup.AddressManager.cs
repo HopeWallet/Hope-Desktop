@@ -15,6 +15,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public readonly TMP_InputField addressField;
 		public readonly TMP_Text contactName;
 
+		private ContactsManager contactsManager;
+
 		/// <summary>
 		/// Whether the send address is valid.
 		/// </summary>
@@ -34,10 +36,16 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Initializes the <see cref="AddressManager"/> by assigning the send address input field.
 		/// </summary>
 		/// <param name="addressField"> The input field for the address. </param>
-		public AddressManager(TMP_InputField addressField, TMP_Text contactName)
+		/// <param name="contactName"> The contactName text component </param>
+		/// <param name="contactsManager"> The active ContactsManager </param>
+		public AddressManager(
+			TMP_InputField addressField,
+			TMP_Text contactName,
+			ContactsManager contactsManager)
 		{
 			this.addressField = addressField;
 			this.contactName = contactName;
+			this.contactsManager = contactsManager;
 
 			addressField.onValueChanged.AddListener(CheckAddress);
 		}
@@ -62,9 +70,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="address"> The address in the input field. </param>
 		private void CheckIfSavedAddress(string address)
 		{
-			if (SecurePlayerPrefs.HasKey(address))
-				contactName.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";
-			
+			if (contactsManager.ContactList.Contains(address))
+				contactName.text = "[ " + contactsManager.ContactList[address].name + " ]";
 
 			else
 				contactName.text = "";

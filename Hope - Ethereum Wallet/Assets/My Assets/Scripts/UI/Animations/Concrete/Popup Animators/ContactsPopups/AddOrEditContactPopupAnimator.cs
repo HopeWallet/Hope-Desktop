@@ -16,6 +16,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	[SerializeField] private GameObject confirmButton;
 
 	private AddOrEditContactPopup addOrEditContactPopup;
+	public ContactsManager contactsManager;
 
 	private TMP_InputField nameInputField;
 	private TMP_InputField addressInputField;
@@ -113,7 +114,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedName = nameInputField.text;
 
-		ValidName = string.IsNullOrWhiteSpace(updatedName) ? string.IsNullOrEmpty(updatedName) : true;
+		ValidName = !string.IsNullOrEmpty(updatedName.Trim());
 
 		SetMainButtonInteractable();
 	}
@@ -130,7 +131,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		string updatedAddress = addressInputField.text;
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
-		bool notOverridingOtherContactAddresses = !SecurePlayerPrefs.HasKey(updatedAddress) || (!AddingContact && updatedAddress == PreviousAddress);
+		bool notOverridingOtherContactAddresses = !contactsManager.ContactList.Contains(updatedAddress) || (!AddingContact && updatedAddress == PreviousAddress);
 
 		ValidAddress = realEthereumAddress && notOverridingOtherContactAddresses;
 
@@ -138,7 +139,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address.");
 
 		else if (!notOverridingOtherContactAddresses)
-			addOrEditContactPopup.SetAddressErrorBodyText("This address has been used under the contact name: " + SecurePlayerPrefs.GetString(updatedAddress) + ".");
+			addOrEditContactPopup.SetAddressErrorBodyText("This address has been used under the contact name: " + contactsManager.ContactList[updatedAddress].name + ".");
 
 		SetMainButtonInteractable();
 	}

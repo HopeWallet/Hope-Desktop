@@ -60,5 +60,5 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 	/// </summary>
 	/// <param name="address"> The new contact address </param>
 	/// <param name="name"> The new contact name </param>
-	public void UpdateContactDetails(string address, string name) => SetButtonInfo(new ContactInfo(ButtonInfo.ContactsPopup, name, address));
+	public void UpdateContactDetails(string address, string name) => SetButtonInfo(new ContactInfo(ButtonInfo.ContactsPopup, address, name));
 }

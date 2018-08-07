@@ -42,7 +42,9 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		for (int i = 0; i < wordInputFields.Length; i++)
 		{
 			wordInputFields[i] = passphrase.transform.GetChild(i).gameObject;
-			wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(1).gameObject;
+			//wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(1).gameObject;
+			wordTextObjects[i] = wordInputFields[i].GetComponent<TMP_InputField>().textComponent.gameObject;
+
 
 			wordInputFields[i].GetComponent<TMP_InputField>().onValueChanged.AddListener(_ => SetButtonInteractable());
 		}

@@ -4,15 +4,15 @@ public sealed class ContactInfo
 
 	public ContactsPopup ContactsPopup { get; }
 
-	public string ContactName { get; }
-
 	public string ContactAddress { get; }
 
+	public string ContactName { get; }
+
 	
-	public ContactInfo(ContactsPopup contactsPopup, string contactName, string contactAddress)
+	public ContactInfo(ContactsPopup contactsPopup, string contactAddress, string contactName)
 	{
 		ContactsPopup = contactsPopup;
-		ContactName = contactName;
 		ContactAddress = contactAddress;
+		ContactName = contactName;
 	}
 }

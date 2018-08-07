@@ -55,14 +55,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// </summary>
 	private void AddContactClicked()
 	{
-		string name = nameInputField.text;
-		string address = addressInputField.text;
-		int contactsCount = contactsManager.Contacts.Count + 1;
-
-		contactsManager.AddContact(address, name, contactsCount);
-		SecurePlayerPrefs.SetString("contact_" + contactsCount, address);
-		SecurePlayerPrefs.SetString(address, name);
-
+		contactsManager.AddContact(addressInputField.text, nameInputField.text);
 		CreateNewContactObjectInList();
 
 		popupManager.CloseActivePopup();
@@ -75,7 +68,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		var button = contactButtonFactory.Create();
 
-		button.SetButtonInfo(new ContactInfo(contactsPopup, nameInputField.text, addressInputField.text));
+		button.SetButtonInfo(new ContactInfo(contactsPopup, addressInputField.text, nameInputField.text));
 
 		Transform contactObject = button.transform.parent;
 		contactObject.parent = contactsPopup.contactsListTransform;
@@ -90,19 +83,14 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		string newName = nameInputField.text;
 		string newAddress = addressInputField.text;
-		int index = contactsManager.ContactOrders[previousAddress];
+		int index = contactsManager.ContactList.IndexOf(previousAddress);
 
-		contactsManager.EditContact(newAddress, previousAddress, newName, index);
+		contactsManager.EditContact(previousAddress, newAddress, newName);
 
-		if (newAddress == previousAddress)
-			SecurePlayerPrefs.SetString(newAddress, newName);
-		else
-		{
-			SecurePlayerPrefs.DeleteKey(previousAddress);
+		if (newAddress != previousAddress)
+			contactsManager.RemoveContact(previousAddress);
 
-			SecurePlayerPrefs.SetString("contact_" + index, newAddress);
-			SecurePlayerPrefs.SetString(newAddress, newName);
-		}
+		contactsManager.AddContact(newAddress, newName);
 
 		contactButton.UpdateContactDetails(newAddress, newName);
 
@@ -120,6 +108,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
 		addOrEditContactPopupAnimator.AddingContact = addingContact;
 		addOrEditContactPopupAnimator.PreviousAddress = address;
+		addOrEditContactPopupAnimator.contactsManager = contactsManager;
 
 		if (!addingContact)
 		{

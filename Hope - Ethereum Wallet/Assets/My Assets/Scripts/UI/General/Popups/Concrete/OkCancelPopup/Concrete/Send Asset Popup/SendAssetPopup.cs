@@ -71,14 +71,15 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         GasPriceObserver gasPriceObserver,
         UpdateManager updateManager,
         DynamicDataCache dynamicDataCache,
-        PeriodicUpdateManager periodicUpdateManager)
+        PeriodicUpdateManager periodicUpdateManager,
+		ContactsManager contactsManager)
     {
         this.userWalletManager = userWalletManager;
         this.dynamicDataCache = dynamicDataCache;
 
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
-        Address = new AddressManager(addressField, contactName);
+        Address = new AddressManager(addressField, contactName, contactsManager);
         Amount = new AmountManager(this, maxToggle, amountField);
     }
 

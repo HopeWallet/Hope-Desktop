@@ -28,17 +28,23 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
+	private ContactsManager contactsManager;
 
-    /// <summary>
-    /// Injects the required dependencies.
-    /// </summary>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-    [Inject]
-    public void Construct(TradableAssetManager tradableAssetManager, TradableAssetImageManager tradableAssetImageManager)
+	/// <summary>
+	/// Injects the required dependencies.
+	/// </summary>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+	/// <param name="contactsManager"> The active ContactsManager </param>
+	[Inject]
+    public void Construct(
+		TradableAssetManager tradableAssetManager,
+		TradableAssetImageManager tradableAssetImageManager,
+		ContactsManager contactsManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
+		this.contactsManager = contactsManager;
     }
 
     /// <summary>
@@ -89,8 +95,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// <param name="nameTextObject"> The name text object </param>
 	private void CheckIfContact(string address, TextMeshProUGUI nameTextObject)
 	{
-		if (SecurePlayerPrefs.HasKey(address))
-			nameTextObject.text = "[ " + SecurePlayerPrefs.GetString(address) + " ]";
+		if (contactsManager.ContactList.Contains(address))
+			nameTextObject.text = "[ " + contactsManager.ContactList[address].name + " ]";
 
 		else
 			nameTextObject.text = "";
