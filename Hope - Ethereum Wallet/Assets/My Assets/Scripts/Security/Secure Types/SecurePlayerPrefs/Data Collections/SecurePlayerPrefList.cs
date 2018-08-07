@@ -10,7 +10,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
 
     private readonly string keyName;
 
-    private string jsonString;
+    private string jsonString = string.Empty;
 
     public SecurePlayerPrefList(string keyName)
     {
@@ -93,7 +93,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     {
         string serializedItem = JsonUtils.Serialize(item);
 
-        if (jsonString.Contains(serializedItem))
+        if (itemList.Count <= index || jsonString.Contains(serializedItem))
             return;
 
         itemList.Insert(index, item);
