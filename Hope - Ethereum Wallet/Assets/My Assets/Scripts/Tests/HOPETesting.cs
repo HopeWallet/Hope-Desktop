@@ -65,7 +65,9 @@ public class HOPETesting : MonoBehaviour
         var raeon = new TokenInfoJson("0xf518e67B86C7a201484c6B50B3Bed092D21Ccef7", "Raeon", "RAEON", 13);
         var dubi = new TokenInfoJson("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203", "Decentralized Universal Basic Income", "DUBI", 18);
 
-        tokenList.IndexOf("Gold").Log();
+        //tokenList.IndexOf("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203").Log();
+        //tokenList.Remove("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203").Log();
+        tokenList.Insert(1, dubi);
     }
 
     [ContextMenu("Delete Player Prefs")]

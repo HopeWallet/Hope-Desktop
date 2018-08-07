@@ -108,12 +108,12 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
 
     public bool Remove(string textToSearch)
     {
-        string itemToRemove = serializedItemList.First(item => item.Contains(textToSearch));
+        string[] items = serializedItemList.Where(item => item.Contains(textToSearch)).ToArray();
 
-        if (string.IsNullOrEmpty(itemToRemove))
+        if (items.Length == 0)
             return false;
 
-        RemoveAt(serializedItemList.IndexOf(itemToRemove));
+        RemoveAt(serializedItemList.IndexOf(items[0]));
 
         return true;
     }
@@ -131,12 +131,12 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
 
     public int IndexOf(string textToSearch)
     {
-        string locatedItem = serializedItemList.First(i => i.Contains(textToSearch));
+        string[] items = serializedItemList.Where(item => item.Contains(textToSearch)).ToArray();
 
-        if (string.IsNullOrEmpty(locatedItem))
+        if (items.Length == 0)
             return -1;
 
-        return serializedItemList.IndexOf(locatedItem);
+        return serializedItemList.IndexOf(items[0]);
     }
 
     public bool Contains(string textToSearch) => jsonString.Contains(textToSearch);
