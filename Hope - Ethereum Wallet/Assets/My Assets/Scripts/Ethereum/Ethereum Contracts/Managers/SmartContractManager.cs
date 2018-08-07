@@ -1,7 +1,7 @@
 ﻿using System;
 
 /// <summary>
-/// Class which manages the different smart contracts and their settings.
+/// Class which manages the different static smart contracts and their settings.
 /// </summary>
 public static class SmartContractManager
 {

@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /// <summary>
 /// Class which initializes and manages all contracts for the game.
 /// </summary>
-public class TokenContractManager
+public sealed class TokenContractManager
 {
-
     public static event Action OnTokensLoaded;
     public static event Action<TradableAsset> OnTokenAdded;
     public static event Action<string> OnTokenRemoved;
 
-    private readonly Settings settings;
     private readonly PopupManager popupManager;
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
@@ -24,13 +21,12 @@ public class TokenContractManager
     /// <param name="settings"> The settings to use with this TokenContractManager. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-    /// <param name="userWalletManager"></param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     public TokenContractManager(Settings settings,
         PopupManager popupManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
     {
-        this.settings = settings;
         this.popupManager = popupManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
