@@ -28,18 +28,20 @@ public sealed class UserWallet : SecureObject
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
     /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
+    /// <param name="walletSettings"> The settings for the UserWallet. </param>
     public UserWallet(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
-        DynamicDataCache dynamicDataCache)
+        DynamicDataCache dynamicDataCache,
+        UserWalletManager.Settings walletSettings)
     {
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;
 
         passwordEncryptor = new EphemeralEncryption(this);
-        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache);
-        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache);
-        walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor);
+        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, walletSettings);
+        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, walletSettings);
+        walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor, walletSettings);
     }
 
     /// <summary>

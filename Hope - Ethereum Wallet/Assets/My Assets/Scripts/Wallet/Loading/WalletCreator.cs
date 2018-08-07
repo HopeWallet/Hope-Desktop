@@ -7,14 +7,18 @@ using System;
 public sealed class WalletCreator : WalletLoaderBase
 {
     private readonly WalletEncryptor walletEncryptor;
+    private readonly UserWalletManager.Settings walletSettings;
 
     private string derivationPath;
 
     public WalletCreator(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
-        DynamicDataCache dynamicDataCache) : base(popupManager, playerPrefPassword, dynamicDataCache)
+        DynamicDataCache dynamicDataCache,
+        UserWalletManager.Settings walletSettings) : base(popupManager, playerPrefPassword, dynamicDataCache)
     {
+        this.walletSettings = walletSettings;
+
         walletEncryptor = new WalletEncryptor(playerPrefPassword, dynamicDataCache);
     }
 
@@ -32,25 +36,25 @@ public sealed class WalletCreator : WalletLoaderBase
 
     private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
     {
-        int walletNum = SecurePlayerPrefs.GetInt("wallet_count") + 1;
+        int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
 
-        SecurePlayerPrefs.SetInt("wallet_count", walletNum);
-        SecurePlayerPrefs.SetString("derivation_" + walletNum, derivationPath);
-        SecurePlayerPrefs.SetString("password_" + walletNum, saltedPasswordHash);
-        SecurePlayerPrefs.SetString("wallet_" + walletNum, encryptedSeed);
-        SecurePlayerPrefs.SetString("wallet_" + walletNum + "_name", dynamicDataCache.GetData("name"));
+        SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, walletNum);
+        SecurePlayerPrefs.SetString(walletSettings.walletDerivationPrefName + walletNum, derivationPath);
+        SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, saltedPasswordHash);
+        SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
+        SecurePlayerPrefs.SetString(walletSettings.walletNamePrefName + walletNum, dynamicDataCache.GetData("name"));
 
         for (int i = 0; i < encryptedHashLvls.Length; i++)
-            SecurePlayerPrefs.SetString("wallet_" + walletNum + "_h" + (i + 1), encryptedHashLvls[i]);
+            SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptedHashLvls[i]);
 
         playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
     }
 
     private void CreateWalletCountPref()
     {
-        if (!SecurePlayerPrefs.HasKey("wallet_count"))
-            SecurePlayerPrefs.SetInt("wallet_count", 0);
+        if (!SecurePlayerPrefs.HasKey(walletSettings.walletCountPrefName))
+            SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, 0);
     }
 
     /// <summary>

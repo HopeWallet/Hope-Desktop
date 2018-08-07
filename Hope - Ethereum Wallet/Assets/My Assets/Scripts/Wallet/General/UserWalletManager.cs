@@ -30,7 +30,7 @@ public sealed class UserWalletManager
         DynamicDataCache dynamicDataCache)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache);
+        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, settings);
     }
 
     /// <summary>
@@ -77,13 +77,20 @@ public sealed class UserWalletManager
     public void CreateWallet() => userWallet.Create();
 
     /// <summary>
-    /// Class which contains the settings for safely storing the password to the wallet.
+    /// Class which contains all settings related to the wallet storage/loading/unlocking.
     /// </summary>
     [Serializable]
     public class Settings
     {
         public PlayerPrefPassword safePassword;
         public string[] safePasswordCharLookups;
-    }
 
+        public string walletDataPrefName;
+        public string walletNamePrefName;
+        public string walletPasswordPrefName;
+        public string walletDerivationPrefName;
+        public string walletCountPrefName;
+        public string walletHashLvlPrefName;
+        public string walletInfoPrefName;
+    }
 }

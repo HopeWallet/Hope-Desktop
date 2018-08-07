@@ -14,6 +14,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
     private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
+    private UserWalletManager.Settings walletSettings;
     private Settings settings;
 
     /// <summary>
@@ -21,12 +22,18 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// </summary>
     /// <param name="walletButtonFactory"> The factory for creating WalletButtons. </param>
     /// <param name="dynamicDataCache"> The active ByteDataCache. </param>
+    /// <param name="walletSettings"> The settings for the UserWallet. </param> 
     /// <param name="settings"> The settings of this menu. </param>
     [Inject]
-    public void Construct(WalletButton.Factory walletButtonFactory, DynamicDataCache dynamicDataCache, Settings settings)
+    public void Construct(
+        WalletButton.Factory walletButtonFactory,
+        DynamicDataCache dynamicDataCache,
+        UserWalletManager.Settings walletSettings,
+        Settings settings)
     {
         this.walletButtonFactory = walletButtonFactory;
         this.dynamicDataCache = dynamicDataCache;
+        this.walletSettings = walletSettings;
         this.settings = settings;
     }
 
@@ -37,10 +44,10 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     {
         List<GameObject> walletObjects = new List<GameObject>();
 
-        for (int i = 1; i <= SecurePlayerPrefs.GetInt("wallet_count"); i++)
+        for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
         {
             walletObjects.Add(walletButtonFactory.Create()
-                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString("wallet_" + i + "_name"), i)).gameObject.transform.GetChild(0).gameObject);
+                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), i)).gameObject.transform.GetChild(0).gameObject);
         } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
     }
 

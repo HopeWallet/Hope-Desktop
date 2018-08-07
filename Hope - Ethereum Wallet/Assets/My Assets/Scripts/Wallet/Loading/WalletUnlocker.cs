@@ -6,27 +6,30 @@ using System.Threading.Tasks;
 public sealed class WalletUnlocker : WalletLoaderBase
 {
     private readonly WalletDecryptor walletDecryptor;
+    private readonly UserWalletManager.Settings walletSettings;
 
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
-        DynamicDataCache protectedStringDataCache) : base(popupManager, playerPrefPassword, protectedStringDataCache)
+        DynamicDataCache protectedStringDataCache,
+        UserWalletManager.Settings walletSettings) : base(popupManager, playerPrefPassword, protectedStringDataCache)
     {
-        walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache);
+        this.walletSettings = walletSettings;
+        walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache, walletSettings);
     }
 
     protected override void LoadWallet(string userPass)
     {
         int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
-        if (!SecurePlayerPrefs.HasKey("password_" + walletNum))
+        if (!SecurePlayerPrefs.HasKey(walletSettings.walletPasswordPrefName + walletNum))
         {
             ExceptionManager.DisplayException(new Exception("No wallet found with that number. Please try a different wallet."));
         }
 
         else
         {
-            string saltedHash = SecurePlayerPrefs.GetString("password_" + walletNum);
+            string saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
             AsyncTaskScheduler.Schedule(() => TryPassword(userPass, saltedHash));
         }
     }

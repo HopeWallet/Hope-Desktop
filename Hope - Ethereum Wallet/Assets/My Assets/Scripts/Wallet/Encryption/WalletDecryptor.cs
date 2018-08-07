@@ -12,18 +12,22 @@ public sealed class WalletDecryptor : SecureObject
 {
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
+    private readonly UserWalletManager.Settings walletSettings;
 
     /// <summary>
     /// Initializes the <see cref="WalletDecryptor"/> with the references to needed objects.
     /// </summary>
     /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPassword"/> object used to encrypt the wallet data. </param>
     /// <param name="dynamicDataCache"> The <see cref="DynamicDataCache"/> used for retrieving the number of the wallet we are decrypting. </param>
+    /// <param name="walletSettings"> The settings for the <see cref="UserWallet"/>. </param>
     public WalletDecryptor(
         PlayerPrefPassword playerPrefPassword,
-        DynamicDataCache dynamicDataCache)
+        DynamicDataCache dynamicDataCache,
+        UserWalletManager.Settings walletSettings)
     {
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
+        this.walletSettings = walletSettings;
     }
 
     /// <summary>
@@ -41,11 +45,11 @@ public sealed class WalletDecryptor : SecureObject
 
             string[] hashLvls = new string[4];
             for (int i = 0; i < hashLvls.Length; i++)
-                hashLvls[i] = SecurePlayerPrefs.GetString("wallet_" + walletNum + "_h" + (i + 1));
+                hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
 
-            string derivation = SecurePlayerPrefs.GetString("derivation_" + walletNum);
+            string derivation = SecurePlayerPrefs.GetString(walletSettings.walletDerivationPrefName + walletNum);
 
-            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(hashLvls, SecurePlayerPrefs.GetString("wallet_" + walletNum), derivation, password, onWalletDecrypted));
+            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(hashLvls, SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum), derivation, password, onWalletDecrypted));
         });
     }
 

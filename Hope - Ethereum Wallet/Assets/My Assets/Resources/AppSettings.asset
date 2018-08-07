@@ -26,6 +26,15 @@ MonoBehaviour:
     - sE8cz0AHmUIvt#F(nQPBN@*yf2K$DgqiOYrR=ST+o)X9bZC^3-&14xVd!MLuajJkel7pG56Wh%w_
     - $_XwlcNx^pCIuYGUm51!8gA#fi4+Jd@oQhW-q*)2&jEM0nazsZtFDH(7OrL%6bev=TSyRK9B3kPV
     - Vl1ORpA@JLZ+&K=hm-U#(GB)YoI3$seHbv*0xcC^6g7TMDNw4f!QW_%jFdakSr5qu8PXzE2yi9nt
+    walletDataPrefName: wallet
+    walletNamePrefName: wallet_name
+    walletPasswordPrefName: wallet_password
+    walletDerivationPrefName: wallet_derivation
+    walletCountPrefName: wallet_count
+    walletHashLvlPrefName: wallet_hash
+    walletInfoPrefName: wallet_info
+  walletInfoSettings:
+    walletInfoPrefName: 
   tokenContractSettings:
     tokenPrefName: Token_
   ethereumNetworkSettings:
@@ -41,14 +50,6 @@ MonoBehaviour:
         - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
             type: 3}
           buttonText: Logout
-        extraOptionsDropdowns:
-        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
-            type: 3}
-          buttonText: Lock PRPS
-          assetAddresses:
-          - 0x7641b2Ca9DDD58adDf6e3381c1F994Aac5f1A32f
-          - 0xd94F2778e2B3913C53637Ae60647598bE588c570
-          - 0x5831819C84C05DdcD2568dE72963AC9f1e6831b6
     menuSettings:
       factoryButtons:
       - {fileID: 1732801882341504, guid: 5b47e53b5545c8a46a7d38752ad38258, type: 2}
