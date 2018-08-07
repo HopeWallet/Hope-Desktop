@@ -122,16 +122,13 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="index"> The index that is being animated </param>
 	private void ProcessWordAnimation(int index)
 	{
-		if (index < wordStrings.Length && !string.IsNullOrEmpty(wordStrings[index]))
+		if (index < wordStrings.Length)
 		{
 			AnimateWord(index);
 		}
 
 		else
 		{
-			for (int i = index; i < 24; i++)
-				wordInputFields[i].GetComponent<TMP_InputField>().text = "";
-
 			Animating = false;
 			SetButtonInteractable();
 		}
@@ -231,20 +228,19 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void PastePhraseClicked()
 	{
 		string clipboard = ClipboardUtils.GetClipboardString();
-		string[] tempArray = WalletUtils.GetMnemonicWords(clipboard);
+		wordStrings = WalletUtils.GetMnemonicWords(clipboard);
 
-		wordStrings = new string[24];
+		int words = wordStrings.Length;
 
-		for (int i = 0; i < 24; i++)
+		if (clipboard != null && words <= 24)
 		{
-			try { wordStrings[i] = tempArray[i]; }
+			dropdownComponent.value = words <= 12 ? 0 : 1;
 
-			catch { wordStrings[i] = ""; }
-		}
+			if (words != 12 || words != 24)
+				importButton.GetComponent<Button>().interactable = false;
 
-		if (clipboard != null && tempArray.Length <= 24)
-		{
-			dropdownComponent.value = tempArray.Length <= 12 ? 0 : 1;
+			for (int i = 0; i < 24; i++)
+				wordInputFields[i].GetComponent<TMP_InputField>().text = "";
 
 			AnimateFormChange(wordCount != 12);
 			StartWordAnimation();
