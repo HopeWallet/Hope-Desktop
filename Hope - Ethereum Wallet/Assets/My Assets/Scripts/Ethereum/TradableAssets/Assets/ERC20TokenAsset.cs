@@ -6,29 +6,25 @@ using System.Numerics;
 /// <summary>
 /// Class which represents an ethereum token that can be traded from one address to another.
 /// </summary>
-public class TokenAsset : TradableAsset
+public sealed class ERC20TokenAsset : TradableAsset
 {
-
-    /// <summary>
-    /// The TokenContract of this asset.
-    /// </summary>
-    public TokenContract TokenContract { get; }
+    private readonly ERC20 erc20TokenContract;
 
     /// <summary>
     /// Initializes this TradableAsset with the TokenContract of the token.
     /// </summary>
-    /// <param name="tokenContract"> The TokenContract of this asset. </param>
+    /// <param name="erc20TokenContract"> The TokenContract of this asset. </param>
     /// <param name="onAssetCreated"> Callback to execute once the asset has been initialized and the current balance received. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    public TokenAsset(
-        TokenContract tokenContract, 
+    public ERC20TokenAsset(
+        ERC20 erc20TokenContract,
         Action<TradableAsset> onAssetCreated,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager) :
-        base(tokenContract.ContractAddress, tokenContract.TokenSymbol, tokenContract.TokenName, tokenContract.TokenDecimals, tradableAssetImageManager, userWalletManager)
+        base(erc20TokenContract.ContractAddress, erc20TokenContract.Symbol, erc20TokenContract.Name, erc20TokenContract.Decimals.Value, tradableAssetImageManager, userWalletManager)
     {
-        TokenContract = tokenContract;
+        this.erc20TokenContract = erc20TokenContract;
         InitializeBasicInfo(onAssetCreated);
     }
 
@@ -37,7 +33,10 @@ public class TokenAsset : TradableAsset
     /// </summary>
     /// <param name="userWalletManager"> The wallet to get the balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the balance as a parameter. </param>
-    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => TokenContract.BalanceOf(userWalletManager.WalletAddress, onBalanceReceived);
+    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived)
+    {
+        erc20TokenContract.BalanceOf(userWalletManager.WalletAddress, onBalanceReceived);
+    }
 
     /// <summary>
     /// Transfers a specified amount of this token from a wallet to another ethereum address.
@@ -47,8 +46,10 @@ public class TokenAsset : TradableAsset
     /// <param name="gasPrice"> The gas price to use for sending the token asset. </param>
     /// <param name="address"> The address to transfer the tokens to. </param>
     /// <param name="amount"> The amount of tokens to transfer. </param>
-    public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount) 
-        => TokenContract.Transfer(userWalletManager, gasLimit, gasPrice, address, amount);
+    public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
+    {
+        erc20TokenContract.Transfer(userWalletManager, gasLimit, gasPrice, address, amount);
+    }
 
     /// <summary>
     /// Gets the gas limit for the transfer of this token from the user's address to another address.
@@ -56,6 +57,12 @@ public class TokenAsset : TradableAsset
     /// <param name="receivingAddress"> The address to be receiving the tokens. </param>
     /// <param name="amount"> The amount of tokens to send and test the gas limit for. </param>
     /// <param name="onLimitReceived"> Action to execute when the gas limit has been received. </param>
-    public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived) 
-        => GasUtils.EstimateGasLimit(TokenContract["transfer"], userWalletManager.WalletAddress, onLimitReceived, receivingAddress, SolidityUtils.ConvertToUInt(amount, TokenContract.TokenDecimals));
+    public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
+    {
+        GasUtils.EstimateGasLimit<ERC20.Messages.Transfer>(erc20TokenContract.ContractAddress,
+                                                           userWalletManager.WalletAddress,
+                                                           onLimitReceived,
+                                                           receivingAddress,
+                                                           SolidityUtils.ConvertToUInt(amount, AssetDecimals));
+    }
 }

@@ -8,19 +8,18 @@ public abstract class Token : DynamicSmartContract
 
     public int? Decimals { get; private set; }
 
-    public Token(string contractAddress, Action onTokenInitialized) : base(contractAddress)
+    protected Token(string contractAddress, Action onTokenInitialized) : base(contractAddress)
     {
         GetTokenName(name => { Name = string.IsNullOrEmpty(name) ? Symbol : name; CheckInitializationStatus(onTokenInitialized); });
         GetTokenSymbol(symbol => { Symbol = symbol; Name = string.IsNullOrEmpty(Name) ? symbol : Name; CheckInitializationStatus(onTokenInitialized); });
         GetTokenDecimals(decimals => { Decimals = decimals == null ? 0 : (int)decimals; CheckInitializationStatus(onTokenInitialized); });
     }
 
-    public Token(string contractAddress, string name, string symbol, int decimals, Action onTokenInitialized) : base(contractAddress)
+    protected Token(string contractAddress, string name, string symbol, int decimals) : base(contractAddress)
     {
         Name = name;
         Symbol = symbol;
         Decimals = decimals;
-        onTokenInitialized?.Invoke();
     }
 
     private void CheckInitializationStatus(Action onTokenInitialied)

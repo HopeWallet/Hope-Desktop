@@ -6,7 +6,7 @@ using System.Numerics;
 /// <summary>
 /// Class which represents a the TradableAsset ether.
 /// </summary>
-public class EtherAsset : TradableAsset
+public sealed class EtherAsset : TradableAsset
 {
 
     public const string ETHER_ADDRESS = "0x0000000000000000000000000000000000000000";

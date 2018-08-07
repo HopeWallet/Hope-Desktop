@@ -9,7 +9,7 @@ public sealed partial class ERC20 : Token
     {
     }
 
-    public ERC20(string contractAddress, string name, string symbol, int decimals, Action onTokenInitialized) : base(contractAddress, name, symbol, decimals, onTokenInitialized)
+    public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress, name, symbol, decimals)
     {
     }
 
