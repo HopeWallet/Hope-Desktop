@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
@@ -64,10 +63,9 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	{
 		if (SecurePlayerPrefs.HasKey(toAddress.text))
 			contactName.text = "[ " + SecurePlayerPrefs.GetString(toAddress.text) + " ]";
-
 		else
-			contactName.text = "";
+			contactName.text = string.Empty;
 
-		contactName.gameObject.SetActive(string.IsNullOrEmpty(contactName.text) ? false : true);
+		contactName.gameObject.SetActive(!string.IsNullOrEmpty(contactName.text));
 	}
 }
