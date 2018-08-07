@@ -121,10 +121,33 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		search = search.ToLower();
 
 		var buttons = contactsListTransform.GetChildrenTransformList().Select(b => b.GetChild(0).GetComponent<ContactButton>()).ToList();
-		buttons.Where(b => !b.ButtonInfo.ContactName.ToLower().Contains(search) || !b.ButtonInfo.ContactAddress.ToLower().StartsWith(search)).ForEach(b => b.transform.parent.gameObject.SetActive(false));
-		buttons.Where(b => b.ButtonInfo.ContactName.ToLower().Contains(search) || b.ButtonInfo.ContactAddress.ToLower().StartsWith(search)).ForEach(b => b.transform.parent.gameObject.SetActive(true));
+		buttons.Where(button => !SearchName(button, search) || !SearchAddress(button, search)).ForEach(button => SetButtonObjectActive(button, false));
+		buttons.Where(button => SearchName(button, search) || SearchAddress(button, search)).ForEach(button => SetButtonObjectActive(button, true));
 	}
-	
+
+	/// <summary>
+	/// Returns a boolean that checks if the name containes the searched text
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton being checked </param>
+	/// <param name="search"> The inputted search text </param>
+	/// <returns></returns>
+	private bool SearchName(ContactButton contactButton, string search) => contactButton.ButtonInfo.ContactName.ToLower().Contains(search);
+
+	/// <summary>
+	/// Returns a boolean that checks if the address starts with the searched text
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton being checked </param>
+	/// <param name="search"> The inputted search text </param>
+	/// <returns></returns>
+	private bool SearchAddress(ContactButton contactButton, string search) => contactButton.ButtonInfo.ContactAddress.ToLower().StartsWith(search);
+
+	/// <summary>
+	/// Sets the contactButton's parent object to active or not
+	/// </summary>
+	/// <param name="contactButton"> The ContactButton being checked </param>
+	/// <param name="isActive"> Checks if setting active or not </param>
+	private void SetButtonObjectActive(ContactButton contactButton, bool isActive) => contactButton.transform.parent.gameObject.SetActive(isActive);
+
 	/// <summary>
 	/// List order has been changed
 	/// </summary>

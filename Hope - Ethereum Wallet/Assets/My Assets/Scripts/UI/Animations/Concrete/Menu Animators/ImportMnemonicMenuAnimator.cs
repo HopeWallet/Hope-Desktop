@@ -157,7 +157,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void PassphraseWordCountChanged(int value)
 	{
 		wordCount = value == 0 ? 12 : 24;
-		AnimateFormChange(value == 0 ? false : true);
+		AnimateFormChange(wordCount == 24);
 
 		SetButtonInteractable();
 	}
@@ -257,7 +257,6 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		else
 		{
 			AnimateIcon(errorIcon);
-			Debug.Log("Add popup saying clipboard text is not a passphrase");
 		}
 	}
 }
