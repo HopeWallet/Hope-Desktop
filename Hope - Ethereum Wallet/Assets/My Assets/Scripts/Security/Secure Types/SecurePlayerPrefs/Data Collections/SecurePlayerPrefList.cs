@@ -29,8 +29,6 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         var items = JsonUtils.Deserialize<ItemArray>(jsonString).items;
         itemList.AddItems(items);
         serializedItemList.AddItems(items.Select(item => JsonUtils.Serialize(item)).ToArray());
-
-        UnityEngine.Debug.Log(jsonString);
     }
 
     private void UpdatePlayerPrefs()
@@ -39,8 +37,6 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         jsonString = JsonUtils.Serialize(array);
 
         SecurePlayerPrefs.SetString(keyName, jsonString);
-        UnityEngine.Debug.Log(jsonString);
-
     }
 
     public T this[int index]

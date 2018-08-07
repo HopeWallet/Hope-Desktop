@@ -60,14 +60,7 @@ public class HOPETesting : MonoBehaviour
     private void Start()
     {
         tokenList = new SecurePlayerPrefList<TokenInfoJson>("tkns");
-        var prps = new TokenInfoJson("0x5831819C84C05DdcD2568dE72963AC9f1e6831b6", "Purpose", "PRPS", 18);
-        var gold = new TokenInfoJson("0x904a34858B7A8714B2459309A004A96F8E092cB2", "Gold", "GLD2", 0);
-        var raeon = new TokenInfoJson("0xf518e67B86C7a201484c6B50B3Bed092D21Ccef7", "Raeon", "RAEON", 13);
-        var dubi = new TokenInfoJson("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203", "Decentralized Universal Basic Income", "DUBI", 18);
-
-        //tokenList.IndexOf("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203").Log();
-        //tokenList.Remove("0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203").Log();
-        tokenList.Insert(1, dubi);
+        tokenList.Clear();
     }
 
     [ContextMenu("Delete Player Prefs")]
