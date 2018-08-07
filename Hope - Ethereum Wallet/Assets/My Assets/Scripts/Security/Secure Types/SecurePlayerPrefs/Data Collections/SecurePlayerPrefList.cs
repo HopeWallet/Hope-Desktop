@@ -62,14 +62,14 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     {
         get
         {
-            if (itemList.Count > index)
+            if (itemList.Count > index && index > 0)
                 return itemList[index];
 
             throw new IndexOutOfRangeException("Index out of the bounds of SecurePlayerPrefList!");
         }
         set
         {
-            if (itemList.Count > index)
+            if (itemList.Count > index && index > 0)
             {
                 itemList[index] = value;
                 serializedItemList[index] = JsonUtils.Serialize(value);
@@ -80,6 +80,17 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
                 throw new IndexOutOfRangeException("Index out of the bounds of SecurePlayerPrefList!");
             }
         }
+    }
+
+    /// <summary>
+    /// Gets or sets an item that was found that contains a certain string text.
+    /// </summary>
+    /// <param name="text"> The text to search for. </param>
+    /// <returns> The item found which contains a certain <see langword="string"/> text. </returns>
+    public T this[string text]
+    {
+        get { return this[IndexOf(text)]; }
+        set { this[IndexOf(text)] = value; }
     }
 
     /// <summary>
