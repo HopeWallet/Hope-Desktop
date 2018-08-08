@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 222133683861128964}
   - component: {fileID: 114906810811265256}
   m_Layer: 5
-  m_Name: Small_Bix_Form
+  m_Name: Small_Box_Form
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

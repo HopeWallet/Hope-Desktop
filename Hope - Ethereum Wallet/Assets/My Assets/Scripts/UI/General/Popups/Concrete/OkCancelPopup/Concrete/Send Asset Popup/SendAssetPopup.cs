@@ -51,18 +51,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// </summary>
     public GasManager Gas { get; private set; }
 
-    /// <summary>
-    /// Adds the required dependencies to the SendAssetPopup.
-    /// </summary>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
-    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
-    /// <param name="updateManager"> The active UpdateManager. </param>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
-    [Inject]
+	/// <summary>
+	/// Adds the required dependencies to the SendAssetPopup.
+	/// </summary>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+	/// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
+	/// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+	/// <param name="updateManager"> The active UpdateManager. </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
+	/// <param name="contactsManager"> The active ContactsManager. </param>
+	[Inject]
     public void Construct(
         UserWalletManager userWalletManager,
         TradableAssetManager tradableAssetManager,

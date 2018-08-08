@@ -29,7 +29,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
 	/// <param name="userWalletManager"> The active UserWalletManager. </param>
 	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-	/// <param name="contactsManager"> The active ContactsManager </param>
+	/// <param name="contactsManager"> The active ContactsManager. </param>
 	[Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
