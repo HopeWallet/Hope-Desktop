@@ -6,7 +6,7 @@ public class LoadingLineAnimator : MonoBehaviour
 
 	[SerializeField] private GameObject[] circles;
 
-	void Start() => StartCoroutine(MoveCircles());
+	private void OnEnable() => StartCoroutine(MoveCircles());
 
 	private IEnumerator MoveCircles()
 	{

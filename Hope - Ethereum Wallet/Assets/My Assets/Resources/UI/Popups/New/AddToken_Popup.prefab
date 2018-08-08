@@ -428,7 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4366300891676550}
   m_Layer: 0
-  m_Name: NoTokenFound_Text
+  m_Name: NoTokenFound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -819,7 +819,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1859726668102050
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -920,6 +920,7 @@ Transform:
   - {fileID: 4594045369970182}
   - {fileID: 4861420532013144}
   - {fileID: 4366300891676550}
+  - {fileID: 224249676075583868}
   - {fileID: 224285752564770512}
   - {fileID: 224474020569898914}
   m_Father: {fileID: 0}
@@ -985,7 +986,6 @@ Transform:
   - {fileID: 224617848701864038}
   - {fileID: 224483025860905756}
   - {fileID: 224908280634994420}
-  - {fileID: 224249676075583868}
   m_Father: {fileID: 4260262099366950}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2677,7 +2677,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114314841486512112}
   cancelButton: {fileID: 114791662071578308}
-  inputField: {fileID: 114684231588794964}
+  addressField: {fileID: 114684231588794964}
+  symbolField: {fileID: 114874500407066142}
+  decimalsField: {fileID: 114786862664111236}
+  tokenIcon: {fileID: 114963866160689284}
+  tokenSymbol: {fileID: 114830425686912282}
 --- !u!114 &114705081442738162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2881,7 +2885,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114479462014687316}
   m_TextViewport: {fileID: 224042631803685770}
   m_TextComponent: {fileID: 114385662855057544}
@@ -2889,13 +2893,13 @@ MonoBehaviour:
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_RegexValue: 
   m_GlobalPointSize: 20
   m_CharacterLimit: 0
@@ -3469,6 +3473,8 @@ MonoBehaviour:
   tokenSection: {fileID: 1073783746036986}
   noTokenFound: {fileID: 1421683828940434}
   addTokenButton: {fileID: 1422634460862138}
+  loadingLine: {fileID: 1859726668102050}
+  checkMarkIcon: {fileID: 1520178590531660}
 --- !u!114 &114837394407152664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3542,7 +3548,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114756441611224358}
   m_TextViewport: {fileID: 224223329027556178}
   m_TextComponent: {fileID: 114013507810610604}
@@ -3550,13 +3556,13 @@ MonoBehaviour:
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 20
   m_CharacterLimit: 0
@@ -4281,18 +4287,18 @@ RectTransform:
   m_GameObject: {fileID: 1859726668102050}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0, z: 1}
   m_Children:
   - {fileID: 224492447316286020}
   - {fileID: 224633882722848548}
   - {fileID: 224037809500945652}
   - {fileID: 224413664836426586}
-  m_Father: {fileID: 4803189497866516}
-  m_RootOrder: 3
+  m_Father: {fileID: 4260262099366950}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 84.19998, y: 46.2}
+  m_AnchoredPosition: {x: 0.000030517578, y: -73.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224268966188441436
@@ -4324,7 +4330,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 4260262099366950}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4488,7 +4494,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4260262099366950}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

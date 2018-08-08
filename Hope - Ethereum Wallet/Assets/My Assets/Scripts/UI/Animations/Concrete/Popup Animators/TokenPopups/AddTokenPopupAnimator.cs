@@ -17,12 +17,39 @@ public class AddTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject noTokenFound;
 	[SerializeField] private GameObject addTokenButton;
 
+	[SerializeField] private GameObject loadingLine;
+	[SerializeField] private GameObject checkMarkIcon;
+
+	public bool ValidAddress { get; set; }
+
+	public bool ValidSymbol { get; set; }
+
+	public bool ValidDecimals { get; set; }
+
+	public bool CustomSymbol { get; set; }
+
+	private bool realTokenAddress;
+
+	public bool RealTokenAddress
+	{
+		get { return realTokenAddress; }
+		set
+		{
+			realTokenAddress = value;
+
+			checkMarkIcon.AnimateGraphicAndScale(realTokenAddress ? 1f : 0f, realTokenAddress ? 1f : 0f, 0.1f);
+			noTokenFound.AnimateGraphicAndScale(realTokenAddress ? 0f : 1f, realTokenAddress ? 0f : 1f, 0.15f);
+			symbolSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
+			decimalSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
+			tokenSection.AnimateScaleX(CustomSymbol ? 0f : 1f, 0.15f);
+		}
+	}
+
 	/// <summary>
 	/// Initializes the button listeners
 	/// </summary>
 	private void Awake()
 	{
-
 
 	}
 
@@ -55,5 +82,19 @@ public class AddTokenPopupAnimator : UIAnimator
 		tokenSection.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		symbolSection.AnimateScaleX(0f, 0.15f);
 		decimalSection.AnimateScaleX(0f, 0.15f);
+	}
+
+	public void AnimateFieldError(TMP_InputField inputField, bool animateIn)
+	{
+		inputField.transform.GetChild(1).gameObject.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.1f);
+	}
+
+	public void AnimateLoadingLine(bool animateIn)
+	{
+		if (animateIn)
+			loadingLine.SetActive(true);
+
+		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.1f, () => { if (!animateIn) loadingLine.SetActive(false); });
+		noTokenFound.AnimateGraphicAndScale(animateIn ? 0f : 1f, animateIn ? 0f : 1f, 0.1f);
 	}
 }

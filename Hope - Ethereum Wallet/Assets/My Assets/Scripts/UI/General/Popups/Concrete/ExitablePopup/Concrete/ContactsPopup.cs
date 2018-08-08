@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using System.Linq;
-using System.Collections.Generic;
 using System;
 
 public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
