@@ -1,4 +1,4 @@
-﻿using Hope.Utils.Misc;
+﻿using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -13,9 +13,8 @@ public static class PrefSettingsRandomizer
 {
     private static AppSettingsInstaller AppSettings;
 
-    private static string OldTokenPrefName;
-
     private static readonly Dictionary<FieldInfo, object> FieldsToRandomize = new Dictionary<FieldInfo, object>();
+    private static readonly Dictionary<FieldInfo, object> PreviousFieldValues = new Dictionary<FieldInfo, object>();
 
     /// <summary>
     /// Replaces the pref name for saved tokens in the wallet.
@@ -28,8 +27,8 @@ public static class PrefSettingsRandomizer
 
         AppSettings = Resources.Load("AppSettings") as AppSettingsInstaller;
 
-        //OldTokenPrefName = AppSettings.tokenContractSettings.tokenPrefName;
-        //AppSettings.tokenContractSettings.tokenPrefName = PasswordUtils.GenerateRandomPassword() + RandomUtils.GenerateRandomHexLetter();
+        PopulateDictionaries();
+        RandomizeFields();
     }
 
     /// <summary>
@@ -38,22 +37,36 @@ public static class PrefSettingsRandomizer
     /// <param name="target"> The target playform of the build. </param>
     /// <param name="result"> The result of the build. </param>
     [PostProcessBuild(3)]
-    public static void RestoreValues(BuildTarget target, string result) => AppSettings.tokenContractSettings.tokenPrefName = OldTokenPrefName;
+    public static void RestoreValues(BuildTarget target, string result)
+    {
+        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, PreviousFieldValues[pair.Key]));
+    }
 
+    /// <summary>
+    /// Randomizes the field values.
+    /// </summary>
     private static void RandomizeFields()
     {
-        var type = typeof(AppSettingsInstaller);
+        SecureRandom secureRandom = new SecureRandom();
+        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, SecureRandom.GetNextBytes(secureRandom, 16).GetBase64String()));
+    }
 
-        foreach (var settingsField in type.GetFields())
+    /// <summary>
+    /// Populates the dictionaries with valid fields which contain the <see cref="RandomizeTextAttribute"/>.
+    /// </summary>
+    private static void PopulateDictionaries()
+    {
+        foreach (var settingsField in typeof(AppSettingsInstaller).GetFields())
         {
             var settingsObj = settingsField.GetValue(AppSettings);
-            foreach (var subField in settingsObj.GetType().GetFields())
+            foreach (var field in settingsObj.GetType().GetFields())
             {
-                if (Attribute.IsDefined(subField, typeof(RandomizeTextAttribute)))
-                    FieldsToRandomize.Add(subField, settingsObj);
+                if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)))
+                {
+                    FieldsToRandomize.Add(field, settingsObj);
+                    PreviousFieldValues.Add(field, field.GetValue(settingsObj));
+                }
             }
         }
-
-        //fieldsToRandomize[0].Item2.SetValue(fieldsToRandomize[0].Item1, "TEST");
     }
 }
