@@ -35,7 +35,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// </summary>
 	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
 	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-	/// <param name="contactsManager"> The active ContactsManager </param>
+	/// <param name="contactsManager"> The active ContactsManager. </param>
 	[Inject]
     public void Construct(
 		TradableAssetManager tradableAssetManager,

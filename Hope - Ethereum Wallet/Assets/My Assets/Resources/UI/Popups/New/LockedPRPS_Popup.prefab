@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 222251870626477666}
   - component: {fileID: 114751790610866186}
   m_Layer: 5
-  m_Name: Medium_Rectangle_Form2
+  m_Name: Big_Rectangle_Form
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

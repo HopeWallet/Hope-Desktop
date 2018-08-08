@@ -36,8 +36,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Initializes the <see cref="AddressManager"/> by assigning the send address input field.
 		/// </summary>
 		/// <param name="addressField"> The input field for the address. </param>
-		/// <param name="contactName"> The contactName text component </param>
-		/// <param name="contactsManager"> The active ContactsManager </param>
+		/// <param name="contactName"> The contactName text component. </param>
+		/// <param name="contactsManager"> The active ContactsManager. </param>
 		public AddressManager(
 			TMP_InputField addressField,
 			TMP_Text contactName,
