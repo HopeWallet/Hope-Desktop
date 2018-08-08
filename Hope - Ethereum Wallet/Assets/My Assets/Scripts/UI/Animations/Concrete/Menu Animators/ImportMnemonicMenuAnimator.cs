@@ -42,9 +42,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		for (int i = 0; i < wordInputFields.Length; i++)
 		{
 			wordInputFields[i] = passphrase.transform.GetChild(i).gameObject;
-			//wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(1).gameObject;
-			wordTextObjects[i] = wordInputFields[i].GetComponent<TMP_InputField>().textComponent.gameObject;
-
+			wordTextObjects[i] = wordInputFields[i].transform.GetChild(0).GetChild(1).gameObject;
 
 			wordInputFields[i].GetComponent<TMP_InputField>().onValueChanged.AddListener(_ => SetButtonInteractable());
 		}
@@ -115,6 +113,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		{
 			wordInputFields[index].GetComponent<TMP_InputField>().text = wordStrings[index];
 			wordTextObjects[index].AnimateScaleX(1f, 0.05f, () => ProcessWordAnimation(++index));
+			wordInputFields[index].transform.GetChild(0).GetChild(0).transform.localScale = Vector3.one;
 		});
 	}
 

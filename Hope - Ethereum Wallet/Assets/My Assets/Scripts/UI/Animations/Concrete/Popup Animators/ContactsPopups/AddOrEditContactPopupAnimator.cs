@@ -128,7 +128,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		if (!AddressUtils.CorrectAddressLength(address))
 			addressInputField.text = address.LimitEnd(42);
 
-		string updatedAddress = addressInputField.text;
+		string updatedAddress = addressInputField.text.ToLower();
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool notOverridingOtherContactAddresses = !contactsManager.ContactList.Contains(updatedAddress) || (!AddingContact && updatedAddress == PreviousAddress);

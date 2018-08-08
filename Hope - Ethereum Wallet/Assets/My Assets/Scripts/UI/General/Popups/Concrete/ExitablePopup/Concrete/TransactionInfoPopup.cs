@@ -24,6 +24,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
     public Image assetImage;
 
+	private string walletAddress, walletName;
+
     private TransactionInfo transactionInfo;
 
     private TradableAssetManager tradableAssetManager;
@@ -40,11 +42,15 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     public void Construct(
 		TradableAssetManager tradableAssetManager,
 		TradableAssetImageManager tradableAssetImageManager,
-		ContactsManager contactsManager)
+		ContactsManager contactsManager,
+		UserWalletManager userWalletManager,
+		UserWalletInfoManager userWalletInfoManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
 		this.contactsManager = contactsManager;
+		walletAddress = userWalletManager.WalletAddress;
+		walletName = userWalletInfoManager.GetWalletInfo(walletAddress).WalletName;
     }
 
     /// <summary>
@@ -78,8 +84,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + " Ether";
-		CheckIfContact(transactionInfo.From, fromAddressName);
-		CheckIfContact(transactionInfo.To, toAddressName);
+		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);
+		CheckIfContact(transactionInfo.To.ToLower(), toAddressName);
 
 		TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
         {
@@ -98,9 +104,12 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		if (contactsManager.ContactList.Contains(address))
 			nameTextObject.text = "[ " + contactsManager.ContactList[address].name + " ]";
 
+		else if (address.EqualsIgnoreCase(walletAddress))
+			nameTextObject.text = "[ " + walletName + " ]";
+
 		else
 			nameTextObject.text = "";
 
-		nameTextObject.gameObject.SetActive(string.IsNullOrEmpty(nameTextObject.text) ? false : true);
+		nameTextObject.gameObject.SetActive(!string.IsNullOrEmpty(nameTextObject.text));
 	}
 }
