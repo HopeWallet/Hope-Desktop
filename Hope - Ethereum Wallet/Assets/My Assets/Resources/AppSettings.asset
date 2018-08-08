@@ -33,8 +33,6 @@ MonoBehaviour:
     walletCountPrefName: wallet_count
     walletHashLvlPrefName: wallet_hash
     walletInfoPrefName: wallet_info
-  walletInfoSettings:
-    walletInfoPrefName: 
   tokenContractSettings:
     tokenPrefName: Token_
   ethereumNetworkSettings:

@@ -148,6 +148,6 @@ public sealed class TokenContractManager
     [Serializable]
     public class Settings
     {
-        public string tokenPrefName;
+        [RandomizeText] public string tokenPrefName;
     }
 }

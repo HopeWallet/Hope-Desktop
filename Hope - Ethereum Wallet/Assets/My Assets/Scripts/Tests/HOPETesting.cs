@@ -47,6 +47,7 @@ using Nethereum.ABI.Model;
 using Nethereum.RPC.Eth.DTOs;
 using System.Collections;
 using Nethereum.JsonRpc.UnityClient;
+using System.Collections.Generic;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -55,6 +56,7 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class HOPETesting : MonoBehaviour
 {
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
