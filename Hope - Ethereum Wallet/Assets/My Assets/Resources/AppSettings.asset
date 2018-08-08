@@ -35,6 +35,8 @@ MonoBehaviour:
     walletInfoPrefName: wallet_info
   tokenContractSettings:
     tokenPrefName: Token_
+  tokenListSettings:
+    tokenListPrefName: TokenList
   ethereumNetworkSettings:
     networkType: 1
   uiSettings:

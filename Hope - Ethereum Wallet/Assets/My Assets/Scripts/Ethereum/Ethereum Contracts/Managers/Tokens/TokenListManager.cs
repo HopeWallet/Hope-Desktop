@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public sealed class TokenListManager
 {
     private readonly SecurePlayerPrefList<AddableTokenJson> tokenList;
 
-    public TokenListManager()
+    public TokenListManager(Settings settings)
     {
-        tokenList = new SecurePlayerPrefList<AddableTokenJson>("test");
+        tokenList = new SecurePlayerPrefList<AddableTokenJson>(settings.tokenListPrefName);
+    }
+
+    [Serializable]
+    public sealed class Settings
+    {
+        [RandomizeText] public string tokenListPrefName;
     }
 }

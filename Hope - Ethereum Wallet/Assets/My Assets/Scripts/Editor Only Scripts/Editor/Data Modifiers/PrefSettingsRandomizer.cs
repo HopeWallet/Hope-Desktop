@@ -56,25 +56,13 @@ public static class PrefSettingsRandomizer
     /// </summary>
     private static void PopulateDictionaries()
     {
-        //foreach (var settingsField in typeof(AppSettingsInstaller).GetFields())
-        //{
-        //    var settingsObj = settingsField.GetValue(AppSettings);
-        //    foreach (var field in settingsObj.GetType().GetFields())
-        //    {
-        //        if (field.FieldType.IsValueType)
-        //        {
-
-        //        }
-        //        if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)))
-        //        {
-        //            FieldsToRandomize.Add(field, settingsObj);
-        //            PreviousFieldValues.Add(field, field.GetValue(settingsObj));
-        //        }
-        //    }
-        //}
         CheckFields(AppSettings);
     }
 
+    /// <summary>
+    /// Recursively checks fields to see if they contain the <see cref="RandomizeTextAttribute"/>.
+    /// </summary>
+    /// <param name="parentValue"> The object value to check the child fields for. </param>
     private static void CheckFields(object parentValue)
     {
         foreach (var field in parentValue.GetType().GetFields())
