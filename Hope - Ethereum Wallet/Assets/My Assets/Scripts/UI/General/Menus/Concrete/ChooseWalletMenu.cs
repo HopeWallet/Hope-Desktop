@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 /// <summary>
 /// Menu which allows the user to choose to open a wallet via Ledger or the built in Hope wallet.
@@ -9,6 +10,11 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     public Button ledgerButton;
     public Button hopeButton;
     public Button exitButton;
+
+    private UserWalletManager.Settings walletSettings;
+
+    [Inject]
+    public void Construct(UserWalletManager.Settings walletSettings) => this.walletSettings = walletSettings;
 
     /// <summary>
     /// Adds the button listeners on start.
@@ -24,7 +30,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenHopeWallet()
     {
-        if (SecurePlayerPrefs.HasKey("wallet_count") && SecurePlayerPrefs.GetInt("wallet_count") > 0)
+        if (SecurePlayerPrefs.HasKey(walletSettings.walletCountPrefName) && SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) > 0)
             uiManager.OpenMenu<WalletListMenu>();
         else
             uiManager.OpenMenu<CreateWalletMenu>();

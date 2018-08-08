@@ -4,7 +4,6 @@ using System.Linq;
 using System.Globalization;
 using System;
 using System.Threading.Tasks;
-using Zenject;
 using Hope.Utils.Misc;
 
 /// <summary>
@@ -13,7 +12,6 @@ using Hope.Utils.Misc;
 [Serializable]
 public class PlayerPrefPassword : ScriptableObject
 {
-
     [SerializeField] public int[] ops = new int[16];
     [SerializeField] public string[] keys = new string[17];
     [SerializeField] private string charLookup;
