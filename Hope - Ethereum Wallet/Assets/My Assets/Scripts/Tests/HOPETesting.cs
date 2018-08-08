@@ -56,6 +56,29 @@ using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
+
+    private void Start()
+    {
+        //typeof(int).IsClass.Log();
+        //typeof(HOPETesting).IsClass.Log();
+        CheckFields(Resources.Load("AppSettings") as AppSettingsInstaller);
+    }
+
+    private static void CheckFields(object parentValue)
+    {
+        foreach (var field in parentValue.GetType().GetFields())
+        {
+            var childValue = field.GetValue(parentValue);
+            var childType = childValue.GetType();
+
+            if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)) && childType == typeof(string))
+                UnityEngine.Debug.Log(childValue);
+
+            if (childType.IsClass && childType != typeof(string))
+                CheckFields(childValue);
+        }
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

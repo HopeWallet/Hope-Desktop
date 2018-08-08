@@ -56,17 +56,40 @@ public static class PrefSettingsRandomizer
     /// </summary>
     private static void PopulateDictionaries()
     {
-        foreach (var settingsField in typeof(AppSettingsInstaller).GetFields())
+        //foreach (var settingsField in typeof(AppSettingsInstaller).GetFields())
+        //{
+        //    var settingsObj = settingsField.GetValue(AppSettings);
+        //    foreach (var field in settingsObj.GetType().GetFields())
+        //    {
+        //        if (field.FieldType.IsValueType)
+        //        {
+
+        //        }
+        //        if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)))
+        //        {
+        //            FieldsToRandomize.Add(field, settingsObj);
+        //            PreviousFieldValues.Add(field, field.GetValue(settingsObj));
+        //        }
+        //    }
+        //}
+        CheckFields(AppSettings);
+    }
+
+    private static void CheckFields(object parentValue)
+    {
+        foreach (var field in parentValue.GetType().GetFields())
         {
-            var settingsObj = settingsField.GetValue(AppSettings);
-            foreach (var field in settingsObj.GetType().GetFields())
+            var childValue = field.GetValue(parentValue);
+            var childType = childValue.GetType();
+
+            if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)) && childType == typeof(string))
             {
-                if (Attribute.IsDefined(field, typeof(RandomizeTextAttribute)))
-                {
-                    FieldsToRandomize.Add(field, settingsObj);
-                    PreviousFieldValues.Add(field, field.GetValue(settingsObj));
-                }
+                FieldsToRandomize.Add(field, parentValue);
+                PreviousFieldValues.Add(field, childValue);
             }
+
+            if (childType.IsClass && childType != typeof(string))
+                CheckFields(childValue);
         }
     }
 }
