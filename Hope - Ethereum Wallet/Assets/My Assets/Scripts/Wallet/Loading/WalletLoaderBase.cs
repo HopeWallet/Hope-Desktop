@@ -9,16 +9,22 @@ public abstract class WalletLoaderBase : SecureObject
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPassword playerPrefPassword;
     protected readonly DynamicDataCache dynamicDataCache;
+    protected readonly UserWalletInfoManager userWalletInfoManager;
 
     protected Action onWalletLoaded;
 
     protected string[] addresses;
 
-    protected WalletLoaderBase(PopupManager popupManager, PlayerPrefPassword playerPrefPassword, DynamicDataCache dynamicDataCache)
+    protected WalletLoaderBase(
+        PopupManager popupManager,
+        PlayerPrefPassword playerPrefPassword,
+        DynamicDataCache dynamicDataCache,
+        UserWalletInfoManager userWalletInfoManager)
     {
         this.popupManager = popupManager;
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
+        this.userWalletInfoManager = userWalletInfoManager;
     }
 
     [SecureCaller]
@@ -49,9 +55,9 @@ public abstract class WalletLoaderBase : SecureObject
         this.addresses = addresses;
     }
 
-    protected void GetAddresses(Wallet wallet)
+    protected void AssignAddresses(string[] walletAddresses)
     {
-        Array.Copy(wallet.GetAddresses(50), addresses, addresses.Length);
+        Array.Copy(walletAddresses, addresses, addresses.Length);
     }
 
     protected abstract void SetupPopup();

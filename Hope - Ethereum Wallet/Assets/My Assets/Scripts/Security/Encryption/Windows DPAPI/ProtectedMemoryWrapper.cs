@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 
 namespace Hope.Security.Encryption.DPAPI
 {
-
     /// <summary>
     /// Wrapper class which adds padding to <see langword="byte"/>[] data which wants to be protected but is not a multiple of 16.
     /// </summary>

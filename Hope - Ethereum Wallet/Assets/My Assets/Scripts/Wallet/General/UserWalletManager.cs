@@ -23,14 +23,16 @@ public sealed class UserWalletManager
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     public UserWalletManager(
         Settings settings,
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
-        DynamicDataCache dynamicDataCache)
+        DynamicDataCache dynamicDataCache,
+        UserWalletInfoManager userWalletInfoManager)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, settings);
+        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, settings, userWalletInfoManager);
     }
 
     /// <summary>

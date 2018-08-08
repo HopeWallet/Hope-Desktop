@@ -15,7 +15,8 @@ public sealed class WalletCreator : WalletLoaderBase
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings) : base(popupManager, playerPrefPassword, dynamicDataCache)
+        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)
     {
         this.walletSettings = walletSettings;
 
@@ -39,7 +40,8 @@ public sealed class WalletCreator : WalletLoaderBase
         int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
 
-        SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, walletNum);
+        userWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses);
+
         SecurePlayerPrefs.SetString(walletSettings.walletDerivationPrefName + walletNum, derivationPath);
         SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
@@ -75,8 +77,11 @@ public sealed class WalletCreator : WalletLoaderBase
             try
             {
                 derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
+
                 var wallet = new Wallet(mnemonic.Value, null, derivationPath);
-                GetAddresses(wallet);
+                var addresses = wallet.GetAddresses(50);
+
+                AssignAddresses(addresses);
                 walletEncryptor.EncryptWallet(wallet.Seed, basePass, SetWalletPlayerPrefs);
             }
             catch (Exception e)

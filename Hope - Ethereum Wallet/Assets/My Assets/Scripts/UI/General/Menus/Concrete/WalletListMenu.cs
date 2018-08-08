@@ -47,7 +47,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
         for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
         {
             walletObjects.Add(walletButtonFactory.Create()
-                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), i)).gameObject.transform.GetChild(0).gameObject);
+                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
         } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
     }
 

@@ -11,8 +11,9 @@ public sealed class WalletUnlocker : WalletLoaderBase
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
-        DynamicDataCache protectedStringDataCache,
-        UserWalletManager.Settings walletSettings) : base(popupManager, playerPrefPassword, protectedStringDataCache)
+        DynamicDataCache dynamicDataCache,
+        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)
     {
         this.walletSettings = walletSettings;
         walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache, walletSettings);
@@ -60,7 +61,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     {
         walletDecryptor.DecryptWallet(password, async (seed, derivation) =>
         {
-            GetAddresses(new Wallet(seed, derivation));
+            AssignAddresses(userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).WalletAddresses);
             await Task.Run(() => dynamicDataCache.SetData("pass", new ProtectedString(password, this))).ConfigureAwait(false);
 
             MainThreadExecutor.QueueAction(onWalletLoaded);

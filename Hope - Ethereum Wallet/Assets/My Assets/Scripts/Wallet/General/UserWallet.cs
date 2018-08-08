@@ -29,19 +29,32 @@ public sealed class UserWallet : SecureObject
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
     /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
     /// <param name="walletSettings"> The settings for the UserWallet. </param>
+    /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     public UserWallet(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings)
+        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager userWalletInfoManager)
     {
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;
 
         passwordEncryptor = new EphemeralEncryption(this);
-        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, walletSettings);
-        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, walletSettings);
+        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, walletSettings, userWalletInfoManager);
+        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, walletSettings, userWalletInfoManager);
         walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor, walletSettings);
+    }
+
+    /// <summary>
+    /// Gets the address of the wallet given the index of the address.
+    /// </summary>
+    /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>
+    /// <returns> Returns the address found at the index. </returns>
+    [SecureCallEnd]
+    public string GetAddress(int addressIndex)
+    {
+        return addresses[addressIndex];
     }
 
     /// <summary>
@@ -73,18 +86,6 @@ public sealed class UserWallet : SecureObject
     private void Load(WalletLoaderBase walletLoader)
     {
         walletLoader.Load(out addresses, OnWalletLoadSuccessful);
-    }
-
-    /// <summary>
-    /// Gets the address of the wallet given the index of the address.
-    /// </summary>
-    /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>
-    /// <returns> Returns the address found at the index. </returns>
-    [SecureCallEnd]
-    [ReflectionProtect(typeof(string))]
-    public string GetAddress(int addressIndex)
-    {
-        return addresses[addressIndex];
     }
 
     /// <summary>
