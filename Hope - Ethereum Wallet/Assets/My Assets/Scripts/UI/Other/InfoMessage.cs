@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine;
+using System;
 
 public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -11,12 +12,18 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	public string bodyText;
 	public bool infoIcon;
 
+	public bool Hovered { get; private set; }
+
+	public static event Action<bool> OnHoverChanged;
+
 	/// <summary>
 	/// Mouse entered the icon
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		Hovered = true;
+		OnHoverChanged?.Invoke(Hovered);
 		PopupManager.GetPopup<InfoPopup>(true).SetUIElements(titleText, bodyText, infoIcon, transform.position);
 		AnimateIconScale(true);
 	}
@@ -25,8 +32,10 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	/// Mouse exited the icon
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerExit(PointerEventData eventData)
+	public void OnPointerExit(PointerEventData eventData = null)
 	{
+		Hovered = false;
+		OnHoverChanged?.Invoke(Hovered);
 		PopupManager.CloseActivePopup();
 		AnimateIconScale(false);
 	}
