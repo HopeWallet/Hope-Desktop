@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 114320695318602676}
   - component: {fileID: 114346386510195404}
   m_Layer: 5
-  m_Name: Info_Icon
+  m_Name: TransactionSpeedInfo_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2330,7 +2330,7 @@ MonoBehaviour:
   assetImage: {fileID: 114155704206949664}
   transactionSpeedSlider: {fileID: 114247633352688526}
   contactsButton: {fileID: 114250894831834018}
-  infoMessage: {fileID: 114346386510195404}
+  transactionSpeedInfoIcon: {fileID: 114346386510195404}
 --- !u!114 &114245874906713646
 MonoBehaviour:
   m_ObjectHideFlags: 1

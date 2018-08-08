@@ -106,8 +106,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 
-		if (addingContact)
-			return;
+		if (addingContact) return;
 
 		nameInputField.text = name;
 		addressInputField.text = address;

@@ -129,7 +129,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	/// <param name="contactButton"> The ContactButton being checked </param>
 	/// <param name="search"> The inputted search text </param>
-	/// <returns></returns>
+	/// <returns> Whether the name starts with the given string </returns>
 	private bool SearchName(ContactButton contactButton, string search) => contactButton.ButtonInfo.ContactName.ToLower().Contains(search);
 
 	/// <summary>
@@ -137,7 +137,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	/// <param name="contactButton"> The ContactButton being checked </param>
 	/// <param name="search"> The inputted search text </param>
-	/// <returns></returns>
+	/// <returns> Whether the address starts with the given string </returns>
 	private bool SearchAddress(ContactButton contactButton, string search) => contactButton.ButtonInfo.ContactAddress.ToLower().StartsWith(search);
 
 	/// <summary>
@@ -155,10 +155,8 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		if (value == 0)
 			ChangeListOrder((b1, b2) => GetAddressNum(b1).CompareTo(GetAddressNum(b2)));
-
 		else if (value == 1)
 			ChangeListOrder((b1, b2) => GetAddressNum(b2).CompareTo(GetAddressNum(b1)));
-
 		else
 			ChangeListOrder((b1, b2) => GetContactName(b1).CompareTo(GetContactName(b2)));
 	}
@@ -167,14 +165,14 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// Returns the contact number at the contact button's address
 	/// </summary>
 	/// <param name="contactButton"> The ContactButton being checked </param>
-	/// <returns></returns>
+	/// <returns> Contact number at the contactButton's index </returns>
 	private int GetAddressNum(ContactButton contactButton) => contactsManager.ContactList.IndexOf(contactButton.ButtonInfo.ContactAddress);
 
 	/// <summary>
 	/// Returns the name string at the contactButton's address
 	/// </summary>
 	/// <param name="contactButton"> The ContactButton being checked </param>
-	/// <returns></returns>
+	/// <returns> The contact name from the given contactButton </returns>
 	private string GetContactName(ContactButton contactButton) => contactsManager.ContactList[contactButton.ButtonInfo.ContactAddress].name;
 
 	/// <summary>

@@ -78,9 +78,10 @@ public class SendAssetPopupAnimator : UIAnimator
             gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
             gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
         }
-
         else
-            transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		{
+			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		}
     }
 
 	/// <summary>
@@ -93,7 +94,6 @@ public class SendAssetPopupAnimator : UIAnimator
 
 		if (advancedMode)
 			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(true));
-
 		else
 			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(false));
 	}
