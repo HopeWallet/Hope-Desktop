@@ -1,8 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
-using Nethereum.HdWallet;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 public abstract class WalletLoaderBase : SecureObject
 {

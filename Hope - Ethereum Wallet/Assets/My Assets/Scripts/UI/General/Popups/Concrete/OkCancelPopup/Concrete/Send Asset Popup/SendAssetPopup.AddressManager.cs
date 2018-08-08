@@ -61,7 +61,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			if (IsValid)
 				CheckIfSavedAddress(address);
 			else
-				contactName.text = "";
+				contactName.text = string.Empty;
 		}
 
 		/// <summary>
@@ -70,12 +70,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="address"> The address in the input field. </param>
 		private void CheckIfSavedAddress(string address)
 		{
-			if (contactsManager.ContactList.Contains(address))
-				contactName.text = "[ " + contactsManager.ContactList[address].name + " ]";
-
-			else
-				contactName.text = "";
-
+			address = address.ToLower();
+			contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].name + " ]" : string.Empty;
 		}
 	}
 }

@@ -68,10 +68,9 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	/// </summary>
 	private void CheckIfSendingToContact()
 	{
-		if (contactsManager.ContactList.Contains(toAddress.text))
-			contactName.text = "[ " + contactsManager.ContactList[toAddress.text].name + " ]";
-		else
-			contactName.text = string.Empty;
+		string address = toAddress.text.ToLower();
+
+		contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].name + " ]" : string.Empty;
 
 		contactName.gameObject.SetActive(!string.IsNullOrEmpty(contactName.text));
 	}

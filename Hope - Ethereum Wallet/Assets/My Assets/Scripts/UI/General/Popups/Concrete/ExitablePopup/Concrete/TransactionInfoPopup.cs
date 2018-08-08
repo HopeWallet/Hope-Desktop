@@ -101,14 +101,13 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// <param name="nameTextObject"> The name text object </param>
 	private void CheckIfContact(string address, TextMeshProUGUI nameTextObject)
 	{
+		nameTextObject.text = string.Empty;
+		address = address.ToLower();
+
 		if (contactsManager.ContactList.Contains(address))
 			nameTextObject.text = "[ " + contactsManager.ContactList[address].name + " ]";
-
 		else if (address.EqualsIgnoreCase(walletAddress))
 			nameTextObject.text = "[ " + walletName + " ]";
-
-		else
-			nameTextObject.text = "";
 
 		nameTextObject.gameObject.SetActive(!string.IsNullOrEmpty(nameTextObject.text));
 	}

@@ -83,14 +83,8 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		string newName = nameInputField.text;
 		string newAddress = addressInputField.text;
-		int index = contactsManager.ContactList.IndexOf(previousAddress);
 
 		contactsManager.EditContact(previousAddress, newAddress, newName);
-
-		if (newAddress != previousAddress)
-			contactsManager.RemoveContact(previousAddress);
-
-		contactsManager.AddContact(newAddress, newName);
 
 		contactButton.UpdateContactDetails(newAddress, newName);
 
@@ -110,16 +104,16 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		addOrEditContactPopupAnimator.PreviousAddress = address;
 		addOrEditContactPopupAnimator.contactsManager = contactsManager;
 
-		if (!addingContact)
-		{
-			previousName = name;
-			previousAddress = address;
-		}
+		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
+
+		if (addingContact)
+			return;
 
 		nameInputField.text = name;
 		addressInputField.text = address;
+		previousName = name;
+		previousAddress = address;
 		this.contactButton = contactButton;
-		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
 	}
 
 	/// <summary>

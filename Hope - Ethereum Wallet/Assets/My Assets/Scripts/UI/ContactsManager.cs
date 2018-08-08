@@ -2,6 +2,9 @@
 public sealed class ContactsManager
 {
 
+	/// <summary>
+	/// The list of contacts
+	/// </summary>
 	public SecurePlayerPrefList<ContactInfoJson> ContactList { get; } = new SecurePlayerPrefList<ContactInfoJson>("Contacts");
 
 	/// <summary>
@@ -13,7 +16,7 @@ public sealed class ContactsManager
 	{
 		UserWallet.OnWalletLoadSuccessful += () =>
 		{
-			string walletAddress = userWalletManager.WalletAddress.ToLower();
+			string walletAddress = userWalletManager.WalletAddress;
 			AddContact(walletAddress, userWalletInfoManager.GetWalletInfo(walletAddress).WalletName);
 		};
 	}

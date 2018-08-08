@@ -131,15 +131,15 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		string updatedAddress = addressInputField.text.ToLower();
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
-		bool notOverridingOtherContactAddresses = !contactsManager.ContactList.Contains(updatedAddress) || (!AddingContact && updatedAddress == PreviousAddress);
+		bool overridingOtherContactAddresses = contactsManager.ContactList.Contains(updatedAddress) && (!AddingContact ? updatedAddress != PreviousAddress : true);
 
-		ValidAddress = realEthereumAddress && notOverridingOtherContactAddresses;
+		ValidAddress = realEthereumAddress && !overridingOtherContactAddresses;
 
 		if (!realEthereumAddress)
 			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address.");
 
-		else if (!notOverridingOtherContactAddresses)
-			addOrEditContactPopup.SetAddressErrorBodyText("This address has been used under the contact name: " + contactsManager.ContactList[updatedAddress].name + ".");
+		else if (overridingOtherContactAddresses)
+			addOrEditContactPopup.SetAddressErrorBodyText("This address has already been saved under the contact name: " + contactsManager.ContactList[updatedAddress].name + ".");
 
 		SetMainButtonInteractable();
 	}
