@@ -19,6 +19,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
+    private UserWalletInfoManager userWalletInfoManager;
     private DynamicDataCache dynamicDataCache;
 	private ContactsManager contactsManager;
 
@@ -35,12 +36,14 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager,
+        UserWalletInfoManager userWalletInfoManager,
         DynamicDataCache dynamicDataCache,
 		ContactsManager contactsManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
+        this.userWalletInfoManager = userWalletInfoManager;
         this.dynamicDataCache = dynamicDataCache;
 		this.contactsManager = contactsManager;
 	}
@@ -56,8 +59,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         toAddress.text = transactionInput[0].ToString();
         fromAddress.text = userWalletManager.WalletAddress;
         feeText.text = dynamicDataCache.GetData("txfee") + " ETH";
+        walletName.text = "[ " + userWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName + " ]";
 		CheckIfSendingToContact();
-		//Wallet name
     }
 
 	/// <summary>
