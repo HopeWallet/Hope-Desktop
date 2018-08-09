@@ -10,7 +10,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	public TMP_InputField nameInputField, addressInputField;
 	public TextMeshProUGUI title;
 
-	public InfoMessage nameError, addressError;
+	public Icon nameError, addressError;
 
 	private string previousName, previousAddress;
 	private ContactButton contactButton;
@@ -119,5 +119,5 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// Sets the addressError body message 
 	/// </summary>
 	/// <param name="bodyText"> The custom body message </param>
-	public void SetAddressErrorBodyText(string bodyText) => addressError.bodyText = bodyText;
+	public void SetAddressErrorBodyText(string bodyText) => addressError.infoText = bodyText;
 }

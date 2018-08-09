@@ -8,9 +8,15 @@ public class InfoPopupAnimator : UIAnimator
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	private void OnEnable() => InfoMessage.OnHoverChanged += AnimateInfoPopup;
+	/// <summary>
+	/// Adds the AnimatePopupOut method to the InfoMessage action
+	/// </summary>
+	private void OnEnable() => Icon.AnimatePopupOut += AnimatePopupOut;
 
-	private void OnDisable() => InfoMessage.OnHoverChanged -= AnimateInfoPopup;
+	/// <summary>
+	/// Removes the AnimatePopupOut method from the InfoMessage action
+	/// </summary>
+	private void OnDisable() => Icon.AnimatePopupOut -= AnimatePopupOut;
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -23,8 +29,6 @@ public class InfoPopupAnimator : UIAnimator
 		background.AnimateGraphicAndScale(1f, 1f, 0.1f);
 		title.AnimateGraphicAndScale(0.85f, 1f, 0.1f);
 		bodyText.AnimateGraphicAndScale(0.65f, 1f, 0.1f, FinishedAnimating);
-
-		Debug.Log("Hello");
 	}
 
 	/// <summary>
@@ -39,11 +43,8 @@ public class InfoPopupAnimator : UIAnimator
 		background.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating);
 	}
 
-	private void AnimateInfoPopup(bool animateIn)
-	{
-		if (animateIn)
-			AnimateEnable();
-		else
-			AnimateDisable(() => transform.GetComponent<InfoPopup>().PopupManager.CloseActivePopup());
-	}
+	/// <summary>
+	/// Animates and close the popup
+	/// </summary>
+	private void AnimatePopupOut() => AnimateDisable(() => transform.GetComponent<InfoPopup>().PopupManager.CloseActivePopup());
 }

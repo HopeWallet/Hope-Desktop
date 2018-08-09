@@ -22,7 +22,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
                     dubiRewardText;
 
     public Toggle maxToggle;
-    public InfoMessage infoMessage;
+    public Icon infoMessage;
 
     private LockedPRPSManager lockedPRPSManager;
     private EtherBalanceObserver etherBalanceObserver;

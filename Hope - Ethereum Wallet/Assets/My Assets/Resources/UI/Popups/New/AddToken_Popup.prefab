@@ -3473,6 +3473,7 @@ MonoBehaviour:
   tokenSection: {fileID: 1073783746036986}
   noTokenFound: {fileID: 1421683828940434}
   addTokenButton: {fileID: 1422634460862138}
+  addressInputField: {fileID: 114684231588794964}
   loadingLine: {fileID: 1859726668102050}
   checkMarkIcon: {fileID: 1520178590531660}
 --- !u!114 &114837394407152664

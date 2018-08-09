@@ -26,7 +26,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private Slider transactionSpeedSlider;
     [SerializeField] private Button contactsButton;
 
-	[SerializeField] private InfoMessage transactionSpeedInfoIcon;
+	[SerializeField] private Icon transactionSpeedInfoIcon;
 
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
