@@ -15,9 +15,12 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 		searchBar.onValueChanged.AddListener(SearchInputChanged);
 	}
 
-	private void AddCustomToken() => popupManager.GetPopup<AddTokenPopup>(true);
+    private void AddCustomToken()
+    {
+        popupManager.GetPopup<AddTokenPopup>(true);
+    }
 
-	private void SearchInputChanged(string search)
+    private void SearchInputChanged(string search)
 	{
 	}
 }

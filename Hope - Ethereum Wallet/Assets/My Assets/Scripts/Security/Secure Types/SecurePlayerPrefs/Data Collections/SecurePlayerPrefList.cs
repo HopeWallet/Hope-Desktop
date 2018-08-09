@@ -14,7 +14,10 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
 
     private readonly string keyName;
 
-    private string jsonString = string.Empty;
+    /// <summary>
+    /// The <see langword="string"/> which holds all serialized list data.
+    /// </summary>
+    public string SerializedList { get; private set; } = string.Empty;
 
     /// <summary>
     /// Initializes the <see cref="SecurePlayerPrefList"/> given the key to use to access the list in the <see cref="SecurePlayerPrefs"/>.
@@ -35,9 +38,9 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         if (!SecurePlayerPrefs.HasKey(keyName))
             return;
 
-        jsonString = SecurePlayerPrefs.GetString(keyName);
+        SerializedList = SecurePlayerPrefs.GetString(keyName);
 
-        var items = JsonUtils.Deserialize<ListJson>(jsonString).items;
+        var items = JsonUtils.Deserialize<ListJson>(SerializedList).items;
         itemList.AddItems(items);
         serializedItemList.AddItems(items.Select(item => JsonUtils.Serialize(item)).ToArray());
     }
@@ -48,9 +51,9 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     private void UpdatePlayerPrefs()
     {
         ListJson array = new ListJson(itemList.ToArray());
-        jsonString = JsonUtils.Serialize(array);
+        SerializedList = JsonUtils.Serialize(array);
 
-        SecurePlayerPrefs.SetString(keyName, jsonString);
+        SecurePlayerPrefs.SetString(keyName, SerializedList);
     }
 
     /// <summary>
@@ -111,7 +114,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         itemList.Clear();
         serializedItemList.Clear();
 
-        jsonString = string.Empty;
+        SerializedList = string.Empty;
         SecurePlayerPrefs.DeleteKey(keyName);
     }
 
@@ -123,7 +126,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     {
         string serializedItem = JsonUtils.Serialize(item);
 
-        if (jsonString.Contains(serializedItem))
+        if (SerializedList.Contains(serializedItem))
             return;
 
         itemList.Add(item);
@@ -141,7 +144,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     {
         string serializedItem = JsonUtils.Serialize(item);
 
-        if (itemList.Count <= index || jsonString.Contains(serializedItem))
+        if (itemList.Count <= index || SerializedList.Contains(serializedItem))
             return;
 
         itemList.Insert(index, item);
@@ -208,7 +211,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// </summary>
     /// <param name="textToSearch"> The <see langword="string"/> to search for in the <see cref="SecurePlayerPrefList"/>. </param>
     /// <returns> True if this <see cref="SecurePlayerPrefList"/> contains the item. </returns>
-    public bool Contains(string textToSearch) => string.IsNullOrEmpty(textToSearch.Trim()) ? false : jsonString.Contains(textToSearch);
+    public bool Contains(string textToSearch) => string.IsNullOrEmpty(textToSearch.Trim()) ? false : SerializedList.Contains(textToSearch);
 
     /// <summary>
     /// Checks if the <see cref="SecurePlayerPrefList"/> contains an item.

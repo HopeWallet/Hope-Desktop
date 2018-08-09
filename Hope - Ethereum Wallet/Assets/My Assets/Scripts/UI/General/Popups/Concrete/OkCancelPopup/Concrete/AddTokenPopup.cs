@@ -25,16 +25,17 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private int? decimals;
 
     private bool updatedName, updatedSymbol, updatedDecimals, updatedLogo;
+    private bool validSymbol, validDecimals;
 
     private int previousAddressLength;
 
     /// <summary> 
     /// Injects dependencies into this popup.
     /// </summary>
+    /// <param name="tokenListManager"> The active TokenListManager. </param>
+    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     [Inject]
-    public void Construct(
-        TokenListManager tokenListManager,
-        TradableAssetImageManager tradableAssetImageManager)
+    public void Construct(TokenListManager tokenListManager, TradableAssetImageManager tradableAssetImageManager)
     {
         this.tokenListManager = tokenListManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
@@ -55,18 +56,29 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnOkClicked()
     {
-        //tokenContractManager.AddToken(addressField.text);
-
+        if (!tokenListManager.ContainsToken(addressField.text))
+            tokenListManager.AddToken(addressField.text, name, symbol, decimals.Value, true, true);
+        else
+            tokenListManager.UpdateToken(addressField.text, true, true);
     }
 
     private void OnSymbolChanged(string value)
     {
+        symbolField.text = value.LimitEnd(5).ToUpper();
+        symbol = symbolField.text;
+        name = symbolField.text;
 
+        validSymbol = !string.IsNullOrEmpty(symbolField.text);
+        okButton.interactable = validDecimals && validSymbol;
     }
 
     private void OnDecimalsChanged(string value)
     {
+        decimalsField.text = value.LimitEnd(2);
+        decimals = int.Parse(decimalsField.text);
 
+        validDecimals = decimals.Value < 36;
+        okButton.interactable = validDecimals && validSymbol;
     }
 
     /// <summary>
@@ -104,7 +116,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         addressField.readOnly = true;
 
-        bool existsInTokenList = tokenListManager.AddableTokens.Contains(addressField.text);
+        bool existsInTokenList = tokenListManager.ContainsToken(addressField.text);
         CheckTokenList(existsInTokenList);
         CheckTokenContract(existsInTokenList);
     }
@@ -114,7 +126,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!existsInTokenList)
             return;
 
-        AddableTokenJson addableToken = tokenListManager.AddableTokens[addressField.text];
+        AddableTokenJson addableToken = tokenListManager.GetToken(addressField.text);
         TokenInfoJson tokenInfo = addableToken.tokenInfo;
         name = tokenInfo.name;
         symbol = tokenInfo.symbol;
@@ -192,7 +204,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             else
             {
                 tokenSymbol.text = symbol;
-                tokenListManager.Add(addressField.text, name, symbol, decimals.Value);
+                tokenListManager.AddToken(addressField.text, name, symbol, decimals.Value, false, false);
 
                 OnStatusChanged?.Invoke(Status.ValidToken);
 
