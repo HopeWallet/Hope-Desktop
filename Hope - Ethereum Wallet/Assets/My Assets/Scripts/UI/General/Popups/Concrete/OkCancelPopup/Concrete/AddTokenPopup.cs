@@ -127,7 +127,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             return;
 
         AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.text);
-        TokenInfo tokenInfo = addableToken.tokenInfo;
+        TokenInfo tokenInfo = addableToken.TokenInfo;
         name = tokenInfo.Name;
         symbol = tokenInfo.Symbol;
         decimals = tokenInfo.Decimals;

@@ -19,7 +19,7 @@ public sealed class TokenListManager
         if (!addableTokens.Contains(address))
             return;
 
-        TokenInfo tokenInfo = addableTokens[address].tokenInfo;
+        TokenInfo tokenInfo = addableTokens[address].TokenInfo;
         addableTokens[address] = new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, enabled, listed);
     }
 
