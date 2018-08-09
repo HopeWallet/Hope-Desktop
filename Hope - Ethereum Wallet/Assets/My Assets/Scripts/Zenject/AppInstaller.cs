@@ -77,6 +77,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<UserWalletInfoManager>().AsSingle().NonLazy();
 
         Container.Bind<TokenContractManager>().AsSingle().NonLazy();
+        Container.Bind<TokenListManager>().AsSingle().NonLazy();
 
         Container.Bind<EthereumNetworkManager>().AsSingle().NonLazy();
         Container.Bind<GasPriceObserver>().AsSingle().NonLazy();
