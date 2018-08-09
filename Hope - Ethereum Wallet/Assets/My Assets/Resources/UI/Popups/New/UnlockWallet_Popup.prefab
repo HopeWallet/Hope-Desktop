@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224522963790363068}
   - component: {fileID: 222349767554348858}
   - component: {fileID: 114900697890520578}
-  - component: {fileID: 114220965807815354}
+  - component: {fileID: 114258127748065316}
   m_Layer: 5
   m_Name: Error_Icon
   m_TagString: Untagged
@@ -595,22 +595,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114220965807815354
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1075966695083058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  infoTitle: 
-  infoText: 
-  iconType: 0
-  hovered: 0
 --- !u!114 &114221500978124820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -665,6 +649,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114258127748065316
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075966695083058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Sign-In Error
+  infoText: The password you entered was incorrect.
+  iconType: 1
 --- !u!114 &114265021338834228
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1063,7 +1061,7 @@ MonoBehaviour:
   passwordInputField: {fileID: 1834140963388842}
   signInButton: {fileID: 1754134967957440}
   loadingIcon: {fileID: 1659307487104918}
-  errorIcon: {fileID: 1075966695083058}
+  errorIcon: {fileID: 114258127748065316}
 --- !u!114 &114860746195938152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1159,7 +1157,7 @@ MonoBehaviour:
   exitButton: {fileID: 114068524187399860}
   unlockWalletButton: {fileID: 114788400095928252}
   passwordField: {fileID: 114073814867379438}
-  errorMessage: {fileID: 114220965807815354}
+  errorMessage: {fileID: 114258127748065316}
 --- !u!222 &222119732321520192
 CanvasRenderer:
   m_ObjectHideFlags: 1

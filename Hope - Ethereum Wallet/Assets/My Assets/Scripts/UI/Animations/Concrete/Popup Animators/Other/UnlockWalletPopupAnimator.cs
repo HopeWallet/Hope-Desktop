@@ -15,7 +15,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject loadingIcon;
-	[SerializeField] private GameObject errorIcon;
+	[SerializeField] private Icon errorIcon;
 
 	private bool errorIconVisible;
 
@@ -117,10 +117,14 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the error icon on or off screen.
 	/// </summary>
-	/// <param name="animatingIn"> Checks if animating the error icon in or out. </param>
-	private void AnimateErrorIcon(bool animatingIn)
+	/// <param name="animateIn"> Checks if animating the error icon in or out. </param>
+	private void AnimateErrorIcon(bool animateIn)
 	{
-		errorIcon.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.2f);
-		ErrorIconVisible = animatingIn;
+		if (animateIn)
+			errorIcon.EnableIcon();
+		else
+			errorIcon.DisableIcon();
+
+		ErrorIconVisible = animateIn;
 	}
 }
