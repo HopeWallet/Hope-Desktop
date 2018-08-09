@@ -39,7 +39,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// </summary>
     protected override void OnStart()
     {
-		errorMessage.PopupManager = popupManager;
+        errorMessage.PopupManager = popupManager;
         unlockWalletButton.onClick.AddListener(LoadWallet);
     }
 

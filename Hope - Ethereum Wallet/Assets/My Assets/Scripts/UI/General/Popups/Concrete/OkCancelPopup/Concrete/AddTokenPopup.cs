@@ -17,7 +17,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenSymbol;
 
-    private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
     private TradableAssetImageManager tradableAssetImageManager;
 
@@ -27,17 +26,16 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     private bool updatedName, updatedSymbol, updatedDecimals, updatedLogo;
 
+    private int previousAddressLength;
+
     /// <summary> 
-    /// Injects more dependencies into this popup.
+    /// Injects dependencies into this popup.
     /// </summary>
-    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     [Inject]
     public void Construct(
-        TokenContractManager tokenContractManager,
         TokenListManager tokenListManager,
         TradableAssetImageManager tradableAssetImageManager)
     {
-        this.tokenContractManager = tokenContractManager;
         this.tokenListManager = tokenListManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
     }
@@ -78,7 +76,12 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// <param name="address"> The inputted text in the address input field. </param>
     private void OnAddressChanged(string address)
     {
-        addressField.text = address.LimitEnd(42);
+        if (address.Length == 43 || previousAddressLength == 43)
+        {
+            previousAddressLength = address.Length;
+            addressField.text = address.LimitEnd(42);
+            return;
+        }
 
         bool validAddress = AddressUtils.IsValidEthereumAddress(addressField.text);
         CheckForInvalidAddress(validAddress);
@@ -91,6 +94,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             return;
 
         OnStatusChanged?.Invoke(Status.NoTokenFound);
+        okButton.interactable = false;
     }
 
     private void CheckForValidAddress(bool validAddress)
@@ -98,7 +102,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!validAddress)
             return;
 
-        addressField.interactable = false;
+        addressField.readOnly = true;
 
         bool existsInTokenList = tokenListManager.AddableTokens.Contains(addressField.text);
         CheckTokenList(existsInTokenList);
@@ -120,6 +124,9 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
 
         OnStatusChanged?.Invoke(Status.ValidToken);
+
+        addressField.readOnly = false;
+        okButton.interactable = true;
     }
 
     private void CheckTokenContract(bool existsInTokenList)
@@ -147,8 +154,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     private void SymbolQueryCompleted(string value)
     {
-        name = string.IsNullOrEmpty(name) ? value : name;
-        symbol = value;
+        symbol = string.IsNullOrEmpty(value) ? string.Empty : value;
+        name = string.IsNullOrEmpty(name) ? symbol : name;
 
         tradableAssetImageManager.LoadImage(symbol, LogoQueryCompleted);
 
@@ -175,7 +182,12 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         {
             if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
             {
+                decimalsField.text = string.Empty;
+                symbolField.text = string.Empty;
+
                 OnStatusChanged?.Invoke(Status.InvalidToken);
+
+                okButton.interactable = false;
             }
             else
             {
@@ -183,9 +195,11 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
                 tokenListManager.Add(addressField.text, name, symbol, decimals.Value);
 
                 OnStatusChanged?.Invoke(Status.ValidToken);
+
+                okButton.interactable = true;
             }
 
-            addressField.interactable = true;
+            addressField.readOnly = false;
         }
     }
 

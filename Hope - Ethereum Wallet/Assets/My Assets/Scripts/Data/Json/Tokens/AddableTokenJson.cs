@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 [Serializable]
 public sealed class AddableTokenJson
@@ -7,13 +8,14 @@ public sealed class AddableTokenJson
     public bool enabled;
     public bool listed;
 
-    public AddableTokenJson(TokenInfoJson tokenInfo, bool enabled, bool listed)
+    private AddableTokenJson(TokenInfoJson tokenInfo, bool enabled, bool listed)
     {
         this.tokenInfo = tokenInfo;
         this.enabled = enabled;
         this.listed = listed;
     }
 
+    [JsonConstructor]
     public AddableTokenJson(
         string address,
         string name,
