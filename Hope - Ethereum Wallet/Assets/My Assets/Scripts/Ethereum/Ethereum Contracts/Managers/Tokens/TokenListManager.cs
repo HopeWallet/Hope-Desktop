@@ -2,11 +2,11 @@
 
 public sealed class TokenListManager
 {
-    private readonly SecurePlayerPrefList<AddableTokenJson> tokenList;
+    public SecurePlayerPrefList<AddableTokenJson> AddableTokens { get; }
 
     public TokenListManager(Settings settings)
     {
-        tokenList = new SecurePlayerPrefList<AddableTokenJson>(settings.tokenListPrefName);
+        AddableTokens = new SecurePlayerPrefList<AddableTokenJson>(settings.tokenListPrefName);
     }
 
     [Serializable]

@@ -18,13 +18,29 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private TextMeshProUGUI tokenSymbol;
 
     private TokenContractManager tokenContractManager;
+    private TokenListManager tokenListManager;
+    private TradableAssetImageManager tradableAssetImageManager;
+
+    new private string name;
+    private string symbol;
+    private int decimals;
+
+    private bool updatedName, updatedSymbol, updatedDecimals, updatedLogo;
 
     /// <summary> 
     /// Injects more dependencies into this popup.
     /// </summary>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     [Inject]
-    public void Construct(TokenContractManager tokenContractManager) => this.tokenContractManager = tokenContractManager;
+    public void Construct(
+        TokenContractManager tokenContractManager,
+        TokenListManager tokenListManager,
+        TradableAssetImageManager tradableAssetImageManager)
+    {
+        this.tokenContractManager = tokenContractManager;
+        this.tokenListManager = tokenListManager;
+        this.tradableAssetImageManager = tradableAssetImageManager;
+    }
 
     /// <summary>
     /// Gets the input field in the children and makes sure the ok button is disabled.
@@ -48,9 +64,89 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     {
         addressField.text = address.LimitEnd(42);
 
-        if (!AddressUtils.IsValidEthereumAddress(addressField.text))
+        bool validAddress = AddressUtils.IsValidEthereumAddress(addressField.text);
+        CheckForInvalidAddress(validAddress);
+        CheckForValidAddress(validAddress);
+    }
+
+    private void CheckForInvalidAddress(bool validAddress)
+    {
+        if (validAddress)
+            return;
+
+        OnStatusChanged?.Invoke(Status.NoTokenFound);
+    }
+
+    private void CheckForValidAddress(bool validAddress)
+    {
+        if (!validAddress)
+            return;
+
+        addressField.interactable = false;
+
+        bool existsInTokenList = tokenListManager.AddableTokens.Contains(addressField.text);
+        CheckTokenList(existsInTokenList);
+        CheckTokenContract(existsInTokenList);
+    }
+
+    private void CheckTokenList(bool existsInTokenList)
+    {
+        if (!existsInTokenList)
+            return;
+
+
+    }
+
+    private void CheckTokenContract(bool existsInTokenList)
+    {
+        if (existsInTokenList)
+            return;
+
+        updatedName = false;
+        updatedSymbol = false;
+        updatedDecimals = false;
+        updatedLogo = false;
+
+        OnStatusChanged?.Invoke(Status.Loading);
+
+        //SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => CheckStatus(ref updatingName, ))
+    }
+
+    private void OnNameReceived(string value)
+    {
+        name = string.IsNullOrEmpty(value) ? name : value;
+        CheckStatus(ref updatedName);
+    }
+
+    private void OnSymbolReceived(string value)
+    {
+        name = string.IsNullOrEmpty(name) ? value : name;
+        symbol = value;
+
+        tradableAssetImageManager.LoadImage(symbol, OnLogoReceived);
+
+        CheckStatus(ref updatedSymbol);
+    }
+
+    private void OnDecimalsReceived(dynamic value)
+    {
+        decimals = value == null ? 0 : (int)value;
+        CheckStatus(ref updatedDecimals);
+    }
+
+    private void OnLogoReceived(Sprite value)
+    {
+        tokenIcon.sprite = value;
+        CheckStatus(ref updatedLogo);
+    }
+
+    private void CheckStatus(ref bool updatingVar)
+    {
+        updatingVar = true;
+
+        if (updatedName && updatedSymbol && updatedDecimals && updatedLogo)
         {
-            OnStatusChanged?.Invoke(Status.NoTokenFound);
+
         }
     }
 
