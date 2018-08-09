@@ -12,7 +12,7 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	public string bodyText;
 	public bool infoIcon;
 
-	public bool Hovered { get; private set; }
+	public bool Hovered { get; set; }
 
 	public static event Action<bool> OnHoverChanged;
 
@@ -23,7 +23,7 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		Hovered = true;
-		OnHoverChanged?.Invoke(Hovered);
+		//OnHoverChanged?.Invoke(Hovered);
 		PopupManager.GetPopup<InfoPopup>(true).SetUIElements(titleText, bodyText, infoIcon, transform.position);
 		AnimateIconScale(true);
 	}
@@ -36,7 +36,6 @@ public sealed class InfoMessage : MonoBehaviour, IPointerEnterHandler, IPointerE
 	{
 		Hovered = false;
 		OnHoverChanged?.Invoke(Hovered);
-		PopupManager.CloseActivePopup();
 		AnimateIconScale(false);
 	}
 
