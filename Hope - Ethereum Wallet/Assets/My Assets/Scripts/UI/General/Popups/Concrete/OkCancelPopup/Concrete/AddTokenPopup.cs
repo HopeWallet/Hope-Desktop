@@ -60,6 +60,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             tokenListManager.AddToken(addressField.text, name, symbol, decimals.Value, true, true);
         else
             tokenListManager.UpdateToken(addressField.text, true, true);
+
+        popupManager.GetPopup<ModifyTokensPopup>().UpdateTokens(tokenListManager.GetToken(addressField.text));
     }
 
     private void OnSymbolChanged(string value)

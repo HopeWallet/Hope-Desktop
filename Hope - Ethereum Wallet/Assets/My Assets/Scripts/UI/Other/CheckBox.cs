@@ -34,7 +34,9 @@ public sealed class CheckBox : MonoBehaviour
     /// <param name="toggledOn"> Whether it should be toggled on or off. </param>
     public void Toggle(bool toggledOn)
     {
-
+        checkMarkIcon.transform.localScale = toggledOn ? Vector2.one : Vector2.zero;
+        checkMarkIcon.GetComponent<Image>().color = toggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
+        ToggledOn = toggledOn;
     }
 
     /// <summary>
