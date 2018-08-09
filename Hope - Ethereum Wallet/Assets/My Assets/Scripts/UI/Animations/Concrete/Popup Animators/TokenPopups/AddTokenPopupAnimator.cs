@@ -11,15 +11,14 @@ public class AddTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject addressSection;
-	[SerializeField] private GameObject symbolSection;
-	[SerializeField] private GameObject decimalSection;
-	[SerializeField] private GameObject tokenSection;
-	[SerializeField] private GameObject noTokenFound;
+	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject noTokenFoundSection;
+	[SerializeField] private GameObject invalidTokenSection;
+	[SerializeField] private GameObject validTokenSection;
 	[SerializeField] private GameObject addTokenButton;
 
-	[SerializeField] private TMP_InputField addressInputField;
-	[SerializeField] private GameObject loadingLine;
-	
+	private AddTokenPopup.Status previousStatus;
+
 	//ADD THE ERROR AND CHECKMARK ICONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	/// <summary>
@@ -28,6 +27,7 @@ public class AddTokenPopupAnimator : UIAnimator
 	private void Awake()
 	{
         GetComponent<AddTokenPopup>().OnStatusChanged += OnStatusChanged;
+		previousStatus = AddTokenPopup.Status.NoTokenFound;
 	}
 
 	/// <summary>
@@ -40,7 +40,7 @@ public class AddTokenPopupAnimator : UIAnimator
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateScaleX(1f, 0.15f,
 			() => addressSection.AnimateScaleX(1f, 0.15f,
-			() => noTokenFound.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => noTokenFoundSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => addTokenButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating)))));
 	}
 
@@ -55,38 +55,75 @@ public class AddTokenPopupAnimator : UIAnimator
 			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => { blur.AnimateMaterialBlur(-0.5f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
 
-		noTokenFound.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		tokenSection.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		symbolSection.AnimateScaleX(0f, 0.15f);
-		decimalSection.AnimateScaleX(0f, 0.15f);
+		loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		noTokenFoundSection.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		invalidTokenSection.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		validTokenSection.AnimateGraphicAndScale(0f, 0f, 0.15f);
 	}
 
-	public void AnimateLoadingLine(bool animateIn)
-	{
-		if (animateIn)
-			loadingLine.SetActive(true);
-
-		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.15f, () => { if (!animateIn) loadingLine.SetActive(false); });
-	}
-
-	private void AnimateNoTokenFound(bool animateIn) => noTokenFound.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
-
-	private void AnimateInvalidToken(bool animateIn)
-	{
-		symbolSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
-		decimalSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
-	}
-
-	private void AnimateValidToken(bool animateIn)
-	{
-		tokenSection.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
-	}
-
+	/// <summary>
+	/// Gets the current status of the AddTokenPopup and sets the proper sections to visible or not
+	/// </summary>
+	/// <param name="tokenPopupStatus"> The AddTokenPopup status </param>
 	private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
     {
-		AnimateLoadingLine(tokenPopupStatus == AddTokenPopup.Status.Loading);
-		AnimateNoTokenFound(tokenPopupStatus == AddTokenPopup.Status.NoTokenFound);
-		AnimateInvalidToken(tokenPopupStatus == AddTokenPopup.Status.InvalidToken);
-		AnimateValidToken(tokenPopupStatus == AddTokenPopup.Status.ValidToken);
+		if (tokenPopupStatus == previousStatus)
+			return;
+
+		switch (tokenPopupStatus)
+		{
+			case AddTokenPopup.Status.Loading:
+				ChangeStatus(loading: true);
+				break;
+			case AddTokenPopup.Status.NoTokenFound:
+				ChangeStatus(noTokenFound: true);
+				break;
+			case AddTokenPopup.Status.InvalidToken:
+				ChangeStatus(invalidToken: true);
+				break;
+			case AddTokenPopup.Status.ValidToken:
+				ChangeStatus(validToken: true);
+				break;
+		}
+
+		previousStatus = tokenPopupStatus;
+	}
+
+	/// <summary>
+	/// Changes the sections according to their booleans
+	/// </summary>
+	/// <param name="loading"> Whether the loading icon should appear </param>
+	/// <param name="noTokenFound"> Whether the noTokenFoundSection should appear </param>
+	/// <param name="invalidToken"> Whether the invalidTokenSection should appear </param>
+	/// <param name="validToken"> Whether the validTokenSection should appear </param>
+	private void ChangeStatus(bool loading = false, bool noTokenFound = false, bool invalidToken = false, bool validToken = false)
+	{
+		AnimateSection(loadingIcon, loading);
+		AnimateSection(noTokenFoundSection, noTokenFound);
+		AnimateSection(invalidTokenSection, invalidToken);
+		AnimateSection(validTokenSection, validToken);
+	}
+
+	/// <summary>
+	/// Animates a section in if the boolean states, or makes the section disappear otherwise
+	/// </summary>
+	/// <param name="section"> The section being modified </param>
+	/// <param name="animateIn"> Whether animating section in or not </param>
+	private void AnimateSection(GameObject section, bool animateIn)
+	{
+		if (animateIn)
+		{
+			if (section == loadingIcon) loadingIcon.SetActive(true);
+			section.AnimateGraphicAndScale(1f, 1f, 0.1f);
+		}
+		else
+		{
+			if (section == loadingIcon)
+			{
+				loadingIcon.SetActive(false);
+				loadingIcon.GetComponent<Image>().color = Color.clear;
+			}
+			section.transform.localScale = Vector2.zero;
+		}
 	}
 }
