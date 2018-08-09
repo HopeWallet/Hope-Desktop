@@ -11,12 +11,12 @@ public sealed class TokenListManager
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)
     {
-        addableTokens.Add(new AddableTokenInfo(address, name, symbol, decimals, enabled, listed));
+        addableTokens.Add(new AddableTokenInfo(address.ToLower(), name, symbol, decimals, enabled, listed));
     }
 
     public void UpdateToken(string address, bool enabled, bool listed)
     {
-        if (!addableTokens.Contains(address))
+        if (!addableTokens.Contains(address = address.ToLower()))
             return;
 
         TokenInfo tokenInfo = addableTokens[address].TokenInfo;
@@ -25,12 +25,12 @@ public sealed class TokenListManager
 
     public bool ContainsToken(string address)
     {
-        return addableTokens.Contains(address);
+        return addableTokens.Contains(address.ToLower());
     }
 
     public AddableTokenInfo GetToken(string address)
     {
-        return !ContainsToken(address) ? null : addableTokens[address];
+        return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
     }
 
     [Serializable]
