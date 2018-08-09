@@ -723,6 +723,7 @@ MonoBehaviour:
   titleText: Name Error
   bodyText: The inputted text is not a compatible contact name
   infoIcon: 0
+  <Hovered>k__BackingField: 0
 --- !u!114 &114167195124459894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2025,6 +2026,7 @@ MonoBehaviour:
   bodyText: The inputted text is not a valid ethereum address, or this address has
     been used in another contact
   infoIcon: 0
+  <Hovered>k__BackingField: 0
 --- !u!114 &114952185648833146
 MonoBehaviour:
   m_ObjectHideFlags: 1

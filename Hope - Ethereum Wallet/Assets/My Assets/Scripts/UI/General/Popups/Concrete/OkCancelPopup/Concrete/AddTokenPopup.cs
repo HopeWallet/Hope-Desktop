@@ -126,11 +126,11 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!existsInTokenList)
             return;
 
-        AddableTokenJson addableToken = tokenListManager.GetToken(addressField.text);
-        TokenInfoJson tokenInfo = addableToken.tokenInfo;
-        name = tokenInfo.name;
-        symbol = tokenInfo.symbol;
-        decimals = tokenInfo.decimals;
+        AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.text);
+        TokenInfo tokenInfo = addableToken.tokenInfo;
+        name = tokenInfo.Name;
+        symbol = tokenInfo.Symbol;
+        decimals = tokenInfo.Decimals;
 
         tokenSymbol.text = symbol;
         tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);

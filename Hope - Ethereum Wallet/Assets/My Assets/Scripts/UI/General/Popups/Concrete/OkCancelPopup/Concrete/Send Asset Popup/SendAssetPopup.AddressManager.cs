@@ -71,7 +71,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void CheckIfSavedAddress(string address)
 		{
 			address = address.ToLower();
-			contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].name + " ]" : string.Empty;
+			contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].ContactName + " ]" : string.Empty;
 		}
 	}
 }

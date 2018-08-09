@@ -2,16 +2,16 @@
 
 public sealed class TokenListManager
 {
-    private readonly SecurePlayerPrefList<AddableTokenJson> addableTokens;
+    private readonly SecurePlayerPrefList<AddableTokenInfo> addableTokens;
 
     public TokenListManager(Settings settings)
     {
-        addableTokens = new SecurePlayerPrefList<AddableTokenJson>(settings.tokenListPrefName);
+        addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)
     {
-        addableTokens.Add(new AddableTokenJson(address, name, symbol, decimals, enabled, listed));
+        addableTokens.Add(new AddableTokenInfo(address, name, symbol, decimals, enabled, listed));
     }
 
     public void UpdateToken(string address, bool enabled, bool listed)
@@ -19,8 +19,8 @@ public sealed class TokenListManager
         if (!addableTokens.Contains(address))
             return;
 
-        TokenInfoJson tokenInfo = addableTokens[address].tokenInfo;
-        addableTokens[address] = new AddableTokenJson(address, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals, enabled, listed);
+        TokenInfo tokenInfo = addableTokens[address].tokenInfo;
+        addableTokens[address] = new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, enabled, listed);
     }
 
     public bool ContainsToken(string address)
@@ -28,7 +28,7 @@ public sealed class TokenListManager
         return addableTokens.Contains(address);
     }
 
-    public AddableTokenJson GetToken(string address)
+    public AddableTokenInfo GetToken(string address)
     {
         return !ContainsToken(address) ? null : addableTokens[address];
     }

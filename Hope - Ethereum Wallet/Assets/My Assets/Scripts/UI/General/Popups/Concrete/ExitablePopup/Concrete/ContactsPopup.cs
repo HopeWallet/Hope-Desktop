@@ -84,8 +84,8 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		for (int i = 0; i < contactsManager.ContactList.Count; i++)
 		{
 			var button = contactButtonFactory.Create();
-			var contactInfoJson = contactsManager.ContactList[i];
-			button.SetButtonInfo(new ContactInfo(this, contactInfoJson.address, contactInfoJson.name));
+			var contactInfo = contactsManager.ContactList[i];
+			button.SetButtonInfo(new ContactInfo(this, contactInfo.ContactAddress, contactInfo.ContactName));
 
 			Transform buttonParent = button.transform.parent;
 			buttonParent.parent = contactsListTransform;
@@ -173,7 +173,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	/// <param name="contactButton"> The ContactButton being checked </param>
 	/// <returns> The contact name from the given contactButton </returns>
-	private string GetContactName(ContactButton contactButton) => contactsManager.ContactList[contactButton.ButtonInfo.ContactAddress].name;
+	private string GetContactName(ContactButton contactButton) => contactsManager.ContactList[contactButton.ButtonInfo.ContactAddress].ContactName;
 
 	/// <summary>
 	/// Manages the interactables of the newly clicked and old contact button that was pressed

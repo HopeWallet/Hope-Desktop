@@ -1,12 +1,11 @@
-﻿
-using System;
+﻿using System;
 
 public sealed class ContactsManager
 {
 	/// <summary>
 	/// The list of contacts
 	/// </summary>
-	public SecurePlayerPrefList<ContactInfoJson> ContactList { get; }
+	public SecurePlayerPrefList<ContactInfo> ContactList { get; }
 
     /// <summary>
     /// Adds contact under the newly created wallet name and address
@@ -16,7 +15,7 @@ public sealed class ContactsManager
     /// <param name="settings"> The settings for the ContactsManager. </param>
     public ContactsManager(UserWalletManager userWalletManager, UserWalletInfoManager userWalletInfoManager, Settings settings)
 	{
-        ContactList = new SecurePlayerPrefList<ContactInfoJson>(settings.contactsPrefName);
+        ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName);
         UserWallet.OnWalletLoadSuccessful += () =>
 		{
 			string walletAddress = userWalletManager.WalletAddress;
@@ -29,7 +28,7 @@ public sealed class ContactsManager
 	/// </summary>
 	/// <param name="contactAddress"> The address being added </param>
 	/// <param name="contactName"> The name being added </param>
-	public void AddContact(string contactAddress, string contactName) => ContactList.Add(new ContactInfoJson(contactAddress.ToLower(), contactName));
+	public void AddContact(string contactAddress, string contactName) => ContactList.Add(new ContactInfo(contactAddress.ToLower(), contactName));
 
 	/// <summary>
 	/// Removes a contact from the SecurePlayerPrefList
@@ -45,7 +44,7 @@ public sealed class ContactsManager
 	/// <param name="newContactName"> The new contact name </param>
 	public void EditContact(string previousAddress, string newContactAddress, string newContactName)
 	{
-		ContactList[previousAddress] = new ContactInfoJson(newContactAddress.ToLower(), newContactName);
+		ContactList[previousAddress] = new ContactInfo(newContactAddress.ToLower(), newContactName);
 	}
 
     /// <summary>

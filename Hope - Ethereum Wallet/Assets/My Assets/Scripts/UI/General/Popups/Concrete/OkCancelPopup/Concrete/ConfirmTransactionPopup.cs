@@ -70,7 +70,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	{
 		string address = toAddress.text.ToLower();
 
-		contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].name + " ]" : string.Empty;
+		contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].ContactName + " ]" : string.Empty;
 
 		contactName.gameObject.SetActive(!string.IsNullOrEmpty(contactName.text));
 	}

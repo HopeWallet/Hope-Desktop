@@ -138,7 +138,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		if (!realEthereumAddress)
 			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address.");
 		else if (overridingOtherContactAddresses)
-			addOrEditContactPopup.SetAddressErrorBodyText("This address has already been saved under the contact name: " + contactsManager.ContactList[updatedAddress].name + ".");
+			addOrEditContactPopup.SetAddressErrorBodyText("This address has already been saved under the contact name: " + contactsManager.ContactList[updatedAddress].ContactName + ".");
 
 		SetMainButtonInteractable();
 	}

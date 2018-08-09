@@ -13,7 +13,7 @@ public sealed class TokenContractManager
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
 
-    private readonly SecurePlayerPrefList<TokenInfoJson> tokens;
+    private readonly SecurePlayerPrefList<TokenInfo> tokens;
 
     /// <summary>
     /// Initializes the TokenContractManager by creating all collections and getting the settings.
@@ -31,7 +31,7 @@ public sealed class TokenContractManager
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
 
-        tokens = new SecurePlayerPrefList<TokenInfoJson>(settings.tokenPrefName);
+        tokens = new SecurePlayerPrefList<TokenInfo>(settings.tokenPrefName);
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public sealed class TokenContractManager
     public void AddToken(string tokenAddress, string tokenName, string tokenSymbol, int tokenDecimals)
     {
         ERC20 erc20Token = new ERC20(tokenAddress, tokenName, tokenSymbol, tokenDecimals);
-        tokens.Add(new TokenInfoJson(tokenAddress, tokenName, tokenSymbol, tokenDecimals));
+        tokens.Add(new TokenInfo(tokenAddress, tokenName, tokenSymbol, tokenDecimals));
 
         new ERC20TokenAsset(erc20Token, asset => UpdateTradableAssets(asset, () =>
         {
@@ -112,8 +112,8 @@ public sealed class TokenContractManager
         if (CheckLoadStatus(index, onTokenLoadFinished))
             return;
 
-        TokenInfoJson tokenInfo = tokens[index];
-        ERC20 erc20Token = new ERC20(tokenInfo.address, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
+        TokenInfo tokenInfo = tokens[index];
+        ERC20 erc20Token = new ERC20(tokenInfo.Address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals);
         new ERC20TokenAsset(erc20Token, asset => UpdateTradableAssets(asset, () => LoadToken(++index, onTokenLoadFinished)), tradableAssetImageManager, userWalletManager);
     }
 

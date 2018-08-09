@@ -60,16 +60,20 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 			return;
 		}
 
-		if (index == 6)
-		{
-			for (int i = index; i < tokenTransform.childCount; i++)
-				tokenTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
+        if (index == 6)
+        {
+            for (int i = index; i < tokenTransform.childCount; i++)
+                tokenTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
 
-			FinishedAnimating();
-		}
-		else if (index == tokenTransform.childCount - 1)
-			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
-		else
-			tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateTokens(++index));
-	}
+            FinishedAnimating();
+        }
+        else if (index == tokenTransform.childCount - 1)
+        {
+            tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
+        }
+        else
+        {
+            tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateTokens(++index));
+        }
+    }
 }

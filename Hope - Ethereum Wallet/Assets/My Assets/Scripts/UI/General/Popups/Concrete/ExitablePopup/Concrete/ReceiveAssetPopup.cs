@@ -8,7 +8,6 @@ using TMPro;
 /// </summary>
 public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 {
-
 	[SerializeField] private Button copyAddressButton;
 
 	[SerializeField] private Image qrImage;

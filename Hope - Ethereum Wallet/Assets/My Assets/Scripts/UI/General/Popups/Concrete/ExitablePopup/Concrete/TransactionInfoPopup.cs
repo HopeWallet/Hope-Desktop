@@ -105,7 +105,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		address = address.ToLower();
 
 		if (contactsManager.ContactList.Contains(address))
-			nameTextObject.text = "[ " + contactsManager.ContactList[address].name + " ]";
+			nameTextObject.text = "[ " + contactsManager.ContactList[address].ContactName + " ]";
 		else if (address.EqualsIgnoreCase(walletAddress))
 			nameTextObject.text = "[ " + walletName + " ]";
 

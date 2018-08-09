@@ -1069,6 +1069,7 @@ MonoBehaviour:
   bodyText: This is your current wallet address. With this text, other people can
     send you crypto currencies to your wallet if they have this address
   infoIcon: 1
+  <Hovered>k__BackingField: 0
 --- !u!114 &114829397814768166
 MonoBehaviour:
   m_ObjectHideFlags: 1

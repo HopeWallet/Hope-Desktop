@@ -2714,6 +2714,7 @@ MonoBehaviour:
   bodyText: Your transaction speed determines how long it will take your transaction
     to go through. The cheaper you spend on gas, the slower it will be, and vice versa.
   infoIcon: 1
+  <Hovered>k__BackingField: 0
 --- !u!114 &114348298059734220
 MonoBehaviour:
   m_ObjectHideFlags: 1
