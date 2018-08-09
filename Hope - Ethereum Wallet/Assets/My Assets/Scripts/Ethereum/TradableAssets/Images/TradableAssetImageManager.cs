@@ -10,7 +10,6 @@ using UnityEngine.Networking;
 /// </summary>
 public sealed class TradableAssetImageManager
 {
-
     private readonly Dictionary<string, Sprite> loadedImages = new Dictionary<string, Sprite>();
     private readonly Sprite defaultSprite;
     private readonly Vector2 pivot;
@@ -37,7 +36,7 @@ public sealed class TradableAssetImageManager
     /// </summary>
     /// <param name="assetSymbol"> The symbol of the asset. </param>
     /// <param name="onImageReceived"> Action called once the image has been received. </param>
-    public void LoadImage(string assetSymbol, Action<Sprite> onImageReceived = null)
+    public void LoadImage(string assetSymbol, Action<Sprite> onImageReceived)
     {
         if (LoadFromDictionary(assetSymbol, onImageReceived) || LoadFromResources(assetSymbol, onImageReceived))
             return;

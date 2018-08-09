@@ -13,6 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugSettings:
     displayNethereumDebugStatements: 0
+  playerPrefSettings:
+    securePlayerPrefSeed: TEST
   walletSettings:
     safePassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
     safePasswordCharLookups:
