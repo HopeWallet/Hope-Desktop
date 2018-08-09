@@ -23,7 +23,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     new private string name;
     private string symbol;
-    private int decimals;
+    private int? decimals;
 
     private bool updatedName, updatedSymbol, updatedDecimals, updatedLogo;
 
@@ -48,12 +48,28 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     protected override void OnStart()
     {
         addressField.onValueChanged.AddListener(OnAddressChanged);
+        symbolField.onValueChanged.AddListener(OnSymbolChanged);
+        decimalsField.onValueChanged.AddListener(OnDecimalsChanged);
     }
 
     /// <summary>
     /// Start the token add process via the ContractManager.
     /// </summary>
-    protected override void OnOkClicked() => tokenContractManager.AddToken(addressField.text);
+    protected override void OnOkClicked()
+    {
+        //tokenContractManager.AddToken(addressField.text);
+
+    }
+
+    private void OnSymbolChanged(string value)
+    {
+
+    }
+
+    private void OnDecimalsChanged(string value)
+    {
+
+    }
 
     /// <summary>
     /// Method called every time the text in the input field changed.
@@ -94,7 +110,16 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!existsInTokenList)
             return;
 
+        AddableTokenJson addableToken = tokenListManager.AddableTokens[addressField.text];
+        TokenInfoJson tokenInfo = addableToken.tokenInfo;
+        name = tokenInfo.name;
+        symbol = tokenInfo.symbol;
+        decimals = tokenInfo.decimals;
 
+        tokenSymbol.text = symbol;
+        tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
+
+        OnStatusChanged?.Invoke(Status.ValidToken);
     }
 
     private void CheckTokenContract(bool existsInTokenList)
@@ -109,52 +134,59 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         OnStatusChanged?.Invoke(Status.Loading);
 
-        //SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => CheckStatus(ref updatingName, ))
+        SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => NameQueryCompleted(output.Value));
+        SimpleContractQueries.QueryStringOutput<Symbol>(addressField.text, null, output => SymbolQueryCompleted(output.Value));
+        SimpleContractQueries.QueryUInt256Output<Decimals>(addressField.text, null, output => DecimalsQueryCompleted(output.Value));
     }
 
-    private void OnNameReceived(string value)
+    private void NameQueryCompleted(string value)
     {
         name = string.IsNullOrEmpty(value) ? name : value;
-        CheckStatus(ref updatedName);
+        CheckLoadStatus(ref updatedName);
     }
 
-    private void OnSymbolReceived(string value)
+    private void SymbolQueryCompleted(string value)
     {
         name = string.IsNullOrEmpty(name) ? value : name;
         symbol = value;
 
-        tradableAssetImageManager.LoadImage(symbol, OnLogoReceived);
+        tradableAssetImageManager.LoadImage(symbol, LogoQueryCompleted);
 
-        CheckStatus(ref updatedSymbol);
+        CheckLoadStatus(ref updatedSymbol);
     }
 
-    private void OnDecimalsReceived(dynamic value)
+    private void DecimalsQueryCompleted(dynamic value)
     {
-        decimals = value == null ? 0 : (int)value;
-        CheckStatus(ref updatedDecimals);
+        decimals = value == null ? (int?)null : (int)value;
+        CheckLoadStatus(ref updatedDecimals);
     }
 
-    private void OnLogoReceived(Sprite value)
+    private void LogoQueryCompleted(Sprite value)
     {
         tokenIcon.sprite = value;
-        CheckStatus(ref updatedLogo);
+        CheckLoadStatus(ref updatedLogo);
     }
 
-    private void CheckStatus(ref bool updatingVar)
+    private void CheckLoadStatus(ref bool updatingVar)
     {
         updatingVar = true;
 
         if (updatedName && updatedSymbol && updatedDecimals && updatedLogo)
         {
+            if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
+            {
+                OnStatusChanged?.Invoke(Status.InvalidToken);
+            }
+            else
+            {
+                tokenSymbol.text = symbol;
+                tokenListManager.Add(addressField.text, name, symbol, decimals.Value);
 
+                OnStatusChanged?.Invoke(Status.ValidToken);
+            }
+
+            addressField.interactable = true;
         }
-    }
-
-    private void Test()
-    {
-        SimpleContractQueries.QueryStringOutput<Name>("0x0", null, output => Debug.Log(output.Value));
-        SimpleContractQueries.QueryStringOutput<Symbol>("0x0", null, output => Debug.Log(output.Value));
-        SimpleContractQueries.QueryUInt256Output<Decimals>("0x0", null, output => Debug.Log(output.Value));
     }
 
     /// <summary>

@@ -9,6 +9,11 @@ public sealed class TokenListManager
         AddableTokens = new SecurePlayerPrefList<AddableTokenJson>(settings.tokenListPrefName);
     }
 
+    public void Add(string address, string name, string symbol, int decimals)
+    {
+        AddableTokens.Add(new AddableTokenJson(address, name, symbol, decimals, false, false));
+    }
+
     [Serializable]
     public sealed class Settings
     {
