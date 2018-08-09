@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public sealed class TokenListManager
 {
@@ -32,6 +34,8 @@ public sealed class TokenListManager
     {
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
     }
+
+    public List<AddableTokenInfo> GetTokenList() => addableTokens.ToList();
 
     [Serializable]
     public sealed class Settings

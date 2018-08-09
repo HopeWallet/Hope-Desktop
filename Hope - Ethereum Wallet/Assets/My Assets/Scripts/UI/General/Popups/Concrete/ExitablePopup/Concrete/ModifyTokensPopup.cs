@@ -26,39 +26,16 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     {
         this.addableTokenButtonFactory = addableTokenButtonFactory;
         this.tokenListManager = tokenListManager;
+
+        tokenListManager.GetTokenList().ForEach(UpdateTokens);
     }
 
-    public void UpdateButton(AddableTokenInfo addableTokenInfo)
+    public void UpdateTokens(AddableTokenInfo addableTokenInfo)
     {
         if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
-        {
-
-        }
-    }
-
-    public void UpdateButtons()
-    {
-        //foreach (var newToken in AddableTokens.Where(token => !tokenListManager.ContainsToken(token.ButtonInfo.TokenInfo.Address)))
-        //{
-        //    AddableTokenButton tokenButton = addableTokenButtonFactory.Create().SetButtonInfo(newToken.ButtonInfo);
-        //    Transform componentTransform = tokenButton.transform;
-        //    Transform parentTransform = componentTransform.parent;
-
-        //    parentTransform.parent = tokenListTransform;
-        //    parentTransform.localScale = new Vector3(0f, 1f, 1f);
-        //    componentTransform.localScale = Vector3.one;
-        //}
-
-        foreach (var oldToken in AddableTokens.Where(token => tokenListManager.ContainsToken(token.ButtonInfo.TokenInfo.Address)))
-        {
-            oldToken.SetButtonInfo(tokenListManager.GetToken(oldToken.ButtonInfo.TokenInfo.Address));
-        }
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-
+            AddableTokens.First(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).SetButtonInfo(addableTokenInfo);
+        else
+            AddableTokens.Add(CreateNewButton(addableTokenInfo));
     }
 
     protected override void OnStart()
@@ -73,6 +50,19 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     }
 
     private void SearchInputChanged(string search)
-	{
-	}
+    {
+    }
+
+    private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)
+    {
+        AddableTokenButton tokenButton = addableTokenButtonFactory.Create().SetButtonInfo(addableTokenInfo);
+        Transform componentTransform = tokenButton.transform;
+        Transform parentTransform = componentTransform.parent;
+
+        parentTransform.parent = tokenListTransform;
+        parentTransform.localScale = new Vector3(0f, 1f, 1f);
+        componentTransform.localScale = Vector3.one;
+
+        return tokenButton;
+    }
 }
