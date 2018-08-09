@@ -2,15 +2,15 @@
 
 public class InfoPopupAnimator : UIAnimator
 {
-
 	[SerializeField] private GameObject background;
 	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject bodyText;
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
+	private void OnEnable() => InfoMessage.OnHoverChanged += AnimateInfoPopup;
 
-	private void Awake() => InfoMessage.OnHoverChanged += AnimateInfoPopup;
+	private void OnDisable() => InfoMessage.OnHoverChanged -= AnimateInfoPopup;
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -23,6 +23,8 @@ public class InfoPopupAnimator : UIAnimator
 		background.AnimateGraphicAndScale(1f, 1f, 0.1f);
 		title.AnimateGraphicAndScale(0.85f, 1f, 0.1f);
 		bodyText.AnimateGraphicAndScale(0.65f, 1f, 0.1f, FinishedAnimating);
+
+		Debug.Log("Hello");
 	}
 
 	/// <summary>
@@ -42,6 +44,6 @@ public class InfoPopupAnimator : UIAnimator
 		if (animateIn)
 			AnimateEnable();
 		else
-			AnimateDisable();
+			AnimateDisable(() => transform.GetComponent<InfoPopup>().PopupManager.CloseActivePopup());
 	}
 }

@@ -9,6 +9,8 @@ public class InfoPopup : FactoryPopup<InfoPopup>
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
+	public PopupManager PopupManager => popupManager;
+
 	/// <summary>
 	/// Sets the UI elements of the info popup
 	/// </summary>

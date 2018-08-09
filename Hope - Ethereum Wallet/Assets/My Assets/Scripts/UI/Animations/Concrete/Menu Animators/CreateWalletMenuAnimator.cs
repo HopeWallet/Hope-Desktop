@@ -189,7 +189,7 @@ public class CreateWalletMenuAnimator : UIAnimator
 	/// <param name="animateIn"> Whether the icon is being animated in or out </param>
 	private void AnimateIcon(GameObject icon, bool animateIn)
 	{
-		if (animateIn && icon.GetComponent<InfoMessage>().Hovered) return; 
+		if (animateIn && icon.GetComponent<InfoMessage>().Hovered) return;
 
 		icon.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
 	}
