@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 224345580419698618}
   - component: {fileID: 222405883988986832}
   - component: {fileID: 114507396087929280}
-  - component: {fileID: 114699120041964866}
+  - component: {fileID: 114381301967653150}
   m_Layer: 5
   m_Name: WalletNameInfo_Icon
   m_TagString: Untagged
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 224463348503191504}
   - component: {fileID: 222162842487099920}
   - component: {fileID: 114455327070100084}
-  - component: {fileID: 114461819044645818}
+  - component: {fileID: 114914689591842108}
   m_Layer: 5
   m_Name: PasswordError_Icon
   m_TagString: Untagged
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 224182443281511618}
   - component: {fileID: 222328300777641712}
   - component: {fileID: 114204403340031352}
-  - component: {fileID: 114817838514162544}
+  - component: {fileID: 114857821849772996}
   m_Layer: 5
   m_Name: WalletNameError_Icon
   m_TagString: Untagged
@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 224842344655207430}
   - component: {fileID: 222912500310211054}
   - component: {fileID: 114519404654475582}
+  - component: {fileID: 114357908969904486}
   m_Layer: 5
   m_Name: PasswordCheckMark_Icon
   m_TagString: Untagged
@@ -925,14 +926,13 @@ MonoBehaviour:
   title: {fileID: 1877274499508246}
   walletNameField: {fileID: 1152292358957426}
   passwordHeader: {fileID: 1523661909573088}
-  passwordStrength: {fileID: 1514068630220970}
-  passwordStrengthProgressBar: {fileID: 1629694434893930}
   password1Field: {fileID: 1962811763491760}
   password2Field: {fileID: 1410199489587684}
   createButton: {fileID: 1661517219496106}
-  walletNameErrorIcon: {fileID: 1473985596704052}
-  passwordCheckMarkIcon: {fileID: 1784752828238066}
-  passwordErrorIcon: {fileID: 1360071420892682}
+  passwordStrengthSection: {fileID: 1514068630220970}
+  progressBar: {fileID: 1629694434893930}
+  progressBarFull: {fileID: 1286626025768614}
+  passwordStrengthText: {fileID: 114199572336162122}
 --- !u!114 &114108722606095098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1496,6 +1496,35 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114357908969904486
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784752828238066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: 
+  infoText: 
+  iconType: 2
+--- !u!114 &114381301967653150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1303167586079506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Creating Your Wallet
+  infoText: Here you will create a wallet name, and password that will be used to
+    sign in.
+  iconType: 0
 --- !u!114 &114450260774734892
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1565,20 +1594,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114461819044645818
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360071420892682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: Invalid Password
-  bodyText: Your passwords do not match.
-  infoIcon: 0
 --- !u!114 &114507396087929280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1648,10 +1663,12 @@ MonoBehaviour:
   createWalletButton: {fileID: 114450260774734892}
   backButton: {fileID: 114131630776764526}
   walletNameField: {fileID: 114047288921506502}
-  passwordField: {fileID: 114009619473119930}
-  walletNameInfoIcon: {fileID: 114699120041964866}
-  walletNameErrorIcon: {fileID: 114817838514162544}
-  passwordErrorIcon: {fileID: 114461819044645818}
+  password1Field: {fileID: 114985819114033810}
+  password2Field: {fileID: 114009619473119930}
+  walletNameInfoIcon: {fileID: 114381301967653150}
+  walletNameErrorIcon: {fileID: 114857821849772996}
+  passwordErrorIcon: {fileID: 114914689591842108}
+  passwordCheckMarkIcon: {fileID: 114357908969904486}
 --- !u!114 &114609398393248940
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1885,21 +1902,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114699120041964866
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1303167586079506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: Creating Your Wallet
-  bodyText: Here you will create a wallet name, and password that will be used to
-    sign in.
-  infoIcon: 1
 --- !u!114 &114739541591114550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2052,7 +2054,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114817838514162544
+--- !u!114 &114857821849772996
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2060,12 +2062,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1473985596704052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
+  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleText: Invalid Wallet Name
-  bodyText: This is not a valid wallet name to save as.
-  infoIcon: 0
+  infoTitle: Invalid Wallet Name
+  infoText: This is not a valid wallet name to save as.
+  iconType: 1
 --- !u!114 &114859870456168772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2180,6 +2182,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114914689591842108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1360071420892682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Invalid Password
+  infoText: Your passwords do not match.
+  iconType: 1
 --- !u!114 &114925083327452106
 MonoBehaviour:
   m_ObjectHideFlags: 1

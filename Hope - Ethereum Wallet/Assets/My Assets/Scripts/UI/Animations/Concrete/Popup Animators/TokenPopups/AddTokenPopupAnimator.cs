@@ -17,33 +17,10 @@ public class AddTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject noTokenFound;
 	[SerializeField] private GameObject addTokenButton;
 
+	[SerializeField] private TMP_InputField addressInputField;
 	[SerializeField] private GameObject loadingLine;
-	[SerializeField] private GameObject checkMarkIcon;
-
-	//public bool ValidAddress { get; set; }
-
-	//public bool ValidSymbol { get; set; }
-
-	//public bool ValidDecimals { get; set; }
-
-	//public bool CustomSymbol { get; set; }
-
-	//private bool realTokenAddress;
-
-	//public bool RealTokenAddress
-	//{
-	//	get { return realTokenAddress; }
-	//	set
-	//	{
-	//		realTokenAddress = value;
-
-	//		checkMarkIcon.AnimateGraphicAndScale(realTokenAddress ? 1f : 0f, realTokenAddress ? 1f : 0f, 0.1f);
-	//		noTokenFound.AnimateGraphicAndScale(realTokenAddress ? 0f : 1f, realTokenAddress ? 0f : 1f, 0.15f);
-	//		symbolSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
-	//		decimalSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
-	//		tokenSection.AnimateScaleX(CustomSymbol ? 0f : 1f, 0.15f);
-	//	}
-	//}
+	
+	//ADD THE ERROR AND CHECKMARK ICONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	/// <summary>
 	/// Initializes the button listeners
@@ -84,27 +61,32 @@ public class AddTokenPopupAnimator : UIAnimator
 		decimalSection.AnimateScaleX(0f, 0.15f);
 	}
 
-	public void AnimateFieldError(TMP_InputField inputField, bool animateIn)
-	{
-		inputField.transform.GetChild(1).gameObject.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.1f);
-	}
-
 	public void AnimateLoadingLine(bool animateIn)
 	{
 		if (animateIn)
+		{
 			loadingLine.SetActive(true);
+			addressInputField.readOnly = true;
+		}
 
-		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.1f, () => { if (!animateIn) loadingLine.SetActive(false); });
-		noTokenFound.AnimateGraphicAndScale(animateIn ? 0f : 1f, animateIn ? 0f : 1f, 0.1f);
+		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.15f, () => { if (!animateIn) loadingLine.SetActive(false); addressInputField.readOnly = false; });
 	}
 
-    private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
+	private void AnimateNoTokenFound(bool animateIn) => noTokenFound.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
+
+	private void AnimateInvalidToken(bool animateIn)
+	{
+		symbolSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
+		decimalSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
+	}
+
+	private void AnimateValidToken(bool animateIn) => tokenSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
+
+	private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
     {
-        //addTokenPopupAnimator.ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
-        //addTokenPopupAnimator.AnimateLoadingLine(addTokenPopupAnimator.ValidAddress && !string.IsNullOrEmpty(updatedAddress));
-
-        //addTokenPopupAnimator.AnimateFieldError(addressField, !addTokenPopupAnimator.ValidAddress);
-
-        //okButton.interactable = addTokenPopupAnimator.RealTokenAddress;
-    }
+		AnimateLoadingLine(tokenPopupStatus == AddTokenPopup.Status.Loading);
+		AnimateNoTokenFound(tokenPopupStatus == AddTokenPopup.Status.NoTokenFound);
+		AnimateInvalidToken(tokenPopupStatus == AddTokenPopup.Status.InvalidToken);
+		AnimateValidToken(tokenPopupStatus == AddTokenPopup.Status.ValidToken);
+	}
 }

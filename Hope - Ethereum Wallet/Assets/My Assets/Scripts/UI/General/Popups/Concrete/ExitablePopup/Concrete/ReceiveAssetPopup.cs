@@ -15,7 +15,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 
 	[SerializeField] private TMP_InputField addressText;
 
-	[SerializeField] private InfoMessage infoMessage;
+	[SerializeField] private Icon infoMessage;
 
 	private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
