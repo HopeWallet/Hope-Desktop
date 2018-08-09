@@ -64,12 +64,9 @@ public class AddTokenPopupAnimator : UIAnimator
 	public void AnimateLoadingLine(bool animateIn)
 	{
 		if (animateIn)
-		{
 			loadingLine.SetActive(true);
-			addressInputField.readOnly = true;
-		}
 
-		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.15f, () => { if (!animateIn) loadingLine.SetActive(false); addressInputField.readOnly = false; });
+		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.15f, () => { if (!animateIn) loadingLine.SetActive(false); });
 	}
 
 	private void AnimateNoTokenFound(bool animateIn) => noTokenFound.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
@@ -80,7 +77,10 @@ public class AddTokenPopupAnimator : UIAnimator
 		decimalSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
 	}
 
-	private void AnimateValidToken(bool animateIn) => tokenSection.AnimateScaleX(animateIn ? 1f : 0f, 0.15f);
+	private void AnimateValidToken(bool animateIn)
+	{
+		tokenSection.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, 0.15f);
+	}
 
 	private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
     {
