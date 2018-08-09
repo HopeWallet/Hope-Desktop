@@ -1,5 +1,4 @@
-﻿using LedgerWallet;
-using NBitcoin;
+﻿using NBitcoin;
 using Nethereum.HdWallet;
 using Nethereum.Web3.Accounts;
 using System.Linq;

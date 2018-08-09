@@ -1,6 +1,7 @@
 ﻿using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Org.BouncyCastle.Security;
+using System;
 using UnityEngine;
 
 namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
@@ -10,11 +11,15 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
     /// </summary>
     public abstract class SecurePlayerPrefsBase
     {
+        private static Settings settings;
+
         /// <summary>
         /// Initializes the <see cref="SecurePlayerPrefsBase"/> by getting the base player pref value.
         /// </summary>
-        protected SecurePlayerPrefsBase()
+        /// <param name="prefSettings"> The Settings for the SecurePlayerPrefs. </param>
+        protected SecurePlayerPrefsBase(Settings prefSettings)
         {
+            settings = prefSettings;
             EnsureSeedCreation();
         }
 
@@ -57,7 +62,16 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            return ("TEST").GetSHA512Hash();
+            return settings.securePlayerPrefSeed.GetSHA512Hash();
+        }
+
+        /// <summary>
+        /// Class which holds the SecurePlayerPrefs settings.
+        /// </summary>
+        [Serializable]
+        public sealed class Settings
+        {
+            [RandomizeText] public string securePlayerPrefSeed;
         }
     }
 }

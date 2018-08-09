@@ -8,6 +8,14 @@ using UnityEngine;
 public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
 {
     /// <summary>
+    /// Initializes the SecurePlayerPrefs.
+    /// </summary>
+    /// <param name="settings"> The Settings to use with the SecurePlayerPrefs. </param>
+    public SecurePlayerPrefs(Settings settings) : base(settings)
+    {
+    }
+
+    /// <summary>
     /// Sets a string value in the <see cref="PlayerPrefs"/>.
     /// </summary>
     /// <param name="key"> The key of the pref. </param>
