@@ -9,6 +9,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
 {
     public DebugManager.Settings debugSettings;
     public SecurePlayerPrefs.Settings playerPrefSettings;
+    public ContactsManager.Settings contactsSettings;
     public UserWalletManager.Settings walletSettings;
     public TokenContractManager.Settings tokenContractSettings;
     public TokenListManager.Settings tokenListSettings;
@@ -23,6 +24,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     {
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
         Container.BindInstance(playerPrefSettings).AsSingle().NonLazy();
+        Container.BindInstance(contactsSettings).AsSingle().NonLazy();
         Container.BindInstance(walletSettings).AsSingle().NonLazy();
         Container.BindInstance(tokenContractSettings).AsSingle().NonLazy();
         Container.BindInstance(tokenListSettings).AsSingle().NonLazy();

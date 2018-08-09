@@ -1,20 +1,23 @@
 ﻿
+using System;
+
 public sealed class ContactsManager
 {
-
 	/// <summary>
 	/// The list of contacts
 	/// </summary>
-	public SecurePlayerPrefList<ContactInfoJson> ContactList { get; } = new SecurePlayerPrefList<ContactInfoJson>("Contacts");
+	public SecurePlayerPrefList<ContactInfoJson> ContactList { get; }
 
-	/// <summary>
-	/// Adds contact under the newly created wallet name and address
-	/// </summary>
-	/// <param name="userWalletManager"> The active UserWalletManager </param>
-	/// <param name="userWalletInfoManager"> The active UserWalletInfoManager </param>
-	public ContactsManager(UserWalletManager userWalletManager, UserWalletInfoManager userWalletInfoManager)
+    /// <summary>
+    /// Adds contact under the newly created wallet name and address
+    /// </summary>
+    /// <param name="userWalletManager"> The active UserWalletManager </param>
+    /// <param name="userWalletInfoManager"> The active UserWalletInfoManager </param>
+    /// <param name="settings"> The settings for the ContactsManager. </param>
+    public ContactsManager(UserWalletManager userWalletManager, UserWalletInfoManager userWalletInfoManager, Settings settings)
 	{
-		UserWallet.OnWalletLoadSuccessful += () =>
+        ContactList = new SecurePlayerPrefList<ContactInfoJson>(settings.contactsPrefName);
+        UserWallet.OnWalletLoadSuccessful += () =>
 		{
 			string walletAddress = userWalletManager.WalletAddress;
 			AddContact(walletAddress, userWalletInfoManager.GetWalletInfo(walletAddress).WalletName);
@@ -45,4 +48,12 @@ public sealed class ContactsManager
 		ContactList[previousAddress] = new ContactInfoJson(newContactAddress.ToLower(), newContactName);
 	}
 
+    /// <summary>
+    /// Class which contains the pref settings for the ContactManager.
+    /// </summary>
+    [Serializable]
+    public sealed class Settings
+    {
+        [RandomizeText] public string contactsPrefName;
+    }
 }
