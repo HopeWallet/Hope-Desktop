@@ -20,37 +20,37 @@ public class AddTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject loadingLine;
 	[SerializeField] private GameObject checkMarkIcon;
 
-	public bool ValidAddress { get; set; }
+	//public bool ValidAddress { get; set; }
 
-	public bool ValidSymbol { get; set; }
+	//public bool ValidSymbol { get; set; }
 
-	public bool ValidDecimals { get; set; }
+	//public bool ValidDecimals { get; set; }
 
-	public bool CustomSymbol { get; set; }
+	//public bool CustomSymbol { get; set; }
 
-	private bool realTokenAddress;
+	//private bool realTokenAddress;
 
-	public bool RealTokenAddress
-	{
-		get { return realTokenAddress; }
-		set
-		{
-			realTokenAddress = value;
+	//public bool RealTokenAddress
+	//{
+	//	get { return realTokenAddress; }
+	//	set
+	//	{
+	//		realTokenAddress = value;
 
-			checkMarkIcon.AnimateGraphicAndScale(realTokenAddress ? 1f : 0f, realTokenAddress ? 1f : 0f, 0.1f);
-			noTokenFound.AnimateGraphicAndScale(realTokenAddress ? 0f : 1f, realTokenAddress ? 0f : 1f, 0.15f);
-			symbolSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
-			decimalSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
-			tokenSection.AnimateScaleX(CustomSymbol ? 0f : 1f, 0.15f);
-		}
-	}
+	//		checkMarkIcon.AnimateGraphicAndScale(realTokenAddress ? 1f : 0f, realTokenAddress ? 1f : 0f, 0.1f);
+	//		noTokenFound.AnimateGraphicAndScale(realTokenAddress ? 0f : 1f, realTokenAddress ? 0f : 1f, 0.15f);
+	//		symbolSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
+	//		decimalSection.AnimateScaleX(CustomSymbol ? 1f : 0f, 0.15f);
+	//		tokenSection.AnimateScaleX(CustomSymbol ? 0f : 1f, 0.15f);
+	//	}
+	//}
 
 	/// <summary>
 	/// Initializes the button listeners
 	/// </summary>
 	private void Awake()
 	{
-
+        GetComponent<AddTokenPopup>().OnStatusChanged += OnStatusChanged;
 	}
 
 	/// <summary>
@@ -97,4 +97,14 @@ public class AddTokenPopupAnimator : UIAnimator
 		loadingLine.AnimateScaleY(animateIn ? 1f : 0f, 0.1f, () => { if (!animateIn) loadingLine.SetActive(false); });
 		noTokenFound.AnimateGraphicAndScale(animateIn ? 0f : 1f, animateIn ? 0f : 1f, 0.1f);
 	}
+
+    private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
+    {
+        //addTokenPopupAnimator.ValidAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
+        //addTokenPopupAnimator.AnimateLoadingLine(addTokenPopupAnimator.ValidAddress && !string.IsNullOrEmpty(updatedAddress));
+
+        //addTokenPopupAnimator.AnimateFieldError(addressField, !addTokenPopupAnimator.ValidAddress);
+
+        //okButton.interactable = addTokenPopupAnimator.RealTokenAddress;
+    }
 }
