@@ -1592,8 +1592,8 @@ MonoBehaviour:
   dubiBalanceText: {fileID: 114381802767292856}
   dubiRewardText: {fileID: 114261162030162700}
   maxToggle: {fileID: 114675470125886244}
-  menuInfoIcon: {fileID: 114103221144928766}
-  purposeErrorIcon: {fileID: 114011413163366008}
+  menuInfoIcon: {fileID: 0}
+  purposeErrorIcon: {fileID: 0}
 --- !u!114 &114220270093468036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3899,7 +3899,7 @@ MonoBehaviour:
   timePeriodSection: {fileID: 1703276064400756}
   noteText: {fileID: 1104521864626898}
   lockPRPSButton: {fileID: 1468875886644998}
-  purposeErrorIcon: {fileID: 114011413163366008}
+  purposeErrorIcon: {fileID: 0}
 --- !u!114 &114842760414198258
 MonoBehaviour:
   m_ObjectHideFlags: 1
