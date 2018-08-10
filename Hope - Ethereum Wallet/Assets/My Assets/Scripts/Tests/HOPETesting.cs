@@ -57,20 +57,7 @@ public class HOPETesting : MonoBehaviour
 {
     private void Start()
     {
-        //string text = "this is a piece of text";
-        //byte[] dataToEncrypt = text.GetUTF8Bytes();
-        //byte[] entropy = new byte[] { 5, 14, 35, 52, 128, 3, 42, 33, 90, 119, 156, 2 };
-        ////string entropy = "nice data u got there lul";
 
-        //byte[] protectedData = DataProtect.Protect(dataToEncrypt, entropy);
-        //byte[] unprotectedData = DataProtect.Unprotect(protectedData, entropy);
-        ////DataProtector.
-
-        //Debug.Log(protectedData.GetBase64String());
-        //Debug.Log(unprotectedData.GetUTF8String());
-
-        HopeDataProtector hopeDataProtector = new HopeDataProtector("HOPE", "wallet encryption", new string[] { "wallet lvl 1", "wallet lvl 2", "wallet lvl 3" });
-        HopeMemoryProtector hopeMemoryProtector = new HopeMemoryProtector("HOPE", "password encryptor", new string[] { "storage" });
     }
 
     [ContextMenu("Delete Player Prefs")]
