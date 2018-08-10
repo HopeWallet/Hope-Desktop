@@ -45,5 +45,4 @@ public static class PasswordEncryption
             diff |= (uint)(correctHash[i] ^ hashToCheck[i]);
         return diff == 0;
     }
-
 }

@@ -48,7 +48,7 @@ public static class PrefSettingsRandomizer
     private static void RandomizeFields()
     {
         SecureRandom secureRandom = new SecureRandom();
-        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, SecureRandom.GetNextBytes(secureRandom, 16).GetBase64String()));
+        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, SecureRandom.GetNextBytes(secureRandom, secureRandom.Next(16, 33)).GetBase64String()));
     }
 
     /// <summary>
