@@ -64,7 +64,7 @@ public sealed class WalletDecryptor : SecureObject
     /// <returns> Task returned which represents the decryption processing. </returns>
     private async Task AsyncDecryptWallet(string[] hashLvls, string encryptedSeed, string derivation, string password, Action<byte[], string> onWalletDecrypted)
     {
-        var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password).GetSHA256Hash()).ConfigureAwait(false);
+        var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password)).ConfigureAwait(false);
         var splitPass = encryptionPassword.SplitHalf();
         var lvl12string = splitPass.Item1.SplitHalf();
         var lvl34string = splitPass.Item2.SplitHalf();

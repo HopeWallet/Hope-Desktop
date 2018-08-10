@@ -49,7 +49,7 @@ public sealed class WalletEncryptor : SecureObject
     {
         SecureRandom secureRandom = new SecureRandom();
 
-        string encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(passwordBase).GetSHA256Hash()).ConfigureAwait(false);
+        string encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(passwordBase)).ConfigureAwait(false);
 
         Tuple<string, string> splitPass = encryptionPassword.SplitHalf();
         Tuple<string, string> lvl12string = splitPass.Item1.SplitHalf();

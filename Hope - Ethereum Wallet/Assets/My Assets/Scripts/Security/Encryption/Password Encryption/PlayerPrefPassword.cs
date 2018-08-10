@@ -37,7 +37,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         prefDictionary.Clear();
 
-        return pass;
+        return pass.GetSHA512Hash();
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
                                         _ => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH),
-                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed);
+                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).GetSHA512Hash();
     }
 
     /// <summary>
