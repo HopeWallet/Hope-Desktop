@@ -55,11 +55,6 @@ using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
-    private void Start()
-    {
-
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

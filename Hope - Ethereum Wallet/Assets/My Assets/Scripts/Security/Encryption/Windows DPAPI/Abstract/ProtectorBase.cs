@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Hope.Security.HashGeneration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public abstract class ProtectorBase : IProtector
 {
@@ -6,17 +9,14 @@ public abstract class ProtectorBase : IProtector
 
     protected ProtectorBase(params object[] protectorObjects)
     {
-        this.protectorObjects = protectorObjects;
+        this.protectorObjects = protectorObjects ?? (new object[0]);
     }
 
     public void Protect(string data) => Protect(data.GetUTF8Bytes());
 
     public void Protect(byte[] data) => Protect(data, protectorObjects.Length > 0 ? GetProtectorHash() : null);
 
-    public void Protect(string data, string entropy)
-    {
-
-    }
+    public void Protect(string data, string entropy) => Protect(data, entropy.GetUTF8Bytes());
 
     public void Protect(string data, byte[] entropy)
     {
@@ -63,9 +63,32 @@ public abstract class ProtectorBase : IProtector
         throw new NotImplementedException();
     }
 
-    private byte[] GetProtectorHash()
+    private byte[] GetProtectorHash(byte[] additionalEntropy = null)
     {
-        return null;
+        byte[] hashBytes = new byte[0];
+
+        List<object> protectors = new List<object>(protectorObjects);
+
+        if (additionalEntropy?.Length > 0)
+            protectors.Add(additionalEntropy);
+
+        if (protectors.Count == 0)
+            return null;
+
+        foreach (var obj in protectors)
+        {
+            byte[] objBytes = obj.ToString().GetUTF8Bytes();
+
+            int currentLength = hashBytes.Length;
+            int objBytesLength = objBytes.Length;
+
+            Array.Resize(ref hashBytes, currentLength + objBytesLength);
+            Array.Copy(objBytes, 0, hashBytes, currentLength, objBytesLength);
+
+            hashBytes = hashBytes.GetSHA256Hash();
+        }
+
+        return hashBytes.ToArray();
     }
 
     protected abstract void InternalProtect(byte[] data, byte[] entropy);
