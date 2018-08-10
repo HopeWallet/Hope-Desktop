@@ -31,5 +31,6 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
     private void OnCheckboxChanged(bool enabled)
     {
         tokenListManager.UpdateToken(ButtonInfo.TokenInfo.Address, enabled, true);
+        ButtonInfo.Enabled = enabled;
     }
 }

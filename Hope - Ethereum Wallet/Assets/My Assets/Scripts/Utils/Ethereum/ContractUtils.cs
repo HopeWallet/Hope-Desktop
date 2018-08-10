@@ -7,7 +7,6 @@ using System.Collections;
 
 namespace Hope.Utils.EthereumUtils
 {
-
     /// <summary>
     /// Class which contains useful utility methods for sending messages to smart contracts or querying data from them.
     /// </summary>

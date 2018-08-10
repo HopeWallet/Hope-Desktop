@@ -6,6 +6,8 @@ public sealed class TokenListManager
 {
     private readonly SecurePlayerPrefList<AddableTokenInfo> addableTokens;
 
+    public List<AddableTokenInfo> TokenList => addableTokens.ToList();
+
     public TokenListManager(Settings settings)
     {
         addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName);
@@ -34,8 +36,6 @@ public sealed class TokenListManager
     {
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
     }
-
-    public List<AddableTokenInfo> GetTokenList() => addableTokens.ToList();
 
     [Serializable]
     public sealed class Settings
