@@ -88,13 +88,5 @@ public sealed class UserWalletManager
     {
         public PlayerPrefPassword safePassword;
         public string[] safePasswordCharLookups;
-
-        [RandomizeText] public string walletDataPrefName;
-        [RandomizeText] public string walletNamePrefName;
-        [RandomizeText] public string walletPasswordPrefName;
-        [RandomizeText] public string walletDerivationPrefName;
-        [RandomizeText] public string walletCountPrefName;
-        [RandomizeText] public string walletHashLvlPrefName;
-        [RandomizeText] public string walletInfoPrefName;
     }
 }

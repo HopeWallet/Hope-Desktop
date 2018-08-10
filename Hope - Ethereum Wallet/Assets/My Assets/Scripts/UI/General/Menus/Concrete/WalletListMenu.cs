@@ -14,7 +14,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
     private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
-    private UserWalletManager.Settings walletSettings;
+    private UserWalletInfoManager.Settings walletSettings;
     private Settings settings;
 
     /// <summary>
@@ -28,7 +28,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     public void Construct(
         WalletButton.Factory walletButtonFactory,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager.Settings walletSettings,
         Settings settings)
     {
         this.walletButtonFactory = walletButtonFactory;

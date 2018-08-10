@@ -2,13 +2,11 @@
 
 namespace Hope.Security.Encryption.DPAPI
 {
-
     /// <summary>
     /// Class which protects data for long term storage which can be protected and unprotected across multiple sessions.
     /// </summary>
     public static class DataProtect
     {
-
         /// <summary>
         /// Protects data for long term use which can be unprotected across multiple sessions. 
         /// Can be unprotected using <see cref="DataProtect.Unprotect"/>.
@@ -80,8 +78,5 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="scope"> The <see cref="DataProtectionScope"/> to apply to the unprotect method. </param>
         /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
         private static byte[] InternalUnprotect(byte[] data, byte[] optionalEntropy, DataProtectionScope scope) => ProtectedData.Unprotect(data, optionalEntropy, scope);
-
-
     }
-
 }

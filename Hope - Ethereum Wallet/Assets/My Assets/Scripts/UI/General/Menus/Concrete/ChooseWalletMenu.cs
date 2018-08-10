@@ -11,10 +11,10 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     public Button hopeButton;
     public Button exitButton;
 
-    private UserWalletManager.Settings walletSettings;
+    private UserWalletInfoManager.Settings walletSettings;
 
     [Inject]
-    public void Construct(UserWalletManager.Settings walletSettings) => this.walletSettings = walletSettings;
+    public void Construct(UserWalletInfoManager.Settings walletSettings) => this.walletSettings = walletSettings;
 
     /// <summary>
     /// Adds the button listeners on start.
