@@ -34,8 +34,8 @@ public sealed class UserWallet : SecureObject
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings,
-        UserWalletInfoManager userWalletInfoManager)
+        UserWalletInfoManager userWalletInfoManager,
+        UserWalletInfoManager.Settings walletSettings)
     {
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;

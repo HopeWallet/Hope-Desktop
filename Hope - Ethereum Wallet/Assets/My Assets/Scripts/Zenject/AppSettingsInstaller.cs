@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Zenject;
 
 /// <summary>
@@ -8,11 +9,8 @@ using Zenject;
 public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstaller>
 {
     public DebugManager.Settings debugSettings;
-    public SecurePlayerPrefs.Settings playerPrefSettings;
-    public ContactsManager.Settings contactsSettings;
+    public Settings playerPrefSettings;
     public UserWalletManager.Settings walletSettings;
-    public TokenContractManager.Settings tokenContractSettings;
-    public TokenListManager.Settings tokenListSettings;
     public EthereumNetworkManager.Settings ethereumNetworkSettings;
     public UIManager.Settings uiSettings;
     public SmartContractManager.Settings contractManagerSettings;
@@ -22,12 +20,14 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     /// </summary>
     public override void InstallBindings()
     {
+        Container.BindInstance(playerPrefSettings.securePlayerPrefSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.contactsSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.tokenContractSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.tokenListSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.walletPrefSettings).AsSingle().NonLazy();
+
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings).AsSingle().NonLazy();
-        Container.BindInstance(contactsSettings).AsSingle().NonLazy();
         Container.BindInstance(walletSettings).AsSingle().NonLazy();
-        Container.BindInstance(tokenContractSettings).AsSingle().NonLazy();
-        Container.BindInstance(tokenListSettings).AsSingle().NonLazy();
         Container.BindInstance(ethereumNetworkSettings).AsSingle().NonLazy();
         Container.BindInstance(uiSettings).AsSingle().NonLazy();
 
@@ -41,5 +41,18 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     {
         typeof(SmartContractManager.Settings).GetFields(BindingFlags.Instance | BindingFlags.GetField | BindingFlags.Public)
                                              .ForEach(field => Container.BindInstance(field.GetValue(contractManagerSettings)).AsSingle().NonLazy());
+    }
+
+    /// <summary>
+    /// Class which manages all player pref key settings.
+    /// </summary>
+    [Serializable]
+    public sealed class Settings
+    {
+        public SecurePlayerPrefs.Settings securePlayerPrefSettings;
+        public ContactsManager.Settings contactsSettings;
+        public UserWalletInfoManager.Settings walletPrefSettings;
+        public TokenContractManager.Settings tokenContractSettings;
+        public TokenListManager.Settings tokenListSettings;
     }
 }

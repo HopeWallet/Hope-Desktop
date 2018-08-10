@@ -7,7 +7,7 @@ using System;
 public sealed class WalletCreator : WalletLoaderBase
 {
     private readonly WalletEncryptor walletEncryptor;
-    private readonly UserWalletManager.Settings walletSettings;
+    private readonly UserWalletInfoManager.Settings walletSettings;
 
     private string derivationPath;
 
@@ -15,7 +15,7 @@ public sealed class WalletCreator : WalletLoaderBase
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager.Settings walletSettings,
         UserWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)
     {
         this.walletSettings = walletSettings;

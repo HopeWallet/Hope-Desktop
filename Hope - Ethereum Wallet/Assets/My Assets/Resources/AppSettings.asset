@@ -14,9 +14,22 @@ MonoBehaviour:
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:
-    securePlayerPrefSeed: TEST
-  contactsSettings:
-    contactsPrefName: Contacts
+    securePlayerPrefSettings:
+      securePlayerPrefSeed: TEST
+    contactsSettings:
+      contactsPrefName: Contacts
+    walletPrefSettings:
+      walletDataPrefName: wallet
+      walletNamePrefName: wallet_name
+      walletPasswordPrefName: wallet_password
+      walletDerivationPrefName: wallet_derivation
+      walletCountPrefName: wallet_count
+      walletHashLvlPrefName: wallet_hash
+      walletInfoPrefName: wallet_info
+    tokenContractSettings:
+      tokenPrefName: Token_
+    tokenListSettings:
+      tokenListPrefName: TokenList
   walletSettings:
     safePassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
     safePasswordCharLookups:
@@ -37,10 +50,6 @@ MonoBehaviour:
     walletCountPrefName: wallet_count
     walletHashLvlPrefName: wallet_hash
     walletInfoPrefName: wallet_info
-  tokenContractSettings:
-    tokenPrefName: Token_
-  tokenListSettings:
-    tokenListPrefName: TokenList
   ethereumNetworkSettings:
     networkType: 1
   uiSettings:

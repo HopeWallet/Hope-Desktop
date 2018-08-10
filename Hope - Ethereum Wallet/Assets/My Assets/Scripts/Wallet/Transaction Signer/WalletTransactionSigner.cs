@@ -24,7 +24,7 @@ public sealed class WalletTransactionSigner
         DynamicDataCache dynamicDataCache,
         EthereumNetwork ethereumNetwork,
         EphemeralEncryption passwordEncryptor,
-        UserWalletManager.Settings walletSettings)
+        UserWalletInfoManager.Settings walletSettings)
     {
         this.ethereumNetwork = ethereumNetwork;
         this.passwordEncryptor = passwordEncryptor;

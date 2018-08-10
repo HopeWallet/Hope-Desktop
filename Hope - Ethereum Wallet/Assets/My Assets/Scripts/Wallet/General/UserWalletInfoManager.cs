@@ -1,16 +1,17 @@
-﻿/// <summary>
+﻿using System;
+/// <summary>
 /// Class which manages the info for each user wallet.
 /// </summary>
 public sealed class UserWalletInfoManager
 {
     private readonly SecurePlayerPrefList<WalletInfo> wallets;
-    private readonly UserWalletManager.Settings walletSettings;
+    private readonly Settings walletSettings;
 
     /// <summary>
     /// Initializes the UserWalletInfoManager.
     /// </summary>
     /// <param name="walletSettings"> The settings of the UserWallet. </param>
-    public UserWalletInfoManager(UserWalletManager.Settings walletSettings)
+    public UserWalletInfoManager(Settings walletSettings)
     {
         this.walletSettings = walletSettings;
 
@@ -63,5 +64,20 @@ public sealed class UserWalletInfoManager
     {
         if (wallets.Remove(walletInfo))
             SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count);
+    }
+
+    /// <summary>
+    /// Class which holds the settings for the wallet player pref data.
+    /// </summary>
+    [Serializable]
+    public sealed class Settings
+    {
+        [RandomizeText] public string walletDataPrefName;
+        [RandomizeText] public string walletNamePrefName;
+        [RandomizeText] public string walletPasswordPrefName;
+        [RandomizeText] public string walletDerivationPrefName;
+        [RandomizeText] public string walletCountPrefName;
+        [RandomizeText] public string walletHashLvlPrefName;
+        [RandomizeText] public string walletInfoPrefName;
     }
 }

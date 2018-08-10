@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 public sealed class WalletUnlocker : WalletLoaderBase
 {
     private readonly WalletDecryptor walletDecryptor;
-    private readonly UserWalletManager.Settings walletSettings;
+    private readonly UserWalletInfoManager.Settings walletSettings;
 
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings,
+        UserWalletInfoManager.Settings walletSettings,
         UserWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)
     {
         this.walletSettings = walletSettings;

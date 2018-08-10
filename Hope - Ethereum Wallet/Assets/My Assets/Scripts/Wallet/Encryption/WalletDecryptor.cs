@@ -12,7 +12,7 @@ public sealed class WalletDecryptor : SecureObject
 {
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
-    private readonly UserWalletManager.Settings walletSettings;
+    private readonly UserWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Initializes the <see cref="WalletDecryptor"/> with the references to needed objects.
@@ -23,7 +23,7 @@ public sealed class WalletDecryptor : SecureObject
     public WalletDecryptor(
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        UserWalletManager.Settings walletSettings)
+        UserWalletInfoManager.Settings walletSettings)
     {
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
