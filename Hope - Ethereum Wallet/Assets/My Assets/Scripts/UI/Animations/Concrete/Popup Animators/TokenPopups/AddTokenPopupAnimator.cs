@@ -121,7 +121,7 @@ public class AddTokenPopupAnimator : UIAnimator
 			if (section == loadingIcon)
 			{
 				loadingIcon.SetActive(false);
-				loadingIcon.GetComponent<Image>().color = Color.clear;
+				loadingIcon.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 			}
 			section.transform.localScale = Vector2.zero;
 		}

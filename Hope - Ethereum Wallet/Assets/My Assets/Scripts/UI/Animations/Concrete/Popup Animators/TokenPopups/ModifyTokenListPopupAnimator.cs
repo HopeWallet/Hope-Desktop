@@ -14,10 +14,18 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 
 	private Transform tokenTransform;
 
+	private ModifyTokensPopup modifyTokensPopup;
+
 	/// <summary>
 	/// Initializes the button listeners
 	/// </summary>
-	private void Awake() => tokenTransform = tokenList.transform.GetChild(0).GetChild(0);
+	private void Awake()
+	{
+		modifyTokensPopup = transform.GetComponent<ModifyTokensPopup>();
+		modifyTokensPopup.OnAddableTokenAdded += AnimateTokenIntoList;
+
+		tokenTransform = tokenList.transform.GetChild(0).GetChild(0);
+	}
 
 	/// <summary>
 	/// Animates the UI elements of the form into view
@@ -76,4 +84,6 @@ public class ModifyTokenListPopupAnimator : UIAnimator
             tokenTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateTokens(++index));
         }
     }
+
+	private void AnimateTokenIntoList(AddableTokenButton addableTokenButton) => addableTokenButton.transform.parent.gameObject.AnimateScaleX(1f, 0.15f);
 }

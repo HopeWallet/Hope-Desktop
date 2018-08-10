@@ -23,7 +23,7 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
 
     protected override void OnValueUpdated(AddableTokenInfo info)
     {
-        tokenDisplayText.text = info.TokenInfo.Symbol;
+        tokenDisplayText.text = info.TokenInfo.Name.LimitEnd(48, "...") + " (" + info.TokenInfo.Symbol + ")";
         tradableAssetImageManager.LoadImage(info.TokenInfo.Symbol, icon => tokenIcon.sprite = icon);
         checkBox.Toggle(info.Enabled);
     }
