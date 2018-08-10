@@ -2830,6 +2830,7 @@ MonoBehaviour:
   bodyText: This features allows you to lock away your purpose for a set period of
     time, and get a reward of DUBI in return
   infoIcon: 1
+  <Hovered>k__BackingField: 0
 --- !u!114 &114530882451241430
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,77 +1,82 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine;
 using System;
-using System.Collections;
 
 public sealed class Icon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public string infoTitle;
-	public string infoText;
-	public IconType iconType;
+    private static int clickId;
 
-	private bool hoverableIcon;
-	private bool hovering;
+    public string infoTitle;
+    public string infoText;
+    public IconType iconType;
 
-	public PopupManager PopupManager { get; set; }
+    private bool hoverableIcon;
+    private bool hovering;
 
-	public static event Action AnimatePopupOut;
+    public PopupManager PopupManager { get; set; }
 
-	private void Awake() => hoverableIcon = iconType == IconType.Info || iconType == IconType.Error;
+    public static event Action AnimatePopupOut;
 
-	private void Update()
-	{
-		if (!hovering)
-			return;
+    private void Awake() => hoverableIcon = iconType == IconType.Info || iconType == IconType.Error;
 
-		if (PopupManager.ActivePopupType != typeof(InfoPopup))
-		{
-			hovering = false;
-		}
-	}
+    /// <summary>
+    /// Opens the InfoPopup after a short period of hovering.
+    /// </summary>
+    private void Update()
+    {
+        if (!hovering)
+            return;
 
-	/// <summary>
-	/// Mouse entered the icon
-	/// </summary>
-	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerEnter(PointerEventData eventData)
-	{
-		if (!hoverableIcon)
-			return;
+        int val = clickId;
+        CoroutineUtils.ExecuteAfterWait(0.1f, () => OpenPopup(val));
+    }
 
-		if (PopupManager.ActivePopupType == typeof(InfoPopup))
-		{
-			hovering = true;
-			return;
-		}
+    /// <summary>
+    /// Mouse entered the icon
+    /// </summary>
+    /// <param name="eventData"> The PointerEventData </param>
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!hoverableIcon)
+            return;
 
-		PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, iconType, transform.position);
-		hovering = true;
-	}
+        clickId++;
+        hovering = true;
+    }
 
-	/// <summary>
-	/// Mouse exited the icon
-	/// </summary>
-	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerExit(PointerEventData eventData = null)
-	{
-		if (!hoverableIcon)
-			return;
+    /// <summary>
+    /// Mouse exited the icon
+    /// </summary>
+    /// <param name="eventData"> The PointerEventData </param>
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!hoverableIcon)
+            return;
 
-		AnimatePopupOut?.Invoke();
-	}
+        clickId++;
+        hovering = false;
 
-	/// <summary>
-	/// Animates the icon
-	/// </summary>
-	/// <param name="value"> The end value of the graphic and scale being animated to </param>
-	/// <param name="onCompleteAction"></param>
-	public void AnimateIcon(float value)
-	{
-		if (hovering)
-			return;
+        PopupManager.GetPopup<InfoPopup>().Animator.AnimateDisable(() => PopupManager.KillActivePopup());
+    }
 
-		gameObject.AnimateGraphicAndScale(value, value, 0.1f);
-	}
+    /// <summary>
+    /// Animates the icon
+    /// </summary>
+    /// <param name="value"> The end value of the graphic and scale being animated to </param>
+    public void AnimateIcon(float value)
+    {
+        gameObject.AnimateGraphicAndScale(value, value, 0.1f);
+    }
 
-	public enum IconType { Info, Error, CheckMark }
+    /// <summary>
+    /// Opens the popup if the current id is still the same as the static click id.
+    /// </summary>
+    /// <param name="currentId"> The current click id. </param>
+    private void OpenPopup(int currentId)
+    {
+        if (currentId == clickId)
+            PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, iconType, transform.position);
+    }
+
+    public enum IconType { Info, Error, CheckMark }
 }

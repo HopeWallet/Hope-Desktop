@@ -10,7 +10,7 @@ public abstract class UIAnimator : MonoBehaviour
 	[SerializeField]
 	private GameObject blocker;
 
-	private Action onAnimationFinished;
+	protected Action onAnimationFinished;
 
 	private bool animating;
 

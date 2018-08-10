@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Object = UnityEngine.Object;
+using static UnityEngine.Object;
 
 /// <summary>
 /// Class which manages the creation and destruction of all popups.
@@ -16,20 +16,20 @@ public sealed class PopupManager
     /// </summary>
     public bool AnimatingPopup { get; private set; }
 
-	/// <summary>
-	/// Whether an active popup currently exists.
-	/// </summary>
-	public bool ActivePopupExists => activePopups.Count > 0;
+    /// <summary>
+    /// Whether an active popup currently exists.
+    /// </summary>
+    public bool ActivePopupExists => activePopups.Count > 0;
 
-	/// <summary>
-	/// The type of the active popup.
-	/// </summary>
-	public Type ActivePopupType => activePopups.Count == 0 ? null : activePopups.Peek().Key.GetType();
+    /// <summary>
+    /// The type of the active popup.
+    /// </summary>
+    public Type ActivePopupType => activePopups.Count == 0 ? null : activePopups.Peek().Key.GetType();
 
-	/// <summary>
-	/// Initializes the PopupManager by adding all required factories.
-	/// </summary>
-	public PopupManager(LoadingPopup.Factory loadingPopupFactory,
+    /// <summary>
+    /// Initializes the PopupManager by adding all required factories.
+    /// </summary>
+    public PopupManager(LoadingPopup.Factory loadingPopupFactory,
         AddTokenPopup.Factory addTokenPopupFactory,
         SendAssetPopup.Factory sendAssetPopupFactory,
         ConfirmTransactionPopup.Factory confirmSendAssetPopupFactory,
@@ -44,10 +44,10 @@ public sealed class PopupManager
         UnlockWalletPopup.Factory unlockWalletPopupFactory,
         ContactsPopup.Factory contactsPopupFactory,
         AddOrEditContactPopup.Factory addOrEditContactPopupFactory,
-		InfoPopup.Factory infoPopupFactory,
+        InfoPopup.Factory infoPopupFactory,
         ModifyTokensPopup.Factory modifyTokensPopupFactory,
-		ExitConfirmationPopup.Factory exitConfirmationPopupFactory,
-		DeleteContactPopup.Factory deleteContactPopupFactory)
+        ExitConfirmationPopup.Factory exitConfirmationPopupFactory,
+        DeleteContactPopup.Factory deleteContactPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -64,14 +64,23 @@ public sealed class PopupManager
                                unlockWalletPopupFactory,
                                contactsPopupFactory,
                                addOrEditContactPopupFactory,
-					 	       infoPopupFactory,
+                                infoPopupFactory,
                                modifyTokensPopupFactory,
-							   exitConfirmationPopupFactory,
-							   deleteContactPopupFactory);
+                               exitConfirmationPopupFactory,
+                               deleteContactPopupFactory);
     }
 
     /// <summary>
-    /// Closes the currently active popup.
+    /// Kills the active popup and ignores all safeguards to prevent popup closing.
+    /// </summary>
+    public void KillActivePopup()
+    {
+        if (activePopups.Count > 0)
+            Destroy(activePopups.Pop().Key.gameObject);
+    }
+
+    /// <summary>
+    /// Closes the currently active popup if there are no popups animating currently and the active popup has closing enabled.
     /// </summary>
     /// <param name="typesToIgnore"> The filter for ignoring closing certain popups if the active popup is one of the types. </param>
     /// <returns> Whether the active popup was closed or not. </returns>
@@ -119,7 +128,7 @@ public sealed class PopupManager
             return null;
 
         TPopup newPopup = factoryPopups.OfType<FactoryPopup<TPopup>.Factory>().Single().Create();
-        activePopups.Push(new KeyValuePair<PopupBase, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Object.Destroy(newPopup.gameObject))));
+        activePopups.Push(new KeyValuePair<PopupBase, Action>(newPopup, () => AnimatePopup(newPopup, false, () => Destroy(newPopup.gameObject))));
 
         AnimatePopup(newPopup, true, null);
 
