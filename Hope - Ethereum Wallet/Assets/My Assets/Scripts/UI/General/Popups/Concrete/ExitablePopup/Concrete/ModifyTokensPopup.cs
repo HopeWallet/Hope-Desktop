@@ -64,6 +64,15 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     private void SearchInputChanged(string search)
     {
+        search = search.ToUpper();
+
+        AddableTokens
+            .Where(token => token.ButtonInfo.TokenInfo.Name.ToUpper().Contains(search) || token.ButtonInfo.TokenInfo.Symbol.Contains(search))
+            .ForEach(token => token.transform.parent.gameObject.SetActive(true));
+
+        AddableTokens
+            .Where(token => !token.ButtonInfo.TokenInfo.Name.ToUpper().Contains(search) && !token.ButtonInfo.TokenInfo.Symbol.Contains(search))
+            .ForEach(token => token.transform.parent.gameObject.SetActive(false));
     }
 
     private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)

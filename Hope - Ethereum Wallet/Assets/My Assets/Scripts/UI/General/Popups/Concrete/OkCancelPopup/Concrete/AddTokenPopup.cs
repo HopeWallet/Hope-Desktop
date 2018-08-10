@@ -13,18 +13,22 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 {
     public event Action<Status> OnStatusChanged;
 
+    private static int addressId;
+
     [SerializeField] private TMP_InputField addressField, symbolField, decimalsField;
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenSymbol;
 
     private TokenListManager tokenListManager;
     private TradableAssetImageManager tradableAssetImageManager;
+    private UserWalletManager userWalletManager;
 
     new private string name;
     private string symbol;
     private int? decimals;
+    private dynamic balance;
 
-    private bool updatedName, updatedSymbol, updatedDecimals, updatedLogo;
+    private bool updatedName, updatedSymbol, updatedDecimals, updatedBalance, updatedLogo;
     private bool validSymbol, validDecimals;
 
     private int previousAddressLength;
@@ -34,11 +38,16 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     /// <param name="tokenListManager"> The active TokenListManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
-    public void Construct(TokenListManager tokenListManager, TradableAssetImageManager tradableAssetImageManager)
+    public void Construct(
+        TokenListManager tokenListManager,
+        TradableAssetImageManager tradableAssetImageManager,
+        UserWalletManager userWalletManager)
     {
         this.tokenListManager = tokenListManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
+        this.userWalletManager = userWalletManager;
     }
 
     /// <summary>
@@ -152,14 +161,16 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         updatedSymbol = false;
         updatedDecimals = false;
         updatedLogo = false;
+        updatedBalance = false;
+
+        addressField.readOnly = true;
 
         OnStatusChanged?.Invoke(Status.Loading);
 
         SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => NameQueryCompleted(output.Value));
         SimpleContractQueries.QueryStringOutput<Symbol>(addressField.text, null, output => SymbolQueryCompleted(output.Value));
         SimpleContractQueries.QueryUInt256Output<Decimals>(addressField.text, null, output => DecimalsQueryCompleted(output.Value));
-        // get balance and check if it is null
-        // if balance is null the token isn't real
+        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressField.text, userWalletManager.WalletAddress, output => BalanceQueryCompleted(output.Value), userWalletManager.WalletAddress);
     }
 
     private void NameQueryCompleted(string value)
@@ -184,6 +195,12 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         CheckLoadStatus(ref updatedDecimals);
     }
 
+    private void BalanceQueryCompleted(dynamic value)
+    {
+        balance = value;
+        CheckLoadStatus(ref updatedBalance);
+    }
+
     private void LogoQueryCompleted(Sprite value)
     {
         tokenIcon.sprite = value;
@@ -194,9 +211,13 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     {
         updatingVar = true;
 
-        if (updatedName && updatedSymbol && updatedDecimals && updatedLogo)
+        if (updatedName && updatedSymbol && updatedDecimals && updatedLogo && updatedBalance)
         {
-            if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
+            if (balance == null)
+            {
+                OnStatusChanged?.Invoke(Status.NoTokenFound);
+            }
+            else if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
             {
                 decimalsField.text = string.Empty;
                 symbolField.text = string.Empty;
