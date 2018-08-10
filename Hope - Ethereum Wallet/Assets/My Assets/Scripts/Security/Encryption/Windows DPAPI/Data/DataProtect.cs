@@ -6,19 +6,19 @@ namespace Hope.Security.Encryption.DPAPI
     /// <summary>
     /// Class which protects data for long term storage which can be protected and unprotected across multiple sessions.
     /// </summary>
-    public static class StorageProtect
+    public static class DataProtect
     {
 
         /// <summary>
         /// Protects data for long term use which can be unprotected across multiple sessions. 
-        /// Can be unprotected using <see cref="StorageProtect.Unprotect"/>.
+        /// Can be unprotected using <see cref="DataProtect.Unprotect"/>.
         /// </summary>
         /// <param name="data"> The <see langword="string"/> data to protect. </param>
         /// <returns> The encrypted data as a <see langword="string"/>. </returns>
         public static string Protect(this string data) => Protect(data, null);
 
         /// <summary>
-        /// Unprotects data which was protected with <see cref="StorageProtect.Protect"/>.
+        /// Unprotects data which was protected with <see cref="DataProtect.Protect"/>.
         /// </summary>
         /// <param name="data"> The encrypted <see langword="string"/> data. </param>
         /// <returns> The unprotected <see langword="string"/> data. </returns>

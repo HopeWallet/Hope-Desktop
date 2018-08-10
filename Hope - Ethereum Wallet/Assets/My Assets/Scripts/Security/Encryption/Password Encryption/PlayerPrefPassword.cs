@@ -5,6 +5,7 @@ using System.Globalization;
 using System;
 using System.Threading.Tasks;
 using Hope.Utils.Misc;
+using Hope.Security.HashGeneration;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.
@@ -27,6 +28,7 @@ public class PlayerPrefPassword : ScriptableObject
     /// <summary>
     /// Extracts the encryption password from the SecurePlayerPrefs.
     /// </summary>
+    /// <param name="seed"> The seed to use to get the encryption password. </param>
     /// <returns> The encryption password to access the wallet data. </returns>
     public string ExtractEncryptionPassword(string seed)
     {
@@ -41,6 +43,7 @@ public class PlayerPrefPassword : ScriptableObject
     /// <summary>
     /// Generates an encryption password to use to encrypt WalletData.
     /// </summary>
+    /// <param name="seed"> The seed to use to get the encryption password. </param>
     /// <returns> The encryption password to use to encrypt the WalletData object. </returns>
     public string GenerateEncryptionPassword(string seed)
     {
@@ -50,7 +53,7 @@ public class PlayerPrefPassword : ScriptableObject
         prefDictionary = new Dictionary<string, string> { { keys[0], password }, { keys[keys.Length - 1], operationStringDeterminant } };
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
-                                        i => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH),
+                                        _ => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH),
                                         (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed);
     }
 
@@ -87,7 +90,7 @@ public class PlayerPrefPassword : ScriptableObject
     {
         prefDictionary = new Dictionary<string, string>();
 
-        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString(key + "_" + walletNum)));
+        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).GetSHA256Hash())));
     }
 
     /// <summary>
@@ -99,7 +102,7 @@ public class PlayerPrefPassword : ScriptableObject
     {
         prefCounter = 0;
 
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString(key + "_" + walletNum, prefDictionary[key], () =>
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletNum).GetSHA256Hash(), prefDictionary[key], () =>
         {
             if (++prefCounter >= keys.Length)
                 onPrefsGenerated?.Invoke();
@@ -136,7 +139,11 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="getPass"> Func which gets the next password to use for derivation. </param>
     /// <param name="usePass"> Action which allows the newest password to be used. </param>
     /// <returns> The derived password from the input parameters. </returns>
-    private string DeriveEncryptionPassword(string operationStringDeterminant, string password, Func<int, string> getPass, Action<int, string> usePass = null)
+    private string DeriveEncryptionPassword(
+        string operationStringDeterminant,
+        string password,
+        Func<int, string> getPass,
+        Action<int, string> usePass = null)
     {
         var operationNumberString = operationStringDeterminant;
         var operationNumbers = StringToIntList(operationNumberString);
@@ -155,7 +162,12 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="operationNumbers"> The list of operation numbers to use for the password modification. </param>
     /// <param name="operationNumbersIndex"> The index to use to get the operation numbers. </param>
     /// <param name="indexToPassDictionary"> The dictionary of indices to their respective password string. </param>
-    private void DetermineOperationNumbers(Func<int, string> getPass, string operationNumberString, ref List<int> operationNumbers, int operationNumbersIndex, Dictionary<int, string> indexToPassDictionary)
+    private void DetermineOperationNumbers(
+        Func<int, string> getPass,
+        string operationNumberString,
+        ref List<int> operationNumbers,
+        int operationNumbersIndex,
+        Dictionary<int, string> indexToPassDictionary)
     {
         for (int i = 0; i < operationNumbersIndex; i++)
         {
@@ -175,8 +187,12 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="operationNumbers"> The list of operation values to apply to the password at each index. </param>
     /// <param name="indexToPassDictionary"> The dictionary of passwords. </param>
     /// <returns> The modified password. </returns>
-    private string ExecuteModification(string password, Func<int, string> getPass, Action<int, string> usePass,
-        List<int> operationNumbers, Dictionary<int, string> indexToPassDictionary)
+    private string ExecuteModification(
+        string password,
+        Func<int, string> getPass,
+        Action<int, string> usePass,
+        List<int> operationNumbers,
+        Dictionary<int, string> indexToPassDictionary)
     {
         for (int i = 1; i < keys.Length - 1; i++)
         {
@@ -199,8 +215,8 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> Returns the modified password. </returns>
     private string ModifyString(string password, string modifier, IEnumerable<int> operationNumbers, int index)
     {
-        int operationNum = Mathf.Clamp(operationNumbers.ElementAt(index) - 9, 0, 1); // Numbers in the 10-15 range use the default and this class's charLookups.
-        int oppositeOperation = Convert.ToInt32(!Convert.ToBoolean(operationNum)); // Numbers in the 0-9 range use the extra charLookups.
+        int operationNum = Mathf.Clamp(operationNumbers.ElementAt(index) - 9, 0, 1);
+        int oppositeOperation = Convert.ToInt32(!Convert.ToBoolean(operationNum));
 
         extraCharLookups.SafeForEach(str => password = password.Modify(modifier, oppositeOperation * ops[index], str));
 
@@ -226,5 +242,4 @@ public class PlayerPrefPassword : ScriptableObject
     /// <param name="str"> The string of hexadecimal numbers. </param>
     /// <returns> The set of ints containing all hexadecimals in the string. </returns>
     private List<int> StringToIntList(string str) => str.Select(c => int.Parse(c.ToString().ToUpper(), NumberStyles.HexNumber)).ToList();
-
 }
