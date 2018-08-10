@@ -5,8 +5,8 @@ using Zenject;
 public sealed class DeleteContactPopup : OkCancelPopupComponent<DeleteContactPopup>
 {
 
-	public TextMeshProUGUI contactName;
-	public TextMeshProUGUI contactAddress;
+	[SerializeField] private TextMeshProUGUI contactName;
+	[SerializeField] private TextMeshProUGUI contactAddress;
 
 	private GameObject contactObject;
 	private ContactButton contactButton;

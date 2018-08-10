@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 224522963790363068}
   - component: {fileID: 222349767554348858}
   - component: {fileID: 114900697890520578}
-  - component: {fileID: 114258127748065316}
+  - component: {fileID: 114803058327641922}
+  - component: {fileID: 114695543734871094}
   m_Layer: 5
-  m_Name: Error_Icon
+  m_Name: PasswordError_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -649,20 +650,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114258127748065316
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1075966695083058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  infoTitle: Sign-In Error
-  infoText: The password you entered was incorrect.
-  iconType: 1
 --- !u!114 &114265021338834228
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -972,6 +959,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114695543734871094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075966695083058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Sign-In Error
+  infoText: The password you entered was incorrect.
+  iconType: 1
 --- !u!114 &114738802187051206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1041,6 +1042,48 @@ MonoBehaviour:
   m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114803058327641922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075966695083058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114900697890520578}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114837806261545842
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1061,7 +1104,7 @@ MonoBehaviour:
   passwordInputField: {fileID: 1834140963388842}
   signInButton: {fileID: 1754134967957440}
   loadingIcon: {fileID: 1659307487104918}
-  errorIcon: {fileID: 114258127748065316}
+  passwordErrorIcon: {fileID: 114695543734871094}
 --- !u!114 &114860746195938152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1157,7 +1200,7 @@ MonoBehaviour:
   exitButton: {fileID: 114068524187399860}
   unlockWalletButton: {fileID: 114788400095928252}
   passwordField: {fileID: 114073814867379438}
-  errorMessage: {fileID: 114258127748065316}
+  passwordErrorIcon: {fileID: 114695543734871094}
 --- !u!222 &222119732321520192
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -1466,7 +1509,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 159.2, y: 11.5}
-  m_SizeDelta: {x: 25, y: 25}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224532224032887294
 RectTransform:

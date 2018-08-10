@@ -11,6 +11,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	[SerializeField] private GameObject tokenList;
 	[SerializeField] private GameObject customTokenButton;
 	[SerializeField] private GameObject searchSection;
+	[SerializeField] private GameObject confirmButton;
 
 	private Transform tokenTransform;
 
@@ -36,9 +37,10 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 		dim.AnimateGraphic(1f, 0.15f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
-			() => searchSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
 			() => tokenList.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => { AnimateTokens(0); customTokenButton.AnimateScaleX(1f, 0.15f); }))));
+			() => { AnimateTokens(0); confirmButton.AnimateScaleX(1f, 0.15f); })));
+
+		CoroutineUtils.ExecuteAfterWait(0.3f, () => { customTokenButton.AnimateGraphicAndScale(1f, 1f, 0.15f); searchSection.AnimateGraphicAndScale(1f, 1f, 0.15f); });
 	}
 
 	/// <summary>
@@ -49,11 +51,12 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 		for (int i = 0; i < tokenTransform.childCount; i++)
 			tokenTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.15f);
 
-		customTokenButton.AnimateScaleX(0f, 0.15f,
+		confirmButton.AnimateScaleX(0f, 0.15f,
 			() => tokenList.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => searchSection.AnimateGraphicAndScale(0f, 0f, 0.15f,
 			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f, 
-			() => { form.AnimateGraphicAndScale(0f, 0f, 0.15f); blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }))));
+			() => { form.AnimateGraphicAndScale(0f, 0f, 0.15f); blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); })));
+
+		CoroutineUtils.ExecuteAfterWait(0.15f, () => { customTokenButton.AnimateGraphicAndScale(0f, 0f, 0.15f); searchSection.AnimateGraphicAndScale(0f, 0f, 0.15f); });
 	}
 
 	/// <summary>

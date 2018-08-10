@@ -9,8 +9,8 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
-	public TMP_Dropdown sortByDropdown;
-	public TMP_InputField searchField;
+	[SerializeField] private TMP_Dropdown sortByDropdown;
+	[SerializeField] private TMP_InputField searchField;
 
 	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;

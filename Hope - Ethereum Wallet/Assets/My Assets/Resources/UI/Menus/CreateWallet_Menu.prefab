@@ -156,9 +156,10 @@ GameObject:
   - component: {fileID: 224345580419698618}
   - component: {fileID: 222405883988986832}
   - component: {fileID: 114507396087929280}
-  - component: {fileID: 114381301967653150}
+  - component: {fileID: 114476416913252104}
+  - component: {fileID: 114427010337852486}
   m_Layer: 5
-  m_Name: WalletNameInfo_Icon
+  m_Name: MenuInfo_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +175,8 @@ GameObject:
   - component: {fileID: 224463348503191504}
   - component: {fileID: 222162842487099920}
   - component: {fileID: 114455327070100084}
-  - component: {fileID: 114914689591842108}
+  - component: {fileID: 114907089315386040}
+  - component: {fileID: 114187562500767216}
   m_Layer: 5
   m_Name: PasswordError_Icon
   m_TagString: Untagged
@@ -244,7 +246,8 @@ GameObject:
   - component: {fileID: 224182443281511618}
   - component: {fileID: 222328300777641712}
   - component: {fileID: 114204403340031352}
-  - component: {fileID: 114857821849772996}
+  - component: {fileID: 114756851208649098}
+  - component: {fileID: 114845111897140600}
   m_Layer: 5
   m_Name: WalletNameError_Icon
   m_TagString: Untagged
@@ -412,7 +415,8 @@ GameObject:
   - component: {fileID: 224842344655207430}
   - component: {fileID: 222912500310211054}
   - component: {fileID: 114519404654475582}
-  - component: {fileID: 114357908969904486}
+  - component: {fileID: 114445131046185062}
+  - component: {fileID: 114288878879219504}
   m_Layer: 5
   m_Name: PasswordCheckMark_Icon
   m_TagString: Untagged
@@ -1089,6 +1093,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114187562500767216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1360071420892682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Invalid Password
+  infoText: Your passwords do not match.
+  iconType: 1
 --- !u!114 &114193833085410178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1371,6 +1389,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114288878879219504
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784752828238066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: 
+  infoText: 
+  iconType: 3
 --- !u!114 &114300907350831232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1496,21 +1528,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114357908969904486
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1784752828238066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  infoTitle: 
-  infoText: 
-  iconType: 2
---- !u!114 &114381301967653150
+--- !u!114 &114427010337852486
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1518,13 +1536,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 1303167586079506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Creating Your Wallet
   infoText: Here you will create a wallet name, and password that will be used to
     sign in.
   iconType: 0
+--- !u!114 &114445131046185062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784752828238066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: e0d1a2a0aa98f0a45b5cb8f7e1e42398,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: e0d1a2a0aa98f0a45b5cb8f7e1e42398, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114519404654475582}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114450260774734892
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1594,6 +1654,48 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114476416913252104
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1303167586079506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 20a9b11abea88e043831da6a12412b60,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 20a9b11abea88e043831da6a12412b60, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114507396087929280}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114507396087929280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1665,10 +1767,10 @@ MonoBehaviour:
   walletNameField: {fileID: 114047288921506502}
   password1Field: {fileID: 114985819114033810}
   password2Field: {fileID: 114009619473119930}
-  walletNameInfoIcon: {fileID: 114381301967653150}
-  walletNameErrorIcon: {fileID: 114857821849772996}
-  passwordErrorIcon: {fileID: 114914689591842108}
-  passwordCheckMarkIcon: {fileID: 114357908969904486}
+  menuInfoIcon: {fileID: 114427010337852486}
+  walletNameErrorIcon: {fileID: 114845111897140600}
+  passwordErrorIcon: {fileID: 114187562500767216}
+  passwordCheckMarkIcon: {fileID: 114288878879219504}
 --- !u!114 &114609398393248940
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2016,6 +2118,48 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114756851208649098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1473985596704052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114204403340031352}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114789829414671408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2054,7 +2198,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114857821849772996
+--- !u!114 &114845111897140600
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2062,11 +2206,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1473985596704052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Invalid Wallet Name
-  infoText: This is not a valid wallet name to save as.
+  infoText: You already have a Hope wallet saved under this name.
   iconType: 1
 --- !u!114 &114859870456168772
 MonoBehaviour:
@@ -2182,7 +2326,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114914689591842108
+--- !u!114 &114907089315386040
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2190,12 +2334,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360071420892682}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30f32918072c854cb2023b272de05d5, type: 3}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoTitle: Invalid Password
-  infoText: Your passwords do not match.
-  iconType: 1
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114455327070100084}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114925083327452106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2647,8 +2819,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 178.5, y: 0}
-  m_SizeDelta: {x: 27, y: 27}
+  m_AnchoredPosition: {x: 179.5, y: 0}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224219197594773246
 RectTransform:
@@ -2815,7 +2987,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 141.2, y: -27.900002}
-  m_SizeDelta: {x: 26, y: 26}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224358145825558304
 RectTransform:
@@ -2871,8 +3043,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 180, y: 0}
-  m_SizeDelta: {x: 27, y: 27}
+  m_AnchoredPosition: {x: 179.5, y: 0}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224490898915418638
 RectTransform:
@@ -3027,8 +3199,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 180.00005, y: 0}
-  m_SizeDelta: {x: 27, y: 27}
+  m_AnchoredPosition: {x: 179.5, y: 0}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224855428189654876
 RectTransform:

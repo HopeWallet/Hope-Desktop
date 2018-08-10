@@ -14,10 +14,10 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 
 	[SerializeField] private TMP_InputField walletNameField, password1Field, password2Field;
 
-	[SerializeField] private Icon walletNameInfoIcon,
-								  walletNameErrorIcon,
-								  passwordErrorIcon,
-								  passwordCheckMarkIcon;
+	[SerializeField] private InteractableIcon menuInfoIcon,
+											  walletNameErrorIcon,
+											  passwordErrorIcon,
+											  passwordCheckMarkIcon;
 
 	private CreateWalletMenuAnimator createWalletMenuAnimator;
     private DynamicDataCache dynamicDataCache;
@@ -37,7 +37,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 		this.dynamicDataCache = dynamicDataCache;
 		this.userWalletInfoManager = userWalletInfoManager;
 
-		walletNameInfoIcon.PopupManager = popupManager;
+		menuInfoIcon.PopupManager = popupManager;
 		walletNameErrorIcon.PopupManager = popupManager;
 		passwordErrorIcon.PopupManager = popupManager;
 	}
@@ -101,7 +101,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 		{
 			try
 			{
-				if (userWalletInfoManager.GetWalletInfo(i).WalletName == walletName)
+				if (userWalletInfoManager.GetWalletInfo(i).WalletName.EqualsIgnoreCase(walletName))
 					return true;
 			}
 			catch

@@ -28,24 +28,6 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
     public bool AddingContact { get; set; }
 
-    private bool ValidName
-	{
-		set
-		{
-			validName = value;
-			AnimateErrorIcon(nameSection, validName);
-		}
-	}
-
-	private bool ValidAddress
-	{
-		set
-		{
-			validAddress = value;
-			AnimateErrorIcon(addressSection, validAddress);
-		}
-	}
-
 	/// <summary>
 	/// Initializes the elements
 	/// </summary>
@@ -114,7 +96,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 
 		string updatedName = nameInputField.text;
 
-		ValidName = !string.IsNullOrEmpty(updatedName.Trim());
+		validName = !string.IsNullOrEmpty(updatedName.Trim());
+		AnimateErrorIcon(addOrEditContactPopup.nameErrorIcon, validName);
 
 		SetMainButtonInteractable();
 	}
@@ -133,10 +116,11 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool overridingOtherContactAddresses = contactsManager.ContactList.Contains(updatedAddress) && (!AddingContact ? updatedAddress != PreviousAddress : true);
 
-		ValidAddress = realEthereumAddress && !overridingOtherContactAddresses;
+		validAddress = realEthereumAddress && !overridingOtherContactAddresses;
+		AnimateErrorIcon(addOrEditContactPopup.addressErrorIcon, validAddress);
 
 		if (!realEthereumAddress)
-			addOrEditContactPopup.SetAddressErrorBodyText("The inputted text is not a valid Ethereum address.");
+			addOrEditContactPopup.SetAddressErrorBodyText("This is not a valid Ethereum address.");
 		else if (overridingOtherContactAddresses)
 			addOrEditContactPopup.SetAddressErrorBodyText("This address has already been saved under the contact name: " + contactsManager.ContactList[updatedAddress].ContactName + ".");
 
@@ -155,14 +139,11 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 		else
 			confirmButton.GetComponent<Button>().interactable = validInputs;
 	}
-	
+
 	/// <summary>
-	/// Animates the error icon in a given section
+	/// Animates the given icon
 	/// </summary>
-	/// <param name="objectSection"> THe GameObject parent of the section </param>
-	/// <param name="isValid"> Checks if the input is valid or not </param>
-	private void AnimateErrorIcon(GameObject objectSection, bool isValid)
-	{
-		objectSection.transform.GetChild(objectSection.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValid ? 0f : 1f, isValid ? 0f : 1f, 0.2f);
-	}
+	/// <param name="icon"> The icon being animated </param>
+	/// <param name="isValid"> Whether being animated in or out </param>
+	private void AnimateErrorIcon(InteractableIcon icon, bool isValid) => icon.AnimateIcon(isValid ? 0f : 1f);
 }

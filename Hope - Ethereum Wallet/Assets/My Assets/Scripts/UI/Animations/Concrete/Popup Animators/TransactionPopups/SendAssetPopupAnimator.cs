@@ -121,7 +121,7 @@ public class SendAssetPopupAnimator : UIAnimator
     /// <param name="isValidField"> Checks if valid input or not. </param>
     private void AnimateFieldError(GameObject sectionObj, bool isValidField)
     {
-        sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).gameObject.AnimateGraphicAndScale(isValidField ? 0f : 1f, isValidField ? 0f : 1f, 0.2f);
+        sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).GetComponent<InteractableIcon>().AnimateIcon(isValidField ? 0f : 1f);
     }
 
 	/// <summary>

@@ -82,5 +82,5 @@ public class CreateWalletMenuAnimator : UIAnimator
 	/// </summary>
 	/// <param name="icon"> The icon being animated </param>
 	/// <param name="animateIn"> Whether the icon is being animated in or out </param>
-	public void AnimateIcon(Icon icon, bool animateIn) => icon.AnimateIcon(animateIn ? 1f : 0f);
+	public void AnimateIcon(InteractableIcon icon, bool animateIn) => icon.AnimateIcon(animateIn ? 1f : 0f);
 }

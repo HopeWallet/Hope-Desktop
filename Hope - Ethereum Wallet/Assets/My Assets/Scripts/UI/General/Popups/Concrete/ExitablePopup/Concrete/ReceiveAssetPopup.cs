@@ -14,7 +14,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 
 	[SerializeField] private TMP_InputField addressText;
 
-	[SerializeField] private Icon infoMessage;
+	[SerializeField] private InteractableIcon menuInfoIcon;
 
 	private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -48,7 +48,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 		addressText.text = walletAddress;
         qrImage.sprite = QRUtils.GenerateQRCode(walletAddress);
 
-		infoMessage.PopupManager = popupManager;
+		menuInfoIcon.PopupManager = popupManager;
 
 		copyAddressButton.onClick.AddListener(CopyAddressClicked);
     }

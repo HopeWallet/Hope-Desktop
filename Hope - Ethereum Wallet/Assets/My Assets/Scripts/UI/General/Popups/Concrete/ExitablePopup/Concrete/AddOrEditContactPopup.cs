@@ -6,11 +6,11 @@ using Zenject;
 public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
 
-	public Button addContactButton, confirmButton;
-	public TMP_InputField nameInputField, addressInputField;
-	public TextMeshProUGUI title;
+	[SerializeField] private Button addContactButton, confirmButton;
+	[SerializeField] private TMP_InputField nameInputField, addressInputField;
+	[SerializeField] private TextMeshProUGUI title;
 
-	public Icon nameError, addressError;
+	public InteractableIcon nameErrorIcon, addressErrorIcon;
 
 	private string previousName, previousAddress;
 	private ContactButton contactButton;
@@ -28,8 +28,8 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
 
-		nameError.PopupManager = popupManager;
-		addressError.PopupManager = popupManager;
+		nameErrorIcon.PopupManager = popupManager;
+		addressErrorIcon.PopupManager = popupManager;
 	}
 
 	/// <summary>
@@ -119,5 +119,5 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// Sets the addressError body message 
 	/// </summary>
 	/// <param name="bodyText"> The custom body message </param>
-	public void SetAddressErrorBodyText(string bodyText) => addressError.infoText = bodyText;
+	public void SetAddressErrorBodyText(string bodyText) => addressErrorIcon.infoText = bodyText;
 }

@@ -1,6 +1,7 @@
 ﻿using Hope.Utils.Misc;
 using Nethereum.Hex.HexTypes;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -9,20 +10,23 @@ using Zenject;
 /// </summary>
 public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable
 {
-    public Button threeMonthsButton,
-                  sixMonthsButton,
-                  twelveMonthsButton;
+    [SerializeField] private Button threeMonthsButton,
+									sixMonthsButton,
+									twelveMonthsButton;
 
-    public TMP_InputField amountInputField;
-    public Slider slider;
+    [SerializeField] private TMP_InputField amountInputField;
 
-    public TMP_Text transactionFeeText,
-                    prpsBalanceText,
-                    dubiBalanceText,
-                    dubiRewardText;
+    [SerializeField] private Slider slider;
 
-    public Toggle maxToggle;
-    public Icon infoMessage;
+    [SerializeField] private TMP_Text transactionFeeText,
+									  prpsBalanceText,
+									  dubiBalanceText,
+									  dubiRewardText;
+
+    [SerializeField] private Toggle maxToggle;
+
+	[SerializeField] private InteractableIcon menuInfoIcon,
+											  purposeErrorIcon;
 
     private LockedPRPSManager lockedPRPSManager;
     private EtherBalanceObserver etherBalanceObserver;
@@ -83,8 +87,9 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
     /// </summary>
     protected override void OnStart()
     {
-        infoMessage.PopupManager = popupManager;
-    }
+		menuInfoIcon.PopupManager = popupManager;
+		purposeErrorIcon.PopupManager = popupManager;
+	}
 
     /// <summary>
     /// Closes all the managers for the LockPRPSPopup and the ether balance observer.

@@ -11,10 +11,11 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     public event Action<AddableTokenButton> OnAddableTokenAdded;
 
     [SerializeField] private Transform tokenListTransform;
-    [SerializeField] private Button addCustomToken;
+    [SerializeField] private Button addCustomToken, 
+									ConfirmButton;
 	[SerializeField] private TMP_InputField searchBar;
 
-    private AddableTokenButton.Factory addableTokenButtonFactory;
+	private AddableTokenButton.Factory addableTokenButtonFactory;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
 

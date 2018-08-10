@@ -26,9 +26,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private Slider transactionSpeedSlider;
     [SerializeField] private Button contactsButton;
 
-	[SerializeField] private Icon transactionSpeedInfoIcon;
+	[SerializeField] private InteractableIcon addressErrorIcon;
+	[SerializeField] private InteractableIcon amountErrorIcon;
+	[SerializeField] private InteractableIcon transactionSpeedInfoIcon;
 
-    private UserWalletManager userWalletManager;
+	private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
 
     /// <summary>
@@ -90,6 +92,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     protected override void OnStart()
     {
         contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
+		addressErrorIcon.PopupManager = popupManager;
+		amountErrorIcon.PopupManager = popupManager;
 		transactionSpeedInfoIcon.PopupManager = popupManager;
 	}
 

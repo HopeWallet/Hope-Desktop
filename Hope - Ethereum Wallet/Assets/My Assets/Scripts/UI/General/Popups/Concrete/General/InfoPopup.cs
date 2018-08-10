@@ -1,7 +1,10 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class InfoPopup : FactoryPopup<InfoPopup>
+/// <summary>
+/// The info popup
+/// </summary>
+public sealed class InfoPopup : FactoryPopup<InfoPopup>
 {
 
 	[SerializeField] private TextMeshProUGUI title;
@@ -18,12 +21,12 @@ public class InfoPopup : FactoryPopup<InfoPopup>
 	/// <param name="bodyText"> The body text string being set </param>
 	/// <param name="isInfoIcon"> Checks if the user is hovering over an info icon or error icon </param>
 	/// <param name="iconPosition"> The icon so that the popup can animate next to it </param>
-	public void SetUIElements(string titleText, string bodyText, Icon.IconType iconType, Vector2 iconPosition)
+	public void SetUIElements(string titleText, string bodyText, InteractableIcon.IconType iconType, Vector2 iconPosition)
 	{
 		title.text = titleText;
 		body.text = bodyText;
-		infoIcon.SetActive(iconType == Icon.IconType.Info);
-		errorIcon.SetActive(iconType == Icon.IconType.Error);
+		infoIcon.SetActive(iconType == InteractableIcon.IconType.Info);
+		errorIcon.SetActive(iconType == InteractableIcon.IconType.Error);
 		transform.position = new Vector2(iconPosition.x + 10f, iconPosition.y);
 	}
 }

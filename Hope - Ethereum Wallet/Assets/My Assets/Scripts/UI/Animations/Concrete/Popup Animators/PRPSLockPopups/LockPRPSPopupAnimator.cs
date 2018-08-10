@@ -15,12 +15,13 @@ public class LockPRPSPopupAnimator : UIAnimator
 	[SerializeField] private GameObject timePeriodSection;
 	[SerializeField] private GameObject noteText;
 	[SerializeField] private GameObject lockPRPSButton;
-    [SerializeField] private GameObject errorIcon;
+
+	[SerializeField] private InteractableIcon purposeErrorIcon;
 
     private void Start()
     {
         LockPRPSPopup lockPRPSPopup = GetComponent<LockPRPSPopup>();
-        lockPRPSPopup.Amount.OnLockAmountChanged += () => AnimateFieldError(errorIcon, lockPRPSPopup.Amount.IsValid || lockPRPSPopup.Amount.IsEmpty);
+        lockPRPSPopup.Amount.OnLockAmountChanged += () => AnimateErrorIcon(purposeErrorIcon, lockPRPSPopup.Amount.IsValid || lockPRPSPopup.Amount.IsEmpty);
     }
 
     /// <summary>
@@ -72,13 +73,10 @@ public class LockPRPSPopupAnimator : UIAnimator
 			() => { form.AnimateGraphicAndScale(0f, 0f, 0.2f); blur.AnimateMaterialBlur(-0.75f, 0.2f); dim.AnimateGraphic(0f, 0.2f, FinishedAnimating); }));
 	}
 
-    /// <summary>
-    /// Animates the error icon for the given input field.
-    /// </summary>
-    /// <param name="errorIconObj"> The error icon object to animate. </param>
-    /// <param name="isValidField"> Checks if valid input or not. </param>
-    private void AnimateFieldError(GameObject errorIconObj, bool isValidField)
-    {
-        errorIconObj.AnimateGraphicAndScale(isValidField ? 0f : 1f, isValidField ? 0f : 1f, 0.2f);
-    }
+	/// <summary>
+	/// Animates the error icon
+	/// </summary>
+	/// <param name="icon"> The icon being animated </param>
+	/// <param name="isValidField"> Whether animating the icon in or out </param>
+	private void AnimateErrorIcon(InteractableIcon icon, bool isValidField) => icon.AnimateIcon(isValidField ? 0f : 1f);
 }

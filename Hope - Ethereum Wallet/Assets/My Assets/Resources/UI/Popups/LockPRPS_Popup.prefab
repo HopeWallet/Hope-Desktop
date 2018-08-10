@@ -402,9 +402,10 @@ GameObject:
   - component: {fileID: 224448915801452200}
   - component: {fileID: 222053894723901498}
   - component: {fileID: 114457923842003760}
-  - component: {fileID: 114515338780119670}
+  - component: {fileID: 114748007447393470}
+  - component: {fileID: 114103221144928766}
   m_Layer: 5
-  m_Name: Info_Icon
+  m_Name: MenuInfo_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -587,8 +588,10 @@ GameObject:
   - component: {fileID: 224882282635609662}
   - component: {fileID: 222444219484750218}
   - component: {fileID: 114414113921641682}
+  - component: {fileID: 114395265811680612}
+  - component: {fileID: 114011413163366008}
   m_Layer: 5
-  m_Name: Error_Icon
+  m_Name: PurposeError_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1144,6 +1147,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114011413163366008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649311376582286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Invalid Purpose Amount
+  infoText: Unable to lock this amount of Purpose.
+  iconType: 1
 --- !u!114 &114013155334984804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1327,6 +1344,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114103221144928766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395438007718552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ed7b2d70de4f74ca97b76db082021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: Locking Purpose
+  infoText: This feature allows you to lock away any amount of prupose for a set period
+    of time, and get a percentage reward of dubi in return.
+  iconType: 0
 --- !u!114 &114108011837104016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1560,7 +1592,8 @@ MonoBehaviour:
   dubiBalanceText: {fileID: 114381802767292856}
   dubiRewardText: {fileID: 114261162030162700}
   maxToggle: {fileID: 114675470125886244}
-  infoMessage: {fileID: 114515338780119670}
+  menuInfoIcon: {fileID: 114103221144928766}
+  purposeErrorIcon: {fileID: 114011413163366008}
 --- !u!114 &114220270093468036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2269,6 +2302,48 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114395265811680612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649311376582286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 200298eef6a3706449d0d1c79c26f4fb, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114414113921641682}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114401418460636674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2815,22 +2890,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114515338780119670
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1395438007718552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 966ae778452b56b4ea4f142ce9324ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleText: Lock Purpose
-  bodyText: This features allows you to lock away your purpose for a set period of
-    time, and get a reward of DUBI in return
-  infoIcon: 1
-  <Hovered>k__BackingField: 0
 --- !u!114 &114530882451241430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3693,6 +3752,48 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114748007447393470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395438007718552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 20a9b11abea88e043831da6a12412b60,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 20a9b11abea88e043831da6a12412b60, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114457923842003760}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114780097224195880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3798,7 +3899,7 @@ MonoBehaviour:
   timePeriodSection: {fileID: 1703276064400756}
   noteText: {fileID: 1104521864626898}
   lockPRPSButton: {fileID: 1468875886644998}
-  errorIcon: {fileID: 1649311376582286}
+  purposeErrorIcon: {fileID: 114011413163366008}
 --- !u!114 &114842760414198258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4843,7 +4944,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 216.4, y: -0.3}
-  m_SizeDelta: {x: 28, y: 28}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224490176382837896
 RectTransform:
@@ -5217,7 +5318,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 229.2, y: 0}
-  m_SizeDelta: {x: 27, y: 27}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224896679678759880
 RectTransform:

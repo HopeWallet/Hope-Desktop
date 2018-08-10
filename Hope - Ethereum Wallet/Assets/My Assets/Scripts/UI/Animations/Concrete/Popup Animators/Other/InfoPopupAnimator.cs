@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class InfoPopupAnimator : UIAnimator
+/// <summary>
+/// The info popup animator
+/// </summary>
+public sealed class InfoPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject background;
 	[SerializeField] private GameObject title;
@@ -26,10 +29,10 @@ public class InfoPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		infoIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		errorIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		bodyText.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		title.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		background.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating);
+		infoIcon.AnimateGraphicAndScale(0f, 0f, 0.1f);
+		errorIcon.AnimateGraphicAndScale(0f, 0f, 0.1f);
+		bodyText.AnimateGraphicAndScale(0f, 0f, 0.1f);
+		title.AnimateGraphicAndScale(0f, 0f, 0.1f);
+		background.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
 	}
 }

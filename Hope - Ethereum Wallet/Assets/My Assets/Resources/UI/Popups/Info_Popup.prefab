@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 222355203318340298}
   - component: {fileID: 114695885444602544}
   m_Layer: 0
-  m_Name: Title_Text
+  m_Name: InfoTitle_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -60.66587, y: -10.000324, z: -58.531586, w: -22.541544}
+  m_margin: {x: 0.14693451, y: -0.14003372, z: -0.19656372, w: 0.10649681}
   m_textInfo:
     textComponent: {fileID: 114695885444602544}
     characterCount: 5
@@ -538,8 +538,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 191, y: 44}
-  m_SizeDelta: {x: 160.3, y: 0}
+  m_AnchoredPosition: {x: 196.1, y: 37.7}
+  m_SizeDelta: {x: 288.2, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224179392103767008
 RectTransform:
@@ -580,7 +580,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 35.9, y: 37.399937}
-  m_SizeDelta: {x: 22, y: 22}
+  m_SizeDelta: {x: 27, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224431766954771998
 RectTransform:
@@ -598,7 +598,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 35.89995, y: 37.74293}
-  m_SizeDelta: {x: 22, y: 22}
+  m_SizeDelta: {x: 27, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224724579110759724
 RectTransform:
