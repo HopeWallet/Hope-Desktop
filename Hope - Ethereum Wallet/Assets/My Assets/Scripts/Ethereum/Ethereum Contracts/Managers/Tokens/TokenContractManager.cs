@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Class which initializes and manages all contracts for the game.
@@ -14,6 +16,8 @@ public sealed class TokenContractManager
     private readonly UserWalletManager userWalletManager;
 
     private readonly SecurePlayerPrefList<TokenInfo> tokens;
+
+    public List<TokenInfo> TokenList => tokens.ToList();
 
     /// <summary>
     /// Initializes the TokenContractManager by creating all collections and getting the settings.
@@ -68,13 +72,13 @@ public sealed class TokenContractManager
             popupManager.GetPopup<LoadingPopup>();
 
         ERC20 erc20Token = null;
-        erc20Token = new ERC20(tokenAddress, () => AddToken(erc20Token.ContractAddress, erc20Token.Name, erc20Token.Symbol, erc20Token.Decimals.Value));
+        erc20Token = new ERC20(tokenAddress, () => AddToken(new TokenInfo(erc20Token.ContractAddress, erc20Token.Name, erc20Token.Symbol, erc20Token.Decimals.Value)));
     }
 
-    public void AddToken(string tokenAddress, string tokenName, string tokenSymbol, int tokenDecimals)
+    public void AddToken(TokenInfo tokenInfo)
     {
-        ERC20 erc20Token = new ERC20(tokenAddress, tokenName, tokenSymbol, tokenDecimals);
-        tokens.Add(new TokenInfo(tokenAddress, tokenName, tokenSymbol, tokenDecimals));
+        ERC20 erc20Token = new ERC20(tokenInfo.Address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals);
+        tokens.Add(tokenInfo);
 
         new ERC20TokenAsset(erc20Token, asset => UpdateTradableAssets(asset, () =>
         {

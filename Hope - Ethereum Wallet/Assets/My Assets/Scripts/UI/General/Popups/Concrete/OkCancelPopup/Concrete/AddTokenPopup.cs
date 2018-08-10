@@ -158,6 +158,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => NameQueryCompleted(output.Value));
         SimpleContractQueries.QueryStringOutput<Symbol>(addressField.text, null, output => SymbolQueryCompleted(output.Value));
         SimpleContractQueries.QueryUInt256Output<Decimals>(addressField.text, null, output => DecimalsQueryCompleted(output.Value));
+        // get balance and check if it is null
+        // if balance is null the token isn't real
     }
 
     private void NameQueryCompleted(string value)

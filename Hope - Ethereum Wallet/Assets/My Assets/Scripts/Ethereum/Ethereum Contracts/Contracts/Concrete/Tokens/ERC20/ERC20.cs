@@ -22,7 +22,7 @@ public sealed partial class ERC20 : Token
     {
         SimpleContractQueries.QueryUInt256Output<Queries.BalanceOf>(ContractAddress,
                                                                     address,
-                                                                    balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, Decimals.Value)), 
+                                                                    balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, Decimals.Value)),
                                                                     address);
     }
 
