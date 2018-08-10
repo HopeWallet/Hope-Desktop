@@ -120,11 +120,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <param name="animateIn"> Checks if animating the error icon in or out. </param>
 	private void AnimateErrorIcon(bool animateIn)
 	{
-		if (animateIn)
-			errorIcon.EnableIcon();
-		else
-			errorIcon.DisableIcon();
-
+		errorIcon.AnimateIcon(animateIn ? 1f : 0f);
 		ErrorIconVisible = animateIn;
 	}
 }
