@@ -67,18 +67,6 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     }
 
     /// <summary>
-    /// Displays the visuals for removing a token.
-    /// </summary>
-    public override void ButtonRightClicked()
-    {
-        if (tradableAssetManager.EtherAsset == ButtonInfo)
-            return;
-
-        popupManager.CloseActivePopup();
-        popupManager.GetPopup<HideAssetPopup>().TradableAsset = ButtonInfo;
-    }
-
-    /// <summary>
     /// Sets the balance text of the button.
     /// </summary>
     public void UpdateButtonBalance()

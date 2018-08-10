@@ -73,9 +73,9 @@ MonoBehaviour:
       - {fileID: 1586119722272208, guid: d8f8f0502b424744f90627b25ee94f2a, type: 2}
       popups:
       - {fileID: 1120657717184104, guid: b13e683ad7d232746a6a33077e53025e, type: 2}
-      - {fileID: 1566284343427046, guid: b9a83c3b7d485c8499d9133fbb7ac799, type: 2}
+      - {fileID: 1095592712460054, guid: 3035794ec750a12419e3c4e25ff4c6b2, type: 2}
       - {fileID: 1282295889785612, guid: 538ab8f64e943274aa9b80b9cc80da0a, type: 2}
-      - {fileID: 1040657794818106, guid: fa9b4dbeb39f96d4693e3458b5f85d1e, type: 2}
+      - {fileID: 1108669729117044, guid: 0241c9f30f541024b8573290c8e85955, type: 2}
       - {fileID: 1364737141961984, guid: 56a531c57a4831a43a98f6f5e61c7b57, type: 2}
       - {fileID: 1911524679015626, guid: 43c64668eaffd2e4ab277098efa1c283, type: 2}
       - {fileID: 1890875510333406, guid: 96c655e600abb1248a641dc4abf8d3ab, type: 2}
@@ -89,8 +89,6 @@ MonoBehaviour:
       - {fileID: 1214643471925612, guid: 32a5190669c319e42baab7ab1c196730, type: 2}
       - {fileID: 1733899067655964, guid: 1c7146e337c02844389ce825402de907, type: 2}
       - {fileID: 1200313821591180, guid: adf7f14f77ea5e345b2d0780878f84fa, type: 2}
-      - {fileID: 1108669729117044, guid: 0241c9f30f541024b8573290c8e85955, type: 2}
-      - {fileID: 1095592712460054, guid: 3035794ec750a12419e3c4e25ff4c6b2, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75
