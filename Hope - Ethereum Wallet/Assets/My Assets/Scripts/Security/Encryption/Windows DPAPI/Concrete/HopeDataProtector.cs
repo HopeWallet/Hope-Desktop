@@ -1,19 +1,12 @@
 ﻿using System.Security.Cryptography;
-using System;
 
 public sealed class HopeDataProtector : ProtectorBase
 {
-    public HopeDataProtector(params object[] protectorObjects) : base(protectorObjects)
+    public HopeDataProtector(object baseProtector, params object[] additionalProtectors) : base(baseProtector, additionalProtectors)
     {
     }
 
-    protected override void InternalProtect(byte[] data, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    protected override byte[] InternalProtect(byte[] data, byte[] entropy) => ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser);
 
-    protected override void InternalUnprotect(byte[] data, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    protected override byte[] InternalUnprotect(byte[] encryptedData, byte[] entropy) => ProtectedData.Unprotect(encryptedData, entropy, DataProtectionScope.CurrentUser);
 }

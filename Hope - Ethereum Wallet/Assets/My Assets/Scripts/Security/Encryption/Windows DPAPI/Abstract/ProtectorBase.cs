@@ -7,63 +7,40 @@ public abstract class ProtectorBase : IProtector
 {
     private readonly object[] protectorObjects;
 
-    protected ProtectorBase(params object[] protectorObjects)
+    protected ProtectorBase(object baseProtector, params object[] additionalProtectors)
     {
-        this.protectorObjects = protectorObjects ?? (new object[0]);
+        List<object> protectors = new List<object>();
+        protectors.AddRange(additionalProtectors ?? (new object[0]));
+        protectors.Add(baseProtector);
+
+        protectorObjects = protectors.ToArray();
     }
 
-    public void Protect(string data) => Protect(data.GetUTF8Bytes());
+    public string Protect(string data) => Protect(data, (string)null);
 
-    public void Protect(byte[] data) => Protect(data, protectorObjects.Length > 0 ? GetProtectorHash() : null);
+    public byte[] Protect(byte[] data) => Protect(data, (byte[])null);
 
-    public void Protect(string data, string entropy) => Protect(data, entropy.GetUTF8Bytes());
+    public string Protect(string data, string entropy) => Protect(data, entropy?.GetUTF8Bytes());
 
-    public void Protect(string data, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public string Protect(string data, byte[] entropy) => Protect(data?.GetUTF8Bytes(), entropy).GetBase64String();
 
-    public void Protect(byte[] data, string entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public byte[] Protect(byte[] data, string entropy) => InternalProtect(data, GetProtectorHash(entropy));
 
-    public void Protect(byte[] data, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public byte[] Protect(byte[] data, byte[] entropy) => Protect(data, entropy?.GetUTF8String());
 
-    public void Unprotect(string encryptedData)
-    {
-        throw new NotImplementedException();
-    }
+    public string Unprotect(string encryptedData) => Unprotect(encryptedData, (string)null);
 
-    public void Unprotect(byte[] encryptedData)
-    {
-        throw new NotImplementedException();
-    }
+    public byte[] Unprotect(byte[] encryptedData) => Unprotect(encryptedData, (byte[])null);
 
-    public void Unprotect(string encryptedData, string entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public string Unprotect(string encryptedData, string entropy) => Unprotect(encryptedData, entropy?.GetUTF8Bytes());
 
-    public void Unprotect(string encryptedData, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public string Unprotect(string encryptedData, byte[] entropy) => Unprotect(encryptedData?.GetBase64Bytes(), entropy).GetUTF8String();
 
-    public void Unprotect(byte[] data, string entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public byte[] Unprotect(byte[] encryptedData, string entropy) => InternalUnprotect(encryptedData, GetProtectorHash(entropy));
 
-    public void Unprotect(byte[] data, byte[] entropy)
-    {
-        throw new NotImplementedException();
-    }
+    public byte[] Unprotect(byte[] encryptedData, byte[] entropy) => Unprotect(encryptedData, entropy?.GetUTF8String());
 
-    private byte[] GetProtectorHash(byte[] additionalEntropy = null)
+    private byte[] GetProtectorHash(string additionalEntropy = null)
     {
         byte[] hashBytes = new byte[0];
 
@@ -91,7 +68,7 @@ public abstract class ProtectorBase : IProtector
         return hashBytes.ToArray();
     }
 
-    protected abstract void InternalProtect(byte[] data, byte[] entropy);
+    protected abstract byte[] InternalProtect(byte[] data, byte[] entropy);
 
-    protected abstract void InternalUnprotect(byte[] data, byte[] entropy);
+    protected abstract byte[] InternalUnprotect(byte[] encryptedData, byte[] entropy);
 }

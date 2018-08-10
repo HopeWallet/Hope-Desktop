@@ -1,19 +1,30 @@
 ﻿using System.Security.Cryptography;
-using System;
+using Hope.Security.Encryption.Symmetric;
 
 public sealed class HopeMemoryProtector : ProtectorBase
 {
-    public HopeMemoryProtector(params object[] protectorObjects) : base(protectorObjects)
+
+    public HopeMemoryProtector(object baseProtector, params object[] additionalProtectors) : base(baseProtector, additionalProtectors)
     {
     }
 
-    protected override void InternalProtect(byte[] data, byte[] entropy)
+    protected override byte[] InternalProtect(byte[] data, byte[] entropy)
     {
-        throw new NotImplementedException();
+        if (data.Length % 16 != 0 || data.Length == 0)
+            data = AesEncryptor.Encrypt(data, entropy);
+
+        ProtectedMemory.Protect(data, MemoryProtectionScope.SameProcess);
+
+        return data;
     }
 
-    protected override void InternalUnprotect(byte[] data, byte[] entropy)
+    protected override byte[] InternalUnprotect(byte[] encryptedData, byte[] entropy)
     {
-        throw new NotImplementedException();
+        if (encryptedData.Length % 16 != 0 || encryptedData.Length == 0)
+            return null;
+
+        ProtectedMemory.Unprotect(encryptedData, MemoryProtectionScope.SameProcess);
+
+        return AesEncryptor.Decrypt(encryptedData, entropy);
     }
 }

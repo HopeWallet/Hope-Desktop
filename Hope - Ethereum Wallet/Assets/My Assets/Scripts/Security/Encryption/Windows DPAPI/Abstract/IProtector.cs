@@ -6,29 +6,27 @@ using System.Threading.Tasks;
 
 public interface IProtector
 {
+    string Protect(string data);
 
-    void Protect(string data);
+    byte[] Protect(byte[] data);
 
-    void Protect(byte[] data);
+    string Protect(string data, string entropy);
 
-    void Protect(string data, string entropy);
+    string Protect(string data, byte[] entropy);
 
-    void Protect(string data, byte[] entropy);
+    byte[] Protect(byte[] data, string entropy);
 
-    void Protect(byte[] data, string entropy);
+    byte[] Protect(byte[] data, byte[] entropy);
 
-    void Protect(byte[] data, byte[] entropy);
+    string Unprotect(string encryptedData);
 
-    void Unprotect(string encryptedData);
+    byte[] Unprotect(byte[] encryptedData);
 
-    void Unprotect(byte[] encryptedData);
+    string Unprotect(string encryptedData, string entropy);
 
-    void Unprotect(string encryptedData, string entropy);
+    string Unprotect(string encryptedData, byte[] entropy);
 
-    void Unprotect(string encryptedData, byte[] entropy);
+    byte[] Unprotect(byte[] encryptedData, string entropy);
 
-    void Unprotect(byte[] data, string entropy);
-
-    void Unprotect(byte[] data, byte[] entropy);
-
+    byte[] Unprotect(byte[] encryptedData, byte[] entropy);
 }
