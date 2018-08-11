@@ -20,7 +20,7 @@ public sealed class WalletCreator : WalletLoaderBase
     {
         this.walletSettings = walletSettings;
 
-        walletEncryptor = new WalletEncryptor(playerPrefPassword, dynamicDataCache);
+        walletEncryptor = new WalletEncryptor(playerPrefPassword, dynamicDataCache, walletSettings);
     }
 
     [SecureCaller]
@@ -35,7 +35,7 @@ public sealed class WalletCreator : WalletLoaderBase
         popupManager.GetPopup<LoadingPopup>(true).Text = "Creating wallet";
     }
 
-    private void SetWalletPlayerPrefs(string[] encryptedHashLvls, string saltedPasswordHash, string encryptedSeed)
+    private void SetWalletPlayerPrefs(string[] encryptedHashes, string saltedPasswordHash, string encryptedSeed)
     {
         int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
@@ -47,8 +47,8 @@ public sealed class WalletCreator : WalletLoaderBase
         SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString(walletSettings.walletNamePrefName + walletNum, dynamicDataCache.GetData("name"));
 
-        for (int i = 0; i < encryptedHashLvls.Length; i++)
-            SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptedHashLvls[i]);
+        for (int i = 0; i < encryptedHashes.Length; i++)
+            SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptedHashes[i]);
 
         playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
     }
@@ -66,7 +66,7 @@ public sealed class WalletCreator : WalletLoaderBase
     [SecureCaller]
     private void TryCredentials(string basePass)
     {
-        if (string.IsNullOrEmpty(basePass) || basePass.Length < AESEncryption.MIN_PASSWORD_LENGTH)
+        if (string.IsNullOrEmpty(basePass) || basePass.Length < PasswordUtils.MIN_LENGTH)
         {
             ExceptionManager.DisplayException(new Exception("Invalid wallet password. Please use a password with more than 8 characters!"));
             return;
@@ -82,7 +82,7 @@ public sealed class WalletCreator : WalletLoaderBase
                 var addresses = wallet.GetAddresses(50);
 
                 AssignAddresses(addresses);
-                walletEncryptor.EncryptWallet(wallet.Seed, basePass, SetWalletPlayerPrefs);
+                walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, SetWalletPlayerPrefs);
             }
             catch (Exception e)
             {

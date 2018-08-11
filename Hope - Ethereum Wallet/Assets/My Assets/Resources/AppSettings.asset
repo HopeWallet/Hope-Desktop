@@ -27,6 +27,7 @@ MonoBehaviour:
       walletCountPrefName: wallet_count
       walletHashLvlPrefName: wallet_hash
       walletInfoPrefName: wallet_info
+      walletEncryptionEntropy: sdfOH$OUH$OHUOUGSFDNUOUAOBUfbfgd
     tokenContractSettings:
       tokenPrefName: Token_
     tokenListSettings:

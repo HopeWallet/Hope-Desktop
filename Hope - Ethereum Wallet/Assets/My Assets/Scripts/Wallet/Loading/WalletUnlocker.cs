@@ -58,14 +58,9 @@ public sealed class WalletUnlocker : WalletLoaderBase
 
     private void CorrectPassword(string password)
     {
-        walletDecryptor.DecryptWallet(password, async (seed, derivation) =>
-        {
-            AssignAddresses(userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).WalletAddresses);
-            await Task.Run(() => dynamicDataCache.SetData("pass", new ProtectedString(password, this))).ConfigureAwait(false);
+        AssignAddresses(userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).WalletAddresses);
+        dynamicDataCache.SetData("pass", new ProtectedString(password, this));
 
-            MainThreadExecutor.QueueAction(onWalletLoaded);
-
-            seed.ClearBytes();
-        });
+        MainThreadExecutor.QueueAction(onWalletLoaded);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption.Symmetric;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.Encryption.Symmetric;
 using System.Diagnostics;
 
 /// <summary>

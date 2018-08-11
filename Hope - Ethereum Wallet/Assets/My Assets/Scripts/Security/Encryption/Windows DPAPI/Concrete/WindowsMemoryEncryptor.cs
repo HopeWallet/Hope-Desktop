@@ -2,61 +2,64 @@
 using Hope.Security.Encryption.Symmetric;
 using Hope.Utils.Random;
 
-/// <summary>
-/// Class which implements a method of encrypting/decrypting data in memory for Windows devices.
-/// </summary>
-public sealed class WindowsMemoryEncryptor : WindowsEncryptor
+namespace Hope.Security.Encryption.DPAPI
 {
-    private readonly AesEncryptor aes;
-    private readonly byte[] randomEntropy;
-
     /// <summary>
-    /// Initializes the <see cref="WindowsMemoryEncryptor"/> by assigning the encryptors to the <see cref="WindowsEncryptor"/> and creating our padding aes encryptor.
+    /// Class which implements a method of encrypting/decrypting data in memory for Windows devices.
     /// </summary>
-    /// <param name="encryptors"> The additional encryptors to use as our advanced entropy. </param>
-    public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
+    public sealed class WindowsMemoryEncryptor : WindowsEncryptor
     {
-        aes = new AesEncryptor(encryptors);
-        randomEntropy = RandomBytes.GetSHA256Bytes(32);
-    }
+        private readonly AesEncryptor aes;
+        private readonly byte[] randomEntropy;
 
-    /// <summary>
-    /// Encrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
-    /// </summary>
-    /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>
-    /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
-    /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
-    [SecureCaller]
-    [ReflectionProtect(typeof(byte[]))]
-    protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
-    {
-        byte[] encryptedData = data;
-        if (data.Length % 16 != 0 || data.Length == 0)
+        /// <summary>
+        /// Initializes the <see cref="WindowsMemoryEncryptor"/> by assigning the encryptors to the <see cref="WindowsEncryptor"/> and creating our padding aes encryptor.
+        /// </summary>
+        /// <param name="encryptors"> The additional encryptors to use as our advanced entropy. </param>
+        public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
         {
-            encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
-            data.ClearBytes();
+            aes = new AesEncryptor(encryptors);
+            randomEntropy = RandomBytes.GetSHA256Bytes(32);
         }
 
-        ProtectedMemory.Protect(encryptedData, MemoryProtectionScope.SameProcess);
+        /// <summary>
+        /// Encrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
+        /// </summary>
+        /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>
+        /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
+        /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
+        [SecureCaller]
+        [ReflectionProtect(typeof(byte[]))]
+        protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
+        {
+            byte[] encryptedData = data;
+            if (data.Length % 16 != 0 || data.Length == 0)
+            {
+                encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
+                data.ClearBytes();
+            }
 
-        return encryptedData;
-    }
+            ProtectedMemory.Protect(encryptedData, MemoryProtectionScope.SameProcess);
 
-    /// <summary>
-    /// Decrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
-    /// </summary>
-    /// <param name="encryptedData"> The encrypted <see langword="byte"/>[] data to decrypt. </param>
-    /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
-    /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
-    [SecureCaller]
-    [ReflectionProtect(typeof(byte[]))]
-    protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
-    {
-        if (encryptedData.Length % 16 != 0 || encryptedData.Length == 0)
-            return null;
+            return encryptedData;
+        }
 
-        ProtectedMemory.Unprotect(encryptedData, MemoryProtectionScope.SameProcess);
+        /// <summary>
+        /// Decrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
+        /// </summary>
+        /// <param name="encryptedData"> The encrypted <see langword="byte"/>[] data to decrypt. </param>
+        /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
+        /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
+        [SecureCaller]
+        [ReflectionProtect(typeof(byte[]))]
+        protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
+        {
+            if (encryptedData.Length % 16 != 0 || encryptedData.Length == 0)
+                return null;
 
-        return aes.Decrypt(encryptedData, entropy?.Length > 0 ? entropy : randomEntropy);
+            ProtectedMemory.Unprotect(encryptedData, MemoryProtectionScope.SameProcess);
+
+            return aes.Decrypt(encryptedData, entropy?.Length > 0 ? entropy : randomEntropy);
+        }
     }
 }

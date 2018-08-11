@@ -1,6 +1,4 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
+﻿using Hope.Security.HashGeneration;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -49,28 +47,53 @@ public sealed class WalletDecryptor : SecureObject
 
             string derivation = SecurePlayerPrefs.GetString(walletSettings.walletDerivationPrefName + walletNum);
 
-            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(hashLvls, SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum), derivation, password, onWalletDecrypted));
+            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(
+                hashLvls,
+                SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum),
+                derivation,
+                password,
+                walletNum,
+                onWalletDecrypted));
         });
     }
 
     /// <summary>
     /// Decrypts the wallet asynchronously.
     /// </summary>
-    /// <param name="hashLvls"> Different hash levels used for multi level encryption of the wallet seed. </param>
+    /// <param name="hashes"> Different hash levels used for multi level encryption of the wallet seed. </param>
     /// <param name="encryptedSeed"> The encrypted seed of the wallet. </param>
     /// <param name="derivation"> The wallet's derivation path. </param>
     /// <param name="password"> The user's password to the wallet. </param>
+    /// <param name="walletNum"> The number of the wallet to decrypt. </param>
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet and the <see langword="string"/> wallet derivation. </param>
     /// <returns> Task returned which represents the decryption processing. </returns>
-    private async Task AsyncDecryptWallet(string[] hashLvls, string encryptedSeed, string derivation, string password, Action<byte[], string> onWalletDecrypted)
+    private async Task AsyncDecryptWallet(
+        string[] hashes,
+        string encryptedSeed,
+        string derivation,
+        string password,
+        int walletNum,
+        Action<byte[], string> onWalletDecrypted)
     {
-        var encryptionPassword = await Task.Run(() => playerPrefPassword.ExtractEncryptionPassword(password)).ConfigureAwait(false);
-        var splitPass = encryptionPassword.SplitHalf();
-        var lvl12string = splitPass.Item1.SplitHalf();
-        var lvl34string = splitPass.Item2.SplitHalf();
+        string encryptionPassword = playerPrefPassword.ExtractEncryptionPassword(password);
 
-        string unprotectedSeed = await Task.Run(() => encryptedSeed.Unprotect(hashLvls[2].Unprotect() + hashLvls[3].AESDecrypt(lvl34string.Item2.GetSHA512Hash()))).ConfigureAwait(false);
-        byte[] decryptedSeed = await Task.Run(() => unprotectedSeed.AESDecrypt(hashLvls[0].AESDecrypt(lvl12string.Item1.GetSHA512Hash()) + hashLvls[1].Unprotect()).HexToByteArray()).ConfigureAwait(false);
+        DataEncryptor dataEncryptor = await Task.Run(() =>
+            new DataEncryptor(
+            walletSettings.walletCountPrefName,
+            walletSettings.walletDataPrefName,
+            walletSettings.walletDerivationPrefName,
+            walletSettings.walletEncryptionEntropy,
+            walletSettings.walletHashLvlPrefName,
+            walletSettings.walletInfoPrefName,
+            walletSettings.walletNamePrefName,
+            walletSettings.walletPasswordPrefName,
+            walletNum,
+            encryptionPassword)).ConfigureAwait(false);
+
+        string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).GetSHA256Hash();
+        string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).GetSHA256Hash();
+
+        byte[] decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, lvl2EncryptHash), lvl1EncryptHash).HexToByteArray();
 
         onWalletDecrypted?.Invoke(decryptedSeed, derivation);
     }

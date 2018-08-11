@@ -1,6 +1,4 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
+﻿using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Random;
 using Org.BouncyCastle.Security;
@@ -14,18 +12,22 @@ public sealed class WalletEncryptor : SecureObject
 {
     private readonly PlayerPrefPassword playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
+    private readonly UserWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Initializes the <see cref="WalletEncryptor"/> by assigning the references to needed objects.
     /// </summary>
     /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPassword"/> object to use with the encryption. </param>
     /// <param name="dynamicDataCache"> The <see cref="DynamicDataCache"/> used for storing the user password. </param>
+    /// <param name="walletSettings"> The settings for the UserWallet. </param>
     public WalletEncryptor(
         PlayerPrefPassword playerPrefPassword,
-        DynamicDataCache dynamicDataCache)
+        DynamicDataCache dynamicDataCache, 
+        UserWalletInfoManager.Settings walletSettings)
     {
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
+        this.walletSettings = walletSettings;
     }
 
     /// <summary>
@@ -33,10 +35,11 @@ public sealed class WalletEncryptor : SecureObject
     /// </summary>
     /// <param name="seed"> The <see langword="byte"/>[] seed of the wallet. </param>
     /// <param name="passwordBase"> The password of the user. </param>
+    /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action to call once the wallet has been encrypted. Passing the array of hashes used to encrypt the wallet, the salted password hash, and encrypted seed. </param>
-    public void EncryptWallet(byte[] seed, string passwordBase, Action<string[], string, string> onWalletEncrypted)
+    public void EncryptWallet(byte[] seed, string passwordBase, int walletNum, Action<string[], string, string> onWalletEncrypted)
     {
-        AsyncTaskScheduler.Schedule(() => AsyncEncryptWallet(seed, passwordBase, onWalletEncrypted));
+        AsyncTaskScheduler.Schedule(() => AsyncEncryptWallet(seed, passwordBase, walletNum, onWalletEncrypted));
     }
 
     /// <summary>
@@ -44,34 +47,39 @@ public sealed class WalletEncryptor : SecureObject
     /// </summary>
     /// <param name="seed"> The <see langword="byte"/>[] seed to encrypt. </param>
     /// <param name="passwordBase"> The base password to use for encryption, retrieved from the user input. </param>
+    /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
     /// <returns> Task returned which represents the work needed to encrypt the wallet data. </returns>
-    private async Task AsyncEncryptWallet(byte[] seed, string passwordBase, Action<string[], string, string> onWalletEncrypted)
+    private async Task AsyncEncryptWallet(byte[] seed, string passwordBase, int walletNum, Action<string[], string, string> onWalletEncrypted)
     {
-        SecureRandom secureRandom = new SecureRandom();
+        string encryptionPassword = playerPrefPassword.GenerateEncryptionPassword(passwordBase);
 
-        string encryptionPassword = await Task.Run(() => playerPrefPassword.GenerateEncryptionPassword(passwordBase)).ConfigureAwait(false);
+        DataEncryptor dataEncryptor = await Task.Run(() =>
+            new DataEncryptor(
+            walletSettings.walletCountPrefName,
+            walletSettings.walletDataPrefName,
+            walletSettings.walletDerivationPrefName,
+            walletSettings.walletEncryptionEntropy,
+            walletSettings.walletHashLvlPrefName,
+            walletSettings.walletInfoPrefName,
+            walletSettings.walletNamePrefName,
+            walletSettings.walletPasswordPrefName,
+            walletNum,
+            encryptionPassword)).ConfigureAwait(false);
 
-        Tuple<string, string> splitPass = encryptionPassword.SplitHalf();
-        Tuple<string, string> lvl12string = splitPass.Item1.SplitHalf();
-        Tuple<string, string> lvl34string = splitPass.Item2.SplitHalf();
+        string hash1 = encryptionPassword.SplitHalf().Item1;
+        string hash2 = RandomBytes.GetSHA512Bytes(128).GetHexString();
+        string hash3 = encryptionPassword.SplitHalf().Item2;
+        string hash4 = RandomBytes.GetSHA512Bytes(128).GetHexString();
 
-        string h1 = await Task.Run(() => lvl12string.Item1.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
-        string h2 = await Task.Run(() => lvl12string.Item2.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
-        string h3 = await Task.Run(() => lvl34string.Item1.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
-        string h4 = await Task.Run(() => lvl34string.Item2.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
+        string encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), (hash1 + hash2).GetSHA256Hash()), (hash3 + hash4).GetSHA256Hash());
+        string saltedPasswordHash = PasswordEncryption.GetSaltedPasswordHash(passwordBase);
 
-        string encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
-        string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(passwordBase)).ConfigureAwait(false);
-
-        string[] encryptedHashLvls = await Task.Run(() => new string[] { h1.AESEncrypt(lvl12string.Item1.GetSHA512Hash()),
-                                                                         h2.Protect(),
-                                                                         h3.Protect(),
-                                                                         h4.AESEncrypt(lvl34string.Item2.GetSHA512Hash()) }).ConfigureAwait(false);
+        string[] encryptedHashes = new string[] { dataEncryptor.Encrypt(hash1), dataEncryptor.Encrypt(hash2), dataEncryptor.Encrypt(hash3), dataEncryptor.Encrypt(hash4) };
 
         dynamicDataCache.SetData("pass", new ProtectedString(passwordBase, this));
         dynamicDataCache.SetData("mnemonic", null);
 
-        MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashLvls, saltedPasswordHash, encryptedSeed));
+        MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashes, saltedPasswordHash, encryptedSeed));
     }
 }

@@ -6,6 +6,7 @@ using System;
 /// </summary>
 public static class PasswordUtils
 {
+    public const int MIN_LENGTH = 8;
 
     /// <summary>
     /// Generates a random password of a given length.

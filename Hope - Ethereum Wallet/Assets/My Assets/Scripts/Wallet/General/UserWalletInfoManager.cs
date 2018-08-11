@@ -67,7 +67,7 @@ public sealed class UserWalletInfoManager
     }
 
     /// <summary>
-    /// Class which holds the settings for the wallet player pref data.
+    /// Class which holds general wallet settings.
     /// </summary>
     [Serializable]
     public sealed class Settings
@@ -79,5 +79,7 @@ public sealed class UserWalletInfoManager
         [RandomizeText] public string walletCountPrefName;
         [RandomizeText] public string walletHashLvlPrefName;
         [RandomizeText] public string walletInfoPrefName;
+
+        [RandomizeText] public string walletEncryptionEntropy;
     }
 }

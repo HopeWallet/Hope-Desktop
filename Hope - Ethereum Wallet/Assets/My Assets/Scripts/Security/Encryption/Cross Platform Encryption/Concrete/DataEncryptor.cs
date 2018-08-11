@@ -1,4 +1,5 @@
-﻿using Hope.Security.Encryption.Symmetric;
+﻿using Hope.Security.Encryption.DPAPI;
+using Hope.Security.Encryption.Symmetric;
 
 /// <summary>
 /// Cross platform class which encrypts/decrypts data for use across multiple sessions.
