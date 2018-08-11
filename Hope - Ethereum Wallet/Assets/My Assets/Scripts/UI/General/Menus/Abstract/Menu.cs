@@ -45,7 +45,6 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 		if (popupManager.ActivePopupType != typeof(ExitConfirmationPopup))
 			Application.CancelQuit();
 
-		//if (popupManager.ActivePopupType != typeof(LoadingPopup))
 		OpenExitConfirmationPopup();
 	}
 
