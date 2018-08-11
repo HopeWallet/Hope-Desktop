@@ -6,8 +6,6 @@ public sealed class ExitConfirmationPopup : OkCancelPopupComponent<ExitConfirmat
 {
 
 	public GameObject noteText;
-
-	private List<Tween> currentlyActiveTweens;
 	
 	/// <summary>
 	/// Closes the wallet

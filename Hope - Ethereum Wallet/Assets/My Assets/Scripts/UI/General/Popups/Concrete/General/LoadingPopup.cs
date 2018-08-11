@@ -22,9 +22,4 @@ public sealed class LoadingPopup : FactoryPopup<LoadingPopup>
 			loadingText.text = value;
 		}
 	}
-
-	private void OnApplicationQuit()
-	{
-		
-	}
 }
