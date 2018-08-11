@@ -6,10 +6,15 @@ using System.Linq;
 /// <summary>
 /// Base class which encrypts data using many different objects as the entropy for the encryption.
 /// </summary>
-public abstract class AdvancedEntropyEncryptor : SecureObject
+public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
 {
     private readonly List<byte[]> encryptorData = new List<byte[]>();
     private readonly List<SecureObject> encryptorSecureObjects = new List<SecureObject>();
+
+    /// <summary>
+    /// Whether this <see cref="AdvancedEntropyEncryptor"/> has been disposed of yet.
+    /// </summary>
+    public bool Disposed { get; protected set; }
 
     /// <summary>
     /// Initializes the <see cref="AdvancedEntropyEncryptor"/> with the array of object data to use to formulate our entropy.
@@ -22,6 +27,23 @@ public abstract class AdvancedEntropyEncryptor : SecureObject
 
         encryptorSecureObjects.AddRange(encryptors.Where(protector => protector.GetType().IsSubclassOf(typeof(SecureObject)))
                                                   .Select(protector => protector as SecureObject));
+    }
+
+    /// <summary>
+    /// Disposes of the advanced entropy encryptors this <see cref="AdvancedEntropyEncryptor"/> class holds and cleans all garbage.
+    /// </summary>
+    [SecureCallEnd]
+    public virtual void Dispose()
+    {
+        if (!Disposed)
+        {
+            encryptorData.ForEach(bytes => bytes?.ClearBytes());
+            UnityEngine.Debug.Log("CLEARED " + GetType());
+            Disposed = true;
+        }
+
+        GC.SuppressFinalize(this);
+        GC.Collect();
     }
 
     /// <summary>

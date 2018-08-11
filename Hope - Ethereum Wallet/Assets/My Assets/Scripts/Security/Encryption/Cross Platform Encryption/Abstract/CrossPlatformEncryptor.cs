@@ -36,6 +36,18 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     }
 
     /// <summary>
+    /// Disposes of the <see cref="AdvancedEntropyEncryptor"/> object.
+    /// </summary>
+    public override void Dispose()
+    {
+        if (!Disposed)
+        {
+            encryptor.Dispose();
+            Disposed = true;
+        }
+    }
+
+    /// <summary>
     /// Encrypts <see langword="byte"/>[] data with an additional entropy parameter.
     /// </summary>
     /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>

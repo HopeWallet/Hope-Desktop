@@ -90,10 +90,14 @@ public sealed class WalletDecryptor : SecureObject
             walletNum,
             encryptionPassword)).ConfigureAwait(false);
 
-        string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).GetSHA256Hash();
-        string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).GetSHA256Hash();
+        byte[] decryptedSeed = null;
+        using (dataEncryptor)
+        {
+            string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).GetSHA256Hash();
+            string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).GetSHA256Hash();
 
-        byte[] decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, lvl2EncryptHash), lvl1EncryptHash).HexToByteArray();
+            decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, lvl2EncryptHash), lvl1EncryptHash).HexToByteArray();
+        }
 
         onWalletDecrypted?.Invoke(decryptedSeed, derivation);
     }

@@ -67,18 +67,25 @@ public sealed class WalletEncryptor : SecureObject
             walletNum,
             encryptionPassword)).ConfigureAwait(false);
 
-        string hash1 = encryptionPassword.SplitHalf().Item1;
-        string hash2 = RandomBytes.GetSHA512Bytes(128).GetHexString();
-        string hash3 = encryptionPassword.SplitHalf().Item2;
-        string hash4 = RandomBytes.GetSHA512Bytes(128).GetHexString();
+        string[] encryptedHashes = null;
+        string saltedPasswordHash = null;
+        string encryptedSeed = null;
 
-        string encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), (hash1 + hash2).GetSHA256Hash()), (hash3 + hash4).GetSHA256Hash());
-        string saltedPasswordHash = PasswordEncryption.GetSaltedPasswordHash(passwordBase);
+        using (dataEncryptor)
+        {
+            string hash1 = encryptionPassword.SplitHalf().Item1;
+            string hash2 = RandomBytes.GetSHA512Bytes(128).GetHexString();
+            string hash3 = encryptionPassword.SplitHalf().Item2;
+            string hash4 = RandomBytes.GetSHA512Bytes(128).GetHexString();
 
-        string[] encryptedHashes = new string[] { dataEncryptor.Encrypt(hash1), dataEncryptor.Encrypt(hash2), dataEncryptor.Encrypt(hash3), dataEncryptor.Encrypt(hash4) };
+            encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), (hash1 + hash2).GetSHA256Hash()), (hash3 + hash4).GetSHA256Hash());
+            saltedPasswordHash = PasswordEncryption.GetSaltedPasswordHash(passwordBase);
 
-        dynamicDataCache.SetData("pass", new ProtectedString(passwordBase, this));
-        dynamicDataCache.SetData("mnemonic", null);
+            encryptedHashes = new string[] { dataEncryptor.Encrypt(hash1), dataEncryptor.Encrypt(hash2), dataEncryptor.Encrypt(hash3), dataEncryptor.Encrypt(hash4) };
+
+            dynamicDataCache.SetData("pass", new ProtectedString(passwordBase, this));
+            dynamicDataCache.SetData("mnemonic", null);
+        }
 
         MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashes, saltedPasswordHash, encryptedSeed));
     }
