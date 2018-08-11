@@ -43,10 +43,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         buttonObserver.SubscribeObservable(this);
     }
 
-	private void Awake()
-	{
-		Screen.SetResolution(1280, 800, false, 120);
-	}
+	private void Awake() => Screen.SetResolution(1280, 800, false, 120);
 
 	/// <summary>
 	/// Starts the UIManager by choosing the first menu to open.
@@ -54,8 +51,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	private void Start()
     {
         createdMenus.AddItems(extraMenus);
-
-		//Screen.SetResolution(1280, 800, false, 120);
 
 		OpenMenu<ChooseWalletMenu>();
     }
