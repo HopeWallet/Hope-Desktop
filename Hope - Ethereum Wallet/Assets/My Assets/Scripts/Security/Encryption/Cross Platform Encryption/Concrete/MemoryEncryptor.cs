@@ -6,6 +6,8 @@ using System.Diagnostics;
 /// </summary>
 public sealed class MemoryEncryptor : CrossPlatformEncryptor<WindowsMemoryEncryptor, AesEncryptor>
 {
+    protected override bool IsEphemeralEncryptor => true;
+
     public MemoryEncryptor(params object[] encryptors) : base(
         Process.GetCurrentProcess().Id,
         Process.GetCurrentProcess().MainModule.ModuleName.GetHashCode(),

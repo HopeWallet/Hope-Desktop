@@ -87,8 +87,6 @@ public abstract class MultiLevelEncryptor : SecureObject
             protectors.Add((hashString + objString).GetUTF8Bytes());
         }
 
-        UnityEngine.Debug.Log(encryptorSecureObjects.Count);
-
         if (additionalEntropy?.Length > 0)
             protectors.Add(additionalEntropy);
 

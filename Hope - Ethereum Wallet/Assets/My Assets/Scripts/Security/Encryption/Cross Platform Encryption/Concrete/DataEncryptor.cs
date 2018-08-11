@@ -5,6 +5,8 @@
 /// </summary>
 public sealed class DataEncryptor : CrossPlatformEncryptor<WindowsDataEncryptor, AesEncryptor>
 {
+    protected override bool IsEphemeralEncryptor => false;
+
     public DataEncryptor(params object[] encryptors) : base(encryptors)
     {
     }

@@ -12,8 +12,13 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : M
 {
     private readonly ISimpleEncryptor encryptor;
 
+    protected abstract bool IsEphemeralEncryptor { get; }
+
     protected CrossPlatformEncryptor(params object[] encryptors) : base(new object[0])
     {
+        if (IsEphemeralEncryptor)
+            encryptors = encryptors.Concat(new object[] { this }).ToArray();
+
         encryptor = Environment.OSVersion.Platform == PlatformID.Win32NT
             ? (ISimpleEncryptor)Activator.CreateInstance(typeof(TWinEncryptor), encryptors)
             : (ISimpleEncryptor)Activator.CreateInstance(typeof(TOtherEncryptor), encryptors);

@@ -13,17 +13,23 @@ public sealed class WindowsMemoryEncryptor : WindowsEncryptor
         aes = new AesEncryptor(encryptors);
     }
 
+    [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
     protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
     {
+        byte[] encryptedData = data;
         if (data.Length % 16 != 0 || data.Length == 0)
-            data = aes.Encrypt(data, entropy?.Length > 0 ? entropy : RandomEntropy);
+        {
+            encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : RandomEntropy);
+            data.ClearBytes();
+        }
 
-        ProtectedMemory.Protect(data, MemoryProtectionScope.SameProcess);
+        ProtectedMemory.Protect(encryptedData, MemoryProtectionScope.SameProcess);
 
-        return data;
+        return encryptedData;
     }
 
+    [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
     protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
     {

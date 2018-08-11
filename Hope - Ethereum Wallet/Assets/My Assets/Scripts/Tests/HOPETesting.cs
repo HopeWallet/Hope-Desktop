@@ -55,23 +55,6 @@ using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
-    private string encryptedData;
-
-    [SecureCallEnd]
-    private void Start()
-    {
-        MemoryEncryptor dataEncryptor = new MemoryEncryptor(5);
-        encryptedData = dataEncryptor.Encrypt("this is some nice text");
-    }
-
-    [ContextMenu("Safe Decrypt")]
-    [SecureCallEnd]
-    public void SafeDecrypt()
-    {
-        Debug.Log(encryptedData);
-        Debug.Log(new MemoryEncryptor(5).Decrypt("twCAxtUy3iy+cngiikimob+xfxXkDTUjwnQcaMkHBeWjs45KSWt1eJxJ0jK/T6YwPs33X9I0OGdhsOQBMmKOtw=="));
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
@@ -93,8 +76,4 @@ public class HOPETesting : MonoBehaviour
 
     //}
 
-}
-
-public class Test : SecureObject
-{
 }
