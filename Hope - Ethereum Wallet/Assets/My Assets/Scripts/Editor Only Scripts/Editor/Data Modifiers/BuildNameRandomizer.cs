@@ -6,7 +6,6 @@ using UnityEditor.Callbacks;
 /// </summary>
 public static class BuildNameRandomizer
 {
-
     private static string CompanyName;
     private static string ProductName;
 
@@ -24,7 +23,7 @@ public static class BuildNameRandomizer
         CompanyName = PlayerSettings.companyName;
         ProductName = PlayerSettings.productName;
 
-        SetPlayerSettings(PasswordUtils.GenerateRandomPassword(), PasswordUtils.GenerateRandomPassword());
+        //SetPlayerSettings(PasswordUtils.GenerateRandomPassword(), PasswordUtils.GenerateRandomPassword());
     }
 
     /// <summary>
