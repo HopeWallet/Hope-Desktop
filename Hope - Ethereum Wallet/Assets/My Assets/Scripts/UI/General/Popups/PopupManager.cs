@@ -76,6 +76,16 @@ public sealed class PopupManager
     }
 
     /// <summary>
+    /// Kills the active popup if it is of a certain type.
+    /// </summary>
+    /// <param name="popupTypeToKill"> The type of the popup to kill. </param>
+    public void KillActivePopup(Type popupTypeToKill)
+    {
+        if (activePopups.Count > 0 && ActivePopupType == popupTypeToKill)
+            Destroy(activePopups.Pop().Key.gameObject);
+    }
+
+    /// <summary>
     /// Closes the currently active popup if there are no popups animating currently and the active popup has closing enabled.
     /// </summary>
     /// <param name="typesToIgnore"> The filter for ignoring closing certain popups if the active popup is one of the types. </param>

@@ -74,7 +74,7 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
 	/// <summary>
 	/// Animates the info popup out and then closes the popup
 	/// </summary>
-	private void CloseInfoPopup() => PopupManager.GetPopup<InfoPopup>().Animator.AnimateDisable(() => PopupManager.KillActivePopup());
+	private void CloseInfoPopup() => PopupManager.GetPopup<InfoPopup>()?.Animator?.AnimateDisable(() => PopupManager.KillActivePopup(typeof(InfoPopup)));
 
 	/// <summary>
 	/// Animates the icon

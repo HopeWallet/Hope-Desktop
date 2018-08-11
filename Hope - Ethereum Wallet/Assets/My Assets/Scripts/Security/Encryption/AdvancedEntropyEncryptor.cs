@@ -38,7 +38,6 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
         if (!Disposed)
         {
             encryptorData.ForEach(bytes => bytes?.ClearBytes());
-            UnityEngine.Debug.Log("CLEARED " + GetType());
             Disposed = true;
         }
 
