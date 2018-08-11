@@ -10,7 +10,7 @@ public sealed class UserWallet : SecureObject
 {
     public static event Action OnWalletLoadSuccessful;
 
-    private readonly EphemeralEncryption passwordEncryptor;
+    private readonly MemoryEncryptor passwordEncryptor;
 
     private readonly PopupManager popupManager;
     private readonly DynamicDataCache dynamicDataCache;
@@ -40,7 +40,7 @@ public sealed class UserWallet : SecureObject
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;
 
-        passwordEncryptor = new EphemeralEncryption(this);
+        passwordEncryptor = new MemoryEncryptor(this);
         walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, walletSettings, userWalletInfoManager);
         walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, walletSettings, userWalletInfoManager);
         walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor, walletSettings);

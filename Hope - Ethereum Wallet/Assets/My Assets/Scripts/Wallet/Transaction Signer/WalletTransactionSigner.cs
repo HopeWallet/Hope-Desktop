@@ -7,7 +7,7 @@ using System;
 /// </summary>
 public sealed class WalletTransactionSigner
 {
-    private readonly EphemeralEncryption passwordEncryptor;
+    private readonly MemoryEncryptor passwordEncryptor;
     private readonly WalletDecryptor walletDecryptor;
     private readonly EthereumNetwork ethereumNetwork;
 
@@ -17,13 +17,13 @@ public sealed class WalletTransactionSigner
     /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPassword"/> instance to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="dynamicDataCache"> The active <see cref="DynamicDataCache"/> to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="ethereumNetwork"> The active <see cref="EthereumNetwork"/>. </param>
-    /// <param name="passwordEncryptor"> The <see cref="EphemeralEncryption"/> instance used to encrypt the password. </param>
+    /// <param name="passwordEncryptor"> The <see cref="MemoryEncryptor"/> instance used to encrypt the password. </param>
     /// <param name="walletSettings"> The settings for the <see cref="UserWallet"/>. </param>
     public WalletTransactionSigner(
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         EthereumNetwork ethereumNetwork,
-        EphemeralEncryption passwordEncryptor,
+        MemoryEncryptor passwordEncryptor,
         UserWalletInfoManager.Settings walletSettings)
     {
         this.ethereumNetwork = ethereumNetwork;

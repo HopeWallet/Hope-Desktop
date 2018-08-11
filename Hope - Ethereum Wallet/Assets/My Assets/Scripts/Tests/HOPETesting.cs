@@ -55,32 +55,22 @@ using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
-    private readonly Test test = new Test();
-    private string encryptedData = "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA4HJ/V+iGNEebdnn7A/tc9QAAAAACAAAAAAAQZgAAAAEAACAAAABMbg6SZjqYtdMVfrmGKojIq90RBOfEol8t5sWbLvQF6AAAAAAOgAAAAAIAACAAAACRdzMBgEydeHR0D2vSEjmt6quoWtaWaRZyExzuw377MCAAAADoijlHIMxnt5oDyg6MQ/VgemvYPjSdKMBr4f5kJFnJzkAAAABHnhtCaqRkXQf2i5if+jMvMgY/5WNRLhf9hcec9ve2x4mOYUNuW31WU6xt52bX/EGOoLfgl3t/Syra2PKE86T1";
+    private string encryptedData;
 
     [SecureCallEnd]
     private void Start()
     {
-        //encryptedData = GetProtector().Protect("this is some nice text");
+        MemoryEncryptor dataEncryptor = new MemoryEncryptor(5);
+        encryptedData = dataEncryptor.Encrypt("this is some nice text");
     }
 
-    [ContextMenu("Secure")]
+    [ContextMenu("Safe Decrypt")]
     [SecureCallEnd]
-    public void SecureDecrypt()
+    public void SafeDecrypt()
     {
         Debug.Log(encryptedData);
-        Debug.Log(GetProtector().Unprotect(encryptedData));
+        Debug.Log(new MemoryEncryptor(5).Decrypt("twCAxtUy3iy+cngiikimob+xfxXkDTUjwnQcaMkHBeWjs45KSWt1eJxJ0jK/T6YwPs33X9I0OGdhsOQBMmKOtw=="));
     }
-
-    [ContextMenu("Insecure")]
-    public void InsecureDecrypt()
-    {
-        Debug.Log(encryptedData);
-        Debug.Log(GetProtector().Unprotect(encryptedData, "try me"));
-    }
-
-    [SecureCaller]
-    private HopeDataProtector GetProtector() => new HopeDataProtector(1, 5, 4, 18, "nice one", false);
 
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
