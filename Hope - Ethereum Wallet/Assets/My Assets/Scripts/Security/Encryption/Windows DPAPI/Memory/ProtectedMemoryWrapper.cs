@@ -29,7 +29,7 @@ namespace Hope.Security.Encryption.DPAPI
         public static void Protect(ref byte[] data, MemoryProtectionScope scope)
         {
             if (data.Length % 16 != 0 || data.Length == 0)
-                data = AesEncryptor.Encrypt(data, ENTROPY.GetBase64String());
+                data = AesEncryptor.StaticEncrypt(data, ENTROPY.GetBase64String());
 
             ProtectedMemory.Protect(data, scope);
         }
@@ -46,7 +46,7 @@ namespace Hope.Security.Encryption.DPAPI
 
             ProtectedMemory.Unprotect(data, scope);
 
-            data = AesEncryptor.Decrypt(data, ENTROPY.GetBase64String());
+            data = AesEncryptor.StaticDecrypt(data, ENTROPY.GetBase64String());
         }
     }
 }

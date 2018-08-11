@@ -16,5 +16,20 @@ namespace Hope.Security.Encryption.Symmetric
         /// The number of bytes to use for the salt and iv for the <see cref="SymmetricAlgorithm"/>.
         /// </summary>
         protected override int SaltIvByteSize => 16;
+
+        /// <summary>
+        /// Initializes the <see cref="AesEncryptor"/> by assigning all additional encryptors to encrypt the data with.
+        /// </summary>
+        /// <param name="encryptors"> The encryptors to encrypt/decrypt data with. </param>
+        public AesEncryptor(params object[] encryptors) : base(encryptors)
+        {
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="AesEncryptor"/>.
+        /// </summary>
+        public AesEncryptor()
+        {
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     /// <typeparam name="TDisposable"> The <see cref="DisposableData"/> of type TType. </typeparam>
     public abstract class ProtectedType<TType, TDisposable> : SecureObject where TDisposable : DisposableData<TType>
     {
-        private readonly EphemeralEncryption ephemeralEncryption;
+        private readonly MemoryEncryptor ephemeralEncryption;
 
         private TDisposable disposableData;
         private byte[] protectedData;
@@ -37,7 +37,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             SecureObject[] currentEncryptionObj = new SecureObject[] { this };
 
-            ephemeralEncryption = new EphemeralEncryption(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
+            ephemeralEncryption = new MemoryEncryptor(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
             SetValue(value);
         }
 

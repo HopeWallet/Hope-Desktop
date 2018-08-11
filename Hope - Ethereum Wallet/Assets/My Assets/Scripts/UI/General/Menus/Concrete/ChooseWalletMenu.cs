@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -13,6 +12,10 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 
     private UserWalletInfoManager.Settings walletSettings;
 
+    /// <summary>
+    /// Adds the required wallet dependencies.
+    /// </summary>
+    /// <param name="walletSettings"> The pref settings for the UserWallet. </param>
     [Inject]
     public void Construct(UserWalletInfoManager.Settings walletSettings) => this.walletSettings = walletSettings;
 

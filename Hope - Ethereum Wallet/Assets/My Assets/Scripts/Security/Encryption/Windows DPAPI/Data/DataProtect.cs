@@ -16,11 +16,12 @@ namespace Hope.Security.Encryption.DPAPI
         public static string Protect(this string data) => Protect(data, null);
 
         /// <summary>
-        /// Unprotects data which was protected with <see cref="DataProtect.Protect"/>.
+        /// Protects data for long term use which can be unprotected across multiple sessions.
+        /// Can be unprotected using <see cref="Unprotect(byte[])"/>.
         /// </summary>
-        /// <param name="data"> The encrypted <see langword="string"/> data. </param>
-        /// <returns> The unprotected <see langword="string"/> data. </returns>
-        public static string Unprotect(this string data) => Unprotect(data, null);
+        /// <param name="data"> The <see langword="byte"/>[] data to encrypt and protect. </param>
+        /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
+        public static byte[] Protect(byte[] data) => Protect(data, null);
 
         /// <summary>
         /// Protects data for long term use which can be unprotected across multiple sessions.
@@ -32,12 +33,13 @@ namespace Hope.Security.Encryption.DPAPI
         public static string Protect(this string data, string optionalEntropy) => Protect(data, optionalEntropy, DataProtectionScope.CurrentUser);
 
         /// <summary>
-        /// Unprotects data which was protected with <see cref="Protect(string, string)"/>.
+        /// Protects data for long term use which can be unprotected across multiple sessions.
+        /// Can be unprotected using <see cref="Unprotect(byte[], byte[])"/>.
         /// </summary>
-        /// <param name="data"> The encrypted <see langword="string"/> data. </param>
-        /// <param name="optionalEntropy"> The entropy used to encrypt the data. </param>
-        /// <returns> The unprotected <see langword="string"/> data. </returns>
-        public static string Unprotect(this string data, string optionalEntropy) => Unprotect(data, optionalEntropy, DataProtectionScope.CurrentUser);
+        /// <param name="data"> The <see langword="byte"/>[] data to encrypt and protect. </param>
+        /// <param name="optionalEntropy"> The entropy to use to encrypt the <see langword="byte"/>[] data with. </param>
+        /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
+        public static byte[] Protect(byte[] data, byte[] optionalEntropy) => Protect(data, optionalEntropy, DataProtectionScope.CurrentUser);
 
         /// <summary>
         /// Protects data for long term use which can be unprotected across multiple sessions.
@@ -48,8 +50,47 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="scope"> The <see cref="DataProtectionScope"/> to apply during the encryption. </param>
         /// <returns> The encrypted data as a <see langword="string"/>. </returns>
         public static string Protect(this string data, string optionalEntropy, DataProtectionScope scope)
-            => InternalProtect(data.DPEncrypt(optionalEntropy).GetBase64Bytes(), optionalEntropy.GetBase64Bytes(), scope).GetBase64String();
+            => Protect(data.GetUTF8Bytes(), optionalEntropy.GetUTF8Bytes(), scope).GetBase64String();
 
+        /// <summary>
+        /// Protects data for long term use which can be unprotected across multiple sessions.
+        /// Can be unprotected using <see cref="Unprotect(byte[], byte[], DataProtectionScope)"/>.
+        /// </summary>
+        /// <param name="data"> The <see langword="byte"/>[] data to encrypt and protect. </param>
+        /// <param name="optionalEntropy"> The entropy to use to encrypt the <see langword="byte"/>[] data with. </param>
+        /// <param name="scope"> The <see cref="DataProtectionScope"/> to apply during the encryption. </param>
+        /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
+        public static byte[] Protect(byte[] data, byte[] optionalEntropy, DataProtectionScope scope) => InternalProtect(data, optionalEntropy, scope);
+
+        /// <summary>
+        /// Unprotects data which was protected with <see cref="DataProtect.Protect"/>.
+        /// </summary>
+        /// <param name="data"> The encrypted <see langword="string"/> data. </param>
+        /// <returns> The unprotected <see langword="string"/> data. </returns>
+        public static string Unprotect(this string data) => Unprotect(data, null);
+
+        /// <summary>
+        /// Unprotects data which was protected with <see cref="Protect(byte[])"/>.
+        /// </summary>
+        /// <param name="data"> The encrypted <see langword="byte"/>[] data. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
+        public static byte[] Unprotect(byte[] data) => Unprotect(data, null);
+
+        /// <summary>
+        /// Unprotects data which was protected with <see cref="Protect(string, string)"/>.
+        /// </summary>
+        /// <param name="data"> The encrypted <see langword="string"/> data. </param>
+        /// <param name="optionalEntropy"> The entropy used to encrypt the data. </param>
+        /// <returns> The unprotected <see langword="string"/> data. </returns>
+        public static string Unprotect(this string data, string optionalEntropy) => Unprotect(data, optionalEntropy, DataProtectionScope.CurrentUser);
+
+        /// <summary>
+        /// Unprotects data which was protected with <see cref="Protect(byte[], byte[])"/>.
+        /// </summary>
+        /// <param name="data"> The encrypted <see langword="byte"/>[] data. </param>
+        /// <param name="optionalEntropy"> The entropy used to encrypt the data. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
+        public static byte[] Unprotect(byte[] data, byte[] optionalEntropy) => Unprotect(data, optionalEntropy, DataProtectionScope.CurrentUser);
 
         /// <summary>
         /// Unprotects data which was protected with <see cref="Protect(string, string, DataProtectionScope)"/>.
@@ -59,7 +100,16 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="scope"> The <see cref="DataProtectionScope"/> used during the encryption. </param>
         /// <returns> The unprotected <see langword="string"/> data. </returns>
         public static string Unprotect(this string data, string optionalEntropy, DataProtectionScope scope)
-            => InternalUnprotect(data.GetBase64Bytes(), optionalEntropy.GetBase64Bytes(), scope).GetBase64String().DPDecrypt(optionalEntropy);
+            => InternalUnprotect(data.GetBase64Bytes(), optionalEntropy.GetUTF8Bytes(), scope).GetUTF8String();
+
+        /// <summary>
+        /// Unprotects data which was protected with <see cref="Protect(byte[], byte[], DataProtectionScope)"/>.
+        /// </summary>
+        /// <param name="data"> The encrypted <see langword="byte"/>[] data. </param>
+        /// <param name="optionalEntropy"> The entropy used to encrypt the data. </param>
+        /// <param name="scope"> The <see cref="DataProtectionScope"/> used during the encryption. </param>
+        /// <returns> The unprotected <see langword="byte"/>[] data. </returns>
+        public static byte[] Unprotect(byte[] data, byte[] optionalEntropy, DataProtectionScope scope) => InternalUnprotect(data, optionalEntropy, scope);
 
         /// <summary>
         /// Encrypts the <see langword="byte"/>[] data using <see cref="ProtectedData.Protect"/>.
