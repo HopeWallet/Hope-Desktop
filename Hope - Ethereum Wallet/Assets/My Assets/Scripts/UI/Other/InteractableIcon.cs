@@ -15,12 +15,19 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
 	private bool hoverable;
     private bool hovering;
 
+	private Texture2D handCursor;
+
     public PopupManager PopupManager { get; set; }
 
 	/// <summary>
 	/// Sets the hoverable bool depending on the IconType
 	/// </summary>
-	private void Awake() => hoverable = iconType == IconType.Info || iconType == IconType.Error || iconType == IconType.Question;
+	private void Awake()
+	{
+		handCursor = Resources.Load("UI/Graphics/Textures/Other/Icons/HandCursor_Icon") as Texture2D;
+
+		hoverable = iconType == IconType.Info || iconType == IconType.Error || iconType == IconType.Question;
+	}
 
 	/// <summary>
 	/// Opens the InfoPopup after a short period of hovering.
@@ -42,7 +49,9 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
     {
 		if (!hoverable) return;
 
-        clickId++;
+		Cursor.SetCursor(handCursor, new Vector2(12f, 0f), CursorMode.Auto);
+
+		clickId++;
         hovering = true;
     }
 
@@ -53,6 +62,8 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
     public void OnPointerExit(PointerEventData eventData)
     {
 		if (!hoverable) return;
+
+		Cursor.SetCursor(null, new Vector2(12f, 0f), CursorMode.Auto);
 
 		clickId++;
         hovering = false;
