@@ -10,7 +10,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     /// <typeparam name="TDisposable"> The <see cref="DisposableData"/> of type TType. </typeparam>
     public abstract class ProtectedType<TType, TDisposable> : SecureObject where TDisposable : DisposableData<TType>
     {
-        private readonly MemoryEncryptor ephemeralEncryption;
+        private readonly MemoryEncryptor memoryEncryptor;
 
         private TDisposable disposableData;
         private byte[] protectedData;
@@ -37,7 +37,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         {
             SecureObject[] currentEncryptionObj = new SecureObject[] { this };
 
-            ephemeralEncryption = new MemoryEncryptor(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
+            memoryEncryptor = new MemoryEncryptor(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
             SetValue(value);
         }
 
@@ -51,10 +51,10 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         [ReflectionProtect(typeof(DisposableData<string>))]
         public TDisposable CreateDisposableData()
         {
-            byte[] data = ephemeralEncryption.Decrypt(protectedData);
-            protectedData = ephemeralEncryption.Encrypt(data);
+            byte[] data = memoryEncryptor.Decrypt(protectedData);
+            protectedData = memoryEncryptor.Encrypt((byte[])data.Clone());
 
-            GC.Collect();
+			GC.Collect();
 
             return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
@@ -72,7 +72,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
             if (disposableData != null)
                 throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before settings new data!");
 
-            protectedData = ephemeralEncryption.Encrypt(GetBytes(value));
+            protectedData = memoryEncryptor.Encrypt(GetBytes(value));
         }
 
         /// <summary>

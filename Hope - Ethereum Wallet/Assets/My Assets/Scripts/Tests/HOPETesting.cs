@@ -56,7 +56,7 @@ using UnityEngine.Assertions;
 
 public class HOPETesting : MonoBehaviour
 {
-    [ContextMenu("Delete Player Prefs")]
+	[ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
         PlayerPrefs.DeleteAll();
