@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Security;
+﻿using Hope.Utils.Random;
+using Org.BouncyCastle.Security;
 using System;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,6 @@ namespace Hope.Security.Encryption.Symmetric
     {
         private const int ITERATIONS = 1000;
 
-        private static readonly SecureRandom Random = new SecureRandom();
         private static readonly T Encryptor = new T();
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace Hope.Security.Encryption.Symmetric
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         private byte[] InternalEncrypt(byte[] data, byte[] entropy, int iterations)
         {
-            byte[] saltStringBytes = SecureRandom.GetNextBytes(Random, SaltIvByteSize);
-            byte[] ivStringBytes = SecureRandom.GetNextBytes(Random, SaltIvByteSize);
+            byte[] saltStringBytes = RandomBytes.GetSHA256Bytes(SaltIvByteSize);
+            byte[] ivStringBytes = RandomBytes.GetSHA256Bytes(SaltIvByteSize);
 
             using (var password = new Rfc2898DeriveBytes(entropy, saltStringBytes, iterations))
             using (var symmetricKey = new A())

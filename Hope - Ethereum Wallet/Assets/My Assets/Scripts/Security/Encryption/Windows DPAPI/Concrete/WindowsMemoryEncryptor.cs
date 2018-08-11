@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
-using Org.BouncyCastle.Security;
 using Hope.Security.Encryption.Symmetric;
+using Hope.Utils.Random;
 
 /// <summary>
 /// Class which implements a method of encrypting/decrypting data in memory for Windows devices.
@@ -17,7 +17,7 @@ public sealed class WindowsMemoryEncryptor : WindowsEncryptor
     public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
     {
         aes = new AesEncryptor(encryptors);
-        randomEntropy = SecureRandom.GetNextBytes(new SecureRandom(), 32);
+        randomEntropy = RandomBytes.GetSHA256Bytes(32);
     }
 
     /// <summary>

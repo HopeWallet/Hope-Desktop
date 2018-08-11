@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Security;
+﻿using Hope.Utils.Random;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -48,7 +49,7 @@ public static class PrefSettingsRandomizer
     private static void RandomizeFields()
     {
         SecureRandom secureRandom = new SecureRandom();
-        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, SecureRandom.GetNextBytes(secureRandom, secureRandom.Next(16, 33)).GetBase64String()));
+        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, RandomBytes.GetSHA256Bytes(32).GetBase64String()));
     }
 
     /// <summary>

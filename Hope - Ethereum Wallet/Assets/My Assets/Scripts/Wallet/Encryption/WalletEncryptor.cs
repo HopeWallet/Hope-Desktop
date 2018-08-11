@@ -2,6 +2,7 @@
 using Hope.Security.Encryption.DPAPI;
 using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
+using Hope.Utils.Random;
 using Org.BouncyCastle.Security;
 using System;
 using System.Threading.Tasks;
@@ -55,10 +56,10 @@ public sealed class WalletEncryptor : SecureObject
         Tuple<string, string> lvl12string = splitPass.Item1.SplitHalf();
         Tuple<string, string> lvl34string = splitPass.Item2.SplitHalf();
 
-        string h1 = await Task.Run(() => lvl12string.Item1.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h2 = await Task.Run(() => lvl12string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h3 = await Task.Run(() => lvl34string.Item1.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
-        string h4 = await Task.Run(() => lvl34string.Item2.GetSHA256Hash().CombineAndRandomize(SecureRandom.GetNextBytes(secureRandom, 30).GetHexString())).ConfigureAwait(false);
+        string h1 = await Task.Run(() => lvl12string.Item1.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
+        string h2 = await Task.Run(() => lvl12string.Item2.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
+        string h3 = await Task.Run(() => lvl34string.Item1.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
+        string h4 = await Task.Run(() => lvl34string.Item2.GetSHA256Hash().CombineAndRandomize(RandomBytes.GetSHA512Bytes(30).GetHexString())).ConfigureAwait(false);
 
         string encryptedSeed = await Task.Run(() => seed.GetHexString().AESEncrypt(h1 + h2).Protect(h3 + h4)).ConfigureAwait(false);
         string saltedPasswordHash = await Task.Run(() => PasswordEncryption.GetSaltedPasswordHash(passwordBase)).ConfigureAwait(false);

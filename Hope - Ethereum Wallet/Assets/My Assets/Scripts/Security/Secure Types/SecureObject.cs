@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Security;
+﻿using Hope.Utils.Random;
+using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -31,7 +32,7 @@ public abstract class SecureObject
     [ReflectionProtect(typeof(int))]
     public override string ToString()
     {
-        return IsSecureCall() ? base.ToString() : SecureRandom.GetNextBytes(random, 12).GetBase64String();
+        return IsSecureCall() ? base.ToString() : RandomBytes.GetSHA256Bytes(16).GetBase64String();
     }
 
     /// <summary>
