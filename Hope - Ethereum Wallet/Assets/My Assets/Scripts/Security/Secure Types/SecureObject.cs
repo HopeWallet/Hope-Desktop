@@ -31,7 +31,7 @@ public abstract class SecureObject
     [ReflectionProtect(typeof(int))]
     public override string ToString()
     {
-        return IsSecureCall() ? GetHashCode().ToString() : SecureRandom.GetNextBytes(random, 12).GetBase64String();
+        return IsSecureCall() ? base.ToString() : SecureRandom.GetNextBytes(random, 12).GetBase64String();
     }
 
     /// <summary>

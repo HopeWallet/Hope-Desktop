@@ -5,57 +5,62 @@ using System.Linq;
 
 public abstract class ProtectorBase : IProtector
 {
-    private readonly object[] protectorObjects;
+    private readonly List<byte[]> protectorByteData = new List<byte[]>();
+    private readonly List<SecureObject> protectorSecureObjects = new List<SecureObject>();
 
-    protected ProtectorBase(object baseProtector, params object[] additionalProtectors)
+    protected ProtectorBase(params object[] protectors)
     {
-        List<object> protectors = new List<object>();
-        protectors.AddRange(additionalProtectors ?? (new object[0]));
-        protectors.Add(baseProtector);
+        protectorByteData.AddRange(protectors.Where(protector => !protector.GetType().IsSubclassOf(typeof(SecureObject)))
+                                             .Select(protector => protector.ToString().GetUTF8Bytes()));
 
-        protectorObjects = protectors.ToArray();
+        protectorSecureObjects.AddRange(protectors.Where(protector => protector.GetType().IsSubclassOf(typeof(SecureObject)))
+                                                  .Select(protector => protector as SecureObject));
     }
 
+    [SecureCaller]
     public string Protect(string data) => Protect(data, (string)null);
 
+    [SecureCaller]
     public byte[] Protect(byte[] data) => Protect(data, (byte[])null);
 
+    [SecureCaller]
     public string Protect(string data, string entropy) => Protect(data, entropy?.GetUTF8Bytes());
 
+    [SecureCaller]
     public string Protect(string data, byte[] entropy) => Protect(data?.GetUTF8Bytes(), entropy).GetBase64String();
 
-    public byte[] Protect(byte[] data, string entropy) => InternalProtect(data, GetProtectorHash(entropy));
+    [SecureCaller]
+    public byte[] Protect(byte[] data, string entropy) => Protect(data, entropy?.GetUTF8Bytes());
 
-    public byte[] Protect(byte[] data, byte[] entropy) => Protect(data, entropy?.GetUTF8String());
+    [SecureCaller]
+    public byte[] Protect(byte[] data, byte[] entropy) => InternalProtect(data, GetProtectorHash(entropy));
 
+    [SecureCaller]
     public string Unprotect(string encryptedData) => Unprotect(encryptedData, (string)null);
 
+    [SecureCaller]
     public byte[] Unprotect(byte[] encryptedData) => Unprotect(encryptedData, (byte[])null);
 
+    [SecureCaller]
     public string Unprotect(string encryptedData, string entropy) => Unprotect(encryptedData, entropy?.GetUTF8Bytes());
 
+    [SecureCaller]
     public string Unprotect(string encryptedData, byte[] entropy) => Unprotect(encryptedData?.GetBase64Bytes(), entropy).GetUTF8String();
 
-    public byte[] Unprotect(byte[] encryptedData, string entropy) => InternalUnprotect(encryptedData, GetProtectorHash(entropy));
+    [SecureCaller]
+    public byte[] Unprotect(byte[] encryptedData, string entropy) => Unprotect(encryptedData, entropy?.GetUTF8Bytes());
 
-    public byte[] Unprotect(byte[] encryptedData, byte[] entropy) => Unprotect(encryptedData, entropy?.GetUTF8String());
+    [SecureCaller]
+    public byte[] Unprotect(byte[] encryptedData, byte[] entropy) => InternalUnprotect(encryptedData, GetProtectorHash(entropy));
 
-    private byte[] GetProtectorHash(string additionalEntropy = null)
+    [SecureCaller]
+    [ReflectionProtect(typeof(byte[]))]
+    private byte[] GetProtectorHash(byte[] additionalEntropy = null)
     {
         byte[] hashBytes = new byte[0];
 
-        List<object> protectors = new List<object>(protectorObjects);
-
-        if (additionalEntropy?.Length > 0)
-            protectors.Add(additionalEntropy);
-
-        if (protectors.Count == 0)
-            return null;
-
-        foreach (var obj in protectors)
+        foreach (var objBytes in GetProtectorByteData(additionalEntropy))
         {
-            byte[] objBytes = obj.ToString().GetUTF8Bytes();
-
             int currentLength = hashBytes.Length;
             int objBytesLength = objBytes.Length;
 
@@ -65,7 +70,26 @@ public abstract class ProtectorBase : IProtector
             hashBytes = hashBytes.GetSHA256Hash();
         }
 
-        return hashBytes.ToArray();
+        return hashBytes;
+    }
+
+    [SecureCaller]
+    [ReflectionProtect(typeof(List<byte[]>))]
+    private List<byte[]> GetProtectorByteData(byte[] additionalEntropy)
+    {
+        List<byte[]> protectors = new List<byte[]>();
+        protectors.AddRange(protectorByteData);
+
+        foreach (var secureObj in protectorSecureObjects)
+        {
+            string hashString = secureObj.GetHashCode().ToString();
+            string objString = secureObj.ToString();
+            protectors.Add((hashString + objString).GetUTF8Bytes());
+        }
+
+        if (additionalEntropy?.Length > 0)
+            protectors.Add(additionalEntropy);
+        return protectors;
     }
 
     protected abstract byte[] InternalProtect(byte[] data, byte[] entropy);

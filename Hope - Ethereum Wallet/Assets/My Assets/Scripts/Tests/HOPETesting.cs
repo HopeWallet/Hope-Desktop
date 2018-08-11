@@ -55,6 +55,33 @@ using System.Collections.Generic;
 
 public class HOPETesting : MonoBehaviour
 {
+    private readonly Test test = new Test();
+    private string encryptedData = "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA4HJ/V+iGNEebdnn7A/tc9QAAAAACAAAAAAAQZgAAAAEAACAAAABMbg6SZjqYtdMVfrmGKojIq90RBOfEol8t5sWbLvQF6AAAAAAOgAAAAAIAACAAAACRdzMBgEydeHR0D2vSEjmt6quoWtaWaRZyExzuw377MCAAAADoijlHIMxnt5oDyg6MQ/VgemvYPjSdKMBr4f5kJFnJzkAAAABHnhtCaqRkXQf2i5if+jMvMgY/5WNRLhf9hcec9ve2x4mOYUNuW31WU6xt52bX/EGOoLfgl3t/Syra2PKE86T1";
+
+    [SecureCallEnd]
+    private void Start()
+    {
+        //encryptedData = GetProtector().Protect("this is some nice text");
+    }
+
+    [ContextMenu("Secure")]
+    [SecureCallEnd]
+    public void SecureDecrypt()
+    {
+        Debug.Log(encryptedData);
+        Debug.Log(GetProtector().Unprotect(encryptedData));
+    }
+
+    [ContextMenu("Insecure")]
+    public void InsecureDecrypt()
+    {
+        Debug.Log(encryptedData);
+        Debug.Log(GetProtector().Unprotect(encryptedData, "try me"));
+    }
+
+    [SecureCaller]
+    private HopeDataProtector GetProtector() => new HopeDataProtector(1, 5, 4, 18, "nice one", false);
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
@@ -76,4 +103,8 @@ public class HOPETesting : MonoBehaviour
 
     //}
 
+}
+
+public class Test : SecureObject
+{
 }
