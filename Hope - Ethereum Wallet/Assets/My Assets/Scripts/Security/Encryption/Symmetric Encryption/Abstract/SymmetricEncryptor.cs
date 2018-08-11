@@ -11,7 +11,7 @@ namespace Hope.Security.Encryption.Symmetric
     /// </summary>
     /// <typeparam name="T"> The type of the class inheriting the SymmetricEncryptor. </typeparam>
     /// <typeparam name="A"> The derived type of the SymmetricAlgorithm. </typeparam>
-    public abstract class SymmetricEncryptor<T, A> : MultiLevelEncryptor, ISimpleEncryptor where T : SymmetricEncryptor<T, A>, new() where A : SymmetricAlgorithm, new()
+    public abstract class SymmetricEncryptor<T, A> : AdvancedEntropyEncryptor where T : SymmetricEncryptor<T, A>, new() where A : SymmetricAlgorithm, new()
     {
         private const int ITERATIONS = 1000;
 
@@ -148,7 +148,7 @@ namespace Hope.Security.Encryption.Symmetric
         /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         [SecureCaller]
-        public override byte[] Encrypt(byte[] data, byte[] entropy) => InternalEncrypt(data, GetMultiLevelEncryptionHash(entropy), ITERATIONS);
+        public override byte[] Encrypt(byte[] data, byte[] entropy) => InternalEncrypt(data, GetAdvancedEntropyHash(entropy), ITERATIONS);
 
         /// <summary>
         /// Decrypts encrypted <see langword="byte"/>[] data.
@@ -157,7 +157,7 @@ namespace Hope.Security.Encryption.Symmetric
         /// <param name="entropy"> The additional entropy to apply to the decryption. </param>
         /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
         [SecureCaller]
-        public override byte[] Decrypt(byte[] encryptedData, byte[] entropy) => InternalDecrypt(encryptedData, GetMultiLevelEncryptionHash(entropy), ITERATIONS);
+        public override byte[] Decrypt(byte[] encryptedData, byte[] entropy) => InternalDecrypt(encryptedData, GetAdvancedEntropyHash(entropy), ITERATIONS);
 
         /// <summary>
         /// Encrypts <see langword="byte"/>[] data using the <see cref="SymmetricAlgorithm"/> provided.

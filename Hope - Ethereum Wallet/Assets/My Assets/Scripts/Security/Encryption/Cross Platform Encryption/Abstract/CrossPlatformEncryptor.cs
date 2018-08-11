@@ -1,27 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : MultiLevelEncryptor
-
-    where TWinEncryptor : MultiLevelEncryptor, ISimpleEncryptor
-
-    where TOtherEncryptor : MultiLevelEncryptor, ISimpleEncryptor
+public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : AdvancedEntropyEncryptor
+    where TWinEncryptor : AdvancedEntropyEncryptor
+    where TOtherEncryptor : AdvancedEntropyEncryptor
 {
-    private readonly ISimpleEncryptor encryptor;
+    private readonly AdvancedEntropyEncryptor encryptor;
 
-    protected abstract bool IsEphemeralEncryptor { get; }
+    protected abstract bool IsEphemeral { get; }
 
     protected CrossPlatformEncryptor(params object[] encryptors) : base(new object[0])
     {
-        if (IsEphemeralEncryptor)
+        if (IsEphemeral)
             encryptors = encryptors.Concat(new object[] { this }).ToArray();
+        else
+            encryptors = encryptors.Where(protector => !protector.GetType().IsSubclassOf(typeof(SecureObject))).ToArray();
 
         encryptor = Environment.OSVersion.Platform == PlatformID.Win32NT
-            ? (ISimpleEncryptor)Activator.CreateInstance(typeof(TWinEncryptor), encryptors)
-            : (ISimpleEncryptor)Activator.CreateInstance(typeof(TOtherEncryptor), encryptors);
+            ? (AdvancedEntropyEncryptor)Activator.CreateInstance(typeof(TWinEncryptor), encryptors)
+            : (AdvancedEntropyEncryptor)Activator.CreateInstance(typeof(TOtherEncryptor), encryptors);
     }
 
     [SecureCaller]

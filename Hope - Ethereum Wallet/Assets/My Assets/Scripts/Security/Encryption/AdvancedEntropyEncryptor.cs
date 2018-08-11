@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public abstract class MultiLevelEncryptor : SecureObject
+public abstract class AdvancedEntropyEncryptor : SecureObject
 {
     private readonly List<byte[]> encryptorData = new List<byte[]>();
     private readonly List<SecureObject> encryptorSecureObjects = new List<SecureObject>();
 
-    protected MultiLevelEncryptor(params object[] encryptors)
+    protected AdvancedEntropyEncryptor(params object[] encryptors)
     {
         encryptorData.AddRange(encryptors.Where(protector => !protector.GetType().IsSubclassOf(typeof(SecureObject)))
                                          .Select(protector => protector.ToString().GetUTF8Bytes()));
@@ -55,7 +55,7 @@ public abstract class MultiLevelEncryptor : SecureObject
 
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
-    protected byte[] GetMultiLevelEncryptionHash(byte[] additionalEntropy = null)
+    protected byte[] GetAdvancedEntropyHash(byte[] additionalEntropy = null)
     {
         byte[] hashBytes = new byte[0];
 

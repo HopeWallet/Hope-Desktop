@@ -4,13 +4,13 @@ using Hope.Security.Encryption.Symmetric;
 
 public sealed class WindowsMemoryEncryptor : WindowsEncryptor
 {
-    private static readonly byte[] RandomEntropy = SecureRandom.GetNextBytes(new SecureRandom(), 32);
-
     private readonly AesEncryptor aes;
+    private readonly byte[] randomEntropy;
 
     public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
     {
         aes = new AesEncryptor(encryptors);
+        randomEntropy = SecureRandom.GetNextBytes(new SecureRandom(), 32);
     }
 
     [SecureCaller]
@@ -20,7 +20,7 @@ public sealed class WindowsMemoryEncryptor : WindowsEncryptor
         byte[] encryptedData = data;
         if (data.Length % 16 != 0 || data.Length == 0)
         {
-            encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : RandomEntropy);
+            encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
             data.ClearBytes();
         }
 
@@ -38,6 +38,6 @@ public sealed class WindowsMemoryEncryptor : WindowsEncryptor
 
         ProtectedMemory.Unprotect(encryptedData, MemoryProtectionScope.SameProcess);
 
-        return aes.Decrypt(encryptedData, entropy?.Length > 0 ? entropy : RandomEntropy);
+        return aes.Decrypt(encryptedData, entropy?.Length > 0 ? entropy : randomEntropy);
     }
 }
