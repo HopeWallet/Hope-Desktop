@@ -4,7 +4,6 @@ using System.Linq;
 using System.Globalization;
 using System;
 using System.Threading.Tasks;
-using Hope.Utils.Misc;
 using Hope.Security.HashGeneration;
 
 /// <summary>
@@ -126,7 +125,7 @@ public class PlayerPrefPassword : ScriptableObject
     private async Task GenerateSpoofKey()
     {
         string key = await Task.Run(() => PasswordUtils.GenerateFixedLengthPassword(PASSWORD_LENGTH)).ConfigureAwait(false);
-        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false) + await Task.Run(() => RandomUtils.GenerateRandomHexLetter()).ConfigureAwait(false);
+        string value = await Task.Run(() => PasswordUtils.GenerateRandomPassword()).ConfigureAwait(false);
 
         MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value));
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using UnityEngine.UI;
 
 /// <summary>

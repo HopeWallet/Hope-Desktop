@@ -1,5 +1,5 @@
 ﻿using UnityEngine.UI;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using TMPro;
 using Zenject;
 using UnityEngine;

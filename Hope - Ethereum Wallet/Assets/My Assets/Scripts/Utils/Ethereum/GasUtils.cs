@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Numerics;
 
-namespace Hope.Utils.EthereumUtils
+namespace Hope.Utils.Ethereum
 {
     /// <summary>
     /// Class used for anything related to ethereum transaction gas.
@@ -30,22 +30,6 @@ namespace Hope.Utils.EthereumUtils
         public GasUtils(EthereumNetworkManager ethereumNetworkManager)
         {
             EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
-        }
-
-        /// <summary>
-        /// Estimates the gas limit for a contract function.
-        /// </summary>
-        /// <param name="function"> The contract function to get the gas limit for. </param>
-        /// <param name="callerAddress"> The address of the function caller. (msg.sender) </param>
-        /// <param name="onGasReceived"> Action to execute once the gas limit has been received. </param>
-        /// <param name="input"> The function input. </param>
-        public static void EstimateGasLimit(
-            Function function,
-            string callerAddress,
-            Action<BigInteger> onGasReceived,
-            params object[] input)
-        {
-            _EstimateGasLimitCoroutine(function.CreateTransactionInput(callerAddress, input), onGasReceived).StartCoroutine();
         }
 
         /// <summary>

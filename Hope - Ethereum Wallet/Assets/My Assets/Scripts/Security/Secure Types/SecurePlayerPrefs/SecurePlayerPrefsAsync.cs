@@ -1,5 +1,4 @@
-﻿using Hope.Security.Encryption.DPAPI;
-using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
+﻿using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -67,7 +66,7 @@ public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     {
         string secureKey = await GetSecureKey(baseKeyEncrypted, key).ConfigureAwait(false);
         string secureEntropy = await Task.Run(() => GetValueHash(secureKey)).ConfigureAwait(false);
-        string encryptedValue = await Task.Run(() => value.DPEncrypt(secureEntropy).Protect()).ConfigureAwait(false);
+        string encryptedValue = await Task.Run(() => dataEncryptor.Encrypt(value, secureEntropy)).ConfigureAwait(false);
 
         MainThreadExecutor.QueueAction(() =>
         {
@@ -79,10 +78,11 @@ public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     /// <summary>
     /// Gets the encrypted and hashed key asynchronously.
     /// </summary>
+    /// <param name="baseKeyEncrypted"> The encrypted base key to use to get the secure key. </param>
     /// <param name="key"> The unencrypted key to use to derive the encrypted and hashed key. </param>
     /// <returns> The secure key to use to set/get the PlayerPref. </returns>
     private static Task<string> GetSecureKey(string baseKeyEncrypted, string key)
     {
-        return Task.Run(() => GetKeyHash(string.Concat(baseKeyEncrypted.Unprotect(), key)));
+        return Task.Run(() => GetKeyHash(string.Concat(dataEncryptor.Decrypt(baseKeyEncrypted), key)));
     }
 }

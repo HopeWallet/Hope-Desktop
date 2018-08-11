@@ -1,4 +1,4 @@
-﻿using Hope.Utils.EthereumUtils;
+﻿using Hope.Utils.Ethereum;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

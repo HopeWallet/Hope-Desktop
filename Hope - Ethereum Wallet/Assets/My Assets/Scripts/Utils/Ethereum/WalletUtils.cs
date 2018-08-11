@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Hope.Utils.EthereumUtils
+namespace Hope.Utils.Ethereum
 {
     /// <summary>
     /// Class with a bunch of utility methods which relate to general wallet info and ethereum info of the wallet.

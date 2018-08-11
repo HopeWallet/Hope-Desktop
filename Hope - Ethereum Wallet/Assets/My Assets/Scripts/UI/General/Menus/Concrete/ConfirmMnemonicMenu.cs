@@ -1,5 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

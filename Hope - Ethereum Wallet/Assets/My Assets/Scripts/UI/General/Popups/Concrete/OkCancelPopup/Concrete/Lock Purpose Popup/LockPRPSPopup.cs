@@ -1,9 +1,11 @@
-﻿using Hope.Utils.Misc;
-using Nethereum.Hex.HexTypes;
+﻿using Nethereum.Hex.HexTypes;
+using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Random = System.Random;
 
 /// <summary>
 /// Class used for locking purpose.
@@ -119,8 +121,30 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         hodlerContract.Hodl(userWalletManager,
                             new HexBigInteger(Gas.TransactionGasLimit),
                             Gas.TransactionGasPrice.FunctionalGasPrice,
-                            RandomUtils.GenerateRandomBigInteger(lockedPRPSManager.UsedIds),
+                            GenerateUnusedBigInteger(lockedPRPSManager.UsedIds),
                             Amount.AmountToLock,
                             Time.MonthsToLock);
+    }
+
+    /// <summary>
+    /// Generates a BigInteger.
+    /// If a collection is passed in, makes sure the new random is not already contained in the collection.
+    /// </summary>
+    /// <param name="numbersToIgnore"> The collection of numbers to ensure the new random number is not a part of. </param>
+    /// <returns> The newly created BigInteger. </returns>
+    public static BigInteger GenerateUnusedBigInteger(ICollection<BigInteger> numbersToIgnore)
+    {
+        var rand = new Random();
+
+        if (numbersToIgnore == null)
+            return new BigInteger(rand.Next());
+
+        var val = rand.Next();
+        while (numbersToIgnore.Contains(val))
+            val = rand.Next();
+
+        numbersToIgnore.Add(val);
+
+        return val;
     }
 }

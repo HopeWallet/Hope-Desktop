@@ -16,6 +16,7 @@ MonoBehaviour:
   playerPrefSettings:
     securePlayerPrefSettings:
       securePlayerPrefSeed: TEST
+      securePlayerPrefDataEntropy: vw4OHOUH$%UOSsdnsdfOUVUWE
     contactsSettings:
       contactsPrefName: Contacts
     walletPrefSettings:
@@ -43,13 +44,6 @@ MonoBehaviour:
     - sE8cz0AHmUIvt#F(nQPBN@*yf2K$DgqiOYrR=ST+o)X9bZC^3-&14xVd!MLuajJkel7pG56Wh%w_
     - $_XwlcNx^pCIuYGUm51!8gA#fi4+Jd@oQhW-q*)2&jEM0nazsZtFDH(7OrL%6bev=TSyRK9B3kPV
     - Vl1ORpA@JLZ+&K=hm-U#(GB)YoI3$seHbv*0xcC^6g7TMDNw4f!QW_%jFdakSr5qu8PXzE2yi9nt
-    walletDataPrefName: wallet
-    walletNamePrefName: wallet_name
-    walletPasswordPrefName: wallet_password
-    walletDerivationPrefName: wallet_derivation
-    walletCountPrefName: wallet_count
-    walletHashLvlPrefName: wallet_hash
-    walletInfoPrefName: wallet_info
   ethereumNetworkSettings:
     networkType: 1
   uiSettings:

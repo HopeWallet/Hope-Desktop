@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 
 public class AddOrEditContactPopupAnimator : UIAnimator
 {

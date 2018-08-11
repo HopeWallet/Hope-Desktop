@@ -1,12 +1,10 @@
-﻿namespace Hope.Utils.EthereumUtils
+﻿namespace Hope.Utils.Ethereum
 {
-
     /// <summary>
     /// Class which has some utility methods needed for ethereum contracts.
     /// </summary>
     public static class AddressUtils
     {
-
         private const int ADDRESS_LENGTH = 42;
         private const string CORRECT_ADDRESS_START = "0x";
 
@@ -57,7 +55,5 @@
 
             return true;
         }
-
     }
-
 }

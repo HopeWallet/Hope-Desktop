@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace Hope.Utils.EthereumUtils
+namespace Hope.Utils.Ethereum
 {
 
     /// <summary>

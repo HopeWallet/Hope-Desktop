@@ -26,7 +26,7 @@ using Hope.Security.ProtectedTypes.Types;
 using Hope.Security.ProtectedTypes.Types.Base;
 using System.ComponentModel;
 using System.Numerics;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using System.Security;
 using Nethereum.Hex.HexConvertors.Extensions;
 using System.Runtime.InteropServices;
@@ -48,6 +48,7 @@ using System.Collections;
 using Nethereum.JsonRpc.UnityClient;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
+using Org.BouncyCastle.Crypto.Prng;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -56,7 +57,7 @@ using UnityEngine.Assertions;
 
 public class HOPETesting : MonoBehaviour
 {
-	[ContextMenu("Delete Player Prefs")]
+    [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
         PlayerPrefs.DeleteAll();

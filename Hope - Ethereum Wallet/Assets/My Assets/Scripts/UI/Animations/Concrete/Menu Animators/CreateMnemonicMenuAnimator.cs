@@ -5,7 +5,7 @@ using TMPro;
 using Random = System.Random;
 using Zenject;
 using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 
 /// <summary>
 /// Class which animates the CreateMnemonicMenu.

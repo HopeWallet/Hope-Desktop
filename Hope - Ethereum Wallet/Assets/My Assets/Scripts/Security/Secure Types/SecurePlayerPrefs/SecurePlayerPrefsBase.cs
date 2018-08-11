@@ -1,5 +1,4 @@
-﻿using Hope.Security.Encryption.DPAPI;
-using Hope.Security.HashGeneration;
+﻿using Hope.Security.HashGeneration;
 using Org.BouncyCastle.Security;
 using System;
 using UnityEngine;
@@ -11,6 +10,8 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
     /// </summary>
     public abstract class SecurePlayerPrefsBase
     {
+        protected static DataEncryptor dataEncryptor;
+
         private static Settings settings;
 
         /// <summary>
@@ -20,6 +21,8 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         protected SecurePlayerPrefsBase(Settings prefSettings)
         {
             settings = prefSettings;
+            dataEncryptor = new DataEncryptor(settings.securePlayerPrefDataEntropy, GetSeedName());
+
             EnsureSeedCreation();
         }
 
@@ -53,7 +56,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, SecureRandom.GetNextBytes(new SecureRandom(), 128).GetBase64String().GetSHA512Hash().Protect());
+            PlayerPrefs.SetString(seedName, dataEncryptor.Encrypt(SecureRandom.GetNextBytes(new SecureRandom(), 128).GetBase64String().GetSHA512Hash()));
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         public sealed class Settings
         {
             [RandomizeText] public string securePlayerPrefSeed;
+            [RandomizeText] public string securePlayerPrefDataEntropy;
         }
     }
 }

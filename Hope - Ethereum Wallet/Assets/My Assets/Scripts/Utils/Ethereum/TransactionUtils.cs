@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Hope.Utils.EthereumUtils
+namespace Hope.Utils.Ethereum
 {
     /// <summary>
     /// Class which extends the nethereum unity transactions to allow for more actions on successful transactions and unsuccessful ones.

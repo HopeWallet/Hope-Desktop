@@ -1,5 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using NBitcoin;
 using Nethereum.HdWallet;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@ using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Collections;
 
-namespace Hope.Utils.EthereumUtils
+namespace Hope.Utils.Ethereum
 {
     /// <summary>
     /// Class which contains useful utility methods for sending messages to smart contracts or querying data from them.

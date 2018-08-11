@@ -1,6 +1,6 @@
 ﻿using Hope.Security.Encryption;
 using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.EthereumUtils;
+using Hope.Utils.Ethereum;
 using Nethereum.HdWallet;
 using System;
 

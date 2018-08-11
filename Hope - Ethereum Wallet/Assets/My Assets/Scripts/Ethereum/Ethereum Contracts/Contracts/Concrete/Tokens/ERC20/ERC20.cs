@@ -1,4 +1,4 @@
-﻿using Hope.Utils.EthereumUtils;
+﻿using Hope.Utils.Ethereum;
 using Nethereum.Hex.HexTypes;
 using System;
 using UnityEngine;
