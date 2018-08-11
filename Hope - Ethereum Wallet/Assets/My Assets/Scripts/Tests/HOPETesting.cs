@@ -47,6 +47,7 @@ using Nethereum.RPC.Eth.DTOs;
 using System.Collections;
 using Nethereum.JsonRpc.UnityClient;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead

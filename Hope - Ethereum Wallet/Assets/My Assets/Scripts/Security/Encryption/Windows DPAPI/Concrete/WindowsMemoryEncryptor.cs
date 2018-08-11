@@ -2,17 +2,30 @@
 using Org.BouncyCastle.Security;
 using Hope.Security.Encryption.Symmetric;
 
+/// <summary>
+/// Class which implements a method of encrypting/decrypting data in memory for Windows devices.
+/// </summary>
 public sealed class WindowsMemoryEncryptor : WindowsEncryptor
 {
     private readonly AesEncryptor aes;
     private readonly byte[] randomEntropy;
 
+    /// <summary>
+    /// Initializes the <see cref="WindowsMemoryEncryptor"/> by assigning the encryptors to the <see cref="WindowsEncryptor"/> and creating our padding aes encryptor.
+    /// </summary>
+    /// <param name="encryptors"> The additional encryptors to use as our advanced entropy. </param>
     public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
     {
         aes = new AesEncryptor(encryptors);
         randomEntropy = SecureRandom.GetNextBytes(new SecureRandom(), 32);
     }
 
+    /// <summary>
+    /// Encrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
+    /// </summary>
+    /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>
+    /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
+    /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
     protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
@@ -29,6 +42,12 @@ public sealed class WindowsMemoryEncryptor : WindowsEncryptor
         return encryptedData;
     }
 
+    /// <summary>
+    /// Decrypts <see langword="byte"/>[] data using the Windows DPAPI ProtectedMemory class.
+    /// </summary>
+    /// <param name="encryptedData"> The encrypted <see langword="byte"/>[] data to decrypt. </param>
+    /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
+    /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
     [ReflectionProtect(typeof(byte[]))]
     protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
