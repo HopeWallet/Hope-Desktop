@@ -45,13 +45,14 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 		if (popupManager.ActivePopupType != typeof(ExitConfirmationPopup))
 			Application.CancelQuit();
 
+		//if (popupManager.ActivePopupType != typeof(LoadingPopup))
 		OpenExitConfirmationPopup();
 	}
 
 	/// <summary>
 	/// Opens up the exit confirmation popup.
 	/// </summary>
-	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true);
+	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>().SetDetails(true);
 
 	/// <summary>
 	/// Class used for creating menus dynamically.

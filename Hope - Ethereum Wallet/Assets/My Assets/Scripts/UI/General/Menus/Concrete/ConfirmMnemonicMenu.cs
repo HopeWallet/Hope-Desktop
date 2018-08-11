@@ -34,7 +34,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 	/// <summary>
 	/// Opens the exit confirmation popup and enables the note text.
 	/// </summary>
-	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetNoteText(true);
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetDetails(true);
 
 	/// <summary>
 	/// Adds the back button listener.

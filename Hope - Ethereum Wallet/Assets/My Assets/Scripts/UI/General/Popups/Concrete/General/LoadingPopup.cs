@@ -23,4 +23,8 @@ public sealed class LoadingPopup : FactoryPopup<LoadingPopup>
 		}
 	}
 
+	private void OnApplicationQuit()
+	{
+		
+	}
 }

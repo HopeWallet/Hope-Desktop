@@ -23,7 +23,7 @@ public class ImportOrCreateMnemonicMenu : Menu<ImportOrCreateMnemonicMenu>
 	/// <summary>
 	/// Opens the exit confirmation popup and enables the note text
 	/// </summary>
-	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetNoteText(true);
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetDetails(true);
 
 	/// <summary>
 	/// Changes to the import wallet gui.
