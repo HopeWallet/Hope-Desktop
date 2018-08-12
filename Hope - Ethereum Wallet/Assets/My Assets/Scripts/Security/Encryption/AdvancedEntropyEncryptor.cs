@@ -23,7 +23,7 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
     protected AdvancedEntropyEncryptor(params object[] encryptors)
     {
         encryptorData.AddRange(encryptors.Where(protector => !protector.GetType().IsSubclassOf(typeof(SecureObject)))
-                                         .Select(protector => protector.ToString().GetUTF8Bytes()));
+                                         .Select(protector => protector is byte[] ? protector as byte[] : protector.ToString().GetUTF8Bytes()));
 
         encryptorSecureObjects.AddRange(encryptors.Where(protector => protector.GetType().IsSubclassOf(typeof(SecureObject)))
                                                   .Select(protector => protector as SecureObject));

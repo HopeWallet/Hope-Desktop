@@ -1,6 +1,7 @@
 ﻿using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Random;
+using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.Threading.Tasks;
 
@@ -49,28 +50,33 @@ public sealed class WalletEncryptor : SecureObject
     /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
     /// <returns> Task returned which represents the work needed to encrypt the wallet data. </returns>
-    private async Task AsyncEncryptWallet(byte[] seed, string passwordBase, int walletNum, Action<string[], string, string> onWalletEncrypted)
+    private async Task AsyncEncryptWallet(
+        byte[] seed,
+        string passwordBase,
+        int walletNum,
+        Action<string[], string, string> onWalletEncrypted)
     {
         string encryptionPassword = playerPrefPassword.GenerateEncryptionPassword(passwordBase);
 
-        DataEncryptor dataEncryptor = await Task.Run(() =>
-            new DataEncryptor(
-            walletSettings.walletCountPrefName,
-            walletSettings.walletDataPrefName,
-            walletSettings.walletDerivationPrefName,
-            walletSettings.walletEncryptionEntropy,
-            walletSettings.walletHashLvlPrefName,
-            walletSettings.walletInfoPrefName,
-            walletSettings.walletNamePrefName,
-            walletSettings.walletPasswordPrefName,
-            walletNum,
-            encryptionPassword)).ConfigureAwait(false);
+        HopeSecureRandom secureRandom = await Task.Run(() =>
+            new HopeSecureRandom(
+                new Blake2bDigest(),
+                walletSettings.walletCountPrefName,
+                walletSettings.walletDataPrefName,
+                walletSettings.walletDerivationPrefName,
+                walletSettings.walletEncryptionEntropy,
+                walletSettings.walletHashLvlPrefName,
+                walletSettings.walletInfoPrefName,
+                walletSettings.walletNamePrefName,
+                walletSettings.walletPasswordPrefName,
+                walletNum,
+                encryptionPassword)).ConfigureAwait(false);
 
         string[] encryptedHashes = null;
         string saltedPasswordHash = null;
         string encryptedSeed = null;
 
-        using (dataEncryptor)
+        using (var dataEncryptor = new DataEncryptor(secureRandom))
         {
             string hash1 = encryptionPassword.SplitHalf().Item1;
             string hash2 = RandomBytes.Blake2.GetBytes(128).GetBase64String();

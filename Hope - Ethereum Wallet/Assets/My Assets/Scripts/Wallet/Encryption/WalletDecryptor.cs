@@ -1,5 +1,7 @@
 ﻿using Hope.Security.HashGeneration;
+using Hope.Utils.Random;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.Threading.Tasks;
 
@@ -77,21 +79,22 @@ public sealed class WalletDecryptor : SecureObject
     {
         string encryptionPassword = playerPrefPassword.ExtractEncryptionPassword(password);
 
-        DataEncryptor dataEncryptor = await Task.Run(() =>
-            new DataEncryptor(
-            walletSettings.walletCountPrefName,
-            walletSettings.walletDataPrefName,
-            walletSettings.walletDerivationPrefName,
-            walletSettings.walletEncryptionEntropy,
-            walletSettings.walletHashLvlPrefName,
-            walletSettings.walletInfoPrefName,
-            walletSettings.walletNamePrefName,
-            walletSettings.walletPasswordPrefName,
-            walletNum,
-            encryptionPassword)).ConfigureAwait(false);
+        HopeSecureRandom secureRandom = await Task.Run(() =>
+            new HopeSecureRandom(
+                new Blake2bDigest(),
+                walletSettings.walletCountPrefName,
+                walletSettings.walletDataPrefName,
+                walletSettings.walletDerivationPrefName,
+                walletSettings.walletEncryptionEntropy,
+                walletSettings.walletHashLvlPrefName,
+                walletSettings.walletInfoPrefName,
+                walletSettings.walletNamePrefName,
+                walletSettings.walletPasswordPrefName,
+                walletNum,
+                encryptionPassword)).ConfigureAwait(false);
 
         byte[] decryptedSeed = null;
-        using (dataEncryptor)
+        using (var dataEncryptor = new DataEncryptor(secureRandom))
         {
             string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).GetSHA256Hash();
             string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).GetSHA256Hash();

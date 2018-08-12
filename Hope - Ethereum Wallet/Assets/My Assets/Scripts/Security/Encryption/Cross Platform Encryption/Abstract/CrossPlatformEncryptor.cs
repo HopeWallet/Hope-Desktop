@@ -36,6 +36,22 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     }
 
     /// <summary>
+    /// Initializes the <see cref="CrossPlatformEncryptor"/> given the <see cref="HopeSecureRandom"/> instance to use for our encryption.
+    /// </summary>
+    /// <param name="secureRandom"> The <see cref="HopeSecureRandom"/> instance to use for our encryption. </param>
+    protected CrossPlatformEncryptor(HopeSecureRandom secureRandom) : this(
+        secureRandom.NextBytes(2),
+        secureRandom.NextBytes(4),
+        secureRandom.NextBytes(8),
+        secureRandom.NextBytes(16),
+        secureRandom.NextBytes(32),
+        secureRandom.NextBytes(64),
+        secureRandom.NextBytes(128),
+        secureRandom.NextBytes(256))
+    {
+    }
+
+    /// <summary>
     /// Disposes of the <see cref="AdvancedEntropyEncryptor"/> object.
     /// </summary>
     public override void Dispose()
