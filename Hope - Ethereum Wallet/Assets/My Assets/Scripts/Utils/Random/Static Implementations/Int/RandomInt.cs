@@ -5,7 +5,13 @@ namespace Hope.Utils.Random
 {
     public static class RandomInt
     {
+        public sealed class SHA1 : RandomIntBase<Sha1Digest> { }
+
+        public sealed class SHA3 : RandomIntBase<Sha3Digest> { }
+
         public sealed class SHA256 : RandomIntBase<Sha256Digest> { }
+
+        public sealed class SHA384 : RandomIntBase<Sha384Digest> { }
 
         public sealed class SHA512 : RandomIntBase<Sha512Digest> { }
 

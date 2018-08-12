@@ -8,7 +8,13 @@ namespace Hope.Utils.Random
     /// </summary>
     public static class RandomBytes
     {
+        public sealed class SHA1 : RandomBytesBase<Sha1Digest> { }
+
+        public sealed class SHA3 : RandomBytesBase<Sha3Digest> { }
+
         public sealed class SHA256 : RandomBytesBase<Sha256Digest> { }
+
+        public sealed class SHA384 : RandomBytesBase<Sha384Digest> { }
 
         public sealed class SHA512 : RandomBytesBase<Sha512Digest> { }
 

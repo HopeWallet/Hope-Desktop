@@ -50,6 +50,7 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
 using Hope.Utils.Random;
+using Hope.Utils.Random.Abstract;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -58,6 +59,29 @@ using Hope.Utils.Random;
 
 public class HOPETesting : MonoBehaviour
 {
+    private void Start()
+    {
+        SpeedTest("SHA1", "seed", 64, RandomBytes.SHA1.GetBytes);
+        SpeedTest("SHA3", "seed", 64, RandomBytes.SHA3.GetBytes);
+        SpeedTest("SHA256", "seed", 64, RandomBytes.SHA256.GetBytes);
+        SpeedTest("SHA384", "seed", 64, RandomBytes.SHA384.GetBytes);
+        SpeedTest("SHA512", "seed", 64, RandomBytes.SHA512.GetBytes);
+        SpeedTest("Keccak", "seed", 64, RandomBytes.Keccak.GetBytes);
+        SpeedTest("Blake2b", "seed", 64, RandomBytes.Blake2b.GetBytes);
+        SpeedTest("Whirlpool", "seed", 64, RandomBytes.Whirlpool.GetBytes);
+    }
+
+    private void SpeedTest(string algoName, string seed, int length, Func<string, int, byte[]> getBytesFunc)
+    {
+        Stopwatch watch = Stopwatch.StartNew();
+
+        for (int i = 0; i < 100000; i++)
+            getBytesFunc.Invoke(seed, length);
+
+        watch.Stop();
+        Debug.Log(algoName + " => " + watch.ElapsedMilliseconds);
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
