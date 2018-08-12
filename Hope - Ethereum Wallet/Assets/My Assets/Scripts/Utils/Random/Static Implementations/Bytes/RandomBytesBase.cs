@@ -2,6 +2,10 @@
 
 namespace Hope.Utils.Random.Abstract
 {
+    /// <summary>
+    /// Base class used for generating random bytes.
+    /// </summary>
+    /// <typeparam name="T"> The hash algorithm to use to generate our random bytes. </typeparam>
     public abstract class RandomBytesBase<T> where T : IDigest, new()
     {
         /// <summary>

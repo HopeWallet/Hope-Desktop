@@ -3,6 +3,11 @@ using Org.BouncyCastle.Crypto.Digests;
 
 namespace Hope.Utils.Random
 {
+    using FastRandom = System.Random;
+
+    /// <summary>
+    /// Utility class used for generating random int data.
+    /// </summary>
     public static class RandomInt
     {
         /// <summary>
@@ -90,25 +95,66 @@ namespace Hope.Utils.Random
         public sealed class Whirlpool : RandomIntBase<WhirlpoolDigest> { }
 
         /// <summary>
-        /// Class which generates random integers using an insecure, yet very fast algorithm. Should only be used if the random integers do not need to be secure.
+        /// Class which generates random integers using an insecure, yet very fast algorithm. 
+        /// <para> Should only be used if the random integers do not need to be secure. </para>
         /// </summary>
         public static class Fast
         {
+            /// <summary>
+            /// Gets the next random integer of this algorithm.
+            /// </summary>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt() => InternalGetInt(null, null, null);
 
+            /// <summary>
+            /// Gets the next random integer of this algorithm given a seed.
+            /// </summary>
+            /// <param name="seed"> The seed to use to produce the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt(int? seed) => InternalGetInt(seed, null, null);
 
+            /// <summary>
+            /// Gets the next random integer of this algorithm given the maximum value.
+            /// </summary>
+            /// <param name="maxValue"> The exclusive maximum value of the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt(int maxValue) => InternalGetInt(null, null, maxValue);
 
+            /// <summary>
+            /// Gets the next random integer of this algorithm given a seed and the maximum value.
+            /// </summary>
+            /// <param name="seed"> The seed to use to produce the random integer. </param>
+            /// <param name="maxValue"> The exclusive maximum value of the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt(int? seed, int maxValue) => InternalGetInt(seed, null, maxValue);
 
+            /// <summary>
+            /// Gets the next random integer of this algorithm given the minimum and maximum value.
+            /// </summary>
+            /// <param name="minValue"> The inclusive minimum value of the random integer. </param>
+            /// <param name="maxValue"> The exclusive maximum value of the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt(int minValue, int maxValue) => InternalGetInt(null, minValue, maxValue);
 
+            /// <summary>
+            /// Gets the next random integer of this algorithm given the a seed, as well as minimum and maximum values.
+            /// </summary>
+            /// <param name="seed"> The seed to use to produce the random integer. </param>
+            /// <param name="minValue"> The inclusive minimum value of the random integer. </param>
+            /// <param name="maxValue"> The exclusive maximum value of the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             public static int GetInt(int? seed, int minValue, int maxValue) => InternalGetInt(seed, minValue, maxValue);
 
+            /// <summary>
+            /// Gets the next random integer given all parameters.
+            /// </summary>
+            /// <param name="seed"> The seed to use to produce the random integer. </param>
+            /// <param name="minValue"> The inclusive minimum value of the random integer. </param>
+            /// <param name="maxValue"> The exclusive maximum value of the random integer. </param>
+            /// <returns> The randomly generated integer. </returns>
             private static int InternalGetInt(int? seed, int? minValue, int? maxValue)
             {
-                System.Random random = (seed == null ? new System.Random() : new System.Random(seed.Value));
+                FastRandom random = (seed == null ? new FastRandom() : new FastRandom(seed.Value));
 
                 if (minValue.HasValue && maxValue.HasValue)
                     return random.Next(minValue.Value, maxValue.Value);

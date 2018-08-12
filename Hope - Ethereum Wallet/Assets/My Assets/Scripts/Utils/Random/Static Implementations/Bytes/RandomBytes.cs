@@ -3,6 +3,8 @@ using Org.BouncyCastle.Crypto.Digests;
 
 namespace Hope.Utils.Random
 {
+    using FastRandom = System.Random;
+
     /// <summary>
     /// Utility class for generating random byte data.
     /// </summary>
@@ -94,7 +96,7 @@ namespace Hope.Utils.Random
 
         /// <summary>
         /// Class which generates random bytes using an insecure, yet very fast algorithm. 
-        /// Should only be used if the random byte data does not need to be secure.
+        /// <para> Should only be used if the random byte data does not need to be secure. </para>
         /// </summary>
         public static class Fast
         {
@@ -122,7 +124,7 @@ namespace Hope.Utils.Random
             private static byte[] GetBytes(int? seed, int length)
             {
                 byte[] bytes;
-                new System.Random(seed.Value).NextBytes(bytes = new byte[length]);
+                new FastRandom(seed.Value).NextBytes(bytes = new byte[length]);
                 return bytes;
             }
         }
