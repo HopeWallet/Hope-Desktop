@@ -58,14 +58,6 @@ using Hope.Utils.Random;
 
 public class HOPETesting : MonoBehaviour
 {
-    private void Start()
-    {
-        RandomInt.Keccak.GetInt("this is my seed").Log();
-        RandomInt.Blake2b.GetInt("this is my seed").Log();
-        RandomInt.SHA256.GetInt("this is my seed").Log();
-        RandomInt.SHA512.GetInt("this is my seed").Log();
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

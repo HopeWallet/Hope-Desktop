@@ -12,5 +12,7 @@ namespace Hope.Utils.Random
         public sealed class Keccak : RandomIntBase<KeccakDigest> { }
 
         public sealed class Blake2b : RandomIntBase<Blake2bDigest> { }
+
+        public sealed class Whirlpool : RandomIntBase<WhirlpoolDigest> { }
     }
 }

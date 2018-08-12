@@ -73,9 +73,9 @@ public sealed class WalletEncryptor : SecureObject
         using (dataEncryptor)
         {
             string hash1 = encryptionPassword.SplitHalf().Item1;
-            string hash2 = RandomBytes.GetSHA512Bytes(128).GetHexString();
+            string hash2 = RandomBytes.Keccak.GetBytes(128).GetHexString();
             string hash3 = encryptionPassword.SplitHalf().Item2;
-            string hash4 = RandomBytes.GetSHA512Bytes(128).GetHexString();
+            string hash4 = RandomBytes.Keccak.GetBytes(128).GetHexString();
 
             encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), (hash1 + hash2).GetSHA256Hash()), (hash3 + hash4).GetSHA256Hash());
             saltedPasswordHash = PBKDF2PasswordHashing.GetSaltedPasswordHash(passwordBase);

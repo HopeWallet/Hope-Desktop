@@ -19,7 +19,7 @@ namespace Hope.Security.Encryption.DPAPI
         public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
         {
             aes = new AesEncryptor(encryptors);
-            randomEntropy = RandomBytes.GetSHA256Bytes(32);
+            randomEntropy = RandomBytes.SHA256.GetBytes(32);
         }
 
         /// <summary>
