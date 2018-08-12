@@ -21,7 +21,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         protected SecurePlayerPrefsBase(Settings prefSettings)
         {
             settings = prefSettings;
-            dataEncryptor = new DataEncryptor(settings.securePlayerPrefDataEntropy, GetSeedName(), RandomBytes.SHA256.GetBytes(GetSeedName(), 64).GetBase64String());
+            dataEncryptor = new DataEncryptor(settings.securePlayerPrefDataEntropy, GetSeedName(), RandomBytes.SHA3.GetBytes(GetSeedName(), 64).GetBase64String());
 
             EnsureSeedCreation();
         }
@@ -56,7 +56,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, dataEncryptor.Encrypt(RandomBytes.SHA256.GetBytes(128).GetSHA512Hash().GetHexString()));
+            PlayerPrefs.SetString(seedName, dataEncryptor.Encrypt(RandomBytes.Blake2.GetBytes(128).GetSHA512Hash().GetHexString()));
         }
 
         /// <summary>

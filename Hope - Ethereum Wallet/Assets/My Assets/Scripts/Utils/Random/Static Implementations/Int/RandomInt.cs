@@ -154,7 +154,7 @@ namespace Hope.Utils.Random
             /// <returns> The randomly generated integer. </returns>
             private static int InternalGetInt(int? seed, int? minValue, int? maxValue)
             {
-                FastRandom random = (seed == null ? new FastRandom() : new FastRandom(seed.Value));
+                FastRandom random = (seed.HasValue ? new FastRandom(seed.Value) : new FastRandom());
 
                 if (minValue.HasValue && maxValue.HasValue)
                     return random.Next(minValue.Value, maxValue.Value);

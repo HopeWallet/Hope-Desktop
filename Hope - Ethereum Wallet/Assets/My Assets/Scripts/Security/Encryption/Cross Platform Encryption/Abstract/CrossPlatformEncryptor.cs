@@ -26,7 +26,7 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     protected CrossPlatformEncryptor(params object[] encryptors) : base(new object[0])
     {
         if (IsEphemeral)
-            encryptors = encryptors.Concat(new object[] { this, RandomBytes.SHA256.GetBytes(32).GetHexString() }).ToArray();
+            encryptors = encryptors.Concat(new object[] { this, RandomBytes.SHA3.GetBytes(32).GetHexString() }).ToArray();
         else
             encryptors = encryptors.Where(protector => !protector.GetType().IsSubclassOf(typeof(SecureObject))).ToArray();
 

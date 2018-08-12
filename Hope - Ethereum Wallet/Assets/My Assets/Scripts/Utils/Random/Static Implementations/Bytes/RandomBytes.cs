@@ -105,7 +105,7 @@ namespace Hope.Utils.Random
             /// </summary>
             /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
             /// <returns> The random SHA256 <see langword="byte"/>[] data. </returns>
-            public static byte[] GetBytes(int length) => GetBytes(null, length);
+            public static byte[] GetBytes(int length) => InternalGetBytes(null, length);
 
             /// <summary>
             /// Generates a series of random <see langword="byte"/>[] data using a fast, nonsecure algorithm an additional <see langword="string"/> seed.
@@ -113,7 +113,7 @@ namespace Hope.Utils.Random
             /// <param name="seed"> The <see langword="int"/> seed to apply random <see langword="byte"/>[] generation. </param>
             /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
             /// <returns> The random SHA256 <see langword="byte"/>[] data. </returns>
-            public static byte[] GetBytes(int seed, int length) => GetBytes((int?)seed, length);
+            public static byte[] GetBytes(int seed, int length) => InternalGetBytes(seed, length);
 
             /// <summary>
             /// Generates a series of random <see langword="byte"/>[] data using a specific <see cref="IDigest"/> and an additional <see langword="byte"/>[] seed.
@@ -121,10 +121,10 @@ namespace Hope.Utils.Random
             /// <param name="seed"> The <see langword="int"/> seed to apply random <see langword="byte"/>[] generation. </param>
             /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
             /// <returns> The random <see langword="byte"/>[] data. </returns>
-            private static byte[] GetBytes(int? seed, int length)
+            private static byte[] InternalGetBytes(int? seed, int length)
             {
                 byte[] bytes;
-                new FastRandom(seed.Value).NextBytes(bytes = new byte[length]);
+                (seed.HasValue ? new FastRandom(seed.Value) : new FastRandom()).NextBytes(bytes = new byte[length]);
                 return bytes;
             }
         }

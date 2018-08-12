@@ -19,7 +19,7 @@ namespace Hope.Security.Encryption.DPAPI
         public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
         {
             aes = new AesEncryptor(encryptors);
-            randomEntropy = RandomBytes.SHA256.GetBytes(32);
+            randomEntropy = RandomBytes.SHA3.GetBytes(32);
         }
 
         /// <summary>
@@ -35,6 +35,7 @@ namespace Hope.Security.Encryption.DPAPI
             byte[] encryptedData = data;
             if (data.Length % 16 != 0 || data.Length == 0)
             {
+                // ProtectedMemory needs data in 16 byte blocks so we need to encrypt it into 16 byte blocks if it is not the case.
                 encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
                 data.ClearBytes();
             }

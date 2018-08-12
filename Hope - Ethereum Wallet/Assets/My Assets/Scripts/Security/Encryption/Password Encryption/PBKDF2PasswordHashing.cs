@@ -1,8 +1,8 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Hope.Utils.Random;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 using System.Linq;
 
 public static class PBKDF2PasswordHashing
@@ -13,9 +13,7 @@ public static class PBKDF2PasswordHashing
 
     public static string GetSaltedPasswordHash(string password)
     {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] salt = SecureRandom.GetNextBytes(secureRandom, SALT_SIZE);
-
+        byte[] salt = RandomBytes.Blake2.GetBytes(SALT_SIZE);
         return salt.Concat(GetPasswordHash(password, salt)).ToArray().GetBase64String();
     }
 

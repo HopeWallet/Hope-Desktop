@@ -49,7 +49,7 @@ public static class PrefSettingsRandomizer
     private static void RandomizeFields()
     {
         SecureRandom secureRandom = new SecureRandom();
-        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, RandomBytes.SHA512.GetBytes(32).GetBase64String()));
+        FieldsToRandomize.ForEach(pair => pair.Key.SetValue(pair.Value, RandomBytes.Shake.GetBytes(32).GetBase64String()));
     }
 
     /// <summary>
