@@ -50,7 +50,6 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
 using Hope.Utils.Random;
-using Hope.Utils.Random.Abstract;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -59,24 +58,37 @@ using Hope.Utils.Random.Abstract;
 
 public class HOPETesting : MonoBehaviour
 {
+    private byte[] GetNonSecureRandom(string seed, int length)
+    {
+        Random random = new Random(seed.GetHashCode());
+        byte[] bytes = new byte[length];
+        random.NextBytes(bytes);
+        return bytes;
+    }
+
     private void Start()
     {
+        SpeedTest("FAST", 13489, 64, RandomBytes.Fast.GetBytes);
+        SpeedTest("Blake2b", "seed", 64, RandomBytes.Blake2.GetBytes);
+        SpeedTest("MD5", "seed", 64, RandomBytes.MD5.GetBytes);
+        SpeedTest("RIPEMD256", "seed", 64, RandomBytes.RIPEMD256.GetBytes);
+        SpeedTest("RIPEMD320", "seed", 64, RandomBytes.RIPEMD320.GetBytes);
         SpeedTest("SHA1", "seed", 64, RandomBytes.SHA1.GetBytes);
         SpeedTest("SHA3", "seed", 64, RandomBytes.SHA3.GetBytes);
         SpeedTest("SHA256", "seed", 64, RandomBytes.SHA256.GetBytes);
-        SpeedTest("SHA384", "seed", 64, RandomBytes.SHA384.GetBytes);
         SpeedTest("SHA512", "seed", 64, RandomBytes.SHA512.GetBytes);
-        SpeedTest("Keccak", "seed", 64, RandomBytes.Keccak.GetBytes);
-        SpeedTest("Blake2b", "seed", 64, RandomBytes.Blake2b.GetBytes);
+        SpeedTest("Shake", "seed", 64, RandomBytes.Shake.GetBytes);
+        SpeedTest("SM3", "seed", 64, RandomBytes.SM3.GetBytes);
+        SpeedTest("Tiger", "seed", 64, RandomBytes.Tiger.GetBytes);
         SpeedTest("Whirlpool", "seed", 64, RandomBytes.Whirlpool.GetBytes);
     }
 
-    private void SpeedTest(string algoName, string seed, int length, Func<string, int, byte[]> getBytesFunc)
+    private void SpeedTest<T>(string algoName, T seed, int length, Func<T, int, byte[]> getBytesFunc)
     {
         Stopwatch watch = Stopwatch.StartNew();
 
-        for (int i = 0; i < 100000; i++)
-            getBytesFunc.Invoke(seed, length);
+        for (int i = 0; i < 50000; i++)
+            getBytesFunc.Invoke(seed, length)/*.GetBase64String().Log()*/;
 
         watch.Stop();
         Debug.Log(algoName + " => " + watch.ElapsedMilliseconds);

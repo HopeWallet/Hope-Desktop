@@ -8,7 +8,7 @@ namespace Hope.Utils.Random.Abstract
         /// Generates a series of random <see langword="byte"/>[] data using the specified algorithm.
         /// </summary>
         /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
-        /// <returns> The random SHA256 <see langword="byte"/>[] data. </returns>
+        /// <returns> The random <see langword="byte"/>[] data. </returns>
         public static byte[] GetBytes(int length) => GetBytes((byte[])null, length);
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace Hope.Utils.Random.Abstract
         /// </summary>
         /// <param name="seed"> The <see langword="string"/> seed to apply random <see langword="byte"/>[] generation. </param>
         /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
-        /// <returns> The random SHA256 <see langword="byte"/>[] data. </returns>
+        /// <returns> The random <see langword="byte"/>[] data. </returns>
         public static byte[] GetBytes(string seed, int length) => GetBytes(seed.GetUTF8Bytes(), length);
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Hope.Utils.Random.Abstract
         /// </summary>
         /// <param name="seed"> The <see langword="byte"/>[] seed to apply random <see langword="byte"/>[] generation. </param>
         /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
-        /// <returns> The random SHA256 <see langword="byte"/>[] data. </returns>
+        /// <returns> The random <see langword="byte"/>[] data. </returns>
         public static byte[] GetBytes(byte[] seed, int length) => GetBytes(seed, length, new T());
 
         /// <summary>
