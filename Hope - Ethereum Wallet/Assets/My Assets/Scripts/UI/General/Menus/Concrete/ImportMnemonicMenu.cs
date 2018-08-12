@@ -52,7 +52,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 	/// <summary>
 	/// Opens the exit confirmation popup and enables the note text
 	/// </summary>
-	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true).SetDetails(true);
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
 
 	/// <summary>
 	/// Unsubscribes this IEnterButtonObserver.

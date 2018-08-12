@@ -26,7 +26,6 @@ public sealed class WalletUnlocker : WalletLoaderBase
         {
             ExceptionManager.DisplayException(new Exception("No wallet found with that number. Please try a different wallet."));
         }
-
         else
         {
             string saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
@@ -53,6 +52,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     {
         var unlockWalletPopup = popupManager.GetPopup<UnlockWalletPopup>();
         unlockWalletPopup.DisableClosing = false;
+
         MainThreadExecutor.QueueAction(() => (unlockWalletPopup.Animator as UnlockWalletPopupAnimator)?.PasswordIncorrect());
     }
 

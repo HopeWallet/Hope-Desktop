@@ -1,7 +1,6 @@
 ﻿using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Random;
-using Org.BouncyCastle.Security;
 using System;
 using System.Threading.Tasks;
 
@@ -82,10 +81,10 @@ public sealed class WalletEncryptor : SecureObject
             saltedPasswordHash = PasswordEncryption.GetSaltedPasswordHash(passwordBase);
 
             encryptedHashes = new string[] { dataEncryptor.Encrypt(hash1), dataEncryptor.Encrypt(hash2), dataEncryptor.Encrypt(hash3), dataEncryptor.Encrypt(hash4) };
-
-            dynamicDataCache.SetData("pass", new ProtectedString(passwordBase, this));
-            dynamicDataCache.SetData("mnemonic", null);
         }
+
+        dynamicDataCache.SetData("pass", new ProtectedString(passwordBase, this));
+        dynamicDataCache.SetData("mnemonic", null);
 
         MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashes, saltedPasswordHash, encryptedSeed));
     }

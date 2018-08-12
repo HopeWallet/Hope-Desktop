@@ -32,7 +32,6 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
     /// <summary>
     /// Disposes of the advanced entropy encryptors this <see cref="AdvancedEntropyEncryptor"/> class holds and cleans all garbage.
     /// </summary>
-    [SecureCallEnd]
     public virtual void Dispose()
     {
         if (!Disposed)

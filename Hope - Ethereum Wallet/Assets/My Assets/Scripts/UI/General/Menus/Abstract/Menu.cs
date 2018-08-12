@@ -51,7 +51,7 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	/// <summary>
 	/// Opens up the exit confirmation popup.
 	/// </summary>
-	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>().SetDetails(false);
+	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>()?.SetDetails(false);
 
 	/// <summary>
 	/// Class used for creating menus dynamically.
