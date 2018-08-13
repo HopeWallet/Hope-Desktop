@@ -40,7 +40,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
 
     private async Task TryPassword(string password, string saltedHash)
     {
-        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PBKDF2PasswordHashing.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
+        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.Blake2.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
 
         if (!correctPassword)
             IncorrectPassword();

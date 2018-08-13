@@ -59,6 +59,19 @@ using Nethereum.Hex.HexTypes;
 
 public class HOPETesting : MonoBehaviour
 {
+    private void Start()
+    {
+        //string saltedHash = PasswordEncryption.Blake2.GetSaltedPasswordHash("this is my password");
+        //PasswordEncryption.SHA3.VerifyPassword("this is my password", saltedHash).Log();
+        string saltedHash = PasswordEncryption.SHA3.GetSaltedPasswordHash("password", 5, 5, 5);
+        bool isCorrectHash = PasswordEncryption.SHA3.VerifyPassword("password", saltedHash, 5, 5, 5);
+        bool isCorrectHash2 = PasswordEncryption.SHA3.VerifyPassword("paswerd", saltedHash, 22, 1, 1);
+
+        saltedHash.Log();
+        isCorrectHash.Log();
+        isCorrectHash2.Log();
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

@@ -51,30 +51,6 @@ public sealed class TokenContractManager
         return tokens.IndexOf(tokenAddress);
     }
 
-    /// <summary>
-    /// Adds a token to the list of tokens in the ContractManager.
-    /// </summary>
-    /// <param name="tokenAddress"> The token address of the token to add to the ContractManager. </param>
-    /// <param name="ignorePopup"> Whether the loading popup should be ignored. </param>
-    public void AddToken(string tokenAddress)
-    {
-        AddToken(tokenAddress, true);
-    }
-
-    public void AddToken(string tokenAddress, bool showLoadingPopup)
-    {
-        tokenAddress = tokenAddress.ToLower();
-
-        if (tokens.Contains(tokenAddress))
-            return;
-
-        if (showLoadingPopup)
-            popupManager.GetPopup<LoadingPopup>();
-
-        ERC20 erc20Token = null;
-        erc20Token = new ERC20(tokenAddress, () => AddToken(new TokenInfo(erc20Token.ContractAddress, erc20Token.Name, erc20Token.Symbol, erc20Token.Decimals.Value)));
-    }
-
     public void AddToken(TokenInfo tokenInfo)
     {
         ERC20 erc20Token = new ERC20(tokenInfo.Address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals);
