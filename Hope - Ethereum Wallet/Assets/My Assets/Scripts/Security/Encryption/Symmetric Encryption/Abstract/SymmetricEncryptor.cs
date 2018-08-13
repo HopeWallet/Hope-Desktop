@@ -1,5 +1,4 @@
 ﻿using Hope.Utils.Random;
-using Org.BouncyCastle.Security;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,8 +17,6 @@ namespace Hope.Security.Encryption.Symmetric
 
         private static readonly T Encryptor = new T();
 
-        private readonly HopeSecureRandom secureRandom;
-
         /// <summary>
         /// The key size and block size to use during the encryption.
         /// </summary>
@@ -36,7 +33,6 @@ namespace Hope.Security.Encryption.Symmetric
         /// <param name="encryptors"> The encryptors to encrypt/decrypt data with. </param>
         protected SymmetricEncryptor(params object[] encryptors) : base(encryptors)
         {
-            secureRandom = new HopeSecureRandom(encryptors);
         }
 
         #region Static Encryption Methods
@@ -171,8 +167,8 @@ namespace Hope.Security.Encryption.Symmetric
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         private byte[] InternalEncrypt(byte[] data, byte[] entropy, int iterations)
         {
-            byte[] saltStringBytes = secureRandom.NextBytes(SaltIvByteSize);
-            byte[] ivStringBytes = secureRandom.NextBytes(SaltIvByteSize);
+            byte[] saltStringBytes = RandomBytes.SHA3.GetBytes(SaltIvByteSize);
+            byte[] ivStringBytes = RandomBytes.SHA3.GetBytes(SaltIvByteSize);
 
             using (var password = new Rfc2898DeriveBytes(entropy, saltStringBytes, iterations))
             using (var symmetricKey = new A())

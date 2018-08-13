@@ -50,6 +50,7 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
 using Hope.Utils.Random;
+using Nethereum.Hex.HexTypes;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead

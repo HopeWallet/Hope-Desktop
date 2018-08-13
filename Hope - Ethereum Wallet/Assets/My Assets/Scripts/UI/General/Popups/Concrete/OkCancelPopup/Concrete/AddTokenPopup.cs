@@ -13,8 +13,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 {
     public event Action<Status> OnStatusChanged;
 
-    private static int addressId;
-
     [SerializeField] private TMP_InputField addressField, symbolField, decimalsField;
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenSymbol;
@@ -242,10 +240,10 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     /// <summary>
     /// The status of the AddTokenPopup.
-    /// Loading - The entered address is being searched for the name/symbol/decimals.
-    /// NoTokenFound - The entered address is not a full length address and cannot be searched for.
-    /// InvalidToken - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available.
-    /// ValidToken - The entered address was searched for and found, therefore the image and symbol text can be displayed.
+    /// <para> <see cref="Loading"/> - The entered address is being searched for the name/symbol/decimals. </para>
+    /// <para> <see cref="NoTokenFound"/> - The entered address is not a full length address and cannot be searched for. </para>
+    /// <para> <see cref="InvalidToken"/> - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available. </para>
+    /// <para> <see cref="ValidToken"/> - The entered address was searched for and found, therefore the image and symbol text can be displayed. </para>
     /// </summary>
     public enum Status { Loading, NoTokenFound, InvalidToken, ValidToken };
 }

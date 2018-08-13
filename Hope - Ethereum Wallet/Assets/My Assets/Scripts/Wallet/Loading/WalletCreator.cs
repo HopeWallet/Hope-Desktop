@@ -66,7 +66,7 @@ public sealed class WalletCreator : WalletLoaderBase
     [SecureCaller]
     private void TryCredentials(string basePass)
     {
-        if (string.IsNullOrEmpty(basePass) || basePass.Length < PasswordUtils.MIN_LENGTH)
+        if (string.IsNullOrEmpty(basePass) || basePass.Length < 8)
         {
             ExceptionManager.DisplayException(new Exception("Invalid wallet password. Please use a password with more than 8 characters!"));
             return;

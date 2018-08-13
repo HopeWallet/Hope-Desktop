@@ -135,7 +135,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	private void PasswordsUpdated(string password1, string password2)
 	{
 		bool passwordsMatch = password1 == password2;
-		bool validPasswordLength = password1.Length >= PasswordUtils.MIN_LENGTH;
+		bool validPasswordLength = password1.Length >= 8;
 
 		validPassword = passwordsMatch && validPasswordLength;
 

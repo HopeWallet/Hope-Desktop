@@ -7,6 +7,7 @@ public sealed partial class ERC20 : Token
 {
     public ERC20(string contractAddress, Action onTokenInitialized) : base(contractAddress, onTokenInitialized)
     {
+        // This can be removed now that we have a method that adds tokens while already having all four pieces of info.
     }
 
     public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress, name, symbol, decimals)
