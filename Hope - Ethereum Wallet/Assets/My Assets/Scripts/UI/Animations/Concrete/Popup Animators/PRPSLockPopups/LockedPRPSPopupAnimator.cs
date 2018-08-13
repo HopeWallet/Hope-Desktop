@@ -48,11 +48,7 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		lockPRPSButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-
-		for (int i = 0; i < listTransform.childCount; i++)
-			listTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.2f);
-
+		lockPRPSButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
 		lockedPRPSList.AnimateScaleX(0f, 0.25f, () => AnimateBasicElements(false));
 		topText.AnimateScaleX(0f, 0.3f);
 	}

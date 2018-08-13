@@ -82,8 +82,8 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText);
         Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
         Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
-    }
-
+	}
+	
     /// <summary>
     /// Initializes the PopupManager for the info message.
     /// </summary>
@@ -93,10 +93,10 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 		purposeErrorIcon.PopupManager = popupManager;
 	}
 
-    /// <summary>
-    /// Closes all the managers for the LockPRPSPopup and the ether balance observer.
-    /// </summary>
-    private void OnDestroy()
+	/// <summary>
+	/// Closes all the managers for the LockPRPSPopup and the ether balance observer.
+	/// </summary>
+	private void OnDestroy()
     {
         Gas.Stop();
         Amount.Stop();

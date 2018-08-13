@@ -19,12 +19,6 @@ public class SendAssetButton : ButtonBase
 	/// <summary>
 	/// Executed when the button is clicked to send the current asset.
 	/// </summary>
-	public override void ButtonLeftClicked()
-	{
-		popupManager.GetPopup<SendAssetPopup>();
-
-		Vector2 mousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-		Debug.Log(mousePosition.x + " " + mousePosition.y);
-	}
+	public override void ButtonLeftClicked() => popupManager.GetPopup<SendAssetPopup>();
 
 }

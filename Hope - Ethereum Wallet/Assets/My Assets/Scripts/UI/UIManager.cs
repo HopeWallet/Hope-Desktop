@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         this.popupManager = popupManager;
         this.menuFactoryManager = menuFactoryManager;
 
-        settings.generalSettings.blurMaterial.SetFloat("_Size", 0f);
+        settings.generalSettings.blurMaterial.SetFloat("_Size", 1.2f);
         buttonObserver.SubscribeObservable(this);
     }
 
@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         if (clickType != ClickType.Down)
             return;
 
-        if (popupManager.AnimatingPopup || popupManager.CloseActivePopup(typeof(LoadingPopup)) || popupManager.ActivePopupExists)
+        if (popupManager.AnimatingPopup || popupManager.CloseActivePopup(typeof(LoadingPopup), typeof(InfoPopup)) || popupManager.ActivePopupExists)
             return;
 
         if (closingMenu?.Animator.Animating != true)

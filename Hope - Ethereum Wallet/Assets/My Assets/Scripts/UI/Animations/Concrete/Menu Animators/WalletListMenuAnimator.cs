@@ -30,11 +30,7 @@ public class WalletListMenuAnimator : UIAnimator
 	protected override void AnimateUniqueElementsOut()
 	{
 		newWalletButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
-
-		for (int i = 0; i < Wallets.Length; i++)
-			Wallets[i].AnimateScaleX(0, 0.25f);
-
-		walletList.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		walletList.AnimateGraphicAndScale(0f, 0f, 0.25f);
 	}
 
 	/// <summary>

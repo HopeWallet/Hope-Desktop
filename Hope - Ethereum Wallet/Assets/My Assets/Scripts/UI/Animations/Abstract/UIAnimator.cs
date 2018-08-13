@@ -7,7 +7,7 @@ public abstract class UIAnimator : MonoBehaviour
 
 	[SerializeField] private GameObject blocker;
 	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
+	[SerializeField] protected GameObject form;
 	[SerializeField] private GameObject blur;
 	[SerializeField] protected GameObject formTitle;
 	[SerializeField] protected GameObject popupContainer;
@@ -20,8 +20,22 @@ public abstract class UIAnimator : MonoBehaviour
 
 	private void OnEnable()
 	{
+		if (popupContainer != null)
+		{
+			Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			Vector2 updatedPosition = new Vector2(GetUpdatedValue(Screen.width / 2, currentMousePosition.x), GetUpdatedValue(Screen.height / 2, currentMousePosition.y));
+
+			popupContainer.transform.localPosition = updatedPosition;
+			startingPosition = updatedPosition;
+		}
+
 		if (animateOnEnable)
 			AnimateEnable();
+	}
+
+	private float GetUpdatedValue(float ScreenDimensionInHalf, float currentPosition)
+	{
+		return currentPosition > ScreenDimensionInHalf ? currentPosition - ScreenDimensionInHalf: (ScreenDimensionInHalf - currentPosition) * -1f;
 	}
 
 	public bool Animating
