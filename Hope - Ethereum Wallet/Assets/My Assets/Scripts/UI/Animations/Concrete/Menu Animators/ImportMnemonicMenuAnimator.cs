@@ -8,12 +8,6 @@ using UnityEngine.UI;
 /// </summary>
 public class ImportMnemonicMenuAnimator : UIAnimator
 {
-
-	[SerializeField] private GameObject form1;
-	[SerializeField] private GameObject backButton1;
-	[SerializeField] private GameObject form2;
-	[SerializeField] private GameObject backButton2;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passphrase;
 	[SerializeField] private GameObject wordCountDropdown;
 	[SerializeField] private GameObject pastePhraseButton;
@@ -33,9 +27,6 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void Awake()
 	{
-		backButton1 = form1.transform.GetChild(0).gameObject;
-		backButton2 = form2.transform.GetChild(0).gameObject;
-
 		wordInputFields = new GameObject[24];
 		wordTextObjects = new GameObject[24];
 
@@ -52,45 +43,14 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form into view
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		form1.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
-			() => wordCountDropdown.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating)));
-
-		pastePhraseButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => importButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => AnimateRow(0, true, 12)));
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		wordCountDropdown.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f, AnimateFormsOut));
-
-		pastePhraseButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => importButton.AnimateGraphicAndScale(0f, 0f, 0.15f));
-
-		for (int i = 0; i < wordCount; i++)
-			wordInputFields[i].AnimateScaleX(0f, 0.15f);
-	}
-
-	/// <summary>
-	/// Animates both forms off the screen
-	/// </summary>
-	private void AnimateFormsOut()
-	{
-		form1.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		form2.AnimateScaleY(0f, 0.15f, FinishedAnimating);
-
-		backButton1.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		backButton2.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		throw new System.NotImplementedException();
 	}
 
 	/// <summary>
@@ -155,30 +115,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void PassphraseWordCountChanged(int value)
 	{
 		wordCount = value == 0 ? 12 : 24;
-		AnimateFormChange(wordCount == 24);
 
 		SetButtonInteractable();
-	}
-
-	/// <summary>
-	/// Changes the form to either accept a 12 word passphrase or 24 word passphrase
-	/// </summary>
-	/// <param name="bigForm"> Boolean that checks if it is a 24 word passphrase, animating this form to the bigger version </param>
-	private void AnimateFormChange(bool bigForm)
-	{
-		form1.AnimateGraphic(bigForm ? 0f : 1f, 0.2f);
-		backButton1.AnimateGraphic(bigForm ? 0f : 1f, 0.2f);
-		form2.AnimateGraphic(bigForm ? 1f : 0f, 0.2f);
-		form2.AnimateScaleY(bigForm ? 1f : 0f, 0.2f);
-		backButton2.AnimateGraphicAndScale(bigForm ? 1f : 0f, bigForm ? 1f : 0f, 0.2f);
-
-		title.AnimateTransformY(bigForm ? 283f : 173f, 0.2f);
-		passphrase.AnimateTransformY(bigForm ? 101f : -11f, 0.2f);
-		wordCountDropdown.AnimateTransformY(bigForm ? 308f : 198f, 0.2f);
-		pastePhraseButton.AnimateTransformY(bigForm ? -236f : -126f, 0.2f);
-		importButton.AnimateTransformY(bigForm ? -303f : -193f, 0.2f);
-
-		AnimateRow(bigForm ? 12 : 20, bigForm, bigForm ? 25 : 8);
 	}
 
 	/// <summary>
@@ -243,7 +181,6 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 			for (int i = 0; i < 24; i++)
 				wordInputFields[i].GetComponent<TMP_InputField>().text = "";
 
-			AnimateFormChange(wordCount != 12);
 			StartWordAnimation();
 		}
 

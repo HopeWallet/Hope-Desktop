@@ -12,9 +12,6 @@ using Hope.Utils.Ethereum;
 /// </summary>
 public class CreateMnemonicMenuAnimator : UIAnimator
 {
-
-    [SerializeField] private GameObject form;
-    [SerializeField] private GameObject title;
     [SerializeField] private GameObject passphrase;
     [SerializeField] private GameObject generateNewButton;
     [SerializeField] private GameObject copyAllButton;
@@ -53,49 +50,43 @@ public class CreateMnemonicMenuAnimator : UIAnimator
         createMnemonicMenu.copyMnemonic.onClick.AddListener(AnimateCheckMarkIcon);
     }
 
-    /// <summary>
-    /// Animates the UI elements of the form into view
-    /// </summary>
-    protected override void AnimateIn()
-    {
-        form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f, 
-			() => AnimatePassphrase(0)));
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
+	{
+		AnimatePassphrase(0);
+		generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+	}
 
-        generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));       
-    }
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
+		copyAllButton.AnimateGraphicAndScale(0f, 0f, 0.25f);
+		generateNewButton.AnimateGraphicAndScale(0f, 0f, 0.25f);
 
-    /// <summary>
-    /// Animates the UI elements of the form out of view
-    /// </summary>
-    protected override void AnimateOut()
-    {
-        title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-            () => form.AnimateGraphicAndScale(0f, 0f, 0.2f));
+		for (int i = 0; i < wordObjects.Count; i++)
+			wordObjects[i].AnimateScaleX(0f, 0.3f);
+	}
 
-        generateNewButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
-        copyAllButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
-            () => confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
-
-        for (int i = 0; i < wordObjects.Count; i++)
-            wordObjects[i].AnimateScaleX(0f, 0.2f);
-    }
-
-    /// <summary>
-    /// Animates the word objects scaleX by row
-    /// </summary>
-    /// <param name="row"> The int to be added by for each row </param>
-    private void AnimatePassphrase(int row)
+	/// <summary>
+	/// Animates the word objects scaleX by row
+	/// </summary>
+	/// <param name="row"> The int to be added by for each row </param>
+	private void AnimatePassphrase(int row)
     {
         for (int x = 0; x < 3; x++)
         {
-            if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.2f, FinishedAnimating);
+            if (x == 2 && row == 9) wordObjects[x + row].AnimateScaleX(1f, 0.08f, FinishedAnimating);
 
-            else if (x == 2) wordObjects[x + row].AnimateScaleX(1f, 0.2f, () => AnimatePassphrase(row += 3));
+            else if (x == 2) wordObjects[x + row].AnimateScaleX(1f, 0.08f, () => AnimatePassphrase(row += 3));
 
-            else wordObjects[x + row].AnimateScaleX(1f, 0.2f);
+            else wordObjects[x + row].AnimateScaleX(1f, 0.08f);
         }
     }
 

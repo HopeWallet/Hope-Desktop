@@ -12,7 +12,7 @@ public abstract class CountdownTimerAnimator : UIAnimator
 	/// <summary>
 	/// Starts the countdown timer animation
 	/// </summary>
-	protected void StartTimerAnimation() => new CountdownTimer(AnimateTimerText, SetButtonInteractables, 5f, 1f).StartCountdown();
+	protected void StartTimerAnimation() => new CountdownTimer(AnimateTimerText, SetButtonInteractable, 5f, 1f).StartCountdown();
 
 	/// <summary>
 	/// Sets the text to the next number, and animates the text in, then out
@@ -32,5 +32,5 @@ public abstract class CountdownTimerAnimator : UIAnimator
 	/// <summary>
 	/// Sets the confirm and cancel button to interactable
 	/// </summary>
-	private void SetButtonInteractables() => confirmButton.GetComponent<Button>().interactable = true;
+	private void SetButtonInteractable() => confirmButton.GetComponent<Button>().interactable = true;
 }

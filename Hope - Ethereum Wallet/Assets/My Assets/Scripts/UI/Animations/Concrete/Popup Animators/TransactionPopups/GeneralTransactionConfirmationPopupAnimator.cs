@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 public sealed class GeneralTransactionConfirmationPopupAnimator : UIAnimator
 {
-    protected override void AnimateIn()
-    {
-        FinishedAnimating();
-    }
 
-    protected override void AnimateOut()
-    {
-        FinishedAnimating();
-    }
+	protected override void AnimateUniqueElementsIn()
+	{
+		throw new NotImplementedException();
+	}
+
+	protected override void AnimateUniqueElementsOut()
+	{
+		throw new NotImplementedException();
+	}
 }

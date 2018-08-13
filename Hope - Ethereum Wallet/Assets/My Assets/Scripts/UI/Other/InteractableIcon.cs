@@ -38,8 +38,8 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
             return;
 
         int val = clickId;
-        CoroutineUtils.ExecuteAfterWait(0.1f, () => OpenPopup(val));
-    }
+		OpenPopup(val);
+	}
 
     /// <summary>
     /// Mouse entered the icon

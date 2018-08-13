@@ -241,10 +241,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1235171367683496}
-  blur: {fileID: 114181209889647560}
   dim: {fileID: 1212732089611596}
   form: {fileID: 1616275738815238}
-  title: {fileID: 1291370526039056}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
   noteText: {fileID: 1464785691805618}
   yesButton: {fileID: 1973815470250418}
   noButton: {fileID: 1252477216113728}

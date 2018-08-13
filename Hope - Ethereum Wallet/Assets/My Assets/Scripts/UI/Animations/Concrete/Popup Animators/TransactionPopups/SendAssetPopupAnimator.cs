@@ -4,12 +4,6 @@ using TMPro;
 
 public class SendAssetPopupAnimator : UIAnimator
 {
-
-	[SerializeField] private Image blur;
-	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
-
 	[SerializeField] private GameObject tokenSection;
 	[SerializeField] private GameObject advancedModeSection;
 	[SerializeField] private GameObject addressSection;
@@ -41,48 +35,15 @@ public class SendAssetPopupAnimator : UIAnimator
         advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form into view
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		blur.AnimateMaterialBlur(1f, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		title.AnimateGraphicAndScale(0.85f, 1f, 0.2f);
-		tokenSection.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		advancedModeSection.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => addressSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => amountSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => sendButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating)))));
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		sendButton.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => dim.AnimateGraphic(0f, 0.2f, FinishedAnimating)));
-		amountSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => tokenSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f)));
-		addressSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => advancedModeSection.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => blur.AnimateMaterialBlur(-1f, 0.2f)));
-
-        if (advancedMode)
-        {
-            gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-            gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-        }
-        else
-		{
-			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
-		}
-    }
+		throw new System.NotImplementedException();
+	}
 
 	/// <summary>
 	/// Advanced mode is toggled

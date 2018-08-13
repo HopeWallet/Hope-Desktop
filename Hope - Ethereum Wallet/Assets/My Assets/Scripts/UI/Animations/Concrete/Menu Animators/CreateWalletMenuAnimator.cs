@@ -7,9 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class CreateWalletMenuAnimator : UIAnimator
 {
-
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject walletNameField;
 	[SerializeField] private GameObject passwordHeader;
 	[SerializeField] private GameObject password1Field;
@@ -22,36 +19,29 @@ public class CreateWalletMenuAnimator : UIAnimator
 	[SerializeField] private TextMeshProUGUI passwordStrengthText;
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
-			() => createButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));
-
-		walletNameField.AnimateScaleX(1f, 0.15f,
-			() => passwordHeader.AnimateScaleX(1f, 0.15f,
-			() => passwordStrengthSection.AnimateScaleX(1f, 0.15f,
-			() => password1Field.AnimateScaleX(1f, 0.15f,
-			() => password2Field.AnimateScaleX(1f, 0.15f, FinishedAnimating)))));
-
+		walletNameField.AnimateScaleX(1f, 0.1f);
+		passwordHeader.AnimateScaleX(1f, 0.15f);
+		passwordStrengthSection.AnimateScaleX(1f, 0.15f);
+		password1Field.AnimateScaleX(1f, 0.2f);
+		password2Field.AnimateScaleX(1f, 0.2f);
+		createButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form out of view
+	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		createButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating)));
-
-		walletNameField.AnimateScaleX(0f, 0.15f);
-		passwordHeader.AnimateScaleX(0f, 0.15f);
-		passwordStrengthSection.AnimateScaleX(0f, 0.15f);
-		password1Field.AnimateScaleX(0f, 0.15f);
+		createButton.AnimateGraphicAndScale(0f, 0f, 0.1f);
 		password2Field.AnimateScaleX(0f, 0.15f);
+		password1Field.AnimateScaleX(0f, 0.15f);
+		passwordStrengthSection.AnimateScaleX(0f, 0.2f, () => AnimateBasicElements(false));
+		passwordHeader.AnimateScaleX(0f, 0.25f);
+		walletNameField.AnimateScaleX(0f, 0.3f);
 	}
 
 	/// <summary>

@@ -13,29 +13,14 @@ public class OpenWalletMenuAnimator : UIAnimator
 	[SerializeField] private GameObject buyButton;
 	[SerializeField] private GameObject sellButton;
 
-	/// <summary>
-	/// Animates the UI elements of the form into view
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		background.AnimateGraphic(1f, 0.15f,
-			() => assetIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => assetName.AnimateGraphicAndScale(0.85f, 1f, 0.15f,
-			() => assetAmount.AnimateGraphicAndScale(0.65f, 1f, 0.15f,
-			() => buyButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => sellButton.AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating))))));
-
-		AnimateList(assetList.transform.GetChild(0).GetChild(0), 0);
-		AnimateList(transactionList.transform.GetChild(0).GetChild(0), 0);
-		AnimateList(taskBarButtons.transform, 0);
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		FinishedAnimating();
+		throw new System.NotImplementedException();
 	}
 
 	/// <summary>
