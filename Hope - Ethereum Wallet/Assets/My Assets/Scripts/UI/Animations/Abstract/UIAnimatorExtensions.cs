@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public static class UIAnimatorExtensions
 {
-
 	/// <summary>
 	/// Animates the graphic and scale X and Y
 	/// </summary>
@@ -69,6 +68,18 @@ public static class UIAnimatorExtensions
 	}
 
 	/// <summary>
+	/// Animates a move in the X and Y axes
+	/// </summary>
+	/// <param name="gameObject"> The GameObject being animated </param>
+	/// <param name="endValue"> The endvalue to reach </param>
+	/// <param name="duration"> The duration of the animation </param>
+	public static void AnimateTransform(this GameObject gameObject, Vector2 endValue, float duration)
+	{
+		gameObject.AnimateTransformX(endValue.x, duration);
+		gameObject.AnimateTransformY(endValue.y, duration);
+	}
+
+	/// <summary>
 	/// Animates a move in the X axis
 	/// </summary>
 	/// <param name="gameObject"> The GameObject being animated </param>
@@ -88,10 +99,5 @@ public static class UIAnimatorExtensions
 	public static void AnimateTransformY(this GameObject gameObject, float endValue, float duration)
 	{
 		gameObject.transform.DOLocalMoveY(endValue, duration);
-	}
-
-	public static void AnimateMaterialBlur(this Image image, float scale, float duration, TweenCallback callback = null)
-	{
-
 	}
 }

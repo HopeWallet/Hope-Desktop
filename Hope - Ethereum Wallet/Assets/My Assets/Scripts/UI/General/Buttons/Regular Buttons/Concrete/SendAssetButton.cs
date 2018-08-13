@@ -7,7 +7,6 @@ using Zenject;
 /// </summary>
 public class SendAssetButton : ButtonBase
 {
-
     private PopupManager popupManager;
 
     /// <summary>

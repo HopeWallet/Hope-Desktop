@@ -7,9 +7,6 @@ using Zenject;
 
 public class ConfirmMnemonicMenuAnimator : UIAnimator
 {
-
-    [SerializeField] private GameObject form;
-    [SerializeField] private GameObject title;
     [SerializeField] private GameObject instructions;
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
@@ -52,55 +49,45 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
     }
 
-    /// <summary>
-    /// Sets the initial word text to what the first word should be
-    /// </summary>
-    private void Start()
-    {
-        SetWordText();
-    }
+	/// <summary>
+	/// Sets the initial word text to what the first word should be
+	/// </summary>
+	private void Start() => SetWordText();
 
-    /// <summary>
-    /// Animates the UI elements of the form into view
-    /// </summary>
-    protected override void AnimateIn()
-    {
-        form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
+	{
+		instructions.AnimateScaleX(1f, 0.15f);
+		wordInputField.AnimateScaleX(1f, 0.2f);
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		AnimateCheckboxes(0);
+	}
 
-        instructions.AnimateScaleX(1f, 0.2f,
-            () => wordInputField.AnimateScaleX(1f, 0.2f,
-            () => nextButton.AnimateScaleX(1f, 0.2f, FinishedAnimating)));
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		for (int i = 0; i < 4; i++)
+			checkBoxes[i].AnimateScale(0f, 0.15f);
 
-        AnimateCheckboxes(0, true);
-    }
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
+		wordInputField.AnimateScaleX(0f, 0.25f);
+		instructions.AnimateScaleX(0f, 0.3f);
+	}
 
-    /// <summary>
-    /// Animates the UI elements of the form out of view
-    /// </summary>
-    protected override void AnimateOut()
-    {
-        title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-            () => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
-
-        nextButton.AnimateScaleX(0f, 0.1f,
-            () => wordInputField.AnimateScaleX(0f, 0.1f,
-            () => instructions.AnimateScaleX(0f, 0.1f)));
-
-        AnimateCheckboxes(0, false);
-    }
-
-    /// <summary>
-    /// Animates the checkboxes one by one
-    /// </summary>
-    /// <param name="index"> The index of the checkboxes array being animated </param>
-    /// <param name="animatingIn"> Checks if animating the boxes on or off screen </param>
-    private void AnimateCheckboxes(int index, bool animatingIn)
+	/// <summary>
+	/// Animates the checkboxes one by one
+	/// </summary>
+	/// <param name="index"> The index of the checkboxes array being animated </param>
+	private void AnimateCheckboxes(int index)
     {
         if (index != 3)
-            checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, animatingIn ? 0.15f : 0.05f, () => AnimateCheckboxes(++index, animatingIn));
+            checkBoxes[index].AnimateScale(1f, 0.075f, () => AnimateCheckboxes(++index));
         else
-            checkBoxes[index].AnimateScaleY(animatingIn ? 1f : 0f, animatingIn ? 0.15f : 0.05f);
+            checkBoxes[index].AnimateScale(1f, 0.075f, FinishedAnimating);
     }
 
     /// <summary>

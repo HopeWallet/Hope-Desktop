@@ -6,8 +6,6 @@ using UnityEngine.UI;
 /// </summary>
 public class WalletListMenuAnimator : UIAnimator
 {
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject walletList;
 	[SerializeField] private GameObject newWalletButton;
     [SerializeField] private Scrollbar scrollbar;
@@ -18,31 +16,25 @@ public class WalletListMenuAnimator : UIAnimator
     public GameObject[] Wallets { get; set; }
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f,
-			() => newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.2f)));
-
-		walletList.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => AnimateWallets(0));
+		walletList.AnimateGraphicAndScale(1f, 1f, 0.2f, () => AnimateWallets(0));
+		newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form out of view
+	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		newWalletButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
-		walletList.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		newWalletButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
 
 		for (int i = 0; i < Wallets.Length; i++)
-            Wallets[i].AnimateScaleX(0, 0.2f, () => Wallets[i].SetActive(false));
+			Wallets[i].AnimateScaleX(0, 0.25f);
 
-		title.AnimateGraphicAndScale(0f, 0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating));
+		walletList.AnimateGraphicAndScale(0f, 0f, 0.3f);
 	}
 
 	/// <summary>
@@ -61,9 +53,8 @@ public class WalletListMenuAnimator : UIAnimator
 			FinishedAnimating();
 		}
 		if (index == (Wallets.Length - 1))
-            Wallets[index].AnimateScaleX(1f, 0.15f, FinishedAnimating);
+            Wallets[index].AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
-            Wallets[index].AnimateScaleX(1f, 0.15f, () => AnimateWallets(++index));
+            Wallets[index].AnimateScaleX(1f, 0.1f, () => AnimateWallets(++index));
 	}
-
 }

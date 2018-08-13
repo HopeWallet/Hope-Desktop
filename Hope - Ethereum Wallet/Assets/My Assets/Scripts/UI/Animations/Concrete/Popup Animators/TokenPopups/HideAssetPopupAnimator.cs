@@ -3,16 +3,14 @@ using UnityEngine.UI;
 
 public class HideAssetPopupAnimator : UIAnimator
 {
-
-	[SerializeField] private Image blur;
-	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
 	[SerializeField] private GameObject mainText;
 	[SerializeField] private GameObject subText;
 	[SerializeField] private GameObject tokenIcon;
 	[SerializeField] private GameObject tokenSymbol;
 	[SerializeField] private GameObject yesButton;
 	[SerializeField] private GameObject noButton;
+
+	//I THINK YOU CAN DELETE THIS POPUP!!?!?!?!?!?!??!!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?
 
 	/// <summary>
 	/// Initializes the button listeners
@@ -24,40 +22,19 @@ public class HideAssetPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// No button is clicked
 	/// </summary>
-	protected override void AnimateIn()
-	{
-		blur.AnimateMaterialBlur(1f, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f,
-			() => tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => tokenSymbol.AnimateGraphicAndScale(1f, 0.85f, 0.15f,
-			() => yesButton.AnimateGraphicAndScale(1f, 1f, 0.1f,
-			() => noButton.AnimateGraphicAndScale(1f, 1f, 0.1f, FinishedAnimating)))));
+	private void NoButtonClicked() => AnimateDisable();
 
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => mainText.AnimateScaleX(1f, 0.15f,
-			() => subText.AnimateScaleX(1f, 0.15f)));
+	protected override void AnimateUniqueElementsIn()
+	{
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		subText.AnimateScaleX(0f, 0.1f,
-			() => mainText.AnimateScaleX(0f, 0.1f,
-			() => blur.AnimateMaterialBlur(-1f, 0.2f)));
-
-		yesButton.AnimateGraphicAndScale(0f, 0f, 0.1f,
-			() => tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.1f,
-			() => dim.AnimateGraphic(0f, 0.2f)));
-
-		noButton.AnimateGraphicAndScale(0f, 0f, 0.1f,
-			() => tokenSymbol.AnimateGraphicAndScale(0f, 0f, 0.1f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating)));
+		throw new System.NotImplementedException();
 	}
-
 
 	/// <summary>
 	/// Yes button is clicked
@@ -67,9 +44,4 @@ public class HideAssetPopupAnimator : UIAnimator
 		//Disable the token in the AssetList
 		AnimateDisable();
 	}
-
-	/// <summary>
-	/// No button is clicked
-	/// </summary>
-	private void NoButtonClicked() => AnimateDisable();
 }

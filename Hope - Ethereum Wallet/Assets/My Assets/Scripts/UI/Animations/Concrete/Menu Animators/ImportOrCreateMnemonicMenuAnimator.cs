@@ -5,39 +5,30 @@
 /// </summary>
 public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 {
-
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject importWalletButton;
 	[SerializeField] private GameObject importWalletDesc;
 	[SerializeField] private GameObject createWalletButton;
 	[SerializeField] private GameObject createWalletDesc;
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateGraphicAndScale(0.85f, 1f, 0.2f));
-
-		importWalletButton.AnimateScaleX(1f, 0.2f,
-			() => importWalletDesc.AnimateScaleX(1f, 0.2f,
-			() => createWalletButton.AnimateScaleX(1f, 0.2f,
-			() => createWalletDesc.AnimateScaleX(1f, 0.2f, FinishedAnimating))));
+		importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		importWalletDesc.AnimateScaleX(1f, 0.2f);
+		createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		createWalletDesc.AnimateScaleX(1f, 0.3f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form out of view
+	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		createWalletDesc.AnimateScaleX(0f, 0.1f,
-			() => createWalletButton.AnimateScaleX(0f, 0.1f));
-
-		importWalletDesc.AnimateScaleX(0f, 0.1f,
-			() => importWalletButton.AnimateScaleX(0f, 0.1f,
-			() => title.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating))));
+		createWalletDesc.AnimateScaleX(0f, 0.15f);
+		createWalletButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
+		importWalletDesc.AnimateScaleX(0f, 0.25f);
+		importWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 	}
 }

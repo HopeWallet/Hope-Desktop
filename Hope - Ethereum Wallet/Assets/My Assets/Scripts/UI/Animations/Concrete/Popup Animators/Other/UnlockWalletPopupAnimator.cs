@@ -7,11 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class UnlockWalletPopupAnimator : UIAnimator
 {
-
-	[SerializeField] private Image blur;
-	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject loadingIcon;
@@ -40,33 +35,17 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form into view.
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		blur.AnimateMaterialBlur(1f, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateScaleX(1f, 0.1f, 
-			() => passwordInputField.AnimateScaleX(1f, 0.1f,
-			() => signInButton.AnimateScaleX(1f, 0.1f, FinishedAnimating))));
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view.
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		title.AnimateScaleX(0f, 0.2f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(-1f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); }));
+		throw new System.NotImplementedException();
 
-		passwordInputField.AnimateScaleX(0f, 0.15f);
-		signInButton.AnimateScaleX(0f, 0.15f);
-
-		if (errorIconVisible) AnimateErrorIcon(false);
-		if (loadingIcon.activeInHierarchy) VerifyingPassword();
+		//	if (errorIconVisible) AnimateErrorIcon(false);
+		//if (loadingIcon.activeInHierarchy) VerifyingPassword();
 	}
 
 	/// <summary>

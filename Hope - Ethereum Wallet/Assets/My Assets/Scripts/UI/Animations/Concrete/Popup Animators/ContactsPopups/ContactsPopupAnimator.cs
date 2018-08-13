@@ -3,11 +3,6 @@ using UnityEngine.UI;
 
 public class ContactsPopupAnimator : UIAnimator
 {
-
-	[SerializeField] private Image blur;
-	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject addContactButton;
 	[SerializeField] private GameObject sortBySection;
 	[SerializeField] private GameObject searchSection;
@@ -21,40 +16,14 @@ public class ContactsPopupAnimator : UIAnimator
 	/// </summary>
 	private void Start() => contactsTransform = contactsList.transform.GetChild(0).GetChild(0);
 
-	/// <summary>
-	/// Animates the UI elements of the form into view
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		blur.AnimateMaterialBlur(0.25f, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f,
-			() => addContactButton.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => searchSection.AnimateScaleX(1f, 0.15f,
-			() => confirmButton.AnimateGraphicAndScale(1f, 1f, 0.15f))));
-
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => title.AnimateScaleX(1f, 0.15f,
-			() => sortBySection.AnimateScaleX(1f, 0.15f,
-			() => contactsList.AnimateScaleX(1f, 0.15f,
-			() => AnimateContacts(0)))));
+		throw new System.NotImplementedException();
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		for (int i = 0; i < contactsTransform.childCount; i++)
-			contactsTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.2f);
-
-		contactsList.AnimateScaleX(0f, 0.15f,
-			() => searchSection.AnimateScaleX(0f, 0.15f,
-			() => addContactButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f))));
-		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f,
-			() => sortBySection.AnimateScaleX(0f, 0.15f,
-			() => title.AnimateScaleX(0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(-0.25f, 0.15f); dim.AnimateGraphic(0f, 0.15f, FinishedAnimating); })));
+		throw new System.NotImplementedException();
 	}
 
 	/// <summary>

@@ -5,11 +5,6 @@ using Hope.Utils.Ethereum;
 
 public class AddOrEditContactPopupAnimator : UIAnimator
 {
-
-	[SerializeField] private Image blur;
-	[SerializeField] private GameObject dim;
-	[SerializeField] private GameObject form;
-	[SerializeField] private GameObject title;
 	[SerializeField] private GameObject nameSection;
 	[SerializeField] private GameObject addressSection;
 	[SerializeField] private GameObject addContactButton;
@@ -43,46 +38,39 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form into view
+	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		blur.AnimateMaterialBlur(0.25f, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f,
-		() => title.AnimateScaleX(1f, 0.15f,
-		() => nameSection.AnimateScaleX(1f, 0.15f,
-		() => addressSection.AnimateScaleX(1f, 0.15f,
-		() => AnimateMainButton(true)))));
+		nameSection.AnimateScaleX(1f, 0.2f);
+		addressSection.AnimateScaleX(1f, 0.25f);
+		AnimateMainButton(true);
 	}
 
 	/// <summary>
-	/// Animates the UI elements of the form out of view
+	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
 		AnimateMainButton(false);
-
-		nameSection.AnimateScaleX(0f, 0.15f,
-			() => title.AnimateScaleX(0f, 0.15f,
-			() => { blur.AnimateMaterialBlur(-0.25f, 0.2f); dim.AnimateGraphic(0f, 0.15f); }));
-		addressSection.AnimateScaleX(0f, 0.15f,
-			() => addressSection.AnimateScaleX(0f, 0.15f,
-			() => form.AnimateGraphicAndScale(0f, 0f, 0.15f, FinishedAnimating)));
+		addressSection.AnimateScaleX(0f, 0.25f, () => AnimateBasicElements(false));
+		nameSection.AnimateScaleX(0f, 0.3f);
 	}
 
 	/// <summary>
 	/// Animates the main button, depending on the boolean addingContact
 	/// </summary>
-	/// <param name="animatingIn"> Checks if animating the button in or out </param>
-	private void AnimateMainButton(bool animatingIn)
+	/// <param name="animateIn"> Checks if animating the button in or out </param>
+	private void AnimateMainButton(bool animateIn)
 	{
-		if (AddingContact)
-			addContactButton.AnimateScaleX(animatingIn ? 1f : 0f, 0.15f);
-		else
-			confirmButton.AnimateScaleX(animatingIn ? 1f : 0f, 0.15f);
+		float endValue = animateIn ? 1f : 0f;
 
-		if (animatingIn) FinishedAnimating();
+		if (AddingContact)
+			addContactButton.AnimateGraphicAndScale(endValue, endValue, animateIn ? 0.3f : 0.2f);
+		else
+			confirmButton.AnimateGraphicAndScale(endValue, endValue, animateIn ? 0.3f : 0.2f);
+
+		if (animateIn) FinishedAnimating();
 	}
 
 	/// <summary>

@@ -6,33 +6,28 @@
 public sealed class InfoPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject background;
-	[SerializeField] private GameObject title;
+	[SerializeField] private GameObject infoTitle;
 	[SerializeField] private GameObject bodyText;
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
-	/// <summary>
-	/// Animates the UI elements of the form into view
-	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
+		background.AnimateGraphicAndScale(1f, 1f, 0.05f);
+		infoTitle.AnimateGraphicAndScale(0.84f, 1f, 0.1f);
+		bodyText.AnimateGraphicAndScale(0.64f, 1f, 0.1f, FinishedAnimating);
+
 		infoIcon.AnimateGraphicAndScale(1f, 1f, 0.1f);
 		errorIcon.AnimateGraphicAndScale(1f, 1f, 0.1f);
-
-		background.AnimateGraphicAndScale(1f, 1f, 0.1f);
-		title.AnimateGraphicAndScale(0.85f, 1f, 0.1f);
-		bodyText.AnimateGraphicAndScale(0.65f, 1f, 0.1f, FinishedAnimating);
 	}
 
-	/// <summary>
-	/// Animates the UI elements of the form out of view
-	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		infoIcon.AnimateGraphicAndScale(0f, 0f, 0.1f);
-		errorIcon.AnimateGraphicAndScale(0f, 0f, 0.1f);
-		bodyText.AnimateGraphicAndScale(0f, 0f, 0.1f);
-		title.AnimateGraphicAndScale(0f, 0f, 0.1f);
-		background.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
+		bodyText.AnimateGraphicAndScale(0f, 0f, 0.05f);
+		infoTitle.AnimateGraphicAndScale(0f, 0f, 0.05f);
+		background.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateBasicElements(false));
+
+		infoIcon.AnimateGraphicAndScale(0f, 0f, 0.05f);
+		errorIcon.AnimateGraphicAndScale(0f, 0f, 0.05f);
 	}
 }

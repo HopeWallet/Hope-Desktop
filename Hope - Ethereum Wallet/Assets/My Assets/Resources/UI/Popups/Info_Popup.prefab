@@ -168,7 +168,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 2
   m_textAlignment: 513
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
@@ -327,8 +327,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 0}
+  dim: {fileID: 0}
+  form: {fileID: 0}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
   background: {fileID: 1190213331531074}
-  title: {fileID: 1423971909711646}
+  infoTitle: {fileID: 1423971909711646}
   bodyText: {fileID: 1151278633860732}
   infoIcon: {fileID: 1408714184898752}
   errorIcon: {fileID: 1652470292717156}
@@ -385,7 +389,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_textAlignment: 513
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
