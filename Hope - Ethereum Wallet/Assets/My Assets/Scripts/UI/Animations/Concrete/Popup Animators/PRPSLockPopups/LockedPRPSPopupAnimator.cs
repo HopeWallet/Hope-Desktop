@@ -33,19 +33,28 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	/// </summary>
 	private void Awake() => listTransform = lockedPRPSList.transform.GetChild(0).GetChild(0);
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		throw new NotImplementedException();
-
-		//AnimateList(0);
+		topText.AnimateScaleX(1f, 0.2f);
+		lockedPRPSList.AnimateScaleX(1f, 0.25f, () => AnimateList(0));
+		lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		throw new NotImplementedException();
+		lockPRPSButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
 
-		//for (int i = 0; i<listTransform.childCount; i++)
-		//listTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.15f);
+		for (int i = 0; i < listTransform.childCount; i++)
+			listTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.2f);
+
+		lockedPRPSList.AnimateScaleX(0f, 0.25f, () => AnimateBasicElements(false));
+		topText.AnimateScaleX(0f, 0.3f);
 	}
 
 	public void AnimateWalletIn(GameObject walletToAnimate)
@@ -78,9 +87,9 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			FinishedAnimating();
 		}
 		else if (index == listTransform.childCount - 1)
-			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, FinishedAnimating);
+			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
-			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.15f, () => AnimateList(++index));
+			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, () => AnimateList(++index));
 	}
 
 	/// <summary>
