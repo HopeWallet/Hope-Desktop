@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptimizedScrollview : MonoBehaviour
+public sealed class OptimizedScrollview : MonoBehaviour
 {
     private readonly List<GameObject> items = new List<GameObject>();
 

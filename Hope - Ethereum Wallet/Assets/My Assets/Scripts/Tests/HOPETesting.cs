@@ -50,6 +50,7 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
 using Hope.Utils.Random;
+using Nethereum.Hex.HexTypes;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -58,6 +59,16 @@ using Hope.Utils.Random;
 
 public class HOPETesting : MonoBehaviour
 {
+
+    private void Start()
+    {
+        RandomString.Blake2.GetString("test", 32).Log();
+        RandomString.SHA1.GetString().Log();
+        RandomString.SHA3.GetString().Log();
+        RandomString.Tiger.GetString().Log();
+        RandomString.Whirlpool.GetString().Log();
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
