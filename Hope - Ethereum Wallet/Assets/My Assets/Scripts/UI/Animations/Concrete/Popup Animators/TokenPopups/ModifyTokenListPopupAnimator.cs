@@ -34,10 +34,6 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	protected override void AnimateUniqueElementsOut()
 	{
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
-
-		for (int i = 0; i < tokenTransform.childCount; i++)
-			tokenTransform.GetChild(i).gameObject.AnimateScaleX(0f, 0.2f);
-
 		tokenList.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		customTokenButton.AnimateScaleX(0f, 0.3f);
 		searchSection.AnimateScaleX(0f, 0.3f);

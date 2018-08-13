@@ -15,7 +15,7 @@ public class LockPRPSPopupAnimator : UIAnimator
 
     private void Start()
     {
-        LockPRPSPopup lockPRPSPopup = GetComponent<LockPRPSPopup>();
+		LockPRPSPopup lockPRPSPopup = GetComponent<LockPRPSPopup>();
         lockPRPSPopup.Amount.OnLockAmountChanged += () => AnimateErrorIcon(purposeErrorIcon, lockPRPSPopup.Amount.IsValid || lockPRPSPopup.Amount.IsEmpty);
     }
 

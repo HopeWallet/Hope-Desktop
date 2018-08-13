@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using UnityEngine;
+using Zenject;
 
 /// <summary>
 /// Class used for the Lock Purpose button in the main OpenWalletMenu.
@@ -25,7 +26,7 @@ public sealed class LockPRPSButton : ButtonBase
     /// </summary>
     public override void ButtonLeftClicked()
     {
-        if (lockedPRPSManager.UnfulfilledItems?.Count > 0)
+		if (lockedPRPSManager.UnfulfilledItems?.Count > 0)
             popupManager.GetPopup<LockedPRPSPopup>();
         else
             popupManager.GetPopup<LockPRPSPopup>();
