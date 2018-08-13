@@ -168,7 +168,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_textAlignment: 513
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
@@ -331,6 +331,7 @@ MonoBehaviour:
   form: {fileID: 0}
   blur: {fileID: 0}
   formTitle: {fileID: 0}
+  popupContainer: {fileID: 0}
   background: {fileID: 1190213331531074}
   infoTitle: {fileID: 1423971909711646}
   bodyText: {fileID: 1151278633860732}
