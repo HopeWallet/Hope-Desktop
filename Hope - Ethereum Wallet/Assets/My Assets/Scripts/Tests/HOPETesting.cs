@@ -59,16 +59,6 @@ using Nethereum.Hex.HexTypes;
 
 public class HOPETesting : MonoBehaviour
 {
-
-    private void Start()
-    {
-        RandomString.Blake2.GetString("test", 32).Log();
-        RandomString.SHA1.GetString().Log();
-        RandomString.SHA3.GetString().Log();
-        RandomString.Tiger.GetString().Log();
-        RandomString.Whirlpool.GetString().Log();
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

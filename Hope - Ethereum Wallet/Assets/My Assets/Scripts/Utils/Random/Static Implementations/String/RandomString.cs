@@ -1,13 +1,13 @@
 ﻿using Hope.Utils.Random.Abstract;
 using Org.BouncyCastle.Crypto.Digests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hope.Utils.Random
 {
+    using FastRandom = System.Random;
+
+    /// <summary>
+    /// Utility class used for generating random string data.
+    /// </summary>
     public static class RandomString
     {
         /// <summary>
@@ -93,5 +93,55 @@ namespace Hope.Utils.Random
         /// This is a very niche algorithm, and has not seen wide use while being fairly secure.
         /// </summary>
         public sealed class Whirlpool : RandomStringBase<WhirlpoolDigest> { }
+
+        /// <summary>
+        /// Class which generates a random string using an insecure, yet very fast algorithm. 
+        /// <para> Should only be used if the random string does not need to be secure. </para>
+        /// </summary>
+        public static class Fast
+        {
+            /// <summary>
+            /// Generates a random <see langword="string"/> using a fast, nonsecure algorithm.
+            /// <para> Uses a default length of 16. </para>
+            /// </summary>
+            /// <returns> The randomly generated <see langword="string"/>. </returns>
+            public static string GetString() => GetString(16);
+
+            /// <summary>
+            /// Generates a random <see langword="string"/> using a fast, nonsecure algorithm and a seed.
+            /// <para> Uses a default length of 16. </para>
+            /// </summary>
+            /// <param name="seed"> The seed to apply to the random <see langword="string"/> generation. </param>
+            /// <returns> The randomly generated <see langword="string"/>. </returns>
+            public static string GetString(int? seed) => GetString(seed, 16);
+
+            /// <summary>
+            /// Generates a random <see langword="string"/> of a given length using a fast, nonsecure algorithm.
+            /// </summary>
+            /// <param name="length"> The length of the random <see langword="string"/>. </param>
+            /// <returns> The randomly generated <see langword="string"/> </returns>
+            public static string GetString(int length) => GetString(null, length);
+
+            /// <summary>
+            /// Generates a random <see langword="string"/> of a given length using a fast, nonsecure algorithm and a seed.
+            /// </summary>
+            /// <param name="seed"> The seed to apply to the random <see langword="string"/> generation. </param>
+            /// <param name="length"> The length of the random <see langword="string"/>. </param>
+            /// <returns> The randomly generated <see langword="string"/>. </returns>
+            public static string GetString(int? seed, int length) => InternalGetString(seed, length);
+
+            /// <summary>
+            /// Generates a random <see langword="string"/> of a given length using a <see cref="FastRandom"/> instance and an <see langword="int"/> seed.
+            /// </summary>
+            /// <param name="seed"> The seed to apply to the random <see langword="string"/> generation. </param>
+            /// <param name="length"> The length of the random <see langword="string"/>. </param>
+            /// <returns> The randomly generated <see langword="string"/>. </returns>
+            private static string InternalGetString(int? seed, int length)
+            {
+                byte[] bytes;
+                (seed.HasValue ? new FastRandom(seed.Value) : new FastRandom()).NextBytes(bytes = new byte[length]);
+                return bytes.GetBase64String().LimitEnd(length);
+            }
+        }
     }
 }

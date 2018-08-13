@@ -116,7 +116,7 @@ namespace Hope.Utils.Random
             public static byte[] GetBytes(int seed, int length) => InternalGetBytes(seed, length);
 
             /// <summary>
-            /// Generates a series of random <see langword="byte"/>[] data using a specific <see cref="IDigest"/> and an additional <see langword="byte"/>[] seed.
+            /// Generates a series of random <see langword="byte"/>[] data using a <see cref="FastRandom"/> instance and an additional <see langword="int"/> seed.
             /// </summary>
             /// <param name="seed"> The <see langword="int"/> seed to apply random <see langword="byte"/>[] generation. </param>
             /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>

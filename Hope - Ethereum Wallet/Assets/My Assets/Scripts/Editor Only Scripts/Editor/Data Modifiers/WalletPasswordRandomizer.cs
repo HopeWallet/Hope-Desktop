@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Utils.Random;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -9,7 +10,6 @@ using UnityEngine;
 /// </summary>
 public static class WalletPasswordRandomizer
 {
-
     private static PlayerPrefPassword PasswordObj;
 
     private static int[] SavedOps;
@@ -55,8 +55,7 @@ public static class WalletPasswordRandomizer
         SavedOps = new int[ops.Length];
         Array.Copy(ops, SavedOps, ops.Length);
 
-        System.Random random = new System.Random();
-        PasswordObj.ops = ops.OrderBy(x => random.Next()).ToArray();
+        PasswordObj.ops = ops.OrderBy(_ => RandomInt.Fast.GetInt()).ToArray();
     }
 
     /// <summary>
@@ -71,7 +70,7 @@ public static class WalletPasswordRandomizer
         Array.Copy(keys, SavedKeys, keys.Length);
 
         for (int i = 0; i < keys.Length; i++)
-            keys[i] = PasswordUtils.GenerateRandomPassword();
+            keys[i] = RandomString.SHA3.GetString(RandomInt.Fast.GetInt(8, 17));
     }
 
     /// <summary>
