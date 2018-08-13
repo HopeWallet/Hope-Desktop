@@ -14,6 +14,7 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
 
     private TradableAssetManager tradableAssetManager;
     private TokenContractManager tokenContractManager;
+    private TokenListManager tokenListManager;
     private DUBI dubiContract;
 
     /// <summary>
@@ -21,12 +22,18 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     /// </summary>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    /// <param name="tokenListManager"> The active TokenListManager. </param>
     /// <param name="dubiContract"> The active DUBI contract. </param>
     [Inject]
-    public void Construct(TradableAssetManager tradableAssetManager, TokenContractManager tokenContractManager, DUBI dubiContract)
+    public void Construct(
+        TradableAssetManager tradableAssetManager,
+        TokenContractManager tokenContractManager,
+        TokenListManager tokenListManager,
+        DUBI dubiContract)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tokenContractManager = tokenContractManager;
+        this.tokenListManager = tokenListManager;
         this.dubiContract = dubiContract;
     }
 
@@ -55,6 +62,13 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     protected override void OnOkClicked()
     {
         if (!tradableAssetManager.TradableAssets.Any(pair => pair.Value.AssetAddress.EqualsIgnoreCase(dubiContract.ContractAddress)))
-            tokenContractManager.AddToken(dubiContract.ContractAddress, false);
+        {
+            if (tokenListManager.ContainsToken(dubiContract.ContractAddress))
+                tokenListManager.UpdateToken(dubiContract.ContractAddress, true, true);
+            else
+                tokenListManager.AddToken(dubiContract.ContractAddress, "Decentralized Universal Basic Income", "DUBI", 18, true, true);
+
+            tokenContractManager.AddToken(tokenListManager.GetToken(dubiContract.ContractAddress).TokenInfo);
+        }
     }
 }

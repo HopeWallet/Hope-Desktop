@@ -59,6 +59,12 @@ using Nethereum.Hex.HexTypes;
 
 public class HOPETesting : MonoBehaviour
 {
+    private void Start()
+    {
+        string hash = PBKDF2PasswordHashing.GetSaltedPasswordHash("this is my password");
+        Debug.Log(hash);
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
