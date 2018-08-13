@@ -37,15 +37,17 @@ public class UnlockWalletPopupAnimator : UIAnimator
 
 	protected override void AnimateUniqueElementsIn()
 	{
-		throw new System.NotImplementedException();
+		passwordInputField.AnimateScaleX(1f, 0.15f);
+		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
 	protected override void AnimateUniqueElementsOut()
 	{
-		throw new System.NotImplementedException();
+		signInButton.AnimateGraphicAndScale(0f, 0f, 0.15f, () => AnimateBasicElements(false));
+		passwordInputField.AnimateScaleX(0f, 0.25f);
 
-		//	if (errorIconVisible) AnimateErrorIcon(false);
-		//if (loadingIcon.activeInHierarchy) VerifyingPassword();
+		if (errorIconVisible) AnimateErrorIcon(false);
+		if (loadingIcon.activeInHierarchy) VerifyingPassword();
 	}
 
 	/// <summary>
