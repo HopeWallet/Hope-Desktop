@@ -594,6 +594,7 @@ MonoBehaviour:
   form: {fileID: 1901696814752814}
   blur: {fileID: 0}
   formTitle: {fileID: 1183188028345492}
+  popupContainer: {fileID: 0}
   importWalletButton: {fileID: 1961381870567516}
   importWalletDesc: {fileID: 1928413761496124}
   createWalletButton: {fileID: 1936300157801342}

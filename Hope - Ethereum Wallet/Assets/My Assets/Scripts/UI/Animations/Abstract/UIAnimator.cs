@@ -18,6 +18,8 @@ public abstract class UIAnimator : MonoBehaviour
 
 	private bool animating;
 
+	// COMMENT THIS CLASSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	private void OnEnable()
 	{
 		if (popupContainer != null)

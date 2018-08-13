@@ -929,6 +929,7 @@ MonoBehaviour:
   form: {fileID: 1185842791821108}
   blur: {fileID: 0}
   formTitle: {fileID: 1877274499508246}
+  popupContainer: {fileID: 0}
   walletNameField: {fileID: 1152292358957426}
   passwordHeader: {fileID: 1523661909573088}
   password1Field: {fileID: 1962811763491760}
