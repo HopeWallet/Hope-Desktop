@@ -63,9 +63,9 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 
 
 	/// <summary>
-	/// Animates the unique elements of this form out of view
+	/// Resets the unique elements of the form back to the starting positions
 	/// </summary>
-	protected override void AnimateUniqueElementsOut()
+	protected override void ResetElementValues()
 	{
 		FinishedAnimating();
 

@@ -18,8 +18,15 @@ public abstract class UIAnimator : MonoBehaviour
 
 	private bool animating;
 
-	// COMMENT THIS CLASSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public bool Animating
+	{
+		get { return animating; }
+		protected set { ChangeAnimationState(value); }
+	}
 
+	/// <summary>
+	/// Sets the starting position if it is a popup, and starts to animate in
+	/// </summary>
 	private void OnEnable()
 	{
 		if (popupContainer != null)
@@ -35,17 +42,21 @@ public abstract class UIAnimator : MonoBehaviour
 			AnimateEnable();
 	}
 
+	/// <summary>
+	/// Gets the updates position of the form compared to the mouse click
+	/// </summary>
+	/// <param name="ScreenDimensionInHalf"> The screen dimension divided by 2 </param>
+	/// <param name="currentPosition"> The current position of the mouse on a specific axis </param>
+	/// <returns></returns>
 	private float GetUpdatedValue(float ScreenDimensionInHalf, float currentPosition)
 	{
 		return currentPosition > ScreenDimensionInHalf ? currentPosition - ScreenDimensionInHalf : (ScreenDimensionInHalf - currentPosition) * -1f;
 	}
 
-	public bool Animating
-	{
-		get { return animating; }
-		protected set { ChangeAnimationState(value); }
-	}
-
+	/// <summary>
+	/// Animates the form in
+	/// </summary>
+	/// <param name="onAnimationFinished"> The action to be called after the animation finishes </param>
 	public void AnimateEnable(Action onAnimationFinished = null)
 	{
 		this.onAnimationFinished = onAnimationFinished;
@@ -54,6 +65,10 @@ public abstract class UIAnimator : MonoBehaviour
 		AnimateBasicElements(true);
 	}
 
+	/// <summary>
+	/// Animates the form out
+	/// </summary>
+	/// <param name="onAnimationFinished"> The action to be called after the animation finishes </param>
 	public void AnimateDisable(Action onAnimationFinished = null)
 	{
 		this.onAnimationFinished = onAnimationFinished;
@@ -62,6 +77,10 @@ public abstract class UIAnimator : MonoBehaviour
 		AnimateBasicElements(false);
 	}
 
+	/// <summary>
+	/// Animates the basic elements of the form, such as the dim, blur, form and title
+	/// </summary>
+	/// <param name="animateIn"> Whether animating the elements in or out </param>
 	protected void AnimateBasicElements(bool animateIn)
 	{
 		if (popupContainer != null)
@@ -81,6 +100,11 @@ public abstract class UIAnimator : MonoBehaviour
 			OnCompleteAction(animateIn);
 	}
 
+	/// <summary>
+	/// On the completion of the elements finishing the animation, it calls other methods to either finish the animation,
+	/// or animate the unique elements of the form.
+	/// </summary>
+	/// <param name="animateIn"></param>
 	private void OnCompleteAction(bool animateIn)
 	{
 		if (animateIn)
@@ -90,22 +114,35 @@ public abstract class UIAnimator : MonoBehaviour
 		else
 		{
 			if (popupContainer == null)
-				AnimateUniqueElementsOut();
+				ResetElementValues();
 			else
 				FinishedAnimating();
 		}
 	}
 
+	/// <summary>
+	/// Animate the unique elements of the form in
+	/// </summary>
 	protected abstract void AnimateUniqueElementsIn();
 
-	protected virtual void AnimateUniqueElementsOut() { }
-
+	/// <summary>
+	/// Resets the unique elements of the form back to the starting positions
+	/// </summary>
+	protected virtual void ResetElementValues() { }
+	
+	/// <summary>
+	/// Changes the animation state and calls the onAnimationFinished method
+	/// </summary>
 	protected void FinishedAnimating()
 	{
 		ChangeAnimationState(false);
 		onAnimationFinished?.Invoke();
 	}
 
+	/// <summary>
+	/// Changes the animation state
+	/// </summary>
+	/// <param name="state"> Whether an animation is currently underway or not </param>
 	private void ChangeAnimationState(bool state)
 	{
 		if (blocker != null)
