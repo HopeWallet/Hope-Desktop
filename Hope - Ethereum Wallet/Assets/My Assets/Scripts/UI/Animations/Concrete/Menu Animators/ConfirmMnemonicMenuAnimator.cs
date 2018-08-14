@@ -66,6 +66,21 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
 	}
 
 	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+
+		for (int i = 0; i < 4; i++)
+			checkBoxes[i].SetScale(Vector2.zero);
+
+		wordInputField.SetScale(new Vector2(0f, 1f));
+		instructions.SetScale(new Vector2(0f, 1f));
+		nextButton.SetGraphicAndScale(Vector2.zero);
+	}
+
+	/// <summary>
 	/// Animates the checkboxes one by one
 	/// </summary>
 	/// <param name="index"> The index of the checkboxes array being animated </param>

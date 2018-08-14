@@ -7179,11 +7179,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1099519179730166}
-  form1: {fileID: 1549816745511152}
-  backButton1: {fileID: 1442137658739292}
-  form2: {fileID: 1810624404519658}
-  backButton2: {fileID: 1605155548371542}
-  title: {fileID: 1739541231758090}
+  dim: {fileID: 0}
+  form: {fileID: 0}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
+  popupContainer: {fileID: 0}
   passphrase: {fileID: 1629886777596512}
   wordCountDropdown: {fileID: 1056937410708042}
   pastePhraseButton: {fileID: 1069082193166164}

@@ -32,6 +32,21 @@ public class CreateWalletMenuAnimator : UIAnimator
 	}
 
 	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+
+		walletNameField.SetScale(new Vector2(0f, 1f));
+		passwordHeader.SetScale(new Vector2(0f, 1f));
+		passwordStrengthSection.SetScale(new Vector2(0f, 1f));
+		password1Field.SetScale(new Vector2(0f, 1f));
+		password2Field.SetScale(new Vector2(0f, 1f));
+		createButton.SetGraphicAndScale(Vector2.zero);
+	}
+
+	/// <summary>
 	/// Animates the password strength bar depending on what the input is in the first password field
 	/// </summary>
 	/// <param name="password"> The text in the first password field </param>

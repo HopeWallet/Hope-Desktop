@@ -20,4 +20,17 @@ public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 		createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		createWalletDesc.AnimateScaleX(1f, 0.3f, FinishedAnimating);
 	}
+
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+
+		importWalletButton.SetGraphicAndScale(Vector2.zero);
+		importWalletDesc.SetScale(new Vector2(0f, 1f));
+		createWalletButton.SetGraphicAndScale(Vector2.zero);
+		createWalletDesc.SetScale(new Vector2(0f, 1f));
+	}
 }

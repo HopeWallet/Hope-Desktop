@@ -100,4 +100,20 @@ public static class UIAnimatorExtensions
 	{
 		gameObject.transform.DOLocalMoveY(endValue, duration);
 	}
+
+	public static void SetGraphicAndScale(this GameObject gameObject, Vector2 endValueScale)
+	{
+		gameObject.SetScale(endValueScale);
+		gameObject.SetGraphic();
+	}
+
+	public static void SetScale(this GameObject gameObject, Vector2 endValue)
+	{
+		gameObject.transform.localScale = endValue;
+	}
+
+	public static void SetGraphic(this GameObject gameObject)
+	{
+		gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+	}
 }

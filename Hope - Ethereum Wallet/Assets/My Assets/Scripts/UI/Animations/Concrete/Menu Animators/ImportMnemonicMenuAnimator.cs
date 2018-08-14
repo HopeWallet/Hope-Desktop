@@ -52,6 +52,14 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	}
 
 	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+	}
+
+	/// <summary>
 	/// Starts the series of word animations
 	/// </summary>
 	private void StartWordAnimation()

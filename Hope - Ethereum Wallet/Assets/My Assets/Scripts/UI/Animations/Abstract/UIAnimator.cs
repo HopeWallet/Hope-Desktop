@@ -37,7 +37,7 @@ public abstract class UIAnimator : MonoBehaviour
 
 	private float GetUpdatedValue(float ScreenDimensionInHalf, float currentPosition)
 	{
-		return currentPosition > ScreenDimensionInHalf ? currentPosition - ScreenDimensionInHalf: (ScreenDimensionInHalf - currentPosition) * -1f;
+		return currentPosition > ScreenDimensionInHalf ? currentPosition - ScreenDimensionInHalf : (ScreenDimensionInHalf - currentPosition) * -1f;
 	}
 
 	public bool Animating
@@ -70,23 +70,35 @@ public abstract class UIAnimator : MonoBehaviour
 		float endValue = animateIn ? 1f : 0f;
 
 		if (dim != null) dim.AnimateGraphic(endValue, 0.2f);
+
 		if (blur != null) blur.AnimateScale(endValue, 0.2f);
-		if (formTitle != null) formTitle.AnimateGraphicAndScale(animateIn ? 0.85f : 0f, endValue, animateIn ? 0.3f : 0.2f);
+
+		if (formTitle != null) formTitle.AnimateGraphicAndScale(0.85f, 1f, animateIn ? 0.3f : 0.2f);
 
 		if (form != null)
+			form.AnimateGraphicAndScale(1f, endValue, 0.2f, () => OnCompleteAction(animateIn));
+		else
+			OnCompleteAction(animateIn);
+	}
+
+	private void OnCompleteAction(bool animateIn)
+	{
+		if (animateIn)
 		{
-			form.AnimateGraphicAndScale(endValue, endValue, 0.2f, () => { if (animateIn) AnimateUniqueElementsIn(); else FinishedAnimating(); });
+			AnimateUniqueElementsIn();
 		}
 		else
 		{
-			if (animateIn)
-				AnimateUniqueElementsIn();
+			if (popupContainer == null)
+				AnimateUniqueElementsOut();
 			else
 				FinishedAnimating();
 		}
 	}
 
 	protected abstract void AnimateUniqueElementsIn();
+
+	protected virtual void AnimateUniqueElementsOut() { }
 
 	protected void FinishedAnimating()
 	{

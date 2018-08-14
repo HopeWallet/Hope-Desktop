@@ -61,6 +61,22 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
+
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+
+		for (int i = 0; i < 12; i++)
+			wordObjects[i].SetScale(new Vector2(0f, 1f));
+
+		generateNewButton.SetGraphicAndScale(Vector2.zero);
+		copyAllButton.SetGraphicAndScale(Vector2.zero);
+		confirmButton.SetGraphicAndScale(Vector2.zero);
+	}
+
 	/// <summary>
 	/// Animates the word objects scaleX by row
 	/// </summary>

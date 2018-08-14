@@ -25,6 +25,17 @@ public class WalletListMenuAnimator : UIAnimator
 	}
 
 	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
+	{
+		FinishedAnimating();
+
+		walletList.SetGraphicAndScale(Vector2.zero);
+		newWalletButton.SetGraphicAndScale(Vector2.zero);
+	}
+
+	/// <summary>
 	/// Loops through the amount of saved wallets and animates them one by one
 	/// </summary>
 	/// <param name="index"> The wallet number in the array </param>
