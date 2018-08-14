@@ -5,7 +5,7 @@ using System.Globalization;
 using System;
 using System.Threading.Tasks;
 using Hope.Security.HashGeneration;
-using Hope.Utils.Random;
+using RandomNET.Strings;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.
@@ -47,13 +47,13 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> The encryption password to use to encrypt the WalletData object. </returns>
     public string GenerateEncryptionPassword(string seed)
     {
-        string operationStringDeterminant = RandomString.Blake2.GetString(PASSWORD_LENGTH);
-        string password = RandomString.Blake2.GetString(PASSWORD_LENGTH);
+        string operationStringDeterminant = RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH);
+        string password = RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH);
 
         prefDictionary = new Dictionary<string, string> { { keys[0], password }, { keys[keys.Length - 1], operationStringDeterminant } };
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
-                                        _ => RandomString.Blake2.GetString(PASSWORD_LENGTH),
+                                        _ => RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH),
                                         (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).GetSHA512Hash();
     }
 
@@ -125,8 +125,8 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> The task used for generating the spoof key. </returns>
     private async Task GenerateSpoofKey()
     {
-        string key = await Task.Run(() => RandomString.SHA3.GetString(PASSWORD_LENGTH)).ConfigureAwait(false);
-        string value = await Task.Run(() => RandomString.SHA3.GetString()).ConfigureAwait(false);
+        string key = await Task.Run(() => RandomString.Secure.SHA3.GetString(PASSWORD_LENGTH)).ConfigureAwait(false);
+        string value = await Task.Run(() => RandomString.Secure.SHA3.GetString()).ConfigureAwait(false);
 
         MainThreadExecutor.QueueAction(() => SecurePlayerPrefsAsync.SetString(key, value));
     }

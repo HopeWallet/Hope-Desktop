@@ -1,5 +1,5 @@
-﻿using Hope.Utils.Random;
-using Org.BouncyCastle.Security;
+﻿using Org.BouncyCastle.Security;
+using RandomNET.Bytes;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;

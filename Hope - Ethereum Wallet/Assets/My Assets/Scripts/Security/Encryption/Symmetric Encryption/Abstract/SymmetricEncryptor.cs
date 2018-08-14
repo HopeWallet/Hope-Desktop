@@ -1,4 +1,4 @@
-﻿using Hope.Utils.Random;
+﻿using RandomNET.Bytes;
 using System;
 using System.IO;
 using System.Linq;
@@ -167,8 +167,8 @@ namespace Hope.Security.Encryption.Symmetric
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         private byte[] InternalEncrypt(byte[] data, byte[] entropy, int iterations)
         {
-            byte[] saltStringBytes = RandomBytes.SHA3.GetBytes(SaltIvByteSize);
-            byte[] ivStringBytes = RandomBytes.SHA3.GetBytes(SaltIvByteSize);
+            byte[] saltStringBytes = RandomBytes.Secure.SHA3.GetBytes(SaltIvByteSize);
+            byte[] ivStringBytes = RandomBytes.Secure.SHA3.GetBytes(SaltIvByteSize);
 
             using (var password = new Rfc2898DeriveBytes(entropy, saltStringBytes, iterations))
             using (var symmetricKey = new A())

@@ -1,6 +1,6 @@
 ﻿using Hope.Security.Encryption.DPAPI;
 using Hope.Security.Encryption.Symmetric;
-using Hope.Utils.Random;
+using RandomNET.Secure;
 
 /// <summary>
 /// Cross platform class which encrypts/decrypts data for use across multiple sessions.

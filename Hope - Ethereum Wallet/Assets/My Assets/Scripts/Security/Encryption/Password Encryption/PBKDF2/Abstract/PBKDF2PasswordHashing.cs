@@ -1,7 +1,7 @@
-﻿using Hope.Utils.Random;
-using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using RandomNET.Secure;
 using System.Linq;
 
 /// <summary>
