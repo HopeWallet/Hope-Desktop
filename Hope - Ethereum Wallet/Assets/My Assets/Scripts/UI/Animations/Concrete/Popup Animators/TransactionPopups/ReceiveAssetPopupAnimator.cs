@@ -14,6 +14,9 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	/// </summary>
 	private void Awake() => copyAddressButton.GetComponent<Button>().onClick.AddListener(AnimateCheckMarkIcon);
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		addressInputField.AnimateScaleX(1f, 0.15f);
@@ -22,6 +25,9 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 		qrCodeImage.AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
 		qrCodeImage.AnimateScale(0f, 0.15f);

@@ -35,14 +35,40 @@ public class SendAssetPopupAnimator : UIAnimator
         advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		throw new System.NotImplementedException();
+		tokenSection.AnimateScale(1f, 0.1f);
+		advancedModeSection.AnimateScale(1f, 0.1f);
+		addressSection.AnimateScaleX(1f, 0.15f);
+		amountSection.AnimateScaleX(1f, 0.2f);
+		transactionSpeedSection.AnimateScaleX(1f, 0.25f);
+		sendButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		throw new System.NotImplementedException();
+		sendButton.AnimateGraphicAndScale(0f, 0f, 0.1f);
+
+		if (advancedMode)
+		{
+			gasPriceSection.AnimateScaleX(0f, 0.15f);
+			gasLimitSection.AnimateScaleX(0f, 0.15f);
+		}
+		else
+		{
+			transactionSpeedSection.AnimateScaleX(0f, 0.15f);
+		}
+
+		amountSection.AnimateScaleX(0f, 0.2f, () => AnimateBasicElements(false));
+		addressSection.AnimateScaleX(0f, 0.25f);
+		advancedModeSection.AnimateScale(0f, 0.3f);
+		tokenSection.AnimateScale(0f, 0.3f);
 	}
 
 	/// <summary>
@@ -54,9 +80,9 @@ public class SendAssetPopupAnimator : UIAnimator
 		Animating = true;
 
 		if (advancedMode)
-			transactionSpeedSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(true));
+			transactionSpeedSection.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(true));
 		else
-			gasLimitSection.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateGasLimitAndPrice(false));
+			gasLimitSection.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(false));
 	}
 
 	/// <summary>
@@ -65,13 +91,13 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// <param name="animatingIn"> Checks to see if animating these fields in or out </param>
 	private void AnimateGasLimitAndPrice(bool animatingIn)
 	{
-		gasLimitSection.AnimateGraphicAndScale(animatingIn ? 1f : 0f, animatingIn ? 1f : 0f, 0.1f);
+		gasLimitSection.AnimateScale(animatingIn ? 1f : 0f, 0.1f);
 
 		if (animatingIn)
-			gasPriceSection.AnimateGraphicAndScale(1f, 1f, 0.1f, () => Animating = false);
+			gasPriceSection.AnimateScale(1f, 0.1f, () => Animating = false);
 		else
-			gasPriceSection.AnimateGraphicAndScale(0f, 0f, 0.1f,
-				() => transactionSpeedSection.AnimateGraphicAndScale(1f, 1f, 0.1f,
+			gasPriceSection.AnimateScale(0f, 0.1f,
+				() => transactionSpeedSection.AnimateScale(1f, 0.1f,
 				() => Animating = false));
 	}
 

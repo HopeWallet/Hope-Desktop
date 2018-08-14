@@ -23,6 +23,9 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 		tokenTransform = tokenList.transform.GetChild(0).GetChild(0);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		customTokenButton.AnimateScaleX(1f, 0.2f);
@@ -31,6 +34,9 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
 		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
