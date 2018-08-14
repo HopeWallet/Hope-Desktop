@@ -49,7 +49,6 @@ using Nethereum.JsonRpc.UnityClient;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
-using Hope.Utils.Random;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;

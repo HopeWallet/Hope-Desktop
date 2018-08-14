@@ -1,4 +1,5 @@
-﻿using Hope.Utils.Random;
+﻿using RandomNET.Integers;
+using RandomNET.Strings;
 using System;
 using System.Linq;
 using UnityEditor;
@@ -70,7 +71,7 @@ public static class WalletPasswordRandomizer
         Array.Copy(keys, SavedKeys, keys.Length);
 
         for (int i = 0; i < keys.Length; i++)
-            keys[i] = RandomString.SHA3.GetString(RandomInt.Fast.GetInt(8, 17));
+            keys[i] = RandomString.Secure.SHA3.GetString(RandomInt.Fast.GetInt(8, 17));
     }
 
     /// <summary>
