@@ -100,11 +100,10 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 
         checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
-        checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f,
-            () => checkMarkIcon.AnimateScaleX(1.01f, 0.5f,
-            () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
-            () => copyButtonComponent.interactable = true)));
-    }
+		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		CoroutineUtils.ExecuteAfterWait(0.7f, () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
+			() => copyButtonComponent.interactable = true));
+	}
 
     /// <summary>
     /// Initializes the randomized list of words and starts the series of random word animations

@@ -3,10 +3,11 @@ using UnityEngine.UI;
 
 public class ReceiveAssetPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject addressSection;
-	[SerializeField] private GameObject checkmarkIcon;
-	[SerializeField] private GameObject qrCodeSection;
+	[SerializeField] private GameObject addressInputField;
 	[SerializeField] private GameObject copyAddressButton;
+	[SerializeField] private GameObject checkMarkIcon;
+	[SerializeField] private GameObject qrCodeText;
+	[SerializeField] private GameObject qrCodeImage;
 
 	/// <summary>
 	/// Initializes the copyAddress button listener
@@ -15,12 +16,18 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 
 	protected override void AnimateUniqueElementsIn()
 	{
-		throw new System.NotImplementedException();
+		addressInputField.AnimateScaleX(1f, 0.15f);
+		copyAddressButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		qrCodeText.AnimateScaleX(1f, 0.25f);
+		qrCodeImage.AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 
 	protected override void AnimateUniqueElementsOut()
 	{
-		throw new System.NotImplementedException();
+		qrCodeImage.AnimateScale(0f, 0.15f);
+		qrCodeText.AnimateScaleX(0f, 0.2f, () => AnimateBasicElements(false));
+		copyAddressButton.AnimateGraphicAndScale(0f, 0f, 0.25f);
+		addressInputField.AnimateScaleX(0f, 0.3f);
 	}
 
 	/// <summary>
@@ -30,11 +37,10 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	{
 		copyAddressButton.GetComponent<Button>().interactable = false;
 
-		checkmarkIcon.transform.localScale = new Vector3(0, 0, 1);
+		checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
-		checkmarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f,
-			() => checkmarkIcon.AnimateScaleX(1.01f, 0.5f,
-			() => checkmarkIcon.AnimateGraphic(0f, 0.5f,
-			() => copyAddressButton.GetComponent<Button>().interactable = true)));
+		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		CoroutineUtils.ExecuteAfterWait(0.7f, () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
+			() => copyAddressButton.GetComponent<Button>().interactable = true));
 	}
 }

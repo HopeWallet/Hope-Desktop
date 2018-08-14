@@ -2657,6 +2657,7 @@ MonoBehaviour:
   form: {fileID: 1264565618320592}
   blur: {fileID: 0}
   formTitle: {fileID: 1332409258444392}
+  popupContainer: {fileID: 0}
   passphrase: {fileID: 1601232707927276}
   generateNewButton: {fileID: 1148146881530552}
   copyAllButton: {fileID: 1368249272141420}
