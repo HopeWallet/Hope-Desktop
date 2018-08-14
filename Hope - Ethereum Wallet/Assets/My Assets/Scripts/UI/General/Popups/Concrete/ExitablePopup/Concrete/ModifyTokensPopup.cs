@@ -12,9 +12,9 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     [SerializeField] private Transform tokenListTransform;
     [SerializeField] private Button addCustomToken, confirmButton;
-	[SerializeField] private TMP_InputField searchBar;
+    [SerializeField] private TMP_InputField searchBar;
 
-	private AddableTokenButton.Factory addableTokenButtonFactory;
+    private AddableTokenButton.Factory addableTokenButtonFactory;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
 
@@ -45,18 +45,23 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     protected override void OnStart()
     {
-		addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
-		searchBar.onValueChanged.AddListener(SearchInputChanged);
+        addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
+        searchBar.onValueChanged.AddListener(SearchInputChanged);
         confirmButton.onClick.AddListener(ConfirmButtonClicked);
-	}
+    }
 
     private void OnDestroy()
     {
         if (confirmClicked)
-            return;
+        {
+            tokenListManager.OldTokenList.Clear();
+        }
+        else
+        {
+            tokenListManager.OldTokenList.ForEach(token => tokenListManager.UpdateToken(token.TokenInfo.Address, token.Enabled, token.Listed));
+            tokenListManager.OldTokenList.Clear();
+        }
 
-        tokenListManager.OldTokenList.ForEach(token => tokenListManager.UpdateToken(token.TokenInfo.Address, token.Enabled, token.Listed));
-        tokenListManager.OldTokenList.Clear();
     }
 
     private void ConfirmButtonClicked()
