@@ -31,7 +31,7 @@ public class TransactionInfoPopupAnimator : UIAnimator
 	{
 		actualGasSection.AnimateScaleX(0f, 0.1f);
 		setGasSection.AnimateScaleX(0f, 0.14f);
-		valueAndTimeSection.AnimateScaleX(0f, 1.8f);
+		valueAndTimeSection.AnimateScaleX(0f, 0.18f);
 		toAddressSection.AnimateScaleX(0f, 0.22f, () => AnimateBasicElements(false));
 		fromAddressSection.AnimateScaleX(0f, 0.26f);
 		transactionHashSection.AnimateScaleX(0f, 0.3f);
