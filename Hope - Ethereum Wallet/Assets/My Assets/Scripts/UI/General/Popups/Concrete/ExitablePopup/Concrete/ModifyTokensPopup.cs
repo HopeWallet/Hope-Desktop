@@ -11,13 +11,14 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     public event Action<AddableTokenButton> OnAddableTokenAdded;
 
     [SerializeField] private Transform tokenListTransform;
-    [SerializeField] private Button addCustomToken, 
-									ConfirmButton;
+    [SerializeField] private Button addCustomToken, confirmButton;
 	[SerializeField] private TMP_InputField searchBar;
 
 	private AddableTokenButton.Factory addableTokenButtonFactory;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
+
+    private bool confirmClicked;
 
     public List<AddableTokenButton> AddableTokens { get; } = new List<AddableTokenButton>();
 
@@ -44,21 +45,35 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     protected override void OnStart()
     {
-		addCustomToken.onClick.AddListener(AddCustomToken);
+		addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
 		searchBar.onValueChanged.AddListener(SearchInputChanged);
+        confirmButton.onClick.AddListener(ConfirmButtonClicked);
 	}
 
     private void OnDestroy()
     {
+        if (confirmClicked)
+            return;
+
+        tokenListManager.OldTokenList.ForEach(token => tokenListManager.UpdateToken(token.TokenInfo.Address, token.Enabled, token.Listed));
+        tokenListManager.OldTokenList.Clear();
+    }
+
+    private void ConfirmButtonClicked()
+    {
+        confirmClicked = true;
+
         var activeTokenAddresses = tokenContractManager.TokenList.Select(token => token.Address);
         var tokensToEnable = AddableTokens.Where(token => !activeTokenAddresses.Contains(token.ButtonInfo.TokenInfo.Address) && token.ButtonInfo.Enabled);
         var tokensToDisable = AddableTokens.Where(token => activeTokenAddresses.Contains(token.ButtonInfo.TokenInfo.Address) && !token.ButtonInfo.Enabled);
 
         tokensToDisable.ForEach(tokenButton => tokenContractManager.RemoveToken(tokenButton.ButtonInfo.TokenInfo.Address));
         tokensToEnable.ForEach(tokenButton => tokenContractManager.AddToken(tokenButton.ButtonInfo.TokenInfo));
+
+        popupManager.CloseActivePopup();
     }
 
-    private void AddCustomToken()
+    private void CustomTokenButtonClicked()
     {
         popupManager.GetPopup<AddTokenPopup>(true);
     }

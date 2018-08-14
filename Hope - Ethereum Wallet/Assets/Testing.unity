@@ -604,7 +604,7 @@ Prefab:
     - target: {fileID: 224801781838125012, guid: d8f8f0502b424744f90627b25ee94f2a,
         type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224801781838125012, guid: d8f8f0502b424744f90627b25ee94f2a,
         type: 2}
@@ -805,7 +805,7 @@ Prefab:
     - target: {fileID: 224063981933358800, guid: ab281cfd370a64b40832f35d5ea1bc00,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224063981933358800, guid: ab281cfd370a64b40832f35d5ea1bc00,
         type: 2}
@@ -876,7 +876,6 @@ GameObject:
   - component: {fileID: 1404536059}
   - component: {fileID: 1404536058}
   - component: {fileID: 1404536061}
-  - component: {fileID: 1404536062}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -955,17 +954,6 @@ MonoBehaviour:
   extraMenus:
   - {fileID: 1030595564}
   - {fileID: 625611318}
---- !u!114 &1404536062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1404536057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c0e0490d1030e4cb3fb54af9f4e25a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1491621424
 GameObject:
   m_ObjectHideFlags: 0
