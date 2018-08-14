@@ -9,5 +9,5 @@ public class LoadingPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateUniqueElementsOut() => gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
+	protected override void ResetElementValues() => gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
 }

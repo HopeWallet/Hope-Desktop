@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         buttonObserver.SubscribeObservable(this);
     }
 
-	private void Awake() => Screen.SetResolution(1280, 800, false, 120);
+	private void Awake() => SetScreenResolution();
 
 	/// <summary>
 	/// Starts the UIManager by choosing the first menu to open.
@@ -54,6 +54,14 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 
 		OpenMenu<ChooseWalletMenu>();
     }
+
+	private void SetScreenResolution()
+	{
+		int screenWidth = (int)(Screen.currentResolution.width * 0.666666666f);
+		int screenHeight = (int)(Screen.currentResolution.height * 0.7407f);
+
+		Screen.SetResolution(screenWidth, screenHeight, false, 120);
+	}
 
     /// <summary>
     /// Closes the active popup if one is open, if not, calls the back button on the active menu.

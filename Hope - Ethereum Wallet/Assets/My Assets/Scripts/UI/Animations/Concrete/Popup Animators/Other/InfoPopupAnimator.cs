@@ -27,7 +27,7 @@ public sealed class InfoPopupAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form out of view
 	/// </summary>
-	protected override void AnimateUniqueElementsOut()
+	protected override void ResetElementValues()
 	{
 		bodyText.AnimateGraphicAndScale(0f, 0f, 0.05f);
 		infoTitle.AnimateGraphicAndScale(0f, 0f, 0.05f);
