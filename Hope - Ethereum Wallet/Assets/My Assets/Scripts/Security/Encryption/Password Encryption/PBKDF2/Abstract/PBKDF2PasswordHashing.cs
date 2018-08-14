@@ -187,7 +187,7 @@ public abstract class PBKDF2PasswordHashing<THashAlgorithm> where THashAlgorithm
     /// <returns> The salted hash as a <see langword="byte"/>[]. </returns>
     private static byte[] InternalGetSaltedPasswordHash(char[] password, int iterations, int saltSize, int hashSize)
     {
-        byte[] salt = new HopeSecureRandom(new THashAlgorithm()).NextBytes(saltSize <= MIN_SALT_SIZE ? MIN_SALT_SIZE : saltSize);
+        byte[] salt = new AdvancedSecureRandom(new THashAlgorithm()).NextBytes(saltSize <= MIN_SALT_SIZE ? MIN_SALT_SIZE : saltSize);
         return salt.Concat(GeneratePasswordHash(password, salt, iterations, hashSize)).ToArray();
     }
 

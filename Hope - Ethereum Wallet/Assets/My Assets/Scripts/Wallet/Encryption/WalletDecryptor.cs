@@ -79,8 +79,8 @@ public sealed class WalletDecryptor : SecureObject
     {
         string encryptionPassword = playerPrefPassword.ExtractEncryptionPassword(password);
 
-        HopeSecureRandom secureRandom = await Task.Run(() =>
-            new HopeSecureRandom(
+        AdvancedSecureRandom secureRandom = await Task.Run(() =>
+            new AdvancedSecureRandom(
                 new Blake2bDigest(),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,

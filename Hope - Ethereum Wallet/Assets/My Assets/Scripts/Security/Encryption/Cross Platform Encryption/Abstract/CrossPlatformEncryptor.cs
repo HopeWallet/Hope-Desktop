@@ -36,10 +36,10 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     }
 
     /// <summary>
-    /// Initializes the <see cref="CrossPlatformEncryptor"/> given the <see cref="HopeSecureRandom"/> instance to use for our encryption.
+    /// Initializes the <see cref="CrossPlatformEncryptor"/> given the <see cref="AdvancedSecureRandom"/> instance to use for our encryption.
     /// </summary>
-    /// <param name="secureRandom"> The <see cref="HopeSecureRandom"/> instance to use for our encryption. </param>
-    protected CrossPlatformEncryptor(HopeSecureRandom secureRandom) : this(
+    /// <param name="secureRandom"> The <see cref="AdvancedSecureRandom"/> instance to use for our encryption. </param>
+    protected CrossPlatformEncryptor(AdvancedSecureRandom secureRandom) : this(
         secureRandom.NextBytes(2),
         secureRandom.NextBytes(4),
         secureRandom.NextBytes(8),

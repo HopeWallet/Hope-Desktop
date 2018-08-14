@@ -21,10 +21,10 @@ public sealed class DataEncryptor : CrossPlatformEncryptor<WindowsDataEncryptor,
     }
 
     /// <summary>
-    /// Initializes the <see cref="DataEncryptor"/> given the <see cref="HopeSecureRandom"/> instance to use for our encryption.
+    /// Initializes the <see cref="DataEncryptor"/> given the <see cref="AdvancedSecureRandom"/> instance to use for our encryption.
     /// </summary>
-    /// <param name="secureRandom"> The <see cref="HopeSecureRandom"/> instance to use for our encryption. </param>
-    public DataEncryptor(HopeSecureRandom secureRandom) : base(secureRandom)
+    /// <param name="secureRandom"> The <see cref="AdvancedSecureRandom"/> instance to use for our encryption. </param>
+    public DataEncryptor(AdvancedSecureRandom secureRandom) : base(secureRandom)
     {
     }
 }

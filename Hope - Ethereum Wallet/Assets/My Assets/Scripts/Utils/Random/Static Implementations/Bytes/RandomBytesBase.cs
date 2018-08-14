@@ -38,6 +38,6 @@ namespace Hope.Utils.Random.Abstract
         /// <param name="length"> The length of the <see langword="byte"/>[] data. </param>
         /// <param name="digest"> The <see cref="IDigest"/> object to use to generate the <see langword="byte"/>[] data. </param>
         /// <returns> The random <see langword="byte"/>[] data. </returns>
-        private static byte[] GetBytes(byte[] seed, int length, IDigest digest) => (seed == null ? new HopeSecureRandom(digest) : new HopeSecureRandom(digest, seed)).NextBytes(length);
+        private static byte[] GetBytes(byte[] seed, int length, IDigest digest) => (seed == null ? new AdvancedSecureRandom(digest) : new AdvancedSecureRandom(digest, seed)).NextBytes(length);
     }
 }

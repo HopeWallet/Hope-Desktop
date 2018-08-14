@@ -63,7 +63,7 @@ namespace Hope.Utils.Random.Abstract
         /// <returns> The randomly generated <see langword="string"/>. </returns>
         private static string InternalGetString(byte[] seed, int length, IDigest digest)
         {
-            return (seed == null ? new HopeSecureRandom(digest) : new HopeSecureRandom(digest, seed)).NextBytes(length).GetBase64String().LimitEnd(length);
+            return (seed == null ? new AdvancedSecureRandom(digest) : new AdvancedSecureRandom(digest, seed)).NextBytes(length).GetBase64String().LimitEnd(length);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Hope.Utils.Random.Abstract
         /// <returns> The randomly generated integer. </returns>
         private static int GetInt(byte[] seed, int? minValue, int? maxValue, IDigest digest)
         {
-            HopeSecureRandom secureRandom = (seed == null ? new HopeSecureRandom(digest) : new HopeSecureRandom(digest, seed));
+            AdvancedSecureRandom secureRandom = (seed == null ? new AdvancedSecureRandom(digest) : new AdvancedSecureRandom(digest, seed));
 
             if (minValue.HasValue && maxValue.HasValue)
                 return secureRandom.Next(minValue.Value, maxValue.Value);
