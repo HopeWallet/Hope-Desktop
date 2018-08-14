@@ -48,16 +48,6 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		AnimateMainButton(false);
-		addressSection.AnimateScaleX(0f, 0.25f, () => AnimateBasicElements(false));
-		nameSection.AnimateScaleX(0f, 0.3f);
-	}
-
-	/// <summary>
 	/// Animates the main button, depending on the boolean addingContact
 	/// </summary>
 	/// <param name="animateIn"> Checks if animating the button in or out </param>

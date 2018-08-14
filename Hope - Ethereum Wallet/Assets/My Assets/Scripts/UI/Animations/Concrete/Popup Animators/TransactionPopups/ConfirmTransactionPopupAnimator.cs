@@ -24,19 +24,4 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
-
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		cancelButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		feeSection.AnimateScaleX(0f, 0.18f);
-		transactionSection.AnimateScaleX(0f, 0.22f, () => AnimateBasicElements(false));
-		line.AnimateScaleX(0f, 0.235f);
-		fromAddressSection.AnimateScaleX(0f, 0.25f);
-		toAddressSection.AnimateScaleX(0f, 0.27f);
-		tokenIcon.AnimateGraphicAndScale(0f, 0f, 0.3f);
-	}
 }

@@ -34,16 +34,6 @@ public class AddTokenPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		addTokenButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
-		ChangeStatus();
-		addressSection.AnimateScaleX(0f, 0.25f);
-	}
-
-	/// <summary>
 	/// Gets the current status of the AddTokenPopup and sets the proper sections to visible or not
 	/// </summary>
 	/// <param name="tokenPopupStatus"> The AddTokenPopup status </param>

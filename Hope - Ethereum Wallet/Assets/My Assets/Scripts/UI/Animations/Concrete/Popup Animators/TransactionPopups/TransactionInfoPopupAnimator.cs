@@ -23,17 +23,4 @@ public class TransactionInfoPopupAnimator : UIAnimator
 		setGasSection.AnimateScaleX(1f, 0.26f);
 		actualGasSection.AnimateScaleX(1f, 0.3f, FinishedAnimating);
 	}
-
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		actualGasSection.AnimateScaleX(0f, 0.1f);
-		setGasSection.AnimateScaleX(0f, 0.14f);
-		valueAndTimeSection.AnimateScaleX(0f, 0.18f);
-		toAddressSection.AnimateScaleX(0f, 0.22f, () => AnimateBasicElements(false));
-		fromAddressSection.AnimateScaleX(0f, 0.26f);
-		transactionHashSection.AnimateScaleX(0f, 0.3f);
-	}
 }

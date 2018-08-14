@@ -43,16 +43,6 @@ public class LockedPRPSPopupAnimator : UIAnimator
 		lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 	}
 
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		lockPRPSButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
-		lockedPRPSList.AnimateScaleX(0f, 0.25f, () => AnimateBasicElements(false));
-		topText.AnimateScaleX(0f, 0.3f);
-	}
-
 	public void AnimateWalletIn(GameObject walletToAnimate)
     {
         walletToAnimate.AnimateScaleX(1f, 0.15f);

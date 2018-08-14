@@ -18,11 +18,6 @@ public class OpenWalletMenuAnimator : UIAnimator
 		throw new System.NotImplementedException();
 	}
 
-	protected override void AnimateUniqueElementsOut()
-	{
-		throw new System.NotImplementedException();
-	}
-
 	/// <summary>
 	/// Animates a given list of objects one by one
 	/// </summary>

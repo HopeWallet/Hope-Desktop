@@ -35,19 +35,13 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		passwordInputField.GetComponent<TMP_InputField>().text = "";
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		passwordInputField.AnimateScaleX(1f, 0.15f);
 		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
-	}
-
-	protected override void AnimateUniqueElementsOut()
-	{
-		signInButton.AnimateGraphicAndScale(0f, 0f, 0.15f, () => AnimateBasicElements(false));
-		passwordInputField.AnimateScaleX(0f, 0.25f);
-
-		if (errorIconVisible) AnimateErrorIcon(false);
-		if (loadingIcon.activeInHierarchy) VerifyingPassword();
 	}
 
 	/// <summary>

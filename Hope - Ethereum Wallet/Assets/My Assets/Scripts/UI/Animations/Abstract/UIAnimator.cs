@@ -59,7 +59,7 @@ public abstract class UIAnimator : MonoBehaviour
 		this.onAnimationFinished = onAnimationFinished;
 
 		ChangeAnimationState(true);
-		AnimateUniqueElementsOut();
+		AnimateBasicElements(false);
 	}
 
 	protected void AnimateBasicElements(bool animateIn)
@@ -87,8 +87,6 @@ public abstract class UIAnimator : MonoBehaviour
 	}
 
 	protected abstract void AnimateUniqueElementsIn();
-
-	protected abstract void AnimateUniqueElementsOut();
 
 	protected void FinishedAnimating()
 	{

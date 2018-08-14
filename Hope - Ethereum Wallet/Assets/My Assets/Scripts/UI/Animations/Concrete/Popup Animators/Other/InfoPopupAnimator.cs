@@ -23,17 +23,4 @@ public sealed class InfoPopupAnimator : UIAnimator
 		infoIcon.AnimateGraphicAndScale(1f, 1f, 0.1f);
 		errorIcon.AnimateGraphicAndScale(1f, 1f, 0.1f);
 	}
-
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		bodyText.AnimateGraphicAndScale(0f, 0f, 0.05f);
-		infoTitle.AnimateGraphicAndScale(0f, 0f, 0.05f);
-		background.AnimateGraphicAndScale(0f, 0f, 0.1f, () => AnimateBasicElements(false));
-
-		infoIcon.AnimateGraphicAndScale(0f, 0f, 0.05f);
-		errorIcon.AnimateGraphicAndScale(0f, 0f, 0.05f);
-	}
 }

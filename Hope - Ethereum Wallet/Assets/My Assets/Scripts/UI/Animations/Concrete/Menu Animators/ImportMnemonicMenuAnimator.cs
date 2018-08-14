@@ -43,12 +43,10 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
-	{
-		throw new System.NotImplementedException();
-	}
-
-	protected override void AnimateUniqueElementsOut()
 	{
 		throw new System.NotImplementedException();
 	}

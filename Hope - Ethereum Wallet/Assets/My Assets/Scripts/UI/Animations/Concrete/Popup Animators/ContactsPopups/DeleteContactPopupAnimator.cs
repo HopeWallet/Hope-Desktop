@@ -20,16 +20,4 @@ public class DeleteContactPopupAnimator : UIAnimator
 		yesButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		noButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
-
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		noButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		yesButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		contactAddress.AnimateScaleX(0f, 0.2f);
-		contactName.AnimateScaleX(0f, 0.25f);
-		mainText.AnimateScaleX(0f, 0.3f);
-	}
 }

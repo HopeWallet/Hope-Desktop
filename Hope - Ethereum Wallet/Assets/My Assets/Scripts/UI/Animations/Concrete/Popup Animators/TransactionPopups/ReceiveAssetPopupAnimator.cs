@@ -26,18 +26,6 @@ public class ReceiveAssetPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		qrCodeImage.AnimateScale(0f, 0.15f);
-		qrCodeText.AnimateScaleX(0f, 0.2f, () => AnimateBasicElements(false));
-		copyAddressButton.AnimateGraphicAndScale(0f, 0f, 0.25f);
-		checkMarkIcon.AnimateGraphicAndScale(0f, 0f, 0.25f);
-		addressInputField.AnimateScaleX(0f, 0.3f);
-	}
-
-	/// <summary>
 	/// Animates the check mark icon on and off screen
 	/// </summary>
 	private void AnimateCheckMarkIcon()

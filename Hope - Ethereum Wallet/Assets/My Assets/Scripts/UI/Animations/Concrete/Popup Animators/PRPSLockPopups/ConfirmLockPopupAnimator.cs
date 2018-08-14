@@ -17,16 +17,4 @@ public class ConfirmLockPopupAnimator : CountdownTimerAnimator
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
-
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void AnimateUniqueElementsOut()
-	{
-		confirmButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
-		cancelButton.AnimateGraphicAndScale(0f, 0f, 0.2f, () => AnimateBasicElements(false));
-		noteText.AnimateScaleX(0f, 0.25f);
-		prpsSection.AnimateScale(0f, 0.3f);
-		dubiSection.AnimateScale(0f, 0.3f);
-	}
 }
