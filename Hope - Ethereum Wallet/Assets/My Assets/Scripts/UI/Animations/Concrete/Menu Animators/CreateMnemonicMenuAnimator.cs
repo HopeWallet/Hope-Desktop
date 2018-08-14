@@ -94,15 +94,14 @@ public class CreateMnemonicMenuAnimator : UIAnimator
     /// Animates the check mark icon on and off screen
     /// </summary>
     private void AnimateCheckMarkIcon()
-    {
-        Button copyButtonComponent = copyAllButton.GetComponent<Button>();
-        copyButtonComponent.interactable = false;
+	{
+		copyAllButton.GetComponent<Button>().interactable = false;
 
         checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
 		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		CoroutineUtils.ExecuteAfterWait(0.7f, () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
-			() => copyButtonComponent.interactable = true));
+			() => copyAllButton.GetComponent<Button>().interactable = true));
 	}
 
     /// <summary>

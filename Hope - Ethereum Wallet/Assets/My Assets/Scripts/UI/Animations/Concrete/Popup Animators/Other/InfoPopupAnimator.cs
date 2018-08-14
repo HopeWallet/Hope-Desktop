@@ -11,6 +11,9 @@ public sealed class InfoPopupAnimator : UIAnimator
 	[SerializeField] private GameObject infoIcon;
 	[SerializeField] private GameObject errorIcon;
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		background.AnimateGraphicAndScale(1f, 1f, 0.05f);
@@ -21,6 +24,9 @@ public sealed class InfoPopupAnimator : UIAnimator
 		errorIcon.AnimateGraphicAndScale(1f, 1f, 0.1f);
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form out of view
+	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
 		bodyText.AnimateGraphicAndScale(0f, 0f, 0.05f);
