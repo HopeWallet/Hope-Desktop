@@ -61,7 +61,6 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
             tokenListManager.OldTokenList.ForEach(token => tokenListManager.UpdateToken(token.TokenInfo.Address, token.Enabled, token.Listed));
             tokenListManager.OldTokenList.Clear();
         }
-
     }
 
     private void ConfirmButtonClicked()
