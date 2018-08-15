@@ -5,11 +5,6 @@ using UnityEngine;
 
 public sealed partial class ERC20 : Token
 {
-    public ERC20(string contractAddress, Action onTokenInitialized) : base(contractAddress, onTokenInitialized)
-    {
-        // This can be removed now that we have a method that adds tokens while already having all four pieces of info.
-    }
-
     public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress, name, symbol, decimals)
     {
     }
@@ -57,20 +52,5 @@ public sealed partial class ERC20 : Token
                                                                  () => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address), address,
                                                                  SolidityUtils.ConvertToUInt(amount, Decimals.Value));
         }, gasLimit, gasPrice, address, ContractAddress, amount, Symbol);
-    }
-
-    protected override void GetTokenName(Action<string> onTokenNameReceived)
-    {
-        SimpleContractQueries.QueryStringOutput<Queries.Name>(ContractAddress, null, o => onTokenNameReceived?.Invoke(o.Value));
-    }
-
-    protected override void GetTokenSymbol(Action<string> onTokenSymbolReceived)
-    {
-        SimpleContractQueries.QueryStringOutput<Queries.Symbol>(ContractAddress, null, o => onTokenSymbolReceived?.Invoke(o.Value));
-    }
-
-    protected override void GetTokenDecimals(Action<dynamic> onTokenDecimalsReceived)
-    {
-        SimpleContractQueries.QueryUInt256Output<Queries.Decimals>(ContractAddress, null, o => onTokenDecimalsReceived?.Invoke(o.Value));
     }
 }
