@@ -9,20 +9,22 @@ using Zenject;
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
     public GameObject backgroundVignette,
-                      lockPurposeSection;
+                      lockPurposeSection,
+                      lockPurposeNotificationSection;
 
 	public TMP_Text assetText,
 					balanceText,
 					currentTokenNetWorthText,
                     lockPrpsNotificationText;
 
-    public Image assetImage,
-                 lockPrpsNotificationImage;
+    public Image assetImage;
 
     public DropdownButton optionsDropdownButton;
 
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
+    private NotificationManager notificationManager;
+    private LockedPRPSManager lockedPrpsManager;
     private PRPS prpsContract;
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
@@ -37,13 +39,17 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     /// <param name="uiSettings"> The ui settings. </param>
     [Inject]
     public void Construct(
-		TokenContractManager tokenContractManager,
-		TradableAssetManager tradableAssetManager,
+        TokenContractManager tokenContractManager,
+        TradableAssetManager tradableAssetManager,
+        NotificationManager notificationManager,
+        LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract,
 		UIManager.Settings uiSettings)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
+        this.notificationManager = notificationManager;
+        this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
 
         optionsDropdownButton.dropdownButtons = uiSettings.generalSettings.dropdowns.optionsDropdowns;
@@ -55,6 +61,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     private void Start()
     {
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
+        lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
     }
 
@@ -85,6 +92,18 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH, "...");
 
         assetImage.sprite = tradableAsset.AssetImage;
+
+        UpdateAssetNotifications();
+    }
+
+    private void UpdateAssetNotifications()
+    {
+        var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
+        lockPurposeNotificationSection.SetActive(lockedPrpsCount > 0);
+        lockPrpsNotificationText.text = lockedPrpsCount.ToString();
+        lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
+
+        notificationManager.SaveNewTransactions(tradableAssetManager.ActiveTradableAsset.AssetAddress);
     }
 
     public override void GoBack()

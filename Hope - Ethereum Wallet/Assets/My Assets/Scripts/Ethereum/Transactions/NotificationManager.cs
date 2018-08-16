@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public sealed class NotificationManager
 {
@@ -47,18 +48,23 @@ public sealed class NotificationManager
             transactionsByAddress[assetAddress] = addressTxCount;
         else
             transactionsByAddress.Add(addressTxCount);
+
+        TransactionsUpdated();
     }
 
     private void TransactionsUpdated()
     {
-        foreach (var address in notificationsByAddress.Keys)
+        foreach (var address in notificationsByAddress.Keys.ToList())
         {
             var txCount = ethereumTransactionManager.GetTransactionListByAddress(address)?.Count;
 
             if (txCount == null)
                 continue;
 
-            notificationsByAddress[address] = txCount - transactionsByAddress[address].transactionCount;
+            notificationsByAddress[address] = txCount - (transactionsByAddress.Contains(address) ? transactionsByAddress[address].transactionCount : 0);
+
+            if (address == prpsContract.ContractAddress)
+                notificationsByAddress[address] += lockedPrpsManager.UnlockableItems.Count;
         }
 
         OnNotificationsUpdated?.Invoke();

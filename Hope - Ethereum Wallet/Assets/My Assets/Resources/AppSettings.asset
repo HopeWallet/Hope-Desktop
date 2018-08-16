@@ -32,6 +32,8 @@ MonoBehaviour:
       tokenPrefName: Token_
     tokenListSettings:
       tokenListPrefName: TokenList
+    notificationSettings:
+      prefName: notifications
   walletSettings:
     safePassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
     safePasswordCharLookups:

@@ -47,6 +47,13 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.transactionButtonManager = transactionButtonManager;
         this.notificationManager = notificationManager;
+
+        notificationManager.OnNotificationsUpdated += UpdateAssetNotifications;
+    }
+
+    private void OnDestroy()
+    {
+        notificationManager.OnNotificationsUpdated -= UpdateAssetNotifications;
     }
 
     /// <summary>
@@ -59,6 +66,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
         UpdateButtonSymbol();
         UpdateButtonImage();
         UpdateButtonTransformOrder();
+        UpdateAssetNotifications();
     }
 
     /// <summary>
@@ -81,6 +89,17 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     {
         string balanceText = ButtonInfo.AssetBalance + "";
         amountText.text = balanceText.LimitEnd(10, "...");
+    }
+
+    private void UpdateAssetNotifications()
+    {
+        var notifications = notificationManager.GetAssetNotificationCount(ButtonInfo.AssetAddress);
+
+        if (notifications.HasValue)
+            loadingTransactionsObj.SetActive(false);
+
+        notificationImageObj.SetActive(notifications.HasValue && notifications.Value > 0);
+        notificationCountText.text = notifications.HasValue ? notifications.Value.ToString() : "0";
     }
 
     /// <summary>

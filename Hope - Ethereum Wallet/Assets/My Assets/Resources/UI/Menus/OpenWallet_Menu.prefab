@@ -1023,12 +1023,12 @@ MonoBehaviour:
   DestroyWhenClosed: 1
   backgroundVignette: {fileID: 0}
   lockPurposeSection: {fileID: 1828604087628714}
+  lockPurposeNotificationSection: {fileID: 1520066508619918}
   assetText: {fileID: 114188047697984526}
   balanceText: {fileID: 114125277020657546}
   currentTokenNetWorthText: {fileID: 114262674153539580}
   lockPrpsNotificationText: {fileID: 114649127489800408}
   assetImage: {fileID: 114967936315283588}
-  lockPrpsNotificationImage: {fileID: 114030602193728692}
   optionsDropdownButton: {fileID: 114327414604029792}
 --- !u!114 &114030602193728692
 MonoBehaviour:
