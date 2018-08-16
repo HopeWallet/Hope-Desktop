@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -7,9 +8,12 @@ using Zenject;
 /// </summary>
 public class AssetButton : InfoButton<AssetButton, TradableAsset>
 {
+    public GameObject notificationImageObj,
+                      loadingTransactionsObj;
 
     public TMP_Text amountText,
-                    symbolText;
+                    symbolText,
+                    notificationCountText;
 
     public Image assetImage;
 
@@ -18,6 +22,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     private TradableAssetButtonManager tradableAssetButtonManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private EthereumTransactionButtonManager transactionButtonManager;
+    private NotificationManager notificationManager;
 
     /// <summary>
     /// Injects the required dependencies into this class.
@@ -27,18 +32,21 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <param name="tradableAssetButtonManager"> The active TradableAssetButtonManager object. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager object. </param>
     /// <param name="transactionButtonManager"> The active TransactionButtonManager object. </param>
+    /// <param name="notificationManager"> The active NotificationManager. </param>
     [Inject]
     public void Construct(PopupManager popupManager,
         TradableAssetManager tradableAssetManager,
         TradableAssetButtonManager tradableAssetButtonManager,
         TradableAssetImageManager tradableAssetImageManager,
-        EthereumTransactionButtonManager transactionButtonManager)
+        EthereumTransactionButtonManager transactionButtonManager,
+        NotificationManager notificationManager)
     {
         this.popupManager = popupManager;
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetButtonManager = tradableAssetButtonManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.transactionButtonManager = transactionButtonManager;
+        this.notificationManager = notificationManager;
     }
 
     /// <summary>
@@ -89,5 +97,4 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// Updates the order of this transform to reflect the proper order of the AssetButtons.
     /// </summary>
     private void UpdateButtonTransformOrder() => transform.SetSiblingIndex(transform.parent.childCount - 2);
-
 }

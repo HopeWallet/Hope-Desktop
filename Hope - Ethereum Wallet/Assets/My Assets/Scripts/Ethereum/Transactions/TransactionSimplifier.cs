@@ -53,7 +53,7 @@ public class TransactionSimplifier
                                         tokenTransaction.data.ConvertFromHex(),
                                         tokenTransaction.gasPrice.ConvertFromHex(),
                                         (int)tokenTransaction.gasUsed.ConvertFromHex(),
-                                        (int)tokenTransaction.timeStamp.ConvertFromHex());
+                                        (long)tokenTransaction.timeStamp.ConvertFromHex());
     }
 
     /// <summary>

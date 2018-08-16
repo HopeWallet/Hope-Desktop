@@ -6,7 +6,6 @@
 [Serializable]
 public class EtherTransactionJson
 {
-
     public string value;
     public string gasPrice;
     public string hash;
@@ -16,8 +15,8 @@ public class EtherTransactionJson
     public string input;
     public string contractAddress;
 
+    public long timeStamp;
     public int blockNumber;
-    public int timeStamp;
     public int nonce;
     public int transactionIndex;
     public int gas;
@@ -26,5 +25,4 @@ public class EtherTransactionJson
     public int cumulativeGasUsed;
     public int gasUsed;
     public int confirmations;
-
 }

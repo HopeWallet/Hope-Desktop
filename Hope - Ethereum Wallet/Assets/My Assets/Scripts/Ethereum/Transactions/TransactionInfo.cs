@@ -51,7 +51,7 @@ public sealed class TransactionInfo
     /// <summary>
     /// The unix time stamp when this transaction was sent.
     /// </summary>
-    public int TimeStamp { get; }
+    public long TimeStamp { get; }
 
     /// <summary>
     /// Initializes the TransactionInfo by assigning all properties.
@@ -74,7 +74,7 @@ public sealed class TransactionInfo
         BigInteger value,
         BigInteger gasPrice,
         int gasUsed,
-        int timeStamp)
+        long timeStamp)
     {
         Type = type;
         From = from;

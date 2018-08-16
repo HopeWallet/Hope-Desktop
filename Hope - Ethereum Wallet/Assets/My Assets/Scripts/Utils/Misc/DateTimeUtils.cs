@@ -18,7 +18,7 @@ public static class DateTimeUtils
     /// Gets the current unix time.
     /// </summary>
     /// <returns> The current unix time. </returns>
-    public static int GetCurrentUnixTime() => (Int32)(DateTime.UtcNow.Subtract(UnixTimeStart)).TotalSeconds;
+    public static long GetCurrentUnixTime() => (long)(DateTime.UtcNow.Subtract(UnixTimeStart)).TotalSeconds;
 
     /// <summary>
     /// Converts a unix time stamp to a DateTime object.
@@ -66,16 +66,16 @@ public static class DateTimeUtils
     /// <param name="unixTime"> The unix time to convert to the maximum time interval. </param>
     /// <param name="extraText"> The extra text to add to the end of the time interval string. </param>
     /// <returns> The final time interval text. </returns>
-    public static string GetMaxTimeInterval(int unixTime, string extraText = "")
+    public static string GetMaxTimeInterval(long unixTime, string extraText = "")
     {
         string finalTimeText;
 
-        int seconds = unixTime;
-        int minutes = seconds / MINUTE_IN_SECONDS;
-        int hours = seconds / HOUR_IN_SECONDS;
-        int days = seconds / DAY_IN_SECONDS;
-        int months = seconds / MONTH_IN_SECONDS;
-        int years = seconds / YEAR_IN_SECONDS;
+        long seconds = unixTime;
+        int minutes = (int)(seconds / MINUTE_IN_SECONDS);
+        int hours = (int)(seconds / HOUR_IN_SECONDS);
+        int days = (int)(seconds / DAY_IN_SECONDS);
+        int months = (int)(seconds / MONTH_IN_SECONDS);
+        int years = (int)(seconds / YEAR_IN_SECONDS);
 
         if (years > 0) finalTimeText = GetCleanTimeText(years, "year");
         else if (months > 0) finalTimeText = GetCleanTimeText(months, "month");
@@ -93,7 +93,7 @@ public static class DateTimeUtils
     /// <param name="timeVal"> The time value. </param>
     /// <param name="timeValName"> The name of the time conversion type. Example: 'second', 'minute', 'hour', etc. </param>
     /// <returns> The time text with the added s in case of plural time.. </returns>
-    private static string GetCleanTimeText(int timeVal, string timeValName) => timeVal + " " + timeValName + "" + GetAddedCharacter(timeVal);
+    private static string GetCleanTimeText(dynamic timeVal, string timeValName) => timeVal + " " + timeValName + "" + GetAddedCharacter(timeVal);
 
     /// <summary>
     /// Gets an added 's' if the value is greater than one. 
@@ -101,7 +101,7 @@ public static class DateTimeUtils
     /// </summary>
     /// <param name="val"> The value to determine if there is an extra character. </param>
     /// <returns> The extra character to add at the end of the string if it is plural. </returns>
-    private static string GetAddedCharacter(int val) => val != 1 ? "s" : "";
+    private static string GetAddedCharacter(dynamic val) => val != 1 ? "s" : "";
 
     /// <summary>
     /// Gets the string representation of the Month of a DateTime object.

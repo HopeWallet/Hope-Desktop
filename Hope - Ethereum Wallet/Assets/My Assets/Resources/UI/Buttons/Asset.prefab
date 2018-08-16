@@ -259,7 +259,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -440,8 +440,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ef2b89920be344e85c63d226a5c5f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notificationImageObj: {fileID: 1148172629158642}
+  loadingTransactionsObj: {fileID: 1180957439927266}
   amountText: {fileID: 114091809301892406}
   symbolText: {fileID: 114686422099605546}
+  notificationCountText: {fileID: 114016705256185550}
   assetImage: {fileID: 114774062304708966}
 --- !u!114 &114686422099605546
 MonoBehaviour:

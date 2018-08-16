@@ -56,10 +56,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <returns> The list of transactions. </returns>
     public List<TransactionInfo> GetTransactionListByAddress(string address)
     {
-        if (!transactionsByAddress.ContainsKey(address))
-            return null;
-
-        return transactionsByAddress[address];
+        return transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
     }
 
     /// <summary>
