@@ -25,6 +25,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
         Container.BindInstance(playerPrefSettings.tokenContractSettings).AsSingle().NonLazy();
         Container.BindInstance(playerPrefSettings.tokenListSettings).AsSingle().NonLazy();
         Container.BindInstance(playerPrefSettings.walletPrefSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.notificationSettings).AsSingle().NonLazy();
 
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
         Container.BindInstance(walletSettings).AsSingle().NonLazy();
@@ -54,5 +55,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
         public UserWalletInfoManager.Settings walletPrefSettings;
         public TokenContractManager.Settings tokenContractSettings;
         public TokenListManager.Settings tokenListSettings;
+        public NotificationManager.Settings notificationSettings;
     }
 }

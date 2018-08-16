@@ -13,9 +13,11 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
 	public TMP_Text assetText,
 					balanceText,
-					currentTokenNetWorthText;
+					currentTokenNetWorthText,
+                    lockPrpsNotificationText;
 
-    public Image assetImage;
+    public Image assetImage,
+                 lockPrpsNotificationImage;
 
     public DropdownButton optionsDropdownButton;
 

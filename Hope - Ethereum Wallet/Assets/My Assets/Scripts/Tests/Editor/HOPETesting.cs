@@ -62,14 +62,6 @@ public class HOPETesting : MonoBehaviour
 {
 
     [Test]
-    public void TestPassword()
-    {
-        string passwordHash = PasswordEncryption.Blake2.GetSaltedPasswordHash("my password", 1000, 256, 256);
-
-        Assert.IsTrue(PasswordEncryption.Blake2.VerifyPassword("my password", passwordHash, 1000, 256, 256));
-    }
-
-    [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
         PlayerPrefs.DeleteAll();
