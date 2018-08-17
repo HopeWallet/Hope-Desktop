@@ -52,6 +52,8 @@ using Org.BouncyCastle.Crypto.Prng;
 using Nethereum.Hex.HexTypes;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
+using RandomNET.Integers;
+using RandomNET.Secure;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -60,7 +62,6 @@ using Assert = NUnit.Framework.Assert;
 
 public class HOPETesting : MonoBehaviour
 {
-
     [Test]
     public void DeletePrefs()
     {

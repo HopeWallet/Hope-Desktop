@@ -19,9 +19,9 @@ public static class DebugUtils
     /// <param name="array"> The array to display. </param>
     public static void LogArray<T>(this T[] array)
     {
-        string text = "";
+        string text = "[";
         array.ForEach(i => text += i.ToString() + ", ");
-        Debug.Log(text.Trim().Remove(text.Length - 2, 1));
+        Debug.Log(text.Trim().Remove(text.Length - 2, 1) + "]");
     }
 
 }

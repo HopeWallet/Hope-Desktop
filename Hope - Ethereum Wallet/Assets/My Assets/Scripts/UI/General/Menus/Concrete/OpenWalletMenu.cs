@@ -23,7 +23,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
-    private NotificationManager notificationManager;
+    private TradableAssetNotificationManager notificationManager;
     private LockedPRPSManager lockedPrpsManager;
     private PRPS prpsContract;
 
@@ -35,13 +35,15 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     /// </summary>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+    /// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
+    /// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
     /// <param name="prpsContract"> The active PRPS contract. </param>
     /// <param name="uiSettings"> The ui settings. </param>
     [Inject]
     public void Construct(
         TokenContractManager tokenContractManager,
         TradableAssetManager tradableAssetManager,
-        NotificationManager notificationManager,
+        TradableAssetNotificationManager notificationManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract,
 		UIManager.Settings uiSettings)
@@ -96,6 +98,9 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         UpdateAssetNotifications();
     }
 
+    /// <summary>
+    /// Updates the notifications for locked purpose and saves the transaction count of the current asset.
+    /// </summary>
     private void UpdateAssetNotifications()
     {
         var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
@@ -103,7 +108,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         lockPrpsNotificationText.text = lockedPrpsCount.ToString();
         lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
 
-        notificationManager.SaveNewTransactions(tradableAssetManager.ActiveTradableAsset.AssetAddress);
+        notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
     }
 
     public override void GoBack()

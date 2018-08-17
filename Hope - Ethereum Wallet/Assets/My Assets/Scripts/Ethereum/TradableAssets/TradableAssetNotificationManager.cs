@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public sealed class NotificationManager
+public sealed class TradableAssetNotificationManager
 {
     public event Action OnNotificationsUpdated;
 
@@ -13,7 +13,7 @@ public sealed class NotificationManager
     private readonly LockedPRPSManager lockedPrpsManager;
     private readonly PRPS prpsContract;
 
-    public NotificationManager(
+    public TradableAssetNotificationManager(
         Settings settings,
         EthereumTransactionManager ethereumTransactionManager,
         LockedPRPSManager lockedPrpsManager,
@@ -37,7 +37,7 @@ public sealed class NotificationManager
         return notificationsByAddress.ContainsKey(assetAddress) ? notificationsByAddress[assetAddress] : null;
     }
 
-    public void SaveNewTransactions(string assetAddress)
+    public void SaveTransactionCount(string assetAddress)
     {
         if (!notificationsByAddress.ContainsKey(assetAddress))
             return;

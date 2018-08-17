@@ -22,7 +22,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     private TradableAssetButtonManager tradableAssetButtonManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private EthereumTransactionButtonManager transactionButtonManager;
-    private NotificationManager notificationManager;
+    private TradableAssetNotificationManager notificationManager;
 
     /// <summary>
     /// Injects the required dependencies into this class.
@@ -32,14 +32,14 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <param name="tradableAssetButtonManager"> The active TradableAssetButtonManager object. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager object. </param>
     /// <param name="transactionButtonManager"> The active TransactionButtonManager object. </param>
-    /// <param name="notificationManager"> The active NotificationManager. </param>
+    /// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
     [Inject]
     public void Construct(PopupManager popupManager,
         TradableAssetManager tradableAssetManager,
         TradableAssetButtonManager tradableAssetButtonManager,
         TradableAssetImageManager tradableAssetImageManager,
         EthereumTransactionButtonManager transactionButtonManager,
-        NotificationManager notificationManager)
+        TradableAssetNotificationManager notificationManager)
     {
         this.popupManager = popupManager;
         this.tradableAssetManager = tradableAssetManager;
@@ -51,6 +51,9 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
         notificationManager.OnNotificationsUpdated += UpdateAssetNotifications;
     }
 
+    /// <summary>
+    /// Removes the UpdateAssetNotifications method from the notification manager.
+    /// </summary>
     private void OnDestroy()
     {
         notificationManager.OnNotificationsUpdated -= UpdateAssetNotifications;
@@ -91,6 +94,9 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
         amountText.text = balanceText.LimitEnd(10, "...");
     }
 
+    /// <summary>
+    /// Updates the notification count of this asset.
+    /// </summary>
     private void UpdateAssetNotifications()
     {
         var notifications = notificationManager.GetAssetNotificationCount(ButtonInfo.AssetAddress);

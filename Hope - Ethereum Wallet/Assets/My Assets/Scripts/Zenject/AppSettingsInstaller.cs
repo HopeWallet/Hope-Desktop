@@ -55,6 +55,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
         public UserWalletInfoManager.Settings walletPrefSettings;
         public TokenContractManager.Settings tokenContractSettings;
         public TokenListManager.Settings tokenListSettings;
-        public NotificationManager.Settings notificationSettings;
+        public TradableAssetNotificationManager.Settings notificationSettings;
     }
 }
