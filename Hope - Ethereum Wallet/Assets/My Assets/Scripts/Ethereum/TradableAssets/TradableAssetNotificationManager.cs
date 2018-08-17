@@ -42,7 +42,12 @@ public sealed class TradableAssetNotificationManager
         if (!notificationsByAddress.ContainsKey(assetAddress))
             return;
 
-        var addressTxCount = new AddressTransactionCount(assetAddress, ethereumTransactionManager.GetTransactionListByAddress(assetAddress).Count);
+        var txCount = ethereumTransactionManager.GetTransactionListByAddress(assetAddress)?.Count;
+
+        if (txCount == null)
+            return;
+
+        var addressTxCount = new AddressTransactionCount(assetAddress, txCount.Value);
 
         if (transactionsByAddress.Contains(assetAddress))
             transactionsByAddress[assetAddress] = addressTxCount;

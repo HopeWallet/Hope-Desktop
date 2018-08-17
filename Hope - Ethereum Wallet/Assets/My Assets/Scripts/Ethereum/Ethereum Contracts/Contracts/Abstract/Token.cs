@@ -2,11 +2,11 @@
 
 public abstract class Token : DynamicSmartContract
 {
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    public string Symbol { get; private set; }
+    public string Symbol { get; }
 
-    public int? Decimals { get; private set; }
+    public int? Decimals { get; }
 
     protected Token(string contractAddress, string name, string symbol, int decimals) : base(contractAddress)
     {
