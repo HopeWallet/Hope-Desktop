@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -8,13 +9,15 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
+    public static event Action<TabType> OnTabChanged;
+
     public GameObject backgroundVignette,
                       lockPurposeSection,
                       lockPurposeNotificationSection;
 
-	public TMP_Text assetText,
-					balanceText,
-					currentTokenNetWorthText,
+    public TMP_Text assetText,
+                    balanceText,
+                    currentTokenNetWorthText,
                     lockPrpsNotificationText;
 
     public Image assetImage;
@@ -46,7 +49,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         TradableAssetNotificationManager notificationManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract,
-		UIManager.Settings uiSettings)
+        UIManager.Settings uiSettings)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
@@ -115,4 +118,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         // Logout popup
     }
+
+    public enum TabType { All, Sent, Received, Pending };
 }
