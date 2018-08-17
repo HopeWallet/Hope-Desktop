@@ -13,9 +13,7 @@ public sealed partial class Hodler : StaticSmartContract
     /// </summary>
     /// <param name="ethereumNetworkSettings"> The active <see cref="EthereumNetworkManager.Settings"/>. </param>
     /// <param name="settings"> The active <see cref="Hodler.Settings"/>. </param>
-    public Hodler(
-        EthereumNetworkManager.Settings ethereumNetworkSettings,
-        Settings settings) : base(ethereumNetworkSettings, settings)
+    public Hodler(EthereumNetworkManager.Settings ethereumNetworkSettings, Settings settings) : base(ethereumNetworkSettings, settings)
     {
     }
 
