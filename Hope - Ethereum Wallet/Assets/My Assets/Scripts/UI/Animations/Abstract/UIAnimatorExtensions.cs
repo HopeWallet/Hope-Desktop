@@ -101,6 +101,11 @@ public static class UIAnimatorExtensions
 		gameObject.transform.DOLocalMoveY(endValue, duration);
 	}
 
+	public static void AnimateColor(this GameObject gameObject, Color endColor, float duration, TweenCallback callback = null)
+	{
+		gameObject.GetComponent<Graphic>().DOColor(endColor, duration).OnComplete(() => callback?.Invoke());
+	}
+
 	public static void SetGraphicAndScale(this GameObject gameObject, Vector2 endValueScale)
 	{
 		gameObject.SetScale(endValueScale);
