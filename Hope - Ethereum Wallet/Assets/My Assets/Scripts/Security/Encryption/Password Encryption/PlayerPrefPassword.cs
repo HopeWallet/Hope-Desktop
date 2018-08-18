@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Hope.Security.HashGeneration;
 using RandomNET.Strings;
+using RandomNET.Bytes;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.
@@ -47,13 +48,13 @@ public class PlayerPrefPassword : ScriptableObject
     /// <returns> The encryption password to use to encrypt the WalletData object. </returns>
     public string GenerateEncryptionPassword(string seed)
     {
-        string operationStringDeterminant = RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH);
-        string password = RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH);
+        string operationStringDeterminant = RandomBytes.Secure.Blake2.GetBytes(PASSWORD_LENGTH).GetHexString().LimitEnd(PASSWORD_LENGTH);
+        string password = RandomBytes.Secure.Blake2.GetBytes(PASSWORD_LENGTH).GetHexString().LimitEnd(PASSWORD_LENGTH);
 
         prefDictionary = new Dictionary<string, string> { { keys[0], password }, { keys[keys.Length - 1], operationStringDeterminant } };
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
-                                        _ => RandomString.Secure.Blake2.GetString(PASSWORD_LENGTH),
+                                        _ => RandomBytes.Secure.Blake2.GetBytes(PASSWORD_LENGTH).GetHexString().LimitEnd(PASSWORD_LENGTH),
                                         (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).GetSHA512Hash();
     }
 
