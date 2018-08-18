@@ -15,10 +15,11 @@ public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		importWalletDesc.AnimateScaleX(1f, 0.2f);
-		createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		createWalletDesc.AnimateScaleX(1f, 0.3f, FinishedAnimating);
+		FinishedAnimating();
+		//importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		//importWalletDesc.AnimateScaleX(1f, 0.2f);
+		//createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		//createWalletDesc.AnimateScaleX(1f, 0.3f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -28,9 +29,9 @@ public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 	{
 		FinishedAnimating();
 
-		importWalletButton.SetGraphicAndScale(Vector2.zero);
-		importWalletDesc.SetScale(new Vector2(0f, 1f));
-		createWalletButton.SetGraphicAndScale(Vector2.zero);
-		createWalletDesc.SetScale(new Vector2(0f, 1f));
+		//importWalletButton.SetGraphicAndScale(Vector2.zero);
+		//importWalletDesc.SetScale(new Vector2(0f, 1f));
+		//createWalletButton.SetGraphicAndScale(Vector2.zero);
+		//createWalletDesc.SetScale(new Vector2(0f, 1f));
 	}
 }

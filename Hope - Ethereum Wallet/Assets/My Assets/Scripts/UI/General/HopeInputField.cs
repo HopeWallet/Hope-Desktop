@@ -99,4 +99,10 @@ public class HopeInputField : MonoBehaviour
 
 		eye.GetComponent<Image>().sprite = inputFieldBase.contentType == InputField.ContentType.Password ? eyeInactiveNormal : eyeActiveNormal;
 	}
+
+	/// <summary>
+	/// Sets the input field base text value
+	/// </summary>
+	/// <param name="text"> The string being set </param>
+	public void SetText(string text) => inputFieldBase.text = text;
 }
