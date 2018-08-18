@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 222900624361926464}
   - component: {fileID: 114801747862018590}
   - component: {fileID: 114806199382893746}
-  - component: {fileID: 114222585450833496}
+  - component: {fileID: 114792103613938650}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 222313275758438672}
   - component: {fileID: 114642899875107960}
   - component: {fileID: 114773675501167290}
-  - component: {fileID: 114947013498320430}
+  - component: {fileID: 114690832921634290}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -373,6 +373,8 @@ GameObject:
   - component: {fileID: 224877450814677380}
   - component: {fileID: 222719440899702766}
   - component: {fileID: 114730853832306972}
+  - component: {fileID: 114621814107392618}
+  - component: {fileID: 114538776209857554}
   m_Layer: 0
   m_Name: Hope_Logo
   m_TagString: Untagged
@@ -966,21 +968,6 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
---- !u!114 &114222585450833496
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1693102022571996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 0
-  textCursor: {fileID: 0}
-  handCursor: {fileID: 0}
-  buttonComponent: {fileID: 0}
 --- !u!114 &114234950032459046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1103,6 +1090,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114538776209857554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816731909116160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 1
+  exitableButton: 0
 --- !u!114 &114542398921408202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1130,6 +1130,48 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114621814107392618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816731909116160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2, type: 3}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 114730853832306972}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114622891587407324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1566,6 +1608,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114690832921634290
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1776928638253394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 1
+  exitableButton: 0
 --- !u!114 &114693723913193844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1606,7 +1661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1694,6 +1749,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114792103613938650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1693102022571996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 1
+  exitableButton: 0
 --- !u!114 &114797628933668318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2078,21 +2146,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114947013498320430
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1776928638253394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 0
-  textCursor: {fileID: 0}
-  handCursor: {fileID: 0}
-  buttonComponent: {fileID: 0}
 --- !u!114 &114967016311071722
 MonoBehaviour:
   m_ObjectHideFlags: 1
