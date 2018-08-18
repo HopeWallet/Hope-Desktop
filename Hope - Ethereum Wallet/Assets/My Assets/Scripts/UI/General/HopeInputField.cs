@@ -34,6 +34,7 @@ public class HopeInputField : MonoBehaviour
 		}
 
 		Error = true;
+		Input = string.Empty;
 	}
 
 	private void SetSprite(ref Sprite targetSprite, string iconName)

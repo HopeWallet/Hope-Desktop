@@ -2,9 +2,9 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CursorChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	private bool isButton;
+	[SerializeField] private bool isButton, exitableButton;
 
 	private Texture2D textCursor, handCursor;
 
@@ -15,12 +15,12 @@ public class CursorChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 	/// </summary>
 	void Awake()
 	{
-		isButton = gameObject.name != "InputField_Base";
-
 		if (isButton)
 		{
 			buttonComponent = transform.GetComponent<Button>();
-			buttonComponent.onClick.AddListener(() => SetCursor(false));
+
+			if (exitableButton)
+				buttonComponent.onClick.AddListener(() => SetCursor(false));
 		}
 
 		textCursor = Resources.Load("UI/Graphics/Textures/New/Icons/TextCursor_Icon") as Texture2D;

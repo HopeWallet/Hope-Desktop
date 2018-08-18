@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 222110185782474138}
   - component: {fileID: 114441758914544058}
   - component: {fileID: 114975156974055756}
-  - component: {fileID: 114230390621928192}
+  - component: {fileID: 114234950032459046}
   m_Layer: 0
   m_Name: InputField_Base
   m_TagString: Untagged
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 222635472184927284}
   - component: {fileID: 114693723913193844}
   - component: {fileID: 114131630776764526}
-  - component: {fileID: 114570640779341898}
+  - component: {fileID: 114630815194334396}
   m_Layer: 5
   m_Name: Back_Button
   m_TagString: Untagged
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 222424912170392248}
   - component: {fileID: 114875816836159094}
   - component: {fileID: 114798928006332916}
-  - component: {fileID: 114305860793061664}
+  - component: {fileID: 114125564668922576}
   m_Layer: 0
   m_Name: InputField_Base
   m_TagString: Untagged
@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 222784145136825762}
   - component: {fileID: 114661979248186938}
   - component: {fileID: 114450260774734892}
-  - component: {fileID: 114259079204291240}
+  - component: {fileID: 114235042486863008}
   m_Layer: 5
   m_Name: Next_Button
   m_TagString: Untagged
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 222210250491516686}
   - component: {fileID: 114542398921408202}
   - component: {fileID: 114188649600924970}
-  - component: {fileID: 114658702535296706}
+  - component: {fileID: 114797628933668318}
   m_Layer: 0
   m_Name: InputField_Base
   m_TagString: Untagged
@@ -820,6 +820,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114125564668922576
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1264088799696250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 0
+  exitableButton: 0
 --- !u!114 &114131630776764526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -964,7 +977,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114230390621928192
+  isButton: 0
+  textCursor: {fileID: 0}
+  handCursor: {fileID: 0}
+  buttonComponent: {fileID: 0}
+--- !u!114 &114234950032459046
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -972,10 +989,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1115140766003118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114259079204291240
+  isButton: 0
+  exitableButton: 0
+--- !u!114 &114235042486863008
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -983,20 +1002,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1661517219496106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114305860793061664
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1264088799696250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  isButton: 1
+  exitableButton: 1
 --- !u!114 &114441758914544058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1120,17 +1130,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114570640779341898
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1116622556422430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114622891587407324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1245,6 +1244,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114630815194334396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1116622556422430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 1
+  exitableButton: 1
 --- !u!114 &114642032020157500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1527,17 +1539,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114658702535296706
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1697706439840438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114661979248186938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1693,6 +1694,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114797628933668318
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697706439840438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isButton: 0
+  exitableButton: 0
 --- !u!114 &114798928006332916
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2075,6 +2089,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isButton: 0
+  textCursor: {fileID: 0}
+  handCursor: {fileID: 0}
+  buttonComponent: {fileID: 0}
 --- !u!114 &114967016311071722
 MonoBehaviour:
   m_ObjectHideFlags: 1
