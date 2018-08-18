@@ -21,6 +21,9 @@ public class HopeInputField : MonoBehaviour
 
 	public bool Error { get; set; }
 
+	/// <summary>
+	/// Sets the variables and inputfield listener
+	/// </summary>
 	private void Awake()
 	{
 		inputFieldBase.onValueChanged.AddListener(InputFieldChanged);
@@ -37,20 +40,33 @@ public class HopeInputField : MonoBehaviour
 		Input = string.Empty;
 	}
 
+	/// <summary>
+	/// Sets the target sprite from a given string
+	/// </summary>
+	/// <param name="targetSprite"> The target sprite being set </param>
+	/// <param name="iconName"> The name of the icon file </param>
 	private void SetSprite(ref Sprite targetSprite, string iconName)
 	{
 		Texture2D loadedTexture = Resources.Load("UI/Graphics/Textures/New/Icons/" + iconName) as Texture2D;
 		targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
 	}
 
+	/// <summary>
+	/// Updates the visuals of the input field
+	/// </summary>
+	/// <param name="emptyString"> Whether the string is empty or not </param>
 	public void UpdateVisuals(bool emptyString)
 	{
-		placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.1f);
-		inputFieldBase.gameObject.AnimateColor(emptyString ? new Color(0.85f, 0.85f, 0.85f) : Error ? UIColors.Red : UIColors.Green, 0.1f);
-		errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.1f);
-		errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.1f);
+		placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
+		inputFieldBase.gameObject.AnimateColor(emptyString ? new Color(0.85f, 0.85f, 0.85f) : Error ? UIColors.Red : UIColors.Green, 0.15f);
+		errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
+		errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
 	}
 
+	/// <summary>
+	/// The input field is changed
+	/// </summary>
+	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
 		Input = inputString;
@@ -64,6 +80,9 @@ public class HopeInputField : MonoBehaviour
 			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.1f);
 	}
 
+	/// <summary>
+	/// The eye icon is clicked and either enables or disables vision of the password
+	/// </summary>
 	private void EyeClicked()
 	{
 		if (inputFieldBase.contentType == InputField.ContentType.Password)
