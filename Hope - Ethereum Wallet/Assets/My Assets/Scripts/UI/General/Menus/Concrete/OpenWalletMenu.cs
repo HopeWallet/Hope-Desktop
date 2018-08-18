@@ -9,11 +9,15 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
+<<<<<<< HEAD
     public static event Action<TabType> OnTabChanged;
 
     public GameObject backgroundVignette,
                       lockPurposeSection,
                       lockPurposeNotificationSection;
+=======
+    public GameObject lockPurposeSection;
+>>>>>>> origin/UI-v2
 
     public TMP_Text assetText,
                     balanceText,
@@ -70,19 +74,15 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         tokenContractManager.StartTokenLoad(OpenMenu);
     }
 
-    /// <summary>
-    /// Called when the OpenWalletMenu is first opened.
-    /// </summary>
-    private void OpenMenu()
-    {
-        backgroundVignette.SetActive(false);
-        transform.GetChild(0).gameObject.SetActive(true);
-    }
+	/// <summary>
+	/// Called when the OpenWalletMenu is first opened.
+	/// </summary>
+	private void OpenMenu() => transform.GetChild(0).gameObject.SetActive(true);
 
-    /// <summary>
-    /// Updates the ui for the newest TradableAsset.
-    /// </summary>
-    public void UpdateAssetUI()
+	/// <summary>
+	/// Updates the ui for the newest TradableAsset.
+	/// </summary>
+	public void UpdateAssetUI()
     {
         var tradableAsset = tradableAssetManager.ActiveTradableAsset;
 
