@@ -40,7 +40,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
         backButton.onClick.AddListener(GoBack);
         copyMnemonic.onClick.AddListener(CopyMnemonic);
         generateNewWords.onClick.AddListener(GenerateMnemonic);
-    }
+	}
 
 	/// <summary>
 	/// Opens the exit confirmation popup and enables the note text
@@ -53,30 +53,24 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 	[SecureCallEnd]
     private void OnEnable()
     {
-        GenerateMnemonic();
-        UpdateWordFields();
+		GenerateMnemonic();
+		UpdateWordFields();
     }
 
-    /// <summary>
-    /// Opens the confirm words menu.
-    /// </summary>
-    public void ConfirmWords()
-    {
-        uiManager.OpenMenu<ConfirmMnemonicMenu>();
-    }
+	/// <summary>
+	/// Opens the confirm words menu.
+	/// </summary>
+	public void ConfirmWords() => uiManager.OpenMenu<ConfirmMnemonicMenu>();
 
-    /// <summary>
-    /// Generates the mnemonic phrase.
-    /// </summary>
-    public void GenerateMnemonic()
-    {
-        dynamicDataCache.SetData("mnemonic", new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase));
-    }
+	/// <summary>
+	/// Generates the mnemonic phrase.
+	/// </summary>
+	public void GenerateMnemonic() => dynamicDataCache.SetData("mnemonic", new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase));
 
-    /// <summary>
-    /// Copies the mnemonic phrase to the clipboard.
-    /// </summary>
-    [SecureCallEnd]
+	/// <summary>
+	/// Copies the mnemonic phrase to the clipboard.
+	/// </summary>
+	[SecureCallEnd]
     public void CopyMnemonic()
     {
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())

@@ -45,9 +45,8 @@ public class CreateMnemonicMenuAnimator : UIAnimator
     /// </summary>
     private void Start()
     {
-        var createMnemonicMenu = GetComponent<CreateMnemonicMenu>();
-        createMnemonicMenu.generateNewWords.onClick.AddListener(StartWordAnimation);
-        createMnemonicMenu.copyMnemonic.onClick.AddListener(AnimateCheckMarkIcon);
+		generateNewButton.transform.GetComponent<Button>().onClick.AddListener(StartWordAnimation);
+		copyAllButton.transform.GetComponent<Button>().onClick.AddListener(AnimateCheckMarkIcon);
     }
 
 	/// <summary>
@@ -55,10 +54,11 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		AnimatePassphrase(0);
-		generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+		FinishedAnimating();
+		//AnimatePassphrase(0);
+		//generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		//copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		//confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
 
@@ -69,12 +69,12 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	{
 		FinishedAnimating();
 
-		for (int i = 0; i < 12; i++)
-			wordObjects[i].SetScale(new Vector2(0f, 1f));
+		//for (int i = 0; i < 12; i++)
+		//	wordObjects[i].SetScale(new Vector2(0f, 1f));
 
-		generateNewButton.SetGraphicAndScale(Vector2.zero);
-		copyAllButton.SetGraphicAndScale(Vector2.zero);
-		confirmButton.SetGraphicAndScale(Vector2.zero);
+		//generateNewButton.SetGraphicAndScale(Vector2.zero);
+		//copyAllButton.SetGraphicAndScale(Vector2.zero);
+		//confirmButton.SetGraphicAndScale(Vector2.zero);
 	}
 
 	/// <summary>
