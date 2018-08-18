@@ -9,15 +9,11 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-<<<<<<< HEAD
     public static event Action<TabType> OnTabChanged;
 
     public GameObject backgroundVignette,
                       lockPurposeSection,
                       lockPurposeNotificationSection;
-=======
-    public GameObject lockPurposeSection;
->>>>>>> origin/UI-v2
 
     public TMP_Text assetText,
                     balanceText,
