@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 222635472184927284}
   - component: {fileID: 114693723913193844}
   - component: {fileID: 114131630776764526}
+  - component: {fileID: 114570640779341898}
   m_Layer: 5
   m_Name: Back_Button
   m_TagString: Untagged
@@ -280,6 +281,7 @@ GameObject:
   - component: {fileID: 222784145136825762}
   - component: {fileID: 114661979248186938}
   - component: {fileID: 114450260774734892}
+  - component: {fileID: 114259079204291240}
   m_Layer: 5
   m_Name: Next_Button
   m_TagString: Untagged
@@ -472,6 +474,8 @@ GameObject:
   - component: {fileID: 224547918930093246}
   - component: {fileID: 223646324280473388}
   - component: {fileID: 114030727281137358}
+  - component: {fileID: 114934157634632768}
+  - component: {fileID: 114746784208049030}
   m_Layer: 0
   m_Name: CreateWallet_Menu
   m_TagString: Untagged
@@ -960,7 +964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: 1
 --- !u!114 &114230390621928192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -972,7 +975,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: 0
+--- !u!114 &114259079204291240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1661517219496106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114305860793061664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -984,7 +997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: 0
 --- !u!114 &114441758914544058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1108,6 +1120,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114570640779341898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1116622556422430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114622891587407324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1515,7 +1538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: 0
 --- !u!114 &114661979248186938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1612,7 +1634,24 @@ MonoBehaviour:
   inputFieldBase: {fileID: 114188649600924970}
   eye: {fileID: 0}
   errorIcon: {fileID: 1968140042154574}
-  ErrorMessage: {fileID: 114015037938011452}
+  errorMessage: {fileID: 114015037938011452}
+--- !u!114 &114746784208049030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1996787740156080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9c4711f55970d4fbf494e1b2ce16f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyWhenClosed: 1
+  nextButton: {fileID: 114450260774734892}
+  backButton: {fileID: 114131630776764526}
+  walletNameField: {fileID: 114733959693888730}
+  password1Field: {fileID: 114847041827421048}
+  password2Field: {fileID: 114975599293786198}
 --- !u!114 &114773675501167290
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1801,7 +1840,7 @@ MonoBehaviour:
   inputFieldBase: {fileID: 114798928006332916}
   eye: {fileID: 1693102022571996}
   errorIcon: {fileID: 1483406284696346}
-  ErrorMessage: {fileID: 114074237551203694}
+  errorMessage: {fileID: 114074237551203694}
 --- !u!114 &114875816836159094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1909,8 +1948,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1976,6 +2015,28 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114934157634632768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1996787740156080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1faa5f75025340b4aa14643c891a21f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 1475811618508708}
+  dim: {fileID: 0}
+  form: {fileID: 0}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
+  popupContainer: {fileID: 0}
+  walletNameField: {fileID: 1158675541128030}
+  password1Field: {fileID: 1948198633804592}
+  password2Field: {fileID: 1386529655050340}
+  nextButton: {fileID: 1661517219496106}
 --- !u!114 &114937641824438988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2014,7 +2075,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aaa020435051a4bbb0c575889c0891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: 1
 --- !u!114 &114967016311071722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2208,7 +2268,7 @@ MonoBehaviour:
   inputFieldBase: {fileID: 114975156974055756}
   eye: {fileID: 1776928638253394}
   errorIcon: {fileID: 1629011831608876}
-  ErrorMessage: {fileID: 114967016311071722}
+  errorMessage: {fileID: 114967016311071722}
 --- !u!222 &222110185782474138
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -2418,7 +2478,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 250}
+  m_AnchoredPosition: {x: 0, y: 245}
   m_SizeDelta: {x: 730, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224276527137575994
@@ -2495,7 +2555,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -261}
+  m_AnchoredPosition: {x: 0, y: -287.6}
   m_SizeDelta: {x: 220, y: 54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224415021376316600

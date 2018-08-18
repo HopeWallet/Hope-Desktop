@@ -1,19 +1,23 @@
-﻿using RandomNET.Strings;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HopeInputField : MonoBehaviour
 {
+	public event Action OnInputUpdated;
+
 	[SerializeField] private GameObject placeholder;
 	[SerializeField] private InputField inputFieldBase;
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
 
-	public TextMeshProUGUI ErrorMessage;
+	public TextMeshProUGUI errorMessage;
 
 	private Sprite eyeInactiveNormal;
 	private Sprite eyeActiveNormal;
+
+	public string Input { get; private set; }
 
 	public bool Error { get; set; }
 
@@ -28,6 +32,8 @@ public class HopeInputField : MonoBehaviour
 			SetSprite(ref eyeInactiveNormal, "Eye_Inactive_Normal");
 			SetSprite(ref eyeActiveNormal, "Eye_Active_Normal");
 		}
+
+		Error = true;
 	}
 
 	private void SetSprite(ref Sprite targetSprite, string iconName)
@@ -36,14 +42,22 @@ public class HopeInputField : MonoBehaviour
 		targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
 	}
 
-	private void InputFieldChanged(string str)
+	public void UpdateVisuals(bool emptyString)
 	{
-		bool emptyString = string.IsNullOrEmpty(str);
-
 		placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.1f);
 		inputFieldBase.gameObject.AnimateColor(emptyString ? new Color(0.85f, 0.85f, 0.85f) : Error ? UIColors.Red : UIColors.Green, 0.1f);
 		errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.1f);
-		ErrorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.1f);
+		errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.1f);
+	}
+
+	private void InputFieldChanged(string inputString)
+	{
+		Input = inputString;
+		OnInputUpdated?.Invoke();
+
+		bool emptyString = string.IsNullOrEmpty(inputString);
+
+		UpdateVisuals(emptyString);
 
 		if (eye != null)
 			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.1f);

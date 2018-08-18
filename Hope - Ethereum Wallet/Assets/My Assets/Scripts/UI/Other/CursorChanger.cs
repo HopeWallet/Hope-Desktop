@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CursorChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public bool hand;
+	private bool isButton;
 
 	private Texture2D textCursor, handCursor;
+
+	private Button buttonComponent;
 
 	/// <summary>
 	/// Loads the text cursor from the resources folder
 	/// </summary>
 	void Awake()
 	{
+		isButton = gameObject.name != "InputField_Base";
+
+		if (isButton)
+		{
+			buttonComponent = transform.GetComponent<Button>();
+			buttonComponent.onClick.AddListener(() => SetCursor(false));
+		}
+
 		textCursor = Resources.Load("UI/Graphics/Textures/New/Icons/TextCursor_Icon") as Texture2D;
 		handCursor = Resources.Load("UI/Graphics/Textures/New/Icons/HandCursor_Icon") as Texture2D;
 	}
@@ -22,15 +33,22 @@ public class CursorChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		Cursor.SetCursor(hand ? handCursor : textCursor, new Vector2(hand ? 12f : 45f, hand ? 0f : 25f), CursorMode.Auto);
+		if ((isButton && buttonComponent.interactable) || !isButton)
+			SetCursor(true);
 	}
 
 	/// <summary>
 	/// Sets cursor image back to the default
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerExit(PointerEventData eventData)
+	public void OnPointerExit(PointerEventData eventData) => SetCursor(false);
+
+	/// <summary>
+	/// Sets the cursor image either to the hand cursor, text cursor, or default cursor
+	/// </summary>
+	/// <param name="customCursor"> Whether the cursor needs to be changed to a customCursor, or the defualt cursor </param>
+	private void SetCursor(bool customCursor)
 	{
-		Cursor.SetCursor(null, new Vector2(hand ? 12f : 45f, hand ? 0f : 25f), CursorMode.Auto);
+		Cursor.SetCursor(customCursor ? (isButton ? handCursor : textCursor) : null, new Vector2(isButton ? 12f : 60f, isButton ? 5f : 25f), CursorMode.Auto);
 	}
 }

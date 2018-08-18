@@ -1,6 +1,4 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.ProtectedTypes.Types;
-using TMPro;
+﻿using Hope.Security.ProtectedTypes.Types;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -10,21 +8,14 @@ using Zenject;
 /// </summary>
 public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 {
-	[SerializeField] private Button createWalletButton, backButton;
+	[SerializeField] private Button nextButton, backButton;
 
-	[SerializeField] private TMP_InputField walletNameField, password1Field, password2Field;
+	[SerializeField] private HopeInputField walletNameField,
+											password1Field,
+											password2Field;
 
-	[SerializeField] private InteractableIcon menuInfoIcon,
-											  walletNameErrorIcon,
-											  passwordErrorIcon,
-											  passwordCheckMarkIcon;
-
-	private CreateWalletMenuAnimator createWalletMenuAnimator;
-    private DynamicDataCache dynamicDataCache;
-
+	private DynamicDataCache dynamicDataCache;
 	private UserWalletInfoManager userWalletInfoManager;
-
-	private bool validPassword, validWalletName;
 
 	/// <summary>
 	/// Adds the required dependencies into this class.
@@ -32,14 +23,10 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
 	/// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
 	[Inject]
-    public void Construct(DynamicDataCache dynamicDataCache, UserWalletInfoManager userWalletInfoManager, PopupManager popupManager)
+    public void Construct(DynamicDataCache dynamicDataCache, UserWalletInfoManager userWalletInfoManager)
 	{
 		this.dynamicDataCache = dynamicDataCache;
 		this.userWalletInfoManager = userWalletInfoManager;
-
-		menuInfoIcon.PopupManager = popupManager;
-		walletNameErrorIcon.PopupManager = popupManager;
-		passwordErrorIcon.PopupManager = popupManager;
 	}
 
 	/// <summary>
@@ -47,13 +34,11 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// </summary>
 	protected override void OnAwake()
 	{
-		createWalletMenuAnimator = transform.GetComponent<CreateWalletMenuAnimator>();
-
+		password1Field.OnInputUpdated += PasswordsUpdated;
+		password2Field.OnInputUpdated += PasswordsUpdated;
+		walletNameField.OnInputUpdated += WalletNameFieldChanged;
+		nextButton.onClick.AddListener(CreateWalletNameAndPass);
 		backButton.onClick.AddListener(GoBack);
-		password1Field.onValueChanged.AddListener(Password1FieldChanged);
-		password2Field.onValueChanged.AddListener(Password2FieldChanged);
-		walletNameField.onValueChanged.AddListener(WalletNameFieldChanged);
-		createWalletButton.onClick.AddListener(CreateWalletNameAndPass);
 	}
 
 	/// <summary>
@@ -61,8 +46,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// </summary>
 	private void CreateWalletNameAndPass()
     {
-        dynamicDataCache.SetData("pass", new ProtectedString(password1Field.text));
-        dynamicDataCache.SetData("name", walletNameField.text);
+        dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Input));
+        dynamicDataCache.SetData("name", walletNameField.Input);
 
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
     }
@@ -71,21 +56,18 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// Checks to see if the wallet name is valid and has not been used before.
 	/// </summary>
 	/// <param name="walletName"> The text in the wallet name input field. </param>
-	private void WalletNameFieldChanged(string walletName)
+	private void WalletNameFieldChanged()
 	{
-		if (walletName.Length > 30)
-			walletNameField.GetComponent<TMP_InputField>().text = walletName.LimitEnd(30);
+		string walletName = walletNameField.Input;
 
 		bool emptyName = string.IsNullOrEmpty(walletName.Trim());
 		bool usedName = WalletNameExists(walletName);
-		validWalletName = !emptyName && !usedName;
+		walletNameField.Error = emptyName || usedName;
 
 		if (emptyName)
-			walletNameErrorIcon.infoText = "This is not a valid wallet name to save as.";
+			walletNameField.errorMessage.text = "Invalid wallet name.";
 		else if (usedName)
-			walletNameErrorIcon.infoText = "You already have a Hope wallet saved under this name.";
-
-		createWalletMenuAnimator.AnimateIcon(walletNameErrorIcon, !string.IsNullOrEmpty(walletName) && !validWalletName);
+			walletNameField.errorMessage.text = "Wallet name in use.";
 
 		SetButtonInteractable();
 	}
@@ -112,46 +94,28 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	}
 
 	/// <summary>
-	/// Sets the password strength progress bar width, color, and sets the passwrod strength text, and color
-	/// </summary>
-	/// <param name="password"> The inputted string in the password1Field </param>
-	private void Password1FieldChanged(string password)
-	{
-		createWalletMenuAnimator.AnimatePasswordStrengthBar(password);
-		PasswordsUpdated(password, password2Field.text);
-	}
-
-	/// <summary>
-	/// Checks to see if the two passwords match, as long as they are not empty
-	/// </summary>
-	/// <param name="password"> The inputted string in the password2Field </param>
-	private void Password2FieldChanged(string password) => PasswordsUpdated(password1Field.text, password);
-
-	/// <summary>
 	/// Checks if the passwords valid and animates the error icon if needed
 	/// </summary>
-	/// <param name="password1"> The text in the first password input field </param>
-	/// <param name="password2"> The text in the second password input field </param>
-	private void PasswordsUpdated(string password1, string password2)
+	private void PasswordsUpdated()
 	{
-		bool passwordsMatch = password1 == password2;
-		bool validPasswordLength = password1.Length >= 8;
+		string password1 = password1Field.Input;
+		string password2 = password2Field.Input;
 
-		validPassword = passwordsMatch && validPasswordLength;
+		password1Field.Error = password1Field.Input.Length < 8;
+		password2Field.Error = password1 != password2;
 
-		if (!passwordsMatch)
-			passwordErrorIcon.infoText = "Your passwords do not match.";
-		else if (!validPasswordLength)
-			passwordErrorIcon.infoText = "Your password length must be a minimum of 8 characters. Your password is currently only " + password1.Length + " characters long.";
+		if (password1Field.Error)
+			password1Field.errorMessage.text = "Password too short.";
 
-		createWalletMenuAnimator.AnimateIcon(passwordErrorIcon, !string.IsNullOrEmpty(password2) && !validPassword);
-		createWalletMenuAnimator.AnimateIcon(passwordCheckMarkIcon, !string.IsNullOrEmpty(password2) && validPassword);
+		if (password2Field.Error)
+			password2Field.errorMessage.text = "Passwords do not match.";
 
+		password2Field.UpdateVisuals(string.IsNullOrEmpty(password2Field.Input));
 		SetButtonInteractable();
 	}
 
 	/// <summary>
 	/// Checks if passwords match, are above 7 characters, and all fields are filled in
 	/// </summary>
-	private void SetButtonInteractable() => createWalletButton.interactable = validWalletName && validPassword;
+	private void SetButtonInteractable() => nextButton.interactable = !walletNameField.Error && !password1Field.Error && !password2Field.Error;
 }
