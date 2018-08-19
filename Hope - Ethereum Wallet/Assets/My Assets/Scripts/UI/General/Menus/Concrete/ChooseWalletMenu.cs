@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -6,9 +7,7 @@ using Zenject;
 /// </summary>
 public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 {
-    public Button ledgerButton;
-    public Button hopeButton;
-    public Button exitButton;
+	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
 
     private UserWalletInfoManager.Settings walletSettings;
 
@@ -25,7 +24,8 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     private void Start()
     {
         ledgerButton.onClick.AddListener(OpenLedgerWallet);
-        hopeButton.onClick.AddListener(OpenHopeWallet);
+		trezorButton.onClick.AddListener(OpenLedgerWallet);
+		hopeButton.onClick.AddListener(OpenHopeWallet);
     }
 
 	/// <summary>
@@ -47,10 +47,18 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
         // TODO
     }
 
-    /// <summary>
-    /// Opens the ExitConfirmationPopup which allows the user to exit the wallet.
-    /// </summary>
-    protected override void OnBackPressed()
+	/// <summary>
+	/// Opens the Trezor wallet.
+	/// </summary>
+	private void OpenTrezorWallet()
+	{
+		// TODO
+	}
+
+	/// <summary>
+	/// Opens the ExitConfirmationPopup which allows the user to exit the wallet.
+	/// </summary>
+	protected override void OnBackPressed()
     {
 		popupManager.GetPopup<ExitConfirmationPopup>();
     }

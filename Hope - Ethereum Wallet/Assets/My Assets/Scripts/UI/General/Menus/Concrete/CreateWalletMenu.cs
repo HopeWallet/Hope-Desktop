@@ -8,7 +8,7 @@ using Zenject;
 /// </summary>
 public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 {
-	[SerializeField] private Button nextButton, backButton;
+	[SerializeField] private Button nextButton;
 
 	[SerializeField] private HopeInputField walletNameField,
 											password1Field,
@@ -38,7 +38,6 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 		password2Field.OnInputUpdated += PasswordsUpdated;
 		walletNameField.OnInputUpdated += WalletNameFieldChanged;
 		nextButton.onClick.AddListener(CreateWalletNameAndPass);
-		backButton.onClick.AddListener(GoBack);
 	}
 
 	/// <summary>

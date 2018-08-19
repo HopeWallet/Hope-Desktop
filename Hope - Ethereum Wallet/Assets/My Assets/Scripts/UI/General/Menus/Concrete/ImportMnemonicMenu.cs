@@ -1,6 +1,7 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using System.Linq;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -9,11 +10,9 @@ using Zenject;
 /// </summary>
 public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
 {
-    public Button importButton,
-                  backButton1,
-                  backButton2;
+	[SerializeField] private Button importButton;
 
-    public TMP_InputField[] wordFields;
+	[SerializeField] private TMP_InputField[] wordFields;
 
     private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
@@ -30,20 +29,15 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
         this.dynamicDataCache = dynamicDataCache;
     }
 
-    /// <summary>
-    /// Adds the button click events.
-    /// </summary>
-    private void Start()
-    {
-        importButton.onClick.AddListener(LoadWallet);
-        backButton1.onClick.AddListener(GoBack);
-        backButton2.onClick.AddListener(GoBack);
-    }
+	/// <summary>
+	/// Adds the button click events.
+	/// </summary>
+	private void Start() => importButton.onClick.AddListener(LoadWallet);
 
-    /// <summary>
-    /// Subscribes this IEnterButtonObserver.
-    /// </summary>
-    protected override void OnEnable()
+	/// <summary>
+	/// Subscribes this IEnterButtonObserver.
+	/// </summary>
+	protected override void OnEnable()
     {
         base.OnEnable();
         buttonObserver.SubscribeObservable(this);

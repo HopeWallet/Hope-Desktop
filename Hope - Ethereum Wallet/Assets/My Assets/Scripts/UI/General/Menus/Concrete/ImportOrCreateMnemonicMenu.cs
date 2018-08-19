@@ -1,14 +1,12 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class which allows the user to choose whether to import or create a new wallet.
 /// </summary>
 public class ImportOrCreateMnemonicMenu : Menu<ImportOrCreateMnemonicMenu>
 {
-
-    public Button importButton;
-    public Button createButton;
-    public Button backButton;
+	[SerializeField] private Button importButton, createButton;
 
     /// <summary>
     /// Adds the click events for the buttons of this menu.
@@ -17,7 +15,6 @@ public class ImportOrCreateMnemonicMenu : Menu<ImportOrCreateMnemonicMenu>
     {
         importButton.onClick.AddListener(ImportWallet);
         createButton.onClick.AddListener(CreateWallet);
-        backButton.onClick.AddListener(GoBack);
     }
 
 	/// <summary>

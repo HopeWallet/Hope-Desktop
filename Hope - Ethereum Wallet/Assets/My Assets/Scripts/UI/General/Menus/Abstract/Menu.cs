@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -7,7 +8,6 @@ using Zenject;
 /// <typeparam name="T"> The class type of the menu. </typeparam>
 public abstract class Menu<T> : Menu where T : Menu<T>
 {
-
 	protected UIManager uiManager;
 	protected PopupManager popupManager;
 
@@ -29,7 +29,10 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	public override void GoBack()
 	{
 		if (!Animator.Animating)
+		{
 			OnBackPressed();
+			backButton?.GetComponent<InteractableElement>().SetCursor(false);
+		}
 	}
 
 	/// <summary>
@@ -69,6 +72,8 @@ public abstract class Menu : MonoBehaviour
 	[Tooltip("Destroy the menu's gameobject when it is closed.")]
 	public bool DestroyWhenClosed = true;
 
+	[SerializeField] protected Button backButton;
+
 	/// <summary>
 	/// The class responsible for animating this menu.
 	/// </summary>
@@ -79,6 +84,7 @@ public abstract class Menu : MonoBehaviour
 	/// </summary>
 	private void Awake()
 	{
+		backButton?.onClick.AddListener(GoBack);
 		Animator = GetComponent<UIAnimator>();
 		OnAwake();
 	}

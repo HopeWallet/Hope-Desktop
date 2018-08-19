@@ -3,7 +3,6 @@ using Hope.Utils.Ethereum;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -11,8 +10,6 @@ using Zenject;
 /// </summary>
 public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu>
 {
-    public Button backButton;
-
     private DynamicDataCache dynamicDataCache;
 
     /// <summary>
@@ -37,25 +34,14 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
 
 	/// <summary>
-	/// Adds the back button listener.
+	/// Starts to load the wallet.
 	/// </summary>
-	private void Start()
-    {
-        backButton.onClick.AddListener(GoBack);
-    }
+	public override void LoadWallet() => userWalletManager.CreateWallet();
 
-    /// <summary>
-    /// Starts to load the wallet.
-    /// </summary>
-    public override void LoadWallet()
-    {
-        userWalletManager.CreateWallet();
-    }
-
-    /// <summary>
-    /// Gets the numbers of the words that need to be confirmed.
-    /// </summary>
-    private void GetConfirmationNumbers()
+	/// <summary>
+	/// Gets the numbers of the words that need to be confirmed.
+	/// </summary>
+	private void GetConfirmationNumbers()
     {
         int[] numbers;
 

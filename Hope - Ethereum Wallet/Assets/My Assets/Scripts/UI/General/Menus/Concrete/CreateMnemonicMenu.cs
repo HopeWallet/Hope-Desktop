@@ -13,12 +13,11 @@ using Zenject;
 /// </summary>
 public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 {
-    public GameObject[] objects;
+    [SerializeField] private GameObject[] objects;
 
-    public Button confirmButton;
-    public Button backButton;
-    public Button copyMnemonic;
-    public Button generateNewWords;
+    [SerializeField] private Button copyMnemonic,
+									generateNewWords,
+								    confirmButton;
 
     private DynamicDataCache dynamicDataCache;
 
@@ -37,7 +36,6 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     protected override void OnAwake()
     {
         confirmButton.onClick.AddListener(ConfirmWords);
-        backButton.onClick.AddListener(GoBack);
         copyMnemonic.onClick.AddListener(CopyMnemonic);
         generateNewWords.onClick.AddListener(GenerateMnemonic);
 	}

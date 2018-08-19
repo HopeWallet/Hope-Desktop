@@ -444,9 +444,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
+  backButton: {fileID: 0}
   ledgerButton: {fileID: 114033805628496660}
+  trezorButton: {fileID: 114743329255603314}
   hopeButton: {fileID: 114106096414961710}
-  exitButton: {fileID: 0}
 --- !u!114 &114891095809298894
 MonoBehaviour:
   m_ObjectHideFlags: 1

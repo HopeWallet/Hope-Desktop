@@ -53,7 +53,7 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// Sets the cursor image either to the hand cursor, text cursor, or default cursor
 	/// </summary>
 	/// <param name="customCursor"> Whether the cursor needs to be changed to a customCursor, or the defualt cursor </param>
-	private void SetCursor(bool customCursor)
+	public void SetCursor(bool customCursor)
 	{
 		hovering = customCursor;
 		Cursor.SetCursor(customCursor ? (isButton ? handCursor : textCursor) : null, new Vector2(isButton ? 12f : 60f, isButton ? 5f : 25f), CursorMode.Auto);
