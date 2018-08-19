@@ -24,7 +24,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     private void Start()
     {
         ledgerButton.onClick.AddListener(OpenLedgerWallet);
-		trezorButton.onClick.AddListener(OpenLedgerWallet);
+		trezorButton.onClick.AddListener(OpenTrezorWallet);
 		hopeButton.onClick.AddListener(OpenHopeWallet);
     }
 

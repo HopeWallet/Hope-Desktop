@@ -2,13 +2,11 @@
 
 namespace Hope.Security.ProtectedTypes.Types
 {
-
     /// <summary>
     /// Class which represents a regular <see langword="string"/> value but has its data encrypted and hidden.
     /// </summary>
     public sealed class ProtectedString : ProtectedType<string, DisposableString>
     {
-
         /// <summary>
         /// Initializes the <see cref="ProtectedString"/> with the <see langword="string"/> value it starts with.
         /// </summary>
@@ -33,5 +31,4 @@ namespace Hope.Security.ProtectedTypes.Types
         /// <returns> The <see langword="byte"/>[] data of the string value. </returns>
         protected override byte[] GetBytes(string value) => value.GetUTF8Bytes();
     }
-
 }
