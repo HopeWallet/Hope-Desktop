@@ -153,7 +153,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void SetButtonInteractable()
 	{
-		if (Animating) return;
+		if (Animating)
+			return;
 
 		Button importButtonComponent = importButton.GetComponent<Button>();
 

@@ -154,6 +154,11 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 		if (index < randomizedList.Count)
 			CrunchWord(randomizedList, index);
 		else
+		{
 			Animating = false;
+
+			for (int i = 0; i < 12; i++)
+				wordFields[i].transform.GetChild(1).GetChild(0).transform.localScale = Vector2.one;
+		}
 	}
 }
