@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class which contains a series of utility methods relating to input fields.
@@ -14,7 +15,7 @@ public static class InputFieldUtils
     /// </summary>
     /// <param name="inputField"> The input field to change the text for. </param>
     /// <param name="decimalPlaces"> The number of decimal places to restrict the input field value to. </param>
-    public static void RestrictDecimalValue(this TMP_InputField inputField, int decimalPlaces)
+    public static void RestrictDecimalValue(this InputField inputField, int decimalPlaces)
     {
         string amount = inputField.text;
 
@@ -37,9 +38,32 @@ public static class InputFieldUtils
         inputField.text = amount;
     }
 
-    /// <summary>
-    /// Gets the actively selected input field.
-    /// </summary>
-    /// <returns> The currently active input field. </returns>
-    public static TMP_InputField GetActiveTMPInputField() => EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>();
+	public static void RestrictDecimalValue(this TMP_InputField inputField, int decimalPlaces)
+	{
+		string amount = inputField.text;
+
+		if (amount == null)
+			return;
+
+		amount = new string(amount.Where(c => char.IsDigit(c) || c == '.').ToArray());
+		inputField.text = amount;
+
+		var decimalIndex = amount.IndexOf(".");
+		var assetDecimalLength = decimalPlaces + decimalIndex + 1;
+
+		if (decimalPlaces == 0 && decimalIndex != -1)
+			amount = amount.Substring(0, amount.Length - 1);
+
+		var substringLength = assetDecimalLength > MAX_BALANCE_FIELD_LENGTH || decimalIndex == -1 ? MAX_BALANCE_FIELD_LENGTH : assetDecimalLength;
+		if (amount.Length > substringLength)
+			amount = amount.Substring(0, substringLength);
+
+		inputField.text = amount;
+	}
+
+	/// <summary>
+	/// Gets the actively selected input field.
+	/// </summary>
+	/// <returns> The currently active input field. </returns>
+	public static InputField GetActiveInputField() => EventSystem.current.currentSelectedGameObject.GetComponent<InputField>();
 }

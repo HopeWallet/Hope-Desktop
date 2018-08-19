@@ -63,8 +63,8 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (wordFields.Contains(InputFieldUtils.GetActiveTMPInputField()) && importButton.interactable && clickType == ClickType.Down)
-            importButton.Press();
+        //if (wordFields.Contains(InputFieldUtils.GetActiveInputField()) && importButton.interactable && clickType == ClickType.Down)
+            //importButton.Press();
     }
 
     /// <summary>

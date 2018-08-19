@@ -8,9 +8,10 @@ public class HopeInputField : MonoBehaviour
 	public event Action OnInputUpdated;
 
 	[SerializeField] private GameObject placeholder;
-	[SerializeField] private InputField inputFieldBase;
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
+
+	public InputField inputFieldBase;
 
 	public TextMeshProUGUI errorMessage;
 

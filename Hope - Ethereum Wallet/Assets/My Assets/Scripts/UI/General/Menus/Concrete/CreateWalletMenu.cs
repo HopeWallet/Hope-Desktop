@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -6,16 +7,20 @@ using Zenject;
 /// <summary>
 /// Menu which lets the user create a new wallet by first choosing a password and name for the wallet.
 /// </summary>
-public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
+public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObservable, ITabButtonObservable
 {
 	[SerializeField] private Button nextButton;
 
-	[SerializeField] private HopeInputField walletNameField,
+	[SerializeField]
+	private HopeInputField walletNameField,
 											password1Field,
 											password2Field;
 
 	private DynamicDataCache dynamicDataCache;
 	private UserWalletInfoManager userWalletInfoManager;
+	private ButtonClickObserver buttonClickObserver;
+
+	private List<Selectable> inputFields = new List<Selectable>();
 
 	/// <summary>
 	/// Adds the required dependencies into this class.
@@ -23,17 +28,34 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
 	/// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
 	[Inject]
-    public void Construct(DynamicDataCache dynamicDataCache, UserWalletInfoManager userWalletInfoManager)
+	public void Construct(DynamicDataCache dynamicDataCache,
+						  UserWalletInfoManager userWalletInfoManager,
+						  ButtonClickObserver buttonClickObserver)
 	{
 		this.dynamicDataCache = dynamicDataCache;
 		this.userWalletInfoManager = userWalletInfoManager;
+		this.buttonClickObserver = buttonClickObserver;
 	}
+
+	/// <summary>
+	/// Subscribes the the current buttonClickObserver
+	/// </summary>
+	private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
+
+	/// <summary>
+	/// Unsubscribes the the current buttonClickObserver
+	/// </summary>
+	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
 	/// <summary>
 	/// Adds the button listeners.
 	/// </summary>
 	protected override void OnAwake()
 	{
+		inputFields.Add(walletNameField.inputFieldBase);
+		inputFields.Add(password1Field.inputFieldBase);
+		inputFields.Add(password2Field.inputFieldBase);
+
 		password1Field.OnInputUpdated += PasswordsUpdated;
 		password2Field.OnInputUpdated += PasswordsUpdated;
 		walletNameField.OnInputUpdated += WalletNameFieldChanged;
@@ -44,12 +66,12 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// Sets up the wallet name and password and opens the next menu.
 	/// </summary>
 	private void CreateWalletNameAndPass()
-    {
-        dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Input));
-        dynamicDataCache.SetData("name", walletNameField.Input);
+	{
+		dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Input));
+		dynamicDataCache.SetData("name", walletNameField.Input);
 
-        uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
-    }
+		uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
+	}
 
 	/// <summary>
 	/// Checks to see if the wallet name is valid and has not been used before.
@@ -117,4 +139,23 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>
 	/// Checks if passwords match, are above 7 characters, and all fields are filled in
 	/// </summary>
 	private void SetButtonInteractable() => nextButton.interactable = !walletNameField.Error && !password1Field.Error && !password2Field.Error;
+
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		if (InputFieldUtils.GetActiveInputField() == password2Field.inputFieldBase && nextButton.interactable)
+			nextButton.Press();
+		else
+			SelectableExtensions.MoveToNextSelectable(inputFields);
+	}
+
+	public void TabButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		SelectableExtensions.MoveToNextSelectable(inputFields);
+	}
 }

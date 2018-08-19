@@ -11,7 +11,7 @@ using Zenject;
 /// <summary>
 /// Class used for creating a new ethereum wallet.
 /// </summary>
-public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
+public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonObservable, ITabButtonObservable
 {
     [SerializeField] private GameObject[] objects;
 
@@ -20,22 +20,30 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 								    confirmButton;
 
     private DynamicDataCache dynamicDataCache;
+	private ButtonClickObserver buttonClickObserver;
 
     private readonly List<TMP_InputField> wordFields = new List<TMP_InputField>();
 
-    /// <summary>
-    /// Adds the DynamicDataCache dependency.
-    /// </summary>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    [Inject]
-    public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
+	private List<Selectable> wordFieldSelectables = new List<Selectable>();
+
+	/// <summary>
+	/// Adds the DynamicDataCache dependency.
+	/// </summary>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+	[Inject]
+    public void Construct(DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
+	{
+		this.dynamicDataCache = dynamicDataCache;
+		this.buttonClickObserver = buttonClickObserver;
+	}
 
     /// <summary>
     /// Initializes this class by creating a new mnemonic phrase and setting the text to it.
     /// </summary>
     protected override void OnAwake()
     {
-        confirmButton.onClick.AddListener(ConfirmWords);
+		confirmButton.onClick.AddListener(ConfirmWords);
         copyMnemonic.onClick.AddListener(CopyMnemonic);
         generateNewWords.onClick.AddListener(GenerateMnemonic);
 	}
@@ -51,9 +59,15 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 	[SecureCallEnd]
     private void OnEnable()
     {
+		buttonClickObserver.SubscribeObservable(this);
 		GenerateMnemonic();
 		UpdateWordFields();
-    }
+	}
+
+	/// <summary>
+	/// Unsubscribes the the current buttonClickObserver
+	/// </summary>
+	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
 	/// <summary>
 	/// Opens the confirm words menu.
@@ -91,5 +105,24 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
             for (int i = 0; i < objects.Length; i++)
                 wordFields[i].text = splitWords[i];
         }
-    }
+
+		for (int i = 0; i < 12; i++)
+			wordFieldSelectables.Add(wordFields[i]);
+	}
+
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		SelectableExtensions.MoveToNextSelectable(wordFieldSelectables);
+	}
+
+	public void TabButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		SelectableExtensions.MoveToNextSelectable(wordFieldSelectables);
+	}
 }

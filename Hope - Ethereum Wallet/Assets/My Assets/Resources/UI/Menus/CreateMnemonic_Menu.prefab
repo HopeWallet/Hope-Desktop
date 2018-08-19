@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 222501632890972292}
   - component: {fileID: 114573497041190622}
   - component: {fileID: 114367144857020858}
-  - component: {fileID: 114642673622535564}
   m_Layer: 0
   m_Name: Hope_Logo
   m_TagString: Untagged
@@ -4130,18 +4129,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114642673622535564
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1122920254499514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
 --- !u!114 &114642907211403870
 MonoBehaviour:
   m_ObjectHideFlags: 1

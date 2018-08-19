@@ -374,7 +374,6 @@ GameObject:
   - component: {fileID: 222719440899702766}
   - component: {fileID: 114730853832306972}
   - component: {fileID: 114621814107392618}
-  - component: {fileID: 114538776209857554}
   m_Layer: 0
   m_Name: Hope_Logo
   m_TagString: Untagged
@@ -1176,18 +1175,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114538776209857554
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1816731909116160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
 --- !u!114 &114542398921408202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1703,6 +1690,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
+  <Hovering>k__BackingField: 0
+  textCursor: {fileID: 0}
+  handCursor: {fileID: 0}
+  buttonComponent: {fileID: 0}
 --- !u!114 &114693723913193844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1843,6 +1834,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
+  <Hovering>k__BackingField: 0
+  textCursor: {fileID: 0}
+  handCursor: {fileID: 0}
+  buttonComponent: {fileID: 0}
 --- !u!114 &114798928006332916
 MonoBehaviour:
   m_ObjectHideFlags: 1
