@@ -28,20 +28,20 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         GetConfirmationWords();
     }
 
-	/// <summary>
-	/// Opens the exit confirmation popup and enables the note text.
-	/// </summary>
-	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
+    /// <summary>
+    /// Opens the exit confirmation popup and enables the note text.
+    /// </summary>
+    protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
 
-	/// <summary>
-	/// Starts to load the wallet.
-	/// </summary>
-	public override void LoadWallet() => userWalletManager.CreateWallet();
+    /// <summary>
+    /// Starts to load the wallet.
+    /// </summary>
+    public override void LoadWallet() => userWalletManager.CreateWallet();
 
-	/// <summary>
-	/// Gets the numbers of the words that need to be confirmed.
-	/// </summary>
-	private void GetConfirmationNumbers()
+    /// <summary>
+    /// Gets the numbers of the words that need to be confirmed.
+    /// </summary>
+    private void GetConfirmationNumbers()
     {
         int[] numbers;
 
@@ -63,16 +63,13 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         ProtectedString[] correctWords;
         int[] numbers = dynamicDataCache.GetData("confirmation numbers");
 
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        {
-            List<int> randomIntList = numbers.ToList();
-            List<string> words = WalletUtils.GetMnemonicWords(mnemonic.Value).ToList();
+        List<int> randomIntList = numbers.ToList();
+        List<string> words = WalletUtils.GetMnemonicWords((string)dynamicDataCache.GetData("mnemonic")).ToList();
 
-            correctWords = words.Where(word => numbers.Contains(words.IndexOf(word) + 1))
-                                .OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1))
-                                .Select(word => new ProtectedString(word))
-                                .ToArray();
-        }
+        correctWords = words.Where(word => numbers.Contains(words.IndexOf(word) + 1))
+                            .OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1))
+                            .Select(word => new ProtectedString(word))
+                            .ToArray();
 
         dynamicDataCache.SetData("confirmation words", correctWords);
     }

@@ -113,8 +113,6 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	[ReflectionProtect]
 	private void StartWordAnimation()
 	{
-        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        //	mnemonicWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
         mnemonicWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));
 
 		Animating = true;

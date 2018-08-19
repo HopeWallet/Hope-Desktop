@@ -35,14 +35,14 @@ public sealed class WalletCreator : WalletLoaderBase
         popupManager.GetPopup<LoadingPopup>(true).Text = "Creating wallet";
     }
 
-    private void SetWalletPlayerPrefs(string[] encryptedHashes, string saltedPasswordHash, string encryptedSeed)
+    private void FinalizeWalletCreation(string[] encryptedHashes, string saltedPasswordHash, string encryptedSeed)
     {
         int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
 
         userWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses);
 
-        SecurePlayerPrefs.SetString(walletSettings.walletDerivationPrefName + walletNum, derivationPath);
+        SecurePlayerPrefs.SetString(walletSettings.walletDerivationPrefName + walletNum, dynamicDataCache.GetData("path"));
         SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString(walletSettings.walletNamePrefName + walletNum, dynamicDataCache.GetData("name"));
@@ -51,6 +51,10 @@ public sealed class WalletCreator : WalletLoaderBase
             SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptedHashes[i]);
 
         playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
+
+        ((byte[])dynamicDataCache.GetData("seed")).ClearBytes();
+        dynamicDataCache.SetData("seed", null);
+        dynamicDataCache.SetData("path", null);
     }
 
     private void CreateWalletCountPref()
@@ -72,24 +76,17 @@ public sealed class WalletCreator : WalletLoaderBase
             return;
         }
 
-        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        //{
         try
         {
-            //derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
-
-            var wallet = new Wallet((byte[])dynamicDataCache.GetData("seed"), (string)dynamicDataCache.GetData("path"));
-            var addresses = wallet.GetAddresses(50);
+            Wallet wallet = new Wallet((byte[])dynamicDataCache.GetData("seed"), (string)dynamicDataCache.GetData("path"));
+            string[] addresses = wallet.GetAddresses(50);
 
             AssignAddresses(addresses);
-            walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, SetWalletPlayerPrefs);
+            walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
         }
         catch (Exception e)
         {
-            //dynamicDataCache.SetData("mnemonic", null);
             ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again. => " + e.Message));
         }
-
-        //}
     }
 }

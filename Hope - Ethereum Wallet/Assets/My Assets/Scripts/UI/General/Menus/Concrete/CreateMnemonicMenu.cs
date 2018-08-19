@@ -11,7 +11,7 @@ using Zenject;
 /// <summary>
 /// Class used for creating a new ethereum wallet.
 /// </summary>
-public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonObservable, ITabButtonObservable
+public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, ITabButtonObservable
 {
     [SerializeField] private GameObject[] objects;
 
@@ -78,7 +78,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonO
     /// <summary>
     /// Generates the mnemonic phrase.
     /// </summary>
-    public void GenerateMnemonic()
+    private void GenerateMnemonic()
     {
         Wallet wallet = new Wallet(Wordlist.English, WordCount.Twelve);
         dynamicDataCache.SetData("seed", wallet.Seed);
@@ -90,11 +90,9 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonO
     /// Copies the mnemonic phrase to the clipboard.
     /// </summary>
     [SecureCallEnd]
-    public void CopyMnemonic()
+    private void CopyMnemonic()
     {
         ClipboardUtils.CopyToClipboard(dynamicDataCache.GetData("mnemonic"));
-        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        //    ClipboardUtils.CopyToClipboard(mnemonic.Value);
     }
 
     /// <summary>
@@ -106,26 +104,13 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonO
         for (int i = 0; i < objects.Length; i++)
             wordFields.Add(objects[i].GetComponent<TMP_InputField>());
 
-        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        //{
-
-        //string[] splitWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
         string[] splitWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));
 
         for (int i = 0; i < objects.Length; i++)
             wordFields[i].text = splitWords[i];
-        //}
 
         for (int i = 0; i < 12; i++)
             wordFieldSelectables.Add(wordFields[i]);
-    }
-
-    public void EnterButtonPressed(ClickType clickType)
-    {
-        if (clickType != ClickType.Down)
-            return;
-
-        wordFieldSelectables.MoveToNextSelectable();
     }
 
     public void TabButtonPressed(ClickType clickType)

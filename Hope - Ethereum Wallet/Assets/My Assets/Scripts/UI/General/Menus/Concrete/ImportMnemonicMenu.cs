@@ -89,29 +89,6 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     [ReflectionProtect(typeof(bool))]
     private bool CheckCreatedMnemonic()
     {
-        //var mnemonicData = dynamicDataCache.GetData("mnemonic");
-        //var newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
-
-        //if (mnemonicData == null)
-        //{
-        //    dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
-        //    return true;
-        //}
-
-        //using (var mnemonic = (mnemonicData as ProtectedString)?.CreateDisposableData())
-        //{
-        //    if (mnemonic.Value.EqualsIgnoreCase(newMnemonic, true))
-        //    {
-        //        uiManager.OpenMenu<ConfirmMnemonicMenu>();
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
-        //        return true;
-        //    }
-        //}
-
         Wallet wallet = null;
 
         string newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
@@ -136,10 +113,12 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
             SetWalletInfo(wallet);
             return true;
         }
-
-        //if (seed.SequenceEqual()
     }
 
+    /// <summary>
+    /// Sets the wallet info to the dynamic data cache.
+    /// </summary>
+    /// <param name="wallet"> The wallet we are importing. </param>
     private void SetWalletInfo(Wallet wallet)
     {
         dynamicDataCache.SetData("seed", wallet.Seed);
