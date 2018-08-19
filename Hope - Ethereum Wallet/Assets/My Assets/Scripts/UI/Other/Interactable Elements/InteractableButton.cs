@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class InteractableButton : InteractableBase
 {
+	[SerializeField] private bool exitableButton;
+
 	private Button buttonComponent;
 
 	private bool hovering;
@@ -16,7 +18,8 @@ public class InteractableButton : InteractableBase
 		customCursorPosition = new Vector2(12f, 5f);
 
 		buttonComponent = transform.GetComponent<Button>();
-		buttonComponent.onClick.AddListener(OnCustomPointerExit);
+		if (exitableButton)
+			buttonComponent.onClick.AddListener(OnCustomPointerExit);
 	}
 
 	/// <summary>

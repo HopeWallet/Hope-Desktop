@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 222900624361926464}
   - component: {fileID: 114801747862018590}
   - component: {fileID: 114806199382893746}
-  - component: {fileID: 114792103613938650}
+  - component: {fileID: 114652924203339010}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 222313275758438672}
   - component: {fileID: 114642899875107960}
   - component: {fileID: 114773675501167290}
-  - component: {fileID: 114690832921634290}
+  - component: {fileID: 114797120223911246}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -1651,6 +1651,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114652924203339010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1693102022571996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 0
 --- !u!114 &114661979248186938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1678,22 +1690,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114690832921634290
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1776928638253394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
-  <Hovering>k__BackingField: 0
-  textCursor: {fileID: 0}
-  handCursor: {fileID: 0}
-  buttonComponent: {fileID: 0}
 --- !u!114 &114693723913193844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1760,9 +1756,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placeholder: {fileID: 1343250748291980}
-  inputFieldBase: {fileID: 114188649600924970}
   eye: {fileID: 0}
   errorIcon: {fileID: 1968140042154574}
+  inputFieldBase: {fileID: 114188649600924970}
   errorMessage: {fileID: 114015037938011452}
 --- !u!114 &114746784208049030
 MonoBehaviour:
@@ -1822,22 +1818,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114792103613938650
+--- !u!114 &114797120223911246
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1693102022571996}
+  m_GameObject: {fileID: 1776928638253394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isButton: 1
-  <Hovering>k__BackingField: 0
-  textCursor: {fileID: 0}
-  handCursor: {fileID: 0}
-  buttonComponent: {fileID: 0}
+  exitableButton: 0
 --- !u!114 &114798928006332916
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1993,9 +1985,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placeholder: {fileID: 1317489815878200}
-  inputFieldBase: {fileID: 114798928006332916}
   eye: {fileID: 1693102022571996}
   errorIcon: {fileID: 1483406284696346}
+  inputFieldBase: {fileID: 114798928006332916}
   errorMessage: {fileID: 114074237551203694}
 --- !u!114 &114866192280127092
 MonoBehaviour:
@@ -2008,6 +2000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114875816836159094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2128,6 +2121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114967016311071722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2318,9 +2312,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placeholder: {fileID: 1867388552217174}
-  inputFieldBase: {fileID: 114975156974055756}
   eye: {fileID: 1776928638253394}
   errorIcon: {fileID: 1629011831608876}
+  inputFieldBase: {fileID: 114975156974055756}
   errorMessage: {fileID: 114967016311071722}
 --- !u!222 &222042671199506396
 CanvasRenderer:
