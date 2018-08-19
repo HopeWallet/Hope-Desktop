@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using Random = System.Random;
 using Zenject;
-using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Ethereum;
 
 /// <summary>
@@ -114,8 +113,9 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	[ReflectionProtect]
 	private void StartWordAnimation()
 	{
-		using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-			mnemonicWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
+        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        //	mnemonicWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
+        mnemonicWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));
 
 		Animating = true;
 		Random rand = new Random();

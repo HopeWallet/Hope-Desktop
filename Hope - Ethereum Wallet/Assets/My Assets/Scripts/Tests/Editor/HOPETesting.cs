@@ -68,6 +68,24 @@ public class HOPETesting : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
+    [Test]
+    public void ArrayEquals()
+    {
+        byte[] data = new byte[] { 5, 74, 4, 23 };
+        byte[] data2 = new byte[] { 5, 74, 4, 23 };
+
+        Assert.IsTrue(data.SequenceEqual(data2));
+    }
+
+    [Test]
+    public void ArrayNotEqual()
+    {
+        byte[] data = new byte[] { 5, 74, 4, 23 };
+        byte[] data2 = new byte[] { 5, 74, 4, 3 };
+
+        Assert.IsFalse(data.SequenceEqual(data2));
+    }
+
     //private void AnonymousStuff()
     //{
     //    var thing = new { Name = "Something", Age = 50 };

@@ -15,78 +15,86 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonO
 {
     [SerializeField] private GameObject[] objects;
 
-    [SerializeField] private Button copyMnemonic,
-									generateNewWords,
-								    confirmButton;
+    [SerializeField]
+    private Button copyMnemonic,
+                   generateNewWords,
+                   confirmButton;
 
     private DynamicDataCache dynamicDataCache;
-	private ButtonClickObserver buttonClickObserver;
+    private ButtonClickObserver buttonClickObserver;
 
     private readonly List<TMP_InputField> wordFields = new List<TMP_InputField>();
 
-	private List<Selectable> wordFieldSelectables = new List<Selectable>();
+    private readonly List<Selectable> wordFieldSelectables = new List<Selectable>();
 
-	/// <summary>
-	/// Adds the DynamicDataCache dependency.
-	/// </summary>
-	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
-	[Inject]
+    /// <summary>
+    /// Adds the DynamicDataCache dependency.
+    /// </summary>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+    [Inject]
     public void Construct(DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
-	{
-		this.dynamicDataCache = dynamicDataCache;
-		this.buttonClickObserver = buttonClickObserver;
-	}
+    {
+        this.dynamicDataCache = dynamicDataCache;
+        this.buttonClickObserver = buttonClickObserver;
+    }
 
     /// <summary>
     /// Initializes this class by creating a new mnemonic phrase and setting the text to it.
     /// </summary>
     protected override void OnAwake()
     {
-		confirmButton.onClick.AddListener(ConfirmWords);
+        confirmButton.onClick.AddListener(ConfirmWords);
         copyMnemonic.onClick.AddListener(CopyMnemonic);
         generateNewWords.onClick.AddListener(GenerateMnemonic);
-	}
+    }
 
-	/// <summary>
-	/// Opens the exit confirmation popup and enables the note text
-	/// </summary>
-	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
+    /// <summary>
+    /// Opens the exit confirmation popup and enables the note text
+    /// </summary>
+    protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
 
-	/// <summary>
-	/// Generates the mnemonic words and sets the initial text fields to the text.
-	/// </summary>
-	[SecureCallEnd]
+    /// <summary>
+    /// Generates the mnemonic words and sets the initial text fields to the text.
+    /// </summary>
+    [SecureCallEnd]
     private void OnEnable()
     {
-		buttonClickObserver.SubscribeObservable(this);
-		GenerateMnemonic();
-		UpdateWordFields();
-	}
+        buttonClickObserver.SubscribeObservable(this);
+        GenerateMnemonic();
+        UpdateWordFields();
+    }
 
-	/// <summary>
-	/// Unsubscribes the the current buttonClickObserver
-	/// </summary>
-	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
+    /// <summary>
+    /// Unsubscribes the the current buttonClickObserver
+    /// </summary>
+    private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
-	/// <summary>
-	/// Opens the confirm words menu.
-	/// </summary>
-	public void ConfirmWords() => uiManager.OpenMenu<ConfirmMnemonicMenu>();
+    /// <summary>
+    /// Opens the confirm words menu.
+    /// </summary>
+    public void ConfirmWords() => uiManager.OpenMenu<ConfirmMnemonicMenu>();
 
-	/// <summary>
-	/// Generates the mnemonic phrase.
-	/// </summary>
-	public void GenerateMnemonic() => dynamicDataCache.SetData("mnemonic", new ProtectedString(new Wallet(Wordlist.English, WordCount.Twelve).Phrase));
+    /// <summary>
+    /// Generates the mnemonic phrase.
+    /// </summary>
+    public void GenerateMnemonic()
+    {
+        Wallet wallet = new Wallet(Wordlist.English, WordCount.Twelve);
+        dynamicDataCache.SetData("seed", wallet.Seed);
+        dynamicDataCache.SetData("path", wallet.Path);
+        dynamicDataCache.SetData("mnemonic", wallet.Phrase);
+    }
 
-	/// <summary>
-	/// Copies the mnemonic phrase to the clipboard.
-	/// </summary>
-	[SecureCallEnd]
+    /// <summary>
+    /// Copies the mnemonic phrase to the clipboard.
+    /// </summary>
+    [SecureCallEnd]
     public void CopyMnemonic()
     {
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-            ClipboardUtils.CopyToClipboard(mnemonic.Value);
+        ClipboardUtils.CopyToClipboard(dynamicDataCache.GetData("mnemonic"));
+        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        //    ClipboardUtils.CopyToClipboard(mnemonic.Value);
     }
 
     /// <summary>
@@ -98,31 +106,33 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, IEnterButtonO
         for (int i = 0; i < objects.Length; i++)
             wordFields.Add(objects[i].GetComponent<TMP_InputField>());
 
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
-        {
-            string[] splitWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
+        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        //{
 
-            for (int i = 0; i < objects.Length; i++)
-                wordFields[i].text = splitWords[i];
-        }
+        //string[] splitWords = WalletUtils.GetMnemonicWords(mnemonic.Value);
+        string[] splitWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));
 
-		for (int i = 0; i < 12; i++)
-			wordFieldSelectables.Add(wordFields[i]);
-	}
+        for (int i = 0; i < objects.Length; i++)
+            wordFields[i].text = splitWords[i];
+        //}
 
-	public void EnterButtonPressed(ClickType clickType)
-	{
-		if (clickType != ClickType.Down)
-			return;
+        for (int i = 0; i < 12; i++)
+            wordFieldSelectables.Add(wordFields[i]);
+    }
 
-		SelectableExtensions.MoveToNextSelectable(wordFieldSelectables);
-	}
+    public void EnterButtonPressed(ClickType clickType)
+    {
+        if (clickType != ClickType.Down)
+            return;
 
-	public void TabButtonPressed(ClickType clickType)
-	{
-		if (clickType != ClickType.Down)
-			return;
+        wordFieldSelectables.MoveToNextSelectable();
+    }
 
-		SelectableExtensions.MoveToNextSelectable(wordFieldSelectables);
-	}
+    public void TabButtonPressed(ClickType clickType)
+    {
+        if (clickType != ClickType.Down)
+            return;
+
+        wordFieldSelectables.MoveToNextSelectable();
+    }
 }

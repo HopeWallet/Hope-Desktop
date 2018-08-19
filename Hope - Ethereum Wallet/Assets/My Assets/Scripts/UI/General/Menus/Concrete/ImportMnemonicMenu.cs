@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
