@@ -31,7 +31,7 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 		if (!Animator.Animating)
 		{
 			OnBackPressed();
-			backButton?.GetComponent<InteractableElement>().SetCursor(false);
+			backButton?.GetComponent<InteractableButton>().OnCustomPointerExit();
 		}
 	}
 

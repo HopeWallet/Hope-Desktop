@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 222808361053409428}
   - component: {fileID: 114356550768879662}
   - component: {fileID: 114033805628496660}
-  - component: {fileID: 114891095809298894}
+  - component: {fileID: 114915445714365674}
   m_Layer: 0
   m_Name: Ledger_Button
   m_TagString: Untagged
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 222429084983146400}
   - component: {fileID: 114034768454566810}
   - component: {fileID: 114106096414961710}
-  - component: {fileID: 114409808020691136}
+  - component: {fileID: 114242080705020268}
   m_Layer: 0
   m_Name: Hope_Button
   m_TagString: Untagged
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 222405538098166242}
   - component: {fileID: 114955772334897016}
   - component: {fileID: 114743329255603314}
-  - component: {fileID: 114439519589873236}
+  - component: {fileID: 114318153778025192}
   m_Layer: 0
   m_Name: Trezor_Button
   m_TagString: Untagged
@@ -292,6 +292,28 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114242080705020268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1621187565130776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114318153778025192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1744140067405156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114352771137486936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -346,30 +368,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114409808020691136
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1621187565130776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
---- !u!114 &114439519589873236
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1744140067405156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
 --- !u!114 &114723571091844658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,7 +446,7 @@ MonoBehaviour:
   ledgerButton: {fileID: 114033805628496660}
   trezorButton: {fileID: 114743329255603314}
   hopeButton: {fileID: 114106096414961710}
---- !u!114 &114891095809298894
+--- !u!114 &114915445714365674
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -456,10 +454,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1174975173140284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isButton: 1
 --- !u!114 &114921970672041736
 MonoBehaviour:
   m_ObjectHideFlags: 1

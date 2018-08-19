@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 222830250336921352}
   - component: {fileID: 114643886067261848}
   - component: {fileID: 114546640484399730}
-  - component: {fileID: 114753454253086696}
+  - component: {fileID: 114478722178827376}
   m_Layer: 5
   m_Name: Back_Button
   m_TagString: Untagged
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 222160861993645640}
   - component: {fileID: 114350077240979862}
   - component: {fileID: 114396688832307516}
-  - component: {fileID: 114754523413324402}
+  - component: {fileID: 114145259781311812}
   m_Layer: 5
   m_Name: CreateWallet_Button
   m_TagString: Untagged
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 222079859108826118}
   - component: {fileID: 114707434907039922}
   - component: {fileID: 114760323859404906}
-  - component: {fileID: 114725324590511488}
+  - component: {fileID: 114487175385646950}
   m_Layer: 5
   m_Name: ImportWallet_Button
   m_TagString: Untagged
@@ -191,6 +191,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114145259781311812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1936300157801342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114158301001932454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -440,6 +451,17 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114478722178827376
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1487033352656102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114480158081983146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -452,9 +474,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
+  backButton: {fileID: 114546640484399730}
   importButton: {fileID: 114760323859404906}
   createButton: {fileID: 114396688832307516}
-  backButton: {fileID: 114546640484399730}
+--- !u!114 &114487175385646950
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1961381870567516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114541634640809724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -801,42 +834,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114725324590511488
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1961381870567516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
---- !u!114 &114753454253086696
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1487033352656102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
---- !u!114 &114754523413324402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1936300157801342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d494a5d40d704694f984395889eca043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isButton: 1
 --- !u!114 &114760323859404906
 MonoBehaviour:
   m_ObjectHideFlags: 1

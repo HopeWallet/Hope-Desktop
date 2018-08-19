@@ -98,13 +98,13 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void AnimateCheckMarkIcon()
 	{
-		copyAllButton.GetComponent<Button>().interactable = false;
+		Animating = true;
 
 		checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
-		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		CoroutineUtils.ExecuteAfterWait(0.7f, () => checkMarkIcon.AnimateGraphic(0f, 0.5f,
-			() => copyAllButton.GetComponent<Button>().interactable = true));
+		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		CoroutineUtils.ExecuteAfterWait(0.6f, () => checkMarkIcon.AnimateGraphic(0f, 0.25f,
+			() => Animating = false));
 	}
 
 	/// <summary>
