@@ -22,7 +22,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
 
     private DynamicDataCache dynamicDataCache;
 
-    private readonly List<TextMeshProUGUI> wordFields = new List<TextMeshProUGUI>();
+    private readonly List<TMP_InputField> wordFields = new List<TMP_InputField>();
 
     /// <summary>
     /// Adds the DynamicDataCache dependency.
@@ -84,7 +84,7 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>
     private void UpdateWordFields()
     {
         for (int i = 0; i < objects.Length; i++)
-            wordFields.Add(objects[i].transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>());
+            wordFields.Add(objects[i].GetComponent<TMP_InputField>());
 
         using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
         {

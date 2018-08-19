@@ -6,6 +6,8 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 {
 	[SerializeField] private bool isButton, exitableButton;
 
+	private bool hovering;
+
 	private Texture2D textCursor, handCursor;
 
 	private Button buttonComponent;
@@ -27,6 +29,14 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 		handCursor = Resources.Load("UI/Graphics/Textures/New/Icons/HandCursor_Icon") as Texture2D;
 	}
 
+	private void Update()
+	{
+		if (hovering && isButton)
+		{
+			SetCursor(buttonComponent.interactable);
+		}
+	}
+
 	/// <summary>
 	/// Sets cursor image to the text cursor icon
 	/// </summary>
@@ -35,13 +45,19 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	{
 		if ((isButton && buttonComponent.interactable) || !isButton)
 			SetCursor(true);
+
+		hovering = true;
 	}
 
 	/// <summary>
 	/// Sets cursor image back to the default
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerExit(PointerEventData eventData) => SetCursor(false);
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		SetCursor(false);
+		hovering = false;
+	}
 
 	/// <summary>
 	/// Sets the cursor image either to the hand cursor, text cursor, or default cursor

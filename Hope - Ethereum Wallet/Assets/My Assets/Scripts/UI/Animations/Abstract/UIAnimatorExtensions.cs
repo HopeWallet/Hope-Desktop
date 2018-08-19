@@ -68,15 +68,14 @@ public static class UIAnimatorExtensions
 	}
 
 	/// <summary>
-	/// Animates a move in the X and Y axes
+	/// Animates a transformation to a given Vector2
 	/// </summary>
 	/// <param name="gameObject"> The GameObject being animated </param>
-	/// <param name="endValue"> The endvalue to reach </param>
+	/// <param name="endValue"> The Vector2 to reach </param>
 	/// <param name="duration"> The duration of the animation </param>
-	public static void AnimateTransform(this GameObject gameObject, Vector2 endValue, float duration)
+	public static void AnimateTransform(this GameObject gameObject, Vector2 endValue, float duration, TweenCallback callback = null)
 	{
-		gameObject.AnimateTransformX(endValue.x, duration);
-		gameObject.AnimateTransformY(endValue.y, duration);
+		gameObject.transform.DOLocalMove(endValue, duration).OnComplete(() => callback?.Invoke());
 	}
 
 	/// <summary>
