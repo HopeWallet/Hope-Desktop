@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114158301001932454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -449,6 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114480158081983146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -475,6 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114541634640809724
 MonoBehaviour:
   m_ObjectHideFlags: 1
