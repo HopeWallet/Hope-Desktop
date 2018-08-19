@@ -834,7 +834,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 0
-  exitableButton: 0
 --- !u!114 &114131630776764526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -980,7 +979,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 0
-  exitableButton: 0
 --- !u!114 &114235042486863008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -993,7 +991,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
-  exitableButton: 1
 --- !u!114 &114411224767866010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1216,7 +1213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
-  exitableButton: 0
 --- !u!114 &114542398921408202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1412,7 +1408,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
-  exitableButton: 1
 --- !u!114 &114642032020157500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1734,7 +1729,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
-  exitableButton: 0
 --- !u!114 &114693723913193844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1875,7 +1869,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 1
-  exitableButton: 0
 --- !u!114 &114797628933668318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1888,7 +1881,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isButton: 0
-  exitableButton: 0
 --- !u!114 &114798928006332916
 MonoBehaviour:
   m_ObjectHideFlags: 1

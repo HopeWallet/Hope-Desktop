@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	[SerializeField] private bool isButton, exitableButton;
+	[SerializeField] private bool isButton;
 
 	private bool hovering;
 
@@ -20,9 +20,7 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 		if (isButton)
 		{
 			buttonComponent = transform.GetComponent<Button>();
-
-			if (exitableButton)
-				buttonComponent.onClick.AddListener(() => SetCursor(false));
+			buttonComponent.onClick.AddListener(() => SetCursor(false));
 		}
 
 		textCursor = Resources.Load("UI/Graphics/Textures/New/Icons/TextCursor_Icon") as Texture2D;
@@ -43,10 +41,10 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		hovering = true;
+
 		if ((isButton && buttonComponent.interactable) || !isButton)
 			SetCursor(true);
-
-		hovering = true;
 	}
 
 	/// <summary>
@@ -55,8 +53,8 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		SetCursor(false);
 		hovering = false;
+		SetCursor(false);
 	}
 
 	/// <summary>
