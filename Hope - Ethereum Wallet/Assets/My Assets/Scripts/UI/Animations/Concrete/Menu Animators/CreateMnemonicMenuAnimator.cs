@@ -152,8 +152,10 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	private void ProcessWordAnimation(List<GameObject> randomizedList, int index)
 	{
 		if (index < randomizedList.Count)
-			CrunchWord(randomizedList, index);
-		else
+        {
+            CrunchWord(randomizedList, index);
+        }
+        else
 		{
 			Animating = false;
 

@@ -72,23 +72,24 @@ public sealed class WalletCreator : WalletLoaderBase
             return;
         }
 
-        using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        //using (var mnemonic = (dynamicDataCache.GetData("mnemonic") as ProtectedString)?.CreateDisposableData())
+        //{
+        try
         {
-            try
-            {
-                derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
+            //derivationPath = WalletUtils.DetermineCorrectPath(mnemonic.Value);
 
-                var wallet = new Wallet(mnemonic.Value, null, derivationPath);
-                var addresses = wallet.GetAddresses(50);
+            var wallet = new Wallet((byte[])dynamicDataCache.GetData("seed"), (string)dynamicDataCache.GetData("path"));
+            var addresses = wallet.GetAddresses(50);
 
-                AssignAddresses(addresses);
-                walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, SetWalletPlayerPrefs);
-            }
-            catch (Exception e)
-            {
-                dynamicDataCache.SetData("mnemonic", null);
-                ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again. => " + e.Message));
-            }
+            AssignAddresses(addresses);
+            walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, SetWalletPlayerPrefs);
         }
+        catch (Exception e)
+        {
+            //dynamicDataCache.SetData("mnemonic", null);
+            ExceptionManager.DisplayException(new Exception("Unable to create wallet with that phrase. Please try again. => " + e.Message));
+        }
+
+        //}
     }
 }

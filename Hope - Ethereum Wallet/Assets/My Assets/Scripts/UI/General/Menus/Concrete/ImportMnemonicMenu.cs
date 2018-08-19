@@ -1,4 +1,6 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using Hope.Utils.Ethereum;
+using Nethereum.HdWallet;
 using System;
 using System.Linq;
 using TMPro;
@@ -87,28 +89,61 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     [ReflectionProtect(typeof(bool))]
     private bool CheckCreatedMnemonic()
     {
-        var mnemonicData = dynamicDataCache.GetData("mnemonic");
-        var newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
+        //var mnemonicData = dynamicDataCache.GetData("mnemonic");
+        //var newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
 
-        if (mnemonicData == null)
+        //if (mnemonicData == null)
+        //{
+        //    dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
+        //    return true;
+        //}
+
+        //using (var mnemonic = (mnemonicData as ProtectedString)?.CreateDisposableData())
+        //{
+        //    if (mnemonic.Value.EqualsIgnoreCase(newMnemonic, true))
+        //    {
+        //        uiManager.OpenMenu<ConfirmMnemonicMenu>();
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
+        //        return true;
+        //    }
+        //}
+
+        Wallet wallet = null;
+
+        string newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
+        byte[] seed = (byte[])dynamicDataCache.GetData("seed");
+
+        try
         {
-            dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
+            wallet = new Wallet(newMnemonic, WalletUtils.DetermineCorrectPath(newMnemonic));
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (seed?.SequenceEqual(wallet.Seed) == true)
+        {
+            uiManager.OpenMenu<ConfirmMnemonicMenu>();
+            return false;
+        }
+        else
+        {
+            SetWalletInfo(wallet);
             return true;
         }
 
-        using (var mnemonic = (mnemonicData as ProtectedString)?.CreateDisposableData())
-        {
-            if (mnemonic.Value.EqualsIgnoreCase(newMnemonic, true))
-            {
-                uiManager.OpenMenu<ConfirmMnemonicMenu>();
-                return false;
-            }
-            else
-            {
-                dynamicDataCache.SetData("mnemonic", new ProtectedString(newMnemonic));
-                return true;
-            }
-        }
+        //if (seed.SequenceEqual()
     }
 
+    private void SetWalletInfo(Wallet wallet)
+    {
+        dynamicDataCache.SetData("seed", wallet.Seed);
+        dynamicDataCache.SetData("path", wallet.Path);
+        dynamicDataCache.SetData("mnemonic", null);
+    }
 }
