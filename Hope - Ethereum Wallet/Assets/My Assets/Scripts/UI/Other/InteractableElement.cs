@@ -30,9 +30,7 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	private void Update()
 	{
 		if (hovering && isButton)
-		{
 			SetCursor(buttonComponent.interactable);
-		}
 	}
 
 	/// <summary>
@@ -41,8 +39,6 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		hovering = true;
-
 		if ((isButton && buttonComponent.interactable) || !isButton)
 			SetCursor(true);
 	}
@@ -51,11 +47,7 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// Sets cursor image back to the default
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
-	public void OnPointerExit(PointerEventData eventData)
-	{
-		hovering = false;
-		SetCursor(false);
-	}
+	public void OnPointerExit(PointerEventData eventData) => SetCursor(false);
 
 	/// <summary>
 	/// Sets the cursor image either to the hand cursor, text cursor, or default cursor
@@ -63,6 +55,7 @@ public class InteractableElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="customCursor"> Whether the cursor needs to be changed to a customCursor, or the defualt cursor </param>
 	private void SetCursor(bool customCursor)
 	{
+		hovering = customCursor;
 		Cursor.SetCursor(customCursor ? (isButton ? handCursor : textCursor) : null, new Vector2(isButton ? 12f : 60f, isButton ? 5f : 25f), CursorMode.Auto);
 	}
 }
