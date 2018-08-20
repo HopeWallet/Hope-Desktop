@@ -138,7 +138,6 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 		{
 			InputField.text = mnemonicWords[words.IndexOf(randomizedWordList[index])];
 			randomizedWordList[index].AnimateGraphicAndScale(1f, 1f, 0.05f, () => ProcessWordAnimation(randomizedWordList, ++index));
-			wordFields[index].transform.GetChild(1).GetChild(0).transform.localScale = Vector2.one;
 		});
 	}
 
@@ -150,8 +149,15 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	private void ProcessWordAnimation(List<GameObject> randomizedWordList, int index)
 	{
 		if (index < randomizedWordList.Count)
+		{
 			AnimateWord(randomizedWordList, index);
+		}
 		else
+		{
 			Animating = false;
+
+			foreach (GameObject wordField in wordFields)
+				wordField.transform.GetChild(1).GetChild(0).transform.localScale = Vector2.one;
+		}
 	}
 }

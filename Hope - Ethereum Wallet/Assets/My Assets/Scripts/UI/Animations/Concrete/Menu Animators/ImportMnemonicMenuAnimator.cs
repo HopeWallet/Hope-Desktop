@@ -203,12 +203,9 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		string clipboard = ClipboardUtils.GetClipboardString();
 		wordStrings = WalletUtils.GetMnemonicWords(clipboard);
 
-		int numOfWords = wordStrings.Length;
-
-		bool emptyClipboard = string.IsNullOrEmpty(clipboard);
-
-		if (!emptyClipboard)
+		if (!string.IsNullOrEmpty(clipboard.Trim()))
 		{
+			int numOfWords = wordStrings.Length;
 			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
 
 			AnimateIcon(checkMarkIcon);
@@ -218,9 +215,6 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		else
 		{
 			AnimateIcon(errorIcon);
-
-			//Add error messages beside the error icon
-			//Error message should says: "Clipboard empty."
 		}
 	}
 }
