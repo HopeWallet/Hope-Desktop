@@ -36,6 +36,7 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 		{
 			wordFields.Add(passphrase.transform.GetChild(i).gameObject);
 			words.Add(wordFields[i].transform.GetChild(1).GetChild(0).gameObject);
+			wordFields[i].GetComponent<Image>().color = UIColors.Green;
 		}
 	}
 
@@ -100,7 +101,7 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 		checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
 		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		CoroutineUtils.ExecuteAfterWait(0.6f, () => checkMarkIcon.AnimateGraphic(0f, 0.25f));
+		CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (checkMarkIcon != null) checkMarkIcon.AnimateGraphic(0f, 0.25f); });
 	}
 
 	/// <summary>
@@ -112,50 +113,45 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	{
         mnemonicWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));
 
+		wordFields.ForEach(f => f.AnimateColor(UIColors.White, 0.1f));
+
 		Animating = true;
 		Random rand = new Random();
 
-		List<GameObject> randomizedList = new List<GameObject>(words);
-		randomizedList.Sort((_, __) => rand.Next(-1, 1));
+		List<GameObject> randomizedWordList = new List<GameObject>(words);
+		randomizedWordList.Sort((_, __) => rand.Next(-1, 1));
 
-		ProcessWordAnimation(randomizedList, 0);
+		ProcessWordAnimation(randomizedWordList, 0);
 	}
-
-	/// <summary>
-	/// Scales the word's X value to zero
-	/// </summary>
-	/// <param name="randomizedList"> The randomized list of words </param>
-	/// <param name="index"> The index that is being animated </param>
-	private void CrunchWord(List<GameObject> randomizedList, int index) => randomizedList[index].AnimateGraphicAndScale(0f, 0f, 0.05f, () => ExpandWord(randomizedList, index));
 
 	/// <summary>
 	/// Scales the word's X value back to 1
 	/// </summary>
-	/// <param name="randomizedList"> The randomized list of words </param>
+	/// <param name="randomizedWordList"> The randomized list of words </param>
 	/// <param name="index"> The index that is being animated </param>
-	private void ExpandWord(List<GameObject> randomizedList, int index)
+	private void AnimateWord(List<GameObject> randomizedWordList, int index)
 	{
-		randomizedList[index].transform.parent.parent.GetComponent<TMP_InputField>().text = mnemonicWords[words.IndexOf(randomizedList[index])];
-		randomizedList[index].AnimateGraphicAndScale(1f, 1f, 0.05f, () => ProcessWordAnimation(randomizedList, ++index));
+		var InputField = randomizedWordList[index].transform.parent.parent.GetComponent<TMP_InputField>();
+
+		InputField.gameObject.AnimateColor(UIColors.Green, 0.1f);
+		randomizedWordList[index].AnimateGraphicAndScale(0f, 0f, 0.05f, () =>
+		{
+			InputField.text = mnemonicWords[words.IndexOf(randomizedWordList[index])];
+			randomizedWordList[index].AnimateGraphicAndScale(1f, 1f, 0.05f, () => ProcessWordAnimation(randomizedWordList, ++index));
+			wordFields[index].transform.GetChild(1).GetChild(0).transform.localScale = Vector2.one;
+		});
 	}
 
 	/// <summary>
 	/// If there are still words left to animate, it calls the CrunchWord animation again
 	/// </summary>
-	/// <param name="randomizedList"> The randomized list of words </param>
+	/// <param name="randomizedWordList"> The randomized list of words </param>
 	/// <param name="index"> The index that is being animated </param>
-	private void ProcessWordAnimation(List<GameObject> randomizedList, int index)
+	private void ProcessWordAnimation(List<GameObject> randomizedWordList, int index)
 	{
-		if (index < randomizedList.Count)
-        {
-            CrunchWord(randomizedList, index);
-        }
-        else
-		{
+		if (index < randomizedWordList.Count)
+			AnimateWord(randomizedWordList, index);
+		else
 			Animating = false;
-
-			for (int i = 0; i < 12; i++)
-				wordFields[i].transform.GetChild(1).GetChild(0).transform.localScale = Vector2.one;
-		}
 	}
 }

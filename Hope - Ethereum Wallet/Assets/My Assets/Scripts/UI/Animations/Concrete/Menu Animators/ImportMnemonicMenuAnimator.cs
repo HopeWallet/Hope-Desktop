@@ -2,7 +2,6 @@
 using Hope.Utils.Ethereum;
 using UnityEngine.UI;
 using System.Linq;
-using TMPro;
 using NBitcoin;
 
 /// <summary>
@@ -80,7 +79,12 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void StartWordAnimation()
 	{
 		wordInputFields.ForEach(i => i.Text = string.Empty);
-		wordTextObjects.ForEach(t => t.transform.localScale = new Vector2(0f, 1f));
+
+		foreach (GameObject textObject in wordTextObjects)
+		{
+			textObject.transform.localScale = new Vector2(0f, 0f);
+			textObject.AnimateColor(new Color(0.85f, 0.85f, 0.85f, 0f), 0.1f);
+		}
 
 		Animating = true;
 		AnimateWord(0);
@@ -93,7 +97,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void AnimateWord(int index)
 	{
 		wordInputFields[index].Text = wordStrings[index];
-		wordTextObjects[index].AnimateScaleX(1f, 0.1f, () => ProcessWordAnimation(++index));
+		wordTextObjects[index].AnimateGraphicAndScale(1f, 1f, 0.1f, () => ProcessWordAnimation(++index));
 	}
 
 	/// <summary>
@@ -102,7 +106,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="index"> The index of the current input field </param>
 	private void ProcessWordAnimation(int index)
 	{
-		if (index < wordStrings.Length)
+		if (index < wordStrings.Length && index < 24)
 		{
 			AnimateWord(index);
 		}
@@ -123,7 +127,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		gameObject.transform.localScale = new Vector3(0, 0, 1);
 
 		gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => gameObject.AnimateGraphic(0f, 0.25f)));
+			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (gameObject != null) gameObject.AnimateGraphic(0f, 0.25f); }));
 	}
 
 	/// <summary>
@@ -203,7 +207,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		bool emptyClipboard = string.IsNullOrEmpty(clipboard);
 
-		if (!emptyClipboard && numOfWords <= 24)
+		if (!emptyClipboard)
 		{
 			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
 
@@ -216,12 +220,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 			AnimateIcon(errorIcon);
 
 			//Add error messages beside the error icon
-
-			//if (emptyClipboard)
-			//Error message says: "Clipboard empty."
-
-			//else
-			//Error message says: "Too many words."
+			//Error message should says: "Clipboard empty."
 		}
 	}
 }
