@@ -1,23 +1,31 @@
-﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.Ethereum;
+﻿using Hope.Utils.Ethereum;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
 /// Menu which appears which allows the user to confirm several words of the mnemonic phrase to verify it has been saved in some form.
 /// </summary>
-public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu>
+public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu>, IEnterButtonObservable
 {
-    private DynamicDataCache dynamicDataCache;
+	[SerializeField] private Button nextButton;
 
-    /// <summary>
-    /// Adds the DynamicDataCache dependency.
-    /// </summary>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    [Inject]
-    public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
+    private DynamicDataCache dynamicDataCache;
+	private ButtonClickObserver buttonClickObserver;
+
+	/// <summary>
+	/// Adds the DynamicDataCache dependency.
+	/// </summary>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+	[Inject]
+    public void Construct(DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
+	{
+		this.dynamicDataCache = dynamicDataCache;
+		this.buttonClickObserver = buttonClickObserver;
+	}
 
     /// <summary>
     /// Gets the word numbers and words of the part of the mnemonic that needs confirming.
@@ -72,4 +80,10 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 
         dynamicDataCache.SetData("confirmation words", correctWords);
     }
+
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType == ClickType.Down && nextButton.interactable)
+			nextButton.Press();
+	}
 }

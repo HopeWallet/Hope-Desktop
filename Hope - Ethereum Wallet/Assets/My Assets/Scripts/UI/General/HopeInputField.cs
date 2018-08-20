@@ -115,4 +115,10 @@ public class HopeInputField : MonoBehaviour
 
 		eye.GetComponent<Image>().sprite = inputFieldBase.contentType == InputField.ContentType.Password ? eyeInactiveNormal : eyeActiveNormal;
 	}
+
+	/// <summary>
+	/// Sets the placeholder text for the input field
+	/// </summary>
+	/// <param name="placeholderText"> The text to set it to </param>
+	public void SetPlaceholderText(string placeholderText) => placeholder.GetComponent<TextMeshProUGUI>().text = placeholderText;
 }

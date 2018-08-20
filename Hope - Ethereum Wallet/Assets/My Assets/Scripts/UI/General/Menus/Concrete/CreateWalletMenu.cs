@@ -27,6 +27,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// </summary>
 	/// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
 	/// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
 	[Inject]
 	public void Construct(DynamicDataCache dynamicDataCache,
 						  UserWalletInfoManager userWalletInfoManager,
