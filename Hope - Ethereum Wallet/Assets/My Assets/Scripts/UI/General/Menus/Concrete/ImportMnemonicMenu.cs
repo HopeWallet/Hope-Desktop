@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.Ethereum;
 using Nethereum.HdWallet;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +11,15 @@ using Zenject;
 /// </summary>
 public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable, ITabButtonObservable
 {
-	[SerializeField] private Button importButton;
+	[SerializeField] private Button nextButton;
 
 	[SerializeField] private HopeInputField[] wordFields;
 
-    private ButtonClickObserver buttonObserver;
+	public List<Selectable> SelectableFields { get; } = new List<Selectable>();
+
+	public Selectable LastSelectableField { get; set; }
+
+	private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
 
     /// <summary>
@@ -32,7 +37,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 	/// <summary>
 	/// Adds the button click events.
 	/// </summary>
-	private void Start() => importButton.onClick.AddListener(LoadWallet);
+	private void Start() => nextButton.onClick.AddListener(LoadWallet);
 
 	/// <summary>
 	/// Subscribes this IEnterButtonObserver.
@@ -63,13 +68,21 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        //if (wordFields.Contains(InputFieldUtils.GetActiveInputField()) && importButton.interactable && clickType == ClickType.Down)
-            //importButton.Press();
-    }
+		if (clickType != ClickType.Down)
+			return;
+
+		if (InputFieldUtils.GetActiveInputField() == LastSelectableField && nextButton.interactable)
+			nextButton.Press();
+		else
+			SelectableExtensions.MoveToNextSelectable(SelectableFields);
+	}
 
 	public void TabButtonPressed(ClickType clickType)
 	{
+		if (clickType != ClickType.Down)
+			return;
 
+		SelectableFields.MoveToNextSelectable();
 	}
 
 	/// <summary>

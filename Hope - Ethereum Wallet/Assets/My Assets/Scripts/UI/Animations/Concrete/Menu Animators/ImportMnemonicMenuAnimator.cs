@@ -20,6 +20,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private HopeInputField[] wordInputFields;
 	private GameObject[] wordTextObjects;
 
+	private ImportMnemonicMenu importMnemonicMenu;
+
 	private string[] wordStrings;
 	private int wordCount = 12;
 
@@ -28,22 +30,32 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void Awake()
 	{
+		importMnemonicMenu = transform.GetComponent<ImportMnemonicMenu>();
+
 		wordInputFields = new HopeInputField[24];
 		wordTextObjects = new GameObject[24];
 
 		for (int i = 0; i < wordInputFields.Length; i++)
-			SetInputFields(i);
+			SetInputFieldVariables(i);
 
 		wordCountSection.GetComponent<RadioButtons>().OnButtonChanged += PassphraseWordCountChanged;
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
+		importMnemonicMenu.LastSelectableField = wordInputFields[11].inputFieldBase;
 	}
 
-	private void SetInputFields(int i)
+	/// <summary>
+	/// Sets the input field variables at a given index
+	/// </summary>
+	/// <param name="i"> The index of the input field in the hiearchy </param>
+	private void SetInputFieldVariables(int i)
 	{
 		wordInputFields[i] = passphrase.transform.GetChild(i).GetComponent<HopeInputField>();
 		wordTextObjects[i] = wordInputFields[i].transform.GetChild(1).GetChild(0).gameObject;
 
 		wordInputFields[i].OnInputUpdated += () => CheckIfValidInput(i);
+
+		if (wordInputFields[i].inputFieldBase.interactable)
+			importMnemonicMenu.SelectableFields.Add(wordInputFields[i].inputFieldBase);
 	}
 
 	/// <summary>
@@ -122,26 +134,47 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	{
 		wordCount = (int)value;
 
-		for (int i = 0; i < 24; i++)
-		{
-			bool interactable = i < wordCount;
-
-			if (!interactable)
-				wordInputFields[i].Text = string.Empty;
-
-			if (string.IsNullOrEmpty(wordInputFields[i].Text))
-				wordInputFields[i].inputFieldBase.gameObject.AnimateColor(interactable ? UIColors.White : new Color(0.45f, 0.45f, 0.45f), 0.15f);
-
-			wordInputFields[i].inputFieldBase.interactable = interactable;
-			wordInputFields[i].transform.GetChild(0).gameObject.AnimateColor(interactable ? UIColors.White : UIColors.Grey, 0.15f);
-		}
-
+		SetInteractableFields();
 		SetButtonInteractable();
 	}
 
+	/// <summary>
+	/// Sets the input field visuals depending on if they are interactable or not, and sets the selectable input fields
+	/// </summary>
+	private void SetInteractableFields()
+	{
+		importMnemonicMenu.SelectableFields.Clear();
+
+		for (int i = 0; i < 24; i++)
+		{
+			bool interactable = i < wordCount;
+			InputField baseInputField = wordInputFields[i].inputFieldBase;
+
+			if (interactable)
+			{
+				importMnemonicMenu.LastSelectableField = baseInputField;
+				importMnemonicMenu.SelectableFields.Add(baseInputField);
+			}
+			else
+			{
+				wordInputFields[i].Text = string.Empty;
+			}
+
+			if (string.IsNullOrEmpty(wordInputFields[i].Text))
+				baseInputField.gameObject.AnimateColor(interactable ? UIColors.White : new Color(0.45f, 0.45f, 0.45f), 0.15f);
+
+			baseInputField.interactable = interactable;
+			wordInputFields[i].transform.GetChild(0).gameObject.AnimateColor(interactable ? UIColors.White : UIColors.DarkGrey, 0.15f);
+		}
+	}
+
+	/// <summary>
+	/// Checks if the text in the input field is a valid input
+	/// </summary>
+	/// <param name="index"> The index of the input field in the hiearchy </param>
 	private void CheckIfValidInput(int index)
 	{
-		wordInputFields[index].Error = string.IsNullOrEmpty(wordInputFields[index].Text);
+		wordInputFields[index].Error = string.IsNullOrEmpty(wordInputFields[index].Text) || wordInputFields[index].Text.Any(char.IsDigit);
 		SetButtonInteractable();
 	}
 

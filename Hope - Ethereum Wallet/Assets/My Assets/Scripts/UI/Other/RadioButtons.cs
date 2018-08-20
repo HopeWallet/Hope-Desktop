@@ -32,6 +32,6 @@ public class RadioButtons : MonoBehaviour
 		Transform ButtonTransform = transform.GetChild(activeButton);
 
 		ButtonTransform.GetComponent<Button>().interactable = !active;
-		ButtonTransform.GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.Grey, 0.15f);
+		ButtonTransform.GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.LightGrey, 0.15f);
 	}
 }
