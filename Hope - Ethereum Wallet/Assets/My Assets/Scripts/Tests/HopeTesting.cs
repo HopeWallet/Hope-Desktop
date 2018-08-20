@@ -54,15 +54,37 @@ using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 using RandomNET.Integers;
 using RandomNET.Secure;
+using Nethereum.Util;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
 // Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
 // Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
 
-public class HOPETesting : MonoBehaviour
+public sealed class HopeTesting : MonoBehaviour
 {
-    [Test]
+    private void Start()
+    {
+        //BenchmarkHashFunction(HashGenerator.Blake2_256, "text", "Blake2-256");
+        //BenchmarkHashFunction(HashGenerator.SHA2_256, "text", "SHA2-256");
+        //BenchmarkHashFunction(HashGenerator.SHA3_256, "text", "SHA3-256");
+        //BenchmarkHashFunction(HashGenerator.Keccak_256, "text", "Keccak-256");
+        //BenchmarkHashFunction(HashGenerator.Shake_256, "text", "Shake-256");
+        //BenchmarkHashFunction(HashGenerator.Whirlpool, "text", "Whirlpool");
+    }
+
+    private void BenchmarkHashFunction(Func<string, string> hashFunc, string input, string name)
+    {
+        var stopwatch = Stopwatch.StartNew();
+
+        for (int i = 0; i < 10000; i++)
+            hashFunc.Invoke(input);
+
+        stopwatch.Stop();
+        Debug.Log(name + " => " + stopwatch.ElapsedMilliseconds);
+    }
+
+    [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
         PlayerPrefs.DeleteAll();

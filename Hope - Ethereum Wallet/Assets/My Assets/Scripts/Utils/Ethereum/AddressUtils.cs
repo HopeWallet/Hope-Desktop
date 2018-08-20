@@ -27,10 +27,10 @@
         /// </summary>
         /// <param name="address"> The address to check. </param>
         /// <returns> True if the <see langword="string"/> starts with '0x'. </returns>
-        private static bool CorrectAddressBeginning(string contractAddress)
+        private static bool CorrectAddressBeginning(string address)
         {
             for (int i = 0; i < CORRECT_ADDRESS_START.Length; i++)
-                if (CORRECT_ADDRESS_START[i] != contractAddress[i])
+                if (CORRECT_ADDRESS_START[i] != address[i])
                     return false;
 
             return true;

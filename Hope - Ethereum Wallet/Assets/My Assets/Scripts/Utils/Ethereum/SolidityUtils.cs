@@ -3,13 +3,11 @@ using System.Numerics;
 
 namespace Hope.Utils.Ethereum
 {
-
     /// <summary>
     /// Class which contains some utility methods useful for translating stuff to and from solidity.
     /// </summary>
     public static class SolidityUtils
     {
-
         public static readonly Dictionary<int, BigInteger> DecimalValueLookup = new Dictionary<int, BigInteger>();
 
         /// <summary>
@@ -74,7 +72,5 @@ namespace Hope.Utils.Ethereum
 
             return DecimalValueLookup[decimals];
         }
-
     }
-
 }

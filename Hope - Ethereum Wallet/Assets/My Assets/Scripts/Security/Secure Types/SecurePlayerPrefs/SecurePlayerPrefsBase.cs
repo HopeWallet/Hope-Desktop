@@ -31,14 +31,14 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// </summary>
         /// <param name="key"> The key to hash. </param>
         /// <returns> The hashed key string. </returns>
-        protected static string GetKeyHash(string key) => key.GetSHA384Hash();
+        protected static string GetKeyHash(string key) => key.SHA2_256();
 
         /// <summary>
         /// Hashes the value using a specific HashAlgorithm. (SHA1 for now)
         /// </summary>
         /// <param name="value"> The value to hash. </param>
         /// <returns> The hashed value string. </returns>
-        protected static string GetValueHash(string value) => value.GetSHA512Hash();
+        protected static string GetValueHash(string value) => value.SHA2_512();
 
         /// <summary>
         /// Gets the seed value from the player prefs.
@@ -56,7 +56,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             if (PlayerPrefs.HasKey(seedName))
                 return;
 
-            PlayerPrefs.SetString(seedName, dataEncryptor.Encrypt(RandomBytes.Secure.Blake2.GetBytes(128).GetSHA512Hash().GetHexString()));
+            PlayerPrefs.SetString(seedName, dataEncryptor.Encrypt(RandomBytes.Secure.Blake2.GetBytes(128).SHA2_512().GetHexString()));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            return settings.securePlayerPrefSeed.GetSHA512Hash();
+            return settings.securePlayerPrefSeed.SHA2_512();
         }
 
         /// <summary>

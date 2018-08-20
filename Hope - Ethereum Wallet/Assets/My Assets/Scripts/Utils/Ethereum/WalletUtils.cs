@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Nethereum.HdWallet;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
@@ -14,9 +15,6 @@ namespace Hope.Utils.Ethereum
     public class WalletUtils
     {
         private static EthereumNetwork EthereumNetwork;
-
-        private const string PATH_TWELVE_WORDS = "m/44'/60'/0'/0/x";
-        private const string PATH_TWENTYFOUR_WORDS = "m/44'/60'/0'/x";
 
         /// <summary>
         /// Initializes the <see cref="WalletUtils"/> by assigning the reference to the active network.
@@ -37,9 +35,9 @@ namespace Hope.Utils.Ethereum
             var wordCount = GetMnemonicWords(mnemonicPhrase).Length;
 
             if (wordCount == 12)
-                return PATH_TWELVE_WORDS;
+                return Wallet.DEFAULT_PATH;
             else if (wordCount == 24)
-                return PATH_TWENTYFOUR_WORDS;
+                return Wallet.ELECTRUM_LEDGER_PATH;
             else
                 return null;
         }
@@ -105,7 +103,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="gasPrice"> The gas price of the ether send transaction. </param>
         /// <param name="addressTo"> The address to send the ether to. </param>
         /// <param name="amount"> The amount to send in ether. </param>
-        /// <returns> The time waited for the request to be broadcast ot the network. </returns>
+        /// <returns> The time waited for the request to be broadcast to the network. </returns>
         private static IEnumerator _SendEtherCoroutine(
             TransactionSignedUnityRequest signedUnityRequest,
             string walletAddress,

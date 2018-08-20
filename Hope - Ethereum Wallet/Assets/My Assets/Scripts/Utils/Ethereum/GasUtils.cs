@@ -1,5 +1,4 @@
-﻿using Nethereum.Contracts;
-using Nethereum.Contracts.Extensions;
+﻿using Nethereum.Contracts.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;

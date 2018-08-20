@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using Org.BouncyCastle.Crypto;
+using System;
+using System.Security.Cryptography;
 
 namespace Hope.Security.HashGeneration
 {
@@ -7,6 +9,20 @@ namespace Hope.Security.HashGeneration
     /// </summary>
     public static class HashGenerationHelpers
     {
+        public static string GetHash(string input, IDigest digest)
+        {
+            return GetHash(input.GetUTF8Bytes(), digest).GetHexString();
+        }
+
+        public static byte[] GetHash(byte[] input, IDigest digest)
+        {
+            byte[] output = new byte[digest.GetDigestSize()];
+            digest.BlockUpdate(input, 0, input.Length);
+            digest.DoFinal(output, 0);
+
+            return output;
+        }
+
         /// <summary>
         /// Gets the hash of a string using a given <see cref="HashAlgorithm"/>.
         /// </summary>

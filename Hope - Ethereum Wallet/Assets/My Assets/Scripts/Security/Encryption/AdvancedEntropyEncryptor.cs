@@ -167,7 +167,7 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
             Array.Resize(ref hashBytes, currentLength + objBytesLength);
             Array.Copy(objBytes, 0, hashBytes, currentLength, objBytesLength);
 
-            hashBytes = hashBytes.GetSHA256Hash();
+            hashBytes = hashBytes.SHA2_256();
         }
 
         return hashBytes;
