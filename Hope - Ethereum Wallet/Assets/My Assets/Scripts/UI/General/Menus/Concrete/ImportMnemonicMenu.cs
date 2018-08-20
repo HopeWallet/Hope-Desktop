@@ -1,9 +1,6 @@
-﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.Ethereum;
+﻿using Hope.Utils.Ethereum;
 using Nethereum.HdWallet;
-using System;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -11,11 +8,11 @@ using Zenject;
 /// <summary>
 /// Menu for importing an ethereum wallet.
 /// </summary>
-public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable
+public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable, ITabButtonObservable
 {
 	[SerializeField] private Button importButton;
 
-	[SerializeField] private TMP_InputField[] wordFields;
+	[SerializeField] private HopeInputField[] wordFields;
 
     private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
@@ -70,10 +67,15 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
             //importButton.Press();
     }
 
-    /// <summary>
-    /// Sends a message to the UserWalletManager to create a wallet with the InputField text as the mnemonic phrase.
-    /// </summary>
-    [SecureCallEnd]
+	public void TabButtonPressed(ClickType clickType)
+	{
+
+	}
+
+	/// <summary>
+	/// Sends a message to the UserWalletManager to create a wallet with the InputField text as the mnemonic phrase.
+	/// </summary>
+	[SecureCallEnd]
     public override void LoadWallet()
     {
         if (CheckCreatedMnemonic())
@@ -91,7 +93,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     {
         Wallet wallet = null;
 
-        string newMnemonic = string.Join(" ", wordFields.Select(field => field.text)).Trim();
+        string newMnemonic = string.Join(" ", wordFields.Select(field => field.Text)).Trim();
         byte[] seed = (byte[])dynamicDataCache.GetData("seed");
 
         try

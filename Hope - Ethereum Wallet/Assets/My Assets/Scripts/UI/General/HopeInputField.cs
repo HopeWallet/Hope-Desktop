@@ -18,7 +18,17 @@ public class HopeInputField : MonoBehaviour
 	private Sprite eyeInactiveNormal;
 	private Sprite eyeActiveNormal;
 
-	public string Input { get; private set; }
+	private string text;
+
+	public string Text
+	{
+		get { return text; }
+		set
+		{
+			text = value;
+			inputFieldBase.text = text;
+		}
+	}
 
 	public bool Error { get; set; }
 
@@ -38,7 +48,7 @@ public class HopeInputField : MonoBehaviour
 		}
 
 		Error = true;
-		Input = string.Empty;
+		Text = string.Empty;
 	}
 
 	/// <summary>
@@ -58,10 +68,10 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="emptyString"> Whether the string is empty or not </param>
 	public void UpdateVisuals(bool emptyString)
 	{
-		placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
+		if (placeholder != null) placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
 		inputFieldBase.gameObject.AnimateColor(emptyString ? new Color(0.85f, 0.85f, 0.85f) : Error ? UIColors.Red : UIColors.Green, 0.15f);
-		errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
-		errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
+		if (errorIcon != null) errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
+		if (errorMessage != null) errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
 	}
 
 	/// <summary>
@@ -70,7 +80,7 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
-		Input = inputString;
+		Text = inputString;
 		OnInputUpdated?.Invoke();
 
 		bool emptyString = string.IsNullOrEmpty(inputString);
@@ -100,10 +110,4 @@ public class HopeInputField : MonoBehaviour
 
 		eye.GetComponent<Image>().sprite = inputFieldBase.contentType == InputField.ContentType.Password ? eyeInactiveNormal : eyeActiveNormal;
 	}
-
-	/// <summary>
-	/// Sets the input field base text value
-	/// </summary>
-	/// <param name="text"> The string being set </param>
-	public void SetText(string text) => inputFieldBase.text = text;
 }

@@ -67,8 +67,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// </summary>
 	private void CreateWalletNameAndPass()
 	{
-		dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Input));
-		dynamicDataCache.SetData("name", walletNameField.Input);
+		dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Text));
+		dynamicDataCache.SetData("name", walletNameField.Text);
 
 		uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
 	}
@@ -79,7 +79,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// <param name="walletName"> The text in the wallet name input field. </param>
 	private void WalletNameFieldChanged()
 	{
-		string walletName = walletNameField.Input;
+		string walletName = walletNameField.Text;
 
 		bool emptyName = string.IsNullOrEmpty(walletName.Trim());
 		bool usedName = WalletNameExists(walletName);
@@ -119,10 +119,10 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// </summary>
 	private void PasswordsUpdated()
 	{
-		string password1 = password1Field.Input;
-		string password2 = password2Field.Input;
+		string password1 = password1Field.Text;
+		string password2 = password2Field.Text;
 
-		password1Field.Error = password1Field.Input.Length < 8;
+		password1Field.Error = password1Field.Text.Length < 8;
 		password2Field.Error = password1 != password2;
 
 		if (password1Field.Error)
@@ -131,7 +131,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		if (password2Field.Error)
 			password2Field.errorMessage.text = "Passwords do not match.";
 
-		password2Field.UpdateVisuals(string.IsNullOrEmpty(password2Field.Input));
+		password2Field.UpdateVisuals(string.IsNullOrEmpty(password2Field.Text));
 		SetButtonInteractable();
 	}
 
