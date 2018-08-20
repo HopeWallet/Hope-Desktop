@@ -19,6 +19,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 
 	public Selectable LastSelectableField { get; set; }
 
+	private ImportMnemonicMenuAnimator importMneomonicMenuAnimator;
 	private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
 
@@ -37,7 +38,11 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 	/// <summary>
 	/// Adds the button click events.
 	/// </summary>
-	private void Start() => nextButton.onClick.AddListener(LoadWallet);
+	private void Start()
+	{
+		importMneomonicMenuAnimator = transform.GetComponent<ImportMnemonicMenuAnimator>();
+		nextButton.onClick.AddListener(LoadWallet);
+	}
 
 	/// <summary>
 	/// Subscribes this IEnterButtonObserver.
@@ -112,10 +117,13 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
         try
         {
             wallet = new Wallet(newMnemonic, WalletUtils.DetermineCorrectPath(newMnemonic));
-        }
+			nextButton.GetComponent<InteractableButton>().OnCustomPointerExit();
+		}
         catch
         {
-            return false;
+			importMneomonicMenuAnimator.AnimateIcon(importMneomonicMenuAnimator.nextButtonErrorIcon);
+			importMneomonicMenuAnimator.AnimateIcon(importMneomonicMenuAnimator.nextButtonErrorMessage);
+			return false;
         }
 
         if (seed?.SequenceEqual(wallet.Seed) == true)

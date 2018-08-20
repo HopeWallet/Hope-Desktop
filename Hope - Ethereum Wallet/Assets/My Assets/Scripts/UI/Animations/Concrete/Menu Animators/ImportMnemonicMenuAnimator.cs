@@ -13,8 +13,11 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	[SerializeField] private GameObject wordCountSection;
 	[SerializeField] private GameObject pastePhraseButton;
 	[SerializeField] private GameObject nextButton;
-	[SerializeField] private GameObject checkMarkIcon;
-	[SerializeField] private GameObject errorIcon;
+	[SerializeField] private GameObject pasteButtonCheckMarkIcon;
+	[SerializeField] private GameObject pasteButtonErrorIcon;
+
+	public GameObject nextButtonErrorIcon;
+	public GameObject nextButtonErrorMessage;
 
 	private HopeInputField[] wordInputFields;
 	private GameObject[] wordTextObjects;
@@ -121,13 +124,13 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates an icon in and out of view
 	/// </summary>
-	/// <param name="gameObject"> The GameObject that is being animated </param>
-	private void AnimateIcon(GameObject gameObject)
+	/// <param name="icon"> The GameObject that is being animated </param>
+	public void AnimateIcon(GameObject icon)
 	{
-		gameObject.transform.localScale = new Vector3(0, 0, 1);
+		icon.transform.localScale = new Vector3(0, 0, 1);
 
-		gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (gameObject != null) gameObject.AnimateGraphic(0f, 0.25f); }));
+		icon.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (icon != null) icon.AnimateGraphic(0f, 0.25f); }));
 	}
 
 	/// <summary>
@@ -208,13 +211,13 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 			int numOfWords = wordStrings.Length;
 			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
 
-			AnimateIcon(checkMarkIcon);
+			AnimateIcon(pasteButtonCheckMarkIcon);
 			StartWordAnimation();
 		}
 
 		else
 		{
-			AnimateIcon(errorIcon);
+			AnimateIcon(pasteButtonErrorIcon);
 		}
 	}
 }
