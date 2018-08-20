@@ -55,7 +55,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
                                         _ => RandomBytes.Secure.Blake2.GetBytes(PASSWORD_LENGTH).GetHexString().LimitEnd(PASSWORD_LENGTH),
-                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).SHA3_512();
+                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).Blake2_512();
     }
 
     /// <summary>

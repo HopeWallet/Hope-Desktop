@@ -61,7 +61,7 @@ public sealed class WalletEncryptor : SecureObject
 
         AdvancedSecureRandom secureRandom = await Task.Run(() =>
             new AdvancedSecureRandom(
-                new Blake2bDigest(),
+                new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
                 walletSettings.walletDerivationPrefName,

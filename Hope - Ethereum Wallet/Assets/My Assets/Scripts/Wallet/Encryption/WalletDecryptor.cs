@@ -47,15 +47,10 @@ public sealed class WalletDecryptor : SecureObject
             for (int i = 0; i < hashLvls.Length; i++)
                 hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
 
+            string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
             string derivation = SecurePlayerPrefs.GetString(walletSettings.walletDerivationPrefName + walletNum);
 
-            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(
-                hashLvls,
-                SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum),
-                derivation,
-                password,
-                walletNum,
-                onWalletDecrypted));
+            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(hashLvls, encryptedSeed, derivation, password, walletNum, onWalletDecrypted));
         });
     }
 
@@ -81,7 +76,7 @@ public sealed class WalletDecryptor : SecureObject
 
         AdvancedSecureRandom secureRandom = await Task.Run(() =>
             new AdvancedSecureRandom(
-                new Blake2bDigest(),
+                new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
                 walletSettings.walletDerivationPrefName,

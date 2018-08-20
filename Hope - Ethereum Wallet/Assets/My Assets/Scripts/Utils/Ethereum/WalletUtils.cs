@@ -2,7 +2,6 @@
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
-using Nethereum.Util;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -26,20 +25,24 @@ namespace Hope.Utils.Ethereum
         }
 
         /// <summary>
-        /// Determines the correct path to use with the wallet derivation based on how many words are in the mnemonic phrase.
+        /// Determines the correct wallet derivation path to use based on how many words are in the mnemonic phrase.
         /// </summary>
-        /// <param name="mnemonicPhrase"> The mnemonic phrase to derive the path from. </param>
+        /// <param name="mnemonicPhrase"> The mnemonic phrase to get the path for. </param>
         /// <returns> The correct path to derive the wallet from. </returns>
         public static string DetermineCorrectPath(string mnemonicPhrase)
         {
-            var wordCount = GetMnemonicWords(mnemonicPhrase).Length;
-
-            if (wordCount == 12)
-                return Wallet.DEFAULT_PATH;
-            else if (wordCount == 24)
-                return Wallet.ELECTRUM_LEDGER_PATH;
-            else
-                return null;
+            switch (GetMnemonicWords(mnemonicPhrase).Length)
+            {
+                case 12:
+                case 15:
+                case 18:
+                case 21:
+                    return Wallet.DEFAULT_PATH;
+                case 24:
+                    return Wallet.ELECTRUM_LEDGER_PATH;
+                default:
+                    return null;
+            }
         }
 
 		/// <summary>
@@ -87,11 +90,10 @@ namespace Hope.Utils.Ethereum
         /// <returns> The time waited for the request to complete. </returns>
         private static IEnumerator _AddressEthBalanceCoroutine(string address, Action<dynamic> onBalanceReceived)
         {
-            var request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
-
+            EthGetBalanceUnityRequest request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
-            request.CheckTransactionResult(() => onBalanceReceived(UnitConversion.Convert.FromWei(request.Result, 18)));
+            request.CheckTransactionResult(() => onBalanceReceived(SolidityUtils.ConvertFromUInt(request.Result.Value, 18)));
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             dynamic amount)
         {
-            var transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(UnitConversion.Convert.ToWei(amount)));
+            TransactionInput transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
             signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(EthereumNetwork.NetworkUrl, ()

@@ -55,6 +55,7 @@ using Assert = NUnit.Framework.Assert;
 using RandomNET.Integers;
 using RandomNET.Secure;
 using Nethereum.Util;
+using Nethereum.RPC.Eth.Transactions;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -63,6 +64,12 @@ using Nethereum.Util;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    private void Start()
+    {
+        //EthSendRawTransaction sendRawTx = new EthSendRawTransaction(null);
+        //sendRawTx.se
+    }
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
