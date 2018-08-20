@@ -96,8 +96,8 @@ public sealed class WalletDecryptor : SecureObject
         byte[] decryptedSeed = null;
         using (var dataEncryptor = new DataEncryptor(secureRandom))
         {
-            string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).SHA2_256();
-            string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).SHA2_256();
+            string lvl1EncryptHash = (dataEncryptor.Decrypt(hashes[0]) + dataEncryptor.Decrypt(hashes[1])).SHA3_512();
+            string lvl2EncryptHash = (dataEncryptor.Decrypt(hashes[2]) + dataEncryptor.Decrypt(hashes[3])).SHA3_512();
 
             decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, lvl2EncryptHash), lvl1EncryptHash).HexToByteArray();
         }

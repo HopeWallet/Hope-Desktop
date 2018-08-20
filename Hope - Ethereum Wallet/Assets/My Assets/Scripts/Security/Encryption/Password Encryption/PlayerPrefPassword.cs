@@ -38,7 +38,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         prefDictionary.Clear();
 
-        return pass.SHA2_512();
+        return pass.Blake2_512();
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class PlayerPrefPassword : ScriptableObject
 
         return DeriveEncryptionPassword(operationStringDeterminant, password,
                                         _ => RandomBytes.Secure.Blake2.GetBytes(PASSWORD_LENGTH).GetHexString().LimitEnd(PASSWORD_LENGTH),
-                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).SHA2_512();
+                                        (i, pass) => prefDictionary.Add(keys[i], pass)).CombineAndRandomize(seed).SHA3_512();
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class PlayerPrefPassword : ScriptableObject
     {
         prefDictionary = new Dictionary<string, string>();
 
-        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).SHA2_256())));
+        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).Keccak_256())));
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class PlayerPrefPassword : ScriptableObject
     {
         prefCounter = 0;
 
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletNum).SHA2_256(), prefDictionary[key], () =>
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletNum).Keccak_256(), prefDictionary[key], () =>
         {
             if (++prefCounter >= keys.Length)
                 onPrefsGenerated?.Invoke();

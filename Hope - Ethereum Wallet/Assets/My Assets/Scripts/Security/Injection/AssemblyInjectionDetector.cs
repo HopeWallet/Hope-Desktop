@@ -25,7 +25,7 @@ namespace Hope.Security.Injection
         private void DisplayAssemblyInfo(Assembly assembly)
         {
             var name = assembly.FullName;
-            var nameHash = name.SHA2_256();
+            var nameHash = name.Keccak_256();
 
             //UnityEngine.Debug.Log(name + " | | | =====> " + nameHash);
         }
