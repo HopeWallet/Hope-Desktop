@@ -60,7 +60,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
     [ReflectionProtect]
     private void GetConfirmationWords()
     {
-        ProtectedString[] correctWords;
+        string[] correctWords;
         int[] numbers = dynamicDataCache.GetData("confirmation numbers");
 
         List<int> randomIntList = numbers.ToList();
@@ -68,7 +68,6 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 
         correctWords = words.Where(word => numbers.Contains(words.IndexOf(word) + 1))
                             .OrderBy(word => randomIntList.IndexOf(words.IndexOf(word) + 1))
-                            .Select(word => new ProtectedString(word))
                             .ToArray();
 
         dynamicDataCache.SetData("confirmation words", correctWords);

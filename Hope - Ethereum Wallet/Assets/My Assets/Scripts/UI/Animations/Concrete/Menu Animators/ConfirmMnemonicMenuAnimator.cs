@@ -10,13 +10,13 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     [SerializeField] private GameObject instructions;
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
-	[SerializeField] private GameObject[] checkBoxes;
-	[SerializeField] private GameObject errorIcon;
+    [SerializeField] private GameObject[] checkBoxes;
+    [SerializeField] private GameObject errorIcon;
 
     private DynamicDataCache dynamicDataCache;
     private ConfirmMnemonicMenu confirmMnemonicMenu;
 
-	private int wordIndex;
+    private int wordIndex;
     private bool errorIconVisible;
 
     /// <summary>
@@ -49,42 +49,42 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
     }
 
-	/// <summary>
-	/// Sets the initial word text to what the first word should be
-	/// </summary>
-	private void Start() => SetWordText();
+    /// <summary>
+    /// Sets the initial word text to what the first word should be
+    /// </summary>
+    private void Start() => SetWordText();
 
-	/// <summary>
-	/// Animates the unique elements of this form into view
-	/// </summary>
-	protected override void AnimateUniqueElementsIn()
-	{
-		instructions.AnimateScaleX(1f, 0.15f);
-		wordInputField.AnimateScaleX(1f, 0.2f);
-		nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		AnimateCheckboxes(0);
-	}
+    /// <summary>
+    /// Animates the unique elements of this form into view
+    /// </summary>
+    protected override void AnimateUniqueElementsIn()
+    {
+        instructions.AnimateScaleX(1f, 0.15f);
+        wordInputField.AnimateScaleX(1f, 0.2f);
+        nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+        AnimateCheckboxes(0);
+    }
 
-	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
-	/// </summary>
-	protected override void ResetElementValues()
-	{
-		FinishedAnimating();
+    /// <summary>
+    /// Resets the unique elements of the form back to the starting positions
+    /// </summary>
+    protected override void ResetElementValues()
+    {
+        FinishedAnimating();
 
-		for (int i = 0; i < 4; i++)
-			checkBoxes[i].SetScale(Vector2.zero);
+        for (int i = 0; i < 4; i++)
+            checkBoxes[i].SetScale(Vector2.zero);
 
-		wordInputField.SetScale(new Vector2(0f, 1f));
-		instructions.SetScale(new Vector2(0f, 1f));
-		nextButton.SetGraphicAndScale(Vector2.zero);
-	}
+        wordInputField.SetScale(new Vector2(0f, 1f));
+        instructions.SetScale(new Vector2(0f, 1f));
+        nextButton.SetGraphicAndScale(Vector2.zero);
+    }
 
-	/// <summary>
-	/// Animates the checkboxes one by one
-	/// </summary>
-	/// <param name="index"> The index of the checkboxes array being animated </param>
-	private void AnimateCheckboxes(int index)
+    /// <summary>
+    /// Animates the checkboxes one by one
+    /// </summary>
+    /// <param name="index"> The index of the checkboxes array being animated </param>
+    private void AnimateCheckboxes(int index)
     {
         if (index != 3)
             checkBoxes[index].AnimateScale(1f, 0.075f, () => AnimateCheckboxes(++index));
@@ -167,30 +167,27 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     /// <summary>
     /// The nextButton has been clicked
     /// </summary>
-    [SecureCallEnd]
-    [ReflectionProtect]
     private void NextButtonClicked()
     {
-        using (var word = ((ProtectedString[])dynamicDataCache.GetData("confirmation words"))[wordIndex].CreateDisposableData())
+        var word = ((string[])dynamicDataCache.GetData("confirmation words"))[wordIndex];
+
+        if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(word))
         {
-            if (wordInputField.GetComponent<TMP_InputField>().text.EqualsIgnoreCase(word.Value))
+            if (wordIndex != checkBoxes.Length - 1)
             {
-                if (wordIndex != checkBoxes.Length - 1)
-                {
-                    checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-                    Animating = true;
-                    AnimateNextWord(false);
-                    wordIndex++;
-                }
-                else
-                {
-                    checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
-                }
+                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
+                Animating = true;
+                AnimateNextWord(false);
+                wordIndex++;
             }
             else
             {
-                AnimateErrorIcon(true);
+                checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
             }
+        }
+        else
+        {
+            AnimateErrorIcon(true);
         }
     }
 }
