@@ -36,10 +36,28 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
         GetConfirmationWords();
     }
 
-    /// <summary>
-    /// Opens the exit confirmation popup and enables the note text.
-    /// </summary>
-    protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
+	/// <summary>
+	/// Subscribes this button observable.
+	/// </summary>
+	protected override void OnEnable()
+	{
+		base.OnEnable();
+		buttonClickObserver.SubscribeObservable(this);
+	}
+
+	/// <summary>
+	/// Unsubscribes this button observable.
+	/// </summary>
+	protected override void OnDisable()
+	{
+		base.OnDisable();
+		buttonClickObserver.UnsubscribeObservable(this);
+	}
+
+	/// <summary>
+	/// Opens the exit confirmation popup and enables the note text.
+	/// </summary>
+	protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
 
     /// <summary>
     /// Starts to load the wallet.

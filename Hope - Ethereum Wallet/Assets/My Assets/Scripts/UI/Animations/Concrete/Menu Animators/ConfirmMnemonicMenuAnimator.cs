@@ -134,12 +134,14 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
             {
 				nextButton.GetComponent<InteractableButton>().OnCustomPointerExit();
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
-            }
+				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
+			}
         }
         else
         {
 			inputField.Error = true;
 			inputField.UpdateVisuals(false);
+			nextButton.GetComponent<Button>().interactable = false;
 		}
     }
 }
