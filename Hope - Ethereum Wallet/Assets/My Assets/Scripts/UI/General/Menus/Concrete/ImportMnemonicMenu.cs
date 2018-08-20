@@ -118,6 +118,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 		}
         catch
         {
+			nextButton.interactable = false;
 			importMneomonicMenuAnimator.AnimateIcon(importMneomonicMenuAnimator.nextButtonErrorIcon);
 			importMneomonicMenuAnimator.AnimateIcon(importMneomonicMenuAnimator.nextButtonErrorMessage);
 			return false;

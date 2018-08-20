@@ -117,6 +117,13 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		else
 		{
 			Animating = false;
+
+			for (int i = index; i < wordCount; i++)
+			{
+				wordTextObjects[i].transform.localScale = Vector2.one;
+				wordTextObjects[i].AnimateColor(UIColors.White, 0.1f);
+			}
+
 			SetButtonInteractable();
 		}
 	}
