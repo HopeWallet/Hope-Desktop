@@ -116,7 +116,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 
         try
         {
-            wallet = new Wallet(newMnemonic, WalletUtils.DetermineCorrectPath(newMnemonic));
+            wallet = new Wallet(newMnemonic, null, WalletUtils.DetermineCorrectPath(newMnemonic));
 			nextButton.GetComponent<InteractableButton>().OnCustomPointerExit();
 		}
         catch
