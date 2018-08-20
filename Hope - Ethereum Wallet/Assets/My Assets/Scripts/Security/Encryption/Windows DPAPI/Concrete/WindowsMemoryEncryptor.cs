@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using Hope.Security.Encryption.Symmetric;
+using Hope.Security.HashGeneration;
 using RandomNET.Bytes;
 
 namespace Hope.Security.Encryption.DPAPI
@@ -19,7 +20,7 @@ namespace Hope.Security.Encryption.DPAPI
         public WindowsMemoryEncryptor(params object[] encryptors) : base(encryptors)
         {
             aes = new AesEncryptor(encryptors);
-            randomEntropy = RandomBytes.Secure.SHA3.GetBytes(32);
+            randomEntropy = RandomBytes.Secure.SHA3.GetBytes(32).Shake_128();
         }
 
         /// <summary>

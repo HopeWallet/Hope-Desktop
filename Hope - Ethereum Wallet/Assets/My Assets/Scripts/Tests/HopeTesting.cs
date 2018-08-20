@@ -63,27 +63,6 @@ using Nethereum.Util;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    private void Start()
-    {
-        //BenchmarkHashFunction(HashGenerator.Blake2_256, "text", "Blake2-256");
-        //BenchmarkHashFunction(HashGenerator.SHA2_256, "text", "SHA2-256");
-        //BenchmarkHashFunction(HashGenerator.SHA3_256, "text", "SHA3-256");
-        //BenchmarkHashFunction(HashGenerator.Keccak_256, "text", "Keccak-256");
-        //BenchmarkHashFunction(HashGenerator.Shake_256, "text", "Shake-256");
-        //BenchmarkHashFunction(HashGenerator.Whirlpool, "text", "Whirlpool");
-    }
-
-    private void BenchmarkHashFunction(Func<string, string> hashFunc, string input, string name)
-    {
-        var stopwatch = Stopwatch.StartNew();
-
-        for (int i = 0; i < 10000; i++)
-            hashFunc.Invoke(input);
-
-        stopwatch.Stop();
-        Debug.Log(name + " => " + stopwatch.ElapsedMilliseconds);
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

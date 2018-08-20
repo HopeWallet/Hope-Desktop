@@ -1,5 +1,4 @@
 ﻿using Org.BouncyCastle.Crypto;
-using System;
 using System.Security.Cryptography;
 
 namespace Hope.Security.HashGeneration
@@ -9,11 +8,23 @@ namespace Hope.Security.HashGeneration
     /// </summary>
     public static class HashGenerationHelpers
     {
+        /// <summary>
+        /// Gets the hash of some <see cref="string"/> input given the digest for processing the hash.
+        /// </summary>
+        /// <param name="input"> The <see cref="string"/> input to hash. </param>
+        /// <param name="digest"> The <see cref="IDigest"/> used for processing the hash. </param>
+        /// <returns> The hashed <see cref="string"/> value. </returns>
         public static string GetHash(string input, IDigest digest)
         {
             return GetHash(input.GetUTF8Bytes(), digest).GetHexString();
         }
 
+        /// <summary>
+        /// Gets the hash of some <see cref="byte"/>[] input given the digest for processing the hash.
+        /// </summary>
+        /// <param name="input"> The <see cref="byte"/>[] input to hash. </param>
+        /// <param name="digest"> The <see cref="IDigest"/> used for processing the hash. </param>
+        /// <returns> The hashed <see cref="byte[]"/> value. </returns>
         public static byte[] GetHash(byte[] input, IDigest digest)
         {
             byte[] output = new byte[digest.GetDigestSize()];
