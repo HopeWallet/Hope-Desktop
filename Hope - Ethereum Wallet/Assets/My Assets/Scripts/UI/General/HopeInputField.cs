@@ -10,6 +10,7 @@ public class HopeInputField : MonoBehaviour
 	[SerializeField] private GameObject placeholder;
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
+	[SerializeField] private bool noSpaces;
 
 	public InputField inputFieldBase;
 
@@ -69,7 +70,7 @@ public class HopeInputField : MonoBehaviour
 	public void UpdateVisuals(bool emptyString)
 	{
 		if (placeholder != null) placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
-		inputFieldBase.gameObject.AnimateColor(emptyString ? new Color(0.85f, 0.85f, 0.85f) : Error ? UIColors.Red : UIColors.Green, 0.15f);
+		inputFieldBase.gameObject.AnimateColor(emptyString ? UIColors.White : Error ? UIColors.Red : UIColors.Green, 0.15f);
 		if (errorIcon != null) errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
 		if (errorMessage != null) errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
 	}
@@ -80,10 +81,14 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
-		Text = inputString;
+		if (noSpaces)
+			Text = inputString.Trim();
+		else
+			Text = inputString;
+
 		OnInputUpdated?.Invoke();
 
-		bool emptyString = string.IsNullOrEmpty(inputString);
+		bool emptyString = string.IsNullOrEmpty(Text);
 
 		UpdateVisuals(emptyString);
 

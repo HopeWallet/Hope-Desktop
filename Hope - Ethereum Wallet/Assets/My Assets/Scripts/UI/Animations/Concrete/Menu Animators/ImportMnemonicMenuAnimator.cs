@@ -3,6 +3,7 @@ using Hope.Utils.Ethereum;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using NBitcoin;
 
 /// <summary>
 /// Class used for animating the ImportMnemonicMenu.
@@ -66,43 +67,32 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void StartWordAnimation()
 	{
-		for (int i = 0; i < 24; i++)
-		{
-			wordInputFields[i].Text = string.Empty;
-			wordTextObjects[i].transform.localScale = new Vector2(0f, 1f);
-		}
+		wordInputFields.ForEach(i => i.Text = string.Empty);
+		wordTextObjects.ForEach(t => t.transform.localScale = new Vector2(0f, 1f));
 
 		Animating = true;
-		AnimateWord(0, 0);
+		AnimateWord(0);
 	}
 
 	/// <summary>
 	/// Animates the word object and sets the input field to the pasted word
 	/// </summary>
-	/// <param name="wordIndex"> The index of the word in the wordStrings array </param>
-	/// <param name="fieldIndex"> The index of the wordInputFields array </param>
-	private void AnimateWord(int wordIndex, int fieldIndex)
+	/// <param name="index"> The index of the current input field </param>
+	private void AnimateWord(int index)
 	{
-		if (!wordInputFields[fieldIndex].gameObject.activeInHierarchy)
-		{
-			ProcessWordAnimation(wordIndex, fieldIndex + 3);
-			return;
-		}
-
-		wordInputFields[fieldIndex].Text = wordStrings[wordIndex];
-		wordTextObjects[fieldIndex].AnimateScaleX(1f, 0.1f, () => ProcessWordAnimation(++wordIndex, ++fieldIndex));
+		wordInputFields[index].Text = wordStrings[index];
+		wordTextObjects[index].AnimateScaleX(1f, 0.1f, () => ProcessWordAnimation(++index));
 	}
 
 	/// <summary>
 	/// If there are still words left to animate, it calls the CrunchWord animation again
 	/// </summary>
-	/// <param name="wordIndex"> The index of the word in the wordStrings array </param>
-	/// <param name="fieldIndex"> The index of the wordInputFields array </param>
-	private void ProcessWordAnimation(int wordIndex, int fieldIndex)
+	/// <param name="index"> The index of the current input field </param>
+	private void ProcessWordAnimation(int index)
 	{
-		if (wordIndex < wordStrings.Length)
+		if (index < wordStrings.Length)
 		{
-			AnimateWord(wordIndex, fieldIndex);
+			AnimateWord(index);
 		}
 
 		else
@@ -128,36 +118,30 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// Checks the value of currently selected word count
 	/// </summary>
 	/// <param name="value"> The value of the dropdown </param>
-	private void PassphraseWordCountChanged(RadioButtons.WordCount value)
+	private void PassphraseWordCountChanged(WordCount value)
 	{
-		wordCount = value == RadioButtons.WordCount.TwelveWords ? 12 : 24;
+		wordCount = (int)value;
 
-		passphrase.AnimateTransformX(wordCount == 12 ? 300f : 0f, 0.1f);
-		//ChangeColumn(wordCount == 12, 3, 9, 15, 21);
+		for (int i = 0; i < 24; i++)
+		{
+			bool interactable = i < wordCount;
+
+			if (!interactable)
+				wordInputFields[i].Text = string.Empty;
+
+			if (string.IsNullOrEmpty(wordInputFields[i].Text))
+				wordInputFields[i].inputFieldBase.gameObject.AnimateColor(interactable ? UIColors.White : new Color(0.45f, 0.45f, 0.45f), 0.15f);
+
+			wordInputFields[i].inputFieldBase.interactable = interactable;
+			wordInputFields[i].transform.GetChild(0).gameObject.AnimateColor(interactable ? UIColors.White : UIColors.Grey, 0.15f);
+		}
 
 		SetButtonInteractable();
 	}
 
-	//private void ChangeColumn(bool twelveWords, params int[] nums)
-	//{
-	//	for (int i = 0; i < nums.Length; i++)
-	//	{
-	//		wordInputFields[nums[i] - 3].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = wordInputFields[twelveWords ? nums[i] + 3 : nums[i] - 3].name;
-
-	//		if (!twelveWords)
-	//			wordInputFields[nums[i]].gameObject.SetActive(true);
-
-	//		wordInputFields[nums[i]].gameObject.AnimateScaleX(twelveWords ? 0f : 1f, 0.15f, () => { if (twelveWords) wordInputFields[nums[i]].gameObject.SetActive(false); });
-	//	}
-
-	//	if (nums[3] != 23)
-	//		ChangeColumn(twelveWords, ++nums[0], ++nums[1], ++nums[2], ++nums[3]);
-	//}
-
 	private void CheckIfValidInput(int index)
 	{
-		wordInputFields[index].Error = string.IsNullOrEmpty(wordInputFields[index].Text.Trim());
-
+		wordInputFields[index].Error = string.IsNullOrEmpty(wordInputFields[index].Text);
 		SetButtonInteractable();
 	}
 
@@ -169,7 +153,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		if (Animating)
 			return;
 
-		var compatibleWords = wordInputFields.Where(b => b.isActiveAndEnabled && !b.Error).ToList();
+		var compatibleWords = wordInputFields.Where(b => b.inputFieldBase.interactable && !b.Error).ToList();
 
 		nextButton.GetComponent<Button>().interactable = compatibleWords.Count == wordCount;
 	}
@@ -186,7 +170,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		if (clipboard != null && words <= 24)
 		{
-			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(words <= 12 ? 0 : 1);
+			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(words <= 12 ? 0 : words <= 15 ? 1 : words <= 18 ? 2 : words <= 21 ? 3 : 4);
 
 			AnimateIcon(checkMarkIcon);
 			StartWordAnimation();

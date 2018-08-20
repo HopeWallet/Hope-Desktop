@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NBitcoin;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,17 +9,22 @@ public class RadioButtons : MonoBehaviour
 
 	private int previouslySelectedButton;
 
-	private readonly Color INACTIVE_COLOR = new Color(0.65f, 0.65f, 0.65f);
-	private readonly Color ACTIVE_COLOR = new Color(0.85f, 0.85f, 0.85f);
+	private void Awake()
+	{
+		for (int i = 0; i < transform.childCount; i++)
+			SetButtonListener(i);
+	}
+
+	private void SetButtonListener(int index) => transform.GetChild(index).GetComponent<Button>().onClick.AddListener(() => RadioButtonClicked(index));
 
 	public void RadioButtonClicked(int activeButton)
 	{
 		SetRadioButton(previouslySelectedButton, false);
 		SetRadioButton(activeButton, true);
 
-		OnButtonChanged?.Invoke((WordCount)activeButton);
-
 		previouslySelectedButton = activeButton;
+
+		OnButtonChanged?.Invoke((WordCount)(12 + (activeButton * 3)));
 	}
 
 	private void SetRadioButton(int activeButton, bool active)
@@ -26,8 +32,6 @@ public class RadioButtons : MonoBehaviour
 		Transform ButtonTransform = transform.GetChild(activeButton);
 
 		ButtonTransform.GetComponent<Button>().interactable = !active;
-		ButtonTransform.GetChild(0).gameObject.AnimateColor(active ? ACTIVE_COLOR : INACTIVE_COLOR, 0.1f);
+		ButtonTransform.GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.Grey, 0.15f);
 	}
-
-	public enum WordCount { TwelveWords, TwentyFourWords }
 }
