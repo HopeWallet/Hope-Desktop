@@ -30,7 +30,7 @@ public sealed class EtherAsset : TradableAsset
     /// </summary>
     /// <param name="userWalletManager"> The wallet to get the current amount of ether for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the amount as a parameter. </param>
-    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => WalletUtils.GetEthBalance(userWalletManager, onBalanceReceived);
+    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => EthUtils.GetEthBalance(userWalletManager.WalletAddress, onBalanceReceived);
 
     /// <summary>
     /// Transfers a specified amount of ether from the input UserWallet to a specified address.
@@ -42,7 +42,7 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="amount"> The amount of ether to send. </param>
     public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request => WalletUtils.SendEther(request, userWalletManager.WalletAddress, gasLimit, gasPrice, address, amount),
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request => EthUtils.SendEther(request, userWalletManager.WalletAddress, gasLimit, gasPrice, address, amount),
                                                           gasLimit,
                                                           gasPrice,
                                                           address,

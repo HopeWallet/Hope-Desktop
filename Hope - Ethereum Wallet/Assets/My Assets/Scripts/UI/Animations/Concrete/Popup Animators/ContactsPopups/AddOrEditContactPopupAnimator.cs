@@ -86,8 +86,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="address"> The current string in the address input field </param>
 	private void AddressChanged(string address)
 	{
-		if (!AddressUtils.CorrectAddressLength(address))
-			addressInputField.text = address.LimitEnd(42);
+		if (!AddressUtils.CorrectAddressLength(address, AddressUtils.ADDRESS_LENGTH))
+			addressInputField.text = address.LimitEnd(AddressUtils.ADDRESS_LENGTH);
 
 		string updatedAddress = addressInputField.text.ToLower();
 

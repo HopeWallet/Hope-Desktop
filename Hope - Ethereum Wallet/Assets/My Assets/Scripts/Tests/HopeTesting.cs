@@ -56,6 +56,8 @@ using RandomNET.Integers;
 using RandomNET.Secure;
 using Nethereum.Util;
 using Nethereum.RPC.Eth.Transactions;
+using Nethereum.Contracts.ContractHandlers;
+using Nethereum.Signer;
 
 // TODO
 // Remove DisposableData and use Actions with the DataContainer/RefType instead
@@ -64,11 +66,6 @@ using Nethereum.RPC.Eth.Transactions;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    private void Start()
-    {
-        //EthSendRawTransaction sendRawTx = new EthSendRawTransaction(null);
-        //sendRawTx.se
-    }
 
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()

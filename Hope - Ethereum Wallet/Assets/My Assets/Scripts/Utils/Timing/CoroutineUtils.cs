@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public static class CoroutineUtils
 {
-
 	private static readonly AppInstaller CoroutineServiceComponent = UnityEngine.Object.FindObjectOfType<AppInstaller>();
 
     /// <summary>
