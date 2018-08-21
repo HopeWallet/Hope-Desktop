@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEngine;
 using Zenject;
 
 /// <summary>
@@ -6,8 +7,9 @@ using Zenject;
 /// </summary>
 public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 {
-    public TMP_Text walletNameText;
+    [SerializeField] private TMP_Text walletNameText;
 
+	private WalletListMenu walletListMenu;
     private PopupManager popupManager;
     private DynamicDataCache dynamicDataCache;
 
@@ -26,20 +28,20 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 	/// <summary>
 	/// Adds the button click listener.
 	/// </summary>
-	protected override void OnAwake() => Button.onClick.AddListener(WalletButtonClicked);
+	protected override void OnAwake()
+	{
+		Button.onClick.AddListener(WalletButtonClicked);
+		walletListMenu = transform.GetComponentInParent<WalletListMenu>();
+	}
 
 	/// <summary>
 	/// Updates the name of the wallet with the WalletInfo object.
 	/// </summary>
 	/// <param name="info"> The WalletInfo of this WalletButton. </param>
-	protected override void OnValueUpdated(WalletInfo info) => walletNameText.text = info.WalletName?.LimitEnd(17, "...");
+	protected override void OnValueUpdated(WalletInfo info) => walletNameText.text = info.WalletName?.LimitEnd(20, "...");
 
 	/// <summary>
 	/// Sets the wallet num in the data cache and opens the <see cref="UnlockWalletPopup"/>.
 	/// </summary>
-	private void WalletButtonClicked()
-    {
-        dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-        popupManager.GetPopup<UnlockWalletPopup>();
-    }
+	private void WalletButtonClicked() => walletListMenu.SetNewActiveWallet(ButtonInfo.WalletNum);
 }

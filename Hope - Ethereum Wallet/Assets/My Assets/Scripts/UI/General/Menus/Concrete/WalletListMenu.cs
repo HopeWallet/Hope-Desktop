@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,9 +10,14 @@ using Zenject;
 /// </summary>
 public sealed class WalletListMenu : Menu<WalletListMenu>
 {
-	[SerializeField] private Button newWalletButton;
+	[SerializeField] private Button deleteButton, editButton, signInButton, newWalletButton;
 
-    private WalletButton.Factory walletButtonFactory;
+	[SerializeField] private Transform walletList;
+
+	private int activeWalletNum = 1;
+
+	private WalletListMenuAnimator walletListMenuAnimator;
+	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
     private UserWalletInfoManager.Settings walletSettings;
     private Settings settings;
@@ -41,6 +47,8 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// </summary>
     protected override void OnAwake()
     {
+		walletListMenuAnimator = transform.GetComponent<WalletListMenuAnimator>();
+
         List<GameObject> walletObjects = new List<GameObject>();
 
         for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
@@ -53,12 +61,61 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	/// <summary>
 	/// Adds the button click events on start.
 	/// </summary>
-	private void Start() => newWalletButton.onClick.AddListener(CreateNewWallet);
+	private void Start()
+	{
+		deleteButton.onClick.AddListener(DeleteWallet);
+		editButton.onClick.AddListener(EditWallet);
+		signInButton.onClick.AddListener(UnlockWallet);
+		newWalletButton.onClick.AddListener(CreateNewWallet);
+	}
+
+	protected override void OnBackPressed()
+	{
+		base.OnBackPressed();
+
+		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
+		activeWalletNum = 1;
+		walletListMenuAnimator.BottomButtonsVisible = false;
+	}
 
 	/// <summary>
 	/// Opens the CreateWalletMenu to allow for creating a new wallet.
 	/// </summary>
 	private void CreateNewWallet() => uiManager.OpenMenu<CreateWalletMenu>();
+
+	private void DeleteWallet()
+	{
+
+	}
+
+	private void EditWallet()
+	{
+
+	}
+
+	private void UnlockWallet()
+	{
+		dynamicDataCache.SetData("walletnum", activeWalletNum);
+		popupManager.GetPopup<UnlockWalletPopup>();
+	}
+
+	public void SetNewActiveWallet(int newWalletNum)
+	{
+		if (!walletListMenuAnimator.BottomButtonsVisible)
+			walletListMenuAnimator.BottomButtonsVisible = true;
+
+		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
+		SetActiveButton(walletList.GetChild(newWalletNum - 1), true);
+		activeWalletNum = newWalletNum;
+	}
+
+	private void SetActiveButton(Transform objectTransform, bool newActiveWallet)
+	{
+		objectTransform.GetComponent<Button>().interactable = !newActiveWallet;
+
+		float value = newActiveWallet ? 1f : 0.85f;
+		objectTransform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(value, value, value);
+	}
 
 	/// <summary>
 	/// The settings for this WalletListMenu.

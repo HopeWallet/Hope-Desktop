@@ -7,8 +7,29 @@ using UnityEngine.UI;
 public class WalletListMenuAnimator : UIAnimator
 {
 	[SerializeField] private GameObject walletList;
+	[SerializeField] private GameObject deleteButton;
+	[SerializeField] private GameObject editButton;
+	[SerializeField] private GameObject signInButton;
+	[SerializeField] private GameObject line2;
+	[SerializeField] private GameObject line3;
 	[SerializeField] private GameObject newWalletButton;
     [SerializeField] private Scrollbar scrollbar;
+
+	private bool bottomButtonsVisible;
+
+	public bool BottomButtonsVisible
+	{
+		get { return bottomButtonsVisible; }
+		set
+		{
+			bottomButtonsVisible = value;
+
+			if (bottomButtonsVisible)
+				AnimateBottomButtons(true);
+			else
+				AnimateBottomButtons(false);
+		}
+	}
 
     /// <summary>
     /// The wallet gameobjects to animate.
@@ -20,8 +41,9 @@ public class WalletListMenuAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		walletList.AnimateGraphicAndScale(1f, 1f, 0.2f, () => AnimateWallets(0));
-		newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		FinishedAnimating();
+		//walletList.AnimateGraphicAndScale(1f, 1f, 0.2f, () => AnimateWallets(0));
+		//newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 	}
 
 	/// <summary>
@@ -31,8 +53,8 @@ public class WalletListMenuAnimator : UIAnimator
 	{
 		FinishedAnimating();
 
-		walletList.SetGraphicAndScale(Vector2.zero);
-		newWalletButton.SetGraphicAndScale(Vector2.zero);
+		//walletList.SetGraphicAndScale(Vector2.zero);
+		//newWalletButton.SetGraphicAndScale(Vector2.zero);
 	}
 
 	/// <summary>
@@ -54,5 +76,41 @@ public class WalletListMenuAnimator : UIAnimator
             Wallets[index].AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
             Wallets[index].AnimateScaleX(1f, 0.1f, () => AnimateWallets(++index));
+	}
+
+	public void AnimateBottomButtons(bool animatingIn)
+	{
+		if (animatingIn)
+		{
+			line2.AnimateTransformY(-190f, 0.15f);
+			line3.AnimateTransformY(-245.3f, 0.15f);
+			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(deleteButton, true));
+			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(editButton, true));
+			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(signInButton, true));
+		}
+		else
+		{
+			Vector2 defaultLinePosition = new Vector2(0.8f, -217.65f);
+			line2.transform.localPosition = defaultLinePosition;
+			line3.transform.localPosition = defaultLinePosition;
+
+			ChangeButtonVisuals(deleteButton, false);
+			ChangeButtonVisuals(editButton, false);
+			ChangeButtonVisuals(signInButton, false);
+		}
+	}
+
+	private void ChangeButtonVisuals(GameObject button, bool animatingIn)
+	{
+		if (animatingIn)
+		{
+			button.AnimateScaleY(1f, 0.1f);
+			button.AnimateGraphic(1f, 0.1f);
+		}
+		else
+		{
+			button.transform.localScale = new Vector2(1f, 0f);
+			button.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+		}
 	}
 }
