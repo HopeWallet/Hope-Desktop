@@ -1,6 +1,7 @@
 ﻿using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
+using RandomNET.Integers;
 using System;
 using System.Collections;
 using Debug = UnityEngine.Debug;
@@ -28,9 +29,11 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         /// <param name="address"> The address to check for the ether balance. </param>
         /// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
-        public static void GetEtherBalance(string address, Action<dynamic> onBalanceReceived)
+        public static EthCallPromise<dynamic> GetEtherBalance(string address)
         {
-            _AddressEthBalanceCoroutine(address, onBalanceReceived).StartCoroutine();
+            int id = RandomInt.Fast.GetInt();
+            _AddressEthBalanceCoroutine(address, id).StartCoroutine();
+            return EthCallPromise<dynamic>.GetPromise(id);
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="gasPrice"> The gas price of the ether send transaction. </param>
         /// <param name="addressTo"> The address to send the ether to. </param>
         /// <param name="amount"> The amount of ether to send. </param>
-        public static void SendEther(
+        public static EthTransactionPromise SendEther(
             TransactionSignedUnityRequest signedUnityRequest,
             string walletAddress,
             HexBigInteger gasLimit,
@@ -50,21 +53,23 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             decimal amount)
         {
-            _SendEtherCoroutine(signedUnityRequest, walletAddress, gasLimit, gasPrice, addressTo, amount).StartCoroutine();
+            int id = RandomInt.Fast.GetInt();
+            _SendEtherCoroutine(signedUnityRequest, walletAddress, gasLimit, gasPrice, addressTo, amount, id).StartCoroutine();
+            return EthTransactionPromise.GetPromise(id);
         }
 
         /// <summary>
         /// Gets the ether balance of a certain wallet.
         /// </summary>
         /// <param name="address"> The address to check the ether balance for. </param>
-        /// <param name="onBalanceReceived"> Callback which is executed when the balance is received. </param>
+        /// <param name="promiseId"> The id of the promise which will contain the result for this eth balance call. </param>
         /// <returns> The time waited for the request to complete. </returns>
-        private static IEnumerator _AddressEthBalanceCoroutine(string address, Action<dynamic> onBalanceReceived)
+        private static IEnumerator _AddressEthBalanceCoroutine(string address, int promiseId)
         {
             EthGetBalanceUnityRequest request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
-            request.CheckTransactionResult(() => onBalanceReceived(SolidityUtils.ConvertFromUInt(request.Result.Value, 18)));
+            EthCallPromise<dynamic>.GetPromise(promiseId).Build(request, () => SolidityUtils.ConvertFromUInt(request.Result.Value, 18));
         }
 
         /// <summary>
@@ -76,6 +81,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="gasPrice"> The gas price of the ether send transaction. </param>
         /// <param name="addressTo"> The address to send the ether to. </param>
         /// <param name="amount"> The amount to send in ether. </param>
+        /// <param name="promiseId"> The id of the promise containing the result of this transaction. </param>
         /// <returns> The time waited for the request to be broadcast to the network. </returns>
         private static IEnumerator _SendEtherCoroutine(
             TransactionSignedUnityRequest signedUnityRequest,
@@ -83,13 +89,15 @@ namespace Hope.Utils.Ethereum
             HexBigInteger gasLimit,
             HexBigInteger gasPrice,
             string addressTo,
-            dynamic amount)
+            dynamic amount,
+            int promiseId)
         {
             TransactionInput transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
-            signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(EthereumNetwork.NetworkUrl, ()
-                => Debug.Log("Successfully sent " + amount + " Ether to address " + addressTo)));
+            EthTransactionPromise.GetPromise(promiseId).Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetwork.NetworkUrl);
+            //signedUnityRequest.CheckTransactionResult(() => signedUnityRequest.PollForTransactionReceipt(EthereumNetwork.NetworkUrl, ()
+            //    => Debug.Log("Successfully sent " + amount + " Ether to address " + addressTo)));
         }
     }
 }

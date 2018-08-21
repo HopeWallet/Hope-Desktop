@@ -31,7 +31,7 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the amount as a parameter. </param>
     public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived)
     {
-        EthUtils.GetEtherBalance(userWalletManager.WalletAddress, onBalanceReceived);
+        EthUtils.GetEtherBalance(userWalletManager.WalletAddress).OnSuccess(onBalanceReceived);
     }
 
     /// <summary>
