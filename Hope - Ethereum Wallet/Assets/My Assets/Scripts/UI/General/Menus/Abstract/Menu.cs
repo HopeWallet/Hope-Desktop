@@ -28,10 +28,10 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	/// </summary>
 	public override void GoBack()
 	{
-		if (!Animator.Animating)
+		if (!Animator.Animating && backButton != null)
 		{
 			OnBackPressed();
-			backButton?.GetComponent<InteractableButton>().OnCustomPointerExit();
+			backButton.GetComponent<InteractableButton>().OnCustomPointerExit();
 		}
 	}
 
