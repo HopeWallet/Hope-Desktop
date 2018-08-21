@@ -28,7 +28,7 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         /// <param name="address"> The address to check for the ether balance. </param>
         /// <param name="onBalanceReceived"> Called when the eth balance has been received. </param>
-        public static void GetEthBalance(string address, Action<dynamic> onBalanceReceived)
+        public static void GetEtherBalance(string address, Action<dynamic> onBalanceReceived)
         {
             _AddressEthBalanceCoroutine(address, onBalanceReceived).StartCoroutine();
         }

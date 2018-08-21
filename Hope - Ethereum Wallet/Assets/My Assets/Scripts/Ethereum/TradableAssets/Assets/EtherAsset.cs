@@ -8,7 +8,6 @@ using System.Numerics;
 /// </summary>
 public sealed class EtherAsset : TradableAsset
 {
-
     public const string ETHER_ADDRESS = "0x0000000000000000000000000000000000000000";
 
     /// <summary>
@@ -30,7 +29,10 @@ public sealed class EtherAsset : TradableAsset
     /// </summary>
     /// <param name="userWalletManager"> The wallet to get the current amount of ether for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the amount as a parameter. </param>
-    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived) => EthUtils.GetEthBalance(userWalletManager.WalletAddress, onBalanceReceived);
+    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived)
+    {
+        EthUtils.GetEtherBalance(userWalletManager.WalletAddress, onBalanceReceived);
+    }
 
     /// <summary>
     /// Transfers a specified amount of ether from the input UserWallet to a specified address.
@@ -57,6 +59,8 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="receivingAddress"> The address to receive the ether. </param>
     /// <param name="amount"> The amount of ether that is requesting to be sent. </param>
     /// <param name="onLimitReceived"> The action to execute when the gas limit has been received. </param>
-    public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived) => GasUtils.EstimateGasLimit(onLimitReceived);
-
+    public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
+    {
+        GasUtils.EstimateEthGasLimit(receivingAddress, SolidityUtils.ConvertToUInt(amount, 18), onLimitReceived);
+    }
 }

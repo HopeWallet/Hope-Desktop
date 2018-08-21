@@ -125,7 +125,7 @@ public sealed class LockPRPSManager : IPeriodicUpdater
             return;
 
         object[] funcParams = new object[] { estimationId, prpsBalance.Value, estimationMonths };
-        GasUtils.EstimateGasLimit<Hodler.Messages.Hodl>(hodlerContract.ContractAddress,
+        GasUtils.EstimateContractGasLimit<Hodler.Messages.Hodl>(hodlerContract.ContractAddress,
                                                         userWalletManager.WalletAddress,
                                                         limit => GasLimit = limit,
                                                         funcParams);

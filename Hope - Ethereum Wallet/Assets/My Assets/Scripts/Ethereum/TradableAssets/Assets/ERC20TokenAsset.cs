@@ -59,7 +59,7 @@ public sealed class ERC20TokenAsset : TradableAsset
     /// <param name="onLimitReceived"> Action to execute when the gas limit has been received. </param>
     public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
     {
-        GasUtils.EstimateGasLimit<ERC20.Messages.Transfer>(erc20TokenContract.ContractAddress,
+        GasUtils.EstimateContractGasLimit<ERC20.Messages.Transfer>(erc20TokenContract.ContractAddress,
                                                            userWalletManager.WalletAddress,
                                                            onLimitReceived,
                                                            receivingAddress,

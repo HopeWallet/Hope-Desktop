@@ -131,7 +131,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
         if (item.Unlockable && !item.UnlockableGasLimit.HasValue)
         {
-            GasUtils.EstimateGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
+            GasUtils.EstimateContractGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
                                                                userWalletManager.WalletAddress,
                                                                limit => item.UnlockableGasLimit = limit,
                                                                item.Id);
