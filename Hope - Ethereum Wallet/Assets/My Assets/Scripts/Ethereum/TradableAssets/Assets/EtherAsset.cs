@@ -62,6 +62,6 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="onLimitReceived"> The action to execute when the gas limit has been received. </param>
     public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
     {
-        GasUtils.EstimateEthGasLimit(receivingAddress, SolidityUtils.ConvertToUInt(amount, 18), onLimitReceived);
+        GasUtils.EstimateEthGasLimit(receivingAddress, SolidityUtils.ConvertToUInt(amount, 18)).OnSuccess(onLimitReceived);
     }
 }

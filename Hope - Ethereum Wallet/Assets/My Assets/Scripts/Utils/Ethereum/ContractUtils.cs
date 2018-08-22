@@ -2,7 +2,6 @@
 using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
-using System;
 using System.Collections;
 
 namespace Hope.Utils.Ethereum
@@ -32,6 +31,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="gasPrice"> The <see cref="HexBigInteger"/> gas price to use with the transaction. </param>
         /// <param name="gasLimit"> The <see cref="HexBigInteger"/> gas limit to use with the transaction. </param>
         /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
+        /// <returns> Promise of the transaction result of sending the contract message. </returns>
         public static EthTransactionPromise SendContractMessage<TFunc>(
             string contractAddress,
             TransactionSignedUnityRequest signedUnityRequest,
