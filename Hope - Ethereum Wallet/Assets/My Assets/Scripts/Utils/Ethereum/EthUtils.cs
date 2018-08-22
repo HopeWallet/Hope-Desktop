@@ -29,9 +29,9 @@ namespace Hope.Utils.Ethereum
         /// <returns> The promise which will return the eth balance. </returns>
         public static EthCallPromise<dynamic> GetEtherBalance(string address)
         {
-            var promise = EthCallPromise<dynamic>.CreateNew();
-
+            var promise = new EthCallPromise<dynamic>();
             _AddressEthBalanceCoroutine(promise, address).StartCoroutine();
+
             return promise;
         }
 
@@ -43,7 +43,7 @@ namespace Hope.Utils.Ethereum
         /// <returns> The time waited for the request to complete. </returns>
         private static IEnumerator _AddressEthBalanceCoroutine(EthCallPromise<dynamic> promise, string address)
         {
-            EthGetBalanceUnityRequest request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
+            var request = new EthGetBalanceUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
             promise.Build(request, () => SolidityUtils.ConvertFromUInt(request.Result.Value, 18));
@@ -67,9 +67,9 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             decimal amount)
         {
-            var promise = EthTransactionPromise.CreateNew();
-
+            var promise = new EthTransactionPromise();
             _SendEtherCoroutine(promise, signedUnityRequest, gasLimit, gasPrice, walletAddress, addressTo, amount).StartCoroutine();
+
             return promise;
         }
 
@@ -93,7 +93,7 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             dynamic amount)
         {
-            TransactionInput transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
+            var transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
             promise.Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetwork.NetworkUrl);

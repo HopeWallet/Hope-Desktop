@@ -8,8 +8,8 @@ namespace Hope.Utils.Ethereum
 {
     public abstract class Promise<TPromise, TReturn> where TPromise : Promise<TPromise, TReturn>, new()
     {
-        private static readonly Dictionary<int, TPromise> promises = new Dictionary<int, TPromise>();
-        private static readonly AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new MD2Digest());
+        //private static readonly Dictionary<int, TPromise> promises = new Dictionary<int, TPromise>();
+        //private static readonly AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new MD5Digest());
 
         private TReturn successVal;
         private string errorVal;
@@ -20,18 +20,36 @@ namespace Hope.Utils.Ethereum
         protected event Action<string> OnPromiseError;
         protected event Action OnPromiseSuccessOrError;
 
-        public int Id { get; private set; }
+        ///// <summary>
+        ///// The integer id of this Promise.
+        ///// </summary>
+        //public int Id { get; private set; }
 
-        public static TPromise CreateNew()
-        {
-            return new TPromise { Id = secureRandom.Next() };
-        }
+        ///// <summary>
+        ///// Creates a new Promise.
+        ///// </summary>
+        ///// <returns> The newly created Promise. </returns>
+        //public static TPromise CreateNew()
+        //{
+        //    return new TPromise { Id = secureRandom.Next() };
+        //}
+
+        ///// <summary>
+        ///// Gets the Promise under a given Promise Id.
+        ///// </summary>
+        ///// <param name="id"> The id of the promise. </param>
+        ///// <returns> The Promise which contains the given id. </returns>
+        //public static TPromise FromId(int id)
+        //{
+        //    return promises.ContainsKey(id) ? promises[id] : null;
+        //}
 
         protected Promise()
         {
             OnPromiseSuccess += _ => OnPromiseSuccessOrError?.Invoke();
             OnPromiseError += _ => OnPromiseSuccessOrError?.Invoke();
-            OnPromiseSuccessOrError += () => PromiseFinished();
+            //OnPromiseSuccessOrError += () => PromiseFinished();
+            OnPromiseSuccessOrError += () => finished = true;
         }
 
         public TPromise OnSuccess(Action<TReturn> onPromiseSuccess)
@@ -92,7 +110,7 @@ namespace Hope.Utils.Ethereum
 
         private void PromiseFinished()
         {
-            promises.Remove(Id);
+            //promises.Remove(Id);
             finished = true;
         }
 
