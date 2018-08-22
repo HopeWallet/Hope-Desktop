@@ -44,13 +44,14 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="amount"> The amount of ether to send. </param>
     public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request => EthUtils.SendEther(request, userWalletManager.WalletAddress, gasLimit, gasPrice, address, amount),
-                                                          gasLimit,
-                                                          gasPrice,
-                                                          address,
-                                                          AssetAddress,
-                                                          amount,
-                                                          "ETH");
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(
+                              request => EthUtils.SendEther(request, gasLimit, gasPrice, userWalletManager.WalletAddress, address, amount).OnSuccess(UnityEngine.Debug.Log),
+                              gasLimit,
+                              gasPrice,
+                              address,
+                              AssetAddress,
+                              amount,
+                              "ETH");
     }
 
     /// <summary>

@@ -18,7 +18,13 @@ namespace Hope.Utils.Ethereum
 
         private IEnumerator PollForTransactionReceipt(string txHash, string networkUrl)
         {
-            EthGetTransactionReceiptUnityRequest request = new EthGetTransactionReceiptUnityRequest(networkUrl);
+            if (!AddressUtils.IsValidTransactionHash(txHash))
+            {
+                InternalInvokeError("Invalid transaction hash");
+                yield return null;
+            }
+
+            var request = new EthGetTransactionReceiptUnityRequest(networkUrl);
 
             do
             {
@@ -28,9 +34,9 @@ namespace Hope.Utils.Ethereum
             while (request.Exception != null || request.Result == null);
 
             if (request.Result?.Status?.Value == 1)
-                InvokeSuccess("Transaction successful!");
+                InternalInvokeSuccess("Transaction successful!");
             else
-                InvokeFail(request.Exception.Message);
+                InternalInvokeError(request.Exception.Message);
         }
     }
 }

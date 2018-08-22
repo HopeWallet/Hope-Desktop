@@ -26,7 +26,7 @@ public static class SimpleContractQueries
         Action<UInt256> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt256>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt256>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public static class SimpleContractQueries
         Action<UInt128> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt128>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt128>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public static class SimpleContractQueries
         Action<UInt64> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt64>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt64>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public static class SimpleContractQueries
         Action<UInt32> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt32>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt32>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public static class SimpleContractQueries
         Action<UInt16> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt16>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt16>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public static class SimpleContractQueries
         Action<UInt8> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt8>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, UInt8>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ public static class SimpleContractQueries
         Action<String> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, String>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, String>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public static class SimpleContractQueries
         Action<Address> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, Address>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, Address>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 
     /// <summary>
@@ -167,6 +167,6 @@ public static class SimpleContractQueries
         Action<Bool> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, Bool>(contractAddress, senderAddress, onQueryCompleted, functionInput);
+        ContractUtils.QueryContract<TFunc, Bool>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
     }
 }

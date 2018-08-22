@@ -66,7 +66,6 @@ using Nethereum.Signer;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

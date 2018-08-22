@@ -6,7 +6,7 @@ namespace Hope.Utils.Ethereum
     {
         protected override void InternalBuild(params Func<object>[] args)
         {
-            InvokeSuccess((T)args[0]?.Invoke());
+            InternalInvokeSuccess((T)args[0]?.Invoke());
         }
     }
 }

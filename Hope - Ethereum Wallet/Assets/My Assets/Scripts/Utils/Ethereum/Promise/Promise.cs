@@ -1,4 +1,6 @@
 ﻿using Nethereum.JsonRpc.UnityClient;
+using Org.BouncyCastle.Crypto.Digests;
+using RandomNET.Secure;
 using System;
 using System.Collections.Generic;
 
@@ -6,44 +8,59 @@ namespace Hope.Utils.Ethereum
 {
     public abstract class Promise<TPromise, TReturn> where TPromise : Promise<TPromise, TReturn>, new()
     {
-        protected event Action<TReturn> OnPromiseSuccess;
-        protected event Action<string> OnPromiseFail;
-        protected event Action OnPromiseSuccessOrFail;
-
-        private int id;
-
         private static readonly Dictionary<int, TPromise> promises = new Dictionary<int, TPromise>();
+        private static readonly AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new MD2Digest());
 
-        public static TPromise GetPromise(int id)
+        private TReturn successVal;
+        private string errorVal;
+
+        private bool finished;
+
+        protected event Action<TReturn> OnPromiseSuccess;
+        protected event Action<string> OnPromiseError;
+        protected event Action OnPromiseSuccessOrError;
+
+        public int Id { get; private set; }
+
+        public static TPromise CreateNew()
         {
-            if (!promises.ContainsKey(id))
-                promises.Add(id, new TPromise { id = id });
-
-            return promises[id];
+            return new TPromise { Id = secureRandom.Next() };
         }
 
         protected Promise()
         {
-            OnPromiseSuccess += _ => OnPromiseSuccessOrFail?.Invoke();
-            OnPromiseFail += _ => OnPromiseSuccessOrFail?.Invoke();
-            OnPromiseSuccessOrFail += () => promises.Remove(id);
+            OnPromiseSuccess += _ => OnPromiseSuccessOrError?.Invoke();
+            OnPromiseError += _ => OnPromiseSuccessOrError?.Invoke();
+            OnPromiseSuccessOrError += () => PromiseFinished();
         }
 
         public TPromise OnSuccess(Action<TReturn> onPromiseSuccess)
         {
-            OnPromiseSuccess += onPromiseSuccess;
+            if (finished && !EqualityComparer<TReturn>.Default.Equals(successVal, default(TReturn)))
+                onPromiseSuccess?.Invoke(successVal);
+            else
+                OnPromiseSuccess += onPromiseSuccess;
+
             return this as TPromise;
         }
 
-        public TPromise OnFail(Action<string> onPromiseFail)
+        public TPromise OnError(Action<string> onPromiseError)
         {
-            OnPromiseFail += onPromiseFail;
+            if (finished && !string.IsNullOrEmpty(errorVal))
+                onPromiseError?.Invoke(errorVal);
+            else
+                OnPromiseError += onPromiseError;
+
             return this as TPromise;
         }
 
-        public TPromise OnSuccessOrFail(Action onPromiseSuccessOrFail)
+        public TPromise OnSuccessOrError(Action onPromiseSuccessOrError)
         {
-            OnPromiseSuccessOrFail += onPromiseSuccessOrFail;
+            if (finished)
+                onPromiseSuccessOrError?.Invoke();
+            else
+                OnPromiseSuccessOrError += onPromiseSuccessOrError;
+
             return this as TPromise;
         }
 
@@ -52,17 +69,31 @@ namespace Hope.Utils.Ethereum
             if (request.Exception == null && !EqualityComparer<T>.Default.Equals(request.Result, default(T)))
                 InternalBuild(args);
             else
-                OnPromiseFail?.Invoke(request.Exception.Message);
+                OnPromiseError?.Invoke(request.Exception.Message);
         }
 
-        protected void InvokeSuccess(TReturn returnVal)
+        protected void InternalInvokeSuccess(TReturn returnVal)
         {
+            if (finished)
+                return;
+
             OnPromiseSuccess?.Invoke(returnVal);
+            successVal = returnVal;
         }
 
-        protected void InvokeFail(string errorMessage)
+        protected void InternalInvokeError(string errorMessage)
         {
-            OnPromiseFail?.Invoke(errorMessage);
+            if (finished)
+                return;
+
+            OnPromiseError?.Invoke(errorMessage);
+            errorVal = errorMessage;
+        }
+
+        private void PromiseFinished()
+        {
+            promises.Remove(Id);
+            finished = true;
         }
 
         protected abstract void InternalBuild(params Func<object>[] args);

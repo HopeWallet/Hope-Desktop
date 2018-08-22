@@ -74,15 +74,17 @@ namespace Hope.Utils.Ethereum
         /// <typeparam name="TOut"> The <see cref="IFunctionOutputDTO"/> which represents the data which was returned from the <see cref="ContractFunction"/>. </typeparam>
         /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
         /// <param name="senderAddress"> The address of the sender requesting this data. </param>
-        /// <param name="onQueryCompleted"> Action called once the query is completed successfully, passing in <typeparamref name="TOut"/>. </param>
         /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
-        public static void QueryContract<TFunc, TOut>(
+        /// <returns> The promise which will return the call result. </returns>
+        public static EthCallPromise<TOut> QueryContract<TFunc, TOut>(
             string contractAddress,
             string senderAddress,
-            Action<TOut> onQueryCompleted,
             params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
-            _QueryContractCoroutine<TFunc, TOut>(contractAddress, senderAddress, onQueryCompleted, functionInput).StartCoroutine();
+            var promise = EthCallPromise<TOut>.CreateNew();
+
+            _QueryContractCoroutine<TFunc, TOut>(promise, contractAddress, senderAddress, functionInput).StartCoroutine();
+            return promise;
         }
 
         /// <summary>
@@ -90,20 +92,20 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> of the smart contract to execute which will return us some data. </typeparam>
         /// <typeparam name="TOut"> The <see cref="IFunctionOutputDTO"/> which represents the data which was returned from the <see cref="ContractFunction"/>. </typeparam>
+        /// <param name="promise"> Promise of eventually returning the data from the contract query. </param>
         /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
         /// <param name="senderAddress"> The address of the sender requesting this data. </param>
-        /// <param name="onQueryCompleted"> Action called once the query is completed successfully, passing in <typeparamref name="TOut"/>. </param>
         /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         private static IEnumerator _QueryContractCoroutine<TFunc, TOut>(
+            EthCallPromise<TOut> promise,
             string contractAddress,
             string senderAddress,
-            Action<TOut> onQueryCompleted,
             params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
             var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetwork.NetworkUrl, senderAddress);
             yield return queryRequest.Query(ContractFunction.CreateFunction<TFunc>(functionInput), contractAddress);
 
-            queryRequest.CheckTransactionResult(() => onQueryCompleted?.Invoke(queryRequest.Result));
+            promise.Build(queryRequest, () => queryRequest.Result);
         }
     }
 }

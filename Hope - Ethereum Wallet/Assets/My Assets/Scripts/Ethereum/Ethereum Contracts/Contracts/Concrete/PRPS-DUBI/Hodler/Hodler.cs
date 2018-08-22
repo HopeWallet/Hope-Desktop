@@ -25,7 +25,7 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<Output.Item> onItemReceived)
     {
-        ContractUtils.QueryContract<Queries.GetItem, Output.Item>(ContractAddress, address, onItemReceived, address, id);
+        ContractUtils.QueryContract<Queries.GetItem, Output.Item>(ContractAddress, address, address, id).OnSuccess(onItemReceived);
     }
 
     /// <summary>
