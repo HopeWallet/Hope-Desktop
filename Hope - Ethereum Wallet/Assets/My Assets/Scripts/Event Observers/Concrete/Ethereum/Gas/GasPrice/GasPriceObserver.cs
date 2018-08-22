@@ -41,7 +41,7 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
     /// <summary>
     /// Gets the newest gas price estimates.
     /// </summary>
-    private void GetUpdatedGasPrices() => GasUtils.EstimateGasPrice(GasUtils.GasPriceTarget.Standard).OnSuccess(price => UpdateAllGasObservables(new HexBigInteger(price)));
+    private void GetUpdatedGasPrices() => GasUtils.EstimateGasPrice().OnSuccess(price => UpdateAllGasObservables(new HexBigInteger(price)));
 
     /// <summary>
     /// Updates the gas prices for all observables.

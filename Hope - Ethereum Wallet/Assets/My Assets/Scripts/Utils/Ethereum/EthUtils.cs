@@ -6,7 +6,7 @@ using System.Collections;
 namespace Hope.Utils.Ethereum
 {
     /// <summary>
-    /// Utility class used for sending ether and getting the ether balance of certain addresses.
+    /// Utility class used for sending ether and retrieving the ether balance of certain addresses.
     /// </summary>
     public sealed class EthUtils
     {

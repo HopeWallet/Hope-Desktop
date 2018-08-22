@@ -88,7 +88,7 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         /// <param name="gasPriceTarget">  The target gas price to aim for. </param>
         /// <returns> Promise of the eventual estimated gas price. </returns>
-        public static EthCallPromise<BigInteger> EstimateGasPrice(GasPriceTarget gasPriceTarget)
+        public static EthCallPromise<BigInteger> EstimateGasPrice(GasPriceTarget gasPriceTarget = GasPriceTarget.Standard)
         {
             var promise = new EthCallPromise<BigInteger>();
             _EstimateGasPriceCoroutine(promise, gasPriceTarget).StartCoroutine();
