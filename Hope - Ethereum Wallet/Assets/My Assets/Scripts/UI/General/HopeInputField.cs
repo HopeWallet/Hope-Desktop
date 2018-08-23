@@ -67,8 +67,10 @@ public class HopeInputField : MonoBehaviour
 	/// Updates the visuals of the input field
 	/// </summary>
 	/// <param name="emptyString"> Whether the string is empty or not </param>
-	public void UpdateVisuals(bool emptyString)
+	public void UpdateVisuals()
 	{
+		bool emptyString = string.IsNullOrEmpty(Text);
+
 		if (placeholder != null) placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
 		inputFieldBase.gameObject.AnimateColor(emptyString ? UIColors.White : Error ? UIColors.Red : UIColors.Green, 0.15f);
 		if (errorIcon != null) errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
@@ -90,7 +92,7 @@ public class HopeInputField : MonoBehaviour
 
 		bool emptyString = string.IsNullOrEmpty(Text);
 
-		UpdateVisuals(emptyString);
+		UpdateVisuals();
 
 		if (eye != null)
 			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.1f);

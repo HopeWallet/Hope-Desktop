@@ -7,21 +7,24 @@ using UnityEngine.UI;
 /// </summary>
 public class UnlockWalletPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject passwordInputField;
+	[SerializeField] private HopeInputField passwordInputField;
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject loadingIcon;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector.
 	/// </summary>
-	private void Awake() => passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+	private void Awake()
+	{
+		passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+	}
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		passwordInputField.AnimateScaleX(1f, 0.15f);
+		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
 		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
@@ -30,10 +33,8 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// </summary>
 	private void InputFieldChanged()
 	{
-		HopeInputField inputField = passwordInputField.GetComponent<HopeInputField>();
-
-		inputField.Error = string.IsNullOrEmpty(inputField.Text);
-		signInButton.GetComponent<Button>().interactable = !inputField.Error;
+		passwordInputField.Error = string.IsNullOrEmpty(passwordInputField.Text);
+		signInButton.GetComponent<Button>().interactable = !passwordInputField.Error;
 	}
 
 	/// <summary>
@@ -41,8 +42,10 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// </summary>
 	public void PasswordIncorrect()
 	{
-		passwordInputField.GetComponent<HopeInputField>().Error = true;
+		passwordInputField.Error = true;
+		passwordInputField.UpdateVisuals();
 		signInButton.GetComponent<Button>().interactable = false;
+		VerifyingPassword();
 	}
 
 	/// <summary>

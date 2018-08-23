@@ -140,7 +140,7 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
         else
         {
 			inputField.Error = true;
-			inputField.UpdateVisuals(false);
+			inputField.UpdateVisuals();
 			nextButton.GetComponent<Button>().interactable = false;
 		}
     }
