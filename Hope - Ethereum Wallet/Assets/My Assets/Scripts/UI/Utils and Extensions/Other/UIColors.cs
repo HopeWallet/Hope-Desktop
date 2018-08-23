@@ -6,7 +6,7 @@
 public static class UIColors
 {
     public static readonly Color Green = new Color(0.105f, 0.741f, 0.619f);
-    public static readonly Color Red = new Color(0.85f, 0f, 0.2f);
+    public static readonly Color Red = new Color(0.85f, 0f, 0f);
 	public static readonly Color Yellow = new Color(1f, 1f, 0f);
 	public static readonly Color LightGrey = new Color(0.65f, 0.65f, 0.65f);
 	public static readonly Color DarkGrey = new Color(0.45f, 0.45f, 0.45f);

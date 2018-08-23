@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 114966619528105506}
   - component: {fileID: 114931393951494596}
   - component: {fileID: 114410418816850996}
+  - component: {fileID: 114217511292832772}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -418,6 +419,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114217511292832772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1432051478495126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114329094850442214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -642,8 +655,8 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 6cde7e9ff1d4b2b4f88c9a34fd550de4, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: 6cde7e9ff1d4b2b4f88c9a34fd550de4, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -777,7 +790,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 121.29999, y: -119.66376}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 198.2, y: 81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224434173691195232

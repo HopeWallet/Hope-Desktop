@@ -9,24 +9,20 @@ using Zenject;
 /// </summary>
 public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
+	[SerializeField] private TMP_Text amountText,
+									  timeFromNowText,
+									  addressText,
+									  dateText,
+									  statusText,
+									  directionText;
 
-	public TMP_Text amountText,
-					timeFromNowText,
-					addressText,
-					dateText,
-					statusText,
-					directionText;
+	[SerializeField] private Image assetImage, circle;
 
-    public Image assetImage, circle;
-
-	public GameObject loadingLine, newText;
+	[SerializeField] private GameObject loadingLine, newText;
 
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
-
-	private readonly Color RED_CIRCLE_COLOR = new Color(0.58f, 0f, 0f);
-	private readonly Color GREEN_CIRCLE_COLOR = new Color(0f, 0.58f, 0f);
 
 	/// <summary>
 	/// Adds the required dependencies to this class.
@@ -76,10 +72,10 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	{
 		var sending = transaction.Type == TransactionInfo.TransactionType.Send;
 
-		circle.color = sending ? RED_CIRCLE_COLOR : GREEN_CIRCLE_COLOR;
+		circle.color = sending ? UIColors.Red : UIColors.Green;
 		statusText.text = sending ? "OUT" : "IN";
 		directionText.text = sending ? "To:" : "From:";
-		addressText.transform.localPosition = new Vector2(sending ? -215f : -185f, addressText.transform.localPosition.y);
+		addressText.transform.localPosition = new Vector2(sending ? -200f : -170f, addressText.transform.localPosition.y);
 	}
 
     /// <summary>

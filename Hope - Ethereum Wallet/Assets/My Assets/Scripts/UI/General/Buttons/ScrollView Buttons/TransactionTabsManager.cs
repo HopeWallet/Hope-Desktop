@@ -5,26 +5,39 @@ using UnityEngine.UI;
 
 public class TransactionTabsManager : MonoBehaviour
 {
-
 	public static event Action<TabType> OnTabChanged;
 
-	[SerializeField] private Button[] transactionTabs;
-
+	private Button[] transactionTabs;
 	private TextMeshProUGUI[] buttonTextElements;
-
-	private readonly Color ACTIVE_TAB_COLOR = new Color(1f, 1f, 1f, 0.847f);
-	private readonly Color INACTIVE_TAB_COLOR = new Color(1f, 1f, 1f, 0.647f);
 
 	private int previouslyActiveTab;
 
+	/// <summary>
+	/// Sets the variables and button listeners
+	/// </summary>
 	private void Awake()
 	{
-		buttonTextElements = new TextMeshProUGUI[transactionTabs.Length];
+		transactionTabs = new Button[transform.childCount];
+		buttonTextElements = new TextMeshProUGUI[transform.childCount];
 
-		for (int i = 0; i < transactionTabs.Length; i++)
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			transactionTabs[i] = transform.GetChild(i).GetComponent<Button>();
 			buttonTextElements[i] = transactionTabs[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+			SetButtonListener(i);
+		}
 	}
 
+	/// <summary>
+	/// Sets the onClick listener for the given button
+	/// </summary>
+	/// <param name="index"> The index of the tab being pressed </param>
+	private void SetButtonListener(int index) => transactionTabs[index].onClick.AddListener(() => TabClicked(index));
+
+	/// <summary>
+	/// A tab has been clicked
+	/// </summary>
+	/// <param name="activeIndex"> The tab that has been clicked </param>
 	public void TabClicked(int activeIndex)
 	{
 		ChangeTabLook(previouslyActiveTab, false);
@@ -35,11 +48,19 @@ public class TransactionTabsManager : MonoBehaviour
 		OnTabChanged?.Invoke((TabType)activeIndex);
 	}
 
+	/// <summary>
+	/// Changes the button look
+	/// </summary>
+	/// <param name="tab"> The index of the tab being changed </param>
+	/// <param name="activeTab"> Whether the tab is currently active or not </param>
 	private void ChangeTabLook(int tab, bool activeTab)
 	{
 		transactionTabs[tab].interactable = !activeTab;
-		buttonTextElements[tab].color = activeTab ? ACTIVE_TAB_COLOR : INACTIVE_TAB_COLOR;
+		buttonTextElements[tab].color = activeTab ? UIColors.White : UIColors.LightGrey;
 	}
 
-	public enum TabType { All, Sent, Received, Pending };
+	/// <summary>
+	/// The tab types
+	/// </summary>
+	public enum TabType { All, Sent, Received }
 }

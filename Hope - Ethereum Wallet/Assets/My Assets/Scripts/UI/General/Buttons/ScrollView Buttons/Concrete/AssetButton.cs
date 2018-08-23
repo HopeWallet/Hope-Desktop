@@ -91,7 +91,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     public void UpdateButtonBalance()
     {
         string balanceText = ButtonInfo.AssetBalance + "";
-        amountText.text = balanceText.LimitEnd(10, "...");
+        amountText.text = balanceText.LimitEnd(7, "...");
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <summary>
     /// Updates the symbol of this button to reflect this button's TradableAsset.
     /// </summary>
-    private void UpdateButtonSymbol() => symbolText.text = ButtonInfo.AssetSymbol.LimitEnd(10, "...");
+    private void UpdateButtonSymbol() => symbolText.text = ButtonInfo.AssetSymbol.LimitEnd(5, "...");
 
     /// <summary>
     /// Updates the image of this button.

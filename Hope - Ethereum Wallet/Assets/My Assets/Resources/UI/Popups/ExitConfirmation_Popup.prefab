@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 222199874673851932}
   - component: {fileID: 114027397065051344}
   - component: {fileID: 114960981757661410}
+  - component: {fileID: 114796680456637958}
   m_Layer: 5
   m_Name: No_Button
   m_TagString: Untagged
@@ -193,6 +194,7 @@ GameObject:
   - component: {fileID: 222107859969039928}
   - component: {fileID: 114783882849529326}
   - component: {fileID: 114246243942797766}
+  - component: {fileID: 114744460987973342}
   m_Layer: 5
   m_Name: Yes_Button
   m_TagString: Untagged
@@ -645,6 +647,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114744460987973342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1973815470250418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114783882849529326
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -672,6 +686,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114796680456637958
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1252477216113728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 1
 --- !u!114 &114812058602873190
 MonoBehaviour:
   m_ObjectHideFlags: 1
