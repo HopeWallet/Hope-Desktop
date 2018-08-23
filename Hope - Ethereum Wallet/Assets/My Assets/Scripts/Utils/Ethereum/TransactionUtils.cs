@@ -2,7 +2,6 @@
 using Nethereum.RPC.Eth.DTOs;
 using System;
 using System.Collections;
-using UnityEngine;
 
 namespace Hope.Utils.Ethereum
 {
@@ -11,9 +10,6 @@ namespace Hope.Utils.Ethereum
     /// </summary>
     public static class TransactionUtils
     {
-        private static readonly WaitForSeconds Waiter = new WaitForSeconds(WAIT_INTERVAL);
-        private const float WAIT_INTERVAL = 5f;
-
         /// <summary>
         /// Checks the details of a transaction hash.
         /// </summary>

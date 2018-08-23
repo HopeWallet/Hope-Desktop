@@ -1,8 +1,8 @@
-﻿using Hope.Security.HashGeneration;
+﻿using Hope.Random;
+using Hope.Random.Bytes;
+using Hope.Security.HashGeneration;
 using Hope.Security.ProtectedTypes.Types;
 using Org.BouncyCastle.Crypto.Digests;
-using RandomNET.Bytes;
-using RandomNET.Secure;
 using System;
 using System.Threading.Tasks;
 

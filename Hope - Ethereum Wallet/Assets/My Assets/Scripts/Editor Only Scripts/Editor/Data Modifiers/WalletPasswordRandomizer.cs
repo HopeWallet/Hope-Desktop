@@ -1,5 +1,5 @@
-﻿using RandomNET.Integers;
-using RandomNET.Strings;
+﻿using Hope.Random.Integers;
+using Hope.Random.Strings;
 using System;
 using System.Linq;
 using UnityEditor;
@@ -56,7 +56,7 @@ public static class WalletPasswordRandomizer
         SavedOps = new int[ops.Length];
         Array.Copy(ops, SavedOps, ops.Length);
 
-        PasswordObj.ops = ops.OrderBy(_ => RandomInt.Fast.GetInt()).ToArray();
+        PasswordObj.ops = ops.OrderBy(_ => RandomInt.Secure.MD5.GetInt()).ToArray();
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public static class WalletPasswordRandomizer
         Array.Copy(keys, SavedKeys, keys.Length);
 
         for (int i = 0; i < keys.Length; i++)
-            keys[i] = RandomString.Secure.SHA3.GetString(RandomInt.Fast.GetInt(8, 17));
+            keys[i] = RandomString.Secure.SHA3.GetString(RandomInt.Secure.MD5.GetInt(8, 17));
     }
 
     /// <summary>

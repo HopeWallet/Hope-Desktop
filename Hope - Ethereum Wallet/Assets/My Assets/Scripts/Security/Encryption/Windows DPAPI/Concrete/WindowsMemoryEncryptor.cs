@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
+using Hope.Random.Bytes;
 using Hope.Security.Encryption.Symmetric;
 using Hope.Security.HashGeneration;
-using RandomNET.Bytes;
 
 namespace Hope.Security.Encryption.DPAPI
 {

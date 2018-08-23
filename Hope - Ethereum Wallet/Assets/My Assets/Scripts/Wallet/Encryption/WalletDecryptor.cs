@@ -1,7 +1,7 @@
-﻿using Hope.Security.HashGeneration;
+﻿using Hope.Random;
+using Hope.Security.HashGeneration;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Org.BouncyCastle.Crypto.Digests;
-using RandomNET.Secure;
 using System;
 using System.Threading.Tasks;
 

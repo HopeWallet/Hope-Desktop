@@ -1,5 +1,5 @@
-﻿using RandomNET.Bytes;
-using RandomNET.Integers;
+﻿using Hope.Random.Bytes;
+using Hope.Random.Integers;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
