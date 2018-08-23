@@ -25,7 +25,7 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="onItemReceived"> Action to call once the item has been received. </param>
     public void GetItem(string address, BigInteger id, Action<Output.Item> onItemReceived)
     {
-        ContractUtils.QueryContract<Queries.GetItem, Output.Item>(ContractAddress, address, onItemReceived, address, id);
+        ContractUtils.QueryContract<Queries.GetItem, Output.Item>(ContractAddress, address, address, id).OnSuccess(onItemReceived);
     }
 
     /// <summary>
@@ -41,14 +41,15 @@ public sealed partial class Hodler : StaticSmartContract
     {
         userWalletManager.SignTransaction<ConfirmLockPopup>(request =>
         {
-            ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
-                                                             request,
-                                                             gasPrice,
-                                                             gasLimit,
-                                                             () => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"),
-                                                             id,
-                                                             SolidityUtils.ConvertToUInt(value, 18),
-                                                             new BigInteger(monthsToLock));
+            var promise = ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
+                                                                           request,
+                                                                           gasPrice,
+                                                                           gasLimit,
+                                                                           id,
+                                                                           SolidityUtils.ConvertToUInt(value, 18),
+                                                                           new BigInteger(monthsToLock));
+
+            promise.OnSuccess(_ => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"));
         }, gasLimit, gasPrice, monthsToLock, value);
     }
 
@@ -64,12 +65,13 @@ public sealed partial class Hodler : StaticSmartContract
     {
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {
-            ContractUtils.SendContractMessage<Messages.Release>(ContractAddress,
-                                                                request,
-                                                                gasPrice,
-                                                                gasLimit,
-                                                                () => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"),
-                                                                id);
+            var promise = ContractUtils.SendContractMessage<Messages.Release>(ContractAddress,
+                                                                              request,
+                                                                              gasPrice,
+                                                                              gasLimit,
+                                                                              id);
+
+            promise.OnSuccess(_ => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"));
         }, gasLimit, gasPrice, "Release Purpose Confirmation");
     }
 

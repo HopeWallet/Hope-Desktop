@@ -133,8 +133,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         {
             GasUtils.EstimateContractGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
                                                                userWalletManager.WalletAddress,
-                                                               limit => item.UnlockableGasLimit = limit,
-                                                               item.Id);
+                                                               item.Id).OnSuccess(limit => item.UnlockableGasLimit = limit);
         }
     }
 

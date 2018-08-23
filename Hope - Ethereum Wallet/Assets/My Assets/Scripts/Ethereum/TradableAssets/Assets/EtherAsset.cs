@@ -44,13 +44,14 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="amount"> The amount of ether to send. </param>
     public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request => EthUtils.SendEther(request, userWalletManager.WalletAddress, gasLimit, gasPrice, address, amount),
-                                                          gasLimit,
-                                                          gasPrice,
-                                                          address,
-                                                          AssetAddress,
-                                                          amount,
-                                                          "ETH");
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(
+                              request => EthUtils.SendEther(request, gasLimit, gasPrice, userWalletManager.WalletAddress, address, amount).OnSuccess(UnityEngine.Debug.Log),
+                              gasLimit,
+                              gasPrice,
+                              address,
+                              AssetAddress,
+                              amount,
+                              "ETH");
     }
 
     /// <summary>
@@ -61,6 +62,6 @@ public sealed class EtherAsset : TradableAsset
     /// <param name="onLimitReceived"> The action to execute when the gas limit has been received. </param>
     public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
     {
-        GasUtils.EstimateEthGasLimit(receivingAddress, SolidityUtils.ConvertToUInt(amount, 18), onLimitReceived);
+        GasUtils.EstimateEthGasLimit(receivingAddress, SolidityUtils.ConvertToUInt(amount, 18)).OnSuccess(onLimitReceived);
     }
 }

@@ -3,7 +3,6 @@ using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Util;
-using System;
 using System.Collections;
 using System.Numerics;
 
@@ -31,42 +30,6 @@ namespace Hope.Utils.Ethereum
         }
 
         /// <summary>
-        /// Estimates the gas limit of a <see cref="ContractFunction"/>.
-        /// </summary>
-        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to estimate the gas limit for. </typeparam>
-        /// <param name="contractAddress"> The address of the contract function to estimate. </param>
-        /// <param name="callerAddress"> The address of the sender. </param>
-        /// <param name="onGasReceived"> Action called with the estimated gas limit. </param>
-        /// <param name="input"> The input parameters of the function. </param>
-        public static void EstimateContractGasLimit<TFunc>(
-            string contractAddress,
-            string callerAddress,
-            Action<BigInteger> onGasReceived,
-            params object[] input) where TFunc : ContractFunction
-        {
-            _EstimateGasLimitCoroutine(ContractFunction.CreateFunction<TFunc>(callerAddress, input).CreateTransactionInput(contractAddress), true, onGasReceived).StartCoroutine();
-        }
-
-        /// <summary>
-        /// Estimates the gas limit for a basic ether transaction.
-        /// </summary>
-        /// <param name="addressTo"> The address the ether is being sent to. </param>
-        /// <param name="value"> The amount of ether in wei that will be sent. </param>
-        /// <param name="onGasReceived"> Action to execute once the eth gas limit has been received. </param>
-        public static void EstimateEthGasLimit(string addressTo, BigInteger value, Action<BigInteger> onGasReceived)
-        {
-            _EstimateGasLimitCoroutine(new CallInput("", addressTo, new HexBigInteger(value)), false, onGasReceived).StartCoroutine();
-        }
-
-        /// <summary>
-        /// Estimates the gas price given the GasPriceTarget.
-        /// </summary>
-        /// <param name="gasPriceTarget">  The target gas price to aim for. </param>
-        /// <param name="onGasPriceReceived"> Action to execute once the gas price has been received. </param>
-        public static void EstimateGasPrice(GasPriceTarget gasPriceTarget, Action<BigInteger> onGasPriceReceived)
-            => _EstimateGasPriceCoroutine(gasPriceTarget, onGasPriceReceived).StartCoroutine();
-
-        /// <summary>
         /// Gets the readable gas price from the regular gwei form of the gas price.
         /// </summary>
         /// <param name="gasPrice"> The gas price to convert. </param>
@@ -87,6 +50,51 @@ namespace Hope.Utils.Ethereum
         /// <param name="gasLimit"> The gas limit. </param>
         /// <returns> The maximum gas cost of in ether. </returns>
         public static decimal CalculateMaximumGasCost(BigInteger gasPrice, BigInteger gasLimit) => UnitConversion.Convert.FromWei(gasPrice * gasLimit);
+
+        /// <summary>
+        /// Estimates the gas limit of a <see cref="ContractFunction"/>.
+        /// </summary>
+        /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to estimate the gas limit for. </typeparam>
+        /// <param name="contractAddress"> The address of the contract function to estimate. </param>
+        /// <param name="callerAddress"> The address of the sender. </param>
+        /// <param name="input"> The input parameters of the function. </param>
+        public static EthCallPromise<BigInteger> EstimateContractGasLimit<TFunc>(
+            string contractAddress,
+            string callerAddress,
+            params object[] input) where TFunc : ContractFunction
+        {
+            var promise = new EthCallPromise<BigInteger>();
+            _EstimateGasLimitCoroutine(promise, ContractFunction.CreateFunction<TFunc>(callerAddress, input).CreateTransactionInput(contractAddress), true).StartCoroutine();
+
+            return promise;
+        }
+
+        /// <summary>
+        /// Estimates the gas limit for a basic ether transaction.
+        /// </summary>
+        /// <param name="addressTo"> The address the ether is being sent to. </param>
+        /// <param name="value"> The amount of ether in wei that will be sent. </param>
+        /// <returns> Promise of the gas limit estimate of an eth transaction. </returns>
+        public static EthCallPromise<BigInteger> EstimateEthGasLimit(string addressTo, BigInteger value)
+        {
+            var promise = new EthCallPromise<BigInteger>();
+            _EstimateGasLimitCoroutine(promise, new CallInput("", addressTo, new HexBigInteger(value)), false).StartCoroutine();
+
+            return promise;
+        }
+
+        /// <summary>
+        /// Estimates the gas price given the GasPriceTarget.
+        /// </summary>
+        /// <param name="gasPriceTarget">  The target gas price to aim for. </param>
+        /// <returns> Promise of the eventual estimated gas price. </returns>
+        public static EthCallPromise<BigInteger> EstimateGasPrice(GasPriceTarget gasPriceTarget = GasPriceTarget.Standard)
+        {
+            var promise = new EthCallPromise<BigInteger>();
+            _EstimateGasPriceCoroutine(promise, gasPriceTarget).StartCoroutine();
+
+            return promise;
+        }
 
         /// <summary>
         /// Modifies the current gas price to reflect the GasPriceTarget.
@@ -110,30 +118,30 @@ namespace Hope.Utils.Ethereum
         /// <summary>
         /// Estimates the gas limit of a certain function of a contract.
         /// </summary>
+        /// <param name="promise"> Promise of the estimated gas limit of a transaction. </param>
         /// <param name="callInput"> The transaction input to estimate the gas limit for. </param>
         /// <param name="overEstimate"> Whether the gas limit should be slightly overestimated. </param>
-        /// <param name="onGasReceived"> Callback which executes an action with the gas limit as a parameter. </param>
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
-        private static IEnumerator _EstimateGasLimitCoroutine(CallInput callInput, bool overEstimate, Action<BigInteger> onGasReceived)
+        private static IEnumerator _EstimateGasLimitCoroutine(EthCallPromise<BigInteger> promise, CallInput callInput, bool overEstimate)
         {
             var request = new EthEstimateGasUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest(callInput);
 
-            request.CheckTransactionResult(() => onGasReceived(overEstimate ? ((request.Result.Value * 100) / 90) : request.Result.Value));
+            promise.Build(request, () => overEstimate ? (request.Result.Value * 100 / 90) : request.Result.Value);
         }
 
         /// <summary>
         /// Estimates the gas price based on current network congestion.
         /// </summary>
+        /// <param name="promise"> Promise of the eventual gas price estimate. </param>
         /// <param name="gasPriceTarget"> The GasPriceTarget to aim for. </param>
-        /// <param name="onGasPriceReceived"> Action to execute once the gas price has been received. </param>
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
-        private static IEnumerator _EstimateGasPriceCoroutine(GasPriceTarget gasPriceTarget, Action<BigInteger> onGasPriceReceived)
+        private static IEnumerator _EstimateGasPriceCoroutine(EthCallPromise<BigInteger> promise, GasPriceTarget gasPriceTarget)
         {
             var request = new EthGasPriceUnityRequest(EthereumNetwork.NetworkUrl);
             yield return request.SendRequest();
 
-            request.CheckTransactionResult(() => onGasPriceReceived(ModifyGasPrice(gasPriceTarget, request.Result.Value)));
+            promise.Build(request, () => ModifyGasPrice(gasPriceTarget, request.Result.Value));
         }
     }
 }

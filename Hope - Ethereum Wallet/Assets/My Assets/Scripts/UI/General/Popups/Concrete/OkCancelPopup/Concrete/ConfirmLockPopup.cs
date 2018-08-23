@@ -68,6 +68,8 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
             else
                 tokenListManager.AddToken(dubiContract.ContractAddress, "Decentralized Universal Basic Income", "DUBI", 18, true, true);
 
+            tokenListManager.OldTokenList.Clear();
+
             tokenContractManager.AddToken(tokenListManager.GetToken(dubiContract.ContractAddress).TokenInfo);
         }
     }

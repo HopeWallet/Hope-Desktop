@@ -45,12 +45,14 @@ public sealed partial class ERC20 : Token
     {
         userWalletManager.SignTransaction<ConfirmTransactionPopup>(request =>
         {
-            ContractUtils.SendContractMessage<Messages.Transfer>(ContractAddress,
-                                                                 request,
-                                                                 gasPrice,
-                                                                 gasLimit,
-                                                                 () => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address), address,
-                                                                 SolidityUtils.ConvertToUInt(amount, Decimals.Value));
+            var promise = ContractUtils.SendContractMessage<Messages.Transfer>(ContractAddress,
+                                                                               request,
+                                                                               gasPrice,
+                                                                               gasLimit,
+                                                                               address,
+                                                                               SolidityUtils.ConvertToUInt(amount, Decimals.Value));
+
+            promise.OnSuccess(_ => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address));
         }, gasLimit, gasPrice, address, ContractAddress, amount, Symbol);
     }
 }
