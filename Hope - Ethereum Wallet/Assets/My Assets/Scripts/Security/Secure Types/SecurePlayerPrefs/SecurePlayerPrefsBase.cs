@@ -1,5 +1,5 @@
-﻿using Hope.Security.HashGeneration;
-using RandomNET.Bytes;
+﻿using Hope.Random.Bytes;
+using Hope.Security.HashGeneration;
 using System;
 using UnityEngine;
 

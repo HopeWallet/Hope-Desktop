@@ -5,8 +5,8 @@ using System.Globalization;
 using System;
 using System.Threading.Tasks;
 using Hope.Security.HashGeneration;
-using RandomNET.Strings;
-using RandomNET.Bytes;
+using Hope.Random.Bytes;
+using Hope.Random.Strings;
 
 /// <summary>
 /// Class which manages the base password data for the AES encryption of the wallet.

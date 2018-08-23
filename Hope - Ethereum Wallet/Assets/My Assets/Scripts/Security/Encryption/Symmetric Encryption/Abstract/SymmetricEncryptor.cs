@@ -1,4 +1,4 @@
-﻿using RandomNET.Bytes;
+﻿using Hope.Random.Bytes;
 using System;
 using System.IO;
 using System.Linq;

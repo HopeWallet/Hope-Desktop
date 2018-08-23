@@ -1,5 +1,5 @@
-﻿using Org.BouncyCastle.Security;
-using RandomNET.Bytes;
+﻿using Hope.Random.Bytes;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
