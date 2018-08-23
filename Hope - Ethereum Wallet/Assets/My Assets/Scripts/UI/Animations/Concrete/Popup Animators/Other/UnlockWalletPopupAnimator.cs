@@ -10,30 +10,11 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject passwordInputField;
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject loadingIcon;
-	[SerializeField] private InteractableIcon passwordErrorIcon;
-
-	private bool errorIconVisible;
-
-	/// <summary>
-	/// Makes button interactable if the errorIcon is set to visible.
-	/// </summary>
-	private bool ErrorIconVisible
-	{
-		set
-		{
-			errorIconVisible = value;
-			if (errorIconVisible) signInButton.GetComponent<Button>().interactable = false;
-		}
-	}
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector.
 	/// </summary>
-	private void Awake()
-	{
-		passwordInputField.GetComponent<TMP_InputField>().onValueChanged.AddListener(InputFieldChanged);
-		passwordInputField.GetComponent<TMP_InputField>().text = "";
-	}
+	private void Awake() => passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
@@ -47,12 +28,12 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <summary>
 	/// Sets the button to interactable if the input field is not empty.
 	/// </summary>
-	/// <param name="str"> The current string in the password input field. </param>
-	private void InputFieldChanged(string str)
+	private void InputFieldChanged()
 	{
-		signInButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(str);
+		HopeInputField inputField = passwordInputField.GetComponent<HopeInputField>();
 
-		if (errorIconVisible) AnimateErrorIcon(false);
+		inputField.Error = string.IsNullOrEmpty(inputField.Text);
+		signInButton.GetComponent<Button>().interactable = !inputField.Error;
 	}
 
 	/// <summary>
@@ -60,8 +41,8 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// </summary>
 	public void PasswordIncorrect()
 	{
-		AnimateErrorIcon(true);
-		VerifyingPassword();
+		passwordInputField.GetComponent<HopeInputField>().Error = true;
+		signInButton.GetComponent<Button>().interactable = false;
 	}
 
 	/// <summary>
@@ -75,27 +56,16 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		if (startingProcess)
 		{
 			loadingIcon.SetActive(true);
-			passwordInputField.GetComponent<TMP_InputField>().interactable = false;
             Animating = true;
 		}
 
-		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.2f);
+		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);
+		signInButton.AnimateGraphicAndScale(startingProcess ? 0f : 1f, startingProcess ? 0f : 1f, 0.15f);
 
 		if (!startingProcess)
 		{
 			loadingIcon.SetActive(false);
-			passwordInputField.GetComponent<TMP_InputField>().interactable = true;
 			Animating = false;
 		}
-	}
-
-	/// <summary>
-	/// Animates the error icon on or off screen.
-	/// </summary>
-	/// <param name="animateIn"> Checks if animating the error icon in or out. </param>
-	private void AnimateErrorIcon(bool animateIn)
-	{
-		passwordErrorIcon.AnimateIcon(animateIn ? 1f : 0f);
-		ErrorIconVisible = animateIn;
 	}
 }

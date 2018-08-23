@@ -15,26 +15,12 @@ public class WalletListMenuAnimator : UIAnimator
 	[SerializeField] private GameObject newWalletButton;
     [SerializeField] private Scrollbar scrollbar;
 
-	private bool bottomButtonsVisible;
-
-	public bool BottomButtonsVisible
-	{
-		get { return bottomButtonsVisible; }
-		set
-		{
-			bottomButtonsVisible = value;
-
-			if (bottomButtonsVisible)
-				AnimateBottomButtons(true);
-			else
-				AnimateBottomButtons(false);
-		}
-	}
-
     /// <summary>
-    /// The wallet gameobjects to animate.
+    /// The wallet gameobjects to animate
     /// </summary>
     public GameObject[] Wallets { get; set; }
+
+	private void Awake() => transform.GetComponent<WalletListMenu>().BottomButtonsVisible += AnimateBottomButtons;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view

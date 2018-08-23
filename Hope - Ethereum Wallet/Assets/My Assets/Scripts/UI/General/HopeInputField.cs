@@ -44,8 +44,8 @@ public class HopeInputField : MonoBehaviour
 		{
 			eye.GetComponent<Button>().onClick.AddListener(EyeClicked);
 
-			SetSprite(ref eyeInactiveNormal, "Eye_Inactive_Normal");
-			SetSprite(ref eyeActiveNormal, "Eye_Active_Normal");
+			SetSprite(ref eyeInactiveNormal, "Eye_Inactive");
+			SetSprite(ref eyeActiveNormal, "Eye_Active");
 		}
 
 		Error = true;

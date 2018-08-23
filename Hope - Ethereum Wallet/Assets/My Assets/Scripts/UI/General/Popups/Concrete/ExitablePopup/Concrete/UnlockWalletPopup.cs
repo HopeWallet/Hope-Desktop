@@ -10,8 +10,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 {
     public Button unlockWalletButton;
 
-    public TMP_InputField passwordField;
-	public InteractableIcon passwordErrorIcon;
+    public HopeInputField passwordField;
 
     private UIManager uiManager;
     private UserWalletManager userWalletManager;
@@ -39,7 +38,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// </summary>
     protected override void OnStart()
     {
-		passwordErrorIcon.PopupManager = popupManager;
         unlockWalletButton.onClick.AddListener(LoadWallet);
     }
 
@@ -75,7 +73,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     private void LoadWallet()
     {
         DisableClosing = true;
-        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
+        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.Text));
         userWalletManager.UnlockWallet();
     }
 

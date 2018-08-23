@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114247612356448146}
   - component: {fileID: 114094641777387330}
   m_Layer: 5
-  m_Name: Next_Button
+  m_Name: OpenWallet_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
