@@ -14,10 +14,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector.
 	/// </summary>
-	private void Awake()
-	{
-		passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
-	}
+	private void Awake() => passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
