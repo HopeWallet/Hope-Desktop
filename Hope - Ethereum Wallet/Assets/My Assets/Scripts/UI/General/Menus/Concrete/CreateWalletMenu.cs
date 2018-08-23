@@ -132,7 +132,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		if (password2Field.Error)
 			password2Field.errorMessage.text = "Passwords do not match.";
 
-		password2Field.UpdateVisuals(string.IsNullOrEmpty(password2Field.Text));
+		password2Field.UpdateVisuals();
 		SetButtonInteractable();
 	}
 

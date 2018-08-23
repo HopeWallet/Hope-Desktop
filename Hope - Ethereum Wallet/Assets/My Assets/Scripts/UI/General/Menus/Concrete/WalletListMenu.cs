@@ -16,10 +16,12 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	private int activeWalletNum = 1;
 
-	private WalletListMenuAnimator walletListMenuAnimator;
+	public event Action<bool> BottomButtonsVisible;
+
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
-    private UserWalletInfoManager.Settings walletSettings;
+	private UserWalletInfoManager walletInfoManager;
+	private UserWalletInfoManager.Settings walletSettings;
     private Settings settings;
 
     /// <summary>
@@ -33,11 +35,13 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     public void Construct(
         WalletButton.Factory walletButtonFactory,
         DynamicDataCache dynamicDataCache,
+		UserWalletInfoManager walletInfoManager,
         UserWalletInfoManager.Settings walletSettings,
         Settings settings)
     {
         this.walletButtonFactory = walletButtonFactory;
         this.dynamicDataCache = dynamicDataCache;
+		this.walletInfoManager = walletInfoManager;
         this.walletSettings = walletSettings;
         this.settings = settings;
     }
@@ -47,8 +51,6 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// </summary>
     protected override void OnAwake()
     {
-		walletListMenuAnimator = transform.GetComponent<WalletListMenuAnimator>();
-
         List<GameObject> walletObjects = new List<GameObject>();
 
         for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
@@ -56,7 +58,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
             walletObjects.Add(walletButtonFactory.Create()
                          .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
         } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
-    }
+	}
 
 	/// <summary>
 	/// Adds the button click events on start.
@@ -75,7 +77,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
 		activeWalletNum = 1;
-		walletListMenuAnimator.BottomButtonsVisible = false;
+		BottomButtonsVisible?.Invoke(false);
 	}
 
 	/// <summary>
@@ -85,12 +87,11 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	private void DeleteWallet()
 	{
-
+		
 	}
 
 	private void EditWallet()
 	{
-
 	}
 
 	private void UnlockWallet()
@@ -101,8 +102,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	public void SetNewActiveWallet(int newWalletNum)
 	{
-		if (!walletListMenuAnimator.BottomButtonsVisible)
-			walletListMenuAnimator.BottomButtonsVisible = true;
+		BottomButtonsVisible?.Invoke(true);
 
 		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
 		SetActiveButton(walletList.GetChild(newWalletNum - 1), true);

@@ -10,8 +10,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 {
     public Button unlockWalletButton;
 
-    public TMP_InputField passwordField;
-	public InteractableIcon passwordErrorIcon;
+    public HopeInputField passwordField;
 
     private UIManager uiManager;
     private UserWalletManager userWalletManager;
@@ -34,19 +33,15 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         this.buttonClickObserver = buttonClickObserver;
     }
 
-    /// <summary>
-    /// Adds the button listener.
-    /// </summary>
-    protected override void OnStart()
-    {
-		passwordErrorIcon.PopupManager = popupManager;
-        unlockWalletButton.onClick.AddListener(LoadWallet);
-    }
+	/// <summary>
+	/// Adds the button listener.
+	/// </summary>
+	protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
 
-    /// <summary>
-    /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
-    /// </summary>
-    private void OnEnable()
+	/// <summary>
+	/// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
+	/// </summary>
+	private void OnEnable()
     {
         UserWallet.OnWalletLoadSuccessful += OnWalletLoad;
         buttonClickObserver.SubscribeObservable(this);
@@ -61,21 +56,18 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         buttonClickObserver.UnsubscribeObservable(this);
     }
 
-    /// <summary>
-    /// Enables the open wallet gui once the user wallet has been successfully loaded.
-    /// </summary>
-    private void OnWalletLoad()
-    {
-        uiManager.OpenMenu<OpenWalletMenu>();
-    }
+	/// <summary>
+	/// Enables the open wallet gui once the user wallet has been successfully loaded.
+	/// </summary>
+	private void OnWalletLoad() => uiManager.OpenMenu<OpenWalletMenu>();
 
-    /// <summary>
-    /// Attempts to unlock the wallet with the password entered in the field.
-    /// </summary>
-    private void LoadWallet()
+	/// <summary>
+	/// Attempts to unlock the wallet with the password entered in the field.
+	/// </summary>
+	private void LoadWallet()
     {
         DisableClosing = true;
-        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.text));
+        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.Text));
         userWalletManager.UnlockWallet();
     }
 
