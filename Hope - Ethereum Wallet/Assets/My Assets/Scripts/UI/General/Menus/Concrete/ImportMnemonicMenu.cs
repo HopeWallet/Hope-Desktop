@@ -15,13 +15,13 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 
 	[SerializeField] private HopeInputField[] wordFields;
 
-	public List<Selectable> SelectableFields { get; } = new List<Selectable>();
+    private ImportMnemonicMenuAnimator importMneomonicMenuAnimator;
+    private ButtonClickObserver buttonObserver;
+    private DynamicDataCache dynamicDataCache;
+
+    public List<Selectable> SelectableFields { get; } = new List<Selectable>();
 
 	public Selectable LastSelectableField { get; set; }
-
-	private ImportMnemonicMenuAnimator importMneomonicMenuAnimator;
-	private ButtonClickObserver buttonObserver;
-    private DynamicDataCache dynamicDataCache;
 
     /// <summary>
     /// Injects the required dependencies into this menu.

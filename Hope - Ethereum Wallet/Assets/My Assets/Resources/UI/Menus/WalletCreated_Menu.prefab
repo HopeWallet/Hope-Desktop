@@ -274,6 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
   backButton: {fileID: 0}
+  openWalletButton: {fileID: 114247612356448146}
 --- !u!114 &114247612356448146
 MonoBehaviour:
   m_ObjectHideFlags: 1

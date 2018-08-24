@@ -4,7 +4,7 @@ using System.Linq;
 /// <summary>
 /// Class which manages the factories and creation of certain menus.
 /// </summary>
-public class MenuFactoryManager
+public sealed class MenuFactoryManager
 {
     private readonly List<object> menuFactories = new List<object>();
 
@@ -19,7 +19,7 @@ public class MenuFactoryManager
         ChooseWalletMenu.Factory chooseWalletMenuFactory,
         CreateWalletMenu.Factory createWalletMenuFactory,
         ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory,
-        UnlockWalletPopup.Factory unlockWalletMenuFactory)
+        WalletCreatedMenu.Factory walletCreatedMenuFactory)
     {
         menuFactories.AddItems(importOrCreateMenuFactory,
                                walletCreateMenuFactory,
@@ -29,7 +29,7 @@ public class MenuFactoryManager
                                chooseWalletMenuFactory,
                                createWalletMenuFactory,
                                confirmMnemonicMenuFactory,
-                               unlockWalletMenuFactory);
+                               walletCreatedMenuFactory);
     }
 
     /// <summary>

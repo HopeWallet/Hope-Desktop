@@ -7,7 +7,6 @@ using Zenject;
 /// <typeparam name="T"> The type of the class responsible for loading the wallet via create or unlock. </typeparam>
 public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
 {
-
     protected UserWalletManager userWalletManager;
 
     /// <summary>
@@ -30,7 +29,7 @@ public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
     /// <summary>
     /// Enables the open wallet gui once the user wallet has been successfully loaded.
     /// </summary>
-    private void OnWalletLoad() => uiManager.OpenMenu<OpenWalletMenu>();
+    private void OnWalletLoad() => uiManager.OpenMenu<WalletCreatedMenu>();
 
     /// <summary>
     /// Loads the wallet.

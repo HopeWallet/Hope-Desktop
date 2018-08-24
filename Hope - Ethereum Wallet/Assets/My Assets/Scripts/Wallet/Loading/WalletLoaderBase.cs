@@ -1,5 +1,4 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.Promises;
 using System;
 
 public abstract class WalletLoaderBase : SecureObject
