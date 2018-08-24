@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Security.HashGeneration;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
@@ -8,8 +9,7 @@ using System.Reflection;
 /// </summary>
 public static class RuntimeMethodSearcher
 {
-
-    private static readonly string ReflectionCall = "InternalInvoke";
+    private static readonly string ReflectionCallHash = "fdb8991f6270d9c55c6a2d0db00eb1a0d465f19cb68e81dedb10624d97ef7255";
 
     /// <summary>
     /// Determines if the calling method was called through reflection or not.
@@ -26,7 +26,7 @@ public static class RuntimeMethodSearcher
             if (methodName == null)
                 return false;
 
-            if (ReflectionCall.EqualsIgnoreCase(methodName))
+            if (ReflectionCallHash.EqualsIgnoreCase(methodName.Keccak_256()))
                 return true;
         }
     }

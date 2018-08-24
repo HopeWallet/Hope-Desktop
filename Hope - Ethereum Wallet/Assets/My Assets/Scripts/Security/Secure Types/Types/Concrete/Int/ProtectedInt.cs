@@ -8,7 +8,6 @@ namespace Hope.Security.ProtectedTypes.Types
     /// </summary>
     public sealed class ProtectedInt : ProtectedType<int, DisposableInt>
     {
-
         /// <summary>
         /// Initializes the <see cref="ProtectedInt"/> with the <see langword="int"/> value it starts with.
         /// </summary>
@@ -23,7 +22,5 @@ namespace Hope.Security.ProtectedTypes.Types
         /// <param name="value"> The <see langword="int"/> value to convert to <see langword="byte"/>[] data. </param>
         /// <returns> The <see langword="byte"/>[] data converted from the <see langword="int"/>. </returns>
         protected override byte[] GetBytes(int value) => BitConverter.GetBytes(value);
-
     }
-
 }

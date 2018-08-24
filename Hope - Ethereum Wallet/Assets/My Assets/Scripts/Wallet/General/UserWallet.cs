@@ -90,6 +90,18 @@ public sealed class UserWallet : SecureObject
     }
 
     /// <summary>
+    /// Gets the encrypted version of a plain text password.
+    /// </summary>
+    /// <param name="plainBytes"> The plain text password to encrypt. </param>
+    /// <returns> The encrypted password as a byte[]. </returns>
+    [SecureCallEnd]
+    [ReflectionProtect(typeof(string))]
+    private byte[] GetEncryptedPass(byte[] plainBytes)
+    {
+        return passwordEncryptor.Encrypt(plainBytes);
+    }
+
+    /// <summary>
     /// Signs a transaction using this UserWallet.
     /// </summary>
     /// <typeparam name="T"> The type of the popup to display the transaction confirmation for. </typeparam>
@@ -110,9 +122,9 @@ public sealed class UserWallet : SecureObject
         DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
         promise.OnSuccess(disposableData =>
         {
-            string encryptedPassword = passwordEncryptor.Encrypt(disposableData.Value);
+            byte[] encryptedPasswordBytes = GetEncryptedPass(disposableData.ByteValue);
             popupManager.GetPopup<T>(true)
-                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(signerAddress, encryptedPassword, onTransactionSigned),
+                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(signerAddress, encryptedPasswordBytes, onTransactionSigned),
                                                gasLimit,
                                                gasPrice,
                                                transactionInput);

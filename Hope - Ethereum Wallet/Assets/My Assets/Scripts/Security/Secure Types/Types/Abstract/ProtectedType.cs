@@ -59,17 +59,15 @@ namespace Hope.Security.ProtectedTypes.Types.Base
 
             AsyncTaskScheduler.Schedule(() => Task.Run(() =>
             {
-                protectedData = memoryEncryptor.Encrypt((byte[])data.Clone());
+                SetValue((byte[])data.Clone());
 
                 GC.Collect();
 
-                MainThreadExecutor.QueueAction(() => promise.Build(() => disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData));
+                disposableData = disposableData?.Disposed != false ? (TDisposable)Activator.CreateInstance(typeof(TDisposable), data) : disposableData;
+                MainThreadExecutor.QueueAction(() => promise.Build(() => disposableData));
             }));
 
             return promise;
-            //TDisposable data = disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
-
-            //return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 
         /// <summary>
@@ -82,10 +80,19 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         [ReflectionProtect]
         public void SetValue(TType value)
         {
+            SetValue(GetBytes(value));
+        }
+
+        [SecureCallEnd]
+        [ReflectionProtect]
+        public void SetValue(byte[] byteValue)
+        {
             if (disposableData?.Disposed == false)
                 throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before setting new data!");
+            if (byteValue == null || byteValue.Length == 0)
+                throw new ArgumentNullException("Invalid value to protect!");
 
-            protectedData = memoryEncryptor.Encrypt(GetBytes(value));
+            protectedData = memoryEncryptor.Encrypt(byteValue);
         }
 
         /// <summary>

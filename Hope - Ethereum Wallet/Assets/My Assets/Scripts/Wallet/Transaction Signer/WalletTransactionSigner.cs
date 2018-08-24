@@ -36,16 +36,17 @@ public sealed class WalletTransactionSigner
     /// Signs a transaction and passes the result through an Action as a <see cref="TransactionSignedUnityRequest"/>.
     /// </summary>
     /// <param name="walletAddress"> The wallet address to sign the transaction with. </param>
-    /// <param name="encryptedPassword"> The encrypted password to use to decrypt the wallet. </param>
+    /// <param name="encryptedPasswordBytes"> The encrypted password to use to decrypt the wallet. </param>
     /// <param name="onRequestReceived"> Action called with the <see cref="TransactionSignedUnityRequest"/> once the transaction was signed. </param>
     [SecureCallEnd]
-    public void SignTransaction(string walletAddress, string encryptedPassword, Action<TransactionSignedUnityRequest> onRequestReceived)
+    public void SignTransaction(string walletAddress, byte[] encryptedPasswordBytes, Action<TransactionSignedUnityRequest> onRequestReceived)
     {
-        walletDecryptor.DecryptWallet(passwordEncryptor.Decrypt(encryptedPassword), (seed, derivation) =>
+        byte[] plainTextBytes = passwordEncryptor.Decrypt(encryptedPasswordBytes);
+        walletDecryptor.DecryptWallet(plainTextBytes.GetUTF8String(), (seed, derivation) =>
         {
             TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, derivation).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
             MainThreadExecutor.QueueAction(() => onRequestReceived?.Invoke(request));
-            ClearData(seed);
+            ClearData(seed, plainTextBytes);
         });
     }
 
@@ -53,9 +54,11 @@ public sealed class WalletTransactionSigner
     /// Clears the <see langword="byte"/>[] data of the wallet seed and collects any garbage.
     /// </summary>
     /// <param name="seed"> The <see langword="byte"/>[] seed used to sign the transaction. </param>
-    private void ClearData(byte[] seed)
+    private void ClearData(params byte[][] seed)
     {
-        seed.ClearBytes();
+        foreach(var byteData in seed)
+            byteData.ClearBytes();
+
         GC.Collect();
     }
 }

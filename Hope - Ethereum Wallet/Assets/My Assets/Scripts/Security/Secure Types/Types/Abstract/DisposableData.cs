@@ -16,6 +16,11 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         public abstract T Value { get; }
 
         /// <summary>
+        /// The unprotected byte data of this DisposableData object.
+        /// </summary>
+        public byte[] ByteValue => unprotectedBytes;
+
+        /// <summary>
         /// Whether this <see cref="DisposableData"/> has been disposed of yet.
         /// </summary>
         public bool Disposed { get; private set; }
