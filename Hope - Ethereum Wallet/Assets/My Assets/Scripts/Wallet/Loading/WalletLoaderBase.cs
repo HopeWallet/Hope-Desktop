@@ -31,12 +31,7 @@ public abstract class WalletLoaderBase : SecureObject
         SetupAddresses(out addresses);
         SetupLoadActions(onWalletLoaded);
 
-        DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
-        promise.OnSuccess(disposableData =>
-        {
-            //using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
-            LoadWallet(disposableData.Value);
-        });
+        (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData().OnSuccess(disposableData => LoadWallet(disposableData.Value));
     }
 
     private void SetupLoadActions(Action onWalletLoaded)

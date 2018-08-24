@@ -79,7 +79,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 		if (InputFieldUtils.GetActiveInputField() == LastSelectableField && nextButton.interactable)
 			nextButton.Press();
 		else
-			SelectableExtensions.MoveToNextSelectable(SelectableFields);
+			SelectableFields.MoveToNextSelectable();
 	}
 
 	public void TabButtonPressed(ClickType clickType)

@@ -3,8 +3,18 @@ using Nethereum.Hex.HexTypes;
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Class which contains methods for interacting with ERC20 tokens.
+/// </summary>
 public sealed partial class ERC20 : Token
 {
+    /// <summary>
+    /// Initializes the ERC20 token with all required values.
+    /// </summary>
+    /// <param name="contractAddress"> The contract address of this ERC20 token. </param>
+    /// <param name="name"> The name of this ERC20 token. </param>
+    /// <param name="symbol"> The symbol of this ERC20 token. </param>
+    /// <param name="decimals"> The decimal count of this ERC20 token. </param>
     public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress, name, symbol, decimals)
     {
     }
@@ -53,6 +63,7 @@ public sealed partial class ERC20 : Token
                                                                                SolidityUtils.ConvertToUInt(amount, Decimals.Value));
 
             promise.OnSuccess(_ => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address));
+            promise.OnError(_ => Debug.Log("Transaction failed! " + amount + " " + Symbol + " was not sent."));
         }, gasLimit, gasPrice, address, ContractAddress, amount, Symbol);
     }
 }

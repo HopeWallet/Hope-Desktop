@@ -49,7 +49,7 @@ namespace Hope.Utils.Promises
             if (request.Result?.Status?.Value == 1)
                 InternalInvokeSuccess("Transaction successful!");
             else
-                InternalInvokeError(request.Exception.Message);
+                InternalInvokeError(request?.Exception?.Message);
         }
     }
 }
