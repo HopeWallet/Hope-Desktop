@@ -21,6 +21,7 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	private readonly List<GameObject> wordFields = new List<GameObject>();
 
 	private string[] mnemonicWords;
+	private bool animatingIcon;
 
 	private DynamicDataCache dynamicDataCache;
 
@@ -46,7 +47,7 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	private void Start()
 	{
 		generateNewButton.transform.GetComponent<Button>().onClick.AddListener(StartWordAnimation);
-		copyAllButton.transform.GetComponent<Button>().onClick.AddListener(AnimateCheckMarkIcon);
+		copyAllButton.transform.GetComponent<Button>().onClick.AddListener(() => { if (!animatingIcon) AnimateCheckMarkIcon(); });
 	}
 
 	/// <summary>
@@ -98,10 +99,11 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	/// </summary>
 	private void AnimateCheckMarkIcon()
 	{
+		animatingIcon = true;
 		checkMarkIcon.transform.localScale = new Vector3(0, 0, 1);
 
 		checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (checkMarkIcon != null) checkMarkIcon.AnimateGraphic(0f, 0.25f); });
+		CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (checkMarkIcon != null) checkMarkIcon.AnimateGraphic(0f, 0.25f, () => animatingIcon = false); });
 	}
 
 	/// <summary>

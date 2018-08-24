@@ -8,13 +8,11 @@ using TMPro;
 /// </summary>
 public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup>
 {
-	[SerializeField] private Button copyAddressButton;
+	[SerializeField] private Button copyButton;
 
 	[SerializeField] private Image qrImage;
 
 	[SerializeField] private TMP_InputField addressText;
-
-	[SerializeField] private InteractableIcon menuInfoIcon;
 
 	private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -48,9 +46,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 		addressText.text = walletAddress;
         qrImage.sprite = QRUtils.GenerateQRCode(walletAddress);
 
-		menuInfoIcon.PopupManager = popupManager;
-
-		copyAddressButton.onClick.AddListener(CopyAddressClicked);
+		copyButton.onClick.AddListener(CopyAddressClicked);
     }
 
 	private void OnDestroy() => TopBarButtons.popupClosed?.Invoke();

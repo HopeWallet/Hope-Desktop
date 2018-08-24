@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 222723126913167382}
   - component: {fileID: 114638770386681726}
   - component: {fileID: 114802729554701794}
+  - component: {fileID: 114275673542213462}
   m_Layer: 5
   m_Name: TokenListScrollbar
   m_TagString: Untagged
@@ -883,6 +884,7 @@ GameObject:
   - component: {fileID: 222253424651473756}
   - component: {fileID: 114899365073123148}
   - component: {fileID: 114801723545209264}
+  - component: {fileID: 114625415174586648}
   m_Layer: 5
   m_Name: TransactionListScrollbar
   m_TagString: Untagged
@@ -2023,6 +2025,18 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114275673542213462
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1061096469329880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5282af49b1ed04499cb40f5f6a5a521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listScrollbarManager: {fileID: 114020252912304242}
 --- !u!114 &114289979791616514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3087,6 +3101,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114625415174586648
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1959133284492490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5282af49b1ed04499cb40f5f6a5a521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listScrollbarManager: {fileID: 114960863489708508}
 --- !u!114 &114631997620217972
 MonoBehaviour:
   m_ObjectHideFlags: 1

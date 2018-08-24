@@ -26,6 +26,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 	private string[] wordStrings;
 	private int wordCount = 12;
+	private bool animatingIcon;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
@@ -133,10 +134,11 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <param name="icon"> The GameObject that is being animated </param>
 	public void AnimateIcon(GameObject icon)
 	{
+		animatingIcon = true;
 		icon.transform.localScale = new Vector3(0, 0, 1);
 
 		icon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (icon != null) icon.AnimateGraphic(0f, 0.25f); }));
+			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (icon != null) icon.AnimateGraphic(0f, 0.25f, () => animatingIcon = false); }));
 	}
 
 	/// <summary>
@@ -223,7 +225,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		else
 		{
-			AnimateIcon(pasteButtonErrorIcon);
+			if (!animatingIcon)
+				AnimateIcon(pasteButtonErrorIcon);
 		}
 	}
 }
