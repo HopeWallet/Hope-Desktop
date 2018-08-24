@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 222141314777159192}
   - component: {fileID: 114455334767583872}
   - component: {fileID: 114710168053252826}
+  - component: {fileID: 114997736163962078}
   m_Layer: 5
   m_Name: WalletList
   m_TagString: Untagged
@@ -892,7 +893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1133,7 +1134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1349,6 +1350,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 1
+--- !u!114 &114997736163962078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1051990768108308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6f5a6b3e8e4214db3ecfc63be22501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollBar: {fileID: 1619388506254856}
+  scrollbarHandle: {fileID: 1710498270665088}
 --- !u!222 &222091160899225740
 CanvasRenderer:
   m_ObjectHideFlags: 1
