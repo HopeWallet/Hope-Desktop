@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using Hope.Utils.Promises;
 using System;
 
 public abstract class WalletLoaderBase : SecureObject
@@ -29,10 +30,13 @@ public abstract class WalletLoaderBase : SecureObject
     {
         SetupAddresses(out addresses);
         SetupLoadActions(onWalletLoaded);
-        SetupPopup();
 
-        using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
-            LoadWallet(pass.Value);
+        DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
+        promise.OnSuccess(disposableData =>
+        {
+            //using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
+            LoadWallet(disposableData.Value);
+        });
     }
 
     private void SetupLoadActions(Action onWalletLoaded)
@@ -57,8 +61,5 @@ public abstract class WalletLoaderBase : SecureObject
         Array.Copy(walletAddresses, addresses, addresses.Length);
     }
 
-    protected abstract void SetupPopup();
-
-    [SecureCaller]
     protected abstract void LoadWallet(string userPass);
 }

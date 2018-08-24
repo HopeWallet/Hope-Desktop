@@ -1,9 +1,10 @@
-﻿using Nethereum.JsonRpc.UnityClient;
+﻿using Hope.Utils.Ethereum;
+using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Hope.Utils.Ethereum
+namespace Hope.Utils.Promises
 {
     /// <summary>
     /// Class used for retrieving the eventual status of a transaction after it has been sent to the ethereum network.

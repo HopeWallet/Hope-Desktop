@@ -1,6 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using System.Threading.Tasks;
-using TMPro;
 using UnityEngine.UI;
 using Zenject;
 

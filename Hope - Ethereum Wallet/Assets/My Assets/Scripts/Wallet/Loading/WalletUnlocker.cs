@@ -33,11 +33,6 @@ public sealed class WalletUnlocker : WalletLoaderBase
         }
     }
 
-    protected override void SetupPopup()
-    {
-        (popupManager.GetPopup<UnlockWalletPopup>().Animator as UnlockWalletPopupAnimator)?.VerifyingPassword();
-    }
-
     private async Task TryPassword(string password, string saltedHash)
     {
         bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.Blake2.VerifyPassword(password, saltedHash)).ConfigureAwait(false);

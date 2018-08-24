@@ -11,15 +11,19 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject loadingIcon;
 
-	/// <summary>
-	/// Initializes the necessary variables that haven't already been initialized in the inspector.
-	/// </summary>
-	private void Awake() => passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+    /// <summary>
+    /// Initializes the necessary variables that haven't already been initialized in the inspector.
+    /// </summary>
+    private void Awake()
+    {
+        passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+        signInButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
+    }
 
-	/// <summary>
-	/// Animates the unique elements of this form into view
-	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+    /// <summary>
+    /// Animates the unique elements of this form into view
+    /// </summary>
+    protected override void AnimateUniqueElementsIn()
 	{
 		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
 		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);

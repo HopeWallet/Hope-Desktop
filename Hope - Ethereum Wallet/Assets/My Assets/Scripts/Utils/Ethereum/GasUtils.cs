@@ -1,4 +1,5 @@
-﻿using Nethereum.Contracts.Extensions;
+﻿using Hope.Utils.Promises;
+using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;

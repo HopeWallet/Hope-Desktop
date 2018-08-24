@@ -1,4 +1,5 @@
 using Hope.Security.ProtectedTypes.Types;
+using Hope.Utils.Promises;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
@@ -106,14 +107,15 @@ public sealed class UserWallet : SecureObject
         string signerAddress,
         params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
-        using (var pass = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData())
+        DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
+        promise.OnSuccess(disposableData =>
         {
-            string encryptedPassword = passwordEncryptor.Encrypt(pass.Value);
+            string encryptedPassword = passwordEncryptor.Encrypt(disposableData.Value);
             popupManager.GetPopup<T>(true)
                         .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(signerAddress, encryptedPassword, onTransactionSigned),
                                                gasLimit,
                                                gasPrice,
                                                transactionInput);
-        }
+        });
     }
 }

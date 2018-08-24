@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hope.Utils.Ethereum
+namespace Hope.Utils.Promises
 {
     /// <summary>
     /// Class used for retrieving an eventual value after querying the ethereum network for some data.

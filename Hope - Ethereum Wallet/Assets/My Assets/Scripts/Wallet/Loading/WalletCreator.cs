@@ -1,15 +1,10 @@
-﻿using Hope.Security.Encryption;
-using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.Ethereum;
-using Nethereum.HdWallet;
+﻿using Nethereum.HdWallet;
 using System;
 
 public sealed class WalletCreator : WalletLoaderBase
 {
     private readonly WalletEncryptor walletEncryptor;
     private readonly UserWalletInfoManager.Settings walletSettings;
-
-    private string derivationPath;
 
     public WalletCreator(
         PopupManager popupManager,
@@ -23,16 +18,10 @@ public sealed class WalletCreator : WalletLoaderBase
         walletEncryptor = new WalletEncryptor(playerPrefPassword, dynamicDataCache, walletSettings);
     }
 
-    [SecureCaller]
     protected override void LoadWallet(string userPass)
     {
         CreateWalletCountPref();
         TryCredentials(userPass);
-    }
-
-    protected override void SetupPopup()
-    {
-        popupManager.GetPopup<LoadingPopup>(true).Text = "Creating wallet";
     }
 
     private void FinalizeWalletCreation(string[] encryptedHashes, string saltedPasswordHash, string encryptedSeed)
@@ -67,7 +56,6 @@ public sealed class WalletCreator : WalletLoaderBase
     /// Attempts to create a wallet given a mnemonic phrase.
     /// </summary>
     /// <param name="basePass"> The password that was entered by the user. </param>
-    [SecureCaller]
     private void TryCredentials(string basePass)
     {
         if (string.IsNullOrEmpty(basePass) || basePass.Length < 8)

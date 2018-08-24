@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Hope.Utils.Ethereum
+namespace Hope.Utils.Promises
 {
     /// <summary>
     /// Base class which manages the eventual result of a Nethereum UnityRequest.
@@ -73,6 +73,15 @@ namespace Hope.Utils.Ethereum
                 OnPromiseSuccessOrError += onPromiseSuccessOrError;
 
             return this as TPromise;
+        }
+
+        /// <summary>
+        /// Builds the promise with the arguments.
+        /// </summary>
+        /// <param name="args"> The arguments to build the promise with. </param>
+        public void Build(params Func<object>[] args)
+        {
+            InternalBuild(args);
         }
 
         /// <summary>

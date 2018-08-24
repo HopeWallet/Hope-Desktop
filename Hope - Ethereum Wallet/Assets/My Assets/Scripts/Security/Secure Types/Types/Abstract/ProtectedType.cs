@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Hope.Utils.Promises;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hope.Security.ProtectedTypes.Types.Base
 {
@@ -50,14 +52,24 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
         [SecureCaller]
         [ReflectionProtect(typeof(DisposableData<string>))]
-        public TDisposable CreateDisposableData()
+        public DisposableDataPromise<TType> CreateDisposableData()
         {
+            DisposableDataPromise<TType> promise = new DisposableDataPromise<TType>();
             byte[] data = memoryEncryptor.Decrypt(protectedData);
-            protectedData = memoryEncryptor.Encrypt((byte[])data.Clone());
 
-			GC.Collect();
+            AsyncTaskScheduler.Schedule(() => Task.Run(() =>
+            {
+                protectedData = memoryEncryptor.Encrypt((byte[])data.Clone());
 
-            return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
+                GC.Collect();
+
+                MainThreadExecutor.QueueAction(() => promise.Build(() => disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData));
+            }));
+
+            return promise;
+            //TDisposable data = disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
+
+            //return disposableData?.Disposed != false ? (disposableData = (TDisposable)Activator.CreateInstance(typeof(TDisposable), data)) : disposableData;
         }
 
         /// <summary>
