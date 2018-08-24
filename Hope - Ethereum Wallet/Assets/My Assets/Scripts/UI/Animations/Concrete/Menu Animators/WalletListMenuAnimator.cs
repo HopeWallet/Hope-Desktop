@@ -70,9 +70,9 @@ public class WalletListMenuAnimator : UIAnimator
 		{
 			line2.AnimateTransformY(-190f, 0.15f);
 			line3.AnimateTransformY(-245.3f, 0.15f);
-			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(deleteButton, true));
-			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(editButton, true));
-			CoroutineUtils.ExecuteAfterWait(0.05f, () => ChangeButtonVisuals(signInButton, true));
+			ChangeButtonVisuals(deleteButton, true);
+			ChangeButtonVisuals(editButton, true);
+			ChangeButtonVisuals(signInButton, true);
 		}
 		else
 		{
@@ -90,12 +90,11 @@ public class WalletListMenuAnimator : UIAnimator
 	{
 		if (animatingIn)
 		{
-			button.AnimateScaleY(1f, 0.1f);
-			button.AnimateGraphic(1f, 0.1f);
+			button.AnimateGraphicAndScale(1f, 1f, 0.15f);
 		}
 		else
 		{
-			button.transform.localScale = new Vector2(1f, 0f);
+			button.transform.localScale = Vector2.zero;
 			button.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 		}
 	}
