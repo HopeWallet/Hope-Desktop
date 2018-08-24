@@ -18,6 +18,7 @@ public class InteractableButton : InteractableBase
 		customCursorPosition = new Vector2(12f, 5f);
 
 		buttonComponent = transform.GetComponent<Button>();
+
 		if (exitableButton)
 			buttonComponent.onClick.AddListener(OnCustomPointerExit);
 	}
