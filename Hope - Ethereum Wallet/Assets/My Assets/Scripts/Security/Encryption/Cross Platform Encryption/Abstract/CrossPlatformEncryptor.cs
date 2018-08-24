@@ -92,7 +92,13 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     [ReflectionProtect(typeof(byte[]))]
     protected byte[] InternalEncrypt(byte[] data, byte[] entropy)
     {
-        return encryptor.Encrypt(data, entropy);
+        if (data == null || data.Length == 0)
+            throw new ArgumentNullException("Data to encrypt is null or has a length of 0!");
+
+        byte[] encryptedData = encryptor.Encrypt(data, entropy);
+        data.ClearBytes();
+
+        return encryptedData;
     }
 
     /// <summary>
@@ -105,6 +111,12 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     [ReflectionProtect(typeof(byte[]))]
     protected byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
     {
-        return encryptor.Decrypt(encryptedData, entropy);
+        if (encryptedData == null || encryptedData.Length == 0)
+            throw new ArgumentNullException("Data to decrypt is null or has a length of 0!");
+
+        byte[] decryptedData = encryptor.Decrypt(encryptedData, entropy);
+        encryptedData.ClearBytes();
+
+        return decryptedData;
     }
 }

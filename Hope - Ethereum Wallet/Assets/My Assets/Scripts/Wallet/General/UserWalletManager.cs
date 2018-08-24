@@ -1,6 +1,8 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Hope.Security.ProtectedTypes.Types;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Class for managing the ethereum wallet of the user.

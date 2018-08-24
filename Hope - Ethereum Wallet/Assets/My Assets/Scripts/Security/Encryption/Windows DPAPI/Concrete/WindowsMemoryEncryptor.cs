@@ -33,13 +33,9 @@ namespace Hope.Security.Encryption.DPAPI
         [ReflectionProtect(typeof(byte[]))]
         protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
         {
-            byte[] encryptedData = data;
+            byte[] encryptedData = null;
             if (data.Length % 16 != 0 || data.Length == 0)
-            {
-                // ProtectedMemory needs data in 16 byte blocks so we need to encrypt it into 16 byte blocks if it is not the case.
                 encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
-                data.ClearBytes();
-            }
 
             ProtectedMemory.Protect(encryptedData, MemoryProtectionScope.SameProcess);
 

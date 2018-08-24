@@ -56,11 +56,7 @@ using Nethereum.Util;
 using Nethereum.RPC.Eth.Transactions;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Signer;
-
-// TODO
-// Remove DisposableData and use Actions with the DataContainer/RefType instead
-// Dispose of the DataContainer/RefType with a Zero method, null it out, and GC.Collect()
-// Initialize the ProtectedType with an attribute that the caller must have to be able to decrypt and use the DataContainer/RefType
+using Hope.Random;
 
 public sealed class HopeTesting : MonoBehaviour
 {

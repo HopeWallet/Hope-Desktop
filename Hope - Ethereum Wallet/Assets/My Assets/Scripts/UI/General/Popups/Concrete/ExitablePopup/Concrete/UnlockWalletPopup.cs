@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
@@ -33,15 +34,15 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         this.buttonClickObserver = buttonClickObserver;
     }
 
-	/// <summary>
-	/// Adds the button listener.
-	/// </summary>
-	protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
+    /// <summary>
+    /// Adds the button listener.
+    /// </summary>
+    protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
 
-	/// <summary>
-	/// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
-	/// </summary>
-	private void OnEnable()
+    /// <summary>
+    /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
+    /// </summary>
+    private void OnEnable()
     {
         UserWallet.OnWalletLoadSuccessful += OnWalletLoad;
         buttonClickObserver.SubscribeObservable(this);
@@ -56,19 +57,29 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         buttonClickObserver.UnsubscribeObservable(this);
     }
 
-	/// <summary>
-	/// Enables the open wallet gui once the user wallet has been successfully loaded.
-	/// </summary>
-	private void OnWalletLoad() => uiManager.OpenMenu<OpenWalletMenu>();
+    /// <summary>
+    /// Enables the open wallet gui once the user wallet has been successfully loaded.
+    /// </summary>
+    private void OnWalletLoad() => uiManager.OpenMenu<OpenWalletMenu>();
 
-	/// <summary>
-	/// Attempts to unlock the wallet with the password entered in the field.
-	/// </summary>
-	private void LoadWallet()
+    /// <summary>
+    /// Attempts to unlock the wallet with the password entered in the field.
+    /// </summary>
+    private async void LoadWallet()
     {
-        DisableClosing = true;
-        dynamicDataCache.SetData("pass", new ProtectedString(passwordField.Text));
-        userWalletManager.UnlockWallet();
+        string text = passwordField.Text;
+
+        await Task.Run(() =>
+        {
+            DisableClosing = true;
+
+            if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
+                ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(text);
+            else
+                dynamicDataCache.SetData("pass", new ProtectedString(text));
+
+            MainThreadExecutor.QueueAction(() => userWalletManager.UnlockWallet());
+        }).ConfigureAwait(false);
     }
 
     /// <summary>

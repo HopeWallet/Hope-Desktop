@@ -43,8 +43,9 @@ namespace Hope.Security.ProtectedTypes.Types.Base
 
         /// <summary>
         /// Creates the <see cref="DisposableData"/> version of this <see cref="ProtectedType"/>.
-        /// Recommended use is within a <see langword="using"/> statement. 
-        /// Example: <see langword="using"/> (var val = <see cref="CreateDisposableData"/>) { }
+        /// <para> Recommended use is within a <see langword="using"/> statement. </para>
+        /// <para> Example: <see langword="using"/> (var val = <see cref="CreateDisposableData"/>) { } </para>
+        /// <para> MUST BE CALLED BY A METHOD WITH [SecureCaller] OR [SecureCallEnd]. </para>
         /// </summary>
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
         [SecureCaller]
@@ -69,8 +70,8 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         [ReflectionProtect]
         public void SetValue(TType value)
         {
-            if (disposableData != null)
-                throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before settings new data!");
+            if (disposableData?.Disposed == false)
+                throw new Exception("Data can not be set while there is already a DisposableData instance active. Dispose of the data before setting new data!");
 
             protectedData = memoryEncryptor.Encrypt(GetBytes(value));
         }
