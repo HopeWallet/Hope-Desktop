@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.Ethereum;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ using Zenject;
 /// </summary>
 public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
+	public static Action popupClosed;
+
 	[SerializeField] private TMP_Text amountText,
 									  timeFromNowText,
 									  addressText,
@@ -38,15 +41,20 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
         this.tradableAssetImageManager = tradableAssetImageManager;
     }
 
-    /// <summary>
-    /// Adds the display popup method to the button listener.
-    /// </summary>
-    protected override void OnAwake() => Button.onClick.AddListener(DisplayTransactionInfoPopup);
+	/// <summary>
+	/// Adds the display popup method to the button listener.
+	/// </summary>
+	protected override void OnAwake() => Button.onClick.AddListener(DisplayTransactionInfoPopup);
 
-    /// <summary>
-    /// Displays the transaction info popup.
-    /// </summary>
-    private void DisplayTransactionInfoPopup() => popupManager.GetPopup<TransactionInfoPopup>().SetTransactionInfo(ButtonInfo);
+	/// <summary>
+	/// Displays the transaction info popup.
+	/// </summary>
+	private void DisplayTransactionInfoPopup()
+	{
+		popupClosed = () => this.Button.interactable = true;
+		this.Button.interactable = false;
+		popupManager.GetPopup<TransactionInfoPopup>().SetTransactionInfo(ButtonInfo);
+	}
 
     /// <summary>
     /// Sets the info of a button based on the TransactionInfo object.

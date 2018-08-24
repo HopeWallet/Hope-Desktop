@@ -11,8 +11,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
     public static event Action<TabType> OnTabChanged;
 
-    public GameObject backgroundVignette,
-                      lockPurposeSection,
+    public GameObject lockPurposeSection,
                       lockPurposeNotificationSection;
 
     public TMP_Text assetText,
@@ -115,5 +114,5 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         // Logout popup
     }
 
-    public enum TabType { All, Sent, Received, Pending };
+    public enum TabType { All, Sent, Received }
 }

@@ -125,5 +125,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     {
         Asset.Destroy();
         Gas.Destroy();
+		TopBarButtons.popupClosed?.Invoke();
     }
 }

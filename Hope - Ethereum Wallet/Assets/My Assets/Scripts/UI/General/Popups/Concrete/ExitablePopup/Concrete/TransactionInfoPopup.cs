@@ -64,6 +64,8 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// </summary>
 	protected override void OnStart() => AssignTransactionInfo();
 
+	private void OnDestroy() => TransactionInfoButton.popupClosed?.Invoke();
+
 	/// <summary>
 	/// Assigns the transaction info to all elements in this popup.
 	/// </summary>
