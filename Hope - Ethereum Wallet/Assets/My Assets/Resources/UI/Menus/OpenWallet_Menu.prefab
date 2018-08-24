@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 222439964429875898}
   - component: {fileID: 114306357372759732}
   - component: {fileID: 114489986849943284}
-  - component: {fileID: 114199087843512002}
+  - component: {fileID: 114885553983256332}
   - component: {fileID: 114685509459113228}
   m_Layer: 5
   m_Name: ModifyTokens_Button
@@ -1025,7 +1025,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: cc9d8e364e9204f45b5b47ce6de1d742, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3a8a777db2213974ea0d52ca41dd4304, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1559,17 +1559,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114199087843512002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1525810943534712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62e38fccd1eb2f14ea25b09d964732d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114202205539928004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2428,7 +2417,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -3856,6 +3845,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d896c6449378a7146a6b8831c7cd8d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114885553983256332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525810943534712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f912b6a2815bec4c863143df4d7f23b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114889933879691746
