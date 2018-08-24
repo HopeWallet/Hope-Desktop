@@ -29,7 +29,7 @@ public class InteractableButton : InteractableBase
 	private void Update()
 	{
 		if (hovering)
-			SetCursor(buttonComponent.interactable);
+			SetCursor(buttonComponent.interactable ? customCursor : null);
 	}
 
 	/// <summary>
@@ -37,7 +37,7 @@ public class InteractableButton : InteractableBase
 	/// </summary>
 	public override void OnCustomPointerEnter()
 	{
-		SetCursor(buttonComponent.interactable);
+		SetCursor(buttonComponent.interactable ? customCursor : null);
 		hovering = true;
 	}
 
@@ -46,7 +46,7 @@ public class InteractableButton : InteractableBase
 	/// </summary>
 	public override void OnCustomPointerExit()
 	{
-		SetCursor(false);
+		SetCursor(null);
 		hovering = false;
 	}
 }

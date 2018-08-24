@@ -1,24 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Class that manages the scrollbar visibility when user hovers over the list that this class is attached to
+/// </summary>
 public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+	[SerializeField] private InteractableScrollbar scrollbarClickManager;
 
 	[SerializeField] private GameObject scrollBar, scrollbarHandle;
 
-	private bool hovering;
-	private bool mouseHeldDownOnScrollbar;
-
-	public bool MouseHeldDownOnScrollbar
-	{
-		set
-		{
-			mouseHeldDownOnScrollbar = value;
-
-			if (!mouseHeldDownOnScrollbar && !hovering)
-				AnimateScrollbar(false);
-		}
-	}
+	public bool Hovering { get; set; }
 
 	/// <summary>
 	/// Animates the scrollbar into visibility
@@ -27,7 +19,7 @@ public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointe
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		AnimateScrollbar(true);
-		hovering = true;
+		Hovering = true;
 	}
 
 	/// <summary>
@@ -36,17 +28,17 @@ public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if (!mouseHeldDownOnScrollbar)
+		if (!scrollbarClickManager.MouseHeldDown)
 			AnimateScrollbar(false);
 
-		hovering = false;
+		Hovering = false;
 	}
 
 	/// <summary>
 	/// Animates the scrollbar graphic
 	/// </summary>
 	/// <param name="isHovered"> If the mouse is hovered over the list or not </param>
-	private void AnimateScrollbar(bool isHovered)
+	public void AnimateScrollbar(bool isHovered)
 	{
 		scrollBar.AnimateGraphic(isHovered ? 1f : 0f, 0.15f);
 		scrollbarHandle.AnimateGraphic(isHovered ? 1f : 0f, 0.15f);
