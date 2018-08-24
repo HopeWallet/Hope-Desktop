@@ -83,6 +83,10 @@ namespace Hope.Security.ProtectedTypes.Types.Base
             SetValue(GetBytes(value));
         }
 
+        /// <summary>
+        /// Sets and updates the byte value of this <see cref="ProtectedType"/>.
+        /// </summary>
+        /// <param name="byteValue"> The byte value to set this <see cref="ProtectedType"/>. </param>
         [SecureCallEnd]
         [ReflectionProtect]
         public void SetValue(byte[] byteValue)
