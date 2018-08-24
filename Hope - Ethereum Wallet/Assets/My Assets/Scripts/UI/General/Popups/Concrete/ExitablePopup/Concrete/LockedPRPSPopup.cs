@@ -43,7 +43,8 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     {
         lockedPRPSManager.OnLockedPRPSUpdated -= UpdateList;
         lockedPRPSItems.ForEach(item => item.EndButtonUpdates());
-    }
+		TopBarButtons.popupClosed?.Invoke();
+	}
 
     private void UpdateList()
     {

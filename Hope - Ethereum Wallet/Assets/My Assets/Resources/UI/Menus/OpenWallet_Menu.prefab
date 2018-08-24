@@ -176,7 +176,6 @@ GameObject:
   - component: {fileID: 222059738508506734}
   - component: {fileID: 114812495613199592}
   - component: {fileID: 114948652733704502}
-  - component: {fileID: 114942225647389056}
   - component: {fileID: 114415623031196246}
   m_Layer: 5
   m_Name: LockPRPS_Button
@@ -300,7 +299,6 @@ GameObject:
   - component: {fileID: 222039697764855710}
   - component: {fileID: 114227901902918574}
   - component: {fileID: 114217626002309264}
-  - component: {fileID: 114672522175966226}
   - component: {fileID: 114527263467228078}
   m_Layer: 5
   m_Name: Send_Button
@@ -527,7 +525,6 @@ GameObject:
   - component: {fileID: 222988023383444172}
   - component: {fileID: 114552693142350432}
   - component: {fileID: 114631997620217972}
-  - component: {fileID: 114178514782610210}
   - component: {fileID: 114829672265865234}
   m_Layer: 5
   m_Name: Receive_Button
@@ -846,6 +843,7 @@ GameObject:
   - component: {fileID: 224908809276809134}
   - component: {fileID: 222157094886977962}
   - component: {fileID: 114801445288602898}
+  - component: {fileID: 114469260788164366}
   m_Layer: 5
   m_Name: Top_Bar
   m_TagString: Untagged
@@ -1000,7 +998,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
   backButton: {fileID: 0}
-  backgroundVignette: {fileID: 0}
   lockPurposeSection: {fileID: 1828604087628714}
   lockPurposeNotificationSection: {fileID: 1520066508619918}
   assetText: {fileID: 114188047697984526}
@@ -1448,17 +1445,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114178514782610210
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1597676208905346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4aa4c15ff6e62b647a735b1f84d37e4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114188047697984526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1841,7 +1827,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -2375,6 +2361,17 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114469260788164366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1942771368931564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5284573304b9784f835d5f81769f6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114472997601384644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2473,7 +2470,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -3115,7 +3112,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -3291,17 +3288,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114672522175966226
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1282134867849492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0d9eedcc52d2c4592982f49b45f6e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114685509459113228
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3343,7 +3329,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -4020,17 +4006,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitableButton: 1
---- !u!114 &114942225647389056
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187215074320998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1e721afec2bb8d4887411e07cb358a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114948652733704502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4060,7 +4035,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted

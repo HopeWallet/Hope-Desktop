@@ -38,6 +38,8 @@ public static class InputFieldUtils
         inputField.text = amount;
     }
 
+
+	//DELETE THIS METHOD BELOW WHEN ALL THE UI ELEMENTS HAVE BEEN REDONE TO FIT THE NEW UI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static void RestrictDecimalValue(this TMP_InputField inputField, int decimalPlaces)
 	{
 		string amount = inputField.text;

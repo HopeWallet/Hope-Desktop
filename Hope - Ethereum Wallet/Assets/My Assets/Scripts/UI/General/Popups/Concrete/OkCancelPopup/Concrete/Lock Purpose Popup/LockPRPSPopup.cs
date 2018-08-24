@@ -101,8 +101,9 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         Gas.Stop();
         Amount.Stop();
         Time.Stop();
+		TopBarButtons.popupClosed?.Invoke();
 
-        etherBalanceObserver.UnsubscribeObservable(this);
+		etherBalanceObserver.UnsubscribeObservable(this);
     }
 
     /// <summary>
