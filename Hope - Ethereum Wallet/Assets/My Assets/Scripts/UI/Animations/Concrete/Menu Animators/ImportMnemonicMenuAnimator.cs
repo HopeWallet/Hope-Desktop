@@ -15,6 +15,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	[SerializeField] private GameObject nextButton;
 	[SerializeField] private GameObject pasteButtonCheckMarkIcon;
 	[SerializeField] private GameObject pasteButtonErrorIcon;
+	[SerializeField] private GameObject loadingIcon;
 
 	public GameObject nextButtonErrorIcon;
 	public GameObject nextButtonErrorMessage;
@@ -34,6 +35,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	private void Awake()
 	{
 		importMnemonicMenu = transform.GetComponent<ImportMnemonicMenu>();
+		importMnemonicMenu.OnWalletLoading += CreateWallet;
 
 		wordInputFields = new HopeInputField[24];
 		wordTextObjects = new GameObject[24];
@@ -228,5 +230,12 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 			if (!animatingIcon)
 				AnimateIcon(pasteButtonErrorIcon);
 		}
+	}
+
+	private void CreateWallet()
+	{
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		loadingIcon.SetActive(true);
+		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
 	}
 }

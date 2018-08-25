@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.Ethereum;
 using Nethereum.HdWallet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,8 @@ using Zenject;
 /// </summary>
 public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>, IEnterButtonObservable, ITabButtonObservable
 {
+	public override event Action OnWalletLoading;
+
 	[SerializeField] private Button nextButton;
 
 	[SerializeField] private HopeInputField[] wordFields;
@@ -19,7 +22,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
 
-    public List<Selectable> SelectableFields { get; } = new List<Selectable>();
+	public List<Selectable> SelectableFields { get; } = new List<Selectable>();
 
 	public Selectable LastSelectableField { get; set; }
 
@@ -96,8 +99,11 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     public override void LoadWallet()
     {
         if (CheckCreatedMnemonic())
-            userWalletManager.CreateWallet();
-    }
+		{
+			OnWalletLoading?.Invoke();
+			userWalletManager.CreateWallet();
+		}
+	}
 
     /// <summary>
     /// Checks if data already exists in the DynamicDataCache.

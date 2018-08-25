@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Zenject;
 
 /// <summary>
@@ -7,6 +8,8 @@ using Zenject;
 /// <typeparam name="T"> The type of the class responsible for loading the wallet via create or unlock. </typeparam>
 public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
 {
+	public abstract event Action OnWalletLoading;
+
     protected UserWalletManager userWalletManager;
 
     /// <summary>

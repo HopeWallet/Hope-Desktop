@@ -8,12 +8,12 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject[] checkBoxes;
+	[SerializeField] private GameObject loadingIcon;
 
-    private DynamicDataCache dynamicDataCache;
+	private DynamicDataCache dynamicDataCache;
     private ConfirmMnemonicMenu confirmMnemonicMenu;
 
     private int wordIndex;
-    private bool errorIconVisible;
 
     /// <summary>
     /// Adds the DynamicDataCache dependency.
@@ -23,25 +23,14 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     public void Construct(DynamicDataCache dynamicDataCache) => this.dynamicDataCache = dynamicDataCache;
 
     /// <summary>
-    /// Makes button interactable if the errorIcon is set to visible
-    /// </summary>
-    private bool ErrorIconVisible
-    {
-        set
-        {
-            errorIconVisible = value;
-            if (errorIconVisible) nextButton.GetComponent<Button>().interactable = false;
-        }
-    }
-
-    /// <summary>
     /// Initializes the necessary variables that haven't already been initialized in the inspector
     /// </summary>
     private void Awake()
     {
         confirmMnemonicMenu = GetComponent<ConfirmMnemonicMenu>();
+		confirmMnemonicMenu.OnWalletLoading += CreateWallet;
 
-        wordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+		wordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
     }
 
@@ -144,4 +133,11 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
 			nextButton.GetComponent<Button>().interactable = false;
 		}
     }
+
+	private void CreateWallet()
+	{
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
+		loadingIcon.SetActive(true);
+		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
+	}
 }
