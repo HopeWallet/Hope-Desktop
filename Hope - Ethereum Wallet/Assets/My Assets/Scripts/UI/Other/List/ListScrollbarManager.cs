@@ -8,7 +8,7 @@ public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointe
 {
 	[SerializeField] private InteractableScrollbar scrollbarClickManager;
 
-	[SerializeField] private GameObject scrollBar, scrollbarHandle;
+	[SerializeField] private GameObject scrollbarHandle;
 
 	public bool Hovering { get; set; }
 
@@ -38,9 +38,5 @@ public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// Animates the scrollbar graphic
 	/// </summary>
 	/// <param name="isHovered"> If the mouse is hovered over the list or not </param>
-	public void AnimateScrollbar(bool isHovered)
-	{
-		scrollBar.AnimateGraphic(isHovered ? 1f : 0f, 0.15f);
-		scrollbarHandle.AnimateGraphic(isHovered ? 1f : 0f, 0.15f);
-	}
+	public void AnimateScrollbar(bool isHovered) => scrollbarHandle.AnimateGraphic(isHovered ? 1f : 0f, 0.15f);
 }

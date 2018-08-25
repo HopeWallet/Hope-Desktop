@@ -8,25 +8,12 @@ public class LockedPRPSPopupAnimator : UIAnimator
 	[SerializeField] private GameObject lockedPRPSList;
 	[SerializeField] private GameObject lockPRPSButton;
 
-	[SerializeField] private GameObject pendingIcon;
-
 	private Transform listTransform;
-
-	private bool pending;
 
     /// <summary>
     /// Array of initial locked purpose items.
     /// </summary>
     public GameObject[] LockedPurposeItems { get; set; }
-
-	public bool Pending
-	{
-		set
-		{
-			pending = value;
-			SetPendingIcon(pending);
-		}
-	}
 
 	/// <summary>
 	/// Initializes the listTransform
@@ -76,20 +63,5 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
 			listTransform.GetChild(index).gameObject.AnimateScaleX(1f, 0.1f, () => AnimateList(++index));
-	}
-
-	/// <summary>
-	/// Animates the pending icon in or out
-	/// </summary>
-	/// <param name="active"> Checks if animating icon in or out </param>
-	private void SetPendingIcon(bool active)
-	{
-		if (active)
-			pendingIcon.SetActive(active);
-
-		pendingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.2f);
-
-		if (!active)
-			pendingIcon.SetActive(false);
 	}
 }
