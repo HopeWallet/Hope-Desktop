@@ -1000,7 +1000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6f5a6b3e8e4214db3ecfc63be22501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollbarClickManager: {fileID: 114983496848245204}
+  interactableScrollbar: {fileID: 114983496848245204}
   scrollbarHandle: {fileID: 1855497761300720}
 --- !u!114 &114026699628265170
 MonoBehaviour:
@@ -3149,7 +3149,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1061096469329880}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -3924,7 +3924,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1959133284492490}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -4110,7 +4110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6f5a6b3e8e4214db3ecfc63be22501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollbarClickManager: {fileID: 114221114449810660}
+  interactableScrollbar: {fileID: 114221114449810660}
   scrollbarHandle: {fileID: 1494606818907576}
 --- !u!114 &114965985044274286
 MonoBehaviour:

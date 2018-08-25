@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 222970666874958804}
   - component: {fileID: 114756006289069916}
   - component: {fileID: 114632771777356878}
-  - component: {fileID: 114648479858316172}
+  - component: {fileID: 114831653418540468}
   m_Layer: 5
   m_Name: WalletListScrollbar
   m_TagString: Untagged
@@ -870,18 +870,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Scrollbar+ScrollEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114648479858316172
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1619388506254856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb4c1305d2836464286639cd7a6e64b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  listScrollbarManager: {fileID: 114997736163962078}
 --- !u!114 &114649967704347112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1141,7 +1129,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1619388506254856}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -1285,6 +1273,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114831653418540468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1619388506254856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4c1305d2836464286639cd7a6e64b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listScrollbarManager: {fileID: 114997736163962078}
 --- !u!114 &114842826615030292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1374,7 +1374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6f5a6b3e8e4214db3ecfc63be22501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollbarClickManager: {fileID: 114648479858316172}
+  interactableScrollbar: {fileID: 114831653418540468}
   scrollbarHandle: {fileID: 1710498270665088}
 --- !u!222 &222091160899225740
 CanvasRenderer:

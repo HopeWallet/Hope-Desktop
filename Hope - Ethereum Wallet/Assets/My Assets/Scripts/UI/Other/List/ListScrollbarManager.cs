@@ -6,11 +6,17 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	[SerializeField] private InteractableScrollbar scrollbarClickManager;
-
+	[SerializeField] private InteractableScrollbar interactableScrollbar;
 	[SerializeField] private GameObject scrollbarHandle;
 
+	//private InteractableScrollbar interactableScrollbar;
+
 	public bool Hovering { get; set; }
+
+	/// <summary>
+	/// Gets the InteractableScrollbar component
+	/// </summary>
+	//private void Awake() => interactableScrollbar = scrollbarHandle.GetComponent<InteractableScrollbar>();
 
 	/// <summary>
 	/// Animates the scrollbar into visibility
@@ -28,7 +34,7 @@ public class ListScrollbarManager : MonoBehaviour, IPointerEnterHandler, IPointe
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		if (!scrollbarClickManager.MouseHeldDown)
+		if (!interactableScrollbar.MouseHeldDown)
 			AnimateScrollbar(false);
 
 		Hovering = false;
