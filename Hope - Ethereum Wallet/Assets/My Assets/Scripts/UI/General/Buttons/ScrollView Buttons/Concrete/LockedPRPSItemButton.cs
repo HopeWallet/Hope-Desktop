@@ -111,8 +111,8 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         var multiplier = (decimal)releaseTimeDifference / minPercentageTime / 100;
 
         lockPeriodDone = currentTimeDifference < 0;
-        purposeAmountText.text = lockedPurpose.ConvertDecimalToString().LimitEnd(15, "...");
-        dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(15, "...");
+        purposeAmountText.text = lockedPurpose.ConvertDecimalToString().LimitEnd(12, "...");
+        dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(11, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
         timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
     }
