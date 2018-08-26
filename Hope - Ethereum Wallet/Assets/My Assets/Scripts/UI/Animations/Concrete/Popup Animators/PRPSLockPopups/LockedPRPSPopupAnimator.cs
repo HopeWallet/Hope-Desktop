@@ -5,10 +5,9 @@ using UnityEngine.UI;
 public class LockedPRPSPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject topText;
-	[SerializeField] private GameObject lockedPRPSList;
+	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject lockPRPSButton;
-
-	private Transform listTransform;
+	[SerializeField] private Transform listTransform;
 
     /// <summary>
     /// Array of initial locked purpose items.
@@ -16,17 +15,12 @@ public class LockedPRPSPopupAnimator : UIAnimator
     public GameObject[] LockedPurposeItems { get; set; }
 
 	/// <summary>
-	/// Initializes the listTransform
-	/// </summary>
-	private void Awake() => listTransform = lockedPRPSList.transform.GetChild(0).GetChild(0);
-
-	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		topText.AnimateScaleX(1f, 0.2f);
-		lockedPRPSList.AnimateScaleX(1f, 0.25f, () => AnimateList(0));
+		topText.AnimateScaleX(1f, 0.2f, () => AnimateList(0));
+		line.AnimateScaleX(1f, 0.25f);
 		lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 	}
 
@@ -52,7 +46,7 @@ public class LockedPRPSPopupAnimator : UIAnimator
 			return;
 		}
 
-		if (index == 6)
+		if (index == 5)
 		{
 			for (int i = index; i < listTransform.childCount; i++)
 				listTransform.GetChild(i).gameObject.transform.localScale = new Vector2(1f, 1f);
