@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 224620152638376046}
   - component: {fileID: 114004171531926536}
   - component: {fileID: 114938370622360762}
-  - component: {fileID: 114705492134360460}
+  - component: {fileID: 114091939929118374}
   m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
@@ -1171,6 +1171,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114091939929118374
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1163387186889724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5194351d0bfa74c46adabb7c95827431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowText: {fileID: 1098765926871636}
+  fastText: {fileID: 1300198106693706}
 --- !u!114 &114115193577728460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3236,19 +3249,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitableButton: 1
---- !u!114 &114705492134360460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1163387186889724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d289970db92b394b94f752706270fa6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slowText: {fileID: 1098765926871636}
-  fastText: {fileID: 1300198106693706}
 --- !u!114 &114720095926320704
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5070,7 +5070,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -23.1, y: -5.4}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 75.83, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224739165980966014
 RectTransform:

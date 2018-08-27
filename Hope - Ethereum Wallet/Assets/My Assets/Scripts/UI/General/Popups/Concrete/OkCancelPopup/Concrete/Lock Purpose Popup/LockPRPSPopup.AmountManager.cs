@@ -80,7 +80,9 @@ public sealed partial class LockPRPSPopup
 		/// </summary>
 		private void MaxChanged()
 		{
-			amountInputField.Text = maxToggle.IsToggledOn ? MaxSendableAmount.ToString() : AmountToLock.ToString();
+			if (maxToggle.IsToggledOn)
+				amountInputField.Text = MaxSendableAmount.ToString();
+
 			CheckIfValidAmount();
 		}
 
