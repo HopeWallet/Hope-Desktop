@@ -5,6 +5,7 @@ public class LockPRPSPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject prpsTokenSection;
 	[SerializeField] private GameObject dubiTokenSection;
+	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject purposeSection;
 	[SerializeField] private GameObject transactionSpeedSection;
 	[SerializeField] private GameObject timePeriodSection;
