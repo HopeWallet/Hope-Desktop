@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class LockPRPSPopupAnimator : UIAnimator
 {
@@ -19,6 +18,7 @@ public class LockPRPSPopupAnimator : UIAnimator
 	{
 		prpsTokenSection.AnimateScale(1f, 0.1f);
 		dubiTokenSection.AnimateScale(1f, 0.1f);
+		line.AnimateScaleX(1f, 0.125f);
 		purposeSection.AnimateScaleX(1f, 0.15f);
 		transactionSpeedSection.AnimateScaleX(1f, 0.2f);
 		timePeriodSection.AnimateScaleX(1f, 0.25f);

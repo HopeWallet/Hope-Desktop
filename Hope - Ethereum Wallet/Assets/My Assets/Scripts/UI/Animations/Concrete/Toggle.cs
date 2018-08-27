@@ -9,7 +9,7 @@ public class Toggle : MonoBehaviour
 	[SerializeField] private GameObject toggleBackground;
 	[SerializeField] private GameObject toggleCircle;
 
-	private readonly Color fadedColor = new Color(0.35f, 0.35f, 0.35f);
+	private readonly Color fadedColor = new Color(0.4f, 0.4f, 0.4f);
 
 	private Action toggleClick;
 
