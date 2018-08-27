@@ -16,7 +16,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 									sixMonthsButton,
 									twelveMonthsButton;
 
-    [SerializeField] private TMP_InputField amountInputField;
+    [SerializeField] private HopeInputField amountInputField;
 
     [SerializeField] private Slider slider;
 
@@ -26,9 +26,6 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 									  dubiRewardText;
 
     [SerializeField] private Toggle maxToggle;
-
-	[SerializeField] private InteractableIcon menuInfoIcon,
-											  purposeErrorIcon;
 
     private LockedPRPSManager lockedPRPSManager;
     private EtherBalanceObserver etherBalanceObserver;
@@ -83,15 +80,6 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
         Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
 	}
-	
-    /// <summary>
-    /// Initializes the PopupManager for the info message.
-    /// </summary>
-    protected override void OnStart()
-    {
-		menuInfoIcon.PopupManager = popupManager;
-		purposeErrorIcon.PopupManager = popupManager;
-	}
 
 	/// <summary>
 	/// Closes all the managers for the LockPRPSPopup and the ether balance observer.
@@ -111,7 +99,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
     /// </summary>
     private void Update()
     {
-        okButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && Amount.IsValid && Time.IsValid;
+        okButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && !amountInputField.Error && Time.IsValid;
     }
 
     /// <summary>

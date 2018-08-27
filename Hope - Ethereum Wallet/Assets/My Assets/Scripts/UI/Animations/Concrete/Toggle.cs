@@ -14,7 +14,7 @@ public class Toggle : MonoBehaviour
 
 	private Action toggleClick;
 
-	public bool IsToggledOn { get; private set; }
+	public bool IsToggledOn { get; set; }
 
 	/// <summary>
 	/// Sets the button listeners

@@ -12,14 +12,6 @@ public class LockPRPSPopupAnimator : UIAnimator
 	[SerializeField] private GameObject noteText;
 	[SerializeField] private GameObject lockPRPSButton;
 
-	[SerializeField] private InteractableIcon purposeErrorIcon;
-
-    private void Start()
-    {
-		LockPRPSPopup lockPRPSPopup = GetComponent<LockPRPSPopup>();
-        lockPRPSPopup.Amount.OnLockAmountChanged += () => AnimateErrorIcon(purposeErrorIcon, lockPRPSPopup.Amount.IsValid || lockPRPSPopup.Amount.IsEmpty);
-    }
-
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
@@ -33,11 +25,4 @@ public class LockPRPSPopupAnimator : UIAnimator
 		noteText.AnimateScaleX(1f, 0.275f);
 		lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
-
-	/// <summary>
-	/// Animates the error icon
-	/// </summary>
-	/// <param name="icon"> The icon being animated </param>
-	/// <param name="isValidField"> Whether animating the icon in or out </param>
-	private void AnimateErrorIcon(InteractableIcon icon, bool isValidField) => icon.AnimateIcon(isValidField ? 0f : 1f);
 }
