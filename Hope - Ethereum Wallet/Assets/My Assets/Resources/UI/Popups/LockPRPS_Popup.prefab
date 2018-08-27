@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 222655273764152240}
   - component: {fileID: 114701989801431602}
   - component: {fileID: 114311651784848402}
+  - component: {fileID: 114822891643480006}
   m_Layer: 5
   m_Name: Toggle_Background
   m_TagString: Untagged
@@ -875,6 +876,7 @@ GameObject:
   - component: {fileID: 222935189973363224}
   - component: {fileID: 114470630378031390}
   - component: {fileID: 114417047495993744}
+  - component: {fileID: 114227982592237804}
   m_Layer: 5
   m_Name: Toggle_Circle
   m_TagString: Untagged
@@ -1549,6 +1551,18 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114227982592237804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1973409803628232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 0
 --- !u!114 &114241617074029544
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2491,7 +2505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3193,7 +3207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3526,6 +3540,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114822891643480006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1308327894351482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c56e57797e888f429fde0c998520681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitableButton: 0
 --- !u!114 &114832158910017344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4793,7 +4819,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -239.3}
+  m_AnchoredPosition: {x: 0, y: -232.65}
   m_SizeDelta: {x: 444.5, y: 16.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224493534281134746

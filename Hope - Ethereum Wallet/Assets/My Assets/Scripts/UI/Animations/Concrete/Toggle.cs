@@ -9,8 +9,7 @@ public class Toggle : MonoBehaviour
 	[SerializeField] private GameObject toggleBackground;
 	[SerializeField] private GameObject toggleCircle;
 
-	private readonly Color greenColor = new Color(0.14f, 1f, 0.84f);
-	private readonly Color fadedColor = new Color(1f, 1f, 1f);
+	private readonly Color fadedColor = new Color(0.35f, 0.35f, 0.35f);
 
 	private Action toggleClick;
 
@@ -45,8 +44,8 @@ public class Toggle : MonoBehaviour
 	public void AnimateImages()
 	{
 		toggleCircle.AnimateTransformX(IsToggledOn ? 12f : -12f, 0.1f);
-		toggleCircle.GetComponent<Image>().DOColor(IsToggledOn ? greenColor : fadedColor, 0.1f);
-		toggleBackground.GetComponent<Image>().DOColor(IsToggledOn ? greenColor : fadedColor, 0.1f);
+		toggleCircle.GetComponent<Image>().DOColor(IsToggledOn ? UIColors.Green : fadedColor, 0.1f);
+		toggleBackground.GetComponent<Image>().DOColor(IsToggledOn ? UIColors.Green : fadedColor, 0.1f);
 
 		toggleClick?.Invoke();
 	}
