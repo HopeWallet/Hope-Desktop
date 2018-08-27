@@ -80,7 +80,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         etherBalanceObserver.SubscribeObservable(this);
 		buttonClickObserver.SubscribeObservable(this);
 
-        Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText);
+        Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
         Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
         Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
 	}

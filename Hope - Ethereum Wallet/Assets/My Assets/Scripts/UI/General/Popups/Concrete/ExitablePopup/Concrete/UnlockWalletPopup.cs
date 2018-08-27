@@ -1,5 +1,6 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -8,9 +9,9 @@ using Zenject;
 /// </summary>
 public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup>, IEnterButtonObservable
 {
-    public Button unlockWalletButton;
+    [SerializeField] private Button unlockWalletButton;
 
-    public HopeInputField passwordField;
+	[SerializeField] private HopeInputField passwordField;
 
     private UIManager uiManager;
     private UserWalletManager userWalletManager;

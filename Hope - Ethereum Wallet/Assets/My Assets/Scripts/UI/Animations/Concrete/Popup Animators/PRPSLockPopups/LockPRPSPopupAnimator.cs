@@ -16,6 +16,7 @@ public class LockPRPSPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		purposeSection.transform.GetChild(0).GetComponent<HopeInputField>().inputFieldBase.ActivateInputField();
 		prpsTokenSection.AnimateScale(1f, 0.1f);
 		dubiTokenSection.AnimateScale(1f, 0.1f);
 		line.AnimateScaleX(1f, 0.125f);

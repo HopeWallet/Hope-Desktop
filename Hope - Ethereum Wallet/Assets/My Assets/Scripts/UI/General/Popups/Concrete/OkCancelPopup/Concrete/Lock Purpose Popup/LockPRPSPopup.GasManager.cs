@@ -16,6 +16,7 @@ public sealed partial class LockPRPSPopup
         private readonly LockPRPSManager lockPRPSManager;
         private readonly TransactionSpeedSlider transactionSpeedSlider;
         private readonly TMP_Text transactionFeeText;
+		private readonly LockPRPSPopup lockPRPSPopup;
 
         /// <summary>
         /// The approximate transaction fee of the transaction based on the gas limit and gas price.
@@ -48,10 +49,12 @@ public sealed partial class LockPRPSPopup
             LockPRPSManager lockPRPSManager,
             GasPriceObserver gasPriceObserver,
             Slider slider,
-            TMP_Text transactionFeeText)
+            TMP_Text transactionFeeText,
+			LockPRPSPopup lockPRPSPopup)
         {
             this.lockPRPSManager = lockPRPSManager;
             this.transactionFeeText = transactionFeeText;
+			this.lockPRPSPopup = lockPRPSPopup;
 
             transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
             transactionSpeedSlider.Start();
@@ -72,12 +75,8 @@ public sealed partial class LockPRPSPopup
         private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
-
-			//bool outOfEther = 
-			
-			//transactionFeeText.text = !outOfEther ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Out of Ether!";
-
-			transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
-        }
+			transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
+			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
+		}
     }
 }
