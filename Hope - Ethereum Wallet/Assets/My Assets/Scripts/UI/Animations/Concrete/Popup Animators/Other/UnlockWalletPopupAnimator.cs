@@ -25,6 +25,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
     /// </summary>
     protected override void AnimateUniqueElementsIn()
 	{
+		passwordInputField.inputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
 		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}

@@ -10,7 +10,7 @@ using Random = System.Random;
 /// <summary>
 /// Class used for locking purpose.
 /// </summary>
-public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable
+public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable, IEnterButtonObservable
 {
     [SerializeField] private Button threeMonthsButton,
 									sixMonthsButton,
@@ -31,6 +31,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
     private EtherBalanceObserver etherBalanceObserver;
     private UserWalletManager userWalletManager;
     private Hodler hodlerContract;
+	private ButtonClickObserver buttonClickObserver;
 
     /// <summary>
     /// Manages the gas for the LockPRPSPopup.
@@ -68,13 +69,16 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         GasPriceObserver gasPriceObserver,
         EtherBalanceObserver etherBalanceObserver,
         Hodler hodlerContract,
-        UserWalletManager userWalletManager)
+        UserWalletManager userWalletManager,
+		ButtonClickObserver buttonClickObserver)
     {
         this.lockedPRPSManager = lockedPRPSManager;
         this.etherBalanceObserver = etherBalanceObserver;
         this.userWalletManager = userWalletManager;
         this.hodlerContract = hodlerContract;
+		this.buttonClickObserver = buttonClickObserver;
         etherBalanceObserver.SubscribeObservable(this);
+		buttonClickObserver.SubscribeObservable(this);
 
         Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText);
         Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
@@ -92,7 +96,8 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 		TopBarButtons.popupClosed?.Invoke();
 
 		etherBalanceObserver.UnsubscribeObservable(this);
-    }
+		buttonClickObserver.UnsubscribeObservable(this);
+	}
 
     /// <summary>
     /// Updates the lock button interactability based on the managers.
@@ -136,4 +141,14 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
         return val;
     }
+
+	/// <summary>
+	/// The enter button is pressed
+	/// </summary>
+	/// <param name="clickType"> The ClickType </param>
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType == ClickType.Down && okButton.interactable && popupManager.ActivePopupType != typeof(ConfirmLockPopup))
+			okButton.Press();
+	}
 }
