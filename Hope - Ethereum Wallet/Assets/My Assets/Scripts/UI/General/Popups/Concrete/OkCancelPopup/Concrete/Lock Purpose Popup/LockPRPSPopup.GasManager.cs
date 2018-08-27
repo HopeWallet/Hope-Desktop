@@ -72,7 +72,12 @@ public sealed partial class LockPRPSPopup
         private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
-            transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
+
+			//bool outOfEther = 
+			
+			//transactionFeeText.text = !outOfEther ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Out of Ether!";
+
+			transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
         }
     }
 }
