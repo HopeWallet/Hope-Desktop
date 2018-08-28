@@ -30,7 +30,7 @@ public sealed class TokenListManager
         TokenInfo tokenInfo = currentToken.TokenInfo;
 
         if (!OldTokenList.Select(token => token.TokenInfo.Address.ToLower()).Contains(address))
-            OldTokenList.Add(new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, !enabled, listed));
+            OldTokenList.Add(new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, currentToken.Enabled, currentToken.Listed));
 
         addableTokens[address] = new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, enabled, listed);
     }
