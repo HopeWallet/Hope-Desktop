@@ -8,7 +8,6 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
     [SerializeField] private TMP_Text tokenDisplayText;
     [SerializeField] private Image tokenIcon;
     [SerializeField] private CheckBox checkBox;
-	[SerializeField] private Button removeButton;
 
     private TokenListManager tokenListManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -22,12 +21,6 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
         checkBox.OnValueChanged += OnCheckboxChanged;
 
 		removeButton.onClick.AddListener(RemoveThisToken);
-	}
-
-	private void RemoveThisToken()
-	{
-		//tokenListManager.RemoveToken();
-		Destroy(transform.parent.gameObject);
 	}
 
     protected override void OnValueUpdated(AddableTokenInfo info)
