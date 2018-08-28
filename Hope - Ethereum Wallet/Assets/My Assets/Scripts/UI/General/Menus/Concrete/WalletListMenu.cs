@@ -10,13 +10,13 @@ using Zenject;
 /// </summary>
 public sealed class WalletListMenu : Menu<WalletListMenu>
 {
+	public event Action<bool> BottomButtonsVisible;
+
 	[SerializeField] private Button deleteButton, editButton, signInButton, newWalletButton;
 
 	[SerializeField] private Transform walletList;
 
 	private int activeWalletNum = 1;
-
-	public event Action<bool> BottomButtonsVisible;
 
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
@@ -71,6 +71,9 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 		newWalletButton.onClick.AddListener(CreateNewWallet);
 	}
 
+	/// <summary>
+	/// Resets the bottom buttons and goes back to the ChooseWallet_Menu
+	/// </summary>
 	protected override void OnBackPressed()
 	{
 		base.OnBackPressed();
@@ -94,12 +97,19 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	{
 	}
 
+	/// <summary>
+	/// Opens up the OpenWallet_Menu
+	/// </summary>
 	private void UnlockWallet()
 	{
 		dynamicDataCache.SetData("walletnum", activeWalletNum);
 		popupManager.GetPopup<UnlockWalletPopup>();
 	}
 
+	/// <summary>
+	/// A new wallet has been clicked
+	/// </summary>
+	/// <param name="newWalletNum"> The index of the button in the hiearchy </param>
 	public void SetNewActiveWallet(int newWalletNum)
 	{
 		BottomButtonsVisible?.Invoke(true);
@@ -109,6 +119,11 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 		activeWalletNum = newWalletNum;
 	}
 
+	/// <summary>
+	/// Changes the visuals of the active button
+	/// </summary>
+	/// <param name="objectTransform"> The transform of the given button </param>
+	/// <param name="newActiveWallet"> Whether the button is active or not </param>
 	private void SetActiveButton(Transform objectTransform, bool newActiveWallet)
 	{
 		objectTransform.GetComponent<Button>().interactable = !newActiveWallet;
