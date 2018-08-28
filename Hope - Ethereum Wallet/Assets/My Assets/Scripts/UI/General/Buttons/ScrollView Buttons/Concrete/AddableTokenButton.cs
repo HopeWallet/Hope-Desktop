@@ -19,8 +19,6 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
         this.tradableAssetImageManager = tradableAssetImageManager;
 
         checkBox.OnValueChanged += OnCheckboxChanged;
-
-		removeButton.onClick.AddListener(RemoveThisToken);
 	}
 
     protected override void OnValueUpdated(AddableTokenInfo info)
