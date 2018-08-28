@@ -32,7 +32,7 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
 
     private void OnDeleteClicked()
     {
-
+        GetComponentInParent<ModifyTokensPopup>().RemoveToken(ButtonInfo);
     }
 
     private void OnCheckboxChanged(bool enabled)

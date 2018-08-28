@@ -43,6 +43,15 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
             AddableTokens.Add(CreateNewButton(addableTokenInfo));
     }
 
+    public void RemoveToken(AddableTokenInfo addableTokenInfo)
+    {
+        var itemToRemove = AddableTokens.Single(info => info.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address));
+        AddableTokens.Remove(itemToRemove);
+        Destroy(itemToRemove.transform.parent.gameObject);
+
+        tokenListManager.UpdateToken(addableTokenInfo.TokenInfo.Address, false, false);
+    }
+
     protected override void OnStart()
     {
         addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
