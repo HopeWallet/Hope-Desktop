@@ -12,7 +12,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     [SerializeField] private Transform tokenListTransform;
     [SerializeField] private Button addCustomToken, confirmButton;
-    [SerializeField] private TMP_InputField searchBar;
+    [SerializeField] private HopeInputField searchBar;
 
     private AddableTokenButton.Factory addableTokenButtonFactory;
     private TokenContractManager tokenContractManager;
@@ -46,7 +46,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     protected override void OnStart()
     {
         addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
-        searchBar.onValueChanged.AddListener(SearchInputChanged);
+        searchBar.OnInputUpdated += SearchInputChanged;
         confirmButton.onClick.AddListener(ConfirmButtonClicked);
     }
 
@@ -79,14 +79,11 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         popupManager.CloseActivePopup();
     }
 
-    private void CustomTokenButtonClicked()
-    {
-        popupManager.GetPopup<AddTokenPopup>(true);
-    }
+	private void CustomTokenButtonClicked() => popupManager.GetPopup<AddTokenPopup>(true);
 
-    private void SearchInputChanged(string search)
+	private void SearchInputChanged()
     {
-        search = search.ToUpper();
+        string search = searchBar.Text.ToUpper();
 
         AddableTokens
             .Where(token => token.ButtonInfo.TokenInfo.Name.ToUpper().Contains(search) || token.ButtonInfo.TokenInfo.Symbol.Contains(search))
@@ -95,7 +92,11 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         AddableTokens
             .Where(token => !token.ButtonInfo.TokenInfo.Name.ToUpper().Contains(search) && !token.ButtonInfo.TokenInfo.Symbol.Contains(search))
             .ForEach(token => token.transform.parent.gameObject.SetActive(false));
-    }
+
+		var visibleTokens = AddableTokens.Where(token => token.gameObject.activeInHierarchy).ToList();
+
+		searchBar.Error = visibleTokens.Count == 0;
+	}
 
     private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)
     {

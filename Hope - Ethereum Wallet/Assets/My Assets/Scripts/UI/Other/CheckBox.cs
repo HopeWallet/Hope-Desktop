@@ -34,9 +34,10 @@ public sealed class CheckBox : MonoBehaviour
     /// <param name="toggledOn"> Whether it should be toggled on or off. </param>
     public void Toggle(bool toggledOn)
     {
-        checkMarkIcon.transform.localScale = toggledOn ? Vector2.one : Vector2.zero;
-        checkMarkIcon.GetComponent<Image>().color = toggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
-        ToggledOn = toggledOn;
+		ToggledOn = toggledOn;
+		gameObject.GetComponent<Image>().color = ToggledOn ? UIColors.Green : UIColors.Blue;
+        checkMarkIcon.transform.localScale = ToggledOn ? Vector2.one : Vector2.zero;
+        checkMarkIcon.GetComponent<Image>().color = ToggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
     }
 
     /// <summary>
@@ -44,8 +45,9 @@ public sealed class CheckBox : MonoBehaviour
     /// </summary>
 	private void OnCheckBoxClicked()
 	{
-		checkMarkIcon.AnimateGraphicAndScale(ToggledOn ? 0f : 1f, ToggledOn ? 0f : 1f, 0.15f);
-        ToggledOn = !ToggledOn;
+		ToggledOn = !ToggledOn;
+		checkMarkIcon.AnimateGraphicAndScale(ToggledOn ? 1f : 0f, ToggledOn ? 1f : 0f, 0.15f);
+		gameObject.AnimateColor(ToggledOn ? UIColors.Green : UIColors.Blue, 0.15f);
 
         OnValueChanged?.Invoke(ToggledOn);
 	}

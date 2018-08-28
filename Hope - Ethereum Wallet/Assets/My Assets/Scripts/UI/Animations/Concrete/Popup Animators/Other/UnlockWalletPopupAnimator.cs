@@ -62,6 +62,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		{
 			loadingIcon.SetActive(true);
             Animating = true;
+			passwordInputField.inputFieldBase.DeactivateInputField();
 		}
 
 		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);

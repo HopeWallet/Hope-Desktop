@@ -11,6 +11,7 @@ public class HopeInputField : MonoBehaviour
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
 	[SerializeField] private bool noSpaces;
+	[SerializeField] private bool placeholderFadeAway;
 
 	public InputField inputFieldBase;
 
@@ -71,7 +72,13 @@ public class HopeInputField : MonoBehaviour
 	{
 		bool emptyString = string.IsNullOrEmpty(Text);
 
-		if (placeholder != null) placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
+		if (placeholder != null)
+		{
+			if (placeholderFadeAway)
+				placeholder.AnimateColor(emptyString ? UIColors.LightGrey : new Color(1f, 1f, 1f, 0f), 0.15f);
+			else
+				placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
+		}
 		inputFieldBase.gameObject.AnimateColor(emptyString ? UIColors.White : Error ? UIColors.Red : UIColors.Green, 0.15f);
 		if (errorIcon != null) errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
 		if (errorMessage != null) errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);

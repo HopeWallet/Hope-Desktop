@@ -3,9 +3,10 @@ using UnityEngine.UI;
 
 public class ModifyTokenListPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject tokenList;
 	[SerializeField] private GameObject customTokenButton;
-	[SerializeField] private GameObject searchSection;
+	[SerializeField] private GameObject searchInputField;
+	[SerializeField] private GameObject line;
+	[SerializeField] private GameObject tokenList;
 	[SerializeField] private GameObject confirmButton;
 
 	private Transform tokenTransform;
@@ -29,7 +30,8 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	protected override void AnimateUniqueElementsIn()
 	{
 		customTokenButton.AnimateScaleX(1f, 0.2f);
-		searchSection.AnimateScaleX(1f, 0.2f, () => AnimateTokens(0));
+		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateTokens(0));
+		line.AnimateScaleX(1f, 0.225f);
 		tokenList.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
