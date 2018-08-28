@@ -6,10 +6,8 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	[SerializeField] private GameObject customTokenButton;
 	[SerializeField] private GameObject searchInputField;
 	[SerializeField] private GameObject line;
-	[SerializeField] private GameObject tokenList;
 	[SerializeField] private GameObject confirmButton;
-
-	private Transform tokenTransform;
+	[SerializeField] private Transform tokenTransform;
 
 	private ModifyTokensPopup modifyTokensPopup;
 
@@ -20,8 +18,6 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	{
 		modifyTokensPopup = transform.GetComponent<ModifyTokensPopup>();
 		modifyTokensPopup.OnAddableTokenAdded += AnimateTokenIntoList;
-
-		tokenTransform = tokenList.transform.GetChild(0).GetChild(0);
 	}
 
 	/// <summary>
@@ -31,8 +27,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	{
 		customTokenButton.AnimateScaleX(1f, 0.2f);
 		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateTokens(0));
-		line.AnimateScaleX(1f, 0.225f);
-		tokenList.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		line.AnimateScaleX(1f, 0.25f);
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
