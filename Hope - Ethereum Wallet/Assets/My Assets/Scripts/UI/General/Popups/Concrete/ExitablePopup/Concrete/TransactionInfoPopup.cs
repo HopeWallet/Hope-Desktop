@@ -80,7 +80,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         transactionHash.text = transactionInfo.TxHash;
-        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 23, "...");
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + " " + tradableAsset.AssetSymbol;
         fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();

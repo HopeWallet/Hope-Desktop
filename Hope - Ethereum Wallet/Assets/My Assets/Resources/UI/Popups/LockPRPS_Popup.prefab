@@ -1199,6 +1199,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 1855222209498094}
   noSpaces: 0
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114028745469082732}
   errorMessage: {fileID: 114961344126590934}
 --- !u!114 &114134434716413552
@@ -5108,7 +5109,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -53}
+  m_SizeDelta: {x: -16, y: -53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224772410269165550
 RectTransform:
