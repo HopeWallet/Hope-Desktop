@@ -14,6 +14,8 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     [SerializeField] private Button addCustomToken, confirmButton;
     [SerializeField] private HopeInputField searchBar;
 
+    private List<AddableTokenInfo> removedTokens = new List<AddableTokenInfo>();
+
     private AddableTokenButton.Factory addableTokenButtonFactory;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
@@ -37,6 +39,9 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     public void UpdateTokens(AddableTokenInfo addableTokenInfo)
     {
+        if (!addableTokenInfo.Listed)
+            return;
+
         if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
             AddableTokens.First(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).SetButtonInfo(addableTokenInfo);
         else
@@ -46,6 +51,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     public void RemoveToken(AddableTokenInfo addableTokenInfo)
     {
         var itemToRemove = AddableTokens.Single(info => info.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address));
+        removedTokens.Add(itemToRemove.ButtonInfo);
         AddableTokens.Remove(itemToRemove);
         Destroy(itemToRemove.transform.parent.gameObject);
 
@@ -71,7 +77,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
             tokenListManager.OldTokenList.Clear();
         }
 
-		TokenListButton.popupClosed?.Invoke();
+        TokenListButton.popupClosed?.Invoke();
     }
 
     private void ConfirmButtonClicked()
@@ -82,15 +88,16 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         var tokensToEnable = AddableTokens.Where(token => !activeTokenAddresses.Contains(token.ButtonInfo.TokenInfo.Address) && token.ButtonInfo.Enabled);
         var tokensToDisable = AddableTokens.Where(token => activeTokenAddresses.Contains(token.ButtonInfo.TokenInfo.Address) && !token.ButtonInfo.Enabled);
 
+        removedTokens.ForEach(info => tokenContractManager.RemoveToken(info.TokenInfo.Address));
         tokensToDisable.ForEach(tokenButton => tokenContractManager.RemoveToken(tokenButton.ButtonInfo.TokenInfo.Address));
         tokensToEnable.ForEach(tokenButton => tokenContractManager.AddToken(tokenButton.ButtonInfo.TokenInfo));
 
         popupManager.CloseActivePopup();
     }
 
-	private void CustomTokenButtonClicked() => popupManager.GetPopup<AddTokenPopup>(true);
+    private void CustomTokenButtonClicked() => popupManager.GetPopup<AddTokenPopup>(true);
 
-	private void SearchInputChanged()
+    private void SearchInputChanged()
     {
         string search = searchBar.Text.ToUpper();
 
@@ -102,10 +109,10 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
             .Where(token => !token.ButtonInfo.TokenInfo.Name.ToUpper().Contains(search) && !token.ButtonInfo.TokenInfo.Symbol.Contains(search))
             .ForEach(token => token.transform.parent.gameObject.SetActive(false));
 
-		var visibleTokens = AddableTokens.Where(token => token.gameObject.activeInHierarchy).ToList();
+        var visibleTokens = AddableTokens.Where(token => token.gameObject.activeInHierarchy).ToList();
 
-		searchBar.Error = visibleTokens.Count == 0;
-	}
+        searchBar.Error = visibleTokens.Count == 0;
+    }
 
     private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)
     {
