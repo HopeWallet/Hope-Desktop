@@ -60,19 +60,16 @@ public sealed partial class LockPRPSPopup
             transactionSpeedSlider.Start();
         }
 
-        /// <summary>
-        /// Stops the GasManager.
-        /// </summary>
-        public void Stop()
-        {
-            transactionSpeedSlider.Stop();
-        }
+		/// <summary>
+		/// Stops the GasManager.
+		/// </summary>
+		public void Stop() => transactionSpeedSlider.Stop();
 
-        /// <summary>
-        /// Updates the gas price estimate given the new GasPrice.
-        /// </summary>
-        /// <param name="gasPrice"> The new GasPrice to set. </param>
-        private void UpdateGasPriceEstimate(GasPrice gasPrice)
+		/// <summary>
+		/// Updates the gas price estimate given the new GasPrice.
+		/// </summary>
+		/// <param name="gasPrice"> The new GasPrice to set. </param>
+		private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
 			transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";

@@ -15,16 +15,16 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// </summary>
 	public sealed class GasManager : IPeriodicUpdater
 	{
-        public event Action OnGasChanged;
+		public event Action OnGasChanged;
 
-        private readonly TradableAssetManager tradableAssetManager;
+		private readonly TradableAssetManager tradableAssetManager;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
 		private TMP_Text transactionFeeText;
 
 		private readonly Toggle advancedModeToggle;
 
-        private readonly TransactionSpeedSlider transactionSpeedSlider;
+		private readonly TransactionSpeedSlider transactionSpeedSlider;
 
 		private readonly HopeInputField gasLimitField,
 										gasPriceField;
@@ -62,18 +62,18 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		public BigInteger TransactionGasLimit => advancedModeToggle.IsToggledOn ? enteredGasLimit : estimatedGasLimit;
 
-        /// <summary>
-        /// Initializes the <see cref="GasManager"/> by assigning all required references.
-        /// </summary>
-        /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
-        /// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
-        /// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
-        /// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
-        /// <param name="slider"> The slider used to control transaction speed. </param>
-        /// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
-        /// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
-        /// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
-        public GasManager(
+		/// <summary>
+		/// Initializes the <see cref="GasManager"/> by assigning all required references.
+		/// </summary>
+		/// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
+		/// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
+		/// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
+		/// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
+		/// <param name="slider"> The slider used to control transaction speed. </param>
+		/// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
+		/// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
+		/// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
+		public GasManager(
 			TradableAssetManager tradableAssetManager,
 			GasPriceObserver gasPriceObserver,
 			PeriodicUpdateManager periodicUpdateManager,
@@ -96,7 +96,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			AddListenersAndObservables();
 			EstimateGasLimit();
-            transactionSpeedSlider.Start();
+			transactionSpeedSlider.Start();
 		}
 
 		/// <summary>
@@ -119,7 +119,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public void Destroy()
 		{
 			periodicUpdateManager.RemovePeriodicUpdater(this);
-            transactionSpeedSlider.Stop();
+			transactionSpeedSlider.Stop();
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void CheckGasLimitField()
 		{
 			BigInteger.TryParse(gasLimitField.Text, out enteredGasLimit);
-			gasLimitField.Error = string.IsNullOrEmpty(gasLimitField.Text);
+			gasLimitField.Error = string.IsNullOrEmpty(gasLimitField.Text) || enteredGasLimit.IsZero;
 
 			OnGasChanged?.Invoke();
 		}
@@ -155,7 +155,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			decimal.TryParse(gasPriceField.Text, out price);
 
 			enteredGasPrice = new GasPrice(GasUtils.GetFunctionalGasPrice(price));
-			gasPriceField.Error = string.IsNullOrEmpty(gasPriceField.Text);
+			gasPriceField.Error = string.IsNullOrEmpty(gasPriceField.Text) || price == 0;
 
 			OnGasChanged?.Invoke();
 		}

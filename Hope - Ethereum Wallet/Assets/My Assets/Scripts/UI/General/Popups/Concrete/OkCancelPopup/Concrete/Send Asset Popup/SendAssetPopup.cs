@@ -1,4 +1,6 @@
 ﻿using Nethereum.Hex.HexTypes;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,8 +9,10 @@ using Zenject;
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
 /// </summary>
-public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
+public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ITabButtonObservable, IEnterButtonObservable
 {
+	public event Action<bool> AnimateAdvancedMode;
+
 	[SerializeField] private HopeInputField addressField;
 	[SerializeField] private HopeInputField amountField;
 	[SerializeField] private HopeInputField gasLimitField;
@@ -26,8 +30,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	[SerializeField] private Slider transactionSpeedSlider;
 	[SerializeField] private Button contactsButton;
 
+	private bool advancedMode;
+
 	private UserWalletManager userWalletManager;
 	private DynamicDataCache dynamicDataCache;
+	private ButtonClickObserver buttonClickObserver;
+
+	private List<Selectable> selectableFields = new List<Selectable>();
+	private Selectable lastSelectableField;
 
 	/// <summary>
 	/// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
@@ -71,34 +81,45 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		UpdateManager updateManager,
 		DynamicDataCache dynamicDataCache,
 		PeriodicUpdateManager periodicUpdateManager,
-		ContactsManager contactsManager)
+		ContactsManager contactsManager,
+		ButtonClickObserver buttonClickObserver)
 	{
 		this.userWalletManager = userWalletManager;
 		this.dynamicDataCache = dynamicDataCache;
+		this.buttonClickObserver = buttonClickObserver;
 
 		Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
 		Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
 		Address = new AddressManager(addressField, contactName, contactsManager);
 		Amount = new AmountManager(this, maxToggle, amountField);
+
+		selectableFields.Add(addressField.GetComponent<Selectable>());
+		selectableFields.Add(amountField.GetComponent<Selectable>());
+		selectableFields.Add(gasLimitField.GetComponent<Selectable>());
+		selectableFields.Add(gasPriceField.GetComponent<Selectable>());
+
+		lastSelectableField = amountField.GetComponent<Selectable>();
 	}
 
 	/// <summary>
 	/// Sets up the contacts button and info message.
 	/// </summary>
-	protected override void OnStart() => contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
+	protected override void OnStart()
+	{
+		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
+		contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
+		buttonClickObserver.SubscribeObservable(this);
+	}
 
 	/// <summary>
 	/// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.
 	/// </summary>
-	private void Update()
-    {
-        okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
-    }
+	private void Update() => okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
 
-    /// <summary>
-    /// Starts the asset transfer.
-    /// </summary>
-    public override void OkButton()
+	/// <summary>
+	/// Starts the asset transfer.
+	/// </summary>
+	public override void OkButton()
     {
         dynamicDataCache.SetData("txfee", Gas.TransactionFee.ToString());
         userWalletManager.TransferAsset(Asset.ActiveAsset,
@@ -115,6 +136,34 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     {
         Asset.Destroy();
         Gas.Destroy();
+		buttonClickObserver.UnsubscribeObservable(this);
 		TopBarButtons.popupClosed?.Invoke();
     }
+
+	private void AdvancedModeClicked()
+	{
+		advancedMode = !advancedMode;
+
+		lastSelectableField = advancedMode ? gasPriceField.GetComponent<Selectable>() : amountField.GetComponent<Selectable>();
+		AnimateAdvancedMode?.Invoke(advancedMode);
+	}
+
+	public void TabButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		selectableFields.MoveToNextSelectable();
+	}
+
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		if (InputFieldUtils.GetActiveInputField() == lastSelectableField && okButton.interactable)
+			okButton.Press();
+		else
+			selectableFields.MoveToNextSelectable();
+	}
 }

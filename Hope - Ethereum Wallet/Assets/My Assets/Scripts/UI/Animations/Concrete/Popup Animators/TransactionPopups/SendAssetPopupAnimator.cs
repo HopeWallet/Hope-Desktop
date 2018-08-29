@@ -14,20 +14,15 @@ public class SendAssetPopupAnimator : UIAnimator
 	[SerializeField] private HopeInputField addressField;
 	[SerializeField] private GameObject contactNameObject;
 
-	[SerializeField] private GameObject advancedModeToggle;
-
 	[SerializeField] private GameObject sendButton;
-
-	private bool advancedMode;
 
 	/// <summary>
 	/// Initializes the button and input field listeners
 	/// </summary>
 	private void Start()
 	{
+		transform.GetComponent<SendAssetPopup>().AnimateAdvancedMode += AdvancedModeClicked;
 		addressField.OnInputUpdated += () => AnimateContactName(!string.IsNullOrEmpty(contactNameObject.GetComponent<TextMeshProUGUI>().text));
-
-		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 	}
 
 	/// <summary>
@@ -47,9 +42,9 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// <summary>
 	/// Advanced mode is toggled
 	/// </summary>
-	private void AdvancedModeClicked()
+	/// <param name="advancedMode"> Whether the popup needs to show the advanced mode or not </param>
+	private void AdvancedModeClicked(bool advancedMode)
 	{
-		advancedMode = !advancedMode;
 		Animating = true;
 
 		if (advancedMode)
