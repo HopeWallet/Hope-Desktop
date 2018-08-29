@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 114241312364951058}
   - component: {fileID: 114403973514637256}
   m_Layer: 5
-  m_Name: CustomToken_Button
+  m_Name: AddToken_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   blur: {fileID: 1520288251594672}
   formTitle: {fileID: 1062430611844804}
   popupContainer: {fileID: 1617529342043482}
-  customTokenButton: {fileID: 1920197590972318}
+  addTokenButton: {fileID: 1920197590972318}
   searchInputField: {fileID: 1415083623569806}
   line: {fileID: 1902412720823524}
   confirmButton: {fileID: 1914641174571360}
@@ -694,9 +694,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: bd78ca8c588fcd94ab83f75da2f62bf6,
+    m_HighlightedSprite: {fileID: 21300000, guid: 722a30b966a7e6043841dc76d7c41b20,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: fe31ae9f8ee27a845b55e7da7fa7c398, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 419215b0e957c214eb84f3bb7ca8d51d, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -907,7 +907,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 41191d8198ac6ce46b92d6bb5acbedbe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d7e267dd28dcb8f4aa416df8b79f8ec8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1973,7 +1973,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 3471.882}
+  m_AnchoredPosition: {x: 0, y: 9855.464}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224998752051692916

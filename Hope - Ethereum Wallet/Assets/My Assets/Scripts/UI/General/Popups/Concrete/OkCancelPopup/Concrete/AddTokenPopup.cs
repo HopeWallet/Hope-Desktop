@@ -13,7 +13,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 {
     public event Action<Status> OnStatusChanged;
 
-    [SerializeField] private TMP_InputField addressField, symbolField, decimalsField;
+    [SerializeField] private HopeInputField addressField, symbolField, decimalsField;
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenSymbol;
 
@@ -27,9 +27,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private dynamic balance;
 
     private bool updatedName, updatedSymbol, updatedDecimals, updatedBalance, updatedLogo;
-    private bool validSymbol, validDecimals;
-
-    private int previousAddressLength;
 
     /// <summary> 
     /// Injects dependencies into this popup.
@@ -53,9 +50,9 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnStart()
     {
-        addressField.onValueChanged.AddListener(OnAddressChanged);
-        symbolField.onValueChanged.AddListener(OnSymbolChanged);
-        decimalsField.onValueChanged.AddListener(OnDecimalsChanged);
+        addressField.OnInputUpdated += OnAddressChanged;
+        symbolField.OnInputUpdated += OnSymbolChanged;
+        decimalsField.OnInputUpdated += OnDecimalsChanged;
     }
 
     /// <summary>
@@ -63,50 +60,42 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnOkClicked()
     {
-        if (!tokenListManager.ContainsToken(addressField.text))
-            tokenListManager.AddToken(addressField.text, name, symbol, decimals.Value, true, true);
+        if (!tokenListManager.ContainsToken(addressField.Text))
+            tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, true, true);
         else
-            tokenListManager.UpdateToken(addressField.text, true, true);
+            tokenListManager.UpdateToken(addressField.Text, true, true);
 
-        popupManager.GetPopup<ModifyTokensPopup>().UpdateTokens(tokenListManager.GetToken(addressField.text));
+        popupManager.GetPopup<ModifyTokensPopup>().UpdateTokens(tokenListManager.GetToken(addressField.Text));
     }
 
-    private void OnSymbolChanged(string value)
+    private void OnSymbolChanged()
     {
-        symbolField.text = value.LimitEnd(5).ToUpper();
-        symbol = symbolField.text;
-        name = symbolField.text;
+		string text = symbolField.Text;
 
-        validSymbol = !string.IsNullOrEmpty(symbolField.text);
-        okButton.interactable = validDecimals && validSymbol;
+		symbol = text;
+		name = text;
+
+		symbolField.Error = string.IsNullOrEmpty(text);
+        okButton.interactable = !symbolField.Error && !decimalsField.Error;
     }
 
-    private void OnDecimalsChanged(string value)
+    private void OnDecimalsChanged()
     {
-        decimalsField.text = value.LimitEnd(2);
-        decimals = int.Parse(decimalsField.text);
+        decimals = int.Parse(decimalsField.Text);
 
-        validDecimals = decimals.Value < 36;
-        okButton.interactable = validDecimals && validSymbol;
+		decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value < 36;
+		okButton.interactable = !decimalsField.Error && !symbolField.Error;
     }
 
     /// <summary>
     /// Method called every time the text in the input field changed.
     /// Sets the button to interactable if the text is a valid ethereum address.
     /// </summary>
-    /// <param name="address"> The inputted text in the address input field. </param>
-    private void OnAddressChanged(string address)
+    private void OnAddressChanged()
     {
-        if (address.Length == 43 || previousAddressLength == 43)
-        {
-            previousAddressLength = address.Length;
-            addressField.text = address.LimitEnd(42);
-            return;
-        }
-
-        bool validAddress = AddressUtils.IsValidEthereumAddress(addressField.text);
-        CheckForInvalidAddress(validAddress);
-        CheckForValidAddress(validAddress);
+        addressField.Error = !AddressUtils.IsValidEthereumAddress(addressField.Text);
+        CheckForInvalidAddress(!addressField.Error);
+        CheckForValidAddress(!addressField.Error);
     }
 
     private void CheckForInvalidAddress(bool validAddress)
@@ -115,7 +104,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             return;
 
         OnStatusChanged?.Invoke(Status.NoTokenFound);
-        okButton.interactable = false;
+        okButton.interactable = true;
     }
 
     private void CheckForValidAddress(bool validAddress)
@@ -123,9 +112,9 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!validAddress)
             return;
 
-        addressField.readOnly = true;
+        addressField.inputFieldBase.interactable = false;
 
-        bool existsInTokenList = tokenListManager.ContainsToken(addressField.text);
+        bool existsInTokenList = tokenListManager.ContainsToken(addressField.Text);
         CheckTokenList(existsInTokenList);
         CheckTokenContract(existsInTokenList);
     }
@@ -135,7 +124,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!existsInTokenList)
             return;
 
-        AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.text);
+        AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.Text);
         TokenInfo tokenInfo = addableToken.TokenInfo;
         name = tokenInfo.Name;
         symbol = tokenInfo.Symbol;
@@ -146,7 +135,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         OnStatusChanged?.Invoke(Status.ValidToken);
 
-        addressField.readOnly = false;
+        addressField.inputFieldBase.interactable = true;
         okButton.interactable = true;
     }
 
@@ -161,14 +150,16 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         updatedLogo = false;
         updatedBalance = false;
 
-        addressField.readOnly = true;
+        addressField.inputFieldBase.interactable = false;
 
         OnStatusChanged?.Invoke(Status.Loading);
 
-        SimpleContractQueries.QueryStringOutput<Name>(addressField.text, null, output => NameQueryCompleted(output.Value));
-        SimpleContractQueries.QueryStringOutput<Symbol>(addressField.text, null, output => SymbolQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<Decimals>(addressField.text, null, output => DecimalsQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressField.text, userWalletManager.WalletAddress, output => BalanceQueryCompleted(output.Value), userWalletManager.WalletAddress);
+		string addressText = addressField.Text;
+
+		SimpleContractQueries.QueryStringOutput<Name>(addressText, null, output => NameQueryCompleted(output.Value));
+        SimpleContractQueries.QueryStringOutput<Symbol>(addressText, null, output => SymbolQueryCompleted(output.Value));
+        SimpleContractQueries.QueryUInt256Output<Decimals>(addressText, null, output => DecimalsQueryCompleted(output.Value));
+        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.WalletAddress, output => BalanceQueryCompleted(output.Value), userWalletManager.WalletAddress);
     }
 
     private void NameQueryCompleted(string value)
@@ -211,30 +202,31 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         if (updatedName && updatedSymbol && updatedDecimals && updatedLogo && updatedBalance)
         {
-            if (balance == null)
+			addressField.inputFieldBase.interactable = true;
+
+			if (balance == null)
             {
                 OnStatusChanged?.Invoke(Status.NoTokenFound);
             }
             else if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
             {
-                decimalsField.text = string.Empty;
-                symbolField.text = string.Empty;
+                decimalsField.Text = string.Empty;
+                symbolField.Text = string.Empty;
 
                 OnStatusChanged?.Invoke(Status.InvalidToken);
+				symbolField.inputFieldBase.ActivateInputField();
 
                 okButton.interactable = false;
             }
             else
             {
                 tokenSymbol.text = symbol;
-                tokenListManager.AddToken(addressField.text, name, symbol, decimals.Value, false, false);
+                tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, false, false);
 
                 OnStatusChanged?.Invoke(Status.ValidToken);
 
                 okButton.interactable = true;
             }
-
-            addressField.readOnly = false;
         }
     }
 

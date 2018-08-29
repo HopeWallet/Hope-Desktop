@@ -112,8 +112,8 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         private void CheckIfValidAmount()
         {
-            amountInputField.Error = string.IsNullOrEmpty(amountInputField.Text) || AmountToLock > MaxSendableAmount || AmountToLock < 0.0000000000000001m;
-            OnLockAmountChanged?.Invoke();
+			amountInputField.Error = string.IsNullOrEmpty(amountInputField.Text) || AmountToLock > MaxSendableAmount || AmountToLock < 0.0000000000000001m;
+			OnLockAmountChanged?.Invoke();
         }
 
         /// <summary>
@@ -121,8 +121,8 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         private void BalancesUpdated()
         {
-            prpsBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.PRPSBalance), 10, "...");
-            dubiBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.DUBIBalance), 10, "...");
+			prpsBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.PRPSBalance), 10, "...");
+			dubiBalanceText.text = StringUtils.LimitEnd(StringUtils.ConvertDecimalToString(lockPRPSManager.DUBIBalance), 10, "...");
         }
     }
 }

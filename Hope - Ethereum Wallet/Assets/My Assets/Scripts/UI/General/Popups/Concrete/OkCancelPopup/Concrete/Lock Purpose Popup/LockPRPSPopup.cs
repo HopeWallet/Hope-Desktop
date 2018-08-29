@@ -99,18 +99,15 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 		buttonClickObserver.UnsubscribeObservable(this);
 	}
 
-    /// <summary>
-    /// Updates the lock button interactability based on the managers.
-    /// </summary>
-    private void Update()
-    {
-        okButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && !amountInputField.Error && Time.IsValid;
-    }
+	/// <summary>
+	/// Updates the lock button interactability based on the managers.
+	/// </summary>
+	private void Update() => okButton.interactable = EtherBalance >= Gas.TransactionFee && Gas.IsValid && !amountInputField.Error && Time.IsValid;
 
-    /// <summary>
-    /// Locks purpose based on all values entered.
-    /// </summary>
-    public override void OkButton()
+	/// <summary>
+	/// Locks purpose based on all values entered.
+	/// </summary>
+	public override void OkButton()
     {
         hodlerContract.Hodl(userWalletManager,
                             new HexBigInteger(Gas.TransactionGasLimit),

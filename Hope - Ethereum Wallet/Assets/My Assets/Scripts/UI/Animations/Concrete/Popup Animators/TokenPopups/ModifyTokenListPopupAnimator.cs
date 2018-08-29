@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class ModifyTokenListPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject customTokenButton;
+	[SerializeField] private GameObject addTokenButton;
 	[SerializeField] private GameObject searchInputField;
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject confirmButton;
@@ -25,7 +25,7 @@ public class ModifyTokenListPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		customTokenButton.AnimateScaleX(1f, 0.2f);
+		addTokenButton.AnimateScaleX(1f, 0.2f);
 		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateTokens(0));
 		line.AnimateScaleX(1f, 0.25f);
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);

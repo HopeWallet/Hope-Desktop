@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class AddTokenPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject addressSection;
+	[SerializeField] private GameObject addressInputField;
 	[SerializeField] private GameObject loadingIcon;
 	[SerializeField] private GameObject noTokenFoundSection;
 	[SerializeField] private GameObject invalidTokenSection;
@@ -11,8 +11,6 @@ public class AddTokenPopupAnimator : UIAnimator
 	[SerializeField] private GameObject addTokenButton;
 
 	private AddTokenPopup.Status previousStatus;
-
-	//ADD THE ERROR AND CHECKMARK ICONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	/// <summary>
 	/// Initializes the button listeners
@@ -28,7 +26,7 @@ public class AddTokenPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		addressSection.AnimateScaleX(1f, 0.2f);
+		addressInputField.AnimateScaleX(1f, 0.2f);
 		noTokenFoundSection.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		addTokenButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
