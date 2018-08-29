@@ -26,6 +26,7 @@ public class AddTokenPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		addressInputField.GetComponent<HopeInputField>().inputFieldBase.ActivateInputField();
 		addressInputField.AnimateScaleX(1f, 0.2f);
 		noTokenFoundSection.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		addTokenButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
