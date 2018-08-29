@@ -147,9 +147,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tokenDisplayText: {fileID: 114092155895601742}
-  removeButton: {fileID: 114578138895611252}
   tokenIcon: {fileID: 114941697685283666}
   checkBox: {fileID: 114985114901463698}
+  removeButton: {fileID: 114578138895611252}
 --- !u!114 &114092155895601742
 MonoBehaviour:
   m_ObjectHideFlags: 1
