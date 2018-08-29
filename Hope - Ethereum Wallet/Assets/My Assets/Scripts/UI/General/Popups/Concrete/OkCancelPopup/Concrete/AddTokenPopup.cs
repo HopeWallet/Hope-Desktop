@@ -15,7 +15,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     [SerializeField] private HopeInputField addressField, symbolField, decimalsField;
     [SerializeField] private Image tokenIcon;
-    [SerializeField] private TextMeshProUGUI tokenSymbol;
+    [SerializeField] private TextMeshProUGUI tokenName;
 
     private TokenListManager tokenListManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -104,7 +104,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             return;
 
         OnStatusChanged?.Invoke(Status.NoTokenFound);
-        okButton.interactable = true;
+        okButton.interactable = false;
     }
 
     private void CheckForValidAddress(bool validAddress)
@@ -127,11 +127,11 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.Text);
         TokenInfo tokenInfo = addableToken.TokenInfo;
         name = tokenInfo.Name;
-        symbol = tokenInfo.Symbol;
-        decimals = tokenInfo.Decimals;
+		symbol = tokenInfo.Symbol;
+		decimals = tokenInfo.Decimals;
 
-        tokenSymbol.text = symbol;
-        tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
+		tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? " (" + symbol + ")" : "");
+		tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
 
         OnStatusChanged?.Invoke(Status.ValidToken);
 
@@ -220,7 +220,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             }
             else
             {
-                tokenSymbol.text = symbol;
+                tokenName.text = symbol;
                 tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, false, false);
 
                 OnStatusChanged?.Invoke(Status.ValidToken);
