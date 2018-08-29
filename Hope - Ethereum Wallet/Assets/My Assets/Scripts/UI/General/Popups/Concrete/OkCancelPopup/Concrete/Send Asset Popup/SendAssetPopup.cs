@@ -71,6 +71,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
 	/// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
 	/// <param name="contactsManager"> The active ContactsManager. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
 	[Inject]
 	public void Construct(
 		UserWalletManager userWalletManager,
@@ -148,6 +149,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		AnimateAdvancedMode?.Invoke(advancedMode);
 	}
 
+	/// <summary>
+	/// Moves to the next input field
+	/// </summary>
+	/// <param name="clickType"> The tab button ClickType </param>
 	public void TabButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)
@@ -156,6 +161,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		selectableFields.MoveToNextSelectable();
 	}
 
+	/// <summary>
+	/// Clicks the send button if on the last input field 
+	/// </summary>
+	/// <param name="clickType"> The enter button ClickType </param>
 	public void EnterButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)

@@ -73,7 +73,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     /// <summary>
     /// Loads the wallet if the button is enabled.
     /// </summary>
-    /// <param name="clickType"> The enter button click type. </param>
+    /// <param name="clickType"> The enter button ClickType </param>
     public void EnterButtonPressed(ClickType clickType)
     {
 		if (clickType != ClickType.Down)
@@ -85,6 +85,10 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 			SelectableFields.MoveToNextSelectable();
 	}
 
+	/// <summary>
+	/// Moves to the next input field
+	/// </summary>
+	/// <param name="clickType"> The tab button ClickType </param>
 	public void TabButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)
