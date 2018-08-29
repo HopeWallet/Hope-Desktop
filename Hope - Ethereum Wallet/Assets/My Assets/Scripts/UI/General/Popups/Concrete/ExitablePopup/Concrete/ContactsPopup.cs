@@ -61,7 +61,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		if (!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text))
 		{
-			string inputtedAddress = sendAssetPopup.Address.addressField.text;
+			string inputtedAddress = sendAssetPopup.Address.addressField.Text;
 
 			for (int i = 0; i < contactsListTransform.childCount; i++)
 			{
@@ -98,7 +98,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void ConfirmButtonClicked()
 	{
-		sendAssetPopup.Address.addressField.text = ActiveContactButton.RealContactAddress;
+		sendAssetPopup.Address.addressField.Text = ActiveContactButton.RealContactAddress;
 		popupManager.CloseActivePopup();
 	}
 

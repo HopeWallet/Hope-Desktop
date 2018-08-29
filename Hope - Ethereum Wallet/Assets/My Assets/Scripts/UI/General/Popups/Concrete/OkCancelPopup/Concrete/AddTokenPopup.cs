@@ -94,22 +94,25 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private void OnAddressChanged()
     {
         addressField.Error = !AddressUtils.IsValidEthereumAddress(addressField.Text);
-        CheckForInvalidAddress(!addressField.Error);
-        CheckForValidAddress(!addressField.Error);
-    }
 
-    private void CheckForInvalidAddress(bool validAddress)
+		if (addressField.Error)
+			CheckForInvalidAddress();
+		else
+			CheckForValidAddress();
+	}
+
+    private void CheckForInvalidAddress()
     {
-        if (validAddress)
-            return;
+		if (!addressField.Error)
+			return;
 
         OnStatusChanged?.Invoke(Status.NoTokenFound);
         okButton.interactable = false;
     }
 
-    private void CheckForValidAddress(bool validAddress)
+    private void CheckForValidAddress()
     {
-        if (!validAddress)
+        if (addressField.Error)
             return;
 
         addressField.inputFieldBase.interactable = false;

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class SendAssetPopupAnimator : UIAnimator
@@ -8,11 +7,11 @@ public class SendAssetPopupAnimator : UIAnimator
 	[SerializeField] private GameObject advancedModeSection;
 	[SerializeField] private GameObject addressSection;
 	[SerializeField] private GameObject amountSection;
-	[SerializeField] private GameObject gasLimitSection;
-	[SerializeField] private GameObject gasPriceSection;
+	[SerializeField] private GameObject gasLimitInputField;
+	[SerializeField] private GameObject gasPriceInputField;
 	[SerializeField] private GameObject transactionSpeedSection;
 
-	[SerializeField] private TMP_InputField addressInputField;
+	[SerializeField] private HopeInputField addressField;
 	[SerializeField] private GameObject contactNameObject;
 
 	[SerializeField] private GameObject advancedModeToggle;
@@ -26,13 +25,9 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	private void Start()
 	{
-        SendAssetPopup sendAssetPopup = GetComponent<SendAssetPopup>();
+		addressField.OnInputUpdated += () => AnimateContactName(!string.IsNullOrEmpty(contactNameObject.GetComponent<TextMeshProUGUI>().text));
 
-		addressInputField.onValueChanged.AddListener(_ => AnimateFieldError(addressSection, sendAssetPopup.Address.IsValid || sendAssetPopup.Address.IsEmpty));
-		addressInputField.onValueChanged.AddListener(_ => AnimateContactName(!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text)));
-        sendAssetPopup.Amount.OnAmountChanged += () => AnimateFieldError(amountSection, sendAssetPopup.Amount.IsValid || sendAssetPopup.Amount.IsEmpty);
-
-        advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
+		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
 	}
 
 	/// <summary>
@@ -40,6 +35,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		addressField.inputFieldBase.ActivateInputField();
 		tokenSection.AnimateScale(1f, 0.1f);
 		advancedModeSection.AnimateScale(1f, 0.1f);
 		addressSection.AnimateScaleX(1f, 0.15f);
@@ -59,7 +55,7 @@ public class SendAssetPopupAnimator : UIAnimator
 		if (advancedMode)
 			transactionSpeedSection.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(true));
 		else
-			gasLimitSection.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(false));
+			gasLimitInputField.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(false));
 	}
 
 	/// <summary>
@@ -68,29 +64,19 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// <param name="animatingIn"> Checks to see if animating these fields in or out </param>
 	private void AnimateGasLimitAndPrice(bool animatingIn)
 	{
-		gasLimitSection.AnimateScale(animatingIn ? 1f : 0f, 0.1f);
+		gasLimitInputField.AnimateScale(animatingIn ? 1f : 0f, 0.1f);
 
 		if (animatingIn)
-			gasPriceSection.AnimateScale(1f, 0.1f, () => Animating = false);
+			gasPriceInputField.AnimateScale(1f, 0.1f, () => Animating = false);
 		else
-			gasPriceSection.AnimateScale(0f, 0.1f,
+			gasPriceInputField.AnimateScale(0f, 0.1f,
 				() => transactionSpeedSection.AnimateScale(1f, 0.1f,
 				() => Animating = false));
 	}
-
-    /// <summary>
-    /// Animates the error icon for the given input field.
-    /// </summary>
-    /// <param name="sectionObj"> The gameobject that holds the input field. </param>
-    /// <param name="isValidField"> Checks if valid input or not. </param>
-    private void AnimateFieldError(GameObject sectionObj, bool isValidField)
-    {
-        sectionObj.transform.GetChild(sectionObj.transform.childCount - 1).GetComponent<InteractableIcon>().AnimateIcon(isValidField ? 0f : 1f);
-    }
 
 	/// <summary>
 	/// Animates the contact name in or out of sight
 	/// </summary>
 	/// <param name="animateIn"> Checks if animating in or out </param>
-	private void AnimateContactName(bool animateIn) => contactNameObject.AnimateGraphic(animateIn ? 0.647f : 0f, 0.15f);
+	private void AnimateContactName(bool animateIn) => contactNameObject.AnimateGraphic(animateIn ? 1f : 0f, 0.15f);
 }

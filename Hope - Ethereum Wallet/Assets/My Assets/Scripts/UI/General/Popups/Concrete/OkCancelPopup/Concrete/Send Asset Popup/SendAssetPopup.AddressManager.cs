@@ -12,25 +12,20 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// </summary>
 	public sealed class AddressManager
 	{
-		public readonly TMP_InputField addressField;
+		public readonly HopeInputField addressField;
 		public readonly TMP_Text contactName;
 
 		private ContactsManager contactsManager;
 
 		/// <summary>
-		/// Whether the send address is valid.
-		/// </summary>
-		public bool IsValid { get; private set; }
-
-		/// <summary>
 		/// Whether the address input field is empty or not.
 		/// </summary>
-		public bool IsEmpty { get { return string.IsNullOrEmpty(addressField.text); } }
+		public bool IsEmpty { get { return string.IsNullOrEmpty(addressField.Text); } }
 
 		/// <summary>
 		/// The address the asset should be sent to.
 		/// </summary>
-		public string SendAddress { get { return addressField.text; } }
+		public string SendAddress { get { return addressField.Text; } }
 
 		/// <summary>
 		/// Initializes the <see cref="AddressManager"/> by assigning the send address input field.
@@ -39,7 +34,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="contactName"> The contactName text component. </param>
 		/// <param name="contactsManager"> The active ContactsManager. </param>
 		public AddressManager(
-			TMP_InputField addressField,
+			HopeInputField addressField,
 			TMP_Text contactName,
 			ContactsManager contactsManager)
 		{
@@ -47,18 +42,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.contactName = contactName;
 			this.contactsManager = contactsManager;
 
-			addressField.onValueChanged.AddListener(CheckAddress);
+			addressField.OnInputUpdated += CheckAddress;
 		}
 
 		/// <summary>
 		/// Checks if the address is valid once the text is changed.
 		/// </summary>
-		/// <param name="address"> The string entered in the address field. </param>
-		private void CheckAddress(string address)
+		private void CheckAddress()
 		{
-			IsValid = AddressUtils.IsValidEthereumAddress(addressField.text);
+			string address = addressField.Text;
 
-			if (IsValid)
+			addressField.Error = !AddressUtils.IsValidEthereumAddress(address);
+
+			if (!addressField.Error)
 				CheckIfSavedAddress(address);
 			else
 				contactName.text = string.Empty;

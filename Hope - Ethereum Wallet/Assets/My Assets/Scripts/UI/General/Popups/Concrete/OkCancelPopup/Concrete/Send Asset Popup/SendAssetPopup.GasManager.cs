@@ -20,11 +20,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private readonly TradableAssetManager tradableAssetManager;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
+		private TMP_Text transactionFeeText;
+
 		private readonly Toggle advancedModeToggle;
 
         private readonly TransactionSpeedSlider transactionSpeedSlider;
 
-		private readonly TMP_InputField gasLimitField,
+		private readonly HopeInputField gasLimitField,
 										gasPriceField;
 
 		private GasPrice estimatedGasPrice,
@@ -48,7 +50,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <summary>
 		/// Is valid if the transaction can be sent based on the current gas price and gas limit.
 		/// </summary>
-		public bool IsValid => TransactionFee > 0;
+		public bool Error => TransactionFee == 0;
 
 		/// <summary>
 		/// The gas price to use for the transaction.
@@ -77,8 +79,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			PeriodicUpdateManager periodicUpdateManager,
 			Toggle advancedModeToggle,
 			Slider slider,
-			TMP_InputField gasLimitField,
-			TMP_InputField gasPriceField,
+			HopeInputField gasLimitField,
+			HopeInputField gasPriceField,
 			TMP_Text transactionFeeText)
 		{
 			this.tradableAssetManager = tradableAssetManager;
@@ -86,12 +88,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.advancedModeToggle = advancedModeToggle;
 			this.gasLimitField = gasLimitField;
 			this.gasPriceField = gasPriceField;
+			this.transactionFeeText = transactionFeeText;
 
-            transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
+			transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
-            OnGasChanged += () => transactionFeeText.text = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH";
+			OnGasChanged += UpdateGasPriceEstimate;
 
-            AddListenersAndObservables();
+			AddListenersAndObservables();
 			EstimateGasLimit();
             transactionSpeedSlider.Start();
 		}
@@ -102,6 +105,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public void PeriodicUpdate()
 		{
 			EstimateGasLimit();
+		}
+
+		private void UpdateGasPriceEstimate()
+		{
+			transactionFeeText.text = TransactionFee < tradableAssetManager.EtherAsset.AssetBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
+			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
 		}
 
 		/// <summary>
@@ -120,18 +129,18 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			periodicUpdateManager.AddPeriodicUpdater(this);
 
-			gasLimitField.onValueChanged.AddListener(CheckGasLimitField);
-			gasPriceField.onValueChanged.AddListener(CheckGasPriceField);
+			gasLimitField.OnInputUpdated += CheckGasLimitField;
+			gasPriceField.OnInputUpdated += CheckGasPriceField;
 		}
 
 		/// <summary>
 		/// Checks the gas limit entered in the gas limit field.
 		/// </summary>
 		/// <param name="gasLimit"> The entered gas limit. </param>
-		private void CheckGasLimitField(string gasLimit)
+		private void CheckGasLimitField()
 		{
-			BigInteger.TryParse(gasLimit, out enteredGasLimit);
-            gasLimitField.text = gasLimit;
+			BigInteger.TryParse(gasLimitField.Text, out enteredGasLimit);
+			gasLimitField.Error = string.IsNullOrEmpty(gasLimitField.Text);
 
 			OnGasChanged?.Invoke();
 		}
@@ -140,14 +149,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Checks the gas price entered in the gas price field.
 		/// </summary>
 		/// <param name="gasPrice"> The entered gas price. </param>
-		private void CheckGasPriceField(string gasPrice)
+		private void CheckGasPriceField()
 		{
-            gasPriceField.text = gasPrice;
-
 			decimal price;
-			decimal.TryParse(gasPriceField.text, out price);
+			decimal.TryParse(gasPriceField.Text, out price);
 
 			enteredGasPrice = new GasPrice(GasUtils.GetFunctionalGasPrice(price));
+			gasPriceField.Error = string.IsNullOrEmpty(gasPriceField.Text);
 
 			OnGasChanged?.Invoke();
 		}
@@ -161,7 +169,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             estimatedGasPrice = newEstimate;
 
             if (!advancedModeToggle.IsToggledOn)
-                gasPriceField.text = estimatedGasPrice.ReadableGasPrice.ToString();
+                gasPriceField.Text = estimatedGasPrice.ReadableGasPrice.ToString();
 
             OnGasChanged?.Invoke();
         }
@@ -182,8 +190,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			estimatedGasLimit = limit;
 
-			if (string.IsNullOrEmpty(gasLimitField.text) || !advancedModeToggle.IsToggledOn || limit > enteredGasLimit)
-				CheckGasLimitField(limit.ToString());
+			if (string.IsNullOrEmpty(gasLimitField.Text) || !advancedModeToggle.IsToggledOn || limit > enteredGasLimit)
+				CheckGasLimitField();
 		}
 	}
 }

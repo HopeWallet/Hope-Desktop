@@ -9,49 +9,45 @@ using Zenject;
 /// </summary>
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>
 {
-    [SerializeField] private TMP_InputField addressField;
-    [SerializeField] private TMP_InputField amountField;
-    [SerializeField] private TMP_InputField gasLimitField;
-    [SerializeField] private TMP_InputField gasPriceField;
+	[SerializeField] private HopeInputField addressField;
+	[SerializeField] private HopeInputField amountField;
+	[SerializeField] private HopeInputField gasLimitField;
+	[SerializeField] private HopeInputField gasPriceField;
 
 	[SerializeField] private TMP_Text assetBalance;
-    [SerializeField] private TMP_Text assetSymbol;
-    [SerializeField] private TMP_Text transactionFee;
+	[SerializeField] private TMP_Text assetSymbol;
+	[SerializeField] private TMP_Text transactionFee;
 	[SerializeField] private TMP_Text contactName;
 
 	[SerializeField] private Toggle advancedModeToggle;
-    [SerializeField] private Toggle maxToggle;
+	[SerializeField] private Toggle maxToggle;
 
-    [SerializeField] private Image assetImage;
-    [SerializeField] private Slider transactionSpeedSlider;
-    [SerializeField] private Button contactsButton;
-
-	[SerializeField] private InteractableIcon addressErrorIcon;
-	[SerializeField] private InteractableIcon amountErrorIcon;
-	[SerializeField] private InteractableIcon transactionSpeedInfoIcon;
+	[SerializeField] private Image assetImage;
+	[SerializeField] private Slider transactionSpeedSlider;
+	[SerializeField] private Button contactsButton;
 
 	private UserWalletManager userWalletManager;
-    private DynamicDataCache dynamicDataCache;
+	private DynamicDataCache dynamicDataCache;
 
-    /// <summary>
-    /// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
-    /// </summary>
-    public AssetManager Asset { get; private set; }
+	/// <summary>
+	/// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
+	/// </summary>
+	public AssetManager Asset { get; private set; }
 
-    /// <summary>
-    /// The <see cref="AmountManager"/> of this <see cref="SendAssetPopup"/>.
-    /// </summary>
-    public AmountManager Amount { get; private set; }
+	/// <summary>
+	/// The <see cref="AmountManager"/> of this <see cref="SendAssetPopup"/>.
+	/// </summary>
+	public AmountManager Amount { get; private set; }
 
-    /// <summary>
-    /// The <see cref="AddressManager"/> of this <see cref="SendAssetPopup"/>.
-    /// </summary>
-    public AddressManager Address { get; private set; }
+	/// <summary>
+	/// The <see cref="AddressManager"/> of this <see cref="SendAssetPopup"/>.
+	/// </summary>
+	public AddressManager Address { get; private set; }
 
-    /// <summary>
-    /// The <see cref="GasManager"/> of this <see cref="SendAssetPopup"/>.
-    /// </summary>
-    public GasManager Gas { get; private set; }
+	/// <summary>
+	/// The <see cref="GasManager"/> of this <see cref="SendAssetPopup"/>.
+	/// </summary>
+	public GasManager Gas { get; private set; }
 
 	/// <summary>
 	/// Adds the required dependencies to the SendAssetPopup.
@@ -66,43 +62,37 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
 	/// <param name="contactsManager"> The active ContactsManager. </param>
 	[Inject]
-    public void Construct(
-        UserWalletManager userWalletManager,
-        TradableAssetManager tradableAssetManager,
-        TradableAssetImageManager tradableAssetImageManager,
-        EtherBalanceObserver etherBalanceObserver,
-        GasPriceObserver gasPriceObserver,
-        UpdateManager updateManager,
-        DynamicDataCache dynamicDataCache,
-        PeriodicUpdateManager periodicUpdateManager,
+	public void Construct(
+		UserWalletManager userWalletManager,
+		TradableAssetManager tradableAssetManager,
+		TradableAssetImageManager tradableAssetImageManager,
+		EtherBalanceObserver etherBalanceObserver,
+		GasPriceObserver gasPriceObserver,
+		UpdateManager updateManager,
+		DynamicDataCache dynamicDataCache,
+		PeriodicUpdateManager periodicUpdateManager,
 		ContactsManager contactsManager)
-    {
-        this.userWalletManager = userWalletManager;
-        this.dynamicDataCache = dynamicDataCache;
+	{
+		this.userWalletManager = userWalletManager;
+		this.dynamicDataCache = dynamicDataCache;
 
-        Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-        Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
-        Address = new AddressManager(addressField, contactName, contactsManager);
-        Amount = new AmountManager(this, maxToggle, amountField);
-    }
-
-    /// <summary>
-    /// Sets up the contacts button and info message.
-    /// </summary>
-    protected override void OnStart()
-    {
-        contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
-		addressErrorIcon.PopupManager = popupManager;
-		amountErrorIcon.PopupManager = popupManager;
-		transactionSpeedInfoIcon.PopupManager = popupManager;
+		Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
+		Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
+		Address = new AddressManager(addressField, contactName, contactsManager);
+		Amount = new AmountManager(this, maxToggle, amountField);
 	}
 
-    /// <summary>
-    /// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.
-    /// </summary>
-    private void Update()
+	/// <summary>
+	/// Sets up the contacts button and info message.
+	/// </summary>
+	protected override void OnStart() => contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
+
+	/// <summary>
+	/// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.
+	/// </summary>
+	private void Update()
     {
-        okButton.interactable = Gas.IsValid && Address.IsValid && Amount.IsValid;
+        okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
     }
 
     /// <summary>

@@ -2368,7 +2368,7 @@ MonoBehaviour:
   placeholder: {fileID: 1592551736564754}
   eye: {fileID: 0}
   errorIcon: {fileID: 1656602818210242}
-  noSpaces: 0
+  noSpaces: 1
   placeholderFadeAway: 0
   inputFieldBase: {fileID: 114709884941586742}
   errorMessage: {fileID: 114971444265548862}
