@@ -2714,6 +2714,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114943312977011698}
   errorMessage: {fileID: 0}
 --- !u!114 &114096382087120622
@@ -2731,6 +2732,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114258279985286778}
   errorMessage: {fileID: 0}
 --- !u!114 &114106939069134228
@@ -3276,6 +3278,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114303411113829752}
   errorMessage: {fileID: 0}
 --- !u!114 &114175030022084592
@@ -3320,6 +3323,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114143416678781848}
   errorMessage: {fileID: 0}
 --- !u!114 &114190641557459808
@@ -3762,6 +3766,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114622656376539884}
   errorMessage: {fileID: 0}
 --- !u!114 &114255048039796906
@@ -4000,6 +4005,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114585190338993452}
   errorMessage: {fileID: 0}
 --- !u!114 &114279476661720152
@@ -4287,6 +4293,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114875201940219218}
   errorMessage: {fileID: 0}
 --- !u!114 &114325322665558938
@@ -4304,6 +4311,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114839493960288274}
   errorMessage: {fileID: 0}
 --- !u!114 &114328878379912280
@@ -4321,6 +4329,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114429159317217578}
   errorMessage: {fileID: 0}
 --- !u!114 &114330441184679100
@@ -4338,6 +4347,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114886520292879928}
   errorMessage: {fileID: 0}
 --- !u!114 &114335263562959308
@@ -4766,6 +4776,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114458469442323790}
   errorMessage: {fileID: 0}
 --- !u!114 &114356324446347144
@@ -5291,6 +5302,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114555950720141420}
   errorMessage: {fileID: 0}
 --- !u!114 &114392944847067430
@@ -5335,6 +5347,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114803074211768706}
   errorMessage: {fileID: 0}
 --- !u!114 &114406539068826900
@@ -5379,6 +5392,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114380522665051262}
   errorMessage: {fileID: 0}
 --- !u!114 &114407398706521744
@@ -5892,6 +5906,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114567096279653116}
   errorMessage: {fileID: 0}
 --- !u!114 &114462944498437416
@@ -5974,6 +5989,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114957892224209772}
   errorMessage: {fileID: 0}
 --- !u!114 &114502723014148950
@@ -6262,6 +6278,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114227134423157558}
   errorMessage: {fileID: 0}
 --- !u!114 &114527431167572252
@@ -7506,6 +7523,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114356324446347144}
   errorMessage: {fileID: 0}
 --- !u!114 &114697217578618484
@@ -7898,6 +7916,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114377990413114478}
   errorMessage: {fileID: 0}
 --- !u!114 &114758645838294594
@@ -8690,6 +8709,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114502723014148950}
   errorMessage: {fileID: 0}
 --- !u!114 &114855801601118840
@@ -8707,6 +8727,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114110507765934674}
   errorMessage: {fileID: 0}
 --- !u!114 &114864006687741298
@@ -8724,6 +8745,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114266806010963620}
   errorMessage: {fileID: 0}
 --- !u!114 &114864957483938182
@@ -9877,6 +9899,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114728335888368384}
   errorMessage: {fileID: 0}
 --- !u!114 &114974761201673732
@@ -9894,6 +9917,7 @@ MonoBehaviour:
   eye: {fileID: 0}
   errorIcon: {fileID: 0}
   noSpaces: 1
+  placeholderFadeAway: 0
   inputFieldBase: {fileID: 114231491237177950}
   errorMessage: {fileID: 0}
 --- !u!114 &114993828319191856
