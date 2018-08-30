@@ -10,7 +10,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
 	[SerializeField] private TMP_Dropdown sortByDropdown;
-	[SerializeField] private TMP_InputField searchField;
+	[SerializeField] private HopeInputField searchField;
 
 	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;
@@ -49,7 +49,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 		sortByDropdown.onValueChanged.AddListener(ListOrderChanged);
-		searchField.onValueChanged.AddListener(SearchBarChanged);
+		searchField.OnInputUpdated += SearchBarChanged;
 
 		AddContactButtons();
 	}

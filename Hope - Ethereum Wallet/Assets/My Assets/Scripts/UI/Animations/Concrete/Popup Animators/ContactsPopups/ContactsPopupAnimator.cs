@@ -4,7 +4,8 @@ public class ContactsPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject addContactButton;
 	[SerializeField] private GameObject sortBySection;
-	[SerializeField] private GameObject searchSection;
+	[SerializeField] private GameObject searchInputField;
+	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
 
@@ -22,8 +23,8 @@ public class ContactsPopupAnimator : UIAnimator
 	{
 		addContactButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
 		sortBySection.AnimateScaleX(1f, 0.2f);
-		searchSection.AnimateScaleX(1f, 0.2f);
-		contactsList.AnimateScaleX(1f, 0.25f, () => AnimateContacts(0));
+		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateContacts(0));
+		line.AnimateScaleX(1f, 0.25f);
 		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 	}
 

@@ -22,6 +22,10 @@ public class Toggle : MonoBehaviour
 		toggleCircle.GetComponent<Button>().onClick.AddListener(ToggleClicked);
 	}
 
+	/// <summary>
+	/// Sets the toggle click action if it is currently null
+	/// </summary>
+	/// <param name="action"> The given Action </param>
     public void AddToggleListener(Action action)
     {
         if (toggleClick == null)
@@ -39,6 +43,9 @@ public class Toggle : MonoBehaviour
 		AnimateImages();
 	}
 
+	/// <summary>
+	/// Animates the UI visuals
+	/// </summary>
 	public void AnimateImages()
 	{
 		toggleCircle.AnimateTransformX(IsToggledOn ? 10f : -10f, 0.1f);

@@ -87,9 +87,9 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		walletNameField.Error = emptyName || usedName;
 
 		if (emptyName)
-			walletNameField.errorMessage.text = "Invalid wallet name.";
+			walletNameField.errorMessage.text = "Invalid wallet name";
 		else if (usedName)
-			walletNameField.errorMessage.text = "Wallet name in use.";
+			walletNameField.errorMessage.text = "Wallet name in use";
 
 		SetButtonInteractable();
 	}
@@ -127,10 +127,10 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		password2Field.Error = password1 != password2;
 
 		if (password1Field.Error)
-			password1Field.errorMessage.text = "Password too short.";
+			password1Field.errorMessage.text = "Password too short";
 
 		if (password2Field.Error)
-			password2Field.errorMessage.text = "Passwords do not match.";
+			password2Field.errorMessage.text = "Passwords do not match";
 
 		password2Field.UpdateVisuals();
 		SetButtonInteractable();

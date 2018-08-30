@@ -120,10 +120,10 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         Transform parentTransform = componentTransform.parent;
 
         parentTransform.parent = tokenListTransform;
-        parentTransform.localScale = new Vector3(0f, 1f, 1f);
-        componentTransform.localScale = Vector3.one;
+		parentTransform.localScale = new Vector3(0f, 1f, 1f);
+		componentTransform.localScale = Vector3.one;
 
-        OnAddableTokenAdded?.Invoke(tokenButton);
+		OnAddableTokenAdded?.Invoke(tokenButton);
 
         return tokenButton;
     }
