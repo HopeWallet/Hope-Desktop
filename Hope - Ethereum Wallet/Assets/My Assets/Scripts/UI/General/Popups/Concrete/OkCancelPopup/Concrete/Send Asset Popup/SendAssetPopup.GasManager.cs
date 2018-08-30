@@ -95,8 +95,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
-			amountInputField.OnInputUpdated += UpdateGasPriceEstimate;
-			OnGasChanged += UpdateGasPriceEstimate;
+			OnGasChanged += UpdateTransactionFeeVisuals;
 
 			AddListenersAndObservables();
 			EstimateGasLimit();
@@ -111,11 +110,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			EstimateGasLimit();
 		}
 
-		private void UpdateGasPriceEstimate()
+        /// <summary>
+        /// Updates the transaction fee visuals based on the current eth amount and gas price.
+        /// </summary>
+		private void UpdateTransactionFeeVisuals()
 		{
 			bool hasEnoughETH;
 
-			if (tradableAssetManager.ActiveTradableAsset.AssetSymbol == "ETH")
+			if (tradableAssetManager.ActiveTradableAsset is EtherAsset)
 			{
 				decimal sendableAmount;
 				decimal.TryParse(amountInputField.Text, out sendableAmount);
@@ -128,7 +130,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			}
 
 			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
-			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
+			transactionFeeText.color = !hasEnoughETH ? UIColors.Red : UIColors.White;
 		}
 
 		/// <summary>
@@ -147,7 +149,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			periodicUpdateManager.AddPeriodicUpdater(this);
 
-			gasLimitField.OnInputUpdated += CheckGasLimitField;
+            amountInputField.OnInputUpdated += _ => UpdateTransactionFeeVisuals();
+            gasLimitField.OnInputUpdated += CheckGasLimitField;
 			gasPriceField.OnInputUpdated += CheckGasPriceField;
 		}
 
@@ -155,10 +158,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Checks the gas limit entered in the gas limit field.
 		/// </summary>
 		/// <param name="gasLimit"> The entered gas limit. </param>
-		private void CheckGasLimitField()
+		private void CheckGasLimitField(string gasLimit)
 		{
-			BigInteger.TryParse(gasLimitField.Text, out enteredGasLimit);
-			gasLimitField.Error = string.IsNullOrEmpty(gasLimitField.Text) || enteredGasLimit.IsZero;
+			BigInteger.TryParse(gasLimit, out enteredGasLimit);
+			gasLimitField.Error = string.IsNullOrEmpty(gasLimit) || enteredGasLimit.IsZero;
 
 			OnGasChanged?.Invoke();
 		}
@@ -167,7 +170,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Checks the gas price entered in the gas price field.
 		/// </summary>
 		/// <param name="gasPrice"> The entered gas price. </param>
-		private void CheckGasPriceField()
+		private void CheckGasPriceField(string gasPrice)
 		{
 			decimal price;
 			decimal.TryParse(gasPriceField.Text, out price);
@@ -185,9 +188,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private void UpdateGasPriceEstimate(GasPrice newEstimate)
 		{
             estimatedGasPrice = newEstimate;
-
-            if (!advancedModeToggle.IsToggledOn)
-                gasPriceField.Text = estimatedGasPrice.ReadableGasPrice.ToString();
 
             OnGasChanged?.Invoke();
         }
@@ -209,7 +209,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			estimatedGasLimit = limit;
 
 			if (string.IsNullOrEmpty(gasLimitField.Text) || !advancedModeToggle.IsToggledOn || limit > enteredGasLimit)
-				CheckGasLimitField();
+				CheckGasLimitField(limit.ToString());
 		}
 	}
 }

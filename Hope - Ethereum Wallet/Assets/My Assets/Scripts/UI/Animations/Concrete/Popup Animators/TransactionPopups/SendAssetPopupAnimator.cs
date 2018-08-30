@@ -22,7 +22,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	private void Start()
 	{
 		transform.GetComponent<SendAssetPopup>().AnimateAdvancedMode += AdvancedModeClicked;
-		addressField.OnInputUpdated += () => AnimateContactName(!string.IsNullOrEmpty(contactNameObject.GetComponent<TextMeshProUGUI>().text));
+		addressField.OnInputUpdated += _ => AnimateContactName(!string.IsNullOrEmpty(contactNameObject.GetComponent<TextMeshProUGUI>().text));
 	}
 
 	/// <summary>

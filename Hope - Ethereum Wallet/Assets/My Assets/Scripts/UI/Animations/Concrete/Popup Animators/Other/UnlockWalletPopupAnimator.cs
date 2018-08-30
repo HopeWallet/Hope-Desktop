@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -16,7 +15,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
     /// </summary>
     private void Awake()
     {
-        passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+        passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
         signInButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
     }
 

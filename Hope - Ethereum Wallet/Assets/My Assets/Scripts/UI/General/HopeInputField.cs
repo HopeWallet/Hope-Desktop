@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HopeInputField : MonoBehaviour
 {
-	public event Action OnInputUpdated;
+	public event Action<string> OnInputUpdated;
 
 	[SerializeField] private GameObject placeholder;
 	[SerializeField] private GameObject eye;
@@ -95,7 +95,7 @@ public class HopeInputField : MonoBehaviour
 		else
 			Text = inputString;
 
-		OnInputUpdated?.Invoke();
+		OnInputUpdated?.Invoke(inputString);
 
 		bool emptyString = string.IsNullOrEmpty(Text);
 

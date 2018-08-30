@@ -42,7 +42,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.contactName = contactName;
 			this.contactsManager = contactsManager;
 
-			addressField.OnInputUpdated += CheckAddress;
+			addressField.OnInputUpdated += _ => CheckAddress();
 		}
 
 		/// <summary>

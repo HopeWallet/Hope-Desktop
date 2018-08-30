@@ -57,7 +57,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		wordInputFields[i] = passphrase.transform.GetChild(i).GetComponent<HopeInputField>();
 		wordTextObjects[i] = wordInputFields[i].transform.GetChild(1).GetChild(0).gameObject;
 
-		wordInputFields[i].OnInputUpdated += () => CheckIfValidInput(i);
+		wordInputFields[i].OnInputUpdated += _ => CheckIfValidInput(i);
 
 		if (wordInputFields[i].inputFieldBase.interactable)
 			importMnemonicMenu.SelectableFields.Add(wordInputFields[i].inputFieldBase);

@@ -57,9 +57,9 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		inputFields.Add(password1Field.inputFieldBase);
 		inputFields.Add(password2Field.inputFieldBase);
 
-		password1Field.OnInputUpdated += PasswordsUpdated;
-		password2Field.OnInputUpdated += PasswordsUpdated;
-		walletNameField.OnInputUpdated += WalletNameFieldChanged;
+		password1Field.OnInputUpdated += _ => PasswordsUpdated();
+		password2Field.OnInputUpdated += _ => PasswordsUpdated();
+		walletNameField.OnInputUpdated += _ => WalletNameFieldChanged();
 		nextButton.onClick.AddListener(CreateWalletNameAndPass);
 	}
 

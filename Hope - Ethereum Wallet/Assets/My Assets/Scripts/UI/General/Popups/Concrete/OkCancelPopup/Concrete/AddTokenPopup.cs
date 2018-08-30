@@ -50,9 +50,9 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnStart()
     {
-        addressField.OnInputUpdated += OnAddressChanged;
-        symbolField.OnInputUpdated += OnSymbolChanged;
-        decimalsField.OnInputUpdated += OnDecimalsChanged;
+        addressField.OnInputUpdated += _ => OnAddressChanged();
+        symbolField.OnInputUpdated += _ => OnSymbolChanged();
+        decimalsField.OnInputUpdated += _ => OnDecimalsChanged();
     }
 
     /// <summary>

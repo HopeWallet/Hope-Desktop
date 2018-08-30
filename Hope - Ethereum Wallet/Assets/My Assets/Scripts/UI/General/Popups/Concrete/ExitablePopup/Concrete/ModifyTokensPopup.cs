@@ -60,7 +60,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     protected override void OnStart()
     {
         addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
-        searchBar.OnInputUpdated += SearchInputChanged;
+        searchBar.OnInputUpdated += _ => SearchInputChanged();
         confirmButton.onClick.AddListener(ConfirmButtonClicked);
     }
 

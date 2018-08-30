@@ -69,7 +69,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			sendAssetPopup.Asset.OnAssetBalanceChanged += MaxChanged;
 			sendAssetPopup.Gas.OnGasChanged += MaxChanged;
 			maxToggle.AddToggleListener(MaxChanged);
-			amountInputField.OnInputUpdated += AmountFieldChanged;
+			amountInputField.OnInputUpdated += _ => AmountFieldChanged();
 		}
 
 		/// <summary>

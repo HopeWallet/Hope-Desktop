@@ -30,7 +30,7 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
         confirmMnemonicMenu = GetComponent<ConfirmMnemonicMenu>();
 		confirmMnemonicMenu.OnWalletLoading += CreateWallet;
 
-		wordInputField.GetComponent<HopeInputField>().OnInputUpdated += InputFieldChanged;
+		wordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
         nextButton.GetComponent<Button>().onClick.AddListener(NextButtonClicked);
     }
 

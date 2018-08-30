@@ -65,7 +65,7 @@ public sealed partial class LockPRPSPopup
 			lockPRPSManager.OnAmountsUpdated += BalancesUpdated;
 
 			maxToggle.AddToggleListener(MaxChanged);
-			amountInputField.OnInputUpdated += AmountFieldChanged;
+			amountInputField.OnInputUpdated += _ => AmountFieldChanged();
 
 			BalancesUpdated();
 		}
