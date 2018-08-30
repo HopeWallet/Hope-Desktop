@@ -90,10 +90,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			amountInputField.inputFieldBase.RestrictDecimalValue(18);
 
-			decimal newLockableAmount;
-			decimal.TryParse(amountInputField.Text, out newLockableAmount);
+			decimal newSendableAmount;
+			decimal.TryParse(amountInputField.Text, out newSendableAmount);
 
-			SendableAmount = newLockableAmount;
+			SendableAmount = newSendableAmount;
 
 			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount))
 			{

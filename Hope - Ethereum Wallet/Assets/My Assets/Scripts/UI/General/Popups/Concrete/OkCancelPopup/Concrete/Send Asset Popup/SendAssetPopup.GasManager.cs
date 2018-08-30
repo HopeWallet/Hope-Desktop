@@ -27,7 +27,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private readonly TransactionSpeedSlider transactionSpeedSlider;
 
 		private readonly HopeInputField gasLimitField,
-										gasPriceField;
+										gasPriceField,
+										amountInputField;
 
 		private GasPrice estimatedGasPrice,
 						 enteredGasPrice;
@@ -79,6 +80,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			PeriodicUpdateManager periodicUpdateManager,
 			Toggle advancedModeToggle,
 			Slider slider,
+			HopeInputField amountInputField,
 			HopeInputField gasLimitField,
 			HopeInputField gasPriceField,
 			TMP_Text transactionFeeText)
@@ -89,9 +91,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasLimitField = gasLimitField;
 			this.gasPriceField = gasPriceField;
 			this.transactionFeeText = transactionFeeText;
+			this.amountInputField = amountInputField;
 
 			transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
+			amountInputField.OnInputUpdated += UpdateGasPriceEstimate;
 			OnGasChanged += UpdateGasPriceEstimate;
 
 			AddListenersAndObservables();
@@ -109,7 +113,21 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private void UpdateGasPriceEstimate()
 		{
-			transactionFeeText.text = TransactionFee < tradableAssetManager.EtherAsset.AssetBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
+			bool hasEnoughETH;
+
+			if (tradableAssetManager.ActiveTradableAsset.AssetSymbol == "ETH")
+			{
+				decimal sendableAmount;
+				decimal.TryParse(amountInputField.Text, out sendableAmount);
+
+				hasEnoughETH = TransactionFee <= (tradableAssetManager.EtherAsset.AssetBalance - sendableAmount);
+			}
+			else
+			{
+				hasEnoughETH = TransactionFee < tradableAssetManager.EtherAsset.AssetBalance;
+			}
+
+			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
 			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
 		}
 
