@@ -41,7 +41,7 @@ public class Toggle : MonoBehaviour
 
 	public void AnimateImages()
 	{
-		toggleCircle.AnimateTransformX(IsToggledOn ? 12f : -12f, 0.1f);
+		toggleCircle.AnimateTransformX(IsToggledOn ? 10f : -10f, 0.1f);
 		toggleCircle.GetComponent<Image>().DOColor(IsToggledOn ? UIColors.Green : UIColors.LightGrey, 0.1f);
 		toggleBackground.GetComponent<Image>().DOColor(IsToggledOn ? UIColors.Green : UIColors.LightGrey, 0.1f);
 
