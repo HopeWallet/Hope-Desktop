@@ -12,6 +12,7 @@ using Zenject;
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ITabButtonObservable, IEnterButtonObservable
 {
 	public event Action<bool> AnimateAdvancedMode;
+	public Action contactsClosed;
 
 	[SerializeField] private HopeInputField addressField;
 	[SerializeField] private HopeInputField amountField;
@@ -100,6 +101,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		selectableFields.Add(gasPriceField.GetComponent<Selectable>());
 
 		lastSelectableField = amountField.GetComponent<Selectable>();
+
+		contactsClosed = () => contactsButton.interactable = true;
 	}
 
 	/// <summary>
@@ -108,7 +111,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	protected override void OnStart()
 	{
 		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
-		contactsButton.onClick.AddListener(() => popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this));
+		contactsButton.onClick.AddListener(() => { popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this); contactsButton.interactable = false; });
 		buttonClickObserver.SubscribeObservable(this);
 	}
 

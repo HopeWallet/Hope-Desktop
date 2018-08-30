@@ -11,6 +11,7 @@ using Zenject;
 public sealed class WalletListMenu : Menu<WalletListMenu>
 {
 	public event Action<bool> BottomButtonsVisible;
+	public static Action PopupClosed;
 
 	[SerializeField] private Button deleteButton, editButton, signInButton, newWalletButton;
 
@@ -90,11 +91,14 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	private void DeleteWallet()
 	{
-		
+		deleteButton.interactable = false;
+		PopupClosed = () => deleteButton.interactable = true;
 	}
 
 	private void EditWallet()
 	{
+		editButton.interactable = false;
+		PopupClosed = () => editButton.interactable = true;
 	}
 
 	/// <summary>
@@ -102,6 +106,9 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	/// </summary>
 	private void UnlockWallet()
 	{
+		signInButton.interactable = false;
+		PopupClosed = () => signInButton.interactable = true;
+
 		dynamicDataCache.SetData("walletnum", activeWalletNum);
 		popupManager.GetPopup<UnlockWalletPopup>();
 	}

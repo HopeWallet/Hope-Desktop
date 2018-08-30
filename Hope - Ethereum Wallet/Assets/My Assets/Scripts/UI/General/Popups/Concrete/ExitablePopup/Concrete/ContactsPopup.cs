@@ -74,6 +74,11 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	}
 
 	/// <summary>
+	/// Sets the contact button to interactable again after the contacts popup has been destroyed
+	/// </summary>
+	private void OnDestroy() => sendAssetPopup.contactsClosed?.Invoke();
+
+	/// <summary>
 	/// Adds the contact buttons accourding to all the saved contacts in the SecurePlayerPrefs
 	/// </summary>
 	private void AddContactButtons()

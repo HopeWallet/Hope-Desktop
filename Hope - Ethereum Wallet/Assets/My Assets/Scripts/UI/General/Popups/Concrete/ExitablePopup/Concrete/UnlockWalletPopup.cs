@@ -18,15 +18,19 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
 
-    /// <summary>
-    /// Adds the required dependencies to this popup.
-    /// </summary>
-    /// <param name="uiManager"> The active UIManager. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
-    [Inject]
-    public void Construct(UIManager uiManager, UserWalletManager userWalletManager, DynamicDataCache dynamicDataCache, ButtonClickObserver buttonClickObserver)
+	/// <summary>
+	/// Adds the required dependencies to this popup.
+	/// </summary>
+	/// <param name="uiManager"> The active UIManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+	/// <param name="walletListMenu"> The active WalletListMenu class. </param>
+	[Inject]
+    public void Construct(UIManager uiManager, 
+						  UserWalletManager userWalletManager, 
+						  DynamicDataCache dynamicDataCache, 
+						  ButtonClickObserver buttonClickObserver)
     {
         this.uiManager = uiManager;
         this.userWalletManager = userWalletManager;
@@ -55,7 +59,8 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     {
         UserWallet.OnWalletLoadSuccessful -= OnWalletLoad;
         buttonClickObserver.UnsubscribeObservable(this);
-    }
+		WalletListMenu.PopupClosed?.Invoke();
+	}
 
     /// <summary>
     /// Enables the open wallet gui once the user wallet has been successfully loaded.
