@@ -90,10 +90,7 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
-		if (noSpaces)
-			Text = inputString.Trim();
-		else
-			Text = inputString;
+		Text = noSpaces ? inputString.Trim() : inputString;
 
 		OnInputUpdated?.Invoke(inputString);
 

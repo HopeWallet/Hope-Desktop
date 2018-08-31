@@ -1924,7 +1924,7 @@ MonoBehaviour:
   confirmButton: {fileID: 114126943363835902}
   contactsListTransform: {fileID: 224468492234351710}
   sortByDropdown: {fileID: 114937954510528154}
-  searchField: {fileID: 114658305477930838}
+  searchBar: {fileID: 114658305477930838}
 --- !u!114 &114898576987009608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2776,7 +2776,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 175.77353}
+  m_AnchoredPosition: {x: 0, y: 274.54706}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224504459596854990

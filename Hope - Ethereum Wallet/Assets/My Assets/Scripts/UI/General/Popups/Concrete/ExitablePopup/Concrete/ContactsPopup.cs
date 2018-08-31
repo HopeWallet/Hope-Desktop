@@ -10,7 +10,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	public Button addContactButton, confirmButton;
 	public Transform contactsListTransform;
 	[SerializeField] private TMP_Dropdown sortByDropdown;
-	[SerializeField] private HopeInputField searchField;
+	[SerializeField] private HopeInputField searchBar;
 
 	private SendAssetPopup sendAssetPopup;
 	private ContactsPopupAnimator contactsPopupAnimator;
@@ -49,7 +49,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 		sortByDropdown.onValueChanged.AddListener(ListOrderChanged);
-		searchField.OnInputUpdated += SearchBarChanged;
+		searchBar.OnInputUpdated += SearchBarChanged;
 
 		AddContactButtons();
 	}
@@ -127,6 +127,9 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		var buttons = contactsListTransform.GetChildrenTransformList().Select(b => b.GetChild(0).GetComponent<ContactButton>()).ToList();
 		buttons.Where(button => !SearchName(button, search) || !SearchAddress(button, search)).ForEach(button => SetButtonObjectActive(button, false));
 		buttons.Where(button => SearchName(button, search) || SearchAddress(button, search)).ForEach(button => SetButtonObjectActive(button, true));
+
+		var visibleContacts = buttons.Where(button => button.gameObject.activeInHierarchy).ToList();
+		searchBar.Error = visibleContacts.Count == 0;
 	}
 
 	/// <summary>

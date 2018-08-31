@@ -54,4 +54,17 @@ public class Toggle : MonoBehaviour
 
 		toggleClick?.Invoke();
 	}
+
+	/// <summary>
+	/// Sets the toggle interactable and animates a color change
+	/// </summary>
+	/// <param name="interactable"> Whether the toggle is interactable or not </param>
+	public void SetInteractable(bool interactable)
+	{
+		toggleBackground.GetComponent<Button>().interactable = interactable;
+		toggleCircle.GetComponent<Button>().interactable = interactable;
+
+		toggleBackground.AnimateColor(interactable ? UIColors.LightGrey : UIColors.DarkGrey, 0.1f);
+		toggleCircle.AnimateColor(interactable ? UIColors.LightGrey : UIColors.DarkGrey, 0.1f);
+	}
 }

@@ -21,7 +21,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private bool usingTokenCurrency;
 		private string tradableTokenSymbol, defaultCurrency = "USD";
-		private decimal oppositeCurrencyValue, currentTokenPrice = 281.81m;
+		private decimal oppositeCurrencyValue, currentTokenPrice = 1.38m;
 
 		private readonly SendAssetPopup sendAssetPopup;
 
@@ -108,6 +108,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			if (!string.IsNullOrEmpty(amountInputField.Text))
 				amountInputField.Text = oppositeCurrencyValue.ToString();
+
+			maxToggle.SetInteractable(usingTokenCurrency);
 		}
 
 		/// <summary>
