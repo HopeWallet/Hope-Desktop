@@ -14,22 +14,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	public event Action<bool> AnimateAdvancedMode;
 	public Action contactsClosed;
 
-	[SerializeField] private HopeInputField addressField;
-	[SerializeField] private HopeInputField amountField;
-	[SerializeField] private HopeInputField gasLimitField;
-	[SerializeField] private HopeInputField gasPriceField;
+	[SerializeField] private HopeInputField addressField,
+											amountField,
+											gasLimitField,
+											gasPriceField;
 
-	[SerializeField] private TMP_Text assetBalance;
-	[SerializeField] private TMP_Text assetSymbol;
-	[SerializeField] private TMP_Text transactionFee;
-	[SerializeField] private TMP_Text contactName;
+	[SerializeField] private TMP_Text assetBalance,
+									  assetSymbol,
+									  transactionFee,
+									  contactName,
+									  currencyText,
+									  oppositeCurrencyAmountText;
 
-	[SerializeField] private Toggle advancedModeToggle;
-	[SerializeField] private Toggle maxToggle;
+	[SerializeField] private Toggle advancedModeToggle, maxToggle;
 
 	[SerializeField] private Image assetImage;
 	[SerializeField] private Slider transactionSpeedSlider;
-	[SerializeField] private Button contactsButton;
+	[SerializeField] private Button contactsButton, currencyButton;
 
 	private bool advancedMode;
 
@@ -93,7 +94,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
 		Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, amountField, gasLimitField, gasPriceField, transactionFee);
 		Address = new AddressManager(addressField, contactName, contactsManager);
-		Amount = new AmountManager(this, maxToggle, amountField);
+		Amount = new AmountManager(this, maxToggle, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
 
 		selectableFields.Add(addressField.GetComponent<Selectable>());
 		selectableFields.Add(amountField.GetComponent<Selectable>());

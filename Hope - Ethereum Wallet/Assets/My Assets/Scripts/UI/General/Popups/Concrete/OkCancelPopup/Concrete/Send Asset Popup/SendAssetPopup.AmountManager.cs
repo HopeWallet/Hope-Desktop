@@ -1,4 +1,7 @@
 ﻿using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.
@@ -11,6 +14,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	public sealed class AmountManager
 	{
 		public event Action OnAmountChanged;
+
+		private TMP_Text currencyButtonText, oppositeCurrencyAmountText;
+
+		private Button currencyButton;
+
+		private bool usingTokenCurrency;
+		private string tradableTokenSymbol, defaultCurrency = "USD";
+		private decimal oppositeCurrencyValue, currentTokenPrice = 281.81m;
 
 		private readonly SendAssetPopup sendAssetPopup;
 
@@ -49,15 +60,30 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="sendAssetPopup"> The active <see cref="SendAssetPopup"/>. </param>
 		/// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
 		/// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
+		/// <param name="currencyText"> The currency text object. </param>
+		/// <param name="oppositeCurrencyAmountText"> The opposite currency amount text object. </param>
+		/// <param name="currencyButton"> The currency button. </param>
+		/// <param name="tokenSymbol"> The token symbol. </param>
 		public AmountManager(
 			SendAssetPopup sendAssetPopup,
 			Toggle maxToggle,
-			HopeInputField amountInputField)
+			HopeInputField amountInputField,
+			TMP_Text currencyText,
+			TMP_Text oppositeCurrencyAmountText,
+			Button currencyButton,
+			string tokenSymbol)
 		{
 			this.sendAssetPopup = sendAssetPopup;
 			this.maxToggle = maxToggle;
 			this.amountInputField = amountInputField;
+			this.currencyButtonText = currencyText;
+			this.oppositeCurrencyAmountText = oppositeCurrencyAmountText;
+			this.currencyButton = currencyButton;
+			tradableTokenSymbol = tokenSymbol;
 
+			amountInputField.SetPlaceholderText("Amount (" + tokenSymbol + ")");
+			usingTokenCurrency = true;
+			currencyText.text = defaultCurrency;
 			SetupListeners();
 		}
 
@@ -70,6 +96,18 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			sendAssetPopup.Gas.OnGasChanged += MaxChanged;
 			maxToggle.AddToggleListener(MaxChanged);
 			amountInputField.OnInputUpdated += _ => AmountFieldChanged();
+			currencyButton.onClick.AddListener(CurrencyChanged);
+		}
+
+		private void CurrencyChanged()
+		{
+			usingTokenCurrency = !usingTokenCurrency;
+
+			amountInputField.SetPlaceholderText("Amount (" + currencyButtonText.text + ")");
+			currencyButtonText.text = usingTokenCurrency ? defaultCurrency : tradableTokenSymbol;
+
+			if (!string.IsNullOrEmpty(amountInputField.Text))
+				amountInputField.Text = oppositeCurrencyValue.ToString();
 		}
 
 		/// <summary>
@@ -78,7 +116,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void MaxChanged()
 		{
 			if (maxToggle.IsToggledOn)
-				amountInputField.Text = MaxSendableAmount.ToString();
+				amountInputField.Text = usingTokenCurrency ? MaxSendableAmount.ToString() : (MaxSendableAmount * currentTokenPrice).ToString();
 
 			CheckIfValidAmount();
 		}
@@ -88,12 +126,15 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void AmountFieldChanged()
 		{
-			amountInputField.inputFieldBase.RestrictDecimalValue(18);
+			amountInputField.inputFieldBase.RestrictDecimalValue(usingTokenCurrency ? 18 : 2);
 
 			decimal newSendableAmount;
 			decimal.TryParse(amountInputField.Text, out newSendableAmount);
 
 			SendableAmount = newSendableAmount;
+
+			oppositeCurrencyAmountText.gameObject.AnimateGraphicAndScale(string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, 0.15f);
+			ChangeOppositeCurrencyValue();
 
 			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount))
 			{
@@ -104,13 +145,22 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			CheckIfValidAmount();
 		}
 
+		private void ChangeOppositeCurrencyValue()
+		{
+			oppositeCurrencyValue = usingTokenCurrency ? SendableAmount * currentTokenPrice : SendableAmount / currentTokenPrice;
+
+			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00").LimitEnd(8, "...") : oppositeCurrencyValue.ToString().LimitEnd(8, "...");
+
+			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= $" + oppositeCurrencyValueText + " " + defaultCurrency : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
+		}
+
 		/// <summary>
 		/// Checks if the amount entered in the input field is valid and updates the amount changed listeners.
 		/// </summary>
 		private void CheckIfValidAmount()
 		{
-			amountInputField.Error = SendableAmount == 0 || SendableAmount > MaxSendableAmount;
-            OnAmountChanged?.Invoke();
-        }
-    }
+			amountInputField.Error = SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / currentTokenPrice) > MaxSendableAmount);
+			OnAmountChanged?.Invoke();
+		}
+	}
 }
