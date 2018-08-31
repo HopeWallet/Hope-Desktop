@@ -5,12 +5,9 @@ using Zenject;
 
 public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
 {
-
 	[SerializeField] private Button addContactButton, confirmButton;
-	[SerializeField] private TMP_InputField nameInputField, addressInputField;
+	[SerializeField] private HopeInputField nameInputField, addressInputField;
 	[SerializeField] private TextMeshProUGUI title;
-
-	public InteractableIcon nameErrorIcon, addressErrorIcon;
 
 	private string previousName, previousAddress;
 	private ContactButton contactButton;
@@ -27,9 +24,6 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
-
-		nameErrorIcon.PopupManager = popupManager;
-		addressErrorIcon.PopupManager = popupManager;
 	}
 
 	/// <summary>
@@ -55,7 +49,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// </summary>
 	private void AddContactClicked()
 	{
-		contactsManager.AddContact(addressInputField.text, nameInputField.text);
+		contactsManager.AddContact(addressInputField.Text, nameInputField.Text);
 		CreateNewContactObjectInList();
 
 		popupManager.CloseActivePopup();
@@ -68,7 +62,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		var button = contactButtonFactory.Create();
 
-		button.SetButtonInfo(new ContactInfo(contactsPopup, addressInputField.text, nameInputField.text));
+		button.SetButtonInfo(new ContactInfo(contactsPopup, addressInputField.Text, nameInputField.Text));
 
 		Transform contactObject = button.transform.parent;
 		contactObject.parent = contactsPopup.contactsListTransform;
@@ -81,8 +75,8 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	/// </summary>
 	private void ConfirmClicked()
 	{
-		string newName = nameInputField.text;
-		string newAddress = addressInputField.text;
+		string newName = nameInputField.Text;
+		string newAddress = addressInputField.Text;
 
 		contactsManager.EditContact(previousAddress, newAddress, newName);
 
@@ -104,20 +98,14 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		addOrEditContactPopupAnimator.PreviousAddress = address;
 		addOrEditContactPopupAnimator.contactsManager = contactsManager;
 
-		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "A D D  C O N T A C T" : "E D I T  C O N T A C T";
+		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "Add Contact" : "Edit Contact";
 
 		if (addingContact) return;
 
-		nameInputField.text = name;
-		addressInputField.text = address;
+		nameInputField.Text = name;
+		addressInputField.Text = address;
 		previousName = name;
 		previousAddress = address;
 		this.contactButton = contactButton;
 	}
-
-	/// <summary>
-	/// Sets the addressError body message 
-	/// </summary>
-	/// <param name="bodyText"> The custom body message </param>
-	public void SetAddressErrorBodyText(string bodyText) => addressErrorIcon.infoText = bodyText;
 }

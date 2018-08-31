@@ -51,7 +51,7 @@ public sealed class ContactButton : InfoButton<ContactButton, ContactInfo>
 		RealContactAddress = address;
 		contactsPopup = info.ContactsPopup;
 
-		contactName.text = name?.LimitEnd(18, "...");
+		contactName.text = name?.LimitEnd(20, "...");
 		contactAddress.text = address?.Substring(0, 8) + "...." + address.Substring(address.Length - 8, 8);
 	}
 

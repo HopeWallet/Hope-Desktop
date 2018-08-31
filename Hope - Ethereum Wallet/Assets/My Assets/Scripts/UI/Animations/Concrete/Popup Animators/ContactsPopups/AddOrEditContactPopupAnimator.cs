@@ -5,19 +5,13 @@ using Hope.Utils.Ethereum;
 
 public class AddOrEditContactPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject nameSection;
-	[SerializeField] private GameObject addressSection;
+	[SerializeField] private HopeInputField nameInputField;
+	[SerializeField] private HopeInputField addressInputField;
 	[SerializeField] private GameObject addContactButton;
 	[SerializeField] private GameObject confirmButton;
 
 	private AddOrEditContactPopup addOrEditContactPopup;
 	public ContactsManager contactsManager;
-
-	private TMP_InputField nameInputField;
-	private TMP_InputField addressInputField;
-
-	private bool validName;
-	private bool validAddress;
 
     public string PreviousAddress { get; set; }
 
@@ -30,11 +24,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	{
 		addOrEditContactPopup = transform.GetComponent<AddOrEditContactPopup>();
 
-		nameInputField = nameSection.transform.GetChild(2).GetComponent<TMP_InputField>();
-		addressInputField = addressSection.transform.GetChild(2).GetComponent<TMP_InputField>();
-
-		nameInputField.onValueChanged.AddListener(ContactNameChanged);
-		addressInputField.onValueChanged.AddListener(AddressChanged);
+		nameInputField.OnInputUpdated += ContactNameChanged;
+		addressInputField.OnInputUpdated += AddressChanged;
 	}
 
 	/// <summary>
@@ -42,8 +33,8 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		nameSection.AnimateScaleX(1f, 0.2f);
-		addressSection.AnimateScaleX(1f, 0.25f);
+		nameInputField.gameObject.AnimateScaleX(1f, 0.2f);
+		addressInputField.gameObject.AnimateScaleX(1f, 0.25f);
 		AnimateMainButton(true);
 	}
 
@@ -69,13 +60,7 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="name"> The current string in the name input field </param>
 	private void ContactNameChanged(string name)
 	{
-		if (name.Length > 30)
-			nameInputField.text = name.LimitEnd(30);
-
-		string updatedName = nameInputField.text;
-
-		validName = !string.IsNullOrEmpty(updatedName.Trim());
-		AnimateErrorIcon(addOrEditContactPopup.nameErrorIcon, validName);
+		nameInputField.Error = string.IsNullOrEmpty(nameInputField.Text.Trim());
 
 		SetMainButtonInteractable();
 	}
@@ -86,21 +71,17 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// <param name="address"> The current string in the address input field </param>
 	private void AddressChanged(string address)
 	{
-		if (!AddressUtils.CorrectAddressLength(address, AddressUtils.ADDRESS_LENGTH))
-			addressInputField.text = address.LimitEnd(AddressUtils.ADDRESS_LENGTH);
-
-		string updatedAddress = addressInputField.text.ToLower();
+		string updatedAddress = addressInputField.Text.ToLower();
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool overridingOtherContactAddresses = contactsManager.ContactList.Contains(updatedAddress) && (!AddingContact ? updatedAddress != PreviousAddress : true);
 
-		validAddress = realEthereumAddress && !overridingOtherContactAddresses;
-		AnimateErrorIcon(addOrEditContactPopup.addressErrorIcon, validAddress);
+		addressInputField.Error = !realEthereumAddress || overridingOtherContactAddresses;
 
 		if (!realEthereumAddress)
-			addOrEditContactPopup.SetAddressErrorBodyText("This is not a valid Ethereum address.");
+			addressInputField.errorMessage.text = "Invalid address";
 		else if (overridingOtherContactAddresses)
-			addOrEditContactPopup.SetAddressErrorBodyText("This address has already been saved under the contact name: " + contactsManager.ContactList[updatedAddress].ContactName + ".");
+			addressInputField.errorMessage.text = "Address in use";
 
 		SetMainButtonInteractable();
 	}
@@ -110,18 +91,11 @@ public class AddOrEditContactPopupAnimator : UIAnimator
 	/// </summary>
 	private void SetMainButtonInteractable()
 	{
-		bool validInputs = !string.IsNullOrEmpty(nameInputField.text) && validName && !string.IsNullOrEmpty(addressInputField.text) && validAddress;
+		bool validInputs = !nameInputField.Error && !addressInputField.Error;
 
 		if (AddingContact)
 			addContactButton.GetComponent<Button>().interactable = validInputs;
 		else
 			confirmButton.GetComponent<Button>().interactable = validInputs;
 	}
-
-	/// <summary>
-	/// Animates the given icon
-	/// </summary>
-	/// <param name="icon"> The icon being animated </param>
-	/// <param name="isValid"> Whether being animated in or out </param>
-	private void AnimateErrorIcon(InteractableIcon icon, bool isValid) => icon.AnimateIcon(isValid ? 0f : 1f);
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -21,7 +20,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private bool usingTokenCurrency;
 		private string tradableTokenSymbol, defaultCurrency = "USD";
-		private decimal oppositeCurrencyValue, currentTokenPrice = 1.38m;
+		private decimal oppositeCurrencyValue, currentTokenPrice = 281.81m;
 
 		private readonly SendAssetPopup sendAssetPopup;
 
@@ -99,6 +98,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			currencyButton.onClick.AddListener(CurrencyChanged);
 		}
 
+		/// <summary>
+		/// Changes the currency and the inputted text according to the currency
+		/// </summary>
 		private void CurrencyChanged()
 		{
 			usingTokenCurrency = !usingTokenCurrency;
@@ -147,6 +149,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			CheckIfValidAmount();
 		}
 
+		/// <summary>
+		/// Changes the opposite currency value text
+		/// </summary>
 		private void ChangeOppositeCurrencyValue()
 		{
 			oppositeCurrencyValue = usingTokenCurrency ? SendableAmount * currentTokenPrice : SendableAmount / currentTokenPrice;

@@ -1,0 +1,736 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isopoh.Cryptography.Argon2</name>
+    </assembly>
+    <members>
+        <member name="T:Isopoh.Cryptography.Argon2.Argon2">
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+            <summary>
+            Argon2 Hashing of passwords
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Blake2BLong(System.Byte[],System.Byte[],Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Does a Blake2 hash with the ability to truncate or extend the hash to any length.
+            </summary>
+            <param name="hash">
+            The buffer to fill with the hash
+            </param>
+            <param name="inbuf">
+            What to hash.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2.BlockSize">
+            <summary>
+            The Argon2 block size in bytes.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2.QwordsInBlock">
+            <summary>
+            The number of 8-byte words in an Argon2 block
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2.PrehashDigestLength">
+            <summary>
+            The number of bytes hashed in initializing Argon2
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2.PrehashSeedLength">
+            <summary>
+            Bytes required in the buffer passed into the <see cref="M:Isopoh.Cryptography.Argon2.Argon2.FillFirstBlocks(System.Byte[])"/> method.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2.SyncPoints">
+            <summary>
+            Number of synchronization points between lanes per pass
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.#ctor(Isopoh.Cryptography.Argon2.Argon2Config)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.Argon2.Argon2"/> class.
+            </summary>
+            <param name="config">
+            The configuration to use.
+            </param>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2.Memory">
+            <summary>
+            Gets the <see cref="P:Isopoh.Cryptography.Argon2.Argon2.MemoryBlockCount"/> blocks.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2.MemoryBlockCount">
+            <summary>
+            Gets the number of memory blocks (<see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes"/>*<see cref="P:Isopoh.Cryptography.Argon2.Argon2.LaneLength"/>).
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2.SegmentLength">
+            <summary>
+            Gets the segment length
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2.LaneLength">
+            <summary>
+            Gets the lane length
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Hash">
+            <summary>
+            Perform the hash.
+            </summary>
+            <returns>
+            The hash bytes.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Dispose">
+            <summary>
+            Zero sensitive memory and dispose of resources.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Hash(Isopoh.Cryptography.Argon2.Argon2Config)">
+            <summary>
+            Hash the given password to a Argon2 hash string.
+            </summary>
+            <param name="configToHash">
+            Contains all the information used to create the hash returned.
+            </param>
+            <returns>
+            The Argon2 hash of the given password.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Hash(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Int32,Isopoh.Cryptography.Argon2.Argon2Type,System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Hash the given password to a Argon2 hash string.
+            </summary>
+            <param name="password">
+            The password to hash. Gets UTF-8 encoded before hashing.
+            </param>
+            <param name="secret">
+            The secret to use in creating the hash. UTF-8 encoded before hashing. May be null. A
+            <see cref="T:System.String"/>.<see cref="F:System.String.Empty"/> is treated the same as null.
+            </param>
+            <param name="timeCost">
+            The time cost to use. Defaults to 3.
+            </param>
+            <param name="memoryCost">
+            The memory cost to use. Defaults to 65536 (64K).
+            </param>
+            <param name="parallelism">
+            The parallelism to use. Default to 1 (single threaded).
+            </param>
+            <param name="type">
+            Data-dependent or data-independent. Defaults to data-independent
+            (as recommended for password hashing).
+            </param>
+            <param name="hashLength">
+            The length of the hash in bytes. Note, the string returned base-64
+            encodes this with other parameters so the resulting string is
+            significantly longer.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            The Argon2 hash of the given password.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Hash(System.String,System.String,System.Int32,System.Int32,System.Int32,Isopoh.Cryptography.Argon2.Argon2Type,System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Hash the given password to a Argon2 hash string.
+            </summary>
+            <param name="password">
+            The password to hash. Gets UTF-8 encoded before hashing.
+            </param>
+            <param name="secret">
+            The secret to use in creating the hash. UTF-8 encoded before hashing. May be null. A
+            <see cref="T:System.String"/>.<see cref="F:System.String.Empty"/> is treated the same as null.
+            </param>
+            <param name="timeCost">
+            The time cost to use. Defaults to 3.
+            </param>
+            <param name="memoryCost">
+            The memory cost to use. Defaults to 65536 (64K).
+            </param>
+            <param name="parallelism">
+            The parallelism to use. Default to 1 (single threaded).
+            </param>
+            <param name="type">
+            Data-dependent or data-independent. Defaults to data-independent
+            (as recommended for password hashing).
+            </param>
+            <param name="hashLength">
+            The length of the hash in bytes. Note, the string returned base-64
+            encodes this with other parameters so the resulting string is
+            significantly longer.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            The Argon2 hash of the given password.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Hash(System.String,System.Int32,System.Int32,System.Int32,Isopoh.Cryptography.Argon2.Argon2Type,System.Int32,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Hash the given password to a Argon2 hash string.
+            </summary>
+            <param name="password">
+            The password to hash. Gets UTF-8 encoded before hashing.
+            </param>
+            <param name="timeCost">
+            The time cost to use. Defaults to 3.
+            </param>
+            <param name="memoryCost">
+            The memory cost to use. Defaults to 65536 (64K).
+            </param>
+            <param name="parallelism">
+            The parallelism to use. Default to 1 (single threaded).
+            </param>
+            <param name="type">
+            Data-dependent or data-independent. Defaults to data-independent
+            (as recommended for password hashing).
+            </param>
+            <param name="hashLength">
+            The length of the hash in bytes. Note, the string returned base-64
+            encodes this with other parameters so the resulting string is
+            significantly longer.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            The Argon2 hash of the given password.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Verify(System.String,Isopoh.Cryptography.Argon2.Argon2Config)">
+            <summary>
+            Verify the given Argon2 hash as being that of the given password.
+            </summary>
+            <param name="encoded">
+            The Argon2 hash string. This has the actual hash along with other parameters used in the hash.
+            </param>
+            <param name="configToVerify">
+            The configuration that contains the values used to created <paramref name="encoded"/>.
+            </param>
+            <returns>
+            True on success; false otherwise.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Verify(System.String,System.Byte[],System.Byte[],Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Verify the given Argon2 hash as being that of the given password.
+            </summary>
+            <param name="encoded">
+            The Argon2 hash string. This has the actual hash along with other parameters used in the hash.
+            </param>
+            <param name="password">
+            The password to verify
+            </param>
+            <param name="secret">
+            The secret hashed into the password.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            True on success; false otherwise.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Verify(System.String,System.Byte[],Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Verify the given Argon2 hash as being that of the given password.
+            </summary>
+            <param name="encoded">
+            The Argon2 hash string. This has the actual hash along with other parameters used in the hash.
+            </param>
+            <param name="password">
+            The password to verify
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            True on success; false otherwise.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Verify(System.String,System.String,System.String,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Verify the given Argon2 hash as being that of the given password.
+            </summary>
+            <param name="encoded">
+            The Argon2 hash string. This has the actual hash along with other parameters used in the hash.
+            </param>
+            <param name="password">
+            The password to verify. This gets UTF-8 encoded.
+            </param>
+            <param name="secret">
+            The secret used in the creation of <paramref name="encoded"/>. UTF-8 encoded to create the byte-buffer actually used in the verification.
+            May be null for no secret. <see cref="T:System.String"/>.<see cref="F:System.String.Empty"/> is treated as null.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            True on success; false otherwise.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Argon2.Verify(System.String,System.String,Isopoh.Cryptography.SecureArray.SecureArrayCall)">
+            <summary>
+            Verify the given Argon2 hash as being that of the given password.
+            </summary>
+            <param name="encoded">
+            The Argon2 hash string. This has the actual hash along with other parameters used in the hash.
+            </param>
+            <param name="password">
+            The password to verify. This gets UTF-8 encoded.
+            </param>
+            <param name="secureArrayCall">
+            The methods that get called to secure arrays. A null value defaults to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </param>
+            <returns>
+            True on success; false otherwise.
+            </returns>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.Argon2Config">
+            <summary>
+            Holds configuration needed to perform an Argon2 hash.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Version">
+            <summary>
+            Gets or sets the Argon2 version used in the password hash. Defaults to
+            <see cref="T:Isopoh.Cryptography.Argon2.Argon2Version"/>.<see cref="F:Isopoh.Cryptography.Argon2.Argon2Version.Nineteen"/> (0x13).
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Type">
+            <summary>
+            Gets or sets the Argon2 type. Default to data independent.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.HashLength">
+            <summary>
+            Gets or sets the hash length to output. Minimum of 4. Default 32.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Password">
+            <summary>
+            Gets or sets the password to hash.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Salt">
+            <summary>
+            Gets or sets the salt used in the password hash. If non-null, must be at least 8 bytes.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Secret">
+            <summary>
+            Gets or sets the secret used in the password hash.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.AssociatedData">
+            <summary>
+            Gets or sets the associated data used in the password hash.
+            </summary>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.TimeCost">
+            <summary>
+            Gets or sets the time cost used in the password hash. Minimum of 1. Defaults to 3.
+            </summary>
+            <remarks>
+            This is the number of iterations to perform. There are attacks on the
+            <see cref="T:Isopoh.Cryptography.Argon2.Argon2Version"/>.<see cref="F:Isopoh.Cryptography.Argon2.Argon2Version.Sixteen"/> with less than
+            three iterations (if I'm reading the paper correctly). So, use a value
+            greater then 3 here if you are not using <see cref="T:Isopoh.Cryptography.Argon2.Argon2Version"/>.<see
+            cref="F:Isopoh.Cryptography.Argon2.Argon2Version.Nineteen"/>.
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.MemoryCost">
+            <summary>
+            Gets or sets the memory cost used in the password hash. Minimum of 1. Defaults to 65536.
+            </summary>
+            <remarks>
+            This translates into the minimum memory used. The memory cost is the minimum number
+            of 1024-byte blocks to used to perform the hash. If this value is less than
+            2 * <see cref="F:Isopoh.Cryptography.Argon2.Argon2.SyncPoints"/> * <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes"/> then that value is used
+            (<see cref="F:Isopoh.Cryptography.Argon2.Argon2.SyncPoints"/> == 4).
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes">
+            <summary>
+            Gets or sets the lanes used in the password hash. Minimum of 1. Defaults to 4.
+            </summary>
+            <remarks>
+            This describes the maximum parallelism that can be achieved. Each "lane" can
+            be processed individually in its own thread. Setting <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Threads"/>
+            to a value greater than one when there is more than one lane will allow the
+            use of multiple cores to speed up hashing.
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.Threads">
+            <summary>
+            Gets or sets the threads used in the password hash. Minimum of 1. Defaults to 1.
+            </summary>
+            <remarks>
+            <para>
+            This value makes no difference in the result. A value greater than one causes that
+            many threads to get spawned to do the work on top of the main thread that orchestrates
+            which thread does what work.
+            </para>
+            <para>
+            <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes"/> defines the maximum parallelism that can be achieved. Setting
+            <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Threads"/> to a value greater than <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes"/> will not result
+            in more than <see cref="P:Isopoh.Cryptography.Argon2.Argon2Config.Lanes"/> threads running.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.ClearPassword">
+            <summary>
+            Gets or sets a value indicating whether to clear the password as
+            soon as it is no longer needed.
+            </summary>
+            <remarks>
+            If true and the configuration has a password, the configuration
+            cannot be used more than once without resetting the password
+            (unless you want an all zero password).
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.ClearSecret">
+            <summary>
+            Gets or sets a value indicating whether to clear the secret as
+            soon as it is no longer needed.
+            </summary>
+            <remarks>
+            If true and the configuration has a secret, the configuration
+            cannot be used more than once without resetting the secret
+            (unless you want an all zero secret).
+            </remarks>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Argon2Config.SecureArrayCall">
+            <summary>
+            Gets or sets the methods that get called to secure arrays. Defaults
+            to <see cref="T:Isopoh.Cryptography.SecureArray.SecureArray"/>.<see cref="P:Isopoh.Cryptography.SecureArray.SecureArray.DefaultCall"/>.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.Argon2Type">
+             <summary>
+             Argon2 can hash in two different ways, data-depenedent and data-independent.
+             </summary>
+             <remarks>
+             <para>
+             From the Argon2 paper:
+             </para>
+             <para>
+             Argon2 has two variants: Argon2d [data-dependent] and Argon2i [data-independent].
+             Argon2d is faster and uses data-depending memory access, which makes it suitable
+             for cryptocurrencies and applications with no threats from side-channel timing
+             attacks. Argon2i uses data-independent memory access, which is preferred for
+             password hashing and password-based key derivation. Argon2i is slower as it
+             makes more passes over the memory to protect from tradeoff attacks.
+             </para>
+             <para>
+            
+             </para>
+             </remarks>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2Type.DataDependentAddressing">
+            <summary>
+            Use data-dependent addressing. This is faster but susceptible to
+            side-channel attacks.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2Type.DataIndependentAddressing">
+            <summary>
+            Use data-independent addressing. This is slower and recommended for password
+            hashing and password-based key derivation.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.Argon2Version">
+            <summary>
+            There are two versions, 16 and 19. 19 is 5%-15% slower but fixes a vulnerabilty
+            where an attacker could take advantage of short time spans where memory blocks
+            were not used to reduce the overall memory cost by up to a factor of about 3.5.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2Version.Sixteen">
+            <summary>
+            For Argon2 versions 1.2.1 or earlier.
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Argon2Version.Nineteen">
+            <summary>
+            For Argon2 version 1.3.
+            </summary>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.Blocks">
+            <summary>
+            Break a byte array into blocks for Argon2 to use
+            </summary>
+        </member>
+        <member name="F:Isopoh.Cryptography.Argon2.Blocks.blockValues">
+            <summary>
+            The array of blocks broken into <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/>
+            which actually return the values in the original array.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.Blocks.#ctor(System.UInt64[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.Argon2.Blocks"/> class.
+            </summary>
+            <param name="memory">
+            The array to use under the blocks.
+            </param>
+            <param name="blockCount">
+            The number of blocks in the array.
+            </param>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.Blocks.Item(System.Int32)">
+            <summary>
+            Gets or sets the <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> element at the specified index.
+            </summary>
+            <param name="i">
+            The <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> element to get or set.
+            </param>
+            <returns>
+            The requested <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> element.
+            </returns>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.BlockValues">
+            <summary>
+            Gets the values from a ulong array. Block lengths are <see cref="F:Isopoh.Cryptography.Argon2.Argon2.QwordsInBlock"/>
+            elements long.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.BlockValues.#ctor(System.UInt64[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> class.
+            </summary>
+            <param name="memory">
+            The array of ulong elements the <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> will use.
+            </param>
+            <param name="blockIndex">
+            The index of the block in <paramref name="memory"/> the <see
+            cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> will use. Blocks are <see cref="F:Isopoh.Cryptography.Argon2.Argon2.QwordsInBlock"/>
+            elements long.
+            </param>
+        </member>
+        <member name="P:Isopoh.Cryptography.Argon2.BlockValues.Item(System.Int32)">
+            <summary>
+            Gets or sets the ulong element at the specified index.
+            </summary>
+            <param name="i">
+            The ulong element to get or set.
+            </param>
+            <returns>
+            The requested ulong element.
+            </returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.BlockValues.Copy(Isopoh.Cryptography.Argon2.BlockValues)">
+            <summary>
+            Copy <paramref name="other"/> into this.
+            </summary>
+            <param name="other">
+            The <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> to copy.
+            </param>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.BlockValues.Xor(Isopoh.Cryptography.Argon2.BlockValues)">
+            <summary>
+            XOR <paramref name="other"/> with this and store the result into this.
+            </summary>
+            <param name="other">
+            The <see cref="T:Isopoh.Cryptography.Argon2.BlockValues"/> to XOR.
+            </param>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.BlockValues.Init(System.UInt64)">
+            <summary>
+            Copy <paramref name="value"/> into every ulong of this.
+            </summary>
+            <param name="value">
+            The value to copy into this.
+            </param>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.DecodeExtension">
+            <summary>
+            Extension to decode Argon2 hash strings.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.DecodeString(Isopoh.Cryptography.Argon2.Argon2Config,System.String,Isopoh.Cryptography.SecureArray.SecureArray{System.Byte}@)">
+            <summary>
+            Decodes an Argon2 hash string into an Argon2 class instance.
+            </summary>
+            <param name="config">
+            The configuration to populate with the data found in <paramref name="str"/>.
+            </param>
+            <param name="str">
+            The string to decode.
+            </param>
+            <param name="hash">
+            Loaded with the hash found in <paramref name="str"/>; set to null if
+            <paramref name="str"/> does not contain a hash.
+            </param>
+            <returns>
+            True on success; false otherwise. <paramref name="hash"/> set to
+            null on failure.
+            </returns>
+            <remarks>
+            <para>
+            Expected format:
+            </para>
+            <para>
+            $argon2&lt;T>[$v=&lt;num>]$m=&lt;num>,t=&lt;num>,p=&lt;num>[,keyid=&lt;bin>][,data=&lt;bin>][$&lt;bin>[$&lt;bin>]]
+            </para>
+            <para>
+            where &lt;T> is either 'd' or 'i', &lt;num> is a decimal integer (positive, fits in
+            an 'unsigned long'), and &lt;bin> is Base64-encoded data (no '=' padding
+            characters, no newline or whitespace).
+            The "keyid" is a binary identifier for a key (up to 8 bytes);
+            "data" is associated data (up to 32 bytes). When the 'keyid'
+            (resp. the 'data') is empty, then it is ommitted from the output.
+            </para>
+            <para>
+            The last two binary chunks (encoded in Base64) are, in that order,
+            the salt and the output. Both are optional, but you cannot have an
+            output without a salt. The binary salt length is between 8 and 48 bytes.
+            The output length is always exactly 32 bytes.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.FromBase64(System.Byte[]@,System.String,System.Int32)">
+            <summary>
+            Decode Base64 chars into bytes.
+            </summary>
+            <param name="dst">results stored here</param>
+            <param name="src">to decode</param>
+            <param name="pos">where to start decoding from</param>
+            <returns>
+            Next position in src to look at.
+            </returns>
+            <remarks>
+            Decoding stops when a non-Base64 character is encountered. If an
+            error occurred then -1 is returned; otherwise, the returned index
+            points to the first non-Base64 character in the source stream.
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.FromBase64(System.Byte[],System.String,System.Int32)">
+            <summary>
+            Decode Base64 chars into bytes.
+            </summary>
+            <param name="dst">results stored here</param>
+            <param name="src">to decode</param>
+            <param name="pos">where to start decoding from</param>
+            <returns>
+            Next position in src to look at.
+            </returns>
+            <remarks>
+            Decoding stops when a non-Base64 character is encountered. If an
+            error occurred then -1 is returned; otherwise, the returned index
+            points to the first non-Base64 character in the source stream.
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.Base64Length(System.String,System.Int32)">
+            <summary>
+            Decode Base64 chars into bytes.
+            </summary>
+            <param name="src">to decode</param>
+            <param name="pos">where to start decoding from</param>
+            <returns>
+            The length of the buffer needed to hold the decoded value.
+            </returns>
+            <remarks>
+            Decoding stops when a non-Base64 character is encountered. If an
+            error occurred then -1 is returned; otherwise, the returned index
+            points to the first non-Base64 character in the source stream.
+            </remarks>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.Base64CharToByte(System.Int32)">
+            <summary>
+            Convert character c to the corresponding 6-bit value. If
+            character c is not a Base64 character, then 0xFF (255) is returned.
+            </summary>
+            <param name="c">to convert</param>
+            <returns>converted value</returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.DecodeDecimal(System.UInt32@,System.String,System.String,System.Int32)">
+            <summary>
+            Decode decimal integer from <paramref name="str"/> with the given prefix <paramref name="check"/>.
+            </summary>
+            <param name="dst">the decoded value</param>
+            <param name="check">the expected prefix</param>
+            <param name="str">where to decode from</param>
+            <param name="pos">where to start decoding</param>
+            <returns>the next position to look at; -1 on failure</returns>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.DecodeExtension.DecodeDecimal(System.String,System.Int32,System.UInt32@)">
+            <summary>
+            Decode decimal integer from <paramref name="str"/>.
+            </summary>
+            <param name="str">where to decode from</param>
+            <param name="pos">where to start decoding</param>
+            <param name="val">the decoded value</param>
+            <returns>the next position to look at; -1 on failure</returns>
+        </member>
+        <member name="T:Isopoh.Cryptography.Argon2.EncodeExtension">
+            <summary>
+            Extension to encode an Argon2 hash string.
+            </summary>
+        </member>
+        <member name="M:Isopoh.Cryptography.Argon2.EncodeExtension.EncodeString(Isopoh.Cryptography.Argon2.Argon2Config,System.Byte[])">
+            <summary>
+            Encodes an Argon2 instance into a string.
+            </summary>
+            <param name="config">
+            To encode.
+            </param>
+            <param name="hash">
+            The hash to put in the encoded string. May be null.
+            </param>
+            <returns>
+            The encoded Argon2 instance.
+            </returns>
+            <remarks>
+            <para>
+            Resulting format:
+            </para>
+            <para>
+            $argon2&lt;T>[$v=&lt;num>]$m=&lt;num>,t=&lt;num>,p=&lt;num>[,keyid=&lt;bin>][,data=&lt;bin>][$&lt;bin>[$&lt;bin>]]
+            </para>
+            <para>
+            where &lt;T> is either 'd' or 'i', &lt;num> is a decimal integer (positive, fits in
+            an 'unsigned long'), and &lt;bin> is Base64-encoded data (no '=' padding
+            characters, no newline or whitespace).
+            The "keyid" is a binary identifier for a key (up to 8 bytes);
+            "data" is associated data (up to 32 bytes). When the 'keyid'
+            (resp. the 'data') is empty, then it is ommitted from the output.
+            </para>
+            <para>
+            The last two binary chunks (encoded in Base64) are, in that order,
+            the salt and the output. Both are optional, but you cannot have an
+            output without a salt. The binary salt length is between 8 and 48 bytes.
+            The output length is always exactly 32 bytes.
+            </para>
+            </remarks>
+        </member>
+    </members>
+</doc>
