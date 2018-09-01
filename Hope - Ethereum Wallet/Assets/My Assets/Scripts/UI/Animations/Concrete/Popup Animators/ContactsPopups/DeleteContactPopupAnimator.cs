@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class DeleteContactPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject mainText;
 	[SerializeField] private GameObject contactName;
 	[SerializeField] private GameObject contactAddress;
 	[SerializeField] private GameObject yesButton;
@@ -14,7 +13,6 @@ public class DeleteContactPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		mainText.AnimateScaleX(1f, 0.15f);
 		contactName.AnimateScaleX(1f, 0.2f);
 		contactAddress.AnimateScaleX(1f, 0.25f);
 		yesButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
