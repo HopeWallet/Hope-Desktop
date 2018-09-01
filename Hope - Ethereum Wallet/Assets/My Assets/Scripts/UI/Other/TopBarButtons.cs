@@ -69,9 +69,6 @@ public class TopBarButtons : MonoBehaviour
 			case 3:
 				popupManager.GetPopup<ReceiveAssetPopup>();
 				break;
-			case 4:
-				//Open more popup
-				break;
 		}
 
 		buttons[index].interactable = false;

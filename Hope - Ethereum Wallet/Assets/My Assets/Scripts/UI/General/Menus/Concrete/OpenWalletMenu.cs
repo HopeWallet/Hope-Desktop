@@ -21,8 +21,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
     public Image assetImage;
 
-    public DropdownButton optionsDropdownButton;
-
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetNotificationManager notificationManager;
@@ -55,8 +53,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         this.notificationManager = notificationManager;
         this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
-
-        optionsDropdownButton.dropdownButtons = uiSettings.generalSettings.dropdowns.optionsDropdowns;
     }
 
     /// <summary>
