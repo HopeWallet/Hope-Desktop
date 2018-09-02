@@ -1740,12 +1740,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114188649600924970}
   placeholder: {fileID: 1343250748291980}
   eye: {fileID: 0}
   errorIcon: {fileID: 1968140042154574}
   noSpaces: 0
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114188649600924970}
   errorMessage: {fileID: 114015037938011452}
 --- !u!114 &114746784208049030
 MonoBehaviour:
@@ -1998,12 +1998,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114798928006332916}
   placeholder: {fileID: 1317489815878200}
   eye: {fileID: 1693102022571996}
   errorIcon: {fileID: 1483406284696346}
   noSpaces: 0
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114798928006332916}
   errorMessage: {fileID: 114074237551203694}
 --- !u!114 &114875816836159094
 MonoBehaviour:
@@ -2315,12 +2315,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114975156974055756}
   placeholder: {fileID: 1867388552217174}
   eye: {fileID: 1776928638253394}
   errorIcon: {fileID: 1629011831608876}
   noSpaces: 0
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114975156974055756}
   errorMessage: {fileID: 114967016311071722}
 --- !u!222 &222042671199506396
 CanvasRenderer:

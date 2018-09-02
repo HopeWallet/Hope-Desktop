@@ -10,7 +10,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     public event Action<AddableTokenButton> OnAddableTokenAdded;
 
     [SerializeField] private Transform tokenListTransform;
-    [SerializeField] private Button addCustomToken, confirmButton;
+    [SerializeField] private Button addCustomToken, saveChangesButton;
     [SerializeField] private HopeInputField searchBar;
 
     private List<AddableTokenInfo> removedTokens = new List<AddableTokenInfo>();
@@ -19,7 +19,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
 
-    private bool confirmClicked;
+    private bool saveChanges;
 
     public List<AddableTokenButton> AddableTokens { get; } = new List<AddableTokenButton>();
 
@@ -55,18 +55,19 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         Destroy(itemToRemove.transform.parent.gameObject);
 
         tokenListManager.UpdateToken(addableTokenInfo.TokenInfo.Address, false, false);
+		saveChangesButton.interactable = true;
     }
 
     protected override void OnStart()
     {
         addCustomToken.onClick.AddListener(CustomTokenButtonClicked);
         searchBar.OnInputUpdated += _ => SearchInputChanged();
-        confirmButton.onClick.AddListener(ConfirmButtonClicked);
+        saveChangesButton.onClick.AddListener(SaveChangesButtonClicked);
     }
 
     private void OnDestroy()
     {
-        if (confirmClicked)
+        if (saveChanges)
         {
             tokenListManager.OldTokenList.Clear();
         }
@@ -79,9 +80,9 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         TokenListButton.popupClosed?.Invoke();
     }
 
-    private void ConfirmButtonClicked()
+    private void SaveChangesButtonClicked()
     {
-        confirmClicked = true;
+        saveChanges = true;
 
         var activeTokenAddresses = tokenContractManager.TokenList.Select(token => token.Address);
         var tokensToEnable = AddableTokens.Where(token => !activeTokenAddresses.Contains(token.ButtonInfo.TokenInfo.Address) && token.ButtonInfo.Enabled);
@@ -115,6 +116,8 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)
     {
+		saveChangesButton.interactable = true;
+
         AddableTokenButton tokenButton = addableTokenButtonFactory.Create().SetButtonInfo(addableTokenInfo);
         Transform componentTransform = tokenButton.transform;
         Transform parentTransform = componentTransform.parent;
