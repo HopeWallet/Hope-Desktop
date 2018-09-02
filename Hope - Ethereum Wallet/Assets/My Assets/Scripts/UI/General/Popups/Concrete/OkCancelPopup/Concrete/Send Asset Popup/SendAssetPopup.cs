@@ -32,19 +32,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	[SerializeField] private Slider transactionSpeedSlider;
 	[SerializeField] private Button contactsButton, currencyButton;
 
-	private bool advancedMode;
+    private readonly List<Selectable> simpleModeSelectableFields = new List<Selectable>();
+    private readonly List<Selectable> advancedModeSelectableFields = new List<Selectable>();
 
 	private UserWalletManager userWalletManager;
 	private DynamicDataCache dynamicDataCache;
 	private ButtonClickObserver buttonClickObserver;
 
-	private readonly List<Selectable> selectableFields = new List<Selectable>();
-	private InputField lastSelectableField;
+    private bool advancedMode;
 
-	/// <summary>
-	/// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
-	/// </summary>
-	public AssetManager Asset { get; private set; }
+    /// <summary>
+    /// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
+    /// </summary>
+    public AssetManager Asset { get; private set; }
 
 	/// <summary>
 	/// The <see cref="AmountManager"/> of this <see cref="SendAssetPopup"/>.
@@ -60,6 +60,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// The <see cref="GasManager"/> of this <see cref="SendAssetPopup"/>.
 	/// </summary>
 	public GasManager Gas { get; private set; }
+
+    /// <summary>
+    /// The last selectable field of the SendAssetPopup based on whether the popup is in advanced mode or not.
+    /// </summary>
+    private Selectable LastSelectableField => advancedModeToggle.IsToggledOn ? gasPriceField.InputFieldBase : amountField.InputFieldBase;
 
 	/// <summary>
 	/// Adds the required dependencies to the SendAssetPopup.
@@ -99,12 +104,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Gas.SetupDependencies(Amount);
         Amount.SetupDependencies(Gas, Asset);
 
-		selectableFields.Add(addressField.InputFieldBase);
-		selectableFields.Add(amountField.InputFieldBase);
-		selectableFields.Add(gasLimitField.InputFieldBase);
-		selectableFields.Add(gasPriceField.InputFieldBase);
+		simpleModeSelectableFields.Add(addressField.InputFieldBase);
+		simpleModeSelectableFields.Add(amountField.InputFieldBase);
 
-		lastSelectableField = amountField.InputFieldBase;
+        //advancedModeSelectableFields.AddRange(simpleModeSelectableFields);
+        advancedModeSelectableFields.Add(addressField.InputFieldBase);
+        advancedModeSelectableFields.Add(amountField.InputFieldBase);
+        advancedModeSelectableFields.Add(gasLimitField.InputFieldBase);
+        advancedModeSelectableFields.Add(gasPriceField.InputFieldBase);
 
 		contactsClosed = () => contactsButton.interactable = true;
 	}
@@ -152,7 +159,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	{
 		advancedMode = !advancedMode;
 
-		lastSelectableField = advancedMode ? gasPriceField.InputFieldBase : amountField.InputFieldBase;
 		AnimateAdvancedMode?.Invoke(advancedMode);
 	}
 
@@ -165,8 +171,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		if (clickType != ClickType.Down)
 			return;
 
-		selectableFields.MoveToNextSelectable();
-	}
+        if (!advancedModeToggle.IsToggledOn)
+            simpleModeSelectableFields.MoveToNextSelectable();
+        else
+            advancedModeSelectableFields.MoveToNextSelectable();
+    }
 
 	/// <summary>
 	/// Clicks the send button if on the last input field 
@@ -177,9 +186,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		if (clickType != ClickType.Down)
 			return;
 
-		if (InputFieldUtils.GetActiveInputField() == lastSelectableField && okButton.interactable)
-			okButton.Press();
-		else
-			selectableFields.MoveToNextSelectable();
-	}
+        if (InputFieldUtils.GetActiveInputField() == LastSelectableField && okButton.interactable)
+            okButton.Press();
+        else if (!advancedModeToggle.IsToggledOn)
+            simpleModeSelectableFields.MoveToNextSelectable();
+        else
+            advancedModeSelectableFields.MoveToNextSelectable();
+    }
 }
