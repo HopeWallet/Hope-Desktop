@@ -7,7 +7,7 @@ public class TopBarButtons : MonoBehaviour
 {
 	public static Action popupClosed;
 
-	private Button[] buttons = new Button[5];
+	[SerializeField] private Button[] buttons = new Button[5];
 
 	private PopupManager popupManager;
 	private LockedPRPSManager lockedPRPSManager;
@@ -30,14 +30,7 @@ public class TopBarButtons : MonoBehaviour
 	private void Awake()
 	{
 		for (int i = 0; i < buttons.Length; i++)
-		{
-			if (i == 0)
-				buttons[0] = transform.GetChild(0).GetChild(0).GetComponent<Button>();
-			else
-				buttons[i] = transform.GetChild(i).GetComponent<Button>();
-
 			SetButtonListener(i);
-		}
 	}
 
 	/// <summary>

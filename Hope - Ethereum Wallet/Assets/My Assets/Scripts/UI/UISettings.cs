@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace UISettings
 {
-
     /// <summary>
     /// Class which contains general UI settings.
     /// </summary>
@@ -11,7 +10,6 @@ namespace UISettings
     public class GeneralSettings
     {
         public Material blurMaterial;
-        public Dropdowns dropdowns;
     }
 
     /// <summary>
@@ -23,14 +21,5 @@ namespace UISettings
         public GameObject[] factoryButtons;
         public GameObject[] menus;
         public GameObject[] popups;
-    }
-
-    /// <summary>
-    /// Class which contains all dropdowns.
-    /// </summary>
-    [Serializable]
-    public class Dropdowns
-    {
-        public DropdownButtonInfo[] optionsDropdowns;
     }
 }
