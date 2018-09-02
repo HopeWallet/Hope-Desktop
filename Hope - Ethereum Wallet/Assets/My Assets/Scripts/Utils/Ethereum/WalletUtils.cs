@@ -20,9 +20,8 @@ namespace Hope.Utils.Ethereum
                 case 15:
                 case 18:
                 case 21:
-                    return Wallet.DEFAULT_PATH;
                 case 24:
-                    return Wallet.ELECTRUM_LEDGER_PATH;
+                    return Wallet.DEFAULT_PATH;
                 default:
                     return null;
             }
