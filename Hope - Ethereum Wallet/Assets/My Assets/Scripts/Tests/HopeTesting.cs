@@ -57,9 +57,27 @@ using Nethereum.RPC.Eth.Transactions;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Signer;
 using Hope.Random;
+using Transaction = Nethereum.Signer.Transaction;
+using Nethereum.RLP;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    //private void Start()
+    //{
+    //    Transaction transaction = new Transaction(
+    //        0.ToBytesForRLPEncoding(), // Nonce
+    //        1000000000.ToBytesForRLPEncoding(), // Gas price
+    //        21000.ToBytesForRLPEncoding(), // Gas limit
+    //        "0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203".HexToByteArray(), // Receiving address
+    //        0.ToBytesForRLPEncoding(), // Ether value
+    //        "".HexToByteArray(), // Data
+    //        0.ToBytesForRLPEncoding(), // R
+    //        0.ToBytesForRLPEncoding(), // S
+    //        4); // V (chainId)
+
+    //    transaction.GetRLPEncoded().LogArray();
+    //}
+
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {
