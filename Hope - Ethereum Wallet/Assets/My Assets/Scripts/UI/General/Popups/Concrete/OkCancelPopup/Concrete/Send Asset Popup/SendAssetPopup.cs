@@ -92,9 +92,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		this.buttonClickObserver = buttonClickObserver;
 
 		Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
-		Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, amountField, gasLimitField, gasPriceField, transactionFee);
+		Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
 		Address = new AddressManager(addressField, contactName, contactsManager);
-		Amount = new AmountManager(this, maxToggle, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
+		Amount = new AmountManager(maxToggle, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
+
+        Gas.SetupDependencies(Amount);
+        Amount.SetupDependencies(Gas, Asset);
 
 		selectableFields.Add(addressField.GetComponent<Selectable>());
 		selectableFields.Add(amountField.GetComponent<Selectable>());

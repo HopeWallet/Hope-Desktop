@@ -20,17 +20,18 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private readonly TradableAssetManager tradableAssetManager;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
-		private TMP_Text transactionFeeText;
-
 		private readonly Toggle advancedModeToggle;
 
 		private readonly TransactionSpeedSlider transactionSpeedSlider;
 
-		private readonly HopeInputField gasLimitField,
-										gasPriceField,
-										amountInputField;
+        private readonly HopeInputField gasLimitField,
+                                        gasPriceField;
 
-		private GasPrice estimatedGasPrice,
+        private AmountManager amountManager;
+
+        private TMP_Text transactionFeeText;
+
+        private GasPrice estimatedGasPrice,
 						 enteredGasPrice;
 
 		private BigInteger estimatedGasLimit,
@@ -63,24 +64,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		public BigInteger TransactionGasLimit => advancedModeToggle.IsToggledOn ? enteredGasLimit : estimatedGasLimit;
 
-		/// <summary>
-		/// Initializes the <see cref="GasManager"/> by assigning all required references.
-		/// </summary>
-		/// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
-		/// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
-		/// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
-		/// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
-		/// <param name="slider"> The slider used to control transaction speed. </param>
-		/// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
-		/// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
-		/// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
-		public GasManager(
+        /// <summary>
+        /// Initializes the <see cref="GasManager"/> by assigning all required references.
+        /// </summary>
+        /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
+        /// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
+        /// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
+        /// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
+        /// <param name="slider"> The slider used to control transaction speed. </param>
+        /// <param name="gasLimitField"> The input field for the gas limit when in advanced mode. </param>
+        /// <param name="gasPriceField"> The input field for the gas price when in advanced mode. </param>
+        /// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
+        public GasManager(
 			TradableAssetManager tradableAssetManager,
 			GasPriceObserver gasPriceObserver,
 			PeriodicUpdateManager periodicUpdateManager,
 			Toggle advancedModeToggle,
 			Slider slider,
-			HopeInputField amountInputField,
 			HopeInputField gasLimitField,
 			HopeInputField gasPriceField,
 			TMP_Text transactionFeeText)
@@ -91,7 +91,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasLimitField = gasLimitField;
 			this.gasPriceField = gasPriceField;
 			this.transactionFeeText = transactionFeeText;
-			this.amountInputField = amountInputField;
 
 			transactionSpeedSlider = new TransactionSpeedSlider(gasPriceObserver, slider, UpdateGasPriceEstimate);
 
@@ -115,19 +114,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// </summary>
 		private void UpdateTransactionFeeVisuals()
 		{
-			bool hasEnoughETH;
+            if (amountManager == null)
+                return;
 
-			if (tradableAssetManager.ActiveTradableAsset is EtherAsset)
-			{
-				decimal sendableAmount;
-				decimal.TryParse(amountInputField.Text, out sendableAmount);
-
-				hasEnoughETH = TransactionFee <= (tradableAssetManager.EtherAsset.AssetBalance - sendableAmount);
-			}
-			else
-			{
-				hasEnoughETH = TransactionFee < tradableAssetManager.EtherAsset.AssetBalance;
-			}
+			bool hasEnoughETH = tradableAssetManager.ActiveTradableAsset is EtherAsset
+				? TransactionFee <= (tradableAssetManager.EtherAsset.AssetBalance - amountManager.SendableAmount)
+				: TransactionFee < tradableAssetManager.EtherAsset.AssetBalance;
 
 			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
 			transactionFeeText.color = !hasEnoughETH ? UIColors.Red : UIColors.White;
@@ -142,6 +134,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			transactionSpeedSlider.Stop();
 		}
 
+        public void SetupDependencies(AmountManager amountManager)
+        {
+            this.amountManager = amountManager;
+            amountManager.OnAmountChanged += UpdateTransactionFeeVisuals;
+
+            UpdateTransactionFeeVisuals();
+        }
+
 		/// <summary>
 		/// Adds all observables/listeners/updaters.
 		/// </summary>
@@ -149,9 +149,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			periodicUpdateManager.AddPeriodicUpdater(this);
 
-            amountInputField.OnInputUpdated += _ => UpdateTransactionFeeVisuals();
             gasLimitField.OnInputUpdated += CheckGasLimitField;
 			gasPriceField.OnInputUpdated += CheckGasPriceField;
+            advancedModeToggle.AddToggleListener(UpdateTransactionFeeVisuals);
 		}
 
 		/// <summary>

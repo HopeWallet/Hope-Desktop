@@ -6,7 +6,7 @@ using Nethereum.RLP;
 namespace Nethereum.Signer
 {
     public class TransactionChainId : TransactionBase
-    {  
+    {
         //The R and S Hashing values
         private static readonly byte[] RHASH_DEFAULT = 0.ToBytesForRLPEncoding();
         private static readonly byte[] SHASH_DEFAULT = 0.ToBytesForRLPEncoding();
