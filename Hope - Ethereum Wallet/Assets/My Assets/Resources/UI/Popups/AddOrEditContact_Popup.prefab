@@ -1190,12 +1190,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114117457049174618}
   placeholder: {fileID: 1329721898033494}
   eye: {fileID: 0}
   errorIcon: {fileID: 1555027696829784}
   noSpaces: 1
   placeholderFadeAway: 1
-  inputFieldBase: {fileID: 114117457049174618}
   errorMessage: {fileID: 114559216980631768}
 --- !u!114 &114480432006423636
 MonoBehaviour:
@@ -1658,12 +1658,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114272610881037312}
   placeholder: {fileID: 1215268361977806}
   eye: {fileID: 0}
   errorIcon: {fileID: 1883964868483436}
   noSpaces: 0
   placeholderFadeAway: 1
-  inputFieldBase: {fileID: 114272610881037312}
   errorMessage: {fileID: 114277281878323486}
 --- !u!114 &114889006932717256
 MonoBehaviour:

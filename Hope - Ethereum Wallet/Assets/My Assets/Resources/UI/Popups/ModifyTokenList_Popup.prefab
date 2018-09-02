@@ -459,13 +459,13 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: a3c128d20682dc344b17947f9ad32826,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 14d89374b63535e44b75603d0235666c, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: 294fab8011933e74c97e5df920635cd0, type: 3}
+    m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114144327842918550}
   m_OnClick:
     m_PersistentCalls:
@@ -1973,7 +1973,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 17096.54}
+  m_AnchoredPosition: {x: 0, y: 18144.59}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224998752051692916

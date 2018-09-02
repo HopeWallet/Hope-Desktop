@@ -41,7 +41,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         if (!addableTokenInfo.Listed)
             return;
 
-        if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
+		if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
             AddableTokens.First(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).SetButtonInfo(addableTokenInfo);
         else
             AddableTokens.Add(CreateNewButton(addableTokenInfo));
@@ -55,7 +55,6 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         Destroy(itemToRemove.transform.parent.gameObject);
 
         tokenListManager.UpdateToken(addableTokenInfo.TokenInfo.Address, false, false);
-		saveChangesButton.interactable = true;
     }
 
     protected override void OnStart()
@@ -116,8 +115,6 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
     private AddableTokenButton CreateNewButton(AddableTokenInfo addableTokenInfo)
     {
-		saveChangesButton.interactable = true;
-
         AddableTokenButton tokenButton = addableTokenButtonFactory.Create().SetButtonInfo(addableTokenInfo);
         Transform componentTransform = tokenButton.transform;
         Transform parentTransform = componentTransform.parent;
