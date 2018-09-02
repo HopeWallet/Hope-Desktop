@@ -496,12 +496,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114729138592413210}
   placeholder: {fileID: 1629761182992564}
   eye: {fileID: 1859614733314428}
   errorIcon: {fileID: 1223965457192776}
   noSpaces: 0
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114729138592413210}
   errorMessage: {fileID: 114635802527267184}
 --- !u!114 &114340383800343060
 MonoBehaviour:

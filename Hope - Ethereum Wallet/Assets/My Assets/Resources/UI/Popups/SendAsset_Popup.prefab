@@ -2083,12 +2083,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114721044842899810}
   placeholder: {fileID: 1931009072916960}
   eye: {fileID: 0}
   errorIcon: {fileID: 1193681952105584}
   noSpaces: 1
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114721044842899810}
   errorMessage: {fileID: 114835707891569490}
 --- !u!114 &114185239684127186
 MonoBehaviour:
@@ -3435,12 +3435,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114952775162931198}
   placeholder: {fileID: 1031073884306882}
   eye: {fileID: 0}
   errorIcon: {fileID: 1145279637040926}
   noSpaces: 1
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114952775162931198}
   errorMessage: {fileID: 114472650157791638}
 --- !u!114 &114521079777181224
 MonoBehaviour:
@@ -3708,12 +3708,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114431010105006590}
   placeholder: {fileID: 1580433430500478}
   eye: {fileID: 0}
   errorIcon: {fileID: 1975058174749014}
   noSpaces: 1
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114431010105006590}
   errorMessage: {fileID: 114360869353483962}
 --- !u!114 &114577150304614598
 MonoBehaviour:
@@ -4540,12 +4540,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf19b776a8afa4fb99cb3769f31797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputFieldBase: {fileID: 114815312810795194}
   placeholder: {fileID: 1041780768553860}
   eye: {fileID: 0}
   errorIcon: {fileID: 1540468050025720}
   noSpaces: 1
   placeholderFadeAway: 0
-  inputFieldBase: {fileID: 114815312810795194}
   errorMessage: {fileID: 114901601991759878}
 --- !u!114 &114772791688704820
 MonoBehaviour:

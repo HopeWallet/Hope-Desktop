@@ -53,9 +53,9 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// </summary>
 	protected override void OnAwake()
 	{
-		inputFields.Add(walletNameField.inputFieldBase);
-		inputFields.Add(password1Field.inputFieldBase);
-		inputFields.Add(password2Field.inputFieldBase);
+		inputFields.Add(walletNameField.InputFieldBase);
+		inputFields.Add(password1Field.InputFieldBase);
+		inputFields.Add(password2Field.InputFieldBase);
 
 		password1Field.OnInputUpdated += _ => PasswordsUpdated();
 		password2Field.OnInputUpdated += _ => PasswordsUpdated();
@@ -146,7 +146,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		if (clickType != ClickType.Down)
 			return;
 
-		if (InputFieldUtils.GetActiveInputField() == password2Field.inputFieldBase && nextButton.interactable)
+		if (InputFieldUtils.GetActiveInputField() == password2Field.InputFieldBase && nextButton.interactable)
 			nextButton.Press();
 		else
 			SelectableExtensions.MoveToNextSelectable(inputFields);

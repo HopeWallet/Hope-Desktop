@@ -30,7 +30,7 @@ public class SendAssetPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		addressField.inputFieldBase.ActivateInputField();
+		addressField.InputFieldBase.ActivateInputField();
 		tokenSection.AnimateScale(1f, 0.1f);
 		advancedModeSection.AnimateScale(1f, 0.1f);
 		addressSection.AnimateScaleX(1f, 0.15f);

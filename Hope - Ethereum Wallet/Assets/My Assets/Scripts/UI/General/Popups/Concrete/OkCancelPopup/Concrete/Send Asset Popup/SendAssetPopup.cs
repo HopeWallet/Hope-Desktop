@@ -38,8 +38,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	private DynamicDataCache dynamicDataCache;
 	private ButtonClickObserver buttonClickObserver;
 
-	private List<Selectable> selectableFields = new List<Selectable>();
-	private Selectable lastSelectableField;
+	private readonly List<Selectable> selectableFields = new List<Selectable>();
+	private InputField lastSelectableField;
 
 	/// <summary>
 	/// The <see cref="AssetManager"/> of this <see cref="SendAssetPopup"/>.
@@ -99,12 +99,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Gas.SetupDependencies(Amount);
         Amount.SetupDependencies(Gas, Asset);
 
-		selectableFields.Add(addressField.GetComponent<Selectable>());
-		selectableFields.Add(amountField.GetComponent<Selectable>());
-		selectableFields.Add(gasLimitField.GetComponent<Selectable>());
-		selectableFields.Add(gasPriceField.GetComponent<Selectable>());
+		selectableFields.Add(addressField.InputFieldBase);
+		selectableFields.Add(amountField.InputFieldBase);
+		selectableFields.Add(gasLimitField.InputFieldBase);
+		selectableFields.Add(gasPriceField.InputFieldBase);
 
-		lastSelectableField = amountField.GetComponent<Selectable>();
+		lastSelectableField = amountField.InputFieldBase;
 
 		contactsClosed = () => contactsButton.interactable = true;
 	}
@@ -152,7 +152,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	{
 		advancedMode = !advancedMode;
 
-		lastSelectableField = advancedMode ? gasPriceField.GetComponent<Selectable>() : amountField.GetComponent<Selectable>();
+		lastSelectableField = advancedMode ? gasPriceField.InputFieldBase : amountField.InputFieldBase;
 		AnimateAdvancedMode?.Invoke(advancedMode);
 	}
 

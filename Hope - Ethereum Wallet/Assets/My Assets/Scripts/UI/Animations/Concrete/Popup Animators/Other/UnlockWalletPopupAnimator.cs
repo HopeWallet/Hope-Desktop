@@ -24,7 +24,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
     /// </summary>
     protected override void AnimateUniqueElementsIn()
 	{
-		passwordInputField.inputFieldBase.ActivateInputField();
+		passwordInputField.InputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
 		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
@@ -61,7 +61,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		{
 			loadingIcon.SetActive(true);
             Animating = true;
-			passwordInputField.inputFieldBase.DeactivateInputField();
+			passwordInputField.InputFieldBase.DeactivateInputField();
 		}
 
 		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);

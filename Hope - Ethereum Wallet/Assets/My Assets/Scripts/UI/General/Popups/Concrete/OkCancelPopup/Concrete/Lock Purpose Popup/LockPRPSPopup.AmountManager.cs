@@ -91,7 +91,7 @@ public sealed partial class LockPRPSPopup
 		/// </summary>
 		private void AmountFieldChanged()
 		{
-			amountInputField.inputFieldBase.RestrictDecimalValue(18);
+			amountInputField.InputFieldBase.RestrictDecimalValue(18);
 
 			decimal newLockableAmount;
 			decimal.TryParse(amountInputField.Text, out newLockableAmount);

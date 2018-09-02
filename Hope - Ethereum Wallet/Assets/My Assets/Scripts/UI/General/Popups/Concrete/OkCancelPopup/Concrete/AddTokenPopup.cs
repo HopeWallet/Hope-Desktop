@@ -115,7 +115,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (addressField.Error)
             return;
 
-        addressField.inputFieldBase.interactable = false;
+        addressField.InputFieldBase.interactable = false;
 
         bool existsInTokenList = tokenListManager.ContainsToken(addressField.Text);
         CheckTokenList(existsInTokenList);
@@ -138,7 +138,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         OnStatusChanged?.Invoke(Status.ValidToken);
 
-        addressField.inputFieldBase.interactable = true;
+        addressField.InputFieldBase.interactable = true;
         okButton.interactable = true;
     }
 
@@ -153,7 +153,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         updatedLogo = false;
         updatedBalance = false;
 
-        addressField.inputFieldBase.interactable = false;
+        addressField.InputFieldBase.interactable = false;
 
         OnStatusChanged?.Invoke(Status.Loading);
 
@@ -205,7 +205,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         if (updatedName && updatedSymbol && updatedDecimals && updatedLogo && updatedBalance)
         {
-			addressField.inputFieldBase.interactable = true;
+			addressField.InputFieldBase.interactable = true;
 
 			if (balance == null)
             {
@@ -217,7 +217,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
                 symbolField.Text = string.Empty;
 
                 OnStatusChanged?.Invoke(Status.InvalidToken);
-				symbolField.inputFieldBase.ActivateInputField();
+				symbolField.InputFieldBase.ActivateInputField();
 
                 okButton.interactable = false;
             }

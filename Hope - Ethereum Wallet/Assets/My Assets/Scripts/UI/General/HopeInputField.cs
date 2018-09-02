@@ -7,13 +7,12 @@ public class HopeInputField : MonoBehaviour
 {
 	public event Action<string> OnInputUpdated;
 
-	[SerializeField] private GameObject placeholder;
+    [SerializeField] private InputField inputFieldBase;
+    [SerializeField] private GameObject placeholder;
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
 	[SerializeField] private bool noSpaces;
 	[SerializeField] private bool placeholderFadeAway;
-
-	public InputField inputFieldBase;
 
 	public TextMeshProUGUI errorMessage;
 
@@ -21,6 +20,8 @@ public class HopeInputField : MonoBehaviour
 	private Sprite eyeActiveNormal;
 
 	private string text;
+
+    public InputField InputFieldBase => inputFieldBase;
 
 	public string Text
 	{

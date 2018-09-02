@@ -140,7 +140,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void AmountFieldChanged()
 		{
-			amountInputField.inputFieldBase.RestrictDecimalValue(usingTokenCurrency ? assetManager.ActiveAsset.AssetDecimals : 2);
+			amountInputField.InputFieldBase.RestrictDecimalValue(usingTokenCurrency ? assetManager.ActiveAsset.AssetDecimals : 2);
 
 			decimal newSendableAmount;
 			decimal.TryParse(amountInputField.Text, out newSendableAmount);

@@ -45,7 +45,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		wordCountSection.GetComponent<RadioButtons>().OnButtonChanged += PassphraseWordCountChanged;
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
-		importMnemonicMenu.LastSelectableField = wordInputFields[11].inputFieldBase;
+		importMnemonicMenu.LastSelectableField = wordInputFields[11].InputFieldBase;
 	}
 
 	/// <summary>
@@ -59,8 +59,8 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 
 		wordInputFields[i].OnInputUpdated += _ => CheckIfValidInput(i);
 
-		if (wordInputFields[i].inputFieldBase.interactable)
-			importMnemonicMenu.SelectableFields.Add(wordInputFields[i].inputFieldBase);
+		if (wordInputFields[i].InputFieldBase.interactable)
+			importMnemonicMenu.SelectableFields.Add(wordInputFields[i].InputFieldBase);
 	}
 
 	/// <summary>
@@ -165,7 +165,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		for (int i = 0; i < 24; i++)
 		{
 			bool interactable = i < wordCount;
-			InputField baseInputField = wordInputFields[i].inputFieldBase;
+			InputField baseInputField = wordInputFields[i].InputFieldBase;
 
 			if (interactable)
 			{
@@ -203,7 +203,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		if (Animating)
 			return;
 
-		var compatibleWords = wordInputFields.Where(b => b.inputFieldBase.interactable && !b.Error).ToList();
+		var compatibleWords = wordInputFields.Where(b => b.InputFieldBase.interactable && !b.Error).ToList();
 
 		nextButton.GetComponent<Button>().interactable = compatibleWords.Count == wordCount;
 	}
