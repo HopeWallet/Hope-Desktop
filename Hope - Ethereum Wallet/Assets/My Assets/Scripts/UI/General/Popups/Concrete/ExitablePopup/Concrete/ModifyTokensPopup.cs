@@ -41,6 +41,9 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         if (!addableTokenInfo.Listed)
             return;
 
+        if (removedTokens.Count(token => token.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address) && addableTokenInfo.Listed) > 0)
+            removedTokens.RemoveAt(removedTokens.IndexOf(removedTokens.Where(token => token.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).First()));
+
 		if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
             AddableTokens.First(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).SetButtonInfo(addableTokenInfo);
         else

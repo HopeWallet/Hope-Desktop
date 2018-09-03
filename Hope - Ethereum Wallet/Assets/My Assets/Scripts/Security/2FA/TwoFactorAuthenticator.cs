@@ -21,22 +21,13 @@ public class SetupCode
 
 public class TwoFactorAuthenticator
 {
-
-    public static DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    private readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     public TimeSpan DefaultClockDriftTolerance { get; set; }
 
-    public bool UseManagedSha1Algorithm { get; set; }
-
-    public bool TryUnmanagedAlgorithmOnFailure { get; set; }
-
-    public TwoFactorAuthenticator() : this(true, true) { }
-
-    public TwoFactorAuthenticator(bool useManagedSha1, bool useUnmanagedOnFail)
+    public TwoFactorAuthenticator()
     {
         DefaultClockDriftTolerance = TimeSpan.FromMinutes(5);
-        UseManagedSha1Algorithm = useManagedSha1;
-        TryUnmanagedAlgorithmOnFailure = useUnmanagedOnFail;
     }
 
     /// <summary>
@@ -95,17 +86,15 @@ public class TwoFactorAuthenticator
 
         if (string.IsNullOrEmpty(issuer))
         {
-            provisionUrl = UrlEncode(String.Format("otpauth://totp/{0}?secret={1}", accountTitleNoSpaces, encodedSecretKey));
+            provisionUrl = UrlEncode(string.Format("otpauth://totp/{0}?secret={1}", accountTitleNoSpaces, encodedSecretKey));
         }
         else
         {
-            provisionUrl = UrlEncode(String.Format("otpauth://totp/{0}?secret={1}&issuer={2}", accountTitleNoSpaces, encodedSecretKey, UrlEncode(issuer)));
+            provisionUrl = UrlEncode(string.Format("otpauth://totp/{0}?secret={1}&issuer={2}", accountTitleNoSpaces, encodedSecretKey, UrlEncode(issuer)));
         }
 
         string protocol = useHttps ? "https" : "http";
-        string url = String.Format("{0}://chart.googleapis.com/chart?cht=qr&chs={1}x{2}&chl={3}", protocol, qrCodeWidth, qrCodeHeight, provisionUrl);
-
-        sC.QrCodeSetupImageUrl = url;
+        sC.QrCodeSetupImageUrl = string.Format("{0}://chart.googleapis.com/chart?cht=qr&chs={1}x{2}&chl={3}", protocol, qrCodeWidth, qrCodeHeight, provisionUrl);
 
         return sC;
     }
@@ -147,13 +136,13 @@ public class TwoFactorAuthenticator
 
         while (i < data.Length)
         {
-            current_byte = (data[i] >= 0) ? data[i] : (data[i] + 256); // Unsign
+            current_byte = data[i]; // Unsign
 
             /* Is the current digit going to span a byte boundary? */
             if (index > (inByteSize - outByteSize))
             {
                 if ((i + 1) < data.Length)
-                    next_byte = (data[i + 1] >= 0) ? data[i + 1] : (data[i + 1] + 256);
+                    next_byte = data[i + 1];
                 else
                     next_byte = 0;
 
@@ -215,7 +204,7 @@ public class TwoFactorAuthenticator
 
     private long GetCurrentCounter()
     {
-        return GetCurrentCounter(DateTime.UtcNow, _epoch, 30);
+        return GetCurrentCounter(DateTime.UtcNow, epoch, 30);
     }
 
     private long GetCurrentCounter(DateTime now, DateTime epoch, int timeStep)
@@ -236,25 +225,11 @@ public class TwoFactorAuthenticator
 
         try
         {
-            hmac = new HMACSHA1(key, UseManagedSha1Algorithm);
+            hmac = new HMACSHA1(key);
         }
-        catch (InvalidOperationException ioe)
+        catch (InvalidOperationException)
         {
-            if (UseManagedSha1Algorithm && TryUnmanagedAlgorithmOnFailure)
-            {
-                try
-                {
-                    hmac = new HMACSHA1(key, false);
-                }
-                catch (InvalidOperationException ioe2)
-                {
-                    throw ioe2;
-                }
-            }
-            else
-            {
-                throw ioe;
-            }
+            throw;
         }
 
         return hmac;
@@ -278,7 +253,7 @@ public class TwoFactorAuthenticator
 
     public string GetCurrentPIN(string accountSecretKey, DateTime now)
     {
-        return GeneratePINAtInterval(accountSecretKey, GetCurrentCounter(now, _epoch, 30));
+        return GeneratePINAtInterval(accountSecretKey, GetCurrentCounter(now, epoch, 30));
     }
 
     public string[] GetCurrentPINs(string accountSecretKey)

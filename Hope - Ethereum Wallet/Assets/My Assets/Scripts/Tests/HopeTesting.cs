@@ -62,6 +62,8 @@ using Nethereum.RLP;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
+using Hope.Random.Strings;
+using Hope.Random.Bytes;
 
 public sealed class HopeTesting : MonoBehaviour
 {
@@ -80,6 +82,39 @@ public sealed class HopeTesting : MonoBehaviour
 
     //    transaction.GetRLPEncoded().LogArray();
     //}
+
+    public string code;
+
+    private string previousCode;
+    private TwoFactorAuthenticator _2fa;
+    private SetupCode setupCode;
+
+    private void Start()
+    {
+        string key = RandomString.Secure.SHA3.GetString("testPassword", 256).Keccak_128();
+        key.Log();
+
+        Debug.Log("==================================");
+
+        _2fa = new TwoFactorAuthenticator();
+
+        setupCode = _2fa.GenerateSetupCode("Hope Wallet", key, 256, 256);
+        setupCode.Account.Log();
+        setupCode.AccountSecretKey.Log();
+        setupCode.ManualEntryKey.Log();
+        setupCode.QrCodeSetupImageUrl.Log();
+    }
+
+    private void Update()
+    {
+        if (code == previousCode)
+            return;
+
+        previousCode = code;
+
+        TwoFactorAuthenticator authenticator = new TwoFactorAuthenticator();
+        authenticator.ValidateTwoFactorPIN(RandomString.Secure.SHA3.GetString("testPassword", 256).Keccak_128(), code).Log();
+    }
 
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
