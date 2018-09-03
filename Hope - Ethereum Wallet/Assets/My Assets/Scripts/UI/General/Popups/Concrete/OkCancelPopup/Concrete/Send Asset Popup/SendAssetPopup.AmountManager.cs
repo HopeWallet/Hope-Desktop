@@ -1,5 +1,6 @@
 ﻿using System;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -16,6 +17,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private TMP_Text currencyText, oppositeCurrencyAmountText;
 
+		private GameObject maxText;
+
 		private Button currencyButton;
 
         private GasManager gasManager;
@@ -23,7 +26,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         private CurrencyManager currencyManager;
         private TradableAssetPriceManager tradableAssetPriceManager;
 
-		private bool usingTokenCurrency = true;
+		private bool usingTokenCurrency = true, priceFound;
 		private decimal oppositeCurrencyValue;
 
         private readonly string tradableTokenSymbol;
@@ -56,21 +59,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			}
 		}
 
-        /// <summary>
-        /// Initializes the <see cref="AmountManager"/> by assigning the references to the popup, max toggle, and amount input field.
-        /// </summary>
-        /// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
-        /// <param name="tradableAssetPriceManager"> The active <see cref="TradableAssetPriceManager"/>. </param>
-        /// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
-        /// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
-        /// <param name="currencyText"> The currency text object. </param>
-        /// <param name="oppositeCurrencyAmountText"> The opposite currency amount text object. </param>
-        /// <param name="currencyButton"> The currency button. </param>
-        /// <param name="tokenSymbol"> The token symbol. </param>
-        public AmountManager(
+		/// <summary>
+		/// Initializes the <see cref="AmountManager"/> by assigning the references to the popup, max toggle, and amount input field.
+		/// </summary>
+		/// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
+		/// <param name="tradableAssetPriceManager"> The active <see cref="TradableAssetPriceManager"/>. </param>
+		/// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
+		/// <param name="maxText"> The max text header. </param>
+		/// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
+		/// <param name="currencyText"> The currency text object. </param>
+		/// <param name="oppositeCurrencyAmountText"> The opposite currency amount text object. </param>
+		/// <param name="currencyButton"> The currency button. </param>
+		/// <param name="tokenSymbol"> The token symbol. </param>
+		public AmountManager(
             CurrencyManager currencyManager,
             TradableAssetPriceManager tradableAssetPriceManager,
 			Toggle maxToggle,
+			GameObject maxText,
 			HopeInputField amountInputField,
 			TMP_Text currencyText,
 			TMP_Text oppositeCurrencyAmountText,
@@ -78,6 +83,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			string tokenSymbol)
 		{
 			this.maxToggle = maxToggle;
+			this.maxText = maxText;
 			this.amountInputField = amountInputField;
 			this.currencyText = currencyText;
 			this.oppositeCurrencyAmountText = oppositeCurrencyAmountText;
@@ -102,11 +108,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasManager = gasManager;
 			this.assetManager = assetManager;
 
-            currencyButton.interactable = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol) > 0;
+			priceFound = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol) > 0;
 
-            gasManager.OnGasChanged += MaxChanged;
+			currencyButton.interactable = priceFound;
+			currencyButton.GetComponent<Image>().color = priceFound ? new Color(1f, 1f, 1f) : UIColors.LightGrey;
+			currencyText.color = priceFound ? UIColors.White : UIColors.LightGrey;
+			if (!priceFound)
+				oppositeCurrencyAmountText.text = "(Price not found)";
+
+			gasManager.OnGasChanged += MaxChanged;
             assetManager.OnAssetBalanceChanged += MaxChanged;
-        }
+
+			if (MaxSendableAmount == 0)
+			{
+				maxToggle.SetInteractable(false);
+				maxText.GetComponent<TextMeshProUGUI>().color = UIColors.LightGrey;
+			}
+		}
 
 		/// <summary>
 		/// Sets up all listeners.
@@ -132,6 +150,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 				amountInputField.Text = oppositeCurrencyValue.ToString();
 
 			maxToggle.SetInteractable(usingTokenCurrency);
+			maxText.AnimateColor(usingTokenCurrency ? UIColors.White : UIColors.LightGrey, 0.1f);
 		}
 
 		/// <summary>
@@ -156,11 +175,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			decimal.TryParse(amountInputField.Text, out newSendableAmount);
 
 			oppositeCurrencyAmountText.gameObject.AnimateGraphicAndScale(string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, 0.15f);
-			ChangeOppositeCurrencyValue(newSendableAmount);
+
+			if (priceFound)
+				ChangeOppositeCurrencyValue(newSendableAmount);
 
 			SendableAmount = usingTokenCurrency ? newSendableAmount : oppositeCurrencyValue;
 
-			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount))
+			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount) && SendableAmount != 0)
 			{
 				maxToggle.IsToggledOn = SendableAmount == MaxSendableAmount;
 				maxToggle.AnimateImages();

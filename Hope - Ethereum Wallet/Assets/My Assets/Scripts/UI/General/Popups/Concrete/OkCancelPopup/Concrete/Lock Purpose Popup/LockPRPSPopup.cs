@@ -23,7 +23,8 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
     [SerializeField] private TMP_Text transactionFeeText,
 									  prpsBalanceText,
 									  dubiBalanceText,
-									  dubiRewardText;
+									  dubiRewardText,
+									  maxText;
 
     [SerializeField] private Toggle maxToggle;
 
@@ -85,7 +86,10 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
 
 		if (lockPRPSManager.PRPSBalance == 0)
+		{
 			maxToggle.SetInteractable(false);
+			maxText.color = UIColors.LightGrey;
+		}
 	}
 
 	/// <summary>

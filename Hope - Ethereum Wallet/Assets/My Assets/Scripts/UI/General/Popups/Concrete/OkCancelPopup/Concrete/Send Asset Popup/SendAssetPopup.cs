@@ -14,19 +14,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     public event Action<bool> AnimateAdvancedMode;
     public Action contactsClosed;
 
-    [SerializeField]
-    private HopeInputField addressField,
-                                            amountField,
-                                            gasLimitField,
-                                            gasPriceField;
+    [SerializeField] private HopeInputField addressField,
+											amountField,
+											gasLimitField,
+											gasPriceField;
 
-    [SerializeField]
-    private TMP_Text assetBalance,
-                                      assetSymbol,
-                                      transactionFee,
-                                      contactName,
-                                      currencyText,
-                                      oppositeCurrencyAmountText;
+    [SerializeField] private TMP_Text assetBalance,
+									  assetSymbol,
+									  transactionFee,
+									  contactName,
+									  currencyText,
+									  oppositeCurrencyAmountText;
+
+	[SerializeField] private GameObject maxText;
 
     [SerializeField] private Toggle advancedModeToggle, maxToggle;
 
@@ -105,7 +105,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
         Address = new AddressManager(addressField, contactName, contactsManager);
-        Amount = new AmountManager(currencyManager, tradableAssetPriceManager, maxToggle, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
+        Amount = new AmountManager(currencyManager, tradableAssetPriceManager, maxToggle, maxText, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
 
         Gas.SetupDependencies(Amount);
         Amount.SetupDependencies(Gas, Asset);

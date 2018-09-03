@@ -1452,6 +1452,7 @@ MonoBehaviour:
   prpsBalanceText: {fileID: 114220270093468036}
   dubiBalanceText: {fileID: 114381802767292856}
   dubiRewardText: {fileID: 114261162030162700}
+  maxText: {fileID: 114602608656835224}
   maxToggle: {fileID: 114675470125886244}
 --- !u!114 &114220270093468036
 MonoBehaviour:

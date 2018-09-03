@@ -2362,6 +2362,7 @@ MonoBehaviour:
   contactName: {fileID: 114677745435073652}
   currencyText: {fileID: 114059024890424152}
   oppositeCurrencyAmountText: {fileID: 114631604028746846}
+  maxText: {fileID: 1093345052433736}
   advancedModeToggle: {fileID: 114772791688704820}
   maxToggle: {fileID: 114338446119812900}
   assetImage: {fileID: 114155704206949664}
