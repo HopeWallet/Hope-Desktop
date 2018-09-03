@@ -19,7 +19,8 @@ public sealed class MenuFactoryManager
         ChooseWalletMenu.Factory chooseWalletMenuFactory,
         CreateWalletMenu.Factory createWalletMenuFactory,
         ConfirmMnemonicMenu.Factory confirmMnemonicMenuFactory,
-        WalletCreatedMenu.Factory walletCreatedMenuFactory)
+        WalletCreatedMenu.Factory walletCreatedMenuFactory,
+        OpenLedgerWalletMenu.Factory openLedgerWalletMenuFactory)
     {
         menuFactories.AddItems(importOrCreateMenuFactory,
                                walletCreateMenuFactory,
@@ -29,7 +30,8 @@ public sealed class MenuFactoryManager
                                chooseWalletMenuFactory,
                                createWalletMenuFactory,
                                confirmMnemonicMenuFactory,
-                               walletCreatedMenuFactory);
+                               walletCreatedMenuFactory,
+                               openLedgerWalletMenuFactory);
     }
 
     /// <summary>

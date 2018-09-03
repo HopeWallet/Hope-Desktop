@@ -44,7 +44,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenLedgerWallet()
     {
-        // TODO
+        uiManager.OpenMenu<OpenLedgerWalletMenu>();
     }
 
 	/// <summary>
