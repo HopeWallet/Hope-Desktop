@@ -12,78 +12,80 @@ using Random = System.Random;
 /// </summary>
 public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup>, IEtherBalanceObservable, IEnterButtonObservable
 {
-    [SerializeField] private Button threeMonthsButton,
+	[SerializeField]
+	private Button threeMonthsButton,
 									sixMonthsButton,
 									twelveMonthsButton;
 
-    [SerializeField] private HopeInputField amountInputField;
+	[SerializeField] private HopeInputField amountInputField;
 
-    [SerializeField] private Slider slider;
+	[SerializeField] private Slider slider;
 
-    [SerializeField] private TMP_Text transactionFeeText,
+	[SerializeField]
+	private TMP_Text transactionFeeText,
 									  prpsBalanceText,
 									  dubiBalanceText,
 									  dubiRewardText,
 									  maxText;
 
-    [SerializeField] private Toggle maxToggle;
+	[SerializeField] private Toggle maxToggle;
 
-    private LockedPRPSManager lockedPRPSManager;
-    private EtherBalanceObserver etherBalanceObserver;
-    private UserWalletManager userWalletManager;
-    private Hodler hodlerContract;
+	private LockedPRPSManager lockedPRPSManager;
+	private EtherBalanceObserver etherBalanceObserver;
+	private UserWalletManager userWalletManager;
+	private Hodler hodlerContract;
 	private ButtonClickObserver buttonClickObserver;
 
-    /// <summary>
-    /// Manages the gas for the LockPRPSPopup.
-    /// </summary>
-    public GasManager Gas { get; private set; }
+	/// <summary>
+	/// Manages the gas for the LockPRPSPopup.
+	/// </summary>
+	public GasManager Gas { get; private set; }
 
-    /// <summary>
-    /// Manages the amount of purpose to lock for the LockPRPSPopup.
-    /// </summary>
-    public AmountManager Amount { get; private set; }
+	/// <summary>
+	/// Manages the amount of purpose to lock for the LockPRPSPopup.
+	/// </summary>
+	public AmountManager Amount { get; private set; }
 
-    /// <summary>
-    /// Manages the amount of time for locking purpose.
-    /// </summary>
-    public TimeManager Time { get; private set; }
+	/// <summary>
+	/// Manages the amount of time for locking purpose.
+	/// </summary>
+	public TimeManager Time { get; private set; }
 
-    /// <summary>
-    /// The current ether balance of the wallet.
-    /// </summary>
-    public dynamic EtherBalance { get; set; }
+	/// <summary>
+	/// The current ether balance of the wallet.
+	/// </summary>
+	public dynamic EtherBalance { get; set; }
 
-    /// <summary>
-    /// Adds all dependencies to the LockPRPSPopup.
-    /// </summary>
-    /// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
-    /// <param name="lockedPRPSManager"> The active LockedPRPSManager. </param>
-    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
-    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
-    /// <param name="hodlerContract"> The active Hodler smart contract. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    [Inject]
-    public void Construct(
-        LockPRPSManager lockPRPSManager,
-        LockedPRPSManager lockedPRPSManager,
-        GasPriceObserver gasPriceObserver,
-        EtherBalanceObserver etherBalanceObserver,
-        Hodler hodlerContract,
-        UserWalletManager userWalletManager,
+	/// <summary>
+	/// Adds all dependencies to the LockPRPSPopup.
+	/// </summary>
+	/// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
+	/// <param name="lockedPRPSManager"> The active LockedPRPSManager. </param>
+	/// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+	/// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
+	/// <param name="hodlerContract"> The active Hodler smart contract. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	[Inject]
+	public void Construct(
+		LockPRPSManager lockPRPSManager,
+		LockedPRPSManager lockedPRPSManager,
+		GasPriceObserver gasPriceObserver,
+		EtherBalanceObserver etherBalanceObserver,
+		Hodler hodlerContract,
+		UserWalletManager userWalletManager,
 		ButtonClickObserver buttonClickObserver)
-    {
-        this.lockedPRPSManager = lockedPRPSManager;
-        this.etherBalanceObserver = etherBalanceObserver;
-        this.userWalletManager = userWalletManager;
-        this.hodlerContract = hodlerContract;
+	{
+		this.lockedPRPSManager = lockedPRPSManager;
+		this.etherBalanceObserver = etherBalanceObserver;
+		this.userWalletManager = userWalletManager;
+		this.hodlerContract = hodlerContract;
 		this.buttonClickObserver = buttonClickObserver;
-        etherBalanceObserver.SubscribeObservable(this);
+		etherBalanceObserver.SubscribeObservable(this);
 		buttonClickObserver.SubscribeObservable(this);
 
-        Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
-        Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
-        Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
+		Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
+		Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
+		Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
 
 		if (lockPRPSManager.PRPSBalance == 0)
 		{
@@ -96,11 +98,13 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 	/// Closes all the managers for the LockPRPSPopup and the ether balance observer.
 	/// </summary>
 	private void OnDestroy()
-    {
-        Gas.Stop();
-        Amount.Stop();
-        Time.Stop();
-		TopBarButtons.popupClosed?.Invoke();
+	{
+		Gas.Stop();
+		Amount.Stop();
+		Time.Stop();
+
+		if (popupManager.ActivePopupType != typeof(LockedPRPSPopup))
+			TopBarButtons.popupClosed?.Invoke();
 
 		etherBalanceObserver.UnsubscribeObservable(this);
 		buttonClickObserver.UnsubscribeObservable(this);
@@ -115,36 +119,36 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 	/// Locks purpose based on all values entered.
 	/// </summary>
 	public override void OkButton()
-    {
-        hodlerContract.Hodl(userWalletManager,
-                            new HexBigInteger(Gas.TransactionGasLimit),
-                            Gas.TransactionGasPrice.FunctionalGasPrice,
-                            GenerateUnusedBigInteger(lockedPRPSManager.UsedIds),
-                            Amount.AmountToLock,
-                            Time.MonthsToLock);
-    }
+	{
+		hodlerContract.Hodl(userWalletManager,
+							new HexBigInteger(Gas.TransactionGasLimit),
+							Gas.TransactionGasPrice.FunctionalGasPrice,
+							GenerateUnusedBigInteger(lockedPRPSManager.UsedIds),
+							Amount.AmountToLock,
+							Time.MonthsToLock);
+	}
 
-    /// <summary>
-    /// Generates a BigInteger.
-    /// If a collection is passed in, makes sure the new random is not already contained in the collection.
-    /// </summary>
-    /// <param name="numbersToIgnore"> The collection of numbers to ensure the new random number is not a part of. </param>
-    /// <returns> The newly created BigInteger. </returns>
-    public static BigInteger GenerateUnusedBigInteger(ICollection<BigInteger> numbersToIgnore)
-    {
-        var rand = new Random();
+	/// <summary>
+	/// Generates a BigInteger.
+	/// If a collection is passed in, makes sure the new random is not already contained in the collection.
+	/// </summary>
+	/// <param name="numbersToIgnore"> The collection of numbers to ensure the new random number is not a part of. </param>
+	/// <returns> The newly created BigInteger. </returns>
+	public static BigInteger GenerateUnusedBigInteger(ICollection<BigInteger> numbersToIgnore)
+	{
+		var rand = new Random();
 
-        if (numbersToIgnore == null)
-            return new BigInteger(rand.Next());
+		if (numbersToIgnore == null)
+			return new BigInteger(rand.Next());
 
-        var val = rand.Next();
-        while (numbersToIgnore.Contains(val))
-            val = rand.Next();
+		var val = rand.Next();
+		while (numbersToIgnore.Contains(val))
+			val = rand.Next();
 
-        numbersToIgnore.Add(val);
+		numbersToIgnore.Add(val);
 
-        return val;
-    }
+		return val;
+	}
 
 	/// <summary>
 	/// The enter button is pressed
