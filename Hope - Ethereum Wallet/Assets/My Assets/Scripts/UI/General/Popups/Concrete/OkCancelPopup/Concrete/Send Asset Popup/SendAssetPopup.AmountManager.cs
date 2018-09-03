@@ -18,13 +18,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private Button currencyButton;
 
-        private GasManager gasManager;
-        private AssetManager assetManager;
+		private GasManager gasManager;
+		private AssetManager assetManager;
 
 		private bool usingTokenCurrency;
 		private decimal oppositeCurrencyValue, currentTokenPrice = 281.81m;
 
-        private readonly string tradableTokenSymbol, defaultCurrency = "USD";
+		private readonly string tradableTokenSymbol, defaultCurrency = "USD";
 
 		private readonly Toggle maxToggle;
 
@@ -84,19 +84,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			SetupListeners();
 		}
 
-        /// <summary>
-        /// Sets up the dependencies for the this instance of the AmountManager.
-        /// </summary>
-        /// <param name="gasManager"> The GasManager dependency. </param>
-        /// <param name="assetManager"> The AssetManager dependency. </param>
-        public void SetupDependencies(GasManager gasManager, AssetManager assetManager)
-        {
-            this.gasManager = gasManager;
-            this.assetManager = assetManager;
+		/// <summary>
+		/// Sets up the dependencies for the this instance of the AmountManager.
+		/// </summary>
+		/// <param name="gasManager"> The GasManager dependency. </param>
+		/// <param name="assetManager"> The AssetManager dependency. </param>
+		public void SetupDependencies(GasManager gasManager, AssetManager assetManager)
+		{
+			this.gasManager = gasManager;
+			this.assetManager = assetManager;
 
-            gasManager.OnGasChanged += MaxChanged;
-            assetManager.OnAssetBalanceChanged += MaxChanged;
-        }
+			gasManager.OnGasChanged += MaxChanged;
+			assetManager.OnAssetBalanceChanged += MaxChanged;
+		}
 
 		/// <summary>
 		/// Sets up all listeners.
@@ -148,7 +148,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			oppositeCurrencyAmountText.gameObject.AnimateGraphicAndScale(string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, 0.15f);
 			ChangeOppositeCurrencyValue(newSendableAmount);
 
-            SendableAmount = usingTokenCurrency ? newSendableAmount : oppositeCurrencyValue;
+			SendableAmount = usingTokenCurrency ? newSendableAmount : oppositeCurrencyValue;
 
 			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount))
 			{
@@ -159,11 +159,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			CheckIfValidAmount();
 		}
 
-        /// <summary>
-        /// Changes the opposite currency value text
-        /// </summary>
-        /// <param name="newSendableAmount"> The new sendable amount entered in the input field. </param>
-        private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
+		/// <summary>
+		/// Changes the opposite currency value text
+		/// </summary>
+		/// <param name="newSendableAmount"> The new sendable amount entered in the input field. </param>
+		private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
 		{
 			oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
 
@@ -177,7 +177,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void CheckIfValidAmount()
 		{
-			amountInputField.Error = SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / currentTokenPrice) > MaxSendableAmount);
+			bool emptyField = string.IsNullOrEmpty(amountInputField.Text);
+
+			amountInputField.Error = emptyField || SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / currentTokenPrice) > MaxSendableAmount);
+
+			if (!emptyField)
+				amountInputField.errorMessage.text = SendableAmount == 0 ? "Invalid amount" : "Exceeds " + tradableTokenSymbol + " balance";
+
 			OnAmountChanged?.Invoke();
 		}
 	}
