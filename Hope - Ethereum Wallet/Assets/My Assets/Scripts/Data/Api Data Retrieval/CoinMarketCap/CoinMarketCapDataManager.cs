@@ -17,10 +17,12 @@ public sealed class CoinMarketCapDataManager
     /// <summary>
     /// Initializes the CoinList.
     /// </summary>
+    /// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
     public CoinMarketCapDataManager(CurrencyManager currencyManager)
     {
         this.currencyManager = currencyManager;
-        InitializeCoinList();
+
+        UnityWebUtils.DownloadString(LISTING_API_URL, RetrieveData);
     }
 
     /// <summary>
@@ -124,14 +126,6 @@ public sealed class CoinMarketCapDataManager
             default:
                 return coinQuotes.USD;
         }
-    }
-
-    /// <summary>
-    /// Initializes the CoinList by getting the reference to the json data and starting to retrieve the data for ids and symbols.
-    /// </summary>
-    private void InitializeCoinList()
-    {
-        UnityWebUtils.DownloadString(LISTING_API_URL, RetrieveData);
     }
 
     /// <summary>

@@ -37,10 +37,25 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
 
     private void UpdatePrice(TradableAsset tradableAsset)
     {
-        coinMarketCapDataManager.GetCoinPrice(tradableAsset.AssetSymbol).OnSuccess(price =>
-        {
-            if (!prices.ContainsKey(tradableAsset.AssetSymbol))
-                prices.Add(tradableAsset.AssetSymbol, price.Value);
-        });
+        coinMarketCapDataManager.GetCoinPrice(tradableAsset.AssetSymbol)
+                                .OnSuccess(price => OnCoinMarketCapPriceFound(tradableAsset, price))
+                                .OnError(_ => OnCoinMarketCapPriceNotFound(tradableAsset));
+    }
+
+    private void OnCoinMarketCapPriceFound(TradableAsset tradableAsset, decimal? price)
+    {
+        if (!prices.ContainsKey(tradableAsset.AssetSymbol))
+            prices.Add(tradableAsset.AssetSymbol, price.Value);
+    }
+
+    private void OnCoinMarketCapPriceNotFound(TradableAsset tradableAsset)
+    {
+        dubiexDataManager.GetRecentEthPrice(tradableAsset.AssetSymbol).OnSuccess(price => OnDubiExPriceFound(tradableAsset, price));
+    }
+
+    private void OnDubiExPriceFound(TradableAsset tradableAsset, decimal? price)
+    {
+        if (!prices.ContainsKey(tradableAsset.AssetSymbol))
+            prices.Add(tradableAsset.AssetSymbol, price.Value * prices["ETH"]);
     }
 }
