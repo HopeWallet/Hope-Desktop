@@ -18,24 +18,15 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private Button currencyButton;
 
-<<<<<<< HEAD
         private GasManager gasManager;
         private AssetManager assetManager;
         private CurrencyManager currencyManager;
         private TradableAssetPriceManager tradableAssetPriceManager;
-=======
-		private GasManager gasManager;
-		private AssetManager assetManager;
->>>>>>> 74194e4eecb228c093109a537b8fadb8c9ea98af
 
 		private bool usingTokenCurrency = true;
 		private decimal oppositeCurrencyValue;
 
-<<<<<<< HEAD
         private readonly string tradableTokenSymbol;
-=======
-		private readonly string tradableTokenSymbol, defaultCurrency = "USD";
->>>>>>> 74194e4eecb228c093109a537b8fadb8c9ea98af
 
 		private readonly Toggle maxToggle;
 
@@ -111,17 +102,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.gasManager = gasManager;
 			this.assetManager = assetManager;
 
-<<<<<<< HEAD
             currencyButton.interactable = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol) > 0;
 
             gasManager.OnGasChanged += MaxChanged;
             assetManager.OnAssetBalanceChanged += MaxChanged;
         }
-=======
-			gasManager.OnGasChanged += MaxChanged;
-			assetManager.OnAssetBalanceChanged += MaxChanged;
-		}
->>>>>>> 74194e4eecb228c093109a537b8fadb8c9ea98af
 
 		/// <summary>
 		/// Sets up all listeners.
@@ -203,18 +188,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void CheckIfValidAmount()
 		{
-<<<<<<< HEAD
-			amountInputField.Error = SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol)) > MaxSendableAmount);
-=======
 			bool emptyField = string.IsNullOrEmpty(amountInputField.Text);
 
-			amountInputField.Error = emptyField || SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / currentTokenPrice) > MaxSendableAmount);
+			amountInputField.Error = emptyField || SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol)) > MaxSendableAmount);
 
 			if (!emptyField)
 				amountInputField.errorMessage.text = SendableAmount == 0 ? "Invalid amount" : "Exceeds " + tradableTokenSymbol + " balance";
 
->>>>>>> 74194e4eecb228c093109a537b8fadb8c9ea98af
-			OnAmountChanged?.Invoke();
+            OnAmountChanged?.Invoke();
 		}
 	}
 }
