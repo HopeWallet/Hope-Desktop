@@ -4,4 +4,8 @@ using UnityEngine;
 
 public sealed class DubiExDataManager
 {
+    public DubiExDataManager()
+    {
+
+    }
 }

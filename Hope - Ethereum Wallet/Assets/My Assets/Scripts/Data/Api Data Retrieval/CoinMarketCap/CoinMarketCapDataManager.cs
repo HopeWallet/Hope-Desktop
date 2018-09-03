@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 /// </summary>
 public sealed class CoinMarketCapDataManager
 {
-    private readonly Dictionary<string, int> coinIDs = new Dictionary<string, int>();
+    private readonly Dictionary<string, int> CoinIDs = new Dictionary<string, int>();
 
     private const string LISTING_API_URL = "https://api.coinmarketcap.com/v2/listings/";
     private const string TICKER_API_URL = "https://api.coinmarketcap.com/v2/ticker/";
@@ -27,19 +27,24 @@ public sealed class CoinMarketCapDataManager
     /// <returns> The coin's id on CoinMarketCap. </returns>
     public int? GetCoinID(string symbol)
     {
-        if (!coinIDs.ContainsKey(symbol))
+        if (!CoinIDs.ContainsKey(symbol))
             return null;
 
-        return coinIDs[symbol];
+        return CoinIDs[symbol];
     }
 
+    /// <summary>
+    /// Gets the price of the coin of a given symbol.
+    /// </summary>
+    /// <param name="symbol"> The symbol of the coin on CoinMarketCap. </param>
+    /// <returns> The promise of an eventual decimal price or null. </returns>
     public SimplePromise<decimal?> GetCoinPrice(string symbol)
     {
-        if (!coinIDs.ContainsKey(symbol))
+        if (!CoinIDs.ContainsKey(symbol))
             return null;
 
         SimplePromise<decimal?> promise = new SimplePromise<decimal?>();
-        UnityWebUtils.DownloadString(TICKER_API_URL + coinIDs[symbol], jsonData => promise.Resolve((decimal?)JsonUtils.DeserializeDynamic(jsonData).data.quotes.USD.price));
+        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol], jsonData => promise.Resolve((decimal?)JsonUtils.DeserializeDynamic(jsonData).data.quotes.USD.price));
 
         return promise;
     }
@@ -66,8 +71,8 @@ public sealed class CoinMarketCapDataManager
             {
                 string symbol = coin.symbol;
                 int id = (int)coin.id;
-                if (!coinIDs.ContainsKey(symbol))
-                    coinIDs.Add(symbol, id);
+                if (!CoinIDs.ContainsKey(symbol))
+                    CoinIDs.Add(symbol, id);
             }
         }).ConfigureAwait(false);
 
