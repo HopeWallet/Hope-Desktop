@@ -83,6 +83,9 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
         Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
         Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
         Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
+
+		if (lockPRPSManager.PRPSBalance == 0)
+			maxToggle.SetInteractable(false);
 	}
 
 	/// <summary>

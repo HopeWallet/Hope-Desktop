@@ -98,7 +98,7 @@ public sealed partial class LockPRPSPopup
 
 			AmountToLock = newLockableAmount;
 
-			if (maxToggle.IsToggledOn != (AmountToLock == MaxSendableAmount))
+			if (maxToggle.IsToggledOn != (AmountToLock == MaxSendableAmount) && AmountToLock != 0)
 			{
 				maxToggle.IsToggledOn = AmountToLock == MaxSendableAmount;
 				maxToggle.AnimateImages();
@@ -112,7 +112,14 @@ public sealed partial class LockPRPSPopup
         /// </summary>
         private void CheckIfValidAmount()
         {
-			amountInputField.Error = string.IsNullOrEmpty(amountInputField.Text) || AmountToLock > MaxSendableAmount || AmountToLock < 0.0000000000000001m;
+			bool emptyField = string.IsNullOrEmpty(amountInputField.Text);
+			bool exceedsBalance = AmountToLock > MaxSendableAmount;
+
+			amountInputField.Error = emptyField || exceedsBalance || AmountToLock < 0.0000000000000001m;
+			
+			if (!emptyField)
+				amountInputField.errorMessage.text = exceedsBalance ? "Exceeds PRPS balance" : "Invalid amount";
+
 			OnLockAmountChanged?.Invoke();
         }
 

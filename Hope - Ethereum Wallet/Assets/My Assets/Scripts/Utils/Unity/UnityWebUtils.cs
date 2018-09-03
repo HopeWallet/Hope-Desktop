@@ -7,12 +7,12 @@ using UnityEngine.Networking;
 /// </summary>
 public static class UnityWebUtils
 {
-    /// <summary>
-    /// Downloads string data from a given url.
-    /// </summary>
-    /// <param name="url"> The url containing string data. </param>
-    /// <param name="onStringDataReceived"> Action called once the string data has been received. </param>
-    public static void DownloadString(string url, Action<string> onStringDataReceived)
+	/// <summary>
+	/// Downloads string data from a given url.
+	/// </summary>
+	/// <param name="url"> The url containing string data. </param>
+	/// <param name="onStringDataReceived"> Action called once the string data has been received. </param>
+	public static void DownloadString(string url, Action<string> onStringDataReceived)
     {
         SendUnityWebRequest(url, webRequest => onStringDataReceived?.Invoke(webRequest.downloadHandler.text)).StartCoroutine();
     }
