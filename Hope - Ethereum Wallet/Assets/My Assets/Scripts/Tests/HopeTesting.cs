@@ -81,10 +81,6 @@ public sealed class HopeTesting : MonoBehaviour
     //    transaction.GetRLPEncoded().LogArray();
     //}
 
-    private void Start()
-    {
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

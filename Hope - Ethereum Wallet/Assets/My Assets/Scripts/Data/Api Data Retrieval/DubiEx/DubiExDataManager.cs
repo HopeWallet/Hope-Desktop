@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.Promises;
+using Nethereum.Util;
 using System.Linq;
 
 public sealed class DubiExDataManager
@@ -23,20 +24,14 @@ public sealed class DubiExDataManager
 
     private static void QueryDubiExData(SimplePromise<decimal?> promise, TradableAsset tradableAsset)
     {
-        UnityWebUtils.DownloadString(DUBIEX_HISTORY_API + tradableAsset.AssetAddress.ToLower(), jsonData =>
+        UnityWebUtils.DownloadString(DUBIEX_HISTORY_API + tradableAsset.AssetAddress.ConvertToEthereumChecksumAddress(), jsonData =>
         {
             dynamic deserializedData = JsonUtils.DeserializeDynamic(jsonData);
 
             if ((int)deserializedData.itemCount == 0)
-            {
-                UnityEngine.Debug.Log(tradableAsset.AssetAddress + " => NOT FOUND");
                 promise.Resolve(null);
-            }
             else
-            {
-                UnityEngine.Debug.Log(tradableAsset.AssetAddress + " => FOUND");
-                promise.Resolve((decimal?)deserializedData.result[0].metadata.price);
-            }
+                promise.Resolve((decimal?)decimal.Parse(deserializedData.result[0].metadata.price));
         });
     }
 }
