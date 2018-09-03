@@ -7,7 +7,7 @@ public class InteractableInputField : InteractableBase
 	/// </summary>
 	private void Start()
 	{
-		customCursor = Resources.Load("UI/Graphics/Textures/New/Icons/TextCursor_Icon") as Texture2D;
+		customCursor = Resources.Load("UI/Graphics/Textures/Icons/TextCursor_Icon") as Texture2D;
 		customCursorPosition = new Vector2(60f, 25f);
 	}
 }

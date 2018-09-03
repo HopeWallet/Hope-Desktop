@@ -61,7 +61,7 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="iconName"> The name of the icon file </param>
 	private void SetSprite(ref Sprite targetSprite, string iconName)
 	{
-		Texture2D loadedTexture = Resources.Load("UI/Graphics/Textures/New/Icons/" + iconName) as Texture2D;
+		Texture2D loadedTexture = Resources.Load("UI/Graphics/Textures/Icons/" + iconName) as Texture2D;
 		targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
 	}
 
