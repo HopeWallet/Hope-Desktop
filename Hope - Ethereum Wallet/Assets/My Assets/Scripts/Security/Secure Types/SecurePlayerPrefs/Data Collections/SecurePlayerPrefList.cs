@@ -42,14 +42,20 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     }
 
     /// <summary>
+    /// Gets the full key name based on the keyName string and unique listId.
+    /// </summary>
+    /// <returns> The full key name which can be used to set/get the prefs. </returns>
+    private string GetFullKeyName() => listId.HasValue? string.Concat(keyName, listId.Value) : keyName;
+
+    /// <summary>
     /// Initializes all values in the <see cref="SecurePlayerPrefList"/>.
     /// </summary>
     private void InitializeList()
     {
-        if (!SecurePlayerPrefs.HasKey(listId.HasValue ? string.Concat(keyName, listId.Value) : keyName))
+        if (!SecurePlayerPrefs.HasKey(GetFullKeyName()))
             return;
 
-        SerializedList = SecurePlayerPrefs.GetString(listId.HasValue ? string.Concat(keyName, listId.Value) : keyName);
+        SerializedList = SecurePlayerPrefs.GetString(GetFullKeyName());
 
         var items = JsonUtils.Deserialize<ListJson>(SerializedList).items;
         itemList.AddItems(items);
@@ -64,7 +70,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         ListJson array = new ListJson(itemList.ToArray());
         SerializedList = JsonUtils.Serialize(array);
 
-        SecurePlayerPrefs.SetString(keyName, SerializedList);
+        SecurePlayerPrefs.SetString(GetFullKeyName(), SerializedList);
     }
 
     /// <summary>
@@ -126,7 +132,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
         serializedItemList.Clear();
 
         SerializedList = string.Empty;
-        SecurePlayerPrefs.DeleteKey(keyName);
+        SecurePlayerPrefs.DeleteKey(GetFullKeyName());
     }
 
     /// <summary>
