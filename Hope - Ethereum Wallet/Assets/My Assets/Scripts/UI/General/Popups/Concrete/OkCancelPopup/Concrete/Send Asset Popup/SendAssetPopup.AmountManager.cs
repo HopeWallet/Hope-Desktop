@@ -20,11 +20,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         private GasManager gasManager;
         private AssetManager assetManager;
+        private CurrencyManager currencyManager;
+        private TradableAssetPriceManager tradableAssetPriceManager;
 
-		private bool usingTokenCurrency;
-		private decimal oppositeCurrencyValue, currentTokenPrice = 281.81m;
+		private bool usingTokenCurrency = true;
+		private decimal oppositeCurrencyValue;
 
-        private readonly string tradableTokenSymbol, defaultCurrency = "USD";
+        private readonly string tradableTokenSymbol;
 
 		private readonly Toggle maxToggle;
 
@@ -54,16 +56,20 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			}
 		}
 
-		/// <summary>
-		/// Initializes the <see cref="AmountManager"/> by assigning the references to the popup, max toggle, and amount input field.
-		/// </summary>
-		/// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
-		/// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
-		/// <param name="currencyText"> The currency text object. </param>
-		/// <param name="oppositeCurrencyAmountText"> The opposite currency amount text object. </param>
-		/// <param name="currencyButton"> The currency button. </param>
-		/// <param name="tokenSymbol"> The token symbol. </param>
-		public AmountManager(
+        /// <summary>
+        /// Initializes the <see cref="AmountManager"/> by assigning the references to the popup, max toggle, and amount input field.
+        /// </summary>
+        /// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
+        /// <param name="tradableAssetPriceManager"> The active <see cref="TradableAssetPriceManager"/>. </param>
+        /// <param name="maxToggle"> The toggle for switching between maximum sendable amount and the entered amount. </param>
+        /// <param name="amountInputField"> The input field used for entering the sendable amount. </param>
+        /// <param name="currencyText"> The currency text object. </param>
+        /// <param name="oppositeCurrencyAmountText"> The opposite currency amount text object. </param>
+        /// <param name="currencyButton"> The currency button. </param>
+        /// <param name="tokenSymbol"> The token symbol. </param>
+        public AmountManager(
+            CurrencyManager currencyManager,
+            TradableAssetPriceManager tradableAssetPriceManager,
 			Toggle maxToggle,
 			HopeInputField amountInputField,
 			TMP_Text currencyText,
@@ -76,11 +82,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			this.currencyText = currencyText;
 			this.oppositeCurrencyAmountText = oppositeCurrencyAmountText;
 			this.currencyButton = currencyButton;
+            this.currencyManager = currencyManager;
+            this.tradableAssetPriceManager = tradableAssetPriceManager;
 			tradableTokenSymbol = tokenSymbol;
 
-			amountInputField.SetPlaceholderText("Amount (" + tokenSymbol + ")");
-			usingTokenCurrency = true;
-			currencyText.text = defaultCurrency;
+            currencyText.text = currencyManager.ActiveCurrency.ToString();
+
+            amountInputField.SetPlaceholderText("Amount (" + tokenSymbol + ")");
 			SetupListeners();
 		}
 
@@ -93,6 +101,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         {
             this.gasManager = gasManager;
             this.assetManager = assetManager;
+
+            currencyButton.interactable = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol) > 0;
 
             gasManager.OnGasChanged += MaxChanged;
             assetManager.OnAssetBalanceChanged += MaxChanged;
@@ -116,7 +126,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			usingTokenCurrency = !usingTokenCurrency;
 
 			amountInputField.SetPlaceholderText("Amount (" + currencyText.text + ")");
-			currencyText.text = usingTokenCurrency ? defaultCurrency : tradableTokenSymbol;
+			currencyText.text = usingTokenCurrency ? currencyManager.ActiveCurrency.ToString() : tradableTokenSymbol;
 
 			if (!string.IsNullOrEmpty(amountInputField.Text))
 				amountInputField.Text = oppositeCurrencyValue.ToString();
@@ -130,7 +140,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void MaxChanged()
 		{
 			if (maxToggle.IsToggledOn)
-				amountInputField.Text = usingTokenCurrency ? MaxSendableAmount.ToString() : (MaxSendableAmount * currentTokenPrice).ToString();
+				amountInputField.Text = usingTokenCurrency ? MaxSendableAmount.ToString() : (MaxSendableAmount * tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol)).ToString();
 
 			CheckIfValidAmount();
 		}
@@ -165,11 +175,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="newSendableAmount"> The new sendable amount entered in the input field. </param>
         private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
 		{
-			oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
+            decimal currentTokenPrice = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol);
+            oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
 
 			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00").LimitEnd(8, "...") : oppositeCurrencyValue.ToString().LimitEnd(8, "...");
 
-			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= $" + oppositeCurrencyValueText + " " + defaultCurrency : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
+			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= $" + oppositeCurrencyValueText + " " + currencyManager.ActiveCurrency.ToString() : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
 		}
 
 		/// <summary>
@@ -177,7 +188,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void CheckIfValidAmount()
 		{
-			amountInputField.Error = SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / currentTokenPrice) > MaxSendableAmount);
+			amountInputField.Error = SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol)) > MaxSendableAmount);
 			OnAmountChanged?.Invoke();
 		}
 	}

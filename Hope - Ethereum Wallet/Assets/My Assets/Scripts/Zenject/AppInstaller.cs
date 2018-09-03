@@ -69,6 +69,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<TradableAssetManager>().AsSingle().NonLazy();
         Container.Bind<TradableAssetButtonManager>().AsSingle().NonLazy();
         Container.Bind<TradableAssetImageManager>().AsSingle().NonLazy();
+        Container.Bind<TradableAssetPriceManager>().AsSingle().NonLazy();
 
         Container.Bind<LockPRPSManager>().AsSingle().NonLazy();
         Container.Bind<LockedPRPSManager>().AsSingle().NonLazy();

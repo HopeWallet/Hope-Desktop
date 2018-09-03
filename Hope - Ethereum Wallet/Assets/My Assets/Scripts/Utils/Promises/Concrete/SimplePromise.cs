@@ -12,7 +12,12 @@ namespace Hope.Utils.Promises
         /// Resolves the promise with the given result.
         /// </summary>
         /// <param name="result"> The result to return. </param>
-        public void Resolve(T result) => InternalBuild(() => result);
+        /// <returns> The current SimplePromise. </returns>
+        public SimplePromise<T> Resolve(T result)
+        {
+            InternalBuild(() => result);
+            return this;
+        }
 
         /// <summary>
         /// Builds the promise and invokes success if the first argument is not null.

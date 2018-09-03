@@ -43,10 +43,11 @@ public sealed class CoinMarketCapDataManager
     /// <returns> The promise of an eventual decimal price or null. </returns>
     public SimplePromise<decimal?> GetCoinPrice(string symbol)
     {
-        if (!CoinIDs.ContainsKey(symbol))
-            return null;
-
         SimplePromise<decimal?> promise = new SimplePromise<decimal?>();
+
+        if (!CoinIDs.ContainsKey(symbol))
+            return promise.Resolve(null);
+
         UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol], jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
 
         return promise;
@@ -147,7 +148,5 @@ public sealed class CoinMarketCapDataManager
                 if (!CoinIDs.ContainsKey((string)coin.symbol))
                     CoinIDs.Add((string)coin.symbol, (int)coin.id);
         }).ConfigureAwait(false);
-
-        MainThreadExecutor.QueueAction(() => GetCoinPrice("ETH").OnSuccess(price => UnityEngine.Debug.Log(price)));
     }
 }
