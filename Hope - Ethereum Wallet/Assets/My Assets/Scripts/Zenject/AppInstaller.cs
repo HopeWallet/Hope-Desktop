@@ -52,15 +52,15 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<MainThreadExecutor>().AsSingle().NonLazy();
 
+        Container.Bind<SecurePlayerPrefs>().AsSingle().NonLazy();
+        Container.Bind<SecurePlayerPrefsAsync>().AsSingle().NonLazy();
+
         Container.Bind<DynamicDataCache>().AsSingle().NonLazy();
 
         Container.Bind<CoinMarketCapDataManager>().AsSingle().NonLazy();
         Container.Bind<DubiExDataManager>().AsSingle().NonLazy();
 
         Container.Bind<CurrencyManager>().AsSingle().NonLazy();
-
-        Container.Bind<SecurePlayerPrefs>().AsSingle().NonLazy();
-        Container.Bind<SecurePlayerPrefsAsync>().AsSingle().NonLazy();
 
         Container.Bind<DebugManager>().AsSingle().NonLazy();
         Container.Bind<ExceptionManager>().AsSingle().NonLazy();

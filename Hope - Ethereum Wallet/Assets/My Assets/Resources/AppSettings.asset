@@ -34,6 +34,8 @@ MonoBehaviour:
       tokenListPrefName: TokenList
     notificationSettings:
       prefName: notifications
+    currencySettings:
+      prefName: currency
   walletSettings:
     safePassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
     safePasswordCharLookups:
@@ -52,14 +54,6 @@ MonoBehaviour:
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
-      dropdowns:
-        optionsDropdowns:
-        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
-            type: 3}
-          buttonText: Settings
-        - buttonImage: {fileID: 21300000, guid: 4f9ea6771b8bf7d4faced4c87cebe95f,
-            type: 3}
-          buttonText: Logout
     menuSettings:
       factoryButtons:
       - {fileID: 1732801882341504, guid: 5b47e53b5545c8a46a7d38752ad38258, type: 2}

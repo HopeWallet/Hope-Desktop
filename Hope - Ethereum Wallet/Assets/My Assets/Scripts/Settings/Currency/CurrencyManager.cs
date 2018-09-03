@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public sealed class CurrencyManager
 {
@@ -17,12 +13,13 @@ public sealed class CurrencyManager
         if (!SecurePlayerPrefs.HasKey(settings.prefName))
             SecurePlayerPrefs.SetInt(settings.prefName, (int)CurrencyType.USD);
 
-
+        ActiveCurrency = (CurrencyType)SecurePlayerPrefs.GetInt(settings.prefName);
     }
 
-    public void SwitchActiveCurrency()
+    public void SwitchActiveCurrency(CurrencyType newActiveCurrency)
     {
-
+        ActiveCurrency = newActiveCurrency;
+        SecurePlayerPrefs.SetInt(settings.prefName, (int)newActiveCurrency);
     }
 
     public enum CurrencyType
@@ -61,6 +58,7 @@ public sealed class CurrencyManager
         ZAR
     }
 
+    [Serializable]
     public sealed class Settings
     {
         [RandomizeText] public string prefName;
