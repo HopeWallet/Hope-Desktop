@@ -73,6 +73,7 @@ MonoBehaviour:
       - {fileID: 1586119722272208, guid: d8f8f0502b424744f90627b25ee94f2a, type: 2}
       - {fileID: 1309645935752502, guid: 04e404d5c2f3de34384cc53d4cab4e63, type: 2}
       - {fileID: 1942602494943120, guid: bfb52cb5e73a303438f4d46757f8d566, type: 2}
+      - {fileID: 1122442493547836, guid: 86a408c61c0d31a4b9ab0e1b950edadd, type: 2}
       popups:
       - {fileID: 1120657717184104, guid: b13e683ad7d232746a6a33077e53025e, type: 2}
       - {fileID: 1095592712460054, guid: 3035794ec750a12419e3c4e25ff4c6b2, type: 2}

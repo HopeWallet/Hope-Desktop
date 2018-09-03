@@ -52,7 +52,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenTrezorWallet()
 	{
-		// TODO
+        uiManager.OpenMenu<OpenTrezorWalletMenu>();
 	}
 
 	/// <summary>

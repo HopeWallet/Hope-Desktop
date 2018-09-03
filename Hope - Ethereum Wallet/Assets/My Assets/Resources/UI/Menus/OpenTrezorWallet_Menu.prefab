@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 223474873146423176}
   - component: {fileID: 114361246173983276}
   - component: {fileID: 114772821232719102}
+  - component: {fileID: 114785937744584154}
   m_Layer: 0
   m_Name: OpenTrezorWallet_Menu
   m_TagString: Untagged
@@ -641,7 +642,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114223612387573264}
   m_OnClick:
     m_PersistentCalls:
@@ -695,7 +696,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114678673640137084}
   m_OnClick:
     m_PersistentCalls:
@@ -917,7 +918,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114344103822565798}
   m_OnClick:
     m_PersistentCalls:
@@ -1067,7 +1068,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114885430229372732}
   m_OnClick:
     m_PersistentCalls:
@@ -1295,7 +1296,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114364857940685286}
   m_OnClick:
     m_PersistentCalls:
@@ -1401,7 +1402,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114626809519695354}
   m_OnClick:
     m_PersistentCalls:
@@ -1710,7 +1711,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114672964056289714}
   m_OnClick:
     m_PersistentCalls:
@@ -1776,7 +1777,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114565901565891588}
   m_OnClick:
     m_PersistentCalls:
@@ -1972,6 +1973,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114785937744584154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1122442493547836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3da4fea82b7d3c45aa32c7e2e844be4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyWhenClosed: 1
+  backButton: {fileID: 114844863802969096}
 --- !u!114 &114794510647462746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2202,7 +2216,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114743233107274324}
   m_OnClick:
     m_PersistentCalls:
