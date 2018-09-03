@@ -13,9 +13,14 @@ public sealed class ContactsManager
     /// <param name="userWalletManager"> The active UserWalletManager </param>
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager </param>
     /// <param name="settings"> The settings for the ContactsManager. </param>
-    public ContactsManager(UserWalletManager userWalletManager, UserWalletInfoManager userWalletInfoManager, Settings settings)
+    /// <param name="networkSettings"> The settings for the EthereumNetworkManager. </param>
+    public ContactsManager(
+        UserWalletManager userWalletManager,
+        UserWalletInfoManager userWalletInfoManager,
+        Settings settings,
+        EthereumNetworkManager.Settings networkSettings)
 	{
-        ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName);
+        ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
         UserWallet.OnWalletLoadSuccessful += () =>
 		{
 			string walletAddress = userWalletManager.WalletAddress;

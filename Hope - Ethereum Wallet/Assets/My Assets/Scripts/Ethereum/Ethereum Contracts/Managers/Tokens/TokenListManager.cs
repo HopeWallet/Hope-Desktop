@@ -10,9 +10,9 @@ public sealed class TokenListManager
 
     public List<AddableTokenInfo> OldTokenList { get; } = new List<AddableTokenInfo>();
 
-    public TokenListManager(Settings settings)
+    public TokenListManager(Settings settings, EthereumNetworkManager.Settings networkSettings)
     {
-        addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName);
+        addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName, (int)networkSettings.networkType);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)

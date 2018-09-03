@@ -15,6 +15,7 @@ public sealed class TradableAssetNotificationManager
 
     public TradableAssetNotificationManager(
         Settings settings,
+        EthereumNetworkManager.Settings networkSettings,
         EthereumTransactionManager ethereumTransactionManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract)
@@ -23,7 +24,7 @@ public sealed class TradableAssetNotificationManager
         this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
 
-        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName);
+        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType);
         notificationsByAddress = new Dictionary<string, int?>();
 
         TradableAssetManager.OnTradableAssetAdded += AssetAdded;

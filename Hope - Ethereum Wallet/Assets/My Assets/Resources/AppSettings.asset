@@ -50,7 +50,7 @@ MonoBehaviour:
     - $_XwlcNx^pCIuYGUm51!8gA#fi4+Jd@oQhW-q*)2&jEM0nazsZtFDH(7OrL%6bev=TSyRK9B3kPV
     - Vl1ORpA@JLZ+&K=hm-U#(GB)YoI3$seHbv*0xcC^6g7TMDNw4f!QW_%jFdakSr5qu8PXzE2yi9nt
   ethereumNetworkSettings:
-    networkType: 0
+    networkType: 1
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}

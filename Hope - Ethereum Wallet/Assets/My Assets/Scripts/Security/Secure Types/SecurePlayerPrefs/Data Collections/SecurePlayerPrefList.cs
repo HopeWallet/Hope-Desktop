@@ -13,6 +13,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     private readonly List<string> serializedItemList = new List<string>();
 
     private readonly string keyName;
+    private readonly int? listId;
 
     /// <summary>
     /// The <see langword="string"/> which holds all serialized list data.
@@ -23,11 +24,21 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// Initializes the <see cref="SecurePlayerPrefList"/> given the key to use to access the list in the <see cref="SecurePlayerPrefs"/>.
     /// </summary>
     /// <param name="keyName"> The key of the <see cref="SecurePlayerPrefs"/> containing the list data. </param>
-    public SecurePlayerPrefList(string keyName)
+    /// <param name="listId"> The id of this list. Can be used to have multiple versions of the same list. </param>
+    public SecurePlayerPrefList(string keyName, int? listId)
     {
         this.keyName = keyName;
+        this.listId = listId;
 
         InitializeList();
+    }
+
+    /// <summary>
+    /// Initializes the <see cref="SecurePlayerPrefList"/> given the key to use to access the list in the <see cref="SecurePlayerPrefs"/>.
+    /// </summary>
+    /// <param name="keyName"> The key of the <see cref="SecurePlayerPrefs"/> containing the list data. </param>
+    public SecurePlayerPrefList(string keyName) : this(keyName, null)
+    {
     }
 
     /// <summary>
@@ -35,10 +46,10 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// </summary>
     private void InitializeList()
     {
-        if (!SecurePlayerPrefs.HasKey(keyName))
+        if (!SecurePlayerPrefs.HasKey(listId.HasValue ? string.Concat(keyName, listId.Value) : keyName))
             return;
 
-        SerializedList = SecurePlayerPrefs.GetString(keyName);
+        SerializedList = SecurePlayerPrefs.GetString(listId.HasValue ? string.Concat(keyName, listId.Value) : keyName);
 
         var items = JsonUtils.Deserialize<ListJson>(SerializedList).items;
         itemList.AddItems(items);

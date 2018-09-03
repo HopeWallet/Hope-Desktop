@@ -17,6 +17,9 @@ public sealed class TokenContractManager
 
     private readonly SecurePlayerPrefList<TokenInfo> tokens;
 
+    /// <summary>
+    /// The list of token info.
+    /// </summary>
     public List<TokenInfo> TokenList => tokens.ToList();
 
     /// <summary>
@@ -26,16 +29,18 @@ public sealed class TokenContractManager
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="networkSettings"> The current EthereumNetworkManager settings. </param>
     public TokenContractManager(Settings settings,
         PopupManager popupManager,
         TradableAssetImageManager tradableAssetImageManager,
-        UserWalletManager userWalletManager)
+        UserWalletManager userWalletManager,
+        EthereumNetworkManager.Settings networkSettings)
     {
         this.popupManager = popupManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
 
-        tokens = new SecurePlayerPrefList<TokenInfo>(settings.tokenPrefName);
+        tokens = new SecurePlayerPrefList<TokenInfo>(settings.tokenPrefName, (int)networkSettings.networkType);
     }
 
     /// <summary>
@@ -51,6 +56,10 @@ public sealed class TokenContractManager
         return tokens.IndexOf(tokenAddress);
     }
 
+    /// <summary>
+    /// Adds a token given the info of the token.
+    /// </summary>
+    /// <param name="tokenInfo"> The info of the token to add. </param>
     public void AddToken(TokenInfo tokenInfo)
     {
         ERC20 erc20Token = new ERC20(tokenInfo.Address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals);
@@ -87,6 +96,11 @@ public sealed class TokenContractManager
         new EtherAsset(asset => UpdateTradableAssets(asset, () => LoadToken(0, onLoadFinished)), tradableAssetImageManager, userWalletManager);
     }
 
+    /// <summary>
+    /// Loads a token of the given index.
+    /// </summary>
+    /// <param name="index"> The index of the token to load. </param>
+    /// <param name="onTokenLoadFinished"> Action to call once the token load is finished. </param>
     private void LoadToken(int index, Action onTokenLoadFinished)
     {
         if (CheckLoadStatus(index, onTokenLoadFinished))
@@ -97,6 +111,12 @@ public sealed class TokenContractManager
         new ERC20TokenAsset(erc20Token, asset => UpdateTradableAssets(asset, () => LoadToken(++index, onTokenLoadFinished)), tradableAssetImageManager, userWalletManager);
     }
 
+    /// <summary>
+    /// Checks whether the initial token load status has completed or not.
+    /// </summary>
+    /// <param name="index"> The current token index. </param>
+    /// <param name="onTokenLoadFinished"> Action to call once the tokens have finished loading. </param>
+    /// <returns> True if the tokens are finished loading. </returns>
     private bool CheckLoadStatus(int index, Action onTokenLoadFinished)
     {
         if (index == tokens.Count)
