@@ -14,7 +14,7 @@ public sealed class TradableAssetImageManager
     private readonly Sprite defaultSprite;
     private readonly Vector2 pivot;
 
-    private readonly CoinList coinList;
+    private readonly CoinMarketCapDataManager coinList;
 
     private readonly string imagePath;
 
@@ -22,7 +22,7 @@ public sealed class TradableAssetImageManager
     /// Initializes the TradableAssetManager by getting the default sprite and initializing the dictionary.
     /// </summary>
     /// <param name="coinList"> Class which contains the list of CoinMarketCap coins with all the ids for image lookup. </param>
-    public TradableAssetImageManager(CoinList coinList)
+    public TradableAssetImageManager(CoinMarketCapDataManager coinList)
     {
         this.coinList = coinList;
 

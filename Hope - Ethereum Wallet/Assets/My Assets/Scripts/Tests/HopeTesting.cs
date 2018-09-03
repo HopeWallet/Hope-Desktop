@@ -59,6 +59,9 @@ using Nethereum.Signer;
 using Hope.Random;
 using Transaction = Nethereum.Signer.Transaction;
 using Nethereum.RLP;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Converters;
 
 public sealed class HopeTesting : MonoBehaviour
 {
