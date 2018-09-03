@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 223318893767593252}
   - component: {fileID: 114148767213633496}
   - component: {fileID: 114260728062604786}
+  - component: {fileID: 114994269093793686}
   m_Layer: 0
   m_Name: OpenLedgerWallet_Menu
   m_TagString: Untagged
@@ -1318,6 +1319,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114994269093793686
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1942602494943120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0765c7cfee1d3b04da97c6a29fdfe242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 0}
+  dim: {fileID: 0}
+  form: {fileID: 0}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
+  popupContainer: {fileID: 0}
 --- !u!222 &222010391698891160
 CanvasRenderer:
   m_ObjectHideFlags: 1
