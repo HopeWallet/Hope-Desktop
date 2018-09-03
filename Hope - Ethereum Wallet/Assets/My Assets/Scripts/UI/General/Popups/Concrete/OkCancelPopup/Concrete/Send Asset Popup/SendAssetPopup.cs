@@ -175,6 +175,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         if (clickType != ClickType.Down)
             return;
 
+        if (popupManager.ActivePopupType != typeof(SendAssetPopup))
+            return;
+
         if (!advancedModeToggle.IsToggledOn)
             simpleModeSelectableFields.MoveToNextSelectable();
         else
@@ -188,6 +191,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     public void EnterButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)
+            return;
+
+        if (popupManager.ActivePopupType != typeof(SendAssetPopup))
             return;
 
         if (InputFieldUtils.GetActiveInputField() == LastSelectableField && okButton.interactable)

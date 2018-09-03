@@ -1,13 +1,16 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>
+public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>, IEnterButtonObservable, ITabButtonObservable
 {
 	[SerializeField] private Button addContactButton, confirmButton;
 	[SerializeField] private HopeInputField nameInputField, addressInputField;
 	[SerializeField] private TextMeshProUGUI title;
+
+    private readonly List<Selectable> inputFields = new List<Selectable>();
 
 	private string previousName, previousAddress;
 	private ContactButton contactButton;
@@ -15,6 +18,8 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	private AddOrEditContactPopupAnimator addOrEditContactPopupAnimator;
 	private ContactButton.Factory contactButtonFactory;
 	private ContactsManager contactsManager;
+    private ButtonClickObserver buttonClickObserver;
+
 	private ContactsPopup contactsPopup;
 
 	/// <summary>
@@ -24,25 +29,40 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 	{
 		addContactButton.onClick.AddListener(AddContactClicked);
 		confirmButton.onClick.AddListener(ConfirmClicked);
+
+        inputFields.Add(nameInputField.InputFieldBase);
+        inputFields.Add(addressInputField.InputFieldBase);
 	}
 
-	/// <summary>
-	/// Adds the required dependencies to the AddOrEditContatPopup
-	/// </summary>
-	/// <param name="contactButtonFactory"> The active ContactButtonFactory</param>
-	/// <param name="contactsManager"> The active ContactsManager</param>
-	[Inject]
-	public void Construct(ContactButton.Factory contactButtonFactory, ContactsManager contactsManager)
+    private void OnEnable()
+    {
+        buttonClickObserver.SubscribeObservable(this);
+    }
+
+    private void OnDisable()
+    {
+        buttonClickObserver.UnsubscribeObservable(this);
+    }
+
+    /// <summary>
+    /// Adds the required dependencies to the AddOrEditContatPopup
+    /// </summary>
+    /// <param name="contactButtonFactory"> The active ContactButtonFactory</param>
+    /// <param name="contactsManager"> The active ContactsManager</param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+    [Inject]
+	public void Construct(ContactButton.Factory contactButtonFactory, ContactsManager contactsManager, ButtonClickObserver buttonClickObserver)
 	{
 		this.contactButtonFactory = contactButtonFactory;
 		this.contactsManager = contactsManager;
+        this.buttonClickObserver = buttonClickObserver;
 	}
 
-	/// <summary>
-	/// Sets this ContactsPopup to the original instance
-	/// </summary>
-	/// <param name="contactsPopup"> The ContactsPopup </param>
-	public void SetContactsPopup(ContactsPopup contactsPopup) => this.contactsPopup = contactsPopup;
+    /// <summary>
+    /// Sets this ContactsPopup to the original instance
+    /// </summary>
+    /// <param name="contactsPopup"> The ContactsPopup </param>
+    public void SetContactsPopup(ContactsPopup contactsPopup) => this.contactsPopup = contactsPopup;
 
 	/// <summary>
 	/// Adds a new contact according to the given inputs
@@ -85,13 +105,14 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 		popupManager.CloseActivePopup();
 	}
 
-	/// <summary>
-	/// Sets all the necessary popup text elements
-	/// </summary>
-	/// <param name="addingContact"> Checks if adding a contact or editing an existing one </param>
-	/// <param name="name"> The current name of the contact </param>
-	/// <param name="address"> The current address of the contact </param>
-	public void SetPopupLayout(bool addingContact, string name = "", string address = "", ContactButton contactButton = null)
+    /// <summary>
+    /// Sets all the necessary popup text elements
+    /// </summary>
+    /// <param name="addingContact"> Checks if adding a contact or editing an existing one </param>
+    /// <param name="name"> The current name of the contact </param>
+    /// <param name="address"> The current address of the contact </param>
+    /// <param name="contactButton"> The ContactButton being edited. </param>
+    public void SetPopupLayout(bool addingContact, string name = "", string address = "", ContactButton contactButton = null)
 	{
 		addOrEditContactPopupAnimator = transform.GetComponent<AddOrEditContactPopupAnimator>();
 		addOrEditContactPopupAnimator.AddingContact = addingContact;
@@ -100,12 +121,38 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
 
 		title.GetComponent<TextMeshProUGUI>().text = addingContact ? "Add Contact" : "Edit Contact";
 
-		if (addingContact) return;
+        confirmButton.gameObject.SetActive(!addingContact);
+        addContactButton.gameObject.SetActive(addingContact);
 
-		nameInputField.Text = name;
+		if (addingContact)
+            return;
+
+        this.contactButton = contactButton;
+
+        nameInputField.Text = name;
 		addressInputField.Text = address;
 		previousName = name;
 		previousAddress = address;
-		this.contactButton = contactButton;
 	}
+
+    public void TabButtonPressed(ClickType clickType)
+    {
+        if (clickType != ClickType.Down)
+            return;
+
+        inputFields.MoveToNextSelectable();
+    }
+
+    public void EnterButtonPressed(ClickType clickType)
+    {
+        if (clickType != ClickType.Down)
+            return;
+
+        Button button = confirmButton.gameObject.activeInHierarchy ? confirmButton : addContactButton;
+
+        if (InputFieldUtils.GetActiveInputField() == inputFields[1] && button.interactable)
+            button.Press();
+        else
+            inputFields.MoveToNextSelectable();
+    }
 }
