@@ -77,7 +77,7 @@ public sealed class UserWalletManager
         BigInteger gasPrice,
         params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {
-        hopeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, transactionInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, transactionInput);
     }
 
     /// <summary>

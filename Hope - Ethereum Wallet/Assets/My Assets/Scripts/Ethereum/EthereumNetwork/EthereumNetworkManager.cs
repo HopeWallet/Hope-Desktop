@@ -56,5 +56,5 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     /// Enum which holds the different network types.
     /// </summary>
     [Serializable]
-    public enum NetworkType { Mainnet, Rinkeby };
+    public enum NetworkType { Mainnet = 1, Rinkeby = 4 };
 }
