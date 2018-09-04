@@ -7,7 +7,7 @@ using Zenject;
 /// </summary>
 public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 {
-    [SerializeField] private TMP_Text walletNameText;
+	[SerializeField] private TMP_Text walletNameText;
 
 	private WalletListMenu walletListMenu;
     private PopupManager popupManager;
@@ -43,5 +43,11 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 	/// <summary>
 	/// Sets the wallet num in the data cache and opens the <see cref="UnlockWalletPopup"/>.
 	/// </summary>
-	private void WalletButtonClicked() => walletListMenu.SetNewActiveWallet(ButtonInfo.WalletNum);
+	private void WalletButtonClicked()
+	{
+		Button.interactable = false;
+
+		dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
+		popupManager.GetPopup<UnlockWalletPopup>().SetFinishingAction(() => Button.interactable = true);
+	}
 }

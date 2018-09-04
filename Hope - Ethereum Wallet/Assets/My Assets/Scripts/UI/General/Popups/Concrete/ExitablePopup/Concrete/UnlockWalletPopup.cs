@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ using Zenject;
 /// </summary>
 public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup>, IEnterButtonObservable
 {
+	private Action popupClosed;
+
     [SerializeField] private Button unlockWalletButton;
 
 	[SerializeField] private HopeInputField passwordField;
@@ -37,10 +40,12 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         this.buttonClickObserver = buttonClickObserver;
     }
 
-    /// <summary>
-    /// Adds the button listener.
-    /// </summary>
-    protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
+	public void SetFinishingAction(Action popupClosed) => this.popupClosed = popupClosed;
+
+	/// <summary>
+	/// Adds the button listener.
+	/// </summary>
+	protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
 
     /// <summary>
     /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
@@ -58,7 +63,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     {
         UserWallet.OnWalletLoadSuccessful -= OnWalletLoad;
         buttonClickObserver.UnsubscribeObservable(this);
-		WalletListMenu.PopupClosed?.Invoke();
+		popupClosed?.Invoke();
 	}
 
     /// <summary>

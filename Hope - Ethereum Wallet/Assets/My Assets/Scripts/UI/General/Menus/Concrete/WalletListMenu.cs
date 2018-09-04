@@ -13,11 +13,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	public event Action<bool> BottomButtonsVisible;
 	public static Action PopupClosed;
 
-	[SerializeField] private Button deleteButton, editButton, signInButton, newWalletButton;
-
-	[SerializeField] private Transform walletList;
-
-	private int activeWalletNum = 1;
+	[SerializeField] private Button newWalletButton;
 
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
@@ -64,80 +60,12 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	/// <summary>
 	/// Adds the button click events on start.
 	/// </summary>
-	private void Start()
-	{
-		deleteButton.onClick.AddListener(DeleteWallet);
-		editButton.onClick.AddListener(EditWallet);
-		signInButton.onClick.AddListener(UnlockWallet);
-		newWalletButton.onClick.AddListener(CreateNewWallet);
-	}
-
-	/// <summary>
-	/// Resets the bottom buttons and goes back to the ChooseWallet_Menu
-	/// </summary>
-	protected override void OnBackPressed()
-	{
-		base.OnBackPressed();
-
-		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
-		activeWalletNum = 1;
-		BottomButtonsVisible?.Invoke(false);
-	}
+	private void Start() => newWalletButton.onClick.AddListener(CreateNewWallet);
 
 	/// <summary>
 	/// Opens the CreateWalletMenu to allow for creating a new wallet.
 	/// </summary>
 	private void CreateNewWallet() => uiManager.OpenMenu<CreateWalletMenu>();
-
-	private void DeleteWallet()
-	{
-		deleteButton.interactable = false;
-		PopupClosed = () => deleteButton.interactable = true;
-	}
-
-	private void EditWallet()
-	{
-		editButton.interactable = false;
-		PopupClosed = () => editButton.interactable = true;
-	}
-
-	/// <summary>
-	/// Opens up the OpenWallet_Menu
-	/// </summary>
-	private void UnlockWallet()
-	{
-		signInButton.interactable = false;
-		PopupClosed = () => signInButton.interactable = true;
-
-		dynamicDataCache.SetData("walletnum", activeWalletNum);
-		popupManager.GetPopup<UnlockWalletPopup>();
-	}
-
-	/// <summary>
-	/// A new wallet has been clicked
-	/// </summary>
-	/// <param name="newWalletNum"> The index of the button in the hiearchy </param>
-	public void SetNewActiveWallet(int newWalletNum)
-	{
-		BottomButtonsVisible?.Invoke(true);
-
-		SetActiveButton(walletList.GetChild(activeWalletNum - 1), false);
-		SetActiveButton(walletList.GetChild(newWalletNum - 1), true);
-		activeWalletNum = newWalletNum;
-	}
-
-	/// <summary>
-	/// Changes the visuals of the active button
-	/// </summary>
-	/// <param name="objectTransform"> The transform of the given button </param>
-	/// <param name="newActiveWallet"> Whether the button is active or not </param>
-	private void SetActiveButton(Transform objectTransform, bool newActiveWallet)
-	{
-		objectTransform.GetComponent<Button>().interactable = !newActiveWallet;
-
-		float value = newActiveWallet ? 1f : 0.85f;
-		objectTransform.GetChild(0).GetComponent<TextMeshProUGUI>().color = new Color(value, value, value);
-	}
 
 	/// <summary>
 	/// The settings for this WalletListMenu.

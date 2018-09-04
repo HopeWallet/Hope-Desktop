@@ -6,12 +6,7 @@ using UnityEngine.UI;
 /// </summary>
 public class WalletListMenuAnimator : UIAnimator
 {
-	[SerializeField] private GameObject walletList;
-	[SerializeField] private GameObject deleteButton;
-	[SerializeField] private GameObject editButton;
-	[SerializeField] private GameObject signInButton;
 	[SerializeField] private GameObject line2;
-	[SerializeField] private GameObject line3;
 	[SerializeField] private GameObject newWalletButton;
     [SerializeField] private Scrollbar scrollbar;
 
@@ -19,8 +14,6 @@ public class WalletListMenuAnimator : UIAnimator
     /// The wallet gameobjects to animate
     /// </summary>
     public GameObject[] Wallets { get; set; }
-
-	private void Awake() => transform.GetComponent<WalletListMenu>().BottomButtonsVisible += AnimateBottomButtons;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
@@ -62,40 +55,5 @@ public class WalletListMenuAnimator : UIAnimator
             Wallets[index].AnimateScaleX(1f, 0.1f, FinishedAnimating);
 		else
             Wallets[index].AnimateScaleX(1f, 0.1f, () => AnimateWallets(++index));
-	}
-
-	public void AnimateBottomButtons(bool animatingIn)
-	{
-		if (animatingIn)
-		{
-			line2.AnimateTransformY(-190f, 0.15f);
-			line3.AnimateTransformY(-245.3f, 0.15f);
-			ChangeButtonVisuals(deleteButton, true);
-			ChangeButtonVisuals(editButton, true);
-			ChangeButtonVisuals(signInButton, true);
-		}
-		else
-		{
-			Vector2 defaultLinePosition = new Vector2(0.8f, -217.65f);
-			line2.transform.localPosition = defaultLinePosition;
-			line3.transform.localPosition = defaultLinePosition;
-
-			ChangeButtonVisuals(deleteButton, false);
-			ChangeButtonVisuals(editButton, false);
-			ChangeButtonVisuals(signInButton, false);
-		}
-	}
-
-	private void ChangeButtonVisuals(GameObject button, bool animatingIn)
-	{
-		if (animatingIn)
-		{
-			button.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		}
-		else
-		{
-			button.transform.localScale = Vector2.zero;
-			button.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
-		}
 	}
 }
