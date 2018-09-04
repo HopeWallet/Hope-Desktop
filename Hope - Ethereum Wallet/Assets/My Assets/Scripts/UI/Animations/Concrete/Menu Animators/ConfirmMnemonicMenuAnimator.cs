@@ -1,7 +1,7 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using System.Linq;
 
 public class ConfirmMnemonicMenuAnimator : UIAnimator
 {
@@ -96,10 +96,14 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
 	{
 		HopeInputField inputField = wordInputField.GetComponent<HopeInputField>();
 
-		nextButton.GetComponent<Button>().interactable = !string.IsNullOrEmpty(inputField.Text);
+		bool stringContainsNonLetter = inputField.Text.Any(c => !char.IsLetter(c));
 
-		if (inputField.Error && !string.IsNullOrEmpty(inputField.Text))
-			inputField.Error = false;
+		inputField.Error = string.IsNullOrEmpty(inputField.Text) || stringContainsNonLetter;
+
+		if (!string.IsNullOrEmpty(inputField.Text))
+			inputField.errorMessage.text = "Invalid word";
+
+		nextButton.GetComponent<Button>().interactable = !inputField.Error;
 	}
 
 	/// <summary>
@@ -129,6 +133,7 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
         else
         {
 			inputField.Error = true;
+			inputField.errorMessage.text = "Incorrect word";
 			inputField.UpdateVisuals();
 			nextButton.GetComponent<Button>().interactable = false;
 		}
