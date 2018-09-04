@@ -137,7 +137,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		}
 
 		/// <summary>
-		/// Changes the currency and the inputted text according to the currency
+		/// Changes the currency and the inputted text according to the currency.
 		/// </summary>
 		private void CurrencyChanged()
 		{
@@ -191,7 +191,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		}
 
 		/// <summary>
-		/// Changes the opposite currency value text
+		/// Changes the opposite currency value text.
 		/// </summary>
 		/// <param name="newSendableAmount"> The new sendable amount entered in the input field. </param>
 		private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
