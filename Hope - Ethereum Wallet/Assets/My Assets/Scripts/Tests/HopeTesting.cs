@@ -65,9 +65,112 @@ using Newtonsoft.Json.Converters;
 using Hope.Random.Strings;
 using Hope.Random.Bytes;
 using Org.BouncyCastle.Asn1.Cms;
+using Nethereum.RPC.NonceServices;
+using Ledger.Net.Connectivity;
+using Ledger.Net;
+using Ledger.Net.Requests;
+using Ledger.Net.Responses;
+using Hid.Net;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    public bool connect;
+
+    private static readonly VendorProductIds[] wellKnownLedgerWallets = new VendorProductIds[] { new VendorProductIds(0x2c97), new VendorProductIds(0x2581, 0x3b7c) };
+    private static readonly UsageSpecification[] usageSpecification = new[] { new UsageSpecification(0xffa0, 0x01) };
+
+    public static async Task<LedgerManager> GetWindowsConnectedLedger()
+    {
+        var devices = new List<DeviceInformation>();
+
+        var collection = WindowsHidDevice.GetConnectedDeviceInformations();
+
+        foreach (var ids in wellKnownLedgerWallets)
+        {
+            if (ids.ProductId == null)
+                devices.AddRange(collection.Where(c => c.VendorId == ids.VendorId));
+            else
+                devices.AddRange(collection.Where(c => c.VendorId == ids.VendorId && c.ProductId == ids.ProductId));
+        }
+
+        var retVal = devices.Find(d => usageSpecification == null || usageSpecification.Length == 0 || usageSpecification.Any(u => d.UsagePage == u.UsagePage && d.Usage == u.Usage));
+        if (retVal == null)
+            return null;
+
+        var ledgerHidDevice = new WindowsHidDevice(retVal);
+        await ledgerHidDevice.InitializeAsync();
+
+        var ledgerManager = new LedgerManager(ledgerHidDevice);
+        var address = await ledgerManager.GetAddressAsync(0, 0);
+
+        return string.IsNullOrEmpty(address) ? null : ledgerManager;
+    }
+
+    private void Update()
+    {
+        if (!connect)
+            return;
+
+        //AsyncTaskScheduler.Schedule(() => SignTransaction(CreateTransaction()));
+        //GetWindowsConnectedLedger();
+        AsyncTaskScheduler.Schedule(GetWindowsConnectedLedger);
+    }
+
+    private Transaction CreateTransaction()
+    {
+        return new Transaction(
+            0.ToBytesForRLPEncoding(), // Nonce
+            1000000000.ToBytesForRLPEncoding(), // Gas price
+            21000.ToBytesForRLPEncoding(), // Gas limit
+            "0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203".HexToByteArray(), // Receiving address
+            0.ToBytesForRLPEncoding(), // Ether value
+            "".HexToByteArray(), // Data
+            0.ToBytesForRLPEncoding(), // R
+            0.ToBytesForRLPEncoding(), // S
+            4);
+    }
+
+    private async Task SignTransaction(Transaction transaction)
+    {
+        var ledgerManager = await LedgerConnector.GetWindowsConnectedLedger();
+
+        if (ledgerManager == null)
+            return;
+
+        ledgerManager.SetCoinNumber(60);
+
+        var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, 0, false, ledgerManager.CurrentCoin.IsSegwit);
+
+        var firstRequest = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
+
+        var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(firstRequest);
+
+        if (!response.IsSuccess)
+        {
+            Debug.Log("SUCCESSFUL");
+        }
+        else
+        {
+            response.SignatureV.Log();
+            response.SignatureR.LogArray();
+            response.SignatureS.LogArray();
+        }
+    }
+
+    //private void Start()
+    //{
+    //    uint v = 44;
+    //    byte[] r = null;
+    //    byte[] s = null;
+
+    //    byte[] signature = EthECDSASignatureFactory.FromComponents(r, s, (byte)v).ToDER();
+
+    //    //EthSendRawTransaction ethSendRawTransaction = new EthSendRawTransaction();
+    //    //ethSendRawTransaction.SendRequestAsync()
+    //    //EthSendRawTransactionUnityRequest ethSendRawTransactionUnityRequest = new EthSendRawTransactionUnityRequest("");
+    //    //ethSendRawTransactionUnityRequest.SendRequest()
+    //}
+
     //private void Start()
     //{
     //    Transaction transaction = new Transaction(
