@@ -3,7 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class TopBarButtons : MonoBehaviour
+/// <summary>
+/// Manages the top bar buttons and button listenerss
+/// </summary>
+public sealed class TopBarButtons : MonoBehaviour
 {
 	public static Action popupClosed;
 

@@ -98,7 +98,7 @@ public sealed partial class LockPRPSPopup
 
 			AmountToLock = newLockableAmount;
 
-			if (maxToggle.IsToggledOn != (AmountToLock == MaxSendableAmount) && AmountToLock != 0)
+			if (maxToggle.IsToggledOn != (AmountToLock == MaxSendableAmount))
 			{
 				maxToggle.IsToggledOn = AmountToLock == MaxSendableAmount;
 				maxToggle.AnimateImages();

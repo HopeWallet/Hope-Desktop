@@ -2,7 +2,10 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+/// <summary>
+/// Manages the More button dropdown
+/// </summary>
+public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 	private Button moreButton;
 	private GameObject clickedImage;
