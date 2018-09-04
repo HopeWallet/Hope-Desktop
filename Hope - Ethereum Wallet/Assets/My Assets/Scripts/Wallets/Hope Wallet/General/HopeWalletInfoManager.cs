@@ -1,8 +1,9 @@
 ﻿using System;
+
 /// <summary>
 /// Class which manages the info for each user wallet.
 /// </summary>
-public sealed class UserWalletInfoManager
+public sealed class HopeWalletInfoManager
 {
     private readonly SecurePlayerPrefList<WalletInfo> wallets;
     private readonly Settings walletSettings;
@@ -11,7 +12,7 @@ public sealed class UserWalletInfoManager
     /// Initializes the UserWalletInfoManager.
     /// </summary>
     /// <param name="walletSettings"> The settings of the UserWallet. </param>
-    public UserWalletInfoManager(Settings walletSettings)
+    public HopeWalletInfoManager(Settings walletSettings)
     {
         this.walletSettings = walletSettings;
 

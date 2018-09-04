@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
 /// </summary>
-public sealed class UserWallet : SecureObject
+public sealed class HopeWallet : SecureObject
 {
     public static event Action OnWalletLoadSuccessful;
 
@@ -31,12 +31,12 @@ public sealed class UserWallet : SecureObject
     /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
     /// <param name="walletSettings"> The settings for the UserWallet. </param>
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
-    public UserWallet(PlayerPrefPassword prefPassword,
+    public HopeWallet(PlayerPrefPassword prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
         DynamicDataCache dynamicDataCache,
-        UserWalletInfoManager userWalletInfoManager,
-        UserWalletInfoManager.Settings walletSettings)
+        HopeWalletInfoManager userWalletInfoManager,
+        HopeWalletInfoManager.Settings walletSettings)
     {
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;

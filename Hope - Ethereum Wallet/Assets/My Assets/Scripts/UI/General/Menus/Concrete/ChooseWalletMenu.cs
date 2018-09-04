@@ -9,14 +9,14 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 {
 	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
 
-    private UserWalletInfoManager.Settings walletSettings;
+    private HopeWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Adds the required wallet dependencies.
     /// </summary>
     /// <param name="walletSettings"> The pref settings for the UserWallet. </param>
     [Inject]
-    public void Construct(UserWalletInfoManager.Settings walletSettings) => this.walletSettings = walletSettings;
+    public void Construct(HopeWalletInfoManager.Settings walletSettings) => this.walletSettings = walletSettings;
 
     /// <summary>
     /// Adds the button listeners on start.

@@ -19,7 +19,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
-    private UserWalletInfoManager userWalletInfoManager;
+    private HopeWalletInfoManager userWalletInfoManager;
     private DynamicDataCache dynamicDataCache;
 	private ContactsManager contactsManager;
 
@@ -36,7 +36,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         TradableAssetManager tradableAssetManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager,
-        UserWalletInfoManager userWalletInfoManager,
+        HopeWalletInfoManager userWalletInfoManager,
         DynamicDataCache dynamicDataCache,
 		ContactsManager contactsManager)
     {

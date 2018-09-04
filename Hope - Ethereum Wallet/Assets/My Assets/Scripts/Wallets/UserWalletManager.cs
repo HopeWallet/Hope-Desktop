@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 /// </summary>
 public sealed class UserWalletManager
 {
-    private readonly UserWallet userWallet;
+    private readonly HopeWallet userWallet;
 
     private int walletNumber, accountNumber;
 
@@ -32,11 +32,11 @@ public sealed class UserWalletManager
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
         DynamicDataCache dynamicDataCache,
-        UserWalletInfoManager userWalletInfoManager,
-        UserWalletInfoManager.Settings walletSettings)
+        HopeWalletInfoManager userWalletInfoManager,
+        HopeWalletInfoManager.Settings walletSettings)
     {
         settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-        userWallet = new UserWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
+        userWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
     }
 
     /// <summary>

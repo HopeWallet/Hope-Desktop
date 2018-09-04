@@ -18,13 +18,13 @@ public sealed class WalletTransactionSigner
     /// <param name="dynamicDataCache"> The active <see cref="DynamicDataCache"/> to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="ethereumNetwork"> The active <see cref="EthereumNetwork"/>. </param>
     /// <param name="passwordEncryptor"> The <see cref="MemoryEncryptor"/> instance used to encrypt the password. </param>
-    /// <param name="walletSettings"> The settings for the <see cref="UserWallet"/>. </param>
+    /// <param name="walletSettings"> The settings for the <see cref="HopeWallet"/>. </param>
     public WalletTransactionSigner(
         PlayerPrefPassword playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         EthereumNetwork ethereumNetwork,
         MemoryEncryptor passwordEncryptor,
-        UserWalletInfoManager.Settings walletSettings)
+        HopeWalletInfoManager.Settings walletSettings)
     {
         this.ethereumNetwork = ethereumNetwork;
         this.passwordEncryptor = passwordEncryptor;

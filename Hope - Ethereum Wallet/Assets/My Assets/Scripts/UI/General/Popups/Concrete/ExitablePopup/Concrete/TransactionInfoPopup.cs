@@ -44,7 +44,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		TradableAssetImageManager tradableAssetImageManager,
 		ContactsManager contactsManager,
 		UserWalletManager userWalletManager,
-		UserWalletInfoManager userWalletInfoManager)
+		HopeWalletInfoManager userWalletInfoManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;

@@ -17,7 +17,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 											password2Field;
 
 	private DynamicDataCache dynamicDataCache;
-	private UserWalletInfoManager userWalletInfoManager;
+	private HopeWalletInfoManager userWalletInfoManager;
 	private ButtonClickObserver buttonClickObserver;
 
 	private List<Selectable> inputFields = new List<Selectable>();
@@ -30,7 +30,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
 	[Inject]
 	public void Construct(DynamicDataCache dynamicDataCache,
-						  UserWalletInfoManager userWalletInfoManager,
+						  HopeWalletInfoManager userWalletInfoManager,
 						  ButtonClickObserver buttonClickObserver)
 	{
 		this.dynamicDataCache = dynamicDataCache;

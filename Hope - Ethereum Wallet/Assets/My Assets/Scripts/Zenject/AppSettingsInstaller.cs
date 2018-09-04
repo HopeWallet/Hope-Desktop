@@ -53,7 +53,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     {
         public SecurePlayerPrefs.Settings securePlayerPrefSettings;
         public ContactsManager.Settings contactsSettings;
-        public UserWalletInfoManager.Settings walletPrefSettings;
+        public HopeWalletInfoManager.Settings walletPrefSettings;
         public TokenContractManager.Settings tokenContractSettings;
         public TokenListManager.Settings tokenListSettings;
         public TradableAssetNotificationManager.Settings notificationSettings;

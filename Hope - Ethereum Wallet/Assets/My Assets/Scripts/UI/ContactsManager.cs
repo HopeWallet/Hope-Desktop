@@ -16,12 +16,12 @@ public sealed class ContactsManager
     /// <param name="networkSettings"> The settings for the EthereumNetworkManager. </param>
     public ContactsManager(
         UserWalletManager userWalletManager,
-        UserWalletInfoManager userWalletInfoManager,
+        HopeWalletInfoManager userWalletInfoManager,
         Settings settings,
         EthereumNetworkManager.Settings networkSettings)
 	{
         ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
-        UserWallet.OnWalletLoadSuccessful += () =>
+        HopeWallet.OnWalletLoadSuccessful += () =>
 		{
 			string walletAddress = userWalletManager.WalletAddress;
 			AddContact(walletAddress, userWalletInfoManager.GetWalletInfo(walletAddress).WalletName);
