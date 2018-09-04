@@ -117,12 +117,6 @@ public sealed class HopeTesting : MonoBehaviour
     //    authenticator.ValidateTwoFactorPIN(RandomString.Secure.SHA3.GetString("testPassword", 256).Keccak_128(), code).Log();
     //}
 
-    private void Start()
-    {
-        //OriginatorInfo originatorInfo = new OriginatorInfo()
-        //AuthenticatedData authenticatedData = new AuthenticatedData()
-    }
-
     [ContextMenu("Delete Player Prefs")]
     public void DeletePrefs()
     {

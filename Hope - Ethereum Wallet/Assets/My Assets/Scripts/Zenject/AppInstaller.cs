@@ -79,6 +79,8 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
 		Container.Bind<ContactsManager>().AsSingle().NonLazy();
 
 		Container.Bind<UserWalletManager>().AsSingle().NonLazy();
+        Container.Bind<LedgerWallet>().AsSingle().NonLazy();
+        Container.Bind<TrezorWallet>().AsSingle().NonLazy();
         Container.Bind<HopeWalletInfoManager>().AsSingle().NonLazy();
 
         Container.Bind<TokenContractManager>().AsSingle().NonLazy();

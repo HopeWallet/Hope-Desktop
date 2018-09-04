@@ -1,13 +1,13 @@
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Promises;
-using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
+using System.Numerics;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
 /// </summary>
-public sealed class HopeWallet : SecureObject
+public sealed class HopeWallet : SecureObject, IWallet
 {
     public static event Action OnWalletLoadSuccessful;
 
@@ -114,8 +114,8 @@ public sealed class HopeWallet : SecureObject
     [ReflectionProtect]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
-        HexBigInteger gasLimit,
-        HexBigInteger gasPrice,
+        BigInteger gasLimit,
+        BigInteger gasPrice,
         string signerAddress,
         params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
     {

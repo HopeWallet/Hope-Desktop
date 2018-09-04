@@ -1,5 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
-using System;
+﻿using System;
+using System.Numerics;
 
 /// <summary>
 /// Base class used for confirming transaction requests.
@@ -9,8 +9,8 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
 {
     private Action onConfirmPressed;
 
-    private HexBigInteger gasLimit,
-                          gasPrice;
+    private BigInteger gasLimit,
+                       gasPrice;
 
     /// <summary>
     /// Sets the transaction request values that need to be confirmed.
@@ -19,7 +19,7 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
     /// <param name="gasLimit"> The gas limit of the transaction request. </param>
     /// <param name="gasPrice"> The gas price of the transaction request. </param>
     /// <param name="transactionInput"> The transaction input of the request being called. </param>
-    public void SetConfirmationValues(Action onConfirmPressed, HexBigInteger gasLimit, HexBigInteger gasPrice, params object[] transactionInput)
+    public void SetConfirmationValues(Action onConfirmPressed, BigInteger gasLimit, BigInteger gasPrice, params object[] transactionInput)
     {
         this.onConfirmPressed = onConfirmPressed;
         this.gasLimit = gasLimit;
