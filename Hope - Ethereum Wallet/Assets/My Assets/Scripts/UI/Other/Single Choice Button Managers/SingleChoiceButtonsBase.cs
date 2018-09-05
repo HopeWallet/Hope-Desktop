@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Manages a set of buttons and manages the change in visuals when one button is pressed
 /// </summary>
-public class SingleChoiceButtons : MonoBehaviour
+public class SingleChoiceButtonsBase : MonoBehaviour
 {
 	public event Action<int> OnButtonChanged;
 

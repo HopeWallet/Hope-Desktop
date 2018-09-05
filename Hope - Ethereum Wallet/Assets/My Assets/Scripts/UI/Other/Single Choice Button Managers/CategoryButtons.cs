@@ -1,5 +1,7 @@
-﻿
-public sealed class GeneralRadioButtons : SingleChoiceButtons
+﻿using TMPro;
+using UnityEngine;
+
+public class CategoryButtons : SingleChoiceButtonsBase
 {
 	/// <summary>
 	/// Changes the visuals of the newly active, and previously active radio button
@@ -10,6 +12,9 @@ public sealed class GeneralRadioButtons : SingleChoiceButtons
 	{
 		base.SetRadioButtonVisuals(activeButton, active);
 
-		transform.GetChild(activeButton).GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.LightGrey, 0.15f);
+		Transform ButtonTransform = transform.GetChild(activeButton);
+
+		ButtonTransform.GetComponent<TextMeshProUGUI>().color = active ? UIColors.Green : UIColors.White;
+		ButtonTransform.GetChild(0).gameObject.AnimateGraphic(active ? 1f : 0f, 0.15f);
 	}
 }
