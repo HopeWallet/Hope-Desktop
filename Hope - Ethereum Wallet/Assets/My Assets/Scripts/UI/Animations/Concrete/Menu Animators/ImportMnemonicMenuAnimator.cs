@@ -221,7 +221,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		if (!string.IsNullOrEmpty(clipboard.Trim()))
 		{
 			int numOfWords = wordStrings.Length;
-			wordCountSection.GetComponent<SingleChoiceButtonsBase>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
+			wordCountSection.GetComponent<SingleChoiceButtonsBase>().ButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
 
 			AnimateIcon(pasteButtonCheckMarkIcon);
 			StartWordAnimation();

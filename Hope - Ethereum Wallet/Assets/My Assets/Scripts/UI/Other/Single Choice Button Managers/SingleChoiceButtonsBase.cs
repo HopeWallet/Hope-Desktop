@@ -24,12 +24,12 @@ public class SingleChoiceButtonsBase : MonoBehaviour
 	/// Sets the button listener for the given index
 	/// </summary>
 	/// <param name="index"> The index of the button in the hiearchy </param>
-	private void SetButtonListener(int index) => transform.GetChild(index).GetComponent<Button>().onClick.AddListener(() => RadioButtonClicked(index));
+	private void SetButtonListener(int index) => transform.GetChild(index).GetComponent<Button>().onClick.AddListener(() => ButtonClicked(index));
 
-	public void RadioButtonClicked(int activeButton)
+	public void ButtonClicked(int activeButton)
 	{
-		SetRadioButtonVisuals(previouslySelectedButton, false);
-		SetRadioButtonVisuals(activeButton, true);
+		SetButtonVisuals(previouslySelectedButton, false);
+		SetButtonVisuals(activeButton, true);
 
 		OnButtonChanged?.Invoke(activeButton);
 
@@ -41,5 +41,5 @@ public class SingleChoiceButtonsBase : MonoBehaviour
 	/// </summary>
 	/// <param name="activeButton"> the index of the button being changed </param>
 	/// <param name="active"> Whether the button is currently active or not </param>
-	protected virtual void SetRadioButtonVisuals(int activeButton, bool active) => transform.GetChild(activeButton).GetComponent<Button>().interactable = !active;
+	protected virtual void SetButtonVisuals(int activeButton, bool active) => transform.GetChild(activeButton).GetComponent<Button>().interactable = !active;
 }

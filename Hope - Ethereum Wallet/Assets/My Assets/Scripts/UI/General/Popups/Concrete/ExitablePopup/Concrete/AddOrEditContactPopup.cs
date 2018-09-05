@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,8 @@ using Zenject;
 
 public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditContactPopup>, IEnterButtonObservable, ITabButtonObservable
 {
+	private Action popupClosed;
+
 	[SerializeField] private Button addContactButton, confirmButton;
 	[SerializeField] private HopeInputField nameInputField, addressInputField;
 	[SerializeField] private TextMeshProUGUI title;
@@ -42,6 +45,7 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
     private void OnDisable()
     {
         buttonClickObserver.UnsubscribeObservable(this);
+		popupClosed?.Invoke();
     }
 
     /// <summary>
@@ -58,11 +62,16 @@ public sealed class AddOrEditContactPopup : ExitablePopupComponent<AddOrEditCont
         this.buttonClickObserver = buttonClickObserver;
 	}
 
-    /// <summary>
-    /// Sets this ContactsPopup to the original instance
-    /// </summary>
-    /// <param name="contactsPopup"> The ContactsPopup </param>
-    public void SetContactsPopup(ContactsPopup contactsPopup) => this.contactsPopup = contactsPopup;
+	/// <summary>
+	/// Sets this ContactsPopup to the original instance and initializes te closing action
+	/// </summary>
+	/// <param name="contactsPopup"> The ContactsPopup </param>
+	/// <param name="popupClosed"> Action to run when this popup has closed </param>
+	public void SetContactsPopup(ContactsPopup contactsPopup, Action popupClosed = null)
+	{
+		this.contactsPopup = contactsPopup;
+		this.popupClosed = popupClosed;
+	}
 
 	/// <summary>
 	/// Adds a new contact according to the given inputs

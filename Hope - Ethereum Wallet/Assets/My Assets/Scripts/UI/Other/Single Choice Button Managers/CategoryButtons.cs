@@ -8,9 +8,9 @@ public class CategoryButtons : SingleChoiceButtonsBase
 	/// </summary>
 	/// <param name="activeButton"> the index of the button being changed </param>
 	/// <param name="active"> Whether the button is currently active or not </param>
-	protected override void SetRadioButtonVisuals(int activeButton, bool active)
+	protected override void SetButtonVisuals(int activeButton, bool active)
 	{
-		base.SetRadioButtonVisuals(activeButton, active);
+		base.SetButtonVisuals(activeButton, active);
 
 		Transform ButtonTransform = transform.GetChild(activeButton);
 

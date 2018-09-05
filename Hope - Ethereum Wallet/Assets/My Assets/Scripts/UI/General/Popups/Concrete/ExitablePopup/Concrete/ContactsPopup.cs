@@ -112,8 +112,10 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// </summary>
 	private void AddContact()
 	{
+		addContactButton.interactable = false;
+
 		popupManager.GetPopup<AddOrEditContactPopup>(true).SetPopupLayout(true);
-		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this);
+		popupManager.GetPopup<AddOrEditContactPopup>(true).SetContactsPopup(this, () => addContactButton.interactable = true);
 	}
 
 	/// <summary>
