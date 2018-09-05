@@ -66,9 +66,77 @@ using Hope.Random.Strings;
 using Hope.Random.Bytes;
 using Org.BouncyCastle.Asn1.Cms;
 using Nethereum.RPC.NonceServices;
+using HidLibrary;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    public class UsageSpecification
+    {
+        public UsageSpecification(ushort usagePage, ushort usage)
+        {
+            UsagePage = usagePage;
+            Usage = usage;
+        }
+
+        public ushort Usage
+        {
+            get;
+            private set;
+        }
+        public ushort UsagePage
+        {
+            get;
+            private set;
+        }
+    }
+
+    public class VendorProductIds
+    {
+        public VendorProductIds(int vendorId)
+        {
+            VendorId = vendorId;
+        }
+        public VendorProductIds(int vendorId, int? productId)
+        {
+            VendorId = vendorId;
+            ProductId = productId;
+        }
+        public int VendorId
+        {
+            get; set;
+        }
+        public int? ProductId
+        {
+            get; set;
+        }
+    }
+
+    private VendorProductIds[] _WellKnownLedgerWallets = new VendorProductIds[]
+    {
+            new VendorProductIds(0x2c97),
+            new VendorProductIds(0x2581, 0x3b7c)
+    };
+
+    private UsageSpecification[] _UsageSpecification = new[] { new UsageSpecification(0xffa0, 0x01) };
+
+    private void Start()
+    {
+        List<HidDevice> devices = new List<HidDevice>();
+        foreach (var ids in _WellKnownLedgerWallets)
+        {
+            if (ids.ProductId == null)
+                devices.AddRange(HidDevices.Enumerate(ids.VendorId));
+            else
+                devices.AddRange(HidDevices.Enumerate(ids.VendorId, ids.ProductId.Value));
+
+        }
+        var hidDevices = devices.Where(d => _UsageSpecification == null
+            || _UsageSpecification.Length == 0
+            || _UsageSpecification.Any(u => (ushort)d.Capabilities.UsagePage == u.UsagePage && (ushort)d.Capabilities.Usage == u.Usage));
+
+        hidDevices.Count().Log();
+    }
+
     //public bool connect;
 
     //private void Update()
