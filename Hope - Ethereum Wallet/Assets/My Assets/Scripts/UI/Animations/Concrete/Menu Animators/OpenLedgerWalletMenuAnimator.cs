@@ -8,4 +8,12 @@ public class OpenLedgerWalletMenuAnimator : UIAnimator
 	{
 		FinishedAnimating();
 	}
+
+	/// <summary>
+	/// Resets the unique elements of the form back to the starting positions
+	/// </summary>
+	protected override void ResetElementValues()
+	{
+		FinishedAnimating();
+	}
 }
