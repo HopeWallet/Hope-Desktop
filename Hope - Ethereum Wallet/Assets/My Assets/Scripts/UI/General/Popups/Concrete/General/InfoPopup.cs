@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public sealed class InfoPopup : FactoryPopup<InfoPopup>
 {
-
 	[SerializeField] private TextMeshProUGUI title;
 	[SerializeField] private TextMeshProUGUI body;
 	[SerializeField] private GameObject infoIcon;

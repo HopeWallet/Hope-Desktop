@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class SettingsPopupAnimator : UIAnimator {
-
+public class SettingsPopupAnimator : UIAnimator
+{
 	[SerializeField] private CategoryButtons settingsCategories;
 	[SerializeField] private GameObject[] sections;
 

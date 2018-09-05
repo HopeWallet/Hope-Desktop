@@ -45,7 +45,9 @@ public sealed class PopupManager
         InfoPopup.Factory infoPopupFactory,
         ModifyTokensPopup.Factory modifyTokensPopupFactory,
         ExitConfirmationPopup.Factory exitConfirmationPopupFactory,
-        DeleteContactPopup.Factory deleteContactPopupFactory)
+        DeleteContactPopup.Factory deleteContactPopupFactory,
+		ConnectionLostPopup.Factory conectionLostPopupFactory,
+		SettingsPopup.Factory settingsPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -60,10 +62,12 @@ public sealed class PopupManager
                                unlockWalletPopupFactory,
                                contactsPopupFactory,
                                addOrEditContactPopupFactory,
-                                infoPopupFactory,
+                               infoPopupFactory,
                                modifyTokensPopupFactory,
                                exitConfirmationPopupFactory,
-                               deleteContactPopupFactory);
+                               deleteContactPopupFactory,
+							   conectionLostPopupFactory,
+							   settingsPopupFactory);
     }
 
     /// <summary>

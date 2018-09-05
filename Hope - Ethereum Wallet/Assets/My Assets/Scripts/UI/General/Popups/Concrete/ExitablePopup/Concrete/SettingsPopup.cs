@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsPopup : FactoryPopup<SettingsPopup>
+public class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
 	[SerializeField] private Button downloadUpdateButton;
-
 
 	protected override void Awake()
 	{
@@ -12,4 +11,6 @@ public class SettingsPopup : FactoryPopup<SettingsPopup>
 
 		downloadUpdateButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
 	}
+
+	private void OnDisable() => MoreDropdown.PopupClosed?.Invoke();
 }

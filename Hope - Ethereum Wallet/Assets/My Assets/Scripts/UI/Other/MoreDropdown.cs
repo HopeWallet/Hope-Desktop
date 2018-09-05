@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Zenject;
 using System;
 
 /// <summary>
@@ -8,6 +9,8 @@ using System;
 /// </summary>
 public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+	public static Action PopupClosed { get; private set; }
+
 	private Button moreButton;
 	private GameObject clickedImage;
 
@@ -16,7 +19,16 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	[SerializeField] private GameObject triangle;
 	[SerializeField] private Button[] subButtons;
 
-	private bool dropdownOpen, hovering;
+	private PopupManager popupManager;
+
+	private bool dropdownOpen, hovering, popupIsOpen;
+
+	/// <summary>
+	/// Sets the popupManager
+	/// </summary>
+	/// <param name="popupManager"> The active PopupManager </param>
+	[Inject]
+	public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
 
 	/// <summary>
 	/// Sets the button listeners
@@ -38,7 +50,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	{
 		if (dropdownOpen && !hovering)
 		{
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0) && !popupIsOpen)
 				MoreButtonClicked();
 		}
 	}
@@ -89,7 +101,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 
 		foreach (Button button in subButtons)
 		{
-			button.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, timeValue, () => button.interactable = true);
+			button.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, timeValue);
 			timeValue += 0.05f;
 		}
 	}
@@ -103,10 +115,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		triangle.AnimateGraphic(0f, 0.1f);
 
 		foreach (Button button in subButtons)
-		{
-			button.interactable = false;
 			button.gameObject.transform.GetChild(0).gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f);
-		}
 	}
 
 	/// <summary>
@@ -118,7 +127,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		switch (num)
 		{
 			case 0:
-				//Open up settings popup
+				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 1:
 				//Open up About popup
@@ -128,6 +137,8 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				break;
 		}
 
-		MoreButtonClicked();
+		popupIsOpen = true;
+		subButtons[num].interactable = false;
+		PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
 	}
 }
