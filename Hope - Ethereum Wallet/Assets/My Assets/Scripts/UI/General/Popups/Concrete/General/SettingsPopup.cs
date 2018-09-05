@@ -5,6 +5,7 @@ public class SettingsPopup : FactoryPopup<SettingsPopup>
 {
 	[SerializeField] private Button downloadUpdateButton;
 
+
 	protected override void Awake()
 	{
 		base.Awake();

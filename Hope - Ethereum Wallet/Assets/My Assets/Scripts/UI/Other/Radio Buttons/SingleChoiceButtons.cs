@@ -9,7 +9,7 @@ public class SingleChoiceButtons : MonoBehaviour
 {
 	public event Action<int> OnButtonChanged;
 
-	private int previouslySelectedButton;
+	public int previouslySelectedButton { get; private set; }
 
 	/// <summary>
 	/// Sets the variables of the radio buttons
@@ -31,9 +31,9 @@ public class SingleChoiceButtons : MonoBehaviour
 		SetRadioButtonVisuals(previouslySelectedButton, false);
 		SetRadioButtonVisuals(activeButton, true);
 
-		previouslySelectedButton = activeButton;
-
 		OnButtonChanged?.Invoke(activeButton);
+
+		previouslySelectedButton = activeButton;
 	}
 
 	/// <summary>
