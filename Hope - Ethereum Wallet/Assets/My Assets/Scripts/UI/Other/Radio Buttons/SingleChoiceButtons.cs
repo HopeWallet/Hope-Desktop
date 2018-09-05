@@ -1,11 +1,13 @@
-﻿using NBitcoin;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RadioButtons : MonoBehaviour
+/// <summary>
+/// Manages a set of buttons and manages the change in visuals when one button is pressed
+/// </summary>
+public class SingleChoiceButtons : MonoBehaviour
 {
-	public event Action<WordCount> OnButtonChanged;
+	public event Action<int> OnButtonChanged;
 
 	private int previouslySelectedButton;
 
@@ -26,24 +28,18 @@ public class RadioButtons : MonoBehaviour
 
 	public void RadioButtonClicked(int activeButton)
 	{
-		SetRadioButton(previouslySelectedButton, false);
-		SetRadioButton(activeButton, true);
+		SetRadioButtonVisuals(previouslySelectedButton, false);
+		SetRadioButtonVisuals(activeButton, true);
 
 		previouslySelectedButton = activeButton;
 
-		OnButtonChanged?.Invoke((WordCount)(12 + (activeButton * 3)));
+		OnButtonChanged?.Invoke(activeButton);
 	}
 
 	/// <summary>
-	/// Changes the visuals of the newly active, and previously active radio button
+	/// Changes the visuals of the newly active, and previously active button
 	/// </summary>
 	/// <param name="activeButton"> the index of the button being changed </param>
 	/// <param name="active"> Whether the button is currently active or not </param>
-	private void SetRadioButton(int activeButton, bool active)
-	{
-		Transform ButtonTransform = transform.GetChild(activeButton);
-
-		ButtonTransform.GetComponent<Button>().interactable = !active;
-		ButtonTransform.GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.LightGrey, 0.15f);
-	}
+	protected virtual void SetRadioButtonVisuals(int activeButton, bool active) => transform.GetChild(activeButton).GetComponent<Button>().interactable = !active;
 }

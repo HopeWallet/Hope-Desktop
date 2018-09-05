@@ -43,7 +43,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		for (int i = 0; i < wordInputFields.Length; i++)
 			SetInputFieldVariables(i);
 
-		wordCountSection.GetComponent<RadioButtons>().OnButtonChanged += PassphraseWordCountChanged;
+		wordCountSection.GetComponent<SingleChoiceButtons>().OnButtonChanged += PassphraseWordCountChanged;
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
 		importMnemonicMenu.LastSelectableField = wordInputFields[11].InputFieldBase;
 	}
@@ -147,8 +147,10 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// Checks the value of currently selected word count
 	/// </summary>
 	/// <param name="value"> The value of the dropdown </param>
-	private void PassphraseWordCountChanged(WordCount value)
+	private void PassphraseWordCountChanged(int value)
 	{
+		value = 12 + (value * 3);
+
 		wordCount = (int)value;
 
 		SetInteractableFields();
@@ -219,7 +221,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		if (!string.IsNullOrEmpty(clipboard.Trim()))
 		{
 			int numOfWords = wordStrings.Length;
-			wordCountSection.GetComponent<RadioButtons>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
+			wordCountSection.GetComponent<SingleChoiceButtons>().RadioButtonClicked(numOfWords <= 12 ? 0 : numOfWords <= 15 ? 1 : numOfWords <= 18 ? 2 : numOfWords <= 21 ? 3 : 4);
 
 			AnimateIcon(pasteButtonCheckMarkIcon);
 			StartWordAnimation();
