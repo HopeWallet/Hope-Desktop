@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 /// <summary>
 /// Manages the More button dropdown
@@ -25,7 +26,9 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		moreButton = transform.GetComponent<Button>();
 		clickedImage = transform.GetChild(0).gameObject;
 		moreButton.onClick.AddListener(MoreButtonClicked);
-		subButtons.ForEach(button => button.onClick.AddListener(MoreButtonClicked));
+
+		for (int i = 0; i < subButtons.Length; i++)
+			SetButtonListener(i);
 	}
 
 	/// <summary>
@@ -39,6 +42,12 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				MoreButtonClicked();
 		}
 	}
+
+	/// <summary>
+	/// Sets the given button onClick listener
+	/// </summary>
+	/// <param name="num"> The number of the button in the array </param>
+	private void SetButtonListener(int num) => subButtons[num].onClick.AddListener(() => DropdownButtonClicked(num));
 
 	/// <summary>
 	/// Pointer enters the More button
@@ -98,5 +107,27 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 			button.interactable = false;
 			button.gameObject.transform.GetChild(0).gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f);
 		}
+	}
+
+	/// <summary>
+	/// A button in the dropdown has been clicked
+	/// </summary>
+	/// <param name="num"> The number of the button in the dropdown hiearchy </param>
+	private void DropdownButtonClicked(int num)
+	{
+		switch (num)
+		{
+			case 0:
+				//Open up settings popup
+				break;
+			case 1:
+				//Open up About popup
+				break;
+			case 2:
+				//Go back to wallet list menu (logout)
+				break;
+		}
+
+		MoreButtonClicked();
 	}
 }

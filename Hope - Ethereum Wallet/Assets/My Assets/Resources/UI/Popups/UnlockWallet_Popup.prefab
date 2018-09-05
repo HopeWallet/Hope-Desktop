@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 114788400095928252}
   - component: {fileID: 114528051825811880}
   m_Layer: 5
-  m_Name: SignIn_Button
+  m_Name: Unlock_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: adea8db8fc00aca4caf9a433a4a35376, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 375e925259feab940888811160bcf9e4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1099,10 +1099,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 63767bd064fc07e4d9828221cf7f386f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 2017223aaa41c834a9ffc903237ae41f,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 7f291da13b3db2a4e830353c5ecc678e, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: cdf7667c62dbf5e4c8821e821f18aacd, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: de234023310b6d24ba762f66c78bf43f, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 9918cb21e6ee24142a20afd5c218722c, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -1161,7 +1161,7 @@ MonoBehaviour:
   formTitle: {fileID: 1134703402362794}
   popupContainer: {fileID: 1369501422783230}
   passwordInputField: {fileID: 114335822126248120}
-  signInButton: {fileID: 1754134967957440}
+  unlockButton: {fileID: 1754134967957440}
   loadingIcon: {fileID: 1287492818483090}
 --- !u!114 &114860746195938152
 MonoBehaviour:

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UnlockWalletPopupAnimator : UIAnimator
 {
 	[SerializeField] private HopeInputField passwordInputField;
-	[SerializeField] private GameObject signInButton;
+	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject loadingIcon;
 
     /// <summary>
@@ -16,7 +16,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
     private void Awake()
     {
         passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
-        signInButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
+        unlockButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	{
 		passwordInputField.InputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
-		signInButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
+		unlockButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -35,7 +35,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	private void InputFieldChanged()
 	{
 		passwordInputField.Error = string.IsNullOrEmpty(passwordInputField.Text);
-		signInButton.GetComponent<Button>().interactable = !passwordInputField.Error;
+		unlockButton.GetComponent<Button>().interactable = !passwordInputField.Error;
 	}
 
 	/// <summary>
@@ -45,7 +45,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	{
 		passwordInputField.Error = true;
 		passwordInputField.UpdateVisuals();
-		signInButton.GetComponent<Button>().interactable = false;
+		unlockButton.GetComponent<Button>().interactable = false;
 		VerifyingPassword();
 	}
 
@@ -65,7 +65,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		}
 
 		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);
-		signInButton.AnimateGraphicAndScale(startingProcess ? 0f : 1f, startingProcess ? 0f : 1f, 0.15f);
+		unlockButton.AnimateGraphicAndScale(startingProcess ? 0f : 1f, startingProcess ? 0f : 1f, 0.15f);
 
 		if (!startingProcess)
 		{
