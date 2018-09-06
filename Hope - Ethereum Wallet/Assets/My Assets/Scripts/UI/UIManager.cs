@@ -51,10 +51,29 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	private void Start()
     {
         createdMenus.AddItems(extraMenus);
-
+		SetDefaultSettings();
 		OpenMenu<ChooseWalletMenu>();
     }
 
+	/// <summary>
+	/// Sets the default setting preferences if there is nothing saved under it already
+	/// </summary>
+	private void SetDefaultSettings()
+	{
+		if (!SecurePlayerPrefs.HasKey("idle timeout"))
+		{
+			SecurePlayerPrefs.SetBool("idle timeout", true);
+			SecurePlayerPrefs.SetInt("idle time", 10);
+			SecurePlayerPrefs.SetBool("countdown timer", true);
+			SecurePlayerPrefs.SetBool("transaction notification", true);
+			SecurePlayerPrefs.SetBool("update notification", true);
+			SecurePlayerPrefs.SetBool("two-factor authentication", false);
+		}
+	}
+
+	/// <summary>
+	/// Sets the default screen size
+	/// </summary>
 	private void SetScreenResolution()
 	{
 		int screenWidth = (int)(Screen.currentResolution.width * 0.666666666f);

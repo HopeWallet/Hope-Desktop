@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class CheckBox : MonoBehaviour
 {
-    public event Action<bool> OnValueChanged;
+    public event Action<bool> OnCheckboxClicked;
 
 	private Button checkBoxButton;
 	private GameObject checkMarkIcon;
@@ -23,7 +23,7 @@ public sealed class CheckBox : MonoBehaviour
     private void Awake()
 	{
 		checkBoxButton = transform.GetComponent<Button>();
-		checkBoxButton.onClick.AddListener(OnCheckBoxClicked);
+		checkBoxButton.onClick.AddListener(CheckboxClicked);
 		checkMarkIcon = transform.GetChild(0).gameObject;
         ToggledOn = checkMarkIcon.transform.localScale.x > 0;
 	}
@@ -32,7 +32,7 @@ public sealed class CheckBox : MonoBehaviour
     /// Toggles the checkbox on/off without animation.
     /// </summary>
     /// <param name="toggledOn"> Whether it should be toggled on or off. </param>
-    public void Toggle(bool toggledOn)
+    public void SetCheckboxValue(bool toggledOn)
     {
 		ToggledOn = toggledOn;
 		gameObject.GetComponent<Image>().color = ToggledOn ? UIColors.Green : UIColors.Blue;
@@ -40,15 +40,23 @@ public sealed class CheckBox : MonoBehaviour
         checkMarkIcon.GetComponent<Image>().color = ToggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
     }
 
-    /// <summary>
-    /// Called when the checkbox is clicked.
-    /// </summary>
-	private void OnCheckBoxClicked()
+	/// <summary>
+	/// Checkbox is clicked
+	/// </summary>
+	private void CheckboxClicked()
 	{
 		ToggledOn = !ToggledOn;
+		AnimateElements(ToggledOn);
+		OnCheckboxClicked?.Invoke(ToggledOn);
+	}
+
+    /// <summary>
+    /// Animates the checkmark icon and the box colour
+    /// </summary>
+	public void AnimateElements(bool toggledOn)
+	{
+		ToggledOn = toggledOn;
 		checkMarkIcon.AnimateGraphicAndScale(ToggledOn ? 1f : 0f, ToggledOn ? 1f : 0f, 0.15f);
 		gameObject.AnimateColor(ToggledOn ? UIColors.Green : UIColors.Blue, 0.15f);
-
-        OnValueChanged?.Invoke(ToggledOn);
 	}
 }
