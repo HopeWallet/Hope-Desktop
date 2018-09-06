@@ -2,19 +2,27 @@
 
 public class SettingsPopupAnimator : UIAnimator
 {
-	[SerializeField] private CategoryButtons settingsCategories;
+	[SerializeField] private GameObject settingsCategoriesParent;
+	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject[] sections;
 
-	private void Awake() => settingsCategories.OnButtonChanged += CategoryChanged;
+	private CategoryButtons settingsCategories;
+
+	private void Awake()
+	{
+		settingsCategories = settingsCategoriesParent.GetComponent<CategoryButtons>();
+		settingsCategories.OnButtonChanged += CategoryChanged;
+	}
 
 	protected override void AnimateUniqueElementsIn()
 	{
-		FinishedAnimating();
+		settingsCategoriesParent.AnimateScaleY(1f, 0.25f);
+		line.AnimateScaleY(1f, 0.25f);
+		sections[0].AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 
 	private void CategoryChanged(int categoryNum)
 	{
-		sections[settingsCategories.previouslySelectedButton].AnimateScale(0f, 0.15f);
-		sections[categoryNum].AnimateScale(1f, 0.15f);
+		sections[settingsCategories.previouslySelectedButton].AnimateScale(0f, 0.15f, () => sections[categoryNum].AnimateScale(1f, 0.15f));
 	}
 }
