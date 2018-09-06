@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsPopup : ExitablePopupComponent<SettingsPopup>
+public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
 	[SerializeField] private Button downloadUpdateButton;
 
