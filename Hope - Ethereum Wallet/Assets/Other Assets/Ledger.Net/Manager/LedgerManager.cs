@@ -3,6 +3,7 @@ using Ledger.Net.Requests;
 using Ledger.Net.Responses;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,14 +48,13 @@ namespace Ledger.Net
         {
             var remaining = 0;
             var packetIndex = 0;
-            byte[] packet = new byte[64];
             using (var response = new MemoryStream())
             {
                 do
                 {
-                    var result = await HID_Read(packet).ConfigureAwait(false);
+                    var packet = await HID_Read().ConfigureAwait(false);
 
-                    if (result < 0)
+                    if (packet?.Length == 0)
                         throw new Exception("Invalid response data packet!");
 
                     var responseDataPacket = Helpers.GetResponseDataPacket(packet, packetIndex, ref remaining);
@@ -128,35 +128,29 @@ namespace Ledger.Net
             return SendRequestAsync<TResponse>(request);
         }
 
-        private async Task<int> HID_Read(byte[] buffer)
+        private async Task<byte[]> HID_Read()
         {
-            const uint blockSize = 64;
-            HidDeviceData result = await LedgerHidDevice.ReadAsync().ConfigureAwait(false);
+            var result = await LedgerHidDevice.ReadAsync().ConfigureAwait(false);
 
             if (result.Status == HidDeviceData.ReadStatus.Success)
             {
-                if (result.Data.Length - 1 > blockSize)
-                    return -1;
+                if (result.Data?.Length - 1 <= 0)
+                    return new byte[0];
 
-                Array.Copy(result.Data, 1, buffer, 0, blockSize);
-                return result.Data.Length;
+                return result.Data.Skip(1).ToArray();
             }
 
-            return -1;
+            return new byte[0];
         }
 
         private async Task<int> HID_Write(byte[] buffer)
         {
-            int length = buffer.Length;
-            byte[] sent = new byte[length + 1];
-
-            Array.Copy(buffer, 0, sent, 1, length);
+            var sent = new byte[1].Concat(buffer).ToArray();
 
             if (!await LedgerHidDevice.WriteAsync(sent).ConfigureAwait(false))
                 return -1;
 
-            Array.Copy(sent, 0, buffer, 0, length);
-            return length;
+            return sent.Length;
         }
     }
 }

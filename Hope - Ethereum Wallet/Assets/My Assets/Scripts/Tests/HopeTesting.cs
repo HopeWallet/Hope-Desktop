@@ -134,7 +134,7 @@ public sealed class HopeTesting : MonoBehaviour
     private static async Task GetAddress()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-        var address = await ledgerManager.GetAddressAsync(0, 1);
+        var address = await ledgerManager.GetAddressAsync(0, 0);
         Debug.Log(address);
     }
 
