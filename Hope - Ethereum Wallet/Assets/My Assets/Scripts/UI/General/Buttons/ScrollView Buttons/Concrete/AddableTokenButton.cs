@@ -19,7 +19,7 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
         this.tokenListManager = tokenListManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
 
-        checkBox.OnValueChanged += OnCheckboxChanged;
+        checkBox.OnCheckboxClicked += OnCheckboxChanged;
         removeButton.onClick.AddListener(OnDeleteClicked);
     }
 
@@ -27,7 +27,7 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
     {
         tokenDisplayText.text = info.TokenInfo.Name.LimitEnd(55, "...") + " (" + info.TokenInfo.Symbol + ")";
         tradableAssetImageManager.LoadImage(info.TokenInfo.Symbol, icon => tokenIcon.sprite = icon);
-        checkBox.Toggle(info.Enabled);
+        checkBox.SetCheckboxValue(info.Enabled);
     }
 
 	private void OnDeleteClicked() => GetComponentInParent<ModifyTokensPopup>().RemoveToken(ButtonInfo);
