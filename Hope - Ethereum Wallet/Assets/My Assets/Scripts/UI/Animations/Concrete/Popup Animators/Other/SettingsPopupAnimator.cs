@@ -17,7 +17,7 @@ public class SettingsPopupAnimator : UIAnimator
 	protected override void AnimateUniqueElementsIn()
 	{
 		settingsCategoriesParent.AnimateScaleY(1f, 0.25f);
-		line.AnimateScaleY(1f, 0.25f);
+		line.AnimateScaleX(1f, 0.25f);
 		sections[0].AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 
