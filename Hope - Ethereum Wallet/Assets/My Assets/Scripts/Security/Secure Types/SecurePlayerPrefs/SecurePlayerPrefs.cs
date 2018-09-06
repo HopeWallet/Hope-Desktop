@@ -1,4 +1,5 @@
 ﻿using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +14,10 @@ public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
     public SecurePlayerPrefs(Settings settings) : base(settings)
     {
     }
+
+    public static void SetBool(string key, bool value) => SetInt(key, Convert.ToInt32(value));
+
+    public static bool GetBool(string key) => Convert.ToBoolean(GetInt(key));
 
     /// <summary>
     /// Sets a string value in the <see cref="PlayerPrefs"/>.
