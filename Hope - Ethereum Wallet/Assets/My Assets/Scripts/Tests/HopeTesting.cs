@@ -67,127 +67,76 @@ using Hope.Random.Bytes;
 using Org.BouncyCastle.Asn1.Cms;
 using Nethereum.RPC.NonceServices;
 using HidLibrary;
+using Ledger.Net.Connectivity;
+using Ledger.Net.Requests;
+using Ledger.Net.Responses;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    public class UsageSpecification
-    {
-        public UsageSpecification(ushort usagePage, ushort usage)
-        {
-            UsagePage = usagePage;
-            Usage = usage;
-        }
+    public bool getAddress;
+    public bool signTransaction;
 
-        public ushort Usage
+    private void Update()
+    {
+        if (getAddress)
         {
-            get;
-            private set;
+            getAddress = false;
+            AsyncTaskScheduler.Schedule(() => GetAddress());
         }
-        public ushort UsagePage
+        else if (signTransaction)
         {
-            get;
-            private set;
+            signTransaction = false;
+            AsyncTaskScheduler.Schedule(() => SignTransaction(CreateTransaction().GetRLPEncoded()));
         }
     }
 
-    public class VendorProductIds
+    private Transaction CreateTransaction()
     {
-        public VendorProductIds(int vendorId)
+        return new Transaction(
+            0.ToBytesForRLPEncoding(), // Nonce
+            1000000000.ToBytesForRLPEncoding(), // Gas price
+            21000.ToBytesForRLPEncoding(), // Gas limit
+            "0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203".HexToByteArray(), // Receiving address
+            0.ToBytesForRLPEncoding(), // Ether value
+            "".HexToByteArray(), // Data
+            0.ToBytesForRLPEncoding(), // R
+            0.ToBytesForRLPEncoding(), // S
+            4);
+    }
+
+    private async Task SignTransaction(byte[] rlpEncodedData)
+    {
+        var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
+
+        if (ledgerManager == null)
+            return;
+
+        ledgerManager.SetCoinNumber(60);
+
+        var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, 0, false, ledgerManager.CurrentCoin.IsSegwit);
+
+        var firstRequest = new EthereumAppSignTransactionRequest(derivationData.Concat(rlpEncodedData).ToArray());
+
+        var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(firstRequest);
+
+        if (!response.IsSuccess)
         {
-            VendorId = vendorId;
+            Debug.LogError("UNSUCCESSFUL");
         }
-        public VendorProductIds(int vendorId, int? productId)
+        else
         {
-            VendorId = vendorId;
-            ProductId = productId;
-        }
-        public int VendorId
-        {
-            get; set;
-        }
-        public int? ProductId
-        {
-            get; set;
+            response.SignatureV.Log();
+            response.SignatureR.LogArray();
+            response.SignatureS.LogArray();
         }
     }
 
-    private VendorProductIds[] _WellKnownLedgerWallets = new VendorProductIds[]
+    private static async Task GetAddress()
     {
-            new VendorProductIds(0x2c97),
-            new VendorProductIds(0x2581, 0x3b7c)
-    };
-
-    private UsageSpecification[] _UsageSpecification = new[] { new UsageSpecification(0xffa0, 0x01) };
-
-    private void Start()
-    {
-        List<HidDevice> devices = new List<HidDevice>();
-        foreach (var ids in _WellKnownLedgerWallets)
-        {
-            if (ids.ProductId == null)
-                devices.AddRange(HidDevices.Enumerate(ids.VendorId));
-            else
-                devices.AddRange(HidDevices.Enumerate(ids.VendorId, ids.ProductId.Value));
-
-        }
-        var hidDevices = devices.Where(d => _UsageSpecification == null
-            || _UsageSpecification.Length == 0
-            || _UsageSpecification.Any(u => (ushort)d.Capabilities.UsagePage == u.UsagePage && (ushort)d.Capabilities.Usage == u.Usage));
-
-        hidDevices.Count().Log();
+        var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
+        var address = await ledgerManager.GetAddressAsync(0, 1);
+        Debug.Log(address);
     }
-
-    //public bool connect;
-
-    //private void Update()
-    //{
-    //    if (!connect)
-    //        return;
-
-    //    AsyncTaskScheduler.Schedule(() => SignTransaction(CreateTransaction().GetRLPEncoded()));
-    //}
-
-    //private Transaction CreateTransaction()
-    //{
-    //    return new Transaction(
-    //        0.ToBytesForRLPEncoding(), // Nonce
-    //        1000000000.ToBytesForRLPEncoding(), // Gas price
-    //        21000.ToBytesForRLPEncoding(), // Gas limit
-    //        "0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203".HexToByteArray(), // Receiving address
-    //        0.ToBytesForRLPEncoding(), // Ether value
-    //        "".HexToByteArray(), // Data
-    //        0.ToBytesForRLPEncoding(), // R
-    //        0.ToBytesForRLPEncoding(), // S
-    //        4);
-    //}
-
-    //private async Task SignTransaction(byte[] rlpEncodedData)
-    //{
-    //    var ledgerManager = await LedgerConnector.GetWindowsConnectedLedger();
-    //    //var ledgerManager = await GetWindowsConnectedLedger();
-
-    //    if (ledgerManager == null)
-    //        return;
-
-    //    ledgerManager.SetCoinNumber(60);
-
-    //    var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, 0, false, ledgerManager.CurrentCoin.IsSegwit);
-
-    //    var firstRequest = new EthereumAppSignTransactionRequest(derivationData.Concat(rlpEncodedData).ToArray());
-
-    //    var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(firstRequest);
-
-    //    if (!response.IsSuccess)
-    //    {
-    //        Debug.Log("SUCCESSFUL");
-    //    }
-    //    else
-    //    {
-    //        response.SignatureV.Log();
-    //        response.SignatureR.LogArray();
-    //        response.SignatureS.LogArray();
-    //    }
-    //}
 
     //private void Start()
     //{
