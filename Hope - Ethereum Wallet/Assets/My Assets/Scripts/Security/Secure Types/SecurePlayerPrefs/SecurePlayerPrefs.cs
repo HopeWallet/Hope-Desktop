@@ -15,8 +15,18 @@ public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
     {
     }
 
+    /// <summary>
+    /// Sets a bool value in the <see cref="PlayerPrefs"/>.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <param name="value"> The value of the pref. </param>
     public static void SetBool(string key, bool value) => SetInt(key, Convert.ToInt32(value));
 
+    /// <summary>
+    /// Gets a bool value from the <see cref="PlayerPrefs"/>.
+    /// </summary>
+    /// <param name="key"> The key of the pref. </param>
+    /// <returns> The bool value returned from the <see cref="PlayerPrefs"/> with the given key. </returns>
     public static bool GetBool(string key) => Convert.ToBoolean(GetInt(key));
 
     /// <summary>

@@ -22,6 +22,11 @@ public sealed class UserWalletManager
     public string WalletAddress => activeWallet.GetAddress(accountNumber);
 
     /// <summary>
+    /// The currently opened, currently active wallet type.
+    /// </summary>
+    public WalletType ActiveWalletType => activeWallet is LedgerWallet ? WalletType.Ledger : activeWallet is TrezorWallet ? WalletType.Trezor : WalletType.Hope;
+
+    /// <summary>
     /// Initializes the UserWallet given the settings to apply.
     /// </summary>
     /// <param name="settings"> The settings to initialize the wallet with. </param>
