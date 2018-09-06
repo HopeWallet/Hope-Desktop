@@ -3720,6 +3720,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitButton: {fileID: 114329233411420534}
+  defaultCurrencyDropdown: {fileID: 0}
+  idleTimeoutTimeCheckbox: {fileID: 114899159167206742}
+  countdownTimerCheckbox: {fileID: 114711658273490876}
+  transactionNotificationCheckbox: {fileID: 114093349561290548}
+  updateNotificationCheckbox: {fileID: 114454385834215994}
+  idleTimeoutTimeInputField: {fileID: 114475025927796514}
   downloadUpdateButton: {fileID: 114641606434186874}
 --- !u!114 &114299105401174872
 MonoBehaviour:
@@ -9800,7 +9806,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 45030.395}
+  m_AnchoredPosition: {x: 0, y: 46772.344}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224345976420852388
