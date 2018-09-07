@@ -31,5 +31,4 @@ public class ButtonClickObserver : ClickObserver<IButtonObservableBase, KeyCode>
         StartClickObservers<ITabButtonObservable>(KeyCode.Tab, (button, click) => button.TabButtonPressed(click));
         StartClickObservers<IEnterButtonObservable>(KeyCode.Return, (button, click) => button.EnterButtonPressed(click));
     }
-
 }

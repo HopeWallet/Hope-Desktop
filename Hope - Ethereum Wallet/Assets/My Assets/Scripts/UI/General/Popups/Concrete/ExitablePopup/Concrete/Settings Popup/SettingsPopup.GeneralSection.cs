@@ -12,11 +12,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		public int IdleTimeValue;
 
 		public GeneralSection(GameObject defaultCurrencyDropdown,
-					   CheckBox idleTimeoutTimeCheckbox,
-					   CheckBox countdownTimerCheckbox,
-					   CheckBox transactionNotificationCheckbox,
-					   CheckBox updateNotificationCheckbox,
-					   HopeInputField idleTimeoutTimeInputField)
+							  CheckBox idleTimeoutTimeCheckbox,
+							  CheckBox countdownTimerCheckbox,
+							  CheckBox transactionNotificationCheckbox,
+							  CheckBox updateNotificationCheckbox,
+							  HopeInputField idleTimeoutTimeInputField)
 		{
 			this.defaultCurrencyDropdown = defaultCurrencyDropdown;
 			this.idleTimeoutTimeCheckbox = idleTimeoutTimeCheckbox;
@@ -55,7 +55,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeInputField.Error = string.IsNullOrEmpty(text) || IdleTimeValue <= 0;
 
 			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
-			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 102f : 89f, 0.15f);
+			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 95f : 81f, 0.15f);
 		}
 	}
 }

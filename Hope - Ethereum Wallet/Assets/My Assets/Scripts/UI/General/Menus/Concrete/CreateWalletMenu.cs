@@ -17,7 +17,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 											password2Field;
 
 	private DynamicDataCache dynamicDataCache;
-	private HopeWalletInfoManager userWalletInfoManager;
+	private HopeWalletInfoManager hopeWalletInfoManager;
 	private ButtonClickObserver buttonClickObserver;
 
 	private List<Selectable> inputFields = new List<Selectable>();
@@ -26,15 +26,15 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// Adds the required dependencies into this class.
 	/// </summary>
 	/// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
-	/// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
+	/// <param name="hopeWalletInfoManager"> The active UserWalletInfoManager. </param>
 	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
 	[Inject]
 	public void Construct(DynamicDataCache dynamicDataCache,
-						  HopeWalletInfoManager userWalletInfoManager,
+						  HopeWalletInfoManager hopeWalletInfoManager,
 						  ButtonClickObserver buttonClickObserver)
 	{
 		this.dynamicDataCache = dynamicDataCache;
-		this.userWalletInfoManager = userWalletInfoManager;
+		this.hopeWalletInfoManager = hopeWalletInfoManager;
 		this.buttonClickObserver = buttonClickObserver;
 	}
 
@@ -59,7 +59,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 
 		password1Field.OnInputUpdated += _ => PasswordsUpdated();
 		password2Field.OnInputUpdated += _ => PasswordsUpdated();
-		walletNameField.OnInputUpdated += _ => WalletNameFieldChanged();
+		walletNameField.OnInputUpdated += WalletNameFieldChanged;
 		nextButton.onClick.AddListener(CreateWalletNameAndPass);
 	}
 
@@ -78,10 +78,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// Checks to see if the wallet name is valid and has not been used before.
 	/// </summary>
 	/// <param name="walletName"> The text in the wallet name input field. </param>
-	private void WalletNameFieldChanged()
+	private void WalletNameFieldChanged(string walletName)
 	{
-		string walletName = walletNameField.Text;
-
 		bool emptyName = string.IsNullOrEmpty(walletName.Trim());
 		bool usedName = WalletNameExists(walletName);
 		walletNameField.Error = emptyName || usedName;
@@ -105,7 +103,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 		{
 			try
 			{
-				if (userWalletInfoManager.GetWalletInfo(i).WalletName.EqualsIgnoreCase(walletName))
+				if (hopeWalletInfoManager.GetWalletInfo(i).WalletName.EqualsIgnoreCase(walletName))
 					return true;
 			}
 			catch
@@ -120,11 +118,11 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 	/// </summary>
 	private void PasswordsUpdated()
 	{
-		string password1 = password1Field.Text;
-		string password2 = password2Field.Text;
+		string password1Text = password1Field.Text;
+		string password2Text = password2Field.Text;
 
 		password1Field.Error = password1Field.Text.Length < 8;
-		password2Field.Error = password1 != password2;
+		password2Field.Error = password1Text != password2Text;
 
 		if (password1Field.Error)
 			password1Field.errorMessage.text = "Password too short";

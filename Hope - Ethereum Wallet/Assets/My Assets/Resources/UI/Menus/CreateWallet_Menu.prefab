@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 114806199382893746}
   - component: {fileID: 114652924203339010}
   m_Layer: 0
-  m_Name: Eye
+  m_Name: Eye_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 114773675501167290}
   - component: {fileID: 114797120223911246}
   m_Layer: 0
-  m_Name: Eye
+  m_Name: Eye_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

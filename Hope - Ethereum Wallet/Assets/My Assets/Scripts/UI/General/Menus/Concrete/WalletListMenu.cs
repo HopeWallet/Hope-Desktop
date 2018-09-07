@@ -41,6 +41,8 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 		this.walletInfoManager = walletInfoManager;
         this.walletSettings = walletSettings;
         this.settings = settings;
+
+		
     }
 
     /// <summary>
