@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,12 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
+
+	private bool idle;
+
+	private Vector3 previousMousePosition;
+
+	private int idleTime;
 
     /// <summary>
     /// Injects the required dependency into this class.
@@ -63,7 +70,25 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
+
+		idleTime = 0;
+		//StartCoroutine(CheckIfStillIdle);
     }
+
+	private void Update()
+	{
+		idle = previousMousePosition == Input.mousePosition;
+
+		previousMousePosition = Input.mousePosition;
+	}
+
+	private IEnumerator CheckIfStillIdle()
+	{
+		yield return new WaitForSeconds(1);
+
+		if (idle)
+			idleTime += 1;
+	}
 
 	/// <summary>
 	/// Called when the OpenWalletMenu is first opened.

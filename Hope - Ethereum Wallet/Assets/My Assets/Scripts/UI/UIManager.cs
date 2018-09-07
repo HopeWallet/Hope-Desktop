@@ -68,6 +68,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 			SecurePlayerPrefs.SetBool("transaction notification", true);
 			SecurePlayerPrefs.SetBool("update notification", true);
 			SecurePlayerPrefs.SetBool("two-factor authentication", false);
+			SecurePlayerPrefs.SetBool("2FA set up", false);
 		}
 	}
 
