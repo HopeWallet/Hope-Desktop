@@ -45,6 +45,20 @@ public sealed class HopeWalletInfoManager
     }
 
     /// <summary>
+    /// Edits the info of the wallet.
+    /// </summary>
+    /// <param name="walletAddress"> An address of the current wallet. </param>
+    /// <param name="newWalletName"> The new name of the wallet. </param>
+    public void EditWalletInfo(string walletAddress, string newWalletName)
+    {
+        if (!wallets.Contains(walletAddress))
+            return;
+
+        WalletInfo currentWallet = wallets[walletAddress];
+        wallets[walletAddress] = new WalletInfo(newWalletName, currentWallet.WalletAddresses, currentWallet.WalletNum);
+    }
+
+    /// <summary>
     /// Deletes a wallet from the list of WalletInfo.
     /// </summary>
     /// <param name="walletNum"> The number of the WalletInfo to delete. </param>
