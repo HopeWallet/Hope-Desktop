@@ -97,13 +97,8 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		box.AnimateGraphic(1f, 0.1f);
 		triangle.AnimateGraphic(1f, 0.1f);
 
-		float timeValue = 0.15f;
-
-		foreach (Button button in subButtons)
-		{
-			button.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, timeValue);
-			timeValue += 0.05f;
-		}
+		float duration = 0.15f;
+		subButtons.ForEach(gameObject => { gameObject.transform.GetChild(0).gameObject.AnimateGraphicAndScale(1f, 1f, duration); duration += 0.05f; });
 	}
 
 	/// <summary>

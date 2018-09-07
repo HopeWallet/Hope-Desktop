@@ -63,7 +63,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		general = new GeneralSection(defaultCurrencyDropdown, idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
 		address = new AddressSection(addressOptions, addressListTransform, unlockButton);
 		twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-		hopeVersion = new HopeVersion(currentVersionText, latestVersionText, downloadUpdateButton);
+		hopeVersion = new HopeVersion(currentVersionText, latestVersionText, downloadUpdateButton, 1.00f, 1.12f);
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 			wallet = new WalletSection(hopeWalletInfoManager, userWalletManager, walletNameField, password1Field, password2Field, saveButton, deleteButton);
