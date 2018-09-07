@@ -1,9 +1,8 @@
-﻿using HidLibrary;
+﻿using Hid.Net;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +38,7 @@ namespace Ledger.Net
                 {
                     data = Helpers.GetRequestDataPacket(memoryStream, packetIndex);
                     packetIndex++;
-                    await HID_Write(data).ConfigureAwait(false);
+                    await LedgerHidDevice.WriteAsync(data);
                 } while (memoryStream.Position != memoryStream.Length);
             }
         }
@@ -52,7 +51,7 @@ namespace Ledger.Net
             {
                 do
                 {
-                    var packet = await HID_Read().ConfigureAwait(false);
+                    var packet = await LedgerHidDevice.ReadAsync().ConfigureAwait(false);
 
                     if (packet?.Length == 0)
                         throw new Exception("Invalid response data packet!");
@@ -126,31 +125,6 @@ namespace Ledger.Net
            where TRequest : RequestBase
         {
             return SendRequestAsync<TResponse>(request);
-        }
-
-        private async Task<byte[]> HID_Read()
-        {
-            var result = await LedgerHidDevice.ReadAsync().ConfigureAwait(false);
-
-            if (result.Status == HidDeviceData.ReadStatus.Success)
-            {
-                if (result.Data?.Length - 1 <= 0)
-                    return new byte[0];
-
-                return result.Data.Skip(1).ToArray();
-            }
-
-            return new byte[0];
-        }
-
-        private async Task<int> HID_Write(byte[] buffer)
-        {
-            var sent = new byte[1].Concat(buffer).ToArray();
-
-            if (!await LedgerHidDevice.WriteAsync(sent).ConfigureAwait(false))
-                return -1;
-
-            return sent.Length;
         }
     }
 }

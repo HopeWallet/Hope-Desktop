@@ -1,7 +1,7 @@
-﻿using HidLibrary;
+﻿using Hid.Net.Unity;
+using HidLibrary;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ledger.Net.Connectivity
 {
@@ -25,7 +25,7 @@ namespace Ledger.Net.Connectivity
                 || UsageSpecification.Length == 0
                 || UsageSpecification.Any(u => (ushort)d.Capabilities.UsagePage == u.UsagePage && (ushort)d.Capabilities.Usage == u.Usage));
 
-            return new LedgerManager(hidDevices.First());
+            return new LedgerManager(new UnityHIDDevice(hidDevices.First()));
         }
     }
 }

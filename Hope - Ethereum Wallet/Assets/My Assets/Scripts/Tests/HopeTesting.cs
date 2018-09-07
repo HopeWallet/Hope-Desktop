@@ -70,6 +70,7 @@ using HidLibrary;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
+using Hid.Net.Unity;
 
 public sealed class HopeTesting : MonoBehaviour
 {
