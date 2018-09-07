@@ -1,5 +1,4 @@
-﻿using NBitcoin;
-using System;
+﻿using System;
 using System.IO;
 
 namespace Ledger.Net
