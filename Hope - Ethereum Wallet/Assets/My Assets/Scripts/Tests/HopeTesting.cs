@@ -82,12 +82,32 @@ public sealed class HopeTesting : MonoBehaviour
         if (getAddress)
         {
             getAddress = false;
-            AsyncTaskScheduler.Schedule(() => GetAddress());
+            Task.Factory.StartNew(GetAddress);
         }
         else if (signTransaction)
         {
             signTransaction = false;
-            AsyncTaskScheduler.Schedule(() => SignTransaction(CreateTransaction().GetRLPEncoded()));
+            Task.Factory.StartNew(async () =>
+            {
+                var response = await SignTransaction(CreateTransaction().GetRLPEncoded());
+                var v = response.SignatureV;
+                var r = response.SignatureR;
+                var s = response.SignatureS;
+
+                v.Log();
+                r.LogArray();
+                s.LogArray();
+
+                var ecdsa = EthECDSASignatureFactory.FromComponents(r, s, (byte)v);
+                var signature = ecdsa.ToDER();
+                var test = ecdsa.To64ByteArray();
+
+                //signature.LogArray();
+                //test.LogArray();
+
+                EthSendRawTransactionUnityRequest ethSendRawTransaction = new EthSendRawTransactionUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+                MainThreadExecutor.QueueAction(() => ethSendRawTransaction.SendRequest(signature.ToHex()).StartCoroutine());
+            });
         }
     }
 
@@ -98,44 +118,47 @@ public sealed class HopeTesting : MonoBehaviour
             1000000000.ToBytesForRLPEncoding(), // Gas price
             21000.ToBytesForRLPEncoding(), // Gas limit
             "0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203".HexToByteArray(), // Receiving address
-            0.ToBytesForRLPEncoding(), // Ether value
-            "".HexToByteArray(), // Data
+            SolidityUtils.ConvertToUInt(0.001m, 18).ToBytesForRLPEncoding(), // Ether value
+            //"0x".HexToByteArray());
+            "0x".HexToByteArray(), // Data
             0.ToBytesForRLPEncoding(), // R
             0.ToBytesForRLPEncoding(), // S
             4);
     }
 
-    private async Task SignTransaction(byte[] rlpEncodedData)
+    private async Task<EthereumAppSignTransactionResponse> SignTransaction(byte[] rlpEncodedData)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
 
         if (ledgerManager == null)
-            return;
+            return null;
 
         ledgerManager.SetCoinNumber(60);
 
-        var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, 0, false, ledgerManager.CurrentCoin.IsSegwit);
+        var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, 2, false, ledgerManager.CurrentCoin.IsSegwit);
 
         var firstRequest = new EthereumAppSignTransactionRequest(derivationData.Concat(rlpEncodedData).ToArray());
 
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(firstRequest);
 
-        if (!response.IsSuccess)
-        {
-            Debug.LogError("UNSUCCESSFUL");
-        }
-        else
-        {
-            response.SignatureV.Log();
-            response.SignatureR.LogArray();
-            response.SignatureS.LogArray();
-        }
+        //if (!response.IsSuccess)
+        //{
+        //    Debug.LogError("UNSUCCESSFUL");
+        //}
+        //else
+        //{
+        //    response.SignatureV.Log();
+        //    response.SignatureR.LogArray();
+        //    response.SignatureS.LogArray();
+        //}
+
+        return response;
     }
 
     private static async Task GetAddress()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-        var address = await ledgerManager.GetAddressAsync(0, 0);
+        var address = await ledgerManager.GetAddressAsync(0, 2);
         Debug.Log(address);
     }
 
