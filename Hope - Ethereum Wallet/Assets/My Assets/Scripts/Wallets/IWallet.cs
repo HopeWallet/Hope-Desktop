@@ -8,9 +8,14 @@ using System.Numerics;
 public interface IWallet
 {
     /// <summary>
-    /// Event called when the wallet is loaded.
+    /// Event called if the wallet is successfully loaded.
     /// </summary>
-    event Action OnWalletLoaded;
+    event Action OnWalletLoadSuccessful;
+
+    /// <summary>
+    /// Event called if the wallet is unsuccessfully loaded.
+    /// </summary>
+    event Action OnWalletLoadUnsuccessful;
 
     /// <summary>
     /// Gets the address of the wallet given the index of the address.

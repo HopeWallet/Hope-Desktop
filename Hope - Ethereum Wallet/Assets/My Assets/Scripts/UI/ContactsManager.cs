@@ -21,7 +21,7 @@ public sealed class ContactsManager
         EthereumNetworkManager.Settings networkSettings)
 	{
         ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
-        UserWalletManager.OnWalletLoaded += () =>
+        UserWalletManager.OnWalletLoadSuccessful += () =>
 		{
 			string walletAddress = userWalletManager.WalletAddress;
 			AddContact(walletAddress, userWalletInfoManager.GetWalletInfo(walletAddress).WalletName);

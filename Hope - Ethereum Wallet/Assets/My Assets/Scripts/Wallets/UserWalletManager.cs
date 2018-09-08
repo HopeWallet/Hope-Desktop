@@ -8,7 +8,8 @@ using System.Numerics;
 /// </summary>
 public sealed class UserWalletManager
 {
-    public static event Action OnWalletLoaded;
+    public static event Action OnWalletLoadSuccessful;
+    public static event Action OnWalletLoadUnsuccessful;
 
     private readonly LedgerWallet ledgerWallet;
     private readonly TrezorWallet trezorWallet;
@@ -57,9 +58,12 @@ public sealed class UserWalletManager
         hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
         activeWallet = hopeWallet;
 
-        ledgerWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
-        trezorWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
-        hopeWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
+        ledgerWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
+        ledgerWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
+        trezorWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
+        trezorWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
+        hopeWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
+        hopeWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
     }
 
 

@@ -9,7 +9,8 @@ using System.Numerics;
 /// </summary>
 public sealed class HopeWallet : SecureObject, IWallet
 {
-    public event Action OnWalletLoaded;
+    public event Action OnWalletLoadSuccessful;
+    public event Action OnWalletLoadUnsuccessful;
 
     private readonly MemoryEncryptor passwordEncryptor;
 
@@ -86,7 +87,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
     {
-        walletLoader.Load(out addresses, OnWalletLoaded);
+        walletLoader.Load(out addresses, OnWalletLoadSuccessful);
     }
 
     /// <summary>
