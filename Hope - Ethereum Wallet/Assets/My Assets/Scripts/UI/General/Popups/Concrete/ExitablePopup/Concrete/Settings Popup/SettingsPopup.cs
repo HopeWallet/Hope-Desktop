@@ -36,6 +36,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	private UserWalletManager userWalletManager;
 	private HopeWalletInfoManager hopeWalletInfoManager;
 	private ButtonClickObserver buttonClickObserver;
+	private CurrencyManager currencyManager;
 
 	[Inject]
 	public void Construct(UserWalletManager userWalletManager,
@@ -46,9 +47,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		this.userWalletManager = userWalletManager;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
 		this.buttonClickObserver = buttonClickObserver;
+		this.currencyManager = currencyManager;
 
-		defaultCurrencyOptions.ButtonClicked((int) currencyManager.ActiveCurrency);
-		defaultCurrencyOptions.OnButtonChanged += num => currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType) num);
+		defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
 	}
 
 	protected override void OnStart()
@@ -77,5 +78,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		categoryButton.GetComponent<TextMeshProUGUI>().color = UIColors.LightGrey;
 	}
 
-	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
+	private void OnDestroy()
+	{
+		MoreDropdown.PopupClosed?.Invoke();
+		currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType) defaultCurrencyOptions.previouslySelectedButton);
+	}
 }

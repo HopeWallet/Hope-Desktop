@@ -1208,7 +1208,7 @@ MonoBehaviour:
   lockPurposeNotificationSection: {fileID: 1520066508619918}
   assetText: {fileID: 114188047697984526}
   balanceText: {fileID: 114125277020657546}
-  currentTokenNetWorthText: {fileID: 114262674153539580}
+  netWorthText: {fileID: 114262674153539580}
   lockPrpsNotificationText: {fileID: 114649127489800408}
   assetImage: {fileID: 114967936315283588}
 --- !u!114 &114030602193728692

@@ -1,7 +1,9 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
@@ -16,7 +18,8 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 
 	[SerializeField] private HopeInputField passwordField;
 
-    private UIManager uiManager;
+	private UnlockWalletPopupAnimator unlockWalletPopupAnimator;
+	private UIManager uiManager;
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
@@ -38,14 +41,18 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         this.userWalletManager = userWalletManager;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
-    }
+	}
 
 	public void SetFinishingAction(Action popupClosed) => this.popupClosed = popupClosed;
 
 	/// <summary>
 	/// Adds the button listener.
 	/// </summary>
-	protected override void OnStart() => unlockWalletButton.onClick.AddListener(LoadWallet);
+	protected override void OnStart()
+	{
+		unlockWalletButton.onClick.AddListener(LoadWallet);
+		unlockWalletPopupAnimator = Animator as UnlockWalletPopupAnimator;
+	}
 
     /// <summary>
     /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
@@ -97,7 +104,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// <param name="clickType"> The enter button click type. </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-        if (clickType == ClickType.Down && unlockWalletButton.interactable && !DisableClosing)
+		if (clickType == ClickType.Down && unlockWalletButton.interactable && !DisableClosing)
             unlockWalletButton.Press();
     }
 }

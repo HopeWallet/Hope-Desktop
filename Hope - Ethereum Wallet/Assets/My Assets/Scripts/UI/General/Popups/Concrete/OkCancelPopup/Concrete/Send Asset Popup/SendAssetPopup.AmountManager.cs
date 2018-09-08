@@ -196,12 +196,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// <param name="newSendableAmount"> The new sendable amount entered in the input field. </param>
 		private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
 		{
-            decimal currentTokenPrice = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol);
+			decimal currentTokenPrice = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol);
             oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
 
 			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00").LimitEnd(8, "...") : oppositeCurrencyValue.ToString().LimitEnd(8, "...");
 
-			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= $" + oppositeCurrencyValueText + " " + currencyManager.ActiveCurrency.ToString() : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
+			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= " + oppositeCurrencyValueText + " " + currencyManager.ActiveCurrency.ToString() : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
 		}
 
 		/// <summary>
