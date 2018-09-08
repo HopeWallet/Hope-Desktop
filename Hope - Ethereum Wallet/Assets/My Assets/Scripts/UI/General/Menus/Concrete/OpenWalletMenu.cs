@@ -10,27 +10,29 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-    public static event Action<TabType> OnTabChanged;
+	public static event Action<TabType> OnTabChanged;
 	public static Action IdleTimeoutEnabled;
 
-    public GameObject lockPurposeSection,
-                      lockPurposeNotificationSection;
+	public GameObject lockPurposeSection,
+					  lockPurposeNotificationSection;
 
-    public TMP_Text assetText,
-                    balanceText,
-                    currentTokenNetWorthText,
-                    lockPrpsNotificationText;
+	public TMP_Text assetText,
+					balanceText,
+					netWorthText,
+					lockPrpsNotificationText;
 
-    public Image assetImage;
+	public Image assetImage;
 
-    private TokenContractManager tokenContractManager;
-    private TradableAssetManager tradableAssetManager;
-    private TradableAssetNotificationManager notificationManager;
-    private LockedPRPSManager lockedPrpsManager;
-    private PRPS prpsContract;
+	private TokenContractManager tokenContractManager;
+	private TradableAssetManager tradableAssetManager;
+	private TradableAssetPriceManager tradableAssetPriceManager;
+	private TradableAssetNotificationManager notificationManager;
+	private LockedPRPSManager lockedPrpsManager;
+	private PRPS prpsContract;
+	private CurrencyManager currencyManager;
 
-    private const int MAX_ASSET_NAME_LENGTH = 36;
-    private const int MAX_ASSET_BALANCE_LENGTH = 54;
+	private const int MAX_ASSET_NAME_LENGTH = 36;
+	private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
 	private int currentIdleTime, maxIdleTime;
 
@@ -41,34 +43,40 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// </summary>
 	/// <param name="tokenContractManager"> The active TokenContractManager. </param>
 	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetPriceManager">The active TradableAssetPriceManager. </param>
 	/// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
 	/// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
 	/// <param name="prpsContract"> The active PRPS contract. </param>
 	/// <param name="uiSettings"> The ui settings. </param>
+	/// <param name="currencyManager"> The active CurrencyManager. </param>
 	[Inject]
-    public void Construct(
-        TokenContractManager tokenContractManager,
-        TradableAssetManager tradableAssetManager,
-        TradableAssetNotificationManager notificationManager,
-        LockedPRPSManager lockedPrpsManager,
-        PRPS prpsContract,
-        UIManager.Settings uiSettings)
-    {
-        this.tokenContractManager = tokenContractManager;
-        this.tradableAssetManager = tradableAssetManager;
-        this.notificationManager = notificationManager;
-        this.lockedPrpsManager = lockedPrpsManager;
-        this.prpsContract = prpsContract;
-    }
+	public void Construct(
+		TokenContractManager tokenContractManager,
+		TradableAssetManager tradableAssetManager,
+		TradableAssetPriceManager tradableAssetPriceManager,
+		TradableAssetNotificationManager notificationManager,
+		LockedPRPSManager lockedPrpsManager,
+		PRPS prpsContract,
+		UIManager.Settings uiSettings,
+		CurrencyManager currencyManager)
+	{
+		this.tokenContractManager = tokenContractManager;
+		this.tradableAssetManager = tradableAssetManager;
+		this.tradableAssetPriceManager = tradableAssetPriceManager;
+		this.notificationManager = notificationManager;
+		this.lockedPrpsManager = lockedPrpsManager;
+		this.prpsContract = prpsContract;
+		this.currencyManager = currencyManager;
+	}
 
-    /// <summary>
-    /// Initializes the instance and the wallet parent object.
-    /// </summary>
-    private void Start()
-    {
-        TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
-        lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
-        tokenContractManager.StartTokenLoad(OpenMenu);
+	/// <summary>
+	/// Initializes the instance and the wallet parent object.
+	/// </summary>
+	private void Start()
+	{
+		TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
+		lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
+		tokenContractManager.StartTokenLoad(OpenMenu);
 
 		IdleTimeoutEnabled = () => CheckIfIdle().StartCoroutine();
 
@@ -88,7 +96,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
 			yield break;
 
-		currentIdleTime.Log();
+		//currentIdleTime.Log();
 
 		if (previousMousePosition == Input.mousePosition)
 		{
@@ -118,41 +126,50 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// Updates the ui for the newest TradableAsset.
 	/// </summary>
 	public void UpdateAssetUI()
-    {
-        var tradableAsset = tradableAssetManager.ActiveTradableAsset;
+	{
+		var tradableAsset = tradableAssetManager.ActiveTradableAsset;
 
-        if (tradableAsset == null)
-            return;
+		if (tradableAsset == null)
+			return;
 
-        string assetBalance = tradableAsset.AssetBalance.ToString();
+		string assetBalance = tradableAsset.AssetBalance.ToString();
 
-        lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
+		lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
-        assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
-        balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH, "...");
+		assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
+		balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH, "...");
 
-        assetImage.sprite = tradableAsset.AssetImage;
+		netWorthText.gameObject.SetActive(tradableAsset.AssetBalance != 0);
 
-        UpdateAssetNotifications();
-    }
+		if (netWorthText.gameObject.activeInHierarchy)
+		{
+			Debug.Log(tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) + " x " + tradableAsset.AssetBalance + " = " + tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) * tradableAsset.AssetBalance);
+			//float netWorth = tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) * tradableAsset.AssetBalance;
+			//netWorthText.text = netWorth.ToString() + " " + currencyManager.ActiveCurrency.ToString();
+		}
 
-    /// <summary>
-    /// Updates the notifications for locked purpose and saves the transaction count of the current asset.
-    /// </summary>
-    private void UpdateAssetNotifications()
-    {
-        var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
-        lockPurposeNotificationSection.SetActive(lockedPrpsCount > 0);
-        lockPrpsNotificationText.text = lockedPrpsCount.ToString();
-        lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
+		assetImage.sprite = tradableAsset.AssetImage;
 
-        notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
-    }
+		UpdateAssetNotifications();
+	}
 
-    public override void GoBack()
-    {
-        // Logout popup
-    }
+	/// <summary>
+	/// Updates the notifications for locked purpose and saves the transaction count of the current asset.
+	/// </summary>
+	private void UpdateAssetNotifications()
+	{
+		var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
+		lockPurposeNotificationSection.SetActive(lockedPrpsCount > 0);
+		lockPrpsNotificationText.text = lockedPrpsCount.ToString();
+		lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
 
-    public enum TabType { All, Sent, Received }
+		notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
+	}
+
+	public override void GoBack()
+	{
+		// Logout popup
+	}
+
+	public enum TabType { All, Sent, Received }
 }
