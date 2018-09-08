@@ -6,7 +6,6 @@ using Zenject;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
-	[SerializeField] private GameObject defaultCurrencyDropdown;
 	[SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
 	[SerializeField] private HopeInputField idleTimeoutTimeInputField;
 

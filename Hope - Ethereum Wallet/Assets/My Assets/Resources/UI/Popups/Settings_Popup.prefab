@@ -1459,6 +1459,7 @@ GameObject:
   - component: {fileID: 224234026945986774}
   - component: {fileID: 222440211347288102}
   - component: {fileID: 114422675565855328}
+  - component: {fileID: 114984883627605048}
   m_Layer: 0
   m_Name: DefaultCurrency_Options
   m_TagString: Untagged
@@ -4367,8 +4368,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292401368
-  m_fontColor: {r: 0.84705883, g: 0.84705883, b: 0.84705883, a: 1}
+    rgba: 4289045925
+  m_fontColor: {r: 0.64705884, g: 0.64705884, b: 0.64705884, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -5862,16 +5863,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitButton: {fileID: 114329233411420534}
-  defaultCurrencyDropdown: {fileID: 0}
   idleTimeoutTimeCheckbox: {fileID: 114899159167206742}
   countdownTimerCheckbox: {fileID: 114711658273490876}
   transactionNotificationCheckbox: {fileID: 114093349561290548}
   updateNotificationCheckbox: {fileID: 114454385834215994}
   idleTimeoutTimeInputField: {fileID: 114475025927796514}
+  defaultCurrencyOptions: {fileID: 114984883627605048}
   walletCategoryButton: {fileID: 114299105401174872}
   walletNameField: {fileID: 114512689139296424}
-  saveButton: {fileID: 114275955786404780}
+  walletSaveButton: {fileID: 114275955786404780}
   deleteButton: {fileID: 114011350672436480}
+  passwordCategoryButton: {fileID: 114647378938914326}
+  currentPasswordField: {fileID: 0}
+  newPasswordField: {fileID: 0}
+  confirmPasswordField: {fileID: 0}
+  passwordSaveButton: {fileID: 0}
+  loadingIcon: {fileID: 0}
+  twoFactorAuthCategoryButton: {fileID: 114081273679628722}
   twoFactorAuthenticationCheckbox: {fileID: 114709621961060372}
   setUpSection: {fileID: 1864048450666854}
   keyText: {fileID: 114747552957290884}
@@ -8359,7 +8367,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 114716448382039426}
   m_OnClick:
     m_PersistentCalls:
@@ -13205,6 +13213,17 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114984883627605048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649414706948136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &222015647427359632
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -14031,7 +14050,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248.2089, y: -70.5}
+  m_AnchoredPosition: {x: -248.2089, y: -33.2}
   m_SizeDelta: {x: 45, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224065598449723090
@@ -15755,7 +15774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248.24014, y: 9.5}
+  m_AnchoredPosition: {x: -248.24014, y: 46.799988}
   m_SizeDelta: {x: 45, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224805267548029684
@@ -15980,7 +15999,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -50.860596, y: 95}
+  m_AnchoredPosition: {x: -50.860596, y: 132}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224878367700879058
@@ -16152,7 +16171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248.2089, y: -150.5}
+  m_AnchoredPosition: {x: -248.2089, y: -113.20001}
   m_SizeDelta: {x: 45, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224928974491039488
