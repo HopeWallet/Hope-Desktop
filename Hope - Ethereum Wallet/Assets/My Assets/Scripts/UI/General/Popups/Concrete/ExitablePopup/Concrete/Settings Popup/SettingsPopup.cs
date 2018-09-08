@@ -10,10 +10,18 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
 	[SerializeField] private HopeInputField idleTimeoutTimeInputField;
 
+	[SerializeField] private GeneralRadioButtons defaultCurrencyOptions;
+
 	[SerializeField] private Button walletCategoryButton;
 	[SerializeField] private HopeInputField walletNameField;
-	[SerializeField] private Button saveButton, deleteButton;
+	[SerializeField] private Button walletSaveButton, deleteButton;
 
+	[SerializeField] private Button passwordCategoryButton;
+	[SerializeField] private HopeInputField currentPasswordField, newPasswordField, confirmPasswordField;
+	[SerializeField] private Button passwordSaveButton;
+	[SerializeField] private GameObject loadingIcon;
+
+	[SerializeField] private Button twoFactorAuthCategoryButton;
 	[SerializeField] private CheckBox twoFactorAuthenticationCheckbox;
 	[SerializeField] private GameObject setUpSection;
 	[SerializeField] private TextMeshProUGUI keyText;
@@ -21,9 +29,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private HopeInputField codeInputField;
 	[SerializeField] private Button confirmButton;
 
-	private GeneralSection general;
-	private WalletSection wallet;
-	private PasswordSection address;
+	private GeneralSection generalSection;
+	private WalletSection walletSection;
+	private PasswordSection passwordSection;
 	private TwoFactorAuthenticationSection twoFactorAuthenticationSection;
 
 	private UserWalletManager userWalletManager;
@@ -33,27 +41,41 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[Inject]
 	public void Construct(UserWalletManager userWalletManager,
 						  HopeWalletInfoManager hopeWalletInfoManager,
-						  ButtonClickObserver buttonClickObserver)
+						  ButtonClickObserver buttonClickObserver,
+						  CurrencyManager currencyManager)
 	{
 		this.userWalletManager = userWalletManager;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
 		this.buttonClickObserver = buttonClickObserver;
+
+		defaultCurrencyOptions.ButtonClicked((int) currencyManager.ActiveCurrency);
+		defaultCurrencyOptions.OnButtonChanged += num => currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType) num);
 	}
 
 	protected override void OnStart()
 	{
 		base.OnStart();
 
-		general = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
-		twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
+		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
-			wallet = new WalletSection(hopeWalletInfoManager, userWalletManager, walletNameField, saveButton, deleteButton);
+		{
+			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, walletNameField, walletSaveButton, deleteButton);
+			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, passwordSaveButton, loadingIcon);
+			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
+		}
 		else
 		{
-			walletCategoryButton.interactable = false;
-			walletCategoryButton.GetComponent<TextMeshProUGUI>().color = UIColors.LightGrey;
+			DisabledCategoryButton(walletCategoryButton);
+			DisabledCategoryButton(passwordCategoryButton);
+			DisabledCategoryButton(twoFactorAuthCategoryButton);
 		}
+	}
+
+	private void DisabledCategoryButton(Button categoryButton)
+	{
+		categoryButton.interactable = false;
+		categoryButton.GetComponent<TextMeshProUGUI>().color = UIColors.LightGrey;
 	}
 
 	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
