@@ -4,6 +4,8 @@ using Nethereum.JsonRpc.UnityClient;
 
 public class TrezorWallet : IWallet
 {
+    public event Action OnWalletLoaded;
+
     public TrezorWallet()
     {
     }

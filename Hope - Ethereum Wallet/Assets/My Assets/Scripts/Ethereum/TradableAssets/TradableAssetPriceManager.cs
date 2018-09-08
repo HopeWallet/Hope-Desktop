@@ -22,7 +22,7 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
 
         TradableAssetManager.OnTradableAssetAdded += UpdatePrice;
 
-        HopeWallet.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
+        UserWalletManager.OnWalletLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this);
     }
 
     public decimal GetPrice(string assetSymbol)

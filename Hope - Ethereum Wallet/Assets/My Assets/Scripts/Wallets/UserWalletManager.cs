@@ -8,6 +8,8 @@ using System.Numerics;
 /// </summary>
 public sealed class UserWalletManager
 {
+    public static event Action OnWalletLoaded;
+
     private readonly LedgerWallet ledgerWallet;
     private readonly TrezorWallet trezorWallet;
     private readonly HopeWallet hopeWallet;
@@ -54,7 +56,12 @@ public sealed class UserWalletManager
 
         hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
         activeWallet = hopeWallet;
+
+        ledgerWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
+        trezorWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
+        hopeWallet.OnWalletLoaded += () => OnWalletLoaded?.Invoke();
     }
+
 
     /// <summary>
     /// Wrapper method for transferring a specified asset from the user's wallet to another ethereum address.

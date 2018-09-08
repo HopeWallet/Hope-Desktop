@@ -22,12 +22,12 @@ public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
     /// <summary>
     /// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.
     /// </summary>
-    protected virtual void OnEnable() => HopeWallet.OnWalletLoadSuccessful += OnWalletLoad;
+    protected virtual void OnEnable() => UserWalletManager.OnWalletLoaded += OnWalletLoad;
 
     /// <summary>
     /// Removes the OnWalletLoad method from the UserWallet.OnWalletLoadSuccessful event.
     /// </summary>
-    protected virtual void OnDisable() => HopeWallet.OnWalletLoadSuccessful -= OnWalletLoad;
+    protected virtual void OnDisable() => UserWalletManager.OnWalletLoaded -= OnWalletLoad;
 
     /// <summary>
     /// Enables the open wallet gui once the user wallet has been successfully loaded.

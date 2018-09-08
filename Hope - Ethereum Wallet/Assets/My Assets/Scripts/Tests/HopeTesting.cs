@@ -87,9 +87,10 @@ public sealed class HopeTesting : MonoBehaviour
         else if (signTransaction)
         {
             signTransaction = false;
+            TransactionUtils.GetAddressTransactionCount("0x90E872f3814cF902845711b8929C59f0c6F79cf9").OnSuccess(count => 
             Task.Factory.StartNew(async () =>
             {
-                byte[] nonce = 0.ToBytesForRLPEncoding();
+                byte[] nonce = count.ToBytesForRLPEncoding();
                 byte[] gasPrice = 1000000000.ToBytesForRLPEncoding();
                 byte[] gasLimit = 21000.ToBytesForRLPEncoding();
                 byte[] address = "0x8b069Ecf7BF230E153b8Ed903bAbf244034cA203".HexToByteArray();
@@ -116,7 +117,7 @@ public sealed class HopeTesting : MonoBehaviour
 
                 EthSendRawTransactionUnityRequest ethSendRawTransaction = new EthSendRawTransactionUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
                 MainThreadExecutor.QueueAction(() => ethSendRawTransaction.SendRequest(transactionChainId.GetRLPEncoded().ToHex()).StartCoroutine());
-            });
+            }));
         }
     }
 

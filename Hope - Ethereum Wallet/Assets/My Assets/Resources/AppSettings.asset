@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   debugSettings:
-    displayNethereumDebugStatements: 1
+    displayNethereumDebugStatements: 0
   playerPrefSettings:
     securePlayerPrefSettings:
       securePlayerPrefSeed: TEST

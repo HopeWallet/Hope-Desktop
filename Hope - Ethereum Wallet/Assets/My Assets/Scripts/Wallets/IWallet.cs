@@ -8,6 +8,11 @@ using System.Numerics;
 public interface IWallet
 {
     /// <summary>
+    /// Event called when the wallet is loaded.
+    /// </summary>
+    event Action OnWalletLoaded;
+
+    /// <summary>
     /// Gets the address of the wallet given the index of the address.
     /// </summary>
     /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>

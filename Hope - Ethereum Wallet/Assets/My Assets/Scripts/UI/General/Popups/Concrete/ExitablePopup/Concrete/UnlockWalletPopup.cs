@@ -59,7 +59,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// </summary>
     private void OnEnable()
     {
-        HopeWallet.OnWalletLoadSuccessful += OnWalletLoad;
+        UserWalletManager.OnWalletLoaded += OnWalletLoad;
         buttonClickObserver.SubscribeObservable(this);
     }
 
@@ -68,7 +68,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// </summary>
     private void OnDisable()
     {
-        HopeWallet.OnWalletLoadSuccessful -= OnWalletLoad;
+        UserWalletManager.OnWalletLoaded -= OnWalletLoad;
         buttonClickObserver.UnsubscribeObservable(this);
 		popupClosed?.Invoke();
 	}
