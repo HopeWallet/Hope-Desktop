@@ -12,7 +12,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private GeneralRadioButtons defaultCurrencyOptions;
 
 	[SerializeField] private Button walletCategoryButton;
-	[SerializeField] private HopeInputField walletNameField;
+	[SerializeField] private HopeInputField currentWalletNameField, newWalletNameField;
 	[SerializeField] private Button walletSaveButton, deleteButton;
 
 	[SerializeField] private Button passwordCategoryButton;
@@ -60,7 +60,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
-			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, walletNameField, walletSaveButton, deleteButton);
+			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton);
 			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, passwordSaveButton, loadingIcon);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}

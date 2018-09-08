@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 		if (!SecurePlayerPrefs.HasKey("idle timeout"))
 		{
 			SecurePlayerPrefs.SetBool("idle timeout", true);
-			SecurePlayerPrefs.SetInt("idle time", 10);
+			SecurePlayerPrefs.SetInt("idle time", 5);
 			SecurePlayerPrefs.SetBool("countdown timer", true);
 			SecurePlayerPrefs.SetBool("transaction notification", true);
 			SecurePlayerPrefs.SetBool("update notification", true);

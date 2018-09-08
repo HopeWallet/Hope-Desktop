@@ -5,7 +5,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 {
 	public sealed class WalletSection
 	{
-		private HopeInputField walletNameField;
+		private HopeInputField currentWalletNameField, newWalletNameField;
 		private Button saveButton, deleteButton;
 		private GameObject saveButtonText;
 
@@ -16,13 +16,15 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		public WalletSection(HopeWalletInfoManager hopeWalletInfoManager,
 							 UserWalletManager userWalletManager,
-							 HopeInputField walletNameField,
+							 HopeInputField currentWalletNameField,
+							 HopeInputField newWalletNameField,
 							 Button saveButton,
 							 Button deleteButton)
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.userWalletManager = userWalletManager;
-			this.walletNameField = walletNameField;
+			this.currentWalletNameField = currentWalletNameField;
+			this.newWalletNameField = newWalletNameField;
 			this.saveButton = saveButton;
 			this.deleteButton = deleteButton;
 
@@ -30,22 +32,22 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			deleteButton.onClick.AddListener(DeleteButtonClicked);
 			saveButtonText = saveButton.transform.GetChild(0).gameObject;
 
-			walletNameField.OnInputUpdated += WalletNameFieldChanged;
+			newWalletNameField.OnInputUpdated += WalletNameFieldChanged;
 
 			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
-			walletNameField.Text = walletName;
+			currentWalletNameField.Text = walletName;
 		}
 
 		private void WalletNameFieldChanged(string textInField)
 		{
 			bool emptyName = string.IsNullOrEmpty(textInField.Trim());
 			bool usedName = WalletNameExists(textInField);
-			walletNameField.Error = emptyName || usedName;
+			newWalletNameField.Error = emptyName || usedName;
 
 			if (emptyName)
-				walletNameField.errorMessage.text = "Invalid wallet name";
+				newWalletNameField.errorMessage.text = "Invalid wallet name";
 			else if (usedName)
-				walletNameField.errorMessage.text = "Wallet name in use";
+				newWalletNameField.errorMessage.text = "Wallet name in use";
 
 			SetSaveButtonInteractable();
 		}
@@ -73,7 +75,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private void SetSaveButtonInteractable()
 		{
-			saveButton.interactable = !walletNameField.Error;
+			saveButton.interactable = !newWalletNameField.Error;
 			saveButtonText.AnimateColor(saveButton.interactable ? UIColors.White : UIColors.DarkGrey, 0.15f);
 		}
 
@@ -81,7 +83,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			//Change wallet name
 
-			walletNameField.Text = string.Empty;
+			currentWalletNameField.Text = newWalletNameField.Text;
+			newWalletNameField.Text = string.Empty;
 		}
 
 		private void DeleteButtonClicked()

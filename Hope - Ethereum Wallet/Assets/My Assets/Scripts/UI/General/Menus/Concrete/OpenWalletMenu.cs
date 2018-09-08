@@ -143,9 +143,8 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
 		if (netWorthText.gameObject.activeInHierarchy)
 		{
-			Debug.Log(tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) + " x " + tradableAsset.AssetBalance + " = " + tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) * tradableAsset.AssetBalance);
-			//float netWorth = tradableAssetPriceManager.GetPrice(currencyManager.ActiveCurrency.ToString()) * tradableAsset.AssetBalance;
-			//netWorthText.text = netWorth.ToString() + " " + currencyManager.ActiveCurrency.ToString();
+			decimal netWorth = tradableAssetPriceManager.GetPrice(tradableAsset.AssetSymbol) * tradableAsset.AssetBalance;
+			netWorthText.text = netWorth.ToString("0.00") + " " + currencyManager.ActiveCurrency.ToString();
 		}
 
 		assetImage.sprite = tradableAsset.AssetImage;

@@ -49,7 +49,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void IdleTimeoutCheckboxClicked(bool enabled)
 		{
 			SecurePlayerPrefs.SetBool("idle timeout", enabled);
-			idleTimeoutTimeInputField.Text = enabled ? "10" : string.Empty;
+			idleTimeoutTimeInputField.Text = enabled ? "5" : string.Empty;
 
 			if (enabled)
 			{
@@ -67,8 +67,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
 			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 142f : 132f, 0.15f);
 
-			if (!idleTimeoutTimeInputField.Error && !idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
+			if (!idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
+			{
+				SecurePlayerPrefs.SetBool("idle timeout", !idleTimeoutTimeInputField.Error);
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+			}
 		}
 	}
 }
