@@ -5,20 +5,18 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 {
 	public sealed class GeneralSection
 	{
-		private GameObject defaultCurrencyDropdown, idleTimeoutTimeSection;
+		private GameObject idleTimeoutTimeSection;
 		private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
 		private HopeInputField idleTimeoutTimeInputField;
 
-		public int IdleTimeValue;
+		private int idleTimeValue;
 
-		public GeneralSection(GameObject defaultCurrencyDropdown,
-							  CheckBox idleTimeoutTimeCheckbox,
+		public GeneralSection(CheckBox idleTimeoutTimeCheckbox,
 							  CheckBox countdownTimerCheckbox,
 							  CheckBox transactionNotificationCheckbox,
 							  CheckBox updateNotificationCheckbox,
 							  HopeInputField idleTimeoutTimeInputField)
 		{
-			this.defaultCurrencyDropdown = defaultCurrencyDropdown;
 			this.idleTimeoutTimeCheckbox = idleTimeoutTimeCheckbox;
 			this.countdownTimerCheckbox = countdownTimerCheckbox;
 			this.transactionNotificationCheckbox = transactionNotificationCheckbox;
@@ -26,14 +24,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.idleTimeoutTimeInputField = idleTimeoutTimeInputField;
 			idleTimeoutTimeSection = idleTimeoutTimeInputField.transform.parent.gameObject;
 
-			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutTimeChanged;
-			idleTimeoutTimeCheckbox.OnCheckboxClicked += SetInputFieldText;
+			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
+			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
+			countdownTimerCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("countdown timer", boolean);
+			transactionNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("transaction notification", boolean);
+			updateNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("update notification", boolean);
 			SetCurrentSettings();
 		}
 
 		private void SetCurrentSettings()
 		{
-			//Set default currency dropdown
 			idleTimeoutTimeCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("idle timeout"));
 			countdownTimerCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("countdown timer"));
 			transactionNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("transaction notification"));
@@ -41,21 +41,34 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			if (idleTimeoutTimeCheckbox.ToggledOn)
 			{
-				IdleTimeValue = SecurePlayerPrefs.GetInt("idle time");
-				idleTimeoutTimeInputField.Text = IdleTimeValue.ToString();
+				idleTimeValue = SecurePlayerPrefs.GetInt("idle time");
+				idleTimeoutTimeInputField.Text = idleTimeValue.ToString();
 			}
 		}
 
-		private void SetInputFieldText(bool toggledOn) => idleTimeoutTimeInputField.Text = toggledOn ? "10" : string.Empty;
-
-		private void IdleTimeoutTimeChanged(string text)
+		private void IdleTimeoutCheckboxClicked(bool enabled)
 		{
-			int.TryParse(text, out IdleTimeValue);
+			SecurePlayerPrefs.SetBool("idle timeout", enabled);
+			idleTimeoutTimeInputField.Text = enabled ? "10" : string.Empty;
 
-			idleTimeoutTimeInputField.Error = string.IsNullOrEmpty(text) || IdleTimeValue <= 0;
+			if (enabled)
+			{
+				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+				OpenWalletMenu.IdleTimeoutEnabled?.Invoke();
+			}
+		}
+
+		private void IdleTimeoutFieldChanged(string text)
+		{
+			int.TryParse(text, out idleTimeValue);
+
+			idleTimeoutTimeInputField.Error = string.IsNullOrEmpty(text) || idleTimeValue <= 0;
 
 			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
 			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 95f : 81f, 0.15f);
+
+			if (!idleTimeoutTimeInputField.Error)
+				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
 		}
 	}
 }

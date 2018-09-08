@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
-	public sealed class AddressSection
+	public sealed class PasswordSection
 	{
 		[SerializeField] private GeneralRadioButtons addressOptions;
 		[SerializeField] private Transform addressListTransform;
 		[SerializeField] private Button unlockButton;
 
-		public AddressSection(GeneralRadioButtons addressOptions,
+		public PasswordSection(GeneralRadioButtons addressOptions,
 							  Transform addressListTransform,
 							  Button unlockButton)
 		{

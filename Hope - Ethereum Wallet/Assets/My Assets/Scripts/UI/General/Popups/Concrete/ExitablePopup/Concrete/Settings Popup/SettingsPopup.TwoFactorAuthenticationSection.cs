@@ -27,6 +27,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.codeInputField = codeInputField;
 			this.confirmButton = confirmButton;
 
+			twoFactorAuthenticationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("two-factor authentication", boolean);
 			SetUpVisuals();
 		}
 

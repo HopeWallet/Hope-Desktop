@@ -5,7 +5,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 {
 	public sealed class WalletSection
 	{
-		private HopeInputField walletNameField, password1Field, password2Field;
+		private HopeInputField walletNameField;
 		private Button saveButton, deleteButton;
 		private GameObject saveButtonText;
 
@@ -17,16 +17,12 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		public WalletSection(HopeWalletInfoManager hopeWalletInfoManager,
 							 UserWalletManager userWalletManager,
 							 HopeInputField walletNameField,
-							 HopeInputField password1Field,
-							 HopeInputField password2Field,
 							 Button saveButton,
 							 Button deleteButton)
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.userWalletManager = userWalletManager;
 			this.walletNameField = walletNameField;
-			this.password1Field = password1Field;
-			this.password2Field = password2Field;
 			this.saveButton = saveButton;
 			this.deleteButton = deleteButton;
 
@@ -34,8 +30,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			deleteButton.onClick.AddListener(DeleteButtonClicked);
 			saveButtonText = saveButton.transform.GetChild(0).gameObject;
 
-			password1Field.OnInputUpdated += _ => PasswordsUpdated();
-			password2Field.OnInputUpdated += _ => PasswordsUpdated();
 			walletNameField.OnInputUpdated += WalletNameFieldChanged;
 
 			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
@@ -77,40 +71,17 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
-		/// <summary>
-		/// Checks if the passwords valid and animates the error icon if needed
-		/// </summary>
-		private void PasswordsUpdated()
-		{
-			string password1Text = password1Field.Text;
-			string password2Text = password2Field.Text;
-
-			password1Field.Error = password1Field.Text.Length < 8;
-			password2Field.Error = password1Text != password2Text;
-
-			if (password1Field.Error)
-				password1Field.errorMessage.text = "Password too short";
-
-			if (password2Field.Error)
-				password2Field.errorMessage.text = "Passwords do not match";
-
-			password2Field.UpdateVisuals();
-			SetSaveButtonInteractable();
-		}
-
 		private void SetSaveButtonInteractable()
 		{
-			saveButton.interactable = !walletNameField.Error && !password1Field.Error && !password2Field.Error;
+			saveButton.interactable = !walletNameField.Error;
 			saveButtonText.AnimateColor(saveButton.interactable ? UIColors.White : UIColors.DarkGrey, 0.15f);
 		}
 
 		private void SaveButtonClicked()
 		{
-			//Change wallet name and password
+			//Change wallet name
 
 			walletNameField.Text = string.Empty;
-			password1Field.Text = string.Empty;
-			password2Field.Text = string.Empty;
 		}
 
 		private void DeleteButtonClicked()

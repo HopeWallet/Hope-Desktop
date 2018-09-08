@@ -11,6 +11,7 @@ using Zenject;
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
     public static event Action<TabType> OnTabChanged;
+	public static Action IdleTimeoutEnabled;
 
     public GameObject lockPurposeSection,
                       lockPurposeNotificationSection;
@@ -31,22 +32,20 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
-	private bool idle;
+	private int currentIdleTime, maxIdleTime;
 
 	private Vector3 previousMousePosition;
 
-	private int idleTime;
-
-    /// <summary>
-    /// Injects the required dependency into this class.
-    /// </summary>
-    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
-    /// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
-    /// <param name="prpsContract"> The active PRPS contract. </param>
-    /// <param name="uiSettings"> The ui settings. </param>
-    [Inject]
+	/// <summary>
+	/// Injects the required dependency into this class.
+	/// </summary>
+	/// <param name="tokenContractManager"> The active TokenContractManager. </param>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
+	/// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
+	/// <param name="prpsContract"> The active PRPS contract. </param>
+	/// <param name="uiSettings"> The ui settings. </param>
+	[Inject]
     public void Construct(
         TokenContractManager tokenContractManager,
         TradableAssetManager tradableAssetManager,
@@ -71,23 +70,43 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
 
-		idleTime = 0;
-		//StartCoroutine(CheckIfStillIdle);
-    }
+		IdleTimeoutEnabled = () => CheckIfIdle().StartCoroutine();
 
-	private void Update()
-	{
-		idle = previousMousePosition == Input.mousePosition;
+		if (SecurePlayerPrefs.GetBool("idle timeout"))
+		{
+			maxIdleTime = SecurePlayerPrefs.GetInt("idle time");
 
-		previousMousePosition = Input.mousePosition;
+			previousMousePosition = Input.mousePosition;
+			CheckIfIdle().StartCoroutine();
+		}
 	}
 
-	private IEnumerator CheckIfStillIdle()
+	private IEnumerator CheckIfIdle()
 	{
 		yield return new WaitForSeconds(1);
 
-		if (idle)
-			idleTime += 1;
+		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
+			yield break;
+
+		currentIdleTime.Log();
+
+		if (previousMousePosition == Input.mousePosition)
+		{
+			if ((currentIdleTime / 60) == maxIdleTime)
+			{
+				popupManager.GetPopup<UnlockWalletPopup>();
+				yield break;
+			}
+			else
+				currentIdleTime++;
+		}
+		else
+		{
+			currentIdleTime = 0;
+		}
+
+		previousMousePosition = Input.mousePosition;
+		CheckIfIdle().StartCoroutine();
 	}
 
 	/// <summary>
