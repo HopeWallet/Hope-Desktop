@@ -20,14 +20,9 @@ namespace Ledger.Net.Responses
             using (var memoryStream = new MemoryStream(data))
             {
                 SignatureV = (uint)memoryStream.ReadByte();
-                //memoryStream.ReadByte();
                 SignatureR = memoryStream.ReadAllBytes(32);
-                //memoryStream.ReadByte();
                 SignatureS = memoryStream.ReadAllBytes(32);
             }
-            data.LogArray();
-            //SignatureR.LogArray();
-            //SignatureS.LogArray();
         }
     }
 }

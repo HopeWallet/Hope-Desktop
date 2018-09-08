@@ -89,7 +89,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);
 		CheckIfContact(transactionInfo.To.ToLower(), toAddressName);
 
-		TransactionUtils.CheckTransactionDetails(transactionInfo.TxHash, tx =>
+		TransactionUtils.GetTransactionDetails(transactionInfo.TxHash).OnSuccess(tx =>
         {
             gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + " Gwei");
             gasLimitText.SetText(tx.Gas.Value.ToString());

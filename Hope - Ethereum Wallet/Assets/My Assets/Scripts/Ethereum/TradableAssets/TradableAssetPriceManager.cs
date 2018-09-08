@@ -6,7 +6,7 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
     private readonly DubiExDataManager dubiexDataManager;
     private readonly TradableAssetManager tradableAssetManager;
 
-    private Dictionary<string, decimal> prices = new Dictionary<string, decimal>();
+    private readonly Dictionary<string, decimal> prices = new Dictionary<string, decimal>();
 
     public float UpdateInterval => 300;
 

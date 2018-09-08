@@ -93,8 +93,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// <param name="tokenTransactionJson"> The json of the token transaction. </param>
     private void GetTransactionInputData(TokenTransactionJson tokenTransactionJson)
     {
-        TransactionUtils.CheckTransactionDetails(tokenTransactionJson.transactionHash,
-            tx => GetItemFromHodlerContract(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
+        TransactionUtils.GetTransactionDetails(tokenTransactionJson.transactionHash)
+                        .OnSuccess(tx => GetItemFromHodlerContract(SolidityUtils.ExtractFunctionParameters(tx.Input), tokenTransactionJson.timeStamp.ConvertFromHex()));
     }
 
     private void GetItemFromHodlerContract(string[] inputData, BigInteger lockedTimeStamp)

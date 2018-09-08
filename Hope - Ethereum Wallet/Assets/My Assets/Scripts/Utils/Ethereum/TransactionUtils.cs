@@ -1,7 +1,9 @@
-﻿using Nethereum.JsonRpc.UnityClient;
+﻿using Hope.Utils.Promises;
+using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RPC.Eth.DTOs;
 using System;
 using System.Collections;
+using System.Numerics;
 
 namespace Hope.Utils.Ethereum
 {
@@ -11,25 +13,62 @@ namespace Hope.Utils.Ethereum
     public static class TransactionUtils
     {
         /// <summary>
-        /// Checks the details of a transaction hash.
+        /// Gets the transaction count of an Ethereum address.
+        /// </summary>
+        /// <param name="address"> The Ethereum address to get the transaction count for. </param>
+        /// <returns> The promise returning the transaction count. </returns>
+        public static EthCallPromise<BigInteger> GetAddressTransactionCount(string address)
+        {
+            EthCallPromise<BigInteger> promise = new EthCallPromise<BigInteger>();
+            _GetAddressTransactionCount(address, promise).StartCoroutine();
+            return promise;
+        }
+
+        /// <summary>
+        /// Gets the details of a transaction hash.
         /// </summary>
         /// <param name="txHash"> The transaction hash. </param>
         /// <param name="onTxReceived"> Action to call once the transaction is received. </param>
-        public static void CheckTransactionDetails(string txHash, Action<Transaction> onTxReceived) => _GetTransactionDetailsCoroutine(txHash, onTxReceived).StartCoroutine();
+        /// <returns> The promise returning the transaction details. </returns>
+        public static EthCallPromise<Transaction> GetTransactionDetails(string txHash)
+        {
+            EthCallPromise<Transaction> promise = new EthCallPromise<Transaction>();
+            _GetTransactionDetailsCoroutine(txHash, promise).StartCoroutine();
+            return promise;
+        }
 
         /// <summary>
-        /// Starts the coroutine for getting the details of a transaction.
+        /// The coroutine for getting the transaction count of an ethereum address.
+        /// </summary>
+        /// <param name="address"> The address to get the transaction count for. </param>
+        /// <param name="promise"> Promise returning the transaction count. </param>
+        /// <returns> The transaction count request to await. </returns>
+        private static IEnumerator _GetAddressTransactionCount(string address, EthCallPromise<BigInteger> promise)
+        {
+            if (!AddressUtils.IsValidEthereumAddress(address))
+                throw new ArgumentException("Expected valid Ethereum address.");
+
+            var request = new EthGetTransactionCountUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+            yield return request.SendRequest(address, BlockParameter.CreateLatest());
+
+            promise.Build(request, () => request.Result.Value);
+        }
+
+        /// <summary>
+        /// The coroutine for getting the details of a transaction.
         /// </summary>
         /// <param name="txHash"> The transaction hash. </param>
-        /// <param name="onTxReceived"> Action to call once the transaction details have been received. </param>
+        /// <param name="promise"> Promise returning the transaction. </param>
         /// <returns> The transaction request to await. </returns>
-        private static IEnumerator _GetTransactionDetailsCoroutine(string txHash, Action<Transaction> onTxReceived)
+        private static IEnumerator _GetTransactionDetailsCoroutine(string txHash, EthCallPromise<Transaction> promise)
         {
-            var request = new EthGetTransactionByHashUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+            if (!AddressUtils.IsValidTransactionHash(txHash))
+                throw new ArgumentException("Expected valid Ethereum transaction hash.");
 
+            var request = new EthGetTransactionByHashUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
             yield return request.SendRequest(txHash);
 
-            onTxReceived?.Invoke(request.Result);
+            promise.Build(request, () => request.Result);
         }
     }
 }
