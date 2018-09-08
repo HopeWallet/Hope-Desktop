@@ -50,7 +50,7 @@ public sealed class CoinMarketCapDataManager
         if (!CoinIDs.ContainsKey(symbol))
             return promise.Resolve(null);
 
-        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol], jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
+        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol] + "/?convert=" + currencyManager.ActiveCurrency.ToString(), jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
 
         return promise;
     }
