@@ -85,15 +85,21 @@ public sealed class UserWalletManager
     /// <param name="onTransactionSigned"> The action to call if the transaction is confirmed and signed. </param>
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
-    /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    /// <param name="value"> The amount of Ether in wei to send to the address. </param>
+    /// <param name="addressTo"> The address the transaction is being sent to. </param>
+    /// <param name="data"> The data to pass along with the transaction. </param>
+    /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
     [SecureCallEnd]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         BigInteger gasLimit,
         BigInteger gasPrice,
-        params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>
+        BigInteger value,
+        string addressTo,
+        string data,
+        params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, transactionInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, displayInput);
     }
 
     /// <summary>

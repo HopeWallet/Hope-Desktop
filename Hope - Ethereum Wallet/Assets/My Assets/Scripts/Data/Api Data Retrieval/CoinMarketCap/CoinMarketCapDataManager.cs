@@ -50,11 +50,16 @@ public sealed class CoinMarketCapDataManager
         if (!CoinIDs.ContainsKey(symbol))
             return promise.Resolve(null);
 
-        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol], jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
+        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol] + "/?convert=" + currencyManager.ActiveCurrency.ToString(), jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
 
         return promise;
     }
 
+    /// <summary>
+    /// Gets the price data from the CoinMarketCap quotes section.
+    /// </summary>
+    /// <param name="coinQuotes"> The quotes section of the CoinMarketCap crypto coin price. </param>
+    /// <returns> The respective price section based on the active currency. </returns>
     private dynamic GetCoinPriceData(dynamic coinQuotes)
     {
         switch (currencyManager.ActiveCurrency)
