@@ -660,6 +660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
   backButton: {fileID: 114011816171501850}
+  openLedgerWalletButton: {fileID: 114005207103077076}
 --- !u!114 &114251184254981024
 MonoBehaviour:
   m_ObjectHideFlags: 1

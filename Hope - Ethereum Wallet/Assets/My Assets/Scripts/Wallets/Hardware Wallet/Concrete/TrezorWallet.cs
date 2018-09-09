@@ -6,7 +6,8 @@ public sealed class TrezorWallet : HardwareWallet
 {
     public TrezorWallet(
         EthereumNetworkManager ethereumNetworkManager,
-        EthereumNetworkManager.Settings ethereumNetworkSettings) : base(ethereumNetworkManager, ethereumNetworkSettings)
+        EthereumNetworkManager.Settings ethereumNetworkSettings,
+        PopupManager popupManager) : base(ethereumNetworkManager, ethereumNetworkSettings, popupManager)
     {
     }
 

@@ -9,14 +9,20 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 {
 	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
 
+    private UserWalletManager userWalletManager;
     private HopeWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Adds the required wallet dependencies.
     /// </summary>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="walletSettings"> The pref settings for the UserWallet. </param>
     [Inject]
-    public void Construct(HopeWalletInfoManager.Settings walletSettings) => this.walletSettings = walletSettings;
+    public void Construct(UserWalletManager userWalletManager, HopeWalletInfoManager.Settings walletSettings)
+    {
+        this.userWalletManager = userWalletManager;
+        this.walletSettings = walletSettings;
+    }
 
     /// <summary>
     /// Adds the button listeners on start.
@@ -33,6 +39,8 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenHopeWallet()
     {
+        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Hope);
+
         if (SecurePlayerPrefs.HasKey(walletSettings.walletCountPrefName) && SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) > 0)
             uiManager.OpenMenu<WalletListMenu>();
         else
@@ -44,6 +52,8 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenLedgerWallet()
     {
+        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Ledger);
+
         uiManager.OpenMenu<OpenLedgerWalletMenu>();
     }
 
@@ -52,6 +62,8 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenTrezorWallet()
 	{
+        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Trezor);
+
         uiManager.OpenMenu<OpenTrezorWalletMenu>();
 	}
 

@@ -1,7 +1,7 @@
 ﻿using System;
 
 /// <summary>
-/// Class which manages the info for each user wallet.
+/// Class which manages the info for each wallet.
 /// </summary>
 public sealed class HopeWalletInfoManager
 {
@@ -24,14 +24,14 @@ public sealed class HopeWalletInfoManager
     /// </summary>
     /// <param name="walletNum"> The number of the wallet to get info for. </param>
     /// <returns> The WalletInfo of the given wallet number. </returns>
-    public WalletInfo GetWalletInfo(int walletNum) => wallets[walletNum - 1];
+    public WalletInfo GetWalletInfo(int walletNum) => wallets.Count >= walletNum ? wallets[walletNum - 1] : new WalletInfo("", null, 0);
 
     /// <summary>
     /// Gets the wallet info for a given wallet address.
     /// </summary>
     /// <param name="address"> The address of the wallet to get the info for. </param>
     /// <returns> The WalletInfo of the given wallet address. </returns>
-    public WalletInfo GetWalletInfo(string address) => wallets[address];
+    public WalletInfo GetWalletInfo(string address) => wallets.Contains(address) ? wallets[address] : new WalletInfo("", null, 0);
 
     /// <summary>
     /// Adds a new wallet to the list of WalletInfo.

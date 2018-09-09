@@ -53,9 +53,6 @@ namespace Ledger.Net
                 {
                     var packet = await LedgerHidDevice.ReadAsync().ConfigureAwait(false);
 
-                    if (packet?.Length == 0)
-                        throw new Exception("Invalid response data packet!");
-
                     var responseDataPacket = Helpers.GetResponseDataPacket(packet, packetIndex, ref remaining);
                     packetIndex++;
 

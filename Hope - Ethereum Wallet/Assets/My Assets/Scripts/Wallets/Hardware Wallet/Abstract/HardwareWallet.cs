@@ -17,11 +17,16 @@ public abstract class HardwareWallet : IWallet
 
     protected readonly EthereumNetworkManager ethereumNetworkManager;
     protected readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
+    protected readonly PopupManager popupManager;
 
-    protected HardwareWallet(EthereumNetworkManager ethereumNetworkManager, EthereumNetworkManager.Settings ethereumNetworkSettings)
+    protected HardwareWallet(
+        EthereumNetworkManager ethereumNetworkManager,
+        EthereumNetworkManager.Settings ethereumNetworkSettings,
+        PopupManager popupManager)
     {
         this.ethereumNetworkManager = ethereumNetworkManager;
         this.ethereumNetworkSettings = ethereumNetworkSettings;
+        this.popupManager = popupManager;
     }
 
     protected void WalletLoadSuccessful() => OnWalletLoadSuccessful?.Invoke();

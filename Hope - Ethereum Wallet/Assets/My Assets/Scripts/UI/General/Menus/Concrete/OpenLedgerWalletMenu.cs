@@ -1,11 +1,15 @@
 ﻿using Ledger.Net.Connectivity;
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodicUpdater
 {
     public event Action OnLedgerConnected;
     public event Action OnLedgerDisconnected;
+
+    [SerializeField] private Button openLedgerWalletButton;
 
     private LedgerWallet ledgerWallet;
     private PeriodicUpdateManager periodicUpdateManager;
@@ -21,14 +25,32 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         this.periodicUpdateManager = periodicUpdateManager;
     }
 
+    private void Start()
+    {
+        openLedgerWalletButton.onClick.AddListener(OpenWallet);
+    }
+
     private void OnEnable()
     {
+        UserWalletManager.OnWalletLoadSuccessful += OpenMainWalletMenu;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     private void OnDisable()
     {
+        UserWalletManager.OnWalletLoadSuccessful -= OpenMainWalletMenu;
         periodicUpdateManager.RemovePeriodicUpdater(this);
+    }
+
+    private void OpenMainWalletMenu()
+    {
+        uiManager.OpenMenu<OpenWalletMenu>();
+    }
+
+    private void OpenWallet()
+    {
+        popupManager.GetPopup<LoadingPopup>();
+        ledgerWallet.InitializeAddresses();
     }
 
     public async void PeriodicUpdate()
@@ -39,14 +61,14 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         if (string.IsNullOrEmpty(address))
         {
             if (connected)
-                OnLedgerDisconnected?.Invoke();
+                MainThreadExecutor.QueueAction(() => OnLedgerDisconnected?.Invoke());
 
             connected = false;
         }
         else
         {
             if (!connected)
-                OnLedgerConnected?.Invoke();
+                MainThreadExecutor.QueueAction(() => OnLedgerConnected?.Invoke());
 
             connected = true;
         }

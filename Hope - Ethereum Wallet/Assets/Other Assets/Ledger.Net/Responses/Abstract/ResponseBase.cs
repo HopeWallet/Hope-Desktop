@@ -46,8 +46,11 @@
         #region Constructor
         protected ResponseBase(byte[] data)
         {
+            if (data == null)
+                return;
+
             Data = data;
-            ReturnCode = ((data[data.Length - 2] & HardeningConstant) << 8) | data[data.Length - 1] & HardeningConstant;
+            ReturnCode = data?.Length <= 3 ? 0x0 : ((data[data.Length - 2] & HardeningConstant) << 8) | data[data.Length - 1] & HardeningConstant;
         }
         #endregion
     }

@@ -49,8 +49,9 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
 		this.contactsManager = contactsManager;
+
 		walletAddress = userWalletManager.WalletAddress;
-		walletName = userWalletInfoManager.GetWalletInfo(walletAddress).WalletName;
+		walletName = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope ? userWalletInfoManager.GetWalletInfo(walletAddress).WalletName : userWalletManager.ActiveWalletType.ToString();
     }
 
     /// <summary>

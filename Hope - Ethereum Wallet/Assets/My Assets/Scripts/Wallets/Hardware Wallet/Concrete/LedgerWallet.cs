@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using Hope.Utils.Ethereum;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Signer;
+using Nethereum.Util;
 
 public sealed class LedgerWallet : HardwareWallet
 {
-
-    private LedgerWallet(
+    public LedgerWallet(
         EthereumNetworkManager ethereumNetworkManager,
-        EthereumNetworkManager.Settings ethereumNetworkSettings) : base(ethereumNetworkManager, ethereumNetworkSettings)
+        EthereumNetworkManager.Settings ethereumNetworkSettings,
+        PopupManager popupManager) : base(ethereumNetworkManager, ethereumNetworkSettings, popupManager)
     {
     }
 
@@ -25,22 +23,23 @@ public sealed class LedgerWallet : HardwareWallet
 
         if (ledgerManager == null)
         {
-            WalletLoadUnsuccessful();
+            MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
             return;
         }
 
         for (uint i = 0; i < addresses.Length; i++)
         {
-            addresses[i] = await ledgerManager.GetAddressAsync(0, i).ConfigureAwait(false);
+            var address = await ledgerManager.GetAddressAsync(0, i).ConfigureAwait(false);
+            addresses[i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
 
-            if (string.IsNullOrEmpty(addresses[i]))
+            if (string.IsNullOrEmpty(address))
             {
-                WalletLoadUnsuccessful();
+                MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
                 return;
             }
         }
 
-        WalletLoadSuccessful();
+        MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
     protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, uint addressIndex)
@@ -53,6 +52,9 @@ public sealed class LedgerWallet : HardwareWallet
         var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, addressIndex, false, ledgerManager.CurrentCoin.IsSegwit);
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);
+
+        if (!response.IsSuccess)
+            return;
 
         var transactionChainId = new TransactionChainId(
             transaction.Nonce,
@@ -67,6 +69,10 @@ public sealed class LedgerWallet : HardwareWallet
             new byte[] { (byte)response.SignatureV });
 
         var ethSendRawTransaction = new EthSendRawTransactionUnityRequest(ethereumNetworkManager.CurrentNetwork.NetworkUrl);
-        MainThreadExecutor.QueueAction(() => ethSendRawTransaction.SendRequest(transactionChainId.GetRLPEncoded().ToHex()).StartCoroutine());
+        MainThreadExecutor.QueueAction(() =>
+        {
+            ethSendRawTransaction.SendRequest(transactionChainId.GetRLPEncoded().ToHex()).StartCoroutine();
+            popupManager.CloseAllPopups();
+        });
     }
 }
