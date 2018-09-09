@@ -38,5 +38,4 @@ public abstract class WalletLoadMenuBase<T> : Menu<T> where T : Menu<T>
     /// Loads the wallet.
     /// </summary>
     public abstract void LoadWallet();
-
 }

@@ -25,7 +25,7 @@ namespace Ledger.Net.Connectivity
                 || UsageSpecification.Length == 0
                 || UsageSpecification.Any(u => (ushort)d.Capabilities.UsagePage == u.UsagePage && (ushort)d.Capabilities.Usage == u.Usage));
 
-            return new LedgerManager(new UnityHIDDevice(hidDevices.First()));
+            return !hidDevices.Any() ? null : new LedgerManager(new UnityHIDDevice(hidDevices.First()));
         }
     }
 }

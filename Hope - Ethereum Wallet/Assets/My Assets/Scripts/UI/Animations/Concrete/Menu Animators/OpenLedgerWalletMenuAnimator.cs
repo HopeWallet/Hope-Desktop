@@ -2,17 +2,15 @@
 using TMPro;
 using UnityEngine;
 
-public class OpenLedgerWalletMenuAnimator : UIAnimator
+public sealed class OpenLedgerWalletMenuAnimator : UIAnimator
 {
 	[SerializeField] private GameObject awaitingConnectionText;
 	[SerializeField] private GameObject loadingIcon;
 	[SerializeField] private GameObject openWalletButton;
 
-	private OpenLedgerWalletMenu openLedgerWalletMenu;
-
 	private void Awake()
 	{
-		openLedgerWalletMenu.transform.GetComponent<OpenLedgerWalletMenu>();
+		var openLedgerWalletMenu = transform.GetComponent<OpenLedgerWalletMenu>();
 
 		openLedgerWalletMenu.OnLedgerConnected += () => ChangeLedgerStatus(true);
 		openLedgerWalletMenu.OnLedgerDisconnected += () => ChangeLedgerStatus(false);
