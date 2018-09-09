@@ -55,6 +55,11 @@ public sealed class CoinMarketCapDataManager
         return promise;
     }
 
+    /// <summary>
+    /// Gets the price data from the CoinMarketCap quotes section.
+    /// </summary>
+    /// <param name="coinQuotes"> The quotes section of the CoinMarketCap crypto coin price. </param>
+    /// <returns> The respective price section based on the active currency. </returns>
     private dynamic GetCoinPriceData(dynamic coinQuotes)
     {
         switch (currencyManager.ActiveCurrency)

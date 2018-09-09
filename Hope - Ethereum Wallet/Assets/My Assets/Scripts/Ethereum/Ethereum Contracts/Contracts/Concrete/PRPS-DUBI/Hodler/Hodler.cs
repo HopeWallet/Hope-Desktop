@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.Ethereum;
+using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using System;
 using System.Numerics;
@@ -39,18 +40,12 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="monthsToLock"> How many months the purpose should be locked for. </param>
     public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
+        var transactionInput = ContractFunction.CreateFunction<Messages.Hodl>(gasPrice, gasLimit, id, SolidityUtils.ConvertToUInt(value, 18), new BigInteger(monthsToLock)).CreateTransactionInput(ContractAddress);
         userWalletManager.SignTransaction<ConfirmLockPopup>(request =>
         {
-            var promise = ContractUtils.SendContractMessage<Messages.Hodl>(ContractAddress,
-                                                                           request,
-                                                                           gasPrice,
-                                                                           gasLimit,
-                                                                           id,
-                                                                           SolidityUtils.ConvertToUInt(value, 18),
-                                                                           new BigInteger(monthsToLock));
-
-            promise.OnSuccess(_ => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"));
-        }, gasLimit, gasPrice, monthsToLock, value);
+            ContractUtils.SendContractMessage(transactionInput, request)
+                         .OnSuccess(_ => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"));
+        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, monthsToLock, value);
     }
 
     /// <summary>
@@ -63,16 +58,12 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="amountToRelease"> The amount of purpose that will be released. </param>
     public void Release(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
     {
+        var transactionInput = ContractFunction.CreateFunction<Messages.Release>(gasPrice, gasLimit, id).CreateTransactionInput(ContractAddress);
         userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
         {
-            var promise = ContractUtils.SendContractMessage<Messages.Release>(ContractAddress,
-                                                                              request,
-                                                                              gasPrice,
-                                                                              gasLimit,
-                                                                              id);
-
-            promise.OnSuccess(_ => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"));
-        }, gasLimit, gasPrice, "Release Purpose Confirmation");
+            ContractUtils.SendContractMessage(transactionInput, request)
+                         .OnSuccess(_ => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"));
+        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, "Release Purpose Confirmation");
     }
 
     /// <summary>
