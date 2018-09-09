@@ -64,7 +64,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Checks if the inputted address is from a saved contact.
 		/// </summary>
 		/// <param name="address"> The address in the input field. </param>
-		private void CheckIfSavedAddress(string address)
+		public void CheckIfSavedAddress(string address)
 		{
 			address = address.ToLower();
 			contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].ContactName + " ]" : string.Empty;

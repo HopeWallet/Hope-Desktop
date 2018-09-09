@@ -61,7 +61,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	{
 		if (!string.IsNullOrEmpty(sendAssetPopup.Address.contactName.text))
 		{
-			string inputtedAddress = sendAssetPopup.Address.addressField.Text;
+			string inputtedAddress = sendAssetPopup.Address.addressField.Text.ToLower();
 
 			for (int i = 0; i < contactsListTransform.childCount; i++)
 			{
@@ -76,7 +76,13 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// <summary>
 	/// Sets the contact button to interactable again after the contacts popup has been destroyed
 	/// </summary>
-	private void OnDestroy() => sendAssetPopup.contactsClosed?.Invoke();
+	private void OnDestroy()
+	{
+		sendAssetPopup.contactsClosed?.Invoke();
+
+		if (!sendAssetPopup.Address.addressField.Error)
+			sendAssetPopup.Address.CheckIfSavedAddress(sendAssetPopup.Address.addressField.Text);
+	}
 
 	/// <summary>
 	/// Adds the contact buttons accourding to all the saved contacts in the SecurePlayerPrefs
@@ -104,6 +110,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private void ConfirmButtonClicked()
 	{
 		sendAssetPopup.Address.addressField.Text = ActiveContactButton.RealContactAddress;
+		sendAssetPopup.Address.contactName.gameObject.AnimateGraphic(1f, 0.15f);
 		popupManager.CloseActivePopup();
 	}
 
