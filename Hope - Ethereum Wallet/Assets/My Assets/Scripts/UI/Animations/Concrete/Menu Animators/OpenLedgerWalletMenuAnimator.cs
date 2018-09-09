@@ -5,6 +5,7 @@ using UnityEngine;
 public class OpenLedgerWalletMenuAnimator : UIAnimator
 {
 	[SerializeField] private GameObject awaitingConnectionText;
+	[SerializeField] private GameObject deviceConnectedText;
 	[SerializeField] private GameObject loadingIcon;
 	[SerializeField] private GameObject openWalletButton;
 
@@ -36,19 +37,12 @@ public class OpenLedgerWalletMenuAnimator : UIAnimator
 
 	private void ChangeLedgerStatus(bool ledgerConnected)
 	{
-		awaitingConnectionText.GetComponent<LoadingTextAnimator>().enabled = !ledgerConnected;
-
-		awaitingConnectionText.AnimateGraphicAndScale(0f, 0f, 0.15f, () =>
-		{
-			awaitingConnectionText.GetComponent<TextMeshProUGUI>().text = ledgerConnected ? "Device found" : "Awaiting connection";
-			awaitingConnectionText.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		});
-
-		if (ledgerConnected)
-			loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f, () => openWalletButton.AnimateGraphicAndScale(1f, 1f, 0.15f));
-		else
-			openWalletButton.AnimateGraphicAndScale(0f, 0f, 0.15f, () => loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f));
+		SwitchObjects(ledgerConnected ? loadingIcon : openWalletButton, ledgerConnected ? openWalletButton : loadingIcon);
+		SwitchObjects(ledgerConnected ? awaitingConnectionText : deviceConnectedText, ledgerConnected ? deviceConnectedText : awaitingConnectionText);
 	}
 
-
+	private void SwitchObjects(GameObject gameObjectOut, GameObject gameObjectIn)
+	{
+		gameObjectOut.AnimateGraphicAndScale(0f, 0f, 0.15f, () => gameObjectIn.AnimateGraphicAndScale(1f, 1f, 0.15f));
+	}
 }
