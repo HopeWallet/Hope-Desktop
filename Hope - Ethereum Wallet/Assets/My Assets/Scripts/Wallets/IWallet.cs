@@ -31,11 +31,17 @@ public interface IWallet
     /// <param name="onTransactionSigned"> The action to call if the transaction is confirmed and signed. </param>
     /// <param name="gasLimit"> The gas limit to use with the transaction. </param>
     /// <param name="gasPrice"> The gas price to use with the transaction. </param>
-    /// <param name="signerAddress"> The address of the wallet signing the transaction. </param>
-    /// <param name="transactionInput"> The input that goes along with the transaction request. </param>
+    /// <param name="value"> The amount of ether in wei being sent along with the transaction. </param>
+    /// <param name="addressFrom"> The address of the wallet signing the transaction. </param>
+    /// <param name="addressTo"> The address the transaction is being sent to. </param>
+    /// <param name="data"> The data sent along with the transaction. </param>
+    /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
     void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
                             BigInteger gasLimit,
                             BigInteger gasPrice,
-                            string signerAddress,
-                            params object[] transactionInput) where T : ConfirmTransactionPopupBase<T>;
+                            BigInteger value,
+                            string addressFrom,
+                            string addressTo,
+                            string data,
+                            params object[] displayInput) where T : ConfirmTransactionPopupBase<T>;
 }

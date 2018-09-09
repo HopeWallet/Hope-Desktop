@@ -99,7 +99,7 @@ public sealed class UserWalletManager
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, WalletAddress, displayInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, displayInput);
     }
 
     /// <summary>

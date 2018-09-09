@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Numerics;
 using Nethereum.JsonRpc.UnityClient;
+using Nethereum.Signer;
 
 public sealed class TrezorWallet : HardwareWallet
 {
-    public TrezorWallet(EthereumNetworkManager.Settings ethereumNetworkSettings) : base(ethereumNetworkSettings)
+    public TrezorWallet(
+        EthereumNetworkManager ethereumNetworkManager,
+        EthereumNetworkManager.Settings ethereumNetworkSettings) : base(ethereumNetworkManager, ethereumNetworkSettings)
     {
     }
 
-    public override void InitializeAddresses()
+    public override async void InitializeAddresses()
     {
     }
 
-    public override void SignTransaction<T>(
-        Action<TransactionSignedUnityRequest> onTransactionSigned,
-        BigInteger gasLimit,
-        BigInteger gasPrice,
-        string signerAddress,
-        params object[] transactionInput)
+    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, uint addressIndex)
     {
     }
 }
