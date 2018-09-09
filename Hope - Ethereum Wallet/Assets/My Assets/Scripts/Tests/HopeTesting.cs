@@ -50,8 +50,6 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 using Org.BouncyCastle.Crypto.Prng;
 using Nethereum.Hex.HexTypes;
-using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
 using Nethereum.Util;
 using Nethereum.RPC.Eth.Transactions;
 using Nethereum.Contracts.ContractHandlers;

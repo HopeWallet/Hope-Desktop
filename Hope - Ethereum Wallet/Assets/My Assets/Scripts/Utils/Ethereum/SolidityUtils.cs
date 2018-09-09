@@ -58,7 +58,13 @@ namespace Hope.Utils.Ethereum
         /// <param name="uintOutput"> The <see cref="SimpleOutputs.UIntBase"/> output to convert to decimal format. </param>
         /// <param name="decimals"> The number of decimal places to convert the value to. </param>
         /// <returns> The uint converted from <see cref="BigInteger"/> range to a readable decimal. </returns>
-        public static decimal ConvertFromUInt(SimpleOutputs.UIntBase uintOutput, int decimals) => ConvertFromUInt(uintOutput.Value, decimals);
+        public static decimal ConvertFromUInt(SimpleOutputs.UIntBase uintOutput, int decimals)
+        {
+            if (uintOutput == null)
+                return 0;
+
+            return ConvertFromUInt(uintOutput.Value, decimals);
+        }
 
         /// <summary>
         /// Gets the BigInteger value corresponding to the number of decimal places needed.

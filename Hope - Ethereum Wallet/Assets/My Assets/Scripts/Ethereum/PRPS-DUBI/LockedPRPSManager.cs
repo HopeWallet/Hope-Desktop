@@ -110,6 +110,9 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     private void AddNewItem(Hodler.Output.Item item, BigInteger lockedTimeStamp)
     {
+        if (item.ReleaseTime == 0)
+            return;
+
         if (!lockedItems.Select(lockedItem => lockedItem.LockedTimeStamp).Contains(lockedTimeStamp))
         {
             UpdateItemInfo(item, lockedTimeStamp);
@@ -119,7 +122,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         }
         else
         {
-            var oldItem = lockedItems.Single(lockedItem => lockedItem.Id == item.Id);
+            var oldItem = lockedItems.Single(lockedItem => lockedItem.LockedTimeStamp == lockedTimeStamp);
             oldItem.Fulfilled = item.Fulfilled;
             UpdateItemInfo(oldItem, lockedTimeStamp);
         }

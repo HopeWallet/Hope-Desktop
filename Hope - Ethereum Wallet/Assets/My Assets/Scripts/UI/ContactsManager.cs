@@ -26,7 +26,7 @@ public sealed class ContactsManager
             var walletAddress = userWalletManager.WalletAddress;
             var info = userWalletInfoManager.GetWalletInfo(walletAddress);
 
-            if (string.IsNullOrEmpty(info?.WalletName))
+            if (!string.IsNullOrEmpty(info?.WalletName))
                 AddContact(walletAddress, info.WalletName);
         };
     }
