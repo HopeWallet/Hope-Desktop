@@ -46,6 +46,7 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 		wordCountSection.GetComponent<SingleChoiceButtonsBase>().OnButtonChanged += PassphraseWordCountChanged;
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
 		importMnemonicMenu.LastSelectableField = wordInputFields[11].InputFieldBase;
+		nextButton.GetComponent<Button>().onClick.AddListener(() => Animating = true);
 	}
 
 	/// <summary>

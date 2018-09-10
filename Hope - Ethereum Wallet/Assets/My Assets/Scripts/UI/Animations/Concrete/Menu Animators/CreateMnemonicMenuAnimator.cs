@@ -48,6 +48,7 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	{
 		generateNewButton.transform.GetComponent<Button>().onClick.AddListener(StartWordAnimation);
 		copyAllButton.transform.GetComponent<Button>().onClick.AddListener(() => { if (!animatingIcon) AnimateCheckMarkIcon(); });
+		nextButton.GetComponent<Button>().onClick.AddListener(() => Animating = true);
 	}
 
 	/// <summary>
