@@ -22,7 +22,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     public WalletUnlocker(
         PopupManager popupManager,
-        PlayerPrefPassword playerPrefPassword,
+        PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         HopeWalletInfoManager.Settings walletSettings,
         HopeWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)

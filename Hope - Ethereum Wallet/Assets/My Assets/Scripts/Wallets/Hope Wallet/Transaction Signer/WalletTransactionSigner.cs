@@ -14,13 +14,13 @@ public sealed class WalletTransactionSigner
     /// <summary>
     /// Initializes the <see cref="WalletTransactionSigner"/> by assigning all references.
     /// </summary>
-    /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPassword"/> instance to assign to the <see cref="WalletDecryptor"/>. </param>
+    /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPasswordDerivation"/> instance to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="dynamicDataCache"> The active <see cref="DynamicDataCache"/> to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="ethereumNetwork"> The active <see cref="EthereumNetwork"/>. </param>
     /// <param name="passwordEncryptor"> The <see cref="MemoryEncryptor"/> instance used to encrypt the password. </param>
     /// <param name="walletSettings"> The settings for the <see cref="HopeWallet"/>. </param>
     public WalletTransactionSigner(
-        PlayerPrefPassword playerPrefPassword,
+        PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         EthereumNetwork ethereumNetwork,
         MemoryEncryptor passwordEncryptor,
@@ -42,9 +42,9 @@ public sealed class WalletTransactionSigner
     public void SignTransaction(string walletAddress, byte[] encryptedPasswordBytes, Action<TransactionSignedUnityRequest> onRequestReceived)
     {
         byte[] plainTextBytes = passwordEncryptor.Decrypt(encryptedPasswordBytes);
-        walletDecryptor.DecryptWallet(plainTextBytes.GetUTF8String(), (seed, derivation) =>
+        walletDecryptor.DecryptWallet(plainTextBytes, (seed, path) =>
         {
-            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, derivation).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
+            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, path).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
             MainThreadExecutor.QueueAction(() => onRequestReceived?.Invoke(request));
             ClearData(seed, plainTextBytes);
         });

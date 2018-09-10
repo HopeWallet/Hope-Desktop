@@ -61,15 +61,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			for (int i = 1; ; i++)
 			{
-				try
-				{
-					if (hopeWalletInfoManager.GetWalletInfo(i).WalletName.EqualsIgnoreCase(textInField) && walletName != textInField)
-						return true;
-				}
-				catch
-				{
-					return false;
-				}
+                if (hopeWalletInfoManager.GetWalletInfo(i).WalletName.EqualsIgnoreCase(textInField) && walletName != textInField)
+                    return true;
+                else if (string.IsNullOrEmpty(hopeWalletInfoManager.GetWalletInfo(i).WalletName))
+                    return false;
 			}
 		}
 
