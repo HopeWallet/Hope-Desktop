@@ -5,7 +5,6 @@
 /// </summary>
 public static class DateTimeUtils
 {
-
     public static readonly DateTime UnixTimeStart = new DateTime(1970, 1, 1);
 
     public const int YEAR_IN_SECONDS = 31536000;
@@ -27,35 +26,35 @@ public static class DateTimeUtils
     /// <returns> The DateTime of the unix time stamp. </returns>
     public static DateTime TimeStampToDateTime(double timeStamp) => UnixTimeStart.AddSeconds(timeStamp).ToLocalTime();
 
-	/// <summary>
-	/// Gets the formatted date, and the proper 12 hour formatted time.
-	/// </summary>
-	/// <param name="dateTime"> The DateTime object to get the string representation for. </param>
-	/// <returns></returns>
-	public static string GetFormattedDateString(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year + " - " + dateTime.GetTimeString();
+    /// <summary>
+    /// Gets the formatted date, and the proper 12 hour formatted time.
+    /// </summary>
+    /// <param name="dateTime"> The DateTime object to get the string representation for. </param>
+    /// <returns></returns>
+    public static string GetFormattedDateString(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year + " - " + dateTime.GetTimeString();
 
-	/// <summary>
-	/// Gets the formatted 12 hour time, not including the seconds
-	/// </summary>
-	/// <param name="dateTime"> The DateTime object to get the string representation for. </param>
-	/// <returns></returns>
-	public static string GetTimeString(this DateTime dateTime)
-	{
-		int hour = dateTime.Hour;
+    /// <summary>
+    /// Gets the formatted 12 hour time, not including the seconds
+    /// </summary>
+    /// <param name="dateTime"> The DateTime object to get the string representation for. </param>
+    /// <returns></returns>
+    public static string GetTimeString(this DateTime dateTime)
+    {
+        int hour = dateTime.Hour;
 
-		string timeConvention = hour >= 12 && hour != 24 ? "PM" : "AM";
-		string twelveHourTime = hour > 12 ? (hour - 12).ToString() : hour == 0 ? 12.ToString() : hour.ToString();
+        string timeConvention = hour >= 12 && hour != 24 ? "PM" : "AM";
+        string twelveHourTime = hour > 12 ? (hour - 12).ToString() : hour == 0 ? 12.ToString() : hour.ToString();
 
-		return twelveHourTime + ":" + dateTime.Minute.ToString("00") + " " + timeConvention;
-	}
+        return twelveHourTime + ":" + dateTime.Minute.ToString("00") + " " + timeConvention;
+    }
 
-	/// <summary>
-	/// Gets a formatted string in the form of month day, year.
-	/// Example: January 1, 2018
-	/// </summary>
-	/// <param name="dateTime"> The DateTime object to get the string representation for. </param>
-	/// <returns> The formatted string of this DateTime object. </returns>
-	public static string GetStringFormattedDate(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year;
+    /// <summary>
+    /// Gets a formatted string in the form of month day, year.
+    /// Example: January 1, 2018
+    /// </summary>
+    /// <param name="dateTime"> The DateTime object to get the string representation for. </param>
+    /// <returns> The formatted string of this DateTime object. </returns>
+    public static string GetStringFormattedDate(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year;
 
     /// <summary>
     /// Gets the maximum time interval in a unix time.
@@ -110,7 +109,7 @@ public static class DateTimeUtils
     /// <returns> The month in string format. </returns>
     private static string GetMonthString(DateTime dateTime)
     {
-        switch(dateTime.Month)
+        switch (dateTime.Month)
         {
             case 1: return "January";
             case 2: return "February";

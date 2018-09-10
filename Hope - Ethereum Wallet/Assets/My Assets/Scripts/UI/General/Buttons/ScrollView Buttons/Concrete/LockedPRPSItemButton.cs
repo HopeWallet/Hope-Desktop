@@ -1,5 +1,6 @@
 ﻿using Hope.Utils.Ethereum;
 using Nethereum.Hex.HexTypes;
+using System.Linq;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
@@ -114,7 +115,7 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         purposeAmountText.text = lockedPurpose.ConvertDecimalToString().LimitEnd(12, "...");
         dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(11, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
-        timeLeftText.text = currentTimeDifference < 0 ? "Done" : DateTimeUtils.GetMaxTimeInterval((int)currentTimeDifference);
+        timeLeftText.text = currentTimeDifference < 0 ? "Done" : GetTimeLeftString((int)currentTimeDifference);
     }
 
     /// <summary>
@@ -134,5 +135,50 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
 
         releasePurposeButton.interactable = item.UnlockableGasLimit.HasValue
             && etherBalance > GasUtils.CalculateMaximumGasCost(StandardGasPrice.FunctionalGasPrice.Value, item.UnlockableGasLimit.Value);
+    }
+
+    /// <summary>
+    /// Gets the formatted time left string.
+    /// Formats it in up to three different time types, starting from the maximum.
+    /// For example, if the Purpose will unlock in 2 hours and 59 minutes, the string will be 2h 59m xs. (where x is the number of seconds).
+    /// If the Purpose will unlock in 3 months, 22 days, the string will be 3m 3w 1d.
+    /// </summary>
+    /// <param name="unixTime"> The unix time which represents when the Purpose will be unlocked. </param>
+    /// <returns> The formatted string which displays the time left until the unlock. </returns>
+    private string GetTimeLeftString(long unixTime)
+    {
+        var times = new[]
+        {
+            new { MaxTime = 1, TimeText = "s" },
+            new { MaxTime = DateTimeUtils.MINUTE_IN_SECONDS, TimeText = "m" },
+            new { MaxTime = DateTimeUtils.HOUR_IN_SECONDS, TimeText = "h" },
+            new { MaxTime = DateTimeUtils.DAY_IN_SECONDS, TimeText = "d" },
+            new { MaxTime = DateTimeUtils.MONTH_IN_SECONDS, TimeText = "m" },
+            new { MaxTime = DateTimeUtils.YEAR_IN_SECONDS, TimeText = "y" }
+        };
+
+        string[] resultTimeText = new string[3];
+
+        int counter = 0;
+        long remainder = unixTime;
+
+        for (int i = times.Length - 1; i >= 0; i--)
+        {
+            if (unixTime / times[i].MaxTime > 0)
+            {
+                long time = remainder / times[i].MaxTime;
+
+                if (time > 0)
+                    resultTimeText[counter] = time + times[i].TimeText;
+
+                remainder %= times[i].MaxTime;
+                counter++;
+            }
+
+            if (counter == 3)
+                break;
+        }
+
+        return string.Join(" ", resultTimeText.Where(text => !string.IsNullOrEmpty(text)));
     }
 }
