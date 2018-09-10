@@ -1,6 +1,7 @@
 ﻿
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class OpenLedgerWalletMenuAnimator : UIAnimator
 {
@@ -35,8 +36,9 @@ public sealed class OpenLedgerWalletMenuAnimator : UIAnimator
 
 	private void ChangeLedgerStatus(bool ledgerConnected)
 	{
-		SwitchObjects(ledgerConnected ? loadingIcon : openWalletButton, ledgerConnected ? openWalletButton : loadingIcon);
 		SwitchObjects(ledgerConnected ? awaitingConnectionText : deviceConnectedText, ledgerConnected ? deviceConnectedText : awaitingConnectionText);
+		loadingIcon.AnimateGraphicAndScale(ledgerConnected ? 0f : 1f, ledgerConnected ? 0f : 1f, 0.15f);
+		openWalletButton.GetComponent<Button>().interactable = ledgerConnected;
 	}
 
 	private void SwitchObjects(GameObject gameObjectOut, GameObject gameObjectIn)
