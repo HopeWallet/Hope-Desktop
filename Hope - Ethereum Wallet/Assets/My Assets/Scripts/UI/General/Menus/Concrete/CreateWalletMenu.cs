@@ -11,8 +11,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
 {
     [SerializeField] private Button nextButton;
 
-    [SerializeField]
-    private HopeInputField walletNameField,
+    [SerializeField] private HopeInputField walletNameField,
                                             password1Field,
                                             password2Field;
 
@@ -126,7 +125,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
             password2Field.errorMessage.text = "Passwords do not match";
 
         password2Field.UpdateVisuals();
-        SetButtonInteractable();
+		SetButtonInteractable();
     }
 
     /// <summary>

@@ -100,7 +100,7 @@ public class HopeInputField : MonoBehaviour
 		UpdateVisuals();
 
 		if (eye != null)
-			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.1f);
+			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.15f);
 	}
 
 	/// <summary>

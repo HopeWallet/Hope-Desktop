@@ -8,23 +8,47 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	{
 		private HopeInputField currentPasswordField, newPasswordField, confirmPasswordField;
 		private GameObject loadingIcon;
-		private Button saveButton;
+		private Button saveButton, nextButton;
+
+		private SettingsPopupAnimator settingsPopupAnimator;
+
+		private bool creatingNewPassword;
 
 		public PasswordSection(HopeInputField currentPasswordField,
 							  HopeInputField newPasswordField,
 							  HopeInputField confirmPasswordField,
 							  GameObject loadingIcon,
-							  Button saveButton)
+							  Button saveButton,
+							  Button nextButton,
+							  SettingsPopupAnimator settingsPopupAnimator)
 		{
 			this.currentPasswordField = currentPasswordField;
 			this.newPasswordField = newPasswordField;
 			this.confirmPasswordField = confirmPasswordField;
 			this.loadingIcon = loadingIcon;
 			this.saveButton = saveButton;
+			this.nextButton = nextButton;
+			this.settingsPopupAnimator = settingsPopupAnimator;
 
+			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
 			newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			saveButton.onClick.AddListener(SaveButtonClicked);
+			nextButton.onClick.AddListener(NextButtonClicked);
+		}
+
+		private void CurrentPasswordFieldChanged(string text)
+		{
+			currentPasswordField.Error = string.IsNullOrEmpty(text);
+			nextButton.interactable = !currentPasswordField.Error;
+
+			if (creatingNewPassword)
+			{
+				creatingNewPassword = false;
+				settingsPopupAnimator.CreateNewPassword(false);
+				newPasswordField.Text = string.Empty;
+				confirmPasswordField.Text = string.Empty;
+			}
 		}
 
 		/// <summary>
@@ -54,7 +78,29 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			currentPasswordField.Text = string.Empty;
 			newPasswordField.Text = string.Empty;
-			currentPasswordField.Text = string.Empty;
+			confirmPasswordField.Text = string.Empty;
+		}
+
+		private void NextButtonClicked()
+		{
+			//Check if current password is correct or not
+
+			settingsPopupAnimator.VerifyingPassword.Invoke(true);
+
+			CoroutineUtils.ExecuteAfterWait(1f, () => settingsPopupAnimator.CreateNewPassword(true));
+			creatingNewPassword = true;
+
+			//if (passwordIncorrect)
+			//{
+			//	currentPasswordField.Error = true;
+			//	settingsPopupAnimator.VerifyingPassword.Invoke(false);
+			//}
+
+			//else
+			//{
+			//	settingsPopupAnimator.PasswordCorrect.Invoke();
+			//	creatingNewPassword = true;
+			//}
 		}
 	}
 }

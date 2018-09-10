@@ -17,7 +17,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	[SerializeField] private Button passwordCategoryButton;
 	[SerializeField] private HopeInputField currentPasswordField, newPasswordField, confirmPasswordField;
-	[SerializeField] private Button passwordSaveButton;
+	[SerializeField] private Button passwordSaveButton, nextButton;
 	[SerializeField] private GameObject loadingIcon;
 
 	[SerializeField] private Button twoFactorAuthCategoryButton;
@@ -56,12 +56,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	{
 		base.OnStart();
 
+		SettingsPopupAnimator settingsPopupAnimator = Animator as SettingsPopupAnimator;
+
 		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
 			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton);
-			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton);
+			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton, nextButton, settingsPopupAnimator);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}
 		else
