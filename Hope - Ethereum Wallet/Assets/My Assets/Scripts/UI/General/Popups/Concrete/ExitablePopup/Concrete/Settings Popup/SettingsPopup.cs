@@ -61,7 +61,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
 			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton);
-			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, passwordSaveButton, loadingIcon);
+			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}
 		else
