@@ -1,7 +1,6 @@
 ﻿using Hope.Random.Integers;
 using Hope.Random.Strings;
 using System;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -11,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public static class WalletPasswordRandomizer
 {
-    private static PlayerPrefPassword PasswordObj;
+    private static PlayerPrefPasswordDerivation PasswordObj;
 
     private static int[] SavedOps;
     private static string[] SavedKeys;
@@ -28,7 +27,7 @@ public static class WalletPasswordRandomizer
         }
 
         ReplacePrefNames();
-        ReplaceOpValues();
+        //ReplaceOpValues();
         SaveChanges();
     }
 
@@ -40,23 +39,9 @@ public static class WalletPasswordRandomizer
     [PostProcessBuild(2)]
     public static void RestoreValues(BuildTarget target, string result)
     {
-        Array.Copy(SavedOps, PasswordObj.ops, SavedOps.Length);
         Array.Copy(SavedKeys, PasswordObj.keys, SavedKeys.Length);
 
         SaveChanges();
-    }
-
-    /// <summary>
-    /// Replaces the operation values by randomizing the array.
-    /// </summary>
-    private static void ReplaceOpValues()
-    {
-        var ops = PasswordObj.ops;
-
-        SavedOps = new int[ops.Length];
-        Array.Copy(ops, SavedOps, ops.Length);
-
-        PasswordObj.ops = ops.OrderBy(_ => RandomInt.Secure.MD5.GetInt()).ToArray();
     }
 
     /// <summary>
@@ -87,6 +72,5 @@ public static class WalletPasswordRandomizer
     /// Loads the WalletPassword object from the Resources folder.
     /// </summary>
     /// <returns> The SafePassword object we will change the values for. </returns>
-    private static PlayerPrefPassword GetWalletPasswordObj() => Resources.Load("PasswordBase") as PlayerPrefPassword;
-
+    private static PlayerPrefPasswordDerivation GetWalletPasswordObj() => Resources.Load("PlayerPrefPasswordDerivation") as PlayerPrefPasswordDerivation;
 }

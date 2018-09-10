@@ -7,7 +7,7 @@ using System;
 public abstract class WalletLoaderBase : SecureObject
 {
     protected readonly PopupManager popupManager;
-    protected readonly PlayerPrefPassword playerPrefPassword;
+    protected readonly PlayerPrefPasswordDerivation playerPrefPassword;
     protected readonly DynamicDataCache dynamicDataCache;
     protected readonly HopeWalletInfoManager userWalletInfoManager;
 
@@ -24,7 +24,7 @@ public abstract class WalletLoaderBase : SecureObject
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     protected WalletLoaderBase(
         PopupManager popupManager,
-        PlayerPrefPassword playerPrefPassword,
+        PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         HopeWalletInfoManager userWalletInfoManager)
     {

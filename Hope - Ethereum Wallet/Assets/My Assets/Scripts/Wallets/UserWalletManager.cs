@@ -53,8 +53,6 @@ public sealed class UserWalletManager
         this.ledgerWallet = ledgerWallet;
         this.trezorWallet = trezorWallet;
 
-        settings.safePassword.AddCharLookups(settings.safePasswordCharLookups);
-
         hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
         activeWallet = hopeWallet;
 
@@ -152,7 +150,6 @@ public sealed class UserWalletManager
     [Serializable]
     public class Settings
     {
-        public PlayerPrefPassword safePassword;
-        public string[] safePasswordCharLookups;
+        public PlayerPrefPasswordDerivation safePassword;
     }
 }

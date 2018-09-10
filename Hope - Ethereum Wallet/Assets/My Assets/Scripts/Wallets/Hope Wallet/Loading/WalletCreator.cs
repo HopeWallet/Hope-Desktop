@@ -19,7 +19,7 @@ public sealed class WalletCreator : WalletLoaderBase
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     public WalletCreator(
         PopupManager popupManager,
-        PlayerPrefPassword playerPrefPassword,
+        PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
         HopeWalletInfoManager.Settings walletSettings,
         HopeWalletInfoManager userWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, userWalletInfoManager)
@@ -79,10 +79,10 @@ public sealed class WalletCreator : WalletLoaderBase
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// </summary>
-    /// <param name="basePass"> The password that was entered by the user. </param>
-    private void TryCredentials(string basePass)
+    /// <param name="password"> The password that was entered by the user. </param>
+    private void TryCredentials(string password)
     {
-        if (string.IsNullOrEmpty(basePass) || basePass.Length < 8)
+        if (string.IsNullOrEmpty(password) || password.Length < 8)
         {
             ExceptionManager.DisplayException(new Exception("Invalid wallet password. Please use a password with more than 8 characters!"));
             return;
@@ -94,7 +94,7 @@ public sealed class WalletCreator : WalletLoaderBase
             string[] addresses = wallet.GetAddresses(50);
 
             AssignAddresses(addresses);
-            walletEncryptor.EncryptWallet(wallet.Seed, basePass, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
+            walletEncryptor.EncryptWallet(wallet.Seed, password, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
         }
         catch (Exception e)
         {

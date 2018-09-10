@@ -37,7 +37,7 @@ MonoBehaviour:
     currencySettings:
       prefName: currency
   walletSettings:
-    safePassword: {fileID: 11400000, guid: 98d26ad707ec2474f88622a396130b55, type: 2}
+    safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
     safePasswordCharLookups:
     - 47Vp)gZGRjQf3SNIHUO9^8X&2@ihBLAym*KnM-svok0xJqP=dFCEw$+l5z#!61ra_%tDTb(YWuec
     - )6SaVx2I_ouh*5G8vEe^Ks-qtU&4wmL%O9#J!cjr=fYlRyD@n(C$BN0bQAgPT1dpHWZiF7+kzXM3
