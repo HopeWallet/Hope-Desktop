@@ -12,7 +12,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private SettingsPopupAnimator settingsPopupAnimator;
 
-		private bool creatingNewPassword;
+		public bool creatingNewPassword { get; private set; }
 
 		public PasswordSection(HopeInputField currentPasswordField,
 							  HopeInputField newPasswordField,
@@ -35,6 +35,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			saveButton.onClick.AddListener(SaveButtonClicked);
 			nextButton.onClick.AddListener(NextButtonClicked);
+
+			currentPasswordField.InputFieldBase.ActivateInputField();
 		}
 
 		private void CurrentPasswordFieldChanged(string text)
@@ -87,20 +89,20 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			settingsPopupAnimator.VerifyingPassword.Invoke(true);
 
-			CoroutineUtils.ExecuteAfterWait(1f, () => settingsPopupAnimator.CreateNewPassword(true));
-			creatingNewPassword = true;
+			bool passwordCorrect = true;
 
-			//if (passwordIncorrect)
-			//{
-			//	currentPasswordField.Error = true;
-			//	settingsPopupAnimator.VerifyingPassword.Invoke(false);
-			//}
+			if (passwordCorrect)
+			{
+				settingsPopupAnimator.CreateNewPassword.Invoke(true);
+				creatingNewPassword = true;
+				newPasswordField.InputFieldBase.ActivateInputField();
 
-			//else
-			//{
-			//	settingsPopupAnimator.PasswordCorrect.Invoke();
-			//	creatingNewPassword = true;
-			//}
+			}
+			else
+			{
+				currentPasswordField.Error = true;
+				settingsPopupAnimator.VerifyingPassword.Invoke(false);
+			}
 		}
 	}
 }

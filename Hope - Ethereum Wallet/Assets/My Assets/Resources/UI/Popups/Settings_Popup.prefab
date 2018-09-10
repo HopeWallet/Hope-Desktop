@@ -6667,6 +6667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitButton: {fileID: 114329233411420534}
+  categoryButtons: {fileID: 114623860586915256}
   idleTimeoutTimeCheckbox: {fileID: 114899159167206742}
   countdownTimerCheckbox: {fileID: 114711658273490876}
   transactionNotificationCheckbox: {fileID: 114093349561290548}

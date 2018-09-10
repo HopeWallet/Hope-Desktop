@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
+	[SerializeField] private CategoryButtons categoryButtons;
 	[SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
 	[SerializeField] private HopeInputField idleTimeoutTimeInputField;
 
@@ -58,6 +58,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		SettingsPopupAnimator settingsPopupAnimator = Animator as SettingsPopupAnimator;
 
+		categoryButtons.OnButtonChanged += CategoryChanged;
+
 		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
@@ -71,6 +73,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			DisabledCategoryButton(walletCategoryButton);
 			DisabledCategoryButton(passwordCategoryButton);
 			DisabledCategoryButton(twoFactorAuthCategoryButton);
+		}
+	}
+
+	private void CategoryChanged(int num)
+	{
+		if (num == 2)
+		{
+			newWalletNameField.InputFieldBase.ActivateInputField();
+		}
+		else if (num == 3)
+		{
+			if (passwordSection.creatingNewPassword)
+				newPasswordField.InputFieldBase.ActivateInputField();
+			else
+				currentPasswordField.InputFieldBase.ActivateInputField();
 		}
 	}
 
