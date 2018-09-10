@@ -33,12 +33,14 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     private void OnEnable()
     {
         UserWalletManager.OnWalletLoadSuccessful += OpenMainWalletMenu;
+        UserWalletManager.OnWalletLoadUnsuccessful += OnWalletLoadUnsuccessful;
         periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     private void OnDisable()
     {
         UserWalletManager.OnWalletLoadSuccessful -= OpenMainWalletMenu;
+        UserWalletManager.OnWalletLoadUnsuccessful -= OnWalletLoadUnsuccessful;
         periodicUpdateManager.RemovePeriodicUpdater(this);
     }
 
@@ -50,7 +52,14 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     private void OpenWallet()
     {
         popupManager.GetPopup<LoadingPopup>();
+        openLedgerWalletButton.interactable = false;
         ledgerWallet.InitializeAddresses();
+    }
+
+    private void OnWalletLoadUnsuccessful()
+    {
+        popupManager.CloseAllPopups();
+        openLedgerWalletButton.interactable = true;
     }
 
     public async void PeriodicUpdate()

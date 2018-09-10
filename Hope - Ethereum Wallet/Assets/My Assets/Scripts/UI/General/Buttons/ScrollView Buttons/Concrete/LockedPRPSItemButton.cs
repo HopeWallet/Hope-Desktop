@@ -140,8 +140,8 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
     /// <summary>
     /// Gets the formatted time left string.
     /// Formats it in up to three different time types, starting from the maximum.
-    /// For example, if the Purpose will unlock in 2 hours and 59 minutes, the string will be 2h 59m xs. (where x is the number of seconds).
-    /// If the Purpose will unlock in 3 months, 22 days, the string will be 3m 3w 1d.
+    /// For example, if the Purpose will unlock in 2 hours and 59 minutes, the string will be 2h 59m xs (where x is the number of seconds).
+    /// If the Purpose will unlock in 3 months, 22 days, the string will be 3m 22d xh (where x is the number of hours).
     /// </summary>
     /// <param name="unixTime"> The unix time which represents when the Purpose will be unlocked. </param>
     /// <returns> The formatted string which displays the time left until the unlock. </returns>
