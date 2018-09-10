@@ -1,4 +1,6 @@
-﻿using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Security.PBKDF2;
+using Hope.Security.PBKDF2.Engines.Blake2b;
+using Hope.Security.ProtectedTypes.Types;
 using System;
 using System.Threading.Tasks;
 
@@ -56,7 +58,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <returns> The task used to check the password. </returns>
     private async Task TryPassword(string password, string saltedHash)
     {
-        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => PasswordEncryption.Blake2.VerifyPassword(password, saltedHash)).ConfigureAwait(false);
+        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => new PBKDF2PasswordHashing(new Blake2b_512_Engine()).VerifyPassword(password, saltedHash)).ConfigureAwait(false);
 
         if (!correctPassword)
             IncorrectPassword();

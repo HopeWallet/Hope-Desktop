@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Ledger.Net;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
@@ -49,7 +50,7 @@ public sealed class LedgerWallet : HardwareWallet
         if (ledgerManager == null)
             return;
 
-        var derivationData = Ledger.Net.Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, addressIndex, false, ledgerManager.CurrentCoin.IsSegwit);
+        var derivationData = Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, addressIndex, false, ledgerManager.CurrentCoin.IsSegwit);
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);
 

@@ -1,6 +1,8 @@
 ﻿using Hope.Random;
 using Hope.Random.Bytes;
 using Hope.Security.HashGeneration;
+using Hope.Security.PBKDF2;
+using Hope.Security.PBKDF2.Engines.Blake2b;
 using Hope.Security.ProtectedTypes.Types;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
@@ -85,7 +87,7 @@ public sealed class WalletEncryptor : SecureObject
             string hash4 = RandomBytes.Secure.Blake2.GetBytes(128).GetBase64String();
 
             encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), (hash1 + hash2).SHA3_512()), (hash3 + hash4).SHA3_512());
-            saltedPasswordHash = PasswordEncryption.Blake2.GetSaltedPasswordHash(passwordBase);
+            saltedPasswordHash = new PBKDF2PasswordHashing(new Blake2b_512_Engine()).GetSaltedPasswordHash(passwordBase);
 
             encryptedHashes = new string[] { dataEncryptor.Encrypt(hash1), dataEncryptor.Encrypt(hash2), dataEncryptor.Encrypt(hash3), dataEncryptor.Encrypt(hash4) };
         }
