@@ -181,7 +181,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			SendableAmount = usingTokenCurrency ? newSendableAmount : oppositeCurrencyValue;
 
-			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount))
+			if (maxToggle.IsToggledOn != (SendableAmount == MaxSendableAmount) && SendableAmount != 0)
 			{
 				maxToggle.IsToggledOn = SendableAmount == MaxSendableAmount;
 				maxToggle.AnimateImages();
