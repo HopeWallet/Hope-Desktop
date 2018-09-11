@@ -70,10 +70,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			//Change password
 
+			settingsPopupAnimator.CreateNewPassword.Invoke(false);
+			currentPasswordField.InputFieldBase.interactable = true;
 			currentPasswordField.Text = string.Empty;
 			newPasswordField.Text = string.Empty;
 			confirmPasswordField.Text = string.Empty;
-			currentPasswordField.InputFieldBase.interactable = true;
 		}
 
 		private void NextButtonClicked()

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Nethereum.Signer;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,10 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		nextPageButton.onClick.AddListener(() => PageChanged(true));
 
 		for (int i = 0; i < 5; i++)
+		{
 			SetButtonListener(i);
+			addressesSection.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = EthECKey.GenerateKey().GetPublicAddress();
+		}
 	}
 
 	private void SetButtonListener(int num) => addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));

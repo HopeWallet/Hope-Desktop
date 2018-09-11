@@ -38,17 +38,6 @@ MonoBehaviour:
       prefName: currency
   walletSettings:
     safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
-    safePasswordCharLookups:
-    - 47Vp)gZGRjQf3SNIHUO9^8X&2@ihBLAym*KnM-svok0xJqP=dFCEw$+l5z#!61ra_%tDTb(YWuec
-    - )6SaVx2I_ouh*5G8vEe^Ks-qtU&4wmL%O9#J!cjr=fYlRyD@n(C$BN0bQAgPT1dpHWZiF7+kzXM3
-    - F-oG9&)TCsZd_P5rW8SIO4ia!2*Kvph7kebtgnz1@+HB3yj^UJE%$Rm6YMN(AlQwDfq=X#cuxL0V
-    - NWOpL1fotyKeMaEmAR&IYD+(k=Q@*7Cr-xqH%_iF!U2S)B#gV6sn8jwdZ45^u9T$JvhX3GbcPzl0
-    - 1ko05m(AREnzWpg=qxV#CHvb_ID!@S$l7+P9Jas)%3Zi2fUYjtTL6BXFwyGc^Nu*4K&h-OerMQd8
-    - _dkA#zb@se3GqwPT6rofELgxW5MnIH1Sa&iZO8VDu4p!tK7cBlN9*-2=)C(vhU^$0QFmy%YJ+RjX
-    - w)C=v1_uZShb6YLfMNXj!nKIr4qB^lt$P@Jap3gc%57W+V#(UeA-*yDxHG9T&2RimOsod0zQFE8k
-    - sE8cz0AHmUIvt#F(nQPBN@*yf2K$DgqiOYrR=ST+o)X9bZC^3-&14xVd!MLuajJkel7pG56Wh%w_
-    - $_XwlcNx^pCIuYGUm51!8gA#fi4+Jd@oQhW-q*)2&jEM0nazsZtFDH(7OrL%6bev=TSyRK9B3kPV
-    - Vl1ORpA@JLZ+&K=hm-U#(GB)YoI3$seHbv*0xcC^6g7TMDNw4f!QW_%jFdakSr5qu8PXzE2yi9nt
   ethereumNetworkSettings:
     networkType: 4
   uiSettings:
@@ -94,6 +83,7 @@ MonoBehaviour:
       - {fileID: 1200313821591180, guid: adf7f14f77ea5e345b2d0780878f84fa, type: 2}
       - {fileID: 1626687375279500, guid: c66b8f84e1c289d40871f0f61e96ffd3, type: 2}
       - {fileID: 1535748500373604, guid: 67ab6b3e8cbfe4047816e960ad313165, type: 2}
+      - {fileID: 1736856466228382, guid: da7f2219878e4f2499afdbca320773b0, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75

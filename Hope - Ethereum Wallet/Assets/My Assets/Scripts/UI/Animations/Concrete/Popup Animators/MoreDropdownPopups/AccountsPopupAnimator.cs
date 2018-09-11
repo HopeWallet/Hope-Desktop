@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nethereum.Signer;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,6 +50,7 @@ public class AccountsPopupAnimator : UIAnimator
 
 		addressObject.AnimateScaleY(0f, 0.15f, () =>
 		{
+			addressObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = EthECKey.GenerateKey().GetPublicAddress();
 			addressObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (firstAddressNumInList + i).ToString();
 			SetAddressButtonInteractable(addressObject, currentlySelectedAddress != (firstAddressNumInList + i));
 			addressObject.AnimateScaleY(1f, 0.15f);
