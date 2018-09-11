@@ -122,12 +122,15 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		switch (num)
 		{
 			case 0:
-				popupManager.GetPopup<SettingsPopup>();
-				break;
-			case 1:
 				//Open up About popup
 				break;
+			case 1:
+				//Open accounts popup
+				break;
 			case 2:
+				popupManager.GetPopup<SettingsPopup>();
+				break;
+			case 3:
 				//Go back to wallet list menu (logout)
 				break;
 		}

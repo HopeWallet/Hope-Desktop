@@ -24,12 +24,17 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.idleTimeoutTimeInputField = idleTimeoutTimeInputField;
 			idleTimeoutTimeSection = idleTimeoutTimeInputField.transform.parent.gameObject;
 
+			SetListeners();
+			SetCurrentSettings();
+		}
+
+		private void SetListeners()
+		{
 			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
 			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
 			countdownTimerCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("countdown timer", boolean);
 			transactionNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("transaction notification", boolean);
 			updateNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("update notification", boolean);
-			SetCurrentSettings();
 		}
 
 		private void SetCurrentSettings()

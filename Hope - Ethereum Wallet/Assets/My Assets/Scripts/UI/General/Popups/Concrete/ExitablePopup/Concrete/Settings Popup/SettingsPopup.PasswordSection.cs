@@ -1,18 +1,16 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
-	public sealed class PasswordSection
+	public sealed class PasswordSection : ITabButtonObservable, IEnterButtonObservable
 	{
 		private HopeInputField currentPasswordField, newPasswordField, confirmPasswordField;
 		private GameObject loadingIcon;
 		private Button saveButton, nextButton;
 
 		private SettingsPopupAnimator settingsPopupAnimator;
-
-		public bool creatingNewPassword { get; private set; }
+		private ButtonClickObserver buttonClickObserver;
 
 		public PasswordSection(HopeInputField currentPasswordField,
 							  HopeInputField newPasswordField,
@@ -20,7 +18,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 							  GameObject loadingIcon,
 							  Button saveButton,
 							  Button nextButton,
-							  SettingsPopupAnimator settingsPopupAnimator)
+							  SettingsPopupAnimator settingsPopupAnimator,
+							  ButtonClickObserver buttonClickObserver)
 		{
 			this.currentPasswordField = currentPasswordField;
 			this.newPasswordField = newPasswordField;
@@ -29,28 +28,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.saveButton = saveButton;
 			this.nextButton = nextButton;
 			this.settingsPopupAnimator = settingsPopupAnimator;
+			this.buttonClickObserver = buttonClickObserver;
 
-			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
+			SetListeners();
+		}
+
+		private void SetListeners()
+		{
+			buttonClickObserver.SubscribeObservable(this);
+
+			currentPasswordField.Error = false;
+			currentPasswordField.OnInputUpdated += (text) => nextButton.interactable = !string.IsNullOrEmpty(text);
 			newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			saveButton.onClick.AddListener(SaveButtonClicked);
 			nextButton.onClick.AddListener(NextButtonClicked);
-
-			currentPasswordField.InputFieldBase.ActivateInputField();
-		}
-
-		private void CurrentPasswordFieldChanged(string text)
-		{
-			currentPasswordField.Error = string.IsNullOrEmpty(text);
-			nextButton.interactable = !currentPasswordField.Error;
-
-			if (creatingNewPassword)
-			{
-				creatingNewPassword = false;
-				settingsPopupAnimator.CreateNewPassword(false);
-				newPasswordField.Text = string.Empty;
-				confirmPasswordField.Text = string.Empty;
-			}
 		}
 
 		/// <summary>
@@ -81,20 +73,20 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			currentPasswordField.Text = string.Empty;
 			newPasswordField.Text = string.Empty;
 			confirmPasswordField.Text = string.Empty;
+			currentPasswordField.InputFieldBase.interactable = true;
 		}
 
 		private void NextButtonClicked()
 		{
-			//Check if current password is correct or not
-
 			settingsPopupAnimator.VerifyingPassword.Invoke(true);
 
+			//Check if current password is correct or not
 			bool passwordCorrect = true;
 
 			if (passwordCorrect)
 			{
 				settingsPopupAnimator.CreateNewPassword.Invoke(true);
-				creatingNewPassword = true;
+				currentPasswordField.InputFieldBase.interactable = false;
 				newPasswordField.InputFieldBase.ActivateInputField();
 
 			}
@@ -103,6 +95,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				currentPasswordField.Error = true;
 				settingsPopupAnimator.VerifyingPassword.Invoke(false);
 			}
+		}
+
+		public void TabButtonPressed(ClickType clickType)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void EnterButtonPressed(ClickType clickType)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

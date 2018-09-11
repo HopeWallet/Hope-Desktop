@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
-	public sealed class WalletSection
+	public sealed class WalletSection : ITabButtonObservable, IEnterButtonObservable
 	{
 		private HopeInputField currentWalletNameField, newWalletNameField;
 		private Button saveButton, deleteButton;
@@ -11,6 +11,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private HopeWalletInfoManager hopeWalletInfoManager;
 		private UserWalletManager userWalletManager;
+		private ButtonClickObserver buttonClickObserver;
 
 		private string walletName;
 
@@ -19,7 +20,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 							 HopeInputField currentWalletNameField,
 							 HopeInputField newWalletNameField,
 							 Button saveButton,
-							 Button deleteButton)
+							 Button deleteButton,
+							 ButtonClickObserver buttonClickObserver)
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.userWalletManager = userWalletManager;
@@ -27,6 +29,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.newWalletNameField = newWalletNameField;
 			this.saveButton = saveButton;
 			this.deleteButton = deleteButton;
+			this.buttonClickObserver = buttonClickObserver;
+
+			SetListeners();
+		}
+
+		private void SetListeners()
+		{
+			buttonClickObserver.SubscribeObservable(this);
 
 			saveButton.onClick.AddListener(SaveButtonClicked);
 			deleteButton.onClick.AddListener(DeleteButtonClicked);
@@ -85,6 +95,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void DeleteButtonClicked()
 		{
 
+		}
+
+		public void TabButtonPressed(ClickType clickType)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void EnterButtonPressed(ClickType clickType)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

@@ -64,8 +64,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
-			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton);
-			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton, nextButton, settingsPopupAnimator);
+			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton, buttonClickObserver);
+			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton, nextButton, settingsPopupAnimator, buttonClickObserver);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}
 		else
@@ -84,10 +84,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		}
 		else if (num == 3)
 		{
-			if (passwordSection.creatingNewPassword)
-				newPasswordField.InputFieldBase.ActivateInputField();
-			else
+			if (currentPasswordField.InputFieldBase.interactable)
 				currentPasswordField.InputFieldBase.ActivateInputField();
+			else
+				newPasswordField.InputFieldBase.ActivateInputField();
 		}
 	}
 
