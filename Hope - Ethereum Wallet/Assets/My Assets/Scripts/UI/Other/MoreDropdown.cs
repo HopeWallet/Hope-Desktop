@@ -125,7 +125,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				//Open up About popup
 				break;
 			case 1:
-				//Open accounts popup
+				popupManager.GetPopup<AccountsPopup>();
 				break;
 			case 2:
 				popupManager.GetPopup<SettingsPopup>();

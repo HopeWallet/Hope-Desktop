@@ -47,7 +47,8 @@ public sealed class PopupManager
         ExitConfirmationPopup.Factory exitConfirmationPopupFactory,
         DeleteContactPopup.Factory deleteContactPopupFactory,
 		ConnectionLostPopup.Factory conectionLostPopupFactory,
-		SettingsPopup.Factory settingsPopupFactory)
+		SettingsPopup.Factory settingsPopupFactory,
+		AccountsPopup.Factory accountsPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -67,7 +68,8 @@ public sealed class PopupManager
                                exitConfirmationPopupFactory,
                                deleteContactPopupFactory,
 							   conectionLostPopupFactory,
-							   settingsPopupFactory);
+							   settingsPopupFactory,
+							   accountsPopupFactory);
     }
 
     /// <summary>

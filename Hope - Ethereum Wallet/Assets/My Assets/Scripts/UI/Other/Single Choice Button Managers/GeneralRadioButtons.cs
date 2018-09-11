@@ -10,6 +10,7 @@ public sealed class GeneralRadioButtons : SingleChoiceButtonsBase
 	{
 		base.SetButtonVisuals(activeButton, active);
 
-		transform.GetChild(activeButton).GetChild(0).gameObject.AnimateColor(active ? UIColors.White : UIColors.LightGrey, 0.15f);
+		for (int i = 0; i < transform.GetChild(activeButton).childCount; i++)
+			transform.GetChild(activeButton).GetChild(i).gameObject.AnimateColor(active ? UIColors.White : UIColors.LightGrey, 0.15f);
 	}
 }
