@@ -8,13 +8,17 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 	[SerializeField] private Transform addressesSection;
 	[SerializeField] private Button previousPageButton, nextPageButton;
 	[SerializeField] private TextMeshProUGUI pageNumText;
+	[SerializeField] private GameObject loadingIcon;
 
-	private int pageNum = 1, firstAddressNumInList = 1, currentlySelectedAddress = 1, currentlyActivatedAddress = 1;
+	private AccountsPopupAnimator accountsPopupAnimator;
+
+	private int pageNum = 1, firstAddressNumInList = 1, currentlySelectedAddress = 1, currentlyUnlockedAddress = 1;
 
 	protected override void Awake()
 	{
 		base.Awake();
 
+		accountsPopupAnimator = Animator as AccountsPopupAnimator;
 		addressesCategories.OnButtonChanged += AddressCategoryChanged;
 		previousPageButton.onClick.AddListener(() => PageChanged(false));
 		nextPageButton.onClick.AddListener(() => PageChanged(true));
@@ -34,7 +38,7 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		SetAddressInteractable(selectedAddressTransform, false);
 		currentlySelectedAddress = int.Parse(selectedAddressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
-		okButton.interactable = currentlyActivatedAddress != currentlySelectedAddress;
+		okButton.interactable = currentlyUnlockedAddress != currentlySelectedAddress;
 	}
 
 	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
@@ -51,17 +55,8 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		firstAddressNumInList = (pageNum * 5) - 4;
 		pageNumText.text = pageNum.ToString();
 
-		for (int i = 0; i < 5; i++)
-		{
-			Transform addressTransform = addressesSection.GetChild(i);
-
-			addressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (firstAddressNumInList + i).ToString();
-
-			if (currentlySelectedAddress == (firstAddressNumInList + i))
-				SetAddressInteractable(addressTransform, false);
-			else
-				SetAddressInteractable(addressTransform, true);
-		}
+		//When addresses are done loading:
+		accountsPopupAnimator.AnimatePageChange(firstAddressNumInList, currentlySelectedAddress);
 	}
 
 	private void AddressCategoryChanged(int num)
@@ -82,5 +77,13 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
 		for (int i = 0; i < addressTransform.childCount; i++)
 			addressTransform.GetChild(i).gameObject.AnimateColor(interactable ? UIColors.LightGrey : UIColors.White, 0.15f);
+	}
+
+	private void SetLoadingIcon(bool active)
+	{
+		if (active)
+			loadingIcon.SetActive(true);
+
+		loadingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.1f, () => { if (!active) loadingIcon.SetActive(false); });
 	}
 }
