@@ -21,9 +21,14 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
 
     private const int PASSWORD_LENGTH = 16;
 
+    /// <summary>
+    /// Derives a password to use to encrypt data given the starting password (seed).
+    /// </summary>
+    /// <param name="startingPassword"> The starting password to use to derive our encryption password. </param>
+    /// <returns> The derived encryption password based on the original password. </returns>
     public byte[] Derive(byte[] startingPassword)
     {
-        byte[] derivedSeed = startingPassword;
+        byte[] derivedSeed = RandomBytes.Secure.Blake2.GetBytes(startingPassword, 128).Concat(startingPassword).ToArray().SHA3_512();
         for (int i = 0; i < keys.Length; i++)
         {
             byte[] last = derivedSeed.SHA3_512();
@@ -41,9 +46,14 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
         return derivedSeed.Blake2_512();
     }
 
+    /// <summary>
+    /// Restores a password to use to encrypt data given the starting password (seed).
+    /// </summary>
+    /// <param name="startingPassword"> The starting password to use to restore our encryption password. </param>
+    /// <returns> The restored encryption password based on the original password. </returns>
     public byte[] Restore(byte[] startingPassword)
     {
-        byte[] derivedSeed = startingPassword;
+        byte[] derivedSeed = RandomBytes.Secure.Blake2.GetBytes(startingPassword, 128).Concat(startingPassword).ToArray().SHA3_512();
         for (int i = 0; i < keys.Length; i++)
         {
             byte[] last = derivedSeed.SHA3_512();

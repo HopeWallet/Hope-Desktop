@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using Hope.Utils.Ethereum;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
@@ -66,7 +65,7 @@ public abstract class HardwareWallet : IWallet
             byte[] valueBytes = value.ToBytesForRLPEncoding();
             byte[] dataBytes = data.HexToByteArray();
 
-            uint index = (uint)addresses.ToList().IndexOf(addresses.Where(address => address.EqualsIgnoreCase(addressFrom)).First());
+            uint index = (uint)addresses.ToList().IndexOf(addresses.First(address => address.EqualsIgnoreCase(addressFrom)));
 
             SignTransaction(
                 onTransactionSigned,
