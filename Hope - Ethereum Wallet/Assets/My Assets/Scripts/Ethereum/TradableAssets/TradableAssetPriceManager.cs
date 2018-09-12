@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public sealed class TradableAssetPriceManager : IPeriodicUpdater
 {
+    public event Action OnPriceUpdateStarted;
+    public event Action OnPriceUpdateSucceeded;
+    public event Action OnPriceUpdateFailed;
+
     private readonly CoinMarketCapDataManager coinMarketCapDataManager;
     private readonly DubiExDataManager dubiexDataManager;
     private readonly TradableAssetManager tradableAssetManager;
@@ -14,11 +19,14 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
         CoinMarketCapDataManager coinMarketCapDataManager,
         DubiExDataManager dubiexDataManager,
         TradableAssetManager tradableAssetManager,
+        TradableAssetButtonManager tradableAssetButtonManager,
         PeriodicUpdateManager periodicUpdateManager)
     {
         this.coinMarketCapDataManager = coinMarketCapDataManager;
         this.dubiexDataManager = dubiexDataManager;
         this.tradableAssetManager = tradableAssetManager;
+
+        tradableAssetButtonManager.OnActiveButtonChanged += activeButton => UpdatePrice(activeButton.ButtonInfo);
 
         UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
     }
@@ -35,6 +43,8 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
 
     private void UpdatePrice(TradableAsset tradableAsset)
     {
+        OnPriceUpdateStarted?.Invoke();
+
         coinMarketCapDataManager.GetCoinPrice(tradableAsset.AssetSymbol)
                                 .OnSuccess(price => OnCoinMarketCapPriceFound(tradableAsset, price))
                                 .OnError(_ => OnCoinMarketCapPriceNotFound(tradableAsset));
@@ -44,16 +54,34 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
     {
         if (!prices.ContainsKey(tradableAsset.AssetSymbol))
             prices.Add(tradableAsset.AssetSymbol, price.Value);
+        else
+            prices[tradableAsset.AssetSymbol] = price.Value;
+
+        OnPriceUpdateSucceeded?.Invoke();
     }
 
     private void OnCoinMarketCapPriceNotFound(TradableAsset tradableAsset)
     {
-        dubiexDataManager.GetRecentEthPrice(tradableAsset.AssetSymbol).OnSuccess(price => OnDubiExPriceFound(tradableAsset, price));
+        coinMarketCapDataManager.GetCoinPrice("ETH").OnSuccess(ethPrice =>
+        {
+            if (!prices.ContainsKey("ETH"))
+                prices.Add("ETH", ethPrice.Value);
+            else
+                prices["ETH"] = ethPrice.Value;
+
+            dubiexDataManager.GetRecentEthPrice(tradableAsset.AssetSymbol)
+                             .OnSuccess(price => OnDubiExPriceFound(tradableAsset, price))
+                             .OnError(_ => OnPriceUpdateFailed?.Invoke());
+        });
     }
 
     private void OnDubiExPriceFound(TradableAsset tradableAsset, decimal? price)
     {
         if (!prices.ContainsKey(tradableAsset.AssetSymbol))
             prices.Add(tradableAsset.AssetSymbol, price.Value * prices["ETH"]);
+        else
+            prices[tradableAsset.AssetSymbol] = price.Value * prices["ETH"];
+
+        OnPriceUpdateSucceeded?.Invoke();
     }
 }

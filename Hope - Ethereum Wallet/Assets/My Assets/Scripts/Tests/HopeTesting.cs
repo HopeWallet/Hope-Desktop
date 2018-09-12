@@ -69,9 +69,18 @@ using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
 using Hid.Net.Unity;
+using UniRx;
+using Nethereum.ABI.JsonDeserialisation;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    //private void Start()
+    //{
+    //    //Nethereum.ABI.JsonDeserialisation.ABIDeserialiser deserializer = new ABIDeserialiser();
+    //    //var abi = deserializer.DeserialiseContract("");
+    //    //abi.Constructor.InputParameters[0].
+    //}
+
     //public string code;
 
     //private string previousCode;

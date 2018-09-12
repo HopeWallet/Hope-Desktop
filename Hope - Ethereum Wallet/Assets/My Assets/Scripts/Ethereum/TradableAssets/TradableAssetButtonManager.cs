@@ -8,6 +8,8 @@ using Object = UnityEngine.Object;
 /// </summary>
 public sealed class TradableAssetButtonManager
 {
+    public event Action<AssetButton> OnActiveButtonChanged;
+
     private readonly TokenContractManager tokenContractManager;
     private readonly AssetButton.Factory buttonFactory;
 
@@ -96,6 +98,8 @@ public sealed class TradableAssetButtonManager
 
         newAssetButton.Button.interactable = false;
         activeAssetButton = newAssetButton;
+
+        OnActiveButtonChanged?.Invoke(activeAssetButton);
     }
 
     /// <summary>

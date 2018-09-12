@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -202,8 +203,16 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
     private void ReadJsonData<T>(string transactionList, string assetAddress, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
-        EtherscanAPIJson<T> transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
-
+        EtherscanAPIJson<T> transactionsJson = null;
+        try
+        {
+            transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.Log(e);
+            UnityEngine.Debug.Log(transactionList);
+        }
         if (transactionsJson == null)
             return;
 

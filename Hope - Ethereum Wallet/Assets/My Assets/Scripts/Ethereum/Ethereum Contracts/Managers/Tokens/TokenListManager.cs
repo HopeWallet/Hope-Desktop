@@ -21,7 +21,6 @@ public sealed class TokenListManager
         EthereumNetworkManager.Settings networkSettings)
     {
         addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName, (int)networkSettings.networkType);
-        addableTokens.Clear();
         InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
     }
 

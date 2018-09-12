@@ -69,10 +69,11 @@ public sealed class LedgerWallet : HardwareWallet
             response.SignatureS,
             new byte[] { (byte)response.SignatureV });
 
-        var ethSendRawTransaction = new EthSendRawTransactionUnityRequest(ethereumNetworkManager.CurrentNetwork.NetworkUrl);
         MainThreadExecutor.QueueAction(() =>
         {
+            var ethSendRawTransaction = new EthSendRawTransactionUnityRequest(ethereumNetworkManager.CurrentNetwork.NetworkUrl);
             ethSendRawTransaction.SendRequest(transactionChainId.GetRLPEncoded().ToHex()).StartCoroutine();
+
             popupManager.CloseAllPopups();
         });
     }

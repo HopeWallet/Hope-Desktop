@@ -3,6 +3,7 @@ using Hope.Utils.Promises;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Numerics;
+using UnityEngine;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.

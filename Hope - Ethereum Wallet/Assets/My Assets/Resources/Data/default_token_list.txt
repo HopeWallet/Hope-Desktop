@@ -12,12 +12,6 @@
     "decimals": 18
   },
   {
-    "address": "0x05f4a42e251f2d52b8ed15e9fedaacfcef1fad27",
-    "name": "Zilliqa",
-    "symbol": "ZIL",
-    "decimals": 12
-  },
-  {
     "address": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
     "name": "Maker",
     "symbol": "MKR",
