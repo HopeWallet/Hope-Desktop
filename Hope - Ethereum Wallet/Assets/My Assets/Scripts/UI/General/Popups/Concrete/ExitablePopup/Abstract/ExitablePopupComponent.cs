@@ -6,7 +6,6 @@
 /// <typeparam name="T"> The type of popup. </typeparam>
 public abstract class ExitablePopupComponent<T> : FactoryPopup<T> where T : FactoryPopup<T>
 {
-
     public Button exitButton;
 
     /// <summary>

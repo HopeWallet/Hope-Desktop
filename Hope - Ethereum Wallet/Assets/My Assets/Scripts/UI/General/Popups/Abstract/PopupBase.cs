@@ -5,7 +5,6 @@
 /// </summary>
 public abstract class PopupBase : MonoBehaviour
 {
-
     /// <summary>
     /// The animator of this popup.
     /// </summary>

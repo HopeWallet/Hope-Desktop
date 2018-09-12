@@ -96,13 +96,13 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
 			yield break;
 
-		//currentIdleTime.Log();
+		currentIdleTime.Log();
 
 		if (previousMousePosition == Input.mousePosition)
 		{
 			if ((currentIdleTime / 60) == maxIdleTime)
 			{
-				popupManager.GetPopup<UnlockWalletPopup>();
+				popupManager.GetPopup<UnlockWalletPopup>().SetPopupDetails(() => CheckIfIdle().StartCoroutine(), false);
 				yield break;
 			}
 			else
