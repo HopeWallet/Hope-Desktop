@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using UniRx;
 
 /// <summary>
 /// Class which manages the loading and updating of ethereum and token transaction data.
@@ -74,6 +74,23 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
             return;
 
         isScraping = true;
+
+        //var asset1 = assetsToScrape.Dequeue();
+        //var asset2 = assetsToScrape.Dequeue();
+
+        //Observable.WhenAll(ObservableWWW.Get(asset1.Url), ObservableWWW.Get(asset2.Url))
+        //          .Subscribe(resultData =>
+        //          {
+        //              Observable.WhenAll(Observable.Start(() =>
+        //              {
+        //                  asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt, null);
+        //                  asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt, null);
+        //              })).SubscribeOnMainThread().Subscribe(_ =>
+        //              {
+        //                  MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
+        //                  isScraping = false;
+        //              });
+        //          });
 
         ScrapeAsset(assetsToScrape.Dequeue(), () => ScrapeAsset(assetsToScrape.Dequeue(), () =>
         {

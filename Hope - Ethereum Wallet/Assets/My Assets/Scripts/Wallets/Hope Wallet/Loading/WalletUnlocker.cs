@@ -2,7 +2,7 @@
 using Hope.Security.PBKDF2.Engines.Blake2b;
 using Hope.Security.ProtectedTypes.Types;
 using System;
-using System.Threading.Tasks;
+using UniRx;
 
 /// <summary>
 /// Class used for unlocking the hope wallet.
@@ -45,25 +45,18 @@ public sealed class WalletUnlocker : WalletLoaderBase
         }
         else
         {
-            string saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
-            AsyncTaskScheduler.Schedule(() => TryPassword(userPass, saltedHash));
+            var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
+
+            Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(userPass) ? false : new PBKDF2PasswordHashing(new Blake2b_512_Engine()).VerifyPassword(userPass, saltedHash)))
+                      .ObserveOnMainThread()
+                      .Subscribe(correctPass =>
+                      {
+                          if (!correctPass[0])
+                              IncorrectPassword();
+                          else
+                              CorrectPassword(userPass);
+                      });
         }
-    }
-
-    /// <summary>
-    /// Tests the password entered against the pbkdf2 salted hash.
-    /// </summary>
-    /// <param name="password"> The password entered by the user. </param>
-    /// <param name="saltedHash"> The pbkdf2 salted password hash. </param>
-    /// <returns> The task used to check the password. </returns>
-    private async Task TryPassword(string password, string saltedHash)
-    {
-        bool correctPassword = string.IsNullOrEmpty(password) ? false : await Task.Run(() => new PBKDF2PasswordHashing(new Blake2b_512_Engine()).VerifyPassword(password, saltedHash)).ConfigureAwait(false);
-
-        if (!correctPassword)
-            IncorrectPassword();
-        else
-            CorrectPassword(password);
     }
 
     /// <summary>
@@ -74,7 +67,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
         var unlockWalletPopup = popupManager.GetPopup<UnlockWalletPopup>();
         unlockWalletPopup.DisableClosing = false;
 
-        MainThreadExecutor.QueueAction(() => (unlockWalletPopup.Animator as UnlockWalletPopupAnimator)?.PasswordIncorrect());
+        (unlockWalletPopup.Animator as UnlockWalletPopupAnimator)?.PasswordIncorrect();
     }
 
     /// <summary>
@@ -86,6 +79,6 @@ public sealed class WalletUnlocker : WalletLoaderBase
         AssignAddresses(userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).WalletAddresses);
         dynamicDataCache.SetData("pass", new ProtectedString(password, this));
 
-        MainThreadExecutor.QueueAction(onWalletLoaded);
+        onWalletLoaded?.Invoke();
     }
 }
