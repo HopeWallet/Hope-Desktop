@@ -1,6 +1,6 @@
 ﻿using Hope.Security.ProtectedTypes.Types;
 using System;
-using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -33,11 +33,12 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
 	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
 	[Inject]
-	public void Construct(UIManager uiManager,
-						  UserWalletManager userWalletManager,
-						  DynamicDataCache dynamicDataCache,
-						  ButtonClickObserver buttonClickObserver)
-	{
+	public void Construct(
+        UIManager uiManager,
+        UserWalletManager userWalletManager,
+        DynamicDataCache dynamicDataCache,
+        ButtonClickObserver buttonClickObserver)
+    {
 		this.uiManager = uiManager;
 		this.userWalletManager = userWalletManager;
 		this.dynamicDataCache = dynamicDataCache;
@@ -98,21 +99,19 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// <summary>
 	/// Attempts to unlock the wallet with the password entered in the field.
 	/// </summary>
-	private async void LoadWallet()
+	private void LoadWallet()
 	{
 		string text = passwordField.Text;
 
-		await Task.Run(() =>
-		{
-			DisableClosing = true;
+        Observable.Start(() =>
+        {
+            DisableClosing = true;
 
-			if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
-				((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(text);
-			else
-				dynamicDataCache.SetData("pass", new ProtectedString(text));
-
-			MainThreadExecutor.QueueAction(() => userWalletManager.UnlockWallet());
-		}).ConfigureAwait(false);
+            if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
+                ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(text);
+            else
+                dynamicDataCache.SetData("pass", new ProtectedString(text));
+        }).SubscribeOnMainThread().Subscribe(_ => userWalletManager.UnlockWallet());
 	}
 
 	private void ClosePopup()
