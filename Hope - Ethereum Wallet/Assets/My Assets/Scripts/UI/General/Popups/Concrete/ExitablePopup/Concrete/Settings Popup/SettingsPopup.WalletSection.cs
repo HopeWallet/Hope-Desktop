@@ -1,10 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
-	public sealed class WalletSection : ITabButtonObservable, IEnterButtonObservable
+	public sealed class WalletSection
 	{
 		private HopeInputField currentPasswordField, walletNameField, newPasswordField, confirmPasswordField;
 		private Button editWalletButton, saveButton, deleteButton;
@@ -12,7 +11,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private HopeWalletInfoManager hopeWalletInfoManager;
 		private UserWalletManager userWalletManager;
-		private ButtonClickObserver buttonClickObserver;
 		private SettingsPopupAnimator settingsPopupAnimator;
 
 		private string walletName;
@@ -30,7 +28,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		public WalletSection(HopeWalletInfoManager hopeWalletInfoManager,
 							 UserWalletManager userWalletManager,
-							 ButtonClickObserver buttonClickObserver,
 							 SettingsPopupAnimator settingsPopupAnimator,
 							 HopeInputField currentPasswordField,
 							 HopeInputField walletNameField,
@@ -43,7 +40,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.userWalletManager = userWalletManager;
-			this.buttonClickObserver = buttonClickObserver;
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.currentPasswordField = currentPasswordField;
 			this.walletNameField = walletNameField;
@@ -59,8 +55,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private void SetListeners()
 		{
-			buttonClickObserver.SubscribeObservable(this);
-
 			saveButton.onClick.AddListener(SaveButtonClicked);
 			deleteButton.onClick.AddListener(DeleteButtonClicked);
 			editWalletButton.onClick.AddListener(EditWalletButtonClicked);
@@ -178,16 +172,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			checkMarkIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
 				() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (checkMarkIcon != null) checkMarkIcon.AnimateGraphic(0f, 0.25f, () => AnimatingIcon = false); }));
-		}
-
-		public void TabButtonPressed(ClickType clickType)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public void EnterButtonPressed(ClickType clickType)
-		{
-			throw new System.NotImplementedException();
 		}
 	}
 }
