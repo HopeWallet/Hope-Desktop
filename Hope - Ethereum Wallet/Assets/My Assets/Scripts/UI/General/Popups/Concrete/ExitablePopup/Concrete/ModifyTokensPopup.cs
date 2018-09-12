@@ -92,7 +92,7 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 
         removedTokens.ForEach(info => tokenContractManager.RemoveToken(info.TokenInfo.Address));
         tokensToDisable.ForEach(tokenButton => tokenContractManager.RemoveToken(tokenButton.ButtonInfo.TokenInfo.Address));
-        tokensToEnable.ForEach(tokenButton => tokenContractManager.AddToken(tokenButton.ButtonInfo.TokenInfo));
+        tokensToEnable.ForEach(tokenButton => tokenContractManager.AddAndUpdateToken(tokenButton.ButtonInfo.TokenInfo));
 
         popupManager.CloseActivePopup();
     }

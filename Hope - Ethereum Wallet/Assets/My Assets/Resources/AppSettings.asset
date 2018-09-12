@@ -39,7 +39,7 @@ MonoBehaviour:
   walletSettings:
     safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
   ethereumNetworkSettings:
-    networkType: 4
+    networkType: 1
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
@@ -92,5 +92,5 @@ MonoBehaviour:
       mainnetAddress: 0xd94F2778e2B3913C53637Ae60647598bE588c570
       rinkebyAddress: 0x5831819C84C05DdcD2568dE72963AC9f1e6831b6
     dubiSettings:
-      mainnetAddress: 0xd94F2778e2B3913C53637Ae60647598bE588c570
+      mainnetAddress: 0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c
       rinkebyAddress: 0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203

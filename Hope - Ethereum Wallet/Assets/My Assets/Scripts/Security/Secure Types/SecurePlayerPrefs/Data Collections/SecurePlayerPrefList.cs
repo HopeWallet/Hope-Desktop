@@ -21,6 +21,11 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     public string SerializedList { get; private set; } = string.Empty;
 
     /// <summary>
+    /// The readonly List of this SecurePlayerPrefList.
+    /// </summary>
+    public List<T> ReadonlyList => itemList.ToList();
+
+    /// <summary>
     /// Initializes the <see cref="SecurePlayerPrefList"/> given the key to use to access the list in the <see cref="SecurePlayerPrefs"/>.
     /// </summary>
     /// <param name="keyName"> The key of the <see cref="SecurePlayerPrefs"/> containing the list data. </param>

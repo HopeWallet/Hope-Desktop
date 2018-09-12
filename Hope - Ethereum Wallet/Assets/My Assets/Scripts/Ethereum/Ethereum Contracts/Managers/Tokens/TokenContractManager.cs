@@ -60,16 +60,31 @@ public sealed class TokenContractManager
     /// Adds a token given the info of the token.
     /// </summary>
     /// <param name="tokenInfo"> The info of the token to add. </param>
-    public void AddToken(TokenInfo tokenInfo)
+    /// <returns> The newly created ERC20 token from this TokenInfo. </returns>
+    public ERC20 AddToken(TokenInfo tokenInfo)
     {
         ERC20 erc20Token = new ERC20(tokenInfo.Address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals);
         tokens.Add(tokenInfo);
 
-        new ERC20TokenAsset(erc20Token, asset => UpdateTradableAssets(asset, () =>
+        return erc20Token;
+    }
+
+    /// <summary>
+    /// Adds a token given the info of the token and updates the balances in the TradableAssetManager.
+    /// </summary>
+    /// <param name="tokenInfo"> The info of the token to add. </param>
+    /// <returns> The newly created ERC20 token from this TokenInfo. </returns>
+    public ERC20 AddAndUpdateToken(TokenInfo tokenInfo)
+    {
+        var token = AddToken(tokenInfo);
+
+        new ERC20TokenAsset(token, asset => UpdateTradableAssets(asset, () =>
         {
             if (popupManager.ActivePopupType == typeof(LoadingPopup))
                 popupManager.CloseActivePopup();
         }), tradableAssetImageManager, userWalletManager);
+
+        return token;
     }
 
     /// <summary>

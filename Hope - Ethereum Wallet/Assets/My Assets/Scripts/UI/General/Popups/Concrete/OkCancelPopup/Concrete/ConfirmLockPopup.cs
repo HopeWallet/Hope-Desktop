@@ -70,7 +70,7 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
 
             tokenListManager.OldTokenList.Clear();
 
-            tokenContractManager.AddToken(tokenListManager.GetToken(dubiContract.ContractAddress).TokenInfo);
+            tokenContractManager.AddAndUpdateToken(tokenListManager.GetToken(dubiContract.ContractAddress).TokenInfo);
         }
     }
 }

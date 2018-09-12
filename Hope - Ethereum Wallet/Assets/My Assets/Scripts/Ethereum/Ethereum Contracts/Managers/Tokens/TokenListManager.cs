@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
+using UnityEngine;
 
 public sealed class TokenListManager
 {
@@ -10,9 +13,16 @@ public sealed class TokenListManager
 
     public List<AddableTokenInfo> OldTokenList { get; } = new List<AddableTokenInfo>();
 
-    public TokenListManager(Settings settings, EthereumNetworkManager.Settings networkSettings)
+    public TokenListManager(
+        TokenContractManager tokenContractManager,
+        PRPS prps,
+        DUBI dubi,
+        Settings settings,
+        EthereumNetworkManager.Settings networkSettings)
     {
         addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName, (int)networkSettings.networkType);
+        addableTokens.Clear();
+        InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)
@@ -43,6 +53,42 @@ public sealed class TokenListManager
     public AddableTokenInfo GetToken(string address)
     {
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
+    }
+
+    private void InitializeDefaultTokenList(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)
+    {
+        if (addableTokens.Count > 0)
+            return;
+
+        if (ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet)
+        {
+            var defaultTokenList = Resources.Load("Data/default_token_list") as TextAsset;
+            var deserializedData = JsonUtils.DeserializeDynamicCollection(defaultTokenList.text);
+
+            for (int i = 0; i < deserializedData.Count; i++)
+            {
+                var obj = deserializedData[i];
+
+                var address = (string)obj.address;
+                var symbol = (string)obj.symbol;
+                var name = (string)obj.name;
+                var decimals = (int)obj.decimals;
+
+                var isEnabled = address.EqualsIgnoreCase(prps.ContractAddress) || address.EqualsIgnoreCase(dubi.ContractAddress);
+
+                addableTokens.Add(new AddableTokenInfo(address.ToLower(), name, symbol, decimals, isEnabled, true));
+
+                if (isEnabled)
+                    tokenContractManager.AddToken(new TokenInfo(address.ToLower(), name, symbol, decimals));
+            }
+        }
+        else
+        {
+            addableTokens.Add(new AddableTokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18, true, true));
+            addableTokens.Add(new AddableTokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18, true, true));
+            tokenContractManager.AddToken(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
+            tokenContractManager.AddToken(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
+        }
     }
 
     [Serializable]

@@ -20,8 +20,6 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
         this.dubiexDataManager = dubiexDataManager;
         this.tradableAssetManager = tradableAssetManager;
 
-        TradableAssetManager.OnTradableAssetAdded += UpdatePrice;
-
         UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
     }
 
@@ -32,7 +30,7 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
 
     public void PeriodicUpdate()
     {
-        tradableAssetManager.TradableAssets.Values.ForEach(UpdatePrice);
+        UpdatePrice(tradableAssetManager.ActiveTradableAsset);
     }
 
     private void UpdatePrice(TradableAsset tradableAsset)

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System.Dynamic;
-using System.IO;
 
 /// <summary>
 /// Class which contains extra json utility methods.
@@ -22,6 +22,13 @@ public static class JsonUtils
     /// <param name="jsonString"> The json string data. </param>
     /// <returns> The deserialized object. </returns>
     public static dynamic DeserializeDynamic(string jsonString) => string.IsNullOrEmpty(jsonString) ? null : (dynamic)JsonConvert.DeserializeObject<ExpandoObject>(jsonString, new ExpandoObjectConverter());
+
+    /// <summary>
+    /// Deserializes the json array/collection into a dynamic array object.
+    /// </summary>
+    /// <param name="jsonString"> The string containing the json collection of data. </param>
+    /// <returns> The deserialized collection. </returns>
+    public static dynamic DeserializeDynamicCollection(string jsonString) => string.IsNullOrEmpty(jsonString) ? null : (dynamic)JArray.Parse(jsonString);
 
     /// <summary>
     /// Serializes an object into the respective string json format.
