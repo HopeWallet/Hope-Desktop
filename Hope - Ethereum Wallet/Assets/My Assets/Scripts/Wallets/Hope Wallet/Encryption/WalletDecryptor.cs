@@ -51,7 +51,7 @@ public sealed class WalletDecryptor : SecureObject
             string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
             string path = SecurePlayerPrefs.GetString(walletSettings.walletDerivationPrefName + walletNum);
 
-            AsyncTaskScheduler.Schedule(() => AsyncDecryptWallet(hashLvls, encryptedSeed, path, password, walletNum, onWalletDecrypted));
+            Task.Factory.StartNew(() => AsyncDecryptWallet(hashLvls, encryptedSeed, path, password, walletNum, onWalletDecrypted));
         });
     }
 
@@ -64,8 +64,7 @@ public sealed class WalletDecryptor : SecureObject
     /// <param name="password"> The user's password to the wallet. </param>
     /// <param name="walletNum"> The number of the wallet to decrypt. </param>
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet and the <see langword="string"/> wallet derivation. </param>
-    /// <returns> Task returned which represents the decryption processing. </returns>
-    private async Task AsyncDecryptWallet(
+    private void AsyncDecryptWallet(
         string[] hashes,
         string encryptedSeed,
         string path,
@@ -75,8 +74,7 @@ public sealed class WalletDecryptor : SecureObject
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);
 
-        AdvancedSecureRandom secureRandom = await Task.Run(() =>
-            new AdvancedSecureRandom(
+        AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(
                 new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
@@ -87,7 +85,7 @@ public sealed class WalletDecryptor : SecureObject
                 walletSettings.walletNamePrefName,
                 walletSettings.walletPasswordPrefName,
                 walletNum,
-                derivedPassword)).ConfigureAwait(false);
+                derivedPassword);
 
         byte[] decryptedSeed = null;
         using (var dataEncryptor = new DataEncryptor(secureRandom))

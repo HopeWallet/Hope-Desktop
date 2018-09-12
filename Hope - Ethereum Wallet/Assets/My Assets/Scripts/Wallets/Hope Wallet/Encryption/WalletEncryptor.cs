@@ -43,7 +43,7 @@ public sealed class WalletEncryptor : SecureObject
     /// <param name="onWalletEncrypted"> Action to call once the wallet has been encrypted. Passing the array of hashes used to encrypt the wallet, the salted password hash, and encrypted seed. </param>
     public void EncryptWallet(byte[] seed, string password, int walletNum, Action<string[], string, string> onWalletEncrypted)
     {
-        AsyncTaskScheduler.Schedule(() => AsyncEncryptWallet(seed, password, walletNum, onWalletEncrypted));
+        Task.Factory.StartNew(() => AsyncEncryptWallet(seed, password, walletNum, onWalletEncrypted));
     }
 
     /// <summary>
@@ -53,8 +53,7 @@ public sealed class WalletEncryptor : SecureObject
     /// <param name="password"> The base password to use for encryption, retrieved from the user input. </param>
     /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
-    /// <returns> Task returned which represents the work needed to encrypt the wallet data. </returns>
-    private async Task AsyncEncryptWallet(
+    private void AsyncEncryptWallet(
         byte[] seed,
         string password,
         int walletNum,
@@ -62,8 +61,7 @@ public sealed class WalletEncryptor : SecureObject
     {
         byte[] derivedPassword = playerPrefPassword.Derive(password.GetUTF8Bytes());
 
-        AdvancedSecureRandom secureRandom = await Task.Run(() =>
-            new AdvancedSecureRandom(
+        AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(
                 new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
@@ -74,7 +72,7 @@ public sealed class WalletEncryptor : SecureObject
                 walletSettings.walletNamePrefName,
                 walletSettings.walletPasswordPrefName,
                 walletNum,
-                derivedPassword)).ConfigureAwait(false);
+                derivedPassword);
 
         string[] encryptedHashes = null;
         string saltedPasswordHash = null;
