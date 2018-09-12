@@ -81,11 +81,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 
 	protected override void OnExitClicked()
 	{
-		if (loadWalletOnFinish)
-		{
-			//Close popup
-		}
-		else
+		if (!loadWalletOnFinish)
 		{
 			//Go back to wallet list menu
 		}

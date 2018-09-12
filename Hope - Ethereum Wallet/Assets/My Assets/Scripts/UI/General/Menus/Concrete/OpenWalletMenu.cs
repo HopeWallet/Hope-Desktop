@@ -11,7 +11,6 @@ using Zenject;
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
 	public static event Action<TabType> OnTabChanged;
-	public static Action IdleTimeoutEnabled;
 
 	public GameObject lockPurposeSection,
 					  lockPurposeNotificationSection;
@@ -33,10 +32,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 
 	private const int MAX_ASSET_NAME_LENGTH = 36;
 	private const int MAX_ASSET_BALANCE_LENGTH = 54;
-
-	private int currentIdleTime, maxIdleTime;
-
-	private Vector3 previousMousePosition;
 
 	/// <summary>
 	/// Injects the required dependency into this class.
@@ -77,44 +72,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
 		lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
 		tokenContractManager.StartTokenLoad(OpenMenu);
-
-		IdleTimeoutEnabled = () => CheckIfIdle().StartCoroutine();
-
-		if (SecurePlayerPrefs.GetBool("idle timeout"))
-		{
-			maxIdleTime = SecurePlayerPrefs.GetInt("idle time");
-
-			previousMousePosition = Input.mousePosition;
-			CheckIfIdle().StartCoroutine();
-		}
-	}
-
-	private IEnumerator CheckIfIdle()
-	{
-		yield return new WaitForSeconds(1);
-
-		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
-			yield break;
-
-		currentIdleTime.Log();
-
-		if (previousMousePosition == Input.mousePosition)
-		{
-			if ((currentIdleTime / 60) == maxIdleTime)
-			{
-				popupManager.GetPopup<UnlockWalletPopup>().SetPopupDetails(() => CheckIfIdle().StartCoroutine(), false);
-				yield break;
-			}
-			else
-				currentIdleTime++;
-		}
-		else
-		{
-			currentIdleTime = 0;
-		}
-
-		previousMousePosition = Input.mousePosition;
-		CheckIfIdle().StartCoroutine();
 	}
 
 	/// <summary>

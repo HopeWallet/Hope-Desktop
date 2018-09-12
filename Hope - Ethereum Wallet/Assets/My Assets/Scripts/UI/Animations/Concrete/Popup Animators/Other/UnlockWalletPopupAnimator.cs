@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 /// <summary>
-/// Class which animates the UnlockWalletPopup.
+/// Class which animates the UnlockWalletPopup
 /// </summary>
 public class UnlockWalletPopupAnimator : UIAnimator
 {
@@ -11,7 +11,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject loadingIcon;
 
     /// <summary>
-    /// Initializes the necessary variables that haven't already been initialized in the inspector.
+    /// Initializes the necessary variables that haven't already been initialized in the inspector
     /// </summary>
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Sets the button to interactable if the input field is not empty.
+	/// Sets the button to interactable if the input field is not empty
 	/// </summary>
 	private void InputFieldChanged()
 	{
@@ -50,9 +50,8 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the loadingIcon while starting and finished the verify password.
+	/// Animates the loadingIcon while starting and finished the verify password
 	/// </summary>
-	/// <param name="startingProcess"> Checks if animating in or out. </param>
 	public void VerifyingPassword()
 	{
 		bool startingProcess = !loadingIcon.activeInHierarchy;

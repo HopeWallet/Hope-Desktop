@@ -59,7 +59,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			if (enabled)
 			{
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
-				OpenWalletMenu.IdleTimeoutEnabled?.Invoke();
+				IdleTimeoutManager.IdleTimeoutEnabled?.Invoke();
 			}
 		}
 
