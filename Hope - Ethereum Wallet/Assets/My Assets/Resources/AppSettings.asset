@@ -39,7 +39,7 @@ MonoBehaviour:
   walletSettings:
     safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
   ethereumNetworkSettings:
-    networkType: 1
+    networkType: 4
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
