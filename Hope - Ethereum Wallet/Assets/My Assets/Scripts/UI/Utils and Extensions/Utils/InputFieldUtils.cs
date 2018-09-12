@@ -38,31 +38,6 @@ public static class InputFieldUtils
         inputField.text = amount;
     }
 
-
-	//DELETE THIS METHOD BELOW WHEN ALL THE UI ELEMENTS HAVE BEEN REDONE TO FIT THE NEW UI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public static void RestrictDecimalValue(this TMP_InputField inputField, int decimalPlaces)
-	{
-		string amount = inputField.text;
-
-		if (amount == null)
-			return;
-
-		amount = new string(amount.Where(c => char.IsDigit(c) || c == '.').ToArray());
-		inputField.text = amount;
-
-		var decimalIndex = amount.IndexOf(".");
-		var assetDecimalLength = decimalPlaces + decimalIndex + 1;
-
-		if (decimalPlaces == 0 && decimalIndex != -1)
-			amount = amount.Substring(0, amount.Length - 1);
-
-		var substringLength = assetDecimalLength > MAX_BALANCE_FIELD_LENGTH || decimalIndex == -1 ? MAX_BALANCE_FIELD_LENGTH : assetDecimalLength;
-		if (amount.Length > substringLength)
-			amount = amount.Substring(0, substringLength);
-
-		inputField.text = amount;
-	}
-
 	/// <summary>
 	/// Gets the actively selected input field.
 	/// </summary>

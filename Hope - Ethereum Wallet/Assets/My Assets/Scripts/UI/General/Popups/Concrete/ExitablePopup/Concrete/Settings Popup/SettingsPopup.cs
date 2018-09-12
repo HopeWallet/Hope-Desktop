@@ -1,9 +1,10 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
+public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>, ITabButtonObservable, IEnterButtonObservable
 {
 	[SerializeField] private CategoryButtons categoryButtons;
 	[SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
@@ -23,6 +24,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private Image qrCodeImage;
 	[SerializeField] private HopeInputField codeInputField;
 	[SerializeField] private Button confirmButton;
+
+	private List<Selectable> selectables = new List<Selectable>();
 
 	private GeneralSection generalSection;
 	private WalletSection walletSection;
@@ -44,6 +47,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		this.buttonClickObserver = buttonClickObserver;
 		this.currencyManager = currencyManager;
 
+		buttonClickObserver.SubscribeObservable(this);
 		defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
 	}
 
@@ -57,7 +61,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
-			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, buttonClickObserver, settingsPopupAnimator, currentPasswordField, walletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveButton, deleteButton, checkMarkIcon);
+			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, currentPasswordField, walletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveButton, deleteButton, checkMarkIcon);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}
 		else
@@ -65,6 +69,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			DisabledCategoryButton(walletCategoryButton);
 			DisabledCategoryButton(twoFactorAuthCategoryButton);
 		}
+
+		selectables.Add(walletNameField.InputFieldBase);
+		selectables.Add(newPasswordField.InputFieldBase);
+		selectables.Add(confirmPasswordField.InputFieldBase);
 	}
 	private void DisabledCategoryButton(Button categoryButton)
 	{
@@ -74,7 +82,29 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	private void OnDestroy()
 	{
+		buttonClickObserver.UnsubscribeObservable(this);
 		MoreDropdown.PopupClosed?.Invoke();
 		currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType) defaultCurrencyOptions.previouslySelectedButton);
+	}
+
+	public void TabButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		SelectableExtensions.MoveToNextSelectable(selectables);
+	}
+
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
+			editWalletButton.Press();
+		else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && saveButton.interactable)
+			saveButton.Press();
+		else
+			SelectableExtensions.MoveToNextSelectable(selectables);
 	}
 }
