@@ -122,7 +122,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 		switch (num)
 		{
 			case 0:
-				//Open up About popup
+				popupManager.GetPopup<AboutPopup>();
 				break;
 			case 1:
 				popupManager.GetPopup<AccountsPopup>();

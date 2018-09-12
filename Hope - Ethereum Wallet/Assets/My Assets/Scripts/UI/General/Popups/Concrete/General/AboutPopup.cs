@@ -2,15 +2,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public sealed class AboutPopup : MonoBehaviour
+public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 {
 	[SerializeField] private TextMeshProUGUI currentVersionText, latestVersionText;
 	[SerializeField] private Button downloadUpdateButton;
 
-	private float currentVersion, latestVersion;
+	private float currentVersion = 1.05f, latestVersion = 1.07f;
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		currentVersionText.text = "Current Hope version: (v " + currentVersion.ToString("0.00") + ")";
 
 		bool upToDate = latestVersion == currentVersion;
@@ -21,4 +23,6 @@ public sealed class AboutPopup : MonoBehaviour
 		if (!upToDate)
 			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
 	}
+
+	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
 }
