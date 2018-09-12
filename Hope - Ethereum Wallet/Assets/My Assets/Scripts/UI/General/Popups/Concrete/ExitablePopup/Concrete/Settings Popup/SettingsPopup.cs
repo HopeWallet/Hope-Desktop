@@ -12,13 +12,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private GeneralRadioButtons defaultCurrencyOptions;
 
 	[SerializeField] private Button walletCategoryButton;
-	[SerializeField] private HopeInputField currentWalletNameField, newWalletNameField;
-	[SerializeField] private Button walletSaveButton, deleteButton;
-
-	[SerializeField] private Button passwordCategoryButton;
-	[SerializeField] private HopeInputField currentPasswordField, newPasswordField, confirmPasswordField;
-	[SerializeField] private Button passwordSaveButton, nextButton;
-	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private HopeInputField currentPasswordField, walletNameField, newPasswordField, confirmPasswordField;
+	[SerializeField] private Button editWalletButton, saveButton, deleteButton;
+	[SerializeField] private GameObject checkMarkIcon;
 
 	[SerializeField] private Button twoFactorAuthCategoryButton;
 	[SerializeField] private CheckBox twoFactorAuthenticationCheckbox;
@@ -30,7 +26,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	private GeneralSection generalSection;
 	private WalletSection walletSection;
-	private PasswordSection passwordSection;
 	private TwoFactorAuthenticationSection twoFactorAuthenticationSection;
 
 	private UserWalletManager userWalletManager;
@@ -58,39 +53,19 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		SettingsPopupAnimator settingsPopupAnimator = Animator as SettingsPopupAnimator;
 
-		categoryButtons.OnButtonChanged += CategoryChanged;
-
 		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField);
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
 		{
-			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, currentWalletNameField, newWalletNameField, walletSaveButton, deleteButton, buttonClickObserver);
-			passwordSection = new PasswordSection(currentPasswordField, newPasswordField, confirmPasswordField, loadingIcon, passwordSaveButton, nextButton, settingsPopupAnimator, buttonClickObserver);
+			walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, buttonClickObserver, settingsPopupAnimator, currentPasswordField, walletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveButton, deleteButton, checkMarkIcon);
 			twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 		}
 		else
 		{
 			DisabledCategoryButton(walletCategoryButton);
-			DisabledCategoryButton(passwordCategoryButton);
 			DisabledCategoryButton(twoFactorAuthCategoryButton);
 		}
 	}
-
-	private void CategoryChanged(int num)
-	{
-		if (num == 2)
-		{
-			newWalletNameField.InputFieldBase.ActivateInputField();
-		}
-		else if (num == 3)
-		{
-			if (currentPasswordField.InputFieldBase.interactable)
-				currentPasswordField.InputFieldBase.ActivateInputField();
-			else
-				newPasswordField.InputFieldBase.ActivateInputField();
-		}
-	}
-
 	private void DisabledCategoryButton(Button categoryButton)
 	{
 		categoryButton.interactable = false;

@@ -3,24 +3,28 @@ using UnityEngine;
 
 public class SettingsPopupAnimator : UIAnimator
 {
-	public Action<bool> CreateNewPassword, VerifyingPassword;
+	public Action<bool> VerifyingPassword;
+	public Action EditWallet;
 
 	[SerializeField] private GameObject settingsCategoriesParent;
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject[] sections;
 
-	[SerializeField] private GameObject nextButton;
-	[SerializeField] private GameObject newPasswordInputField;
-	[SerializeField] private GameObject confirmPasswordInputField;
-	[SerializeField] private GameObject saveButton;
-	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject editWalletButton,
+										currentPasswordField,
+										walletNameField,
+										newPasswordField,
+										confirmPasswordField,
+										deleteButton,
+										saveButton,
+										loadingIcon;
 
 	private CategoryButtons settingsCategories;
 
 	private void Awake()
 	{
-		CreateNewPassword = AnimateNewPasswordVisuals;
-		VerifyingPassword = AnimateVerifyingPasswordVisuals;
+		EditWallet = AnimateOtherFields;
+		VerifyingPassword = AnimateLoadingIcon;
 
 		settingsCategories = settingsCategoriesParent.GetComponent<CategoryButtons>();
 		settingsCategories.OnButtonChanged += CategoryChanged;
@@ -38,20 +42,26 @@ public class SettingsPopupAnimator : UIAnimator
 		sections[settingsCategories.previouslySelectedButton].AnimateScale(0f, 0.15f, () => sections[categoryNum].AnimateScale(1f, 0.15f));
 	}
 
-	private void AnimateNewPasswordVisuals(bool createNewPassword)
+	private void AnimateOtherFields()
 	{
-		loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f);
-		newPasswordInputField.AnimateScale(createNewPassword ? 1f : 0f, 0.2f);
-		confirmPasswordInputField.AnimateScale(createNewPassword ? 1f : 0f, 0.25f);
-		saveButton.AnimateScale(createNewPassword ? 1f : 0f, 0.3f);
-
-		if (!createNewPassword)
-			nextButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		currentPasswordField.AnimateScale(0f, 0.15f);
+		loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.2f, () =>
+		{
+			loadingIcon.SetActive(false);
+			walletNameField.AnimateScale(1f, 0.15f);
+			newPasswordField.AnimateScale(1f, 0.2f);
+			confirmPasswordField.AnimateScale(1f, 0.25f);
+			deleteButton.AnimateScale(1f, 0.3f);
+			saveButton.AnimateScale(1f, 0.3f);
+		});
 	}
 
-	private void AnimateVerifyingPasswordVisuals(bool verifying)
+	private void AnimateLoadingIcon(bool verifying)
 	{
-		loadingIcon.AnimateGraphicAndScale(verifying ? 1f : 0f, verifying ? 1f : 0f, 0.15f);
-		nextButton.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f);
+		if (verifying)
+			loadingIcon.SetActive(true);
+
+		loadingIcon.AnimateGraphicAndScale(verifying ? 1f : 0f, verifying ? 1f : 0f, 0.15f, () => { if (!verifying) loadingIcon.SetActive(false); });
+		editWalletButton.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f);
 	}
 }
