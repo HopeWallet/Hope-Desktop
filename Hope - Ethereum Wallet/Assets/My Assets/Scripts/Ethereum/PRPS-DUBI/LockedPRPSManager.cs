@@ -14,7 +14,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     private readonly PeriodicUpdateManager periodicUpdateManager;
     private readonly Hodler hodlerContract;
     private readonly PRPS prpsContract;
-    private readonly EthereumNetwork ethereumNetwork;
+    private EtherscanApiService apiService;
 
     private int updateCount;
     private int updateCounter;
@@ -31,15 +31,14 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         UserWalletManager userWalletManager,
         Hodler hodlerContract,
         PRPS prpsContract,
-        EthereumNetworkManager ethereumNetworkManager,
-        PeriodicUpdateManager periodicUpdateManager)
+        PeriodicUpdateManager periodicUpdateManager,
+        EtherscanApiService apiService)
     {
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
         this.hodlerContract = hodlerContract;
         this.prpsContract = prpsContract;
-
-        ethereumNetwork = ethereumNetworkManager.CurrentNetwork;
+        this.apiService = apiService;
 
         TradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
         TradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
@@ -67,8 +66,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// </summary>
     private void StartNewItemSearch()
     {
-        string apiUrl = ethereumNetwork.Api.GetTokenTransfersFromAndToUrl(prpsContract.ContractAddress, userWalletManager.WalletAddress, hodlerContract.ContractAddress);
-        UnityWebUtils.DownloadString(apiUrl, ProcessTxList);
+        apiService.SendTokenTransfersFromAndToAddressRequest(userWalletManager.WalletAddress, hodlerContract.ContractAddress, prpsContract.ContractAddress)
+                  .OnSuccess(ProcessTxList);
     }
 
     /// <summary>
@@ -135,8 +134,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         if (item.Unlockable && !item.UnlockableGasLimit.HasValue)
         {
             GasUtils.EstimateContractGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
-                                                               userWalletManager.WalletAddress,
-                                                               item.Id).OnSuccess(limit => item.UnlockableGasLimit = limit);
+                                                                       userWalletManager.WalletAddress,
+                                                                       item.Id).OnSuccess(limit => item.UnlockableGasLimit = limit);
         }
     }
 

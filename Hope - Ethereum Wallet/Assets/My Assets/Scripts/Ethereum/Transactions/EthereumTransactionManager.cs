@@ -16,7 +16,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
     private readonly TradableAssetManager tradableAssetManager;
     private readonly UserWalletManager userWalletManager;
-    private readonly EthereumAPI api;
+    private readonly EtherscanApiService apiService;
+    //private readonly EthereumAPI api;
 
     private bool isScraping;
 
@@ -31,21 +32,20 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="periodicUpdateManager"> Thge PeriodicUpdateManager to use when periodically checking for new transactions. </param>
     /// <param name="updateManager"> The UpdateManager to use when getting the transactions for each asset. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="apiService"> The active EtherscanApiService. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="ethereumNetwork"> The network manager. </param>
     public EthereumTransactionManager(PeriodicUpdateManager periodicUpdateManager,
         UpdateManager updateManager,
         TradableAssetManager tradableAssetManager,
         UserWalletManager userWalletManager,
-        EthereumNetworkManager ethereumNetwork)
+        EtherscanApiService apiService)
     {
         TradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
         TokenContractManager.OnTokensLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this);
 
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
-
-        api = ethereumNetwork.CurrentNetwork.Api;
+        this.apiService = apiService;
 
         updateManager.AddUpdater(this);
     }
@@ -75,28 +75,21 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
         isScraping = true;
 
-        //var asset1 = assetsToScrape.Dequeue();
-        //var asset2 = assetsToScrape.Dequeue();
+        var asset1 = assetsToScrape.Dequeue();
+        var asset2 = assetsToScrape.Dequeue();
 
-        //Observable.WhenAll(ObservableWWW.Get(asset1.Url), ObservableWWW.Get(asset2.Url))
-        //          .Subscribe(resultData =>
-        //          {
-        //              Observable.WhenAll(Observable.Start(() =>
-        //              {
-        //                  asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt, null);
-        //                  asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt, null);
-        //              })).SubscribeOnMainThread().Subscribe(_ =>
-        //              {
-        //                  MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
-        //                  isScraping = false;
-        //              });
-        //          });
-
-        ScrapeAsset(assetsToScrape.Dequeue(), () => ScrapeAsset(assetsToScrape.Dequeue(), () =>
+        Observable.WhenAll(ObservableWWW.Get(asset1.Url), ObservableWWW.Get(asset2.Url)).Subscribe(resultData =>
         {
-            MainThreadExecutor.QueueAction(OnTransactionsAdded);
-            isScraping = false;
-        }));
+            Observable.Start(() =>
+            {
+                asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt);
+                asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt);
+            }).SubscribeOnMainThread().Subscribe(_ =>
+            {
+                MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
+                isScraping = false;
+            });
+        });
     }
 
     /// <summary>
@@ -117,10 +110,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueEther(string walletAddress)
     {
-        QueueAsset(api.GetInternalTransactionListUrl(walletAddress),
-                   api.GetTransactionListUrl(walletAddress),
-                   EtherAsset.ETHER_ADDRESS,
-                   ProcessEtherTransactionData);
+        //QueueAsset(api.GetInternalTransactionListUrl(walletAddress),
+        //           api.GetTransactionListUrl(walletAddress),
+        //           EtherAsset.ETHER_ADDRESS,
+        //           ProcessEtherTransactionData);
     }
 
     /// <summary>
@@ -130,10 +123,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueToken(string assetAddress, string walletAddress)
     {
-        QueueAsset(api.GetTokenTransfersFromWalletUrl(walletAddress, assetAddress),
-                   api.GetTokenTransfersToWalletUrl(walletAddress, assetAddress),
-                   assetAddress,
-                   ProcessTokenTransactionData);
+        //QueueAsset(api.GetTokenTransfersFromWalletUrl(walletAddress, assetAddress),
+        //           api.GetTokenTransfersToWalletUrl(walletAddress, assetAddress),
+        //           assetAddress,
+        //           ProcessTokenTransactionData);
     }
 
     /// <summary>
@@ -143,22 +136,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="url2"> The second url containing transactions for the asset. </param>
     /// <param name="assetAddress"> The address of the asset. </param>
     /// <param name="processTransactionsAction"> Called after the transaction list has been received, which processes the transactions. </param>
-    private void QueueAsset(string url1, string url2, string assetAddress, Action<string, string, bool, Action> processTransactionsAction)
+    private void QueueAsset(string url1, string url2, string assetAddress, Action<string, string, bool> processTransactionsAction)
     {
         assetsToScrape.Enqueue(new AssetToScrape(url1, assetAddress, true, processTransactionsAction));
         assetsToScrape.Enqueue(new AssetToScrape(url2, assetAddress, false, processTransactionsAction));
-    }
-
-    /// <summary>
-    /// Scrapes the transaction list for the next asset in the queue once it has finished with the last asset.
-    /// </summary>
-    /// <param name="assetToScrape"> The current asset to have the transactions scraped for. </param>
-    /// <param name="onAssetScraped"> Action to call once the transactions have been scraped. </param>
-    private void ScrapeAsset(AssetToScrape assetToScrape, Action onAssetScraped)
-    {
-        MainThreadExecutor.QueueAction(()
-            => UnityWebUtils.DownloadString(assetToScrape.Url, txList
-                => assetToScrape.ProcessTransactionList(txList, assetToScrape.AssetAddress, assetToScrape.IgnoreReceipt, onAssetScraped)));
     }
 
     /// <summary>
@@ -167,14 +148,12 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="transactionData"> The token transaction data received from etherscan. </param>
     /// <param name="assetAddress"> The address of the token. </param>
     /// <param name="ignoreReceipt"> Whether the receipt should be ignored. Useful for ether transaction processing only. </param>
-    /// <param name="onTransactionsProcessed"> Action called once the transactions have finished processing. </param>
-    private void ProcessTokenTransactionData(string transactionData, string assetAddress, bool ignoreReceipt, Action onTransactionsProcessed)
+    private void ProcessTokenTransactionData(string transactionData, string assetAddress, bool ignoreReceipt)
     {
-        ProcessTransactionData<TokenTransactionJson>(transactionData,
-                                                     assetAddress,
-                                                     _ => true,
-                                                     info => TransactionSimplifier.CreateTokenTransaction(info, userWalletManager),
-                                                     onTransactionsProcessed);
+        ReadJsonData<TokenTransactionJson>(transactionData,
+                                           assetAddress,
+                                           _ => true,
+                                           info => TransactionSimplifier.CreateTokenTransaction(info, userWalletManager));
     }
 
     /// <summary>
@@ -183,31 +162,12 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="transactionData"> The general transaction data received from etherscan. </param>
     /// <param name="assetAddress"> The address of this asset, which is 0x000...  </param>
     /// <param name="ignoreReceipt"> Whether the receipt should be ignored, which is the case for internal transactions. </param>
-    /// <param name="onTransactionsProcessed"> Action called once the transactions have finished processing. </param>
-    private void ProcessEtherTransactionData(string transactionData, string assetAddress, bool ignoreReceipt, Action onTransactionsProcessed)
+    private void ProcessEtherTransactionData(string transactionData, string assetAddress, bool ignoreReceipt)
     {
-        ProcessTransactionData<EtherTransactionJson>(transactionData,
-                                                     assetAddress,
-                                                     info => info.isError != 1 && (ignoreReceipt || info.txreceipt_status != 0),
-                                                     info => TransactionSimplifier.CreateEtherTransaction(info, userWalletManager),
-                                                     onTransactionsProcessed);
-    }
-
-    /// <summary>
-    /// Processes the transaction data received from etherscan.
-    /// </summary>
-    /// <typeparam name="T"> The type of the transaction json object. Either EtherTransactionJson or TokenTransactionJson. </typeparam>
-    /// <param name="transactionData"> The transaction data to process. </param>
-    /// <param name="assetAddress"> The address of this asset. </param>
-    /// <param name="isValidTransaction"> Func to call to determine if the current transaction is valid or not. </param>
-    /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
-    /// <param name="onTransactionsProcessed"> Action to call once the transactions have finished processing. </param>
-    private async void ProcessTransactionData<T>(string transactionData, string assetAddress, Func<T, bool> isValidTransaction,
-        Func<T, TransactionInfo> getTransaction, Action onTransactionsProcessed)
-    {
-        await Task.Run(() => ReadJsonData(transactionData, assetAddress, isValidTransaction, getTransaction)).ConfigureAwait(false);
-
-        onTransactionsProcessed?.Invoke();
+        ReadJsonData<EtherTransactionJson>(transactionData,
+                                           assetAddress,
+                                           info => info.isError != 1 && (ignoreReceipt || info.txreceipt_status != 0),
+                                           info => TransactionSimplifier.CreateEtherTransaction(info, userWalletManager));
     }
 
     /// <summary>
@@ -221,6 +181,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     private void ReadJsonData<T>(string transactionList, string assetAddress, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
         EtherscanAPIJson<T> transactionsJson = null;
+
         try
         {
             transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
@@ -230,6 +191,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
             UnityEngine.Debug.Log(e);
             UnityEngine.Debug.Log(transactionList);
         }
+
         if (transactionsJson == null)
             return;
 

@@ -9,7 +9,7 @@ public class AssetToScrape
     /// <summary>
     /// Action to execute which processes the list of transactions found.
     /// </summary>
-    public Action<string, string, bool, Action> ProcessTransactionList { get; private set; }
+    public Action<string, string, bool> ProcessTransactionList { get; private set; }
 
     /// <summary>
     /// The url used to find the transaction list.
@@ -33,7 +33,7 @@ public class AssetToScrape
     /// <param name="assetAddress"> The asset's address. </param>
     /// <param name="ignoreReceipt"> Whether the tx_receipt should be ignored for this asset. </param>
     /// <param name="processTxlist"> Action to execute which processes the transaction list. </param>
-    public AssetToScrape(string url, string assetAddress, bool ignoreReceipt, Action<string, string, bool, Action> processTxlist)
+    public AssetToScrape(string url, string assetAddress, bool ignoreReceipt, Action<string, string, bool> processTxlist)
     {
         Url = url;
         AssetAddress = assetAddress;
