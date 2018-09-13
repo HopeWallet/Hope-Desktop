@@ -16,7 +16,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
     private readonly TradableAssetManager tradableAssetManager;
     private readonly UserWalletManager userWalletManager;
-    private readonly EthereumAPI api;
+    private readonly EtherscanApiService apiService;
+    //private readonly EthereumAPI api;
 
     private bool isScraping;
 
@@ -31,21 +32,20 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="periodicUpdateManager"> Thge PeriodicUpdateManager to use when periodically checking for new transactions. </param>
     /// <param name="updateManager"> The UpdateManager to use when getting the transactions for each asset. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="apiService"> The active EtherscanApiService. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="ethereumNetwork"> The network manager. </param>
     public EthereumTransactionManager(PeriodicUpdateManager periodicUpdateManager,
         UpdateManager updateManager,
         TradableAssetManager tradableAssetManager,
         UserWalletManager userWalletManager,
-        EthereumNetworkManager ethereumNetwork)
+        EtherscanApiService apiService)
     {
         TradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
         TokenContractManager.OnTokensLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this);
 
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
-
-        api = ethereumNetwork.CurrentNetwork.Api;
+        this.apiService = apiService;
 
         updateManager.AddUpdater(this);
     }
@@ -110,10 +110,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueEther(string walletAddress)
     {
-        QueueAsset(api.GetInternalTransactionListUrl(walletAddress),
-                   api.GetTransactionListUrl(walletAddress),
-                   EtherAsset.ETHER_ADDRESS,
-                   ProcessEtherTransactionData);
+        //QueueAsset(api.GetInternalTransactionListUrl(walletAddress),
+        //           api.GetTransactionListUrl(walletAddress),
+        //           EtherAsset.ETHER_ADDRESS,
+        //           ProcessEtherTransactionData);
     }
 
     /// <summary>
@@ -123,10 +123,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueToken(string assetAddress, string walletAddress)
     {
-        QueueAsset(api.GetTokenTransfersFromWalletUrl(walletAddress, assetAddress),
-                   api.GetTokenTransfersToWalletUrl(walletAddress, assetAddress),
-                   assetAddress,
-                   ProcessTokenTransactionData);
+        //QueueAsset(api.GetTokenTransfersFromWalletUrl(walletAddress, assetAddress),
+        //           api.GetTokenTransfersToWalletUrl(walletAddress, assetAddress),
+        //           assetAddress,
+        //           ProcessTokenTransactionData);
     }
 
     /// <summary>

@@ -74,23 +74,6 @@ using Nethereum.ABI.JsonDeserialisation;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    public int requestCount = 1;
-    private int oldRequestCount;
-
-    private void Update()
-    {
-        if (requestCount != oldRequestCount)
-        {
-            oldRequestCount = requestCount;
-            CoinMarketCapApiService apiService = new CoinMarketCapApiService();
-
-            for (int i = 0; i < requestCount; i++)
-            {
-                apiService.SendListingRequest().OnSuccess(_ => Debug.Log("DONE"));
-            }
-        }
-    }
-
     //private void Start()
     //{
     //    //Nethereum.ABI.JsonDeserialisation.ABIDeserialiser deserializer = new ABIDeserialiser();

@@ -57,6 +57,9 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<DynamicDataCache>().AsSingle().NonLazy();
 
+        Container.Bind<EtherscanApiService>().AsSingle().NonLazy();
+        Container.Bind<CoinMarketCapApiService>().AsSingle().NonLazy();
+
         Container.Bind<CoinMarketCapDataManager>().AsSingle().NonLazy();
         Container.Bind<DubiExDataManager>().AsSingle().NonLazy();
 

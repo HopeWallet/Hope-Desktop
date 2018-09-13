@@ -19,12 +19,12 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     /// Initializes the network manager by setting up the different networks.
     /// </summary>
     /// <param name="settings"> The <see cref="Settings"/> to apply to this <see cref="EthereumNetworkManager"/>. </param>
-    public EthereumNetworkManager(Settings settings) : base()
+    public EthereumNetworkManager(Settings settings)
     {
         this.settings = settings;
 
-        mainnet = new EthereumNetwork("https://mainnet.infura.io", "https://api.etherscan.io/api?");
-        rinkeby = new EthereumNetwork("https://rinkeby.infura.io", "https://api-rinkeby.etherscan.io/api?");
+        mainnet = new EthereumNetwork("https://mainnet.infura.io");
+        rinkeby = new EthereumNetwork("https://rinkeby.infura.io");
     }
 
     /// <summary>

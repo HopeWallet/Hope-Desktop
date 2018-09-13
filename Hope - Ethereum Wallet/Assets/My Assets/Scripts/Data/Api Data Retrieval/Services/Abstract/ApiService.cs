@@ -1,14 +1,17 @@
 ﻿using Hope.Utils.Promises;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
+/// <summary>
+/// Base class to use to send calls to api urls while staying within the allowed call amount per second.
+/// </summary>
 public abstract class ApiService
 {
+    /// <summary>
+    /// Struct which represents a query request to be sent.
+    /// </summary>
     private struct QueuedRequest
     {
         public string urlRequest;
@@ -24,10 +27,19 @@ public abstract class ApiService
 
     private WaitForSeconds waitForSeconds;
 
+    /// <summary>
+    /// The base url of the api.
+    /// </summary>
     protected abstract string ApiUrl { get; }
 
+    /// <summary>
+    /// The maximum number of allowed calls per minute.
+    /// </summary>
     protected abstract int MaximumCallsPerMinute { get; }
 
+    /// <summary>
+    /// Initializes the ApiService by assigning all timing variables and starting the api timer.
+    /// </summary>
     protected ApiService()
     {
         float callsPerSecond = MaximumCallsPerMinute / 60f;
@@ -38,11 +50,21 @@ public abstract class ApiService
         ApiTimerCoroutine().StartCoroutine();
     }
 
+    /// <summary>
+    /// Builds the api url with the arguments.
+    /// </summary>
+    /// <param name="arguments"> The api arguments to add to the request. </param>
+    /// <returns> The api request. </returns>
     protected string BuildRequest(string arguments)
     {
         return ApiUrl + arguments;
     }
 
+    /// <summary>
+    /// Sends a request if this ApiService is under the limit. If the limit has been exceeded, the request will be added to queue.
+    /// </summary>
+    /// <param name="request"> The api request to send. </param>
+    /// <returns> The promise of the result from the api. </returns>
     protected SimplePromise<string> SendRequest(string request)
     {
         var promise = new SimplePromise<string>();
@@ -55,6 +77,11 @@ public abstract class ApiService
         return promise;
     }
 
+    /// <summary>
+    /// Queues a request if there are no sendable requests available.
+    /// </summary>
+    /// <param name="promise"> The promise returning the result of this request. </param>
+    /// <param name="request"> The api request to send. </param>
     private void InternalQueueRequest(SimplePromise<string> promise, string request)
     {
         int maximumSendableRequests = maximumRequestsPerInterval - sentRequestCount;
@@ -64,6 +91,11 @@ public abstract class ApiService
         queuedRequests.Enqueue(new QueuedRequest { urlRequest = request, result = promise });
     }
 
+    /// <summary>
+    /// Sends the api request if we are under the maximum sendable requests in this time interval.
+    /// </summary>
+    /// <param name="promise"> The promise returning the result of this request. </param>
+    /// <param name="request"> The api request to send. </param>
     private void InternalSendRequest(SimplePromise<string> promise, string request)
     {
         int maximumSendableRequests = maximumRequestsPerInterval - sentRequestCount;
@@ -76,6 +108,9 @@ public abstract class ApiService
                   .Subscribe(results => promise.ResolveResult(results[0]), ex => promise.ResolveException(ex));
     }
 
+    /// <summary>
+    /// Coroutine which waits the time interval and then executes the queued requests.
+    /// </summary>
     private IEnumerator ApiTimerCoroutine()
     {
         yield return waitForSeconds ?? (waitForSeconds = new WaitForSeconds(timeInterval));
