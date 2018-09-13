@@ -48,9 +48,9 @@ public sealed class CoinMarketCapDataManager
         SimplePromise<decimal?> promise = new SimplePromise<decimal?>();
 
         if (!CoinIDs.ContainsKey(symbol))
-            return promise.Resolve(null);
+            return promise.ResolveResult(null);
 
-        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol] + "/?convert=" + currencyManager.ActiveCurrency.ToString(), jsonData => promise.Resolve((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
+        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol] + "/?convert=" + currencyManager.ActiveCurrency.ToString(), jsonData => promise.ResolveResult((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
 
         return promise;
     }

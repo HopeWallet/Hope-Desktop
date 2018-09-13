@@ -76,9 +76,9 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<EthereumTransactionManager>().AsSingle().NonLazy();
         Container.Bind<EthereumTransactionButtonManager>().AsSingle().NonLazy();
         Container.Bind<TradableAssetNotificationManager>().AsSingle().NonLazy();
-		Container.Bind<ContactsManager>().AsSingle().NonLazy();
+        Container.Bind<ContactsManager>().AsSingle().NonLazy();
 
-		Container.Bind<UserWalletManager>().AsSingle().NonLazy();
+        Container.Bind<UserWalletManager>().AsSingle().NonLazy();
         Container.Bind<LedgerWallet>().AsSingle().NonLazy();
         Container.Bind<TrezorWallet>().AsSingle().NonLazy();
         Container.Bind<HopeWalletInfoManager>().AsSingle().NonLazy();
@@ -121,7 +121,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         BindButtonFactory<AssetButton>(tradableAssetButtonSettings.spawnTransform);
         BindButtonFactory<WalletButton>(walletListMenuSettings.walletButtonSpawnTransform);
         BindButtonFactory<LockedPRPSItemButton>(null);
-		BindButtonFactory<ContactButton>(null);
+        BindButtonFactory<ContactButton>(null);
         BindButtonFactory<AddableTokenButton>(null);
     }
 
@@ -131,7 +131,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     private void BindPopupFactories()
     {
         appSettings.uiSettings.menuSettings.popups.ForEach(popup => InvokeGenericMethod(this, "BindPopupFactory", popup.GetComponent<PopupBase>().GetType()));
-	}
+    }
 
     /// <summary>
     /// Binds the factories for the ui menus.
@@ -140,6 +140,8 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     {
         appSettings.uiSettings.menuSettings.menus.ForEach(menu => InvokeGenericMethod(this, "BindMenuFactory", menu.GetComponent<Menu>().GetType()));
     }
+
+#pragma warning disable RCS1213 // Remove unused member declaration.
 
     /// <summary>
     /// Binds the types for a menu factory.
@@ -158,6 +160,8 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     {
         BindFactory<TPopup, FactoryPopup<TPopup>.Factory>(uiProvider.uiRoot.transform, appSettings.uiSettings.menuSettings.popups);
     }
+
+#pragma warning restore RCS1213 // Remove unused member declaration.
 
     /// <summary>
     /// Binds the types for a button factory.

@@ -29,9 +29,9 @@ public sealed class DubiExDataManager
             dynamic deserializedData = JsonUtils.DeserializeDynamic(jsonData);
 
             if ((int)deserializedData.itemCount == 0)
-                promise.Resolve(null);
+                promise.ResolveResult(null);
             else
-                promise.Resolve((decimal?)decimal.Parse(deserializedData.result[0].metadata.price));
+                promise.ResolveResult((decimal?)decimal.Parse(deserializedData.result[0].metadata.price));
         });
     }
 }

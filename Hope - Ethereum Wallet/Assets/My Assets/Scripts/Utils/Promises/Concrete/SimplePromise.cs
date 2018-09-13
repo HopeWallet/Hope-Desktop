@@ -13,9 +13,15 @@ namespace Hope.Utils.Promises
         /// </summary>
         /// <param name="result"> The result to return. </param>
         /// <returns> The current SimplePromise. </returns>
-        public SimplePromise<T> Resolve(T result)
+        public SimplePromise<T> ResolveResult(T result)
         {
             InternalBuild(() => result);
+            return this;
+        }
+
+        public SimplePromise<T> ResolveException(Exception e)
+        {
+            InternalInvokeError(e.Message);
             return this;
         }
 

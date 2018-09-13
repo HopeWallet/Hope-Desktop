@@ -39,7 +39,7 @@ public class IdleTimeoutManager : MonoBehaviour
 		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
 			yield break;
 
-		currentIdleTime.Log();
+		//currentIdleTime.Log();
 
 		if (previousMousePosition == Input.mousePosition)
 		{
