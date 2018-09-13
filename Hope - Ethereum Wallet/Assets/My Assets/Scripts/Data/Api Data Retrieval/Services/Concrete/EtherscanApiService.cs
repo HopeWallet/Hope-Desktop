@@ -61,7 +61,7 @@ public sealed class EtherscanApiService : ApiService
     /// <param name="address"> The address the tokens were sent to. </param>
     /// <param name="tokenAddress"> The address of the ethereum token. </param>
     /// <returns> The promise returning the string data from the api. </returns>
-    public SimplePromise<string> SendTokenTransfersToAddressRequest(string address, string tokenAddress) 
+    public SimplePromise<string> SendTokenTransfersToAddressRequest(string address, string tokenAddress)
         => SendRequest(BuildRequest($"module=logs&action=getLogs&fromBlock=0&toBlock=latest{tokenAddress}&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef&topic2=0x000000000000000000000000{address.Remove(0, 2)}"));
 
     /// <summary>
@@ -70,7 +70,7 @@ public sealed class EtherscanApiService : ApiService
     /// <param name="address"> The address that sent the tokens. </param>
     /// <param name="tokenAddress"> The address of the ethereum token. </param>
     /// <returns> The promise returning the string data from the api. </returns>
-    public SimplePromise<string> SendTokenTransfersFromAddressRequest(string address, string tokenAddress) 
+    public SimplePromise<string> SendTokenTransfersFromAddressRequest(string address, string tokenAddress)
         => SendRequest(BuildRequest($"module=logs&action=getLogs&fromBlock=0&toBlock=latest{tokenAddress}&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef&topic1=0x000000000000000000000000{address.Remove(0, 2)}"));
 
     /// <summary>

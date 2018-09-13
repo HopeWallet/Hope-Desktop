@@ -1163,7 +1163,6 @@ MonoBehaviour:
   passwordInputField: {fileID: 114335822126248120}
   unlockButton: {fileID: 1754134967957440}
   loadingIcon: {fileID: 1287492818483090}
-  plainBackground: {fileID: 0}
 --- !u!114 &114887304772661034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1270,7 +1269,6 @@ MonoBehaviour:
   exitButton: {fileID: 114068524187399860}
   unlockWalletButton: {fileID: 114788400095928252}
   passwordField: {fileID: 114335822126248120}
-  plainBackground: {fileID: 0}
 --- !u!222 &222018505525371230
 CanvasRenderer:
   m_ObjectHideFlags: 1

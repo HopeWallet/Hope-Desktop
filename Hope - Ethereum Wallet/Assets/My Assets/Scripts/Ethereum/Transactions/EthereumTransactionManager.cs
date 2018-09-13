@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Utils.Promises;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,18 +79,34 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         var asset1 = assetsToScrape.Dequeue();
         var asset2 = assetsToScrape.Dequeue();
 
-        Observable.WhenAll(ObservableWWW.Get(asset1.Url), ObservableWWW.Get(asset2.Url)).Subscribe(resultData =>
-        {
-            Observable.Start(() =>
-            {
-                asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt);
-                asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt);
-            }).SubscribeOnMainThread().Subscribe(_ =>
-            {
-                MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
-                isScraping = false;
-            });
-        });
+        //asset1.Query?.Invoke().OnSuccess(txData1 =>
+        //{
+        //    asset2.Query?.Invoke().OnSuccess(txData2 =>
+        //    {
+        //        Observable.Start(() =>
+        //        {
+        //            asset1.ProcessTransactionList(txData1, asset1.AssetAddress, asset1.IgnoreReceipt);
+        //            asset2.ProcessTransactionList(txData2, asset2.AssetAddress, asset2.IgnoreReceipt);
+        //        }).SubscribeOnMainThread().Subscribe(_ =>
+        //        {
+        //            MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
+        //            isScraping = false;
+        //        });
+        //    });
+        //});
+
+        //Observable.WhenAll(ObservableWWW.Get(asset1.Query), ObservableWWW.Get(asset2.Query)).Subscribe(resultData =>
+        //{
+        //    Observable.Start(() =>
+        //    {
+        //        asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt);
+        //        asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt);
+        //    }).SubscribeOnMainThread().Subscribe(_ =>
+        //    {
+        //        MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
+        //        isScraping = false;
+        //    });
+        //});
     }
 
     /// <summary>
@@ -110,10 +127,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueEther(string walletAddress)
     {
-        //QueueAsset(api.GetInternalTransactionListUrl(walletAddress),
-        //           api.GetTransactionListUrl(walletAddress),
-        //           EtherAsset.ETHER_ADDRESS,
-        //           ProcessEtherTransactionData);
+        QueueAsset(() => apiService.SendInternalTransactionListRequest(walletAddress),
+                   () => apiService.SendTransactionListRequest(walletAddress),
+                   EtherAsset.ETHER_ADDRESS,
+                   ProcessEtherTransactionData);
     }
 
     /// <summary>
@@ -123,23 +140,23 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="walletAddress"> The main wallet address. </param>
     private void QueueToken(string assetAddress, string walletAddress)
     {
-        //QueueAsset(api.GetTokenTransfersFromWalletUrl(walletAddress, assetAddress),
-        //           api.GetTokenTransfersToWalletUrl(walletAddress, assetAddress),
-        //           assetAddress,
-        //           ProcessTokenTransactionData);
+        QueueAsset(() => apiService.SendTokenTransfersFromAddressRequest(walletAddress, assetAddress),
+                   () => apiService.SendTokenTransfersToAddressRequest(walletAddress, assetAddress),
+                   assetAddress,
+                   ProcessTokenTransactionData);
     }
 
     /// <summary>
     /// Queue's an asset to have its transactions searched for.
     /// </summary>
-    /// <param name="url1"> The first url containing transactions for the asset. </param>
-    /// <param name="url2"> The second url containing transactions for the asset. </param>
+    /// <param name="query1"> The first url containing transactions for the asset. </param>
+    /// <param name="query2"> The second url containing transactions for the asset. </param>
     /// <param name="assetAddress"> The address of the asset. </param>
     /// <param name="processTransactionsAction"> Called after the transaction list has been received, which processes the transactions. </param>
-    private void QueueAsset(string url1, string url2, string assetAddress, Action<string, string, bool> processTransactionsAction)
+    private void QueueAsset(Func<SimplePromise<string>> query1, Func<SimplePromise<string>> query2, string assetAddress, Action<string, string, bool> processTransactionsAction)
     {
-        assetsToScrape.Enqueue(new AssetToScrape(url1, assetAddress, true, processTransactionsAction));
-        assetsToScrape.Enqueue(new AssetToScrape(url2, assetAddress, false, processTransactionsAction));
+        assetsToScrape.Enqueue(new AssetToScrape(query1, assetAddress, true, processTransactionsAction));
+        assetsToScrape.Enqueue(new AssetToScrape(query2, assetAddress, false, processTransactionsAction));
     }
 
     /// <summary>

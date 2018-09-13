@@ -10,30 +10,31 @@ using Zenject;
 /// </summary>
 public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, TransactionInfo>
 {
-	public static Action popupClosed;
+    public static Action popupClosed;
 
-	[SerializeField] private TMP_Text amountText,
-									  timeFromNowText,
-									  addressText,
-									  dateText,
-									  statusText,
-									  directionText;
+    [SerializeField]
+    private TMP_Text amountText,
+                                      timeFromNowText,
+                                      addressText,
+                                      dateText,
+                                      statusText,
+                                      directionText;
 
-	[SerializeField] private Image assetImage, circle;
+    [SerializeField] private Image assetImage, circle;
 
-	[SerializeField] private GameObject loadingLine, newText;
+    [SerializeField] private GameObject loadingLine, newText;
 
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
 
-	/// <summary>
-	/// Adds the required dependencies to this class.
-	/// </summary>
-	/// <param name="popupManager"> The active PopupManager. </param>
-	/// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
-	/// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
-	[Inject]
+    /// <summary>
+    /// Adds the required dependencies to this class.
+    /// </summary>
+    /// <param name="popupManager"> The active PopupManager. </param>
+    /// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
+    /// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
+    [Inject]
     public void Construct(PopupManager popupManager, TradableAssetManager tradableAssetManager, TradableAssetImageManager tradableAssetImageManager)
     {
         this.popupManager = popupManager;
@@ -41,20 +42,20 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
         this.tradableAssetImageManager = tradableAssetImageManager;
     }
 
-	/// <summary>
-	/// Adds the display popup method to the button listener.
-	/// </summary>
-	protected override void OnAwake() => Button.onClick.AddListener(DisplayTransactionInfoPopup);
+    /// <summary>
+    /// Adds the display popup method to the button listener.
+    /// </summary>
+    protected override void OnAwake() => Button.onClick.AddListener(DisplayTransactionInfoPopup);
 
-	/// <summary>
-	/// Displays the transaction info popup.
-	/// </summary>
-	private void DisplayTransactionInfoPopup()
-	{
-		popupClosed = () => this.Button.interactable = true;
-		this.Button.interactable = false;
-		popupManager.GetPopup<TransactionInfoPopup>().SetTransactionInfo(ButtonInfo);
-	}
+    /// <summary>
+    /// Displays the transaction info popup.
+    /// </summary>
+    private void DisplayTransactionInfoPopup()
+    {
+        popupClosed = () => this.Button.interactable = true;
+        this.Button.interactable = false;
+        popupManager.GetPopup<TransactionInfoPopup>().SetTransactionInfo(ButtonInfo);
+    }
 
     /// <summary>
     /// Sets the info of a button based on the TransactionInfo object.
@@ -69,22 +70,22 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
         SetDate(info);
         SetTimeFromNow(info);
         SetImage(tradableAsset);
-		SetDirection(info);
+        SetDirection(info);
     }
 
-	/// <summary>
-	/// Sets the direction label beside the date
-	/// </summary>
-	/// <param name="transaction"> The info of this transaction. </param>
-	private void SetDirection(TransactionInfo transaction)
-	{
-		var sending = transaction.Type == TransactionInfo.TransactionType.Send;
+    /// <summary>
+    /// Sets the direction label beside the date
+    /// </summary>
+    /// <param name="transaction"> The info of this transaction. </param>
+    private void SetDirection(TransactionInfo transaction)
+    {
+        var sending = transaction.Type == TransactionInfo.TransactionType.Send;
 
-		circle.color = sending ? UIColors.Red : UIColors.Green;
-		statusText.text = sending ? "OUT" : "IN";
-		directionText.text = sending ? "To:" : "From:";
-		addressText.transform.localPosition = new Vector2(sending ? -200f : -170f, addressText.transform.localPosition.y);
-	}
+        circle.color = sending ? UIColors.Red : UIColors.Green;
+        statusText.text = sending ? "OUT" : "IN";
+        directionText.text = sending ? "To:" : "From:";
+        addressText.transform.localPosition = new Vector2(sending ? -200f : -170f, addressText.transform.localPosition.y);
+    }
 
     /// <summary>
     /// Sets the amount of the asset that was traded in this transaction.
