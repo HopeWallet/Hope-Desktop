@@ -49,8 +49,8 @@ public abstract class ApiService
         if (string.IsNullOrEmpty(request))
             return promise;
 
-        InternalSendRequest(promise, request);
         InternalQueueRequest(promise, request);
+        InternalSendRequest(promise, request);
 
         return promise;
     }
@@ -82,7 +82,7 @@ public abstract class ApiService
 
         sentRequestCount = 0;
 
-        if (queuedRequests.Count > 0)
+        for (int i = 0; i < (queuedRequests.Count < maximumRequestsPerInterval ? queuedRequests.Count : maximumRequestsPerInterval); i++)
         {
             var request = queuedRequests.Dequeue();
             InternalSendRequest(request.result, request.urlRequest);
