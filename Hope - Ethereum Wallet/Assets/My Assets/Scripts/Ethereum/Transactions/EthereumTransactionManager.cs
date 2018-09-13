@@ -79,21 +79,21 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         var asset1 = assetsToScrape.Dequeue();
         var asset2 = assetsToScrape.Dequeue();
 
-        //asset1.Query?.Invoke().OnSuccess(txData1 =>
-        //{
-        //    asset2.Query?.Invoke().OnSuccess(txData2 =>
-        //    {
-        //        Observable.Start(() =>
-        //        {
-        //            asset1.ProcessTransactionList(txData1, asset1.AssetAddress, asset1.IgnoreReceipt);
-        //            asset2.ProcessTransactionList(txData2, asset2.AssetAddress, asset2.IgnoreReceipt);
-        //        }).SubscribeOnMainThread().Subscribe(_ =>
-        //        {
-        //            MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
-        //            isScraping = false;
-        //        });
-        //    });
-        //});
+        asset1.Query?.Invoke().OnSuccess(txData1 =>
+        {
+            asset2.Query?.Invoke().OnSuccess(txData2 =>
+            {
+                Observable.Start(() =>
+                {
+                    asset1.ProcessTransactionList(txData1, asset1.AssetAddress, asset1.IgnoreReceipt);
+                    asset2.ProcessTransactionList(txData2, asset2.AssetAddress, asset2.IgnoreReceipt);
+                }).SubscribeOnMainThread().Subscribe(_ =>
+                {
+                    MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
+                    isScraping = false;
+                });
+            });
+        });
 
         //Observable.WhenAll(ObservableWWW.Get(asset1.Query), ObservableWWW.Get(asset2.Query)).Subscribe(resultData =>
         //{

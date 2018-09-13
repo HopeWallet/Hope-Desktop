@@ -146,7 +146,7 @@
   {
     "address": "0xbf52f2ab39e26e0951d2a02b49b7702abe30406a",
     "name": "ODEM",
-    "symbol": "ODEM",
+    "symbol": "ODE",
     "decimals": 18
   },
   {
