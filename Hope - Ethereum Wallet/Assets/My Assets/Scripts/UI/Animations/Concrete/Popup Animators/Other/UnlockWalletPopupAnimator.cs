@@ -50,9 +50,9 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the loadingIcon while starting and finished the verify password
+	/// Animates the loadingIcon while in or out of view
 	/// </summary>
-	public void VerifyingPassword()
+	private void VerifyingPassword()
 	{
 		bool startingProcess = !loadingIcon.activeInHierarchy;
 

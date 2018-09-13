@@ -27,7 +27,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.codeInputField = codeInputField;
 			this.confirmButton = confirmButton;
 
-			twoFactorAuthenticationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("two-factor authentication", boolean);
 			SetUpVisuals();
 		}
 
@@ -41,15 +40,31 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			if (setUp2FA)
 			{
 				//Generate key and qr code image
-			}
 
-			codeInputField.OnInputUpdated += CodeInputFieldChanged;
+				codeInputField.OnInputUpdated += CodeInputFieldChanged;
+				confirmButton.onClick.AddListener(ConfirmButtonClicked);
+			}
+			else
+			{
+				twoFactorAuthenticationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("two-factor authentication", boolean);
+				twoFactorAuthenticationCheckbox.transform.localScale = Vector2.one;
+				setUpSection.transform.localScale = Vector2.zero;
+			}
 		}
 
 		private void CodeInputFieldChanged(string code)
 		{
 			codeInputField.Error = string.IsNullOrEmpty(code);
 			confirmButton.interactable = !codeInputField.Error;
+		}
+
+		private void ConfirmButtonClicked()
+		{
+			//If code is correct:
+			setUpSection.AnimateScale(0f, 0.15f, () => twoFactorAuthenticationCheckbox.gameObject.AnimateScale(1f, 0.15f));
+			SecurePlayerPrefs.SetBool("two-factor authentication", true);
+
+			//Else codeInputField.Error = true;
 		}
 	}
 }

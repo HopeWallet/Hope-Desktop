@@ -2,7 +2,6 @@
 using System;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Zenject;
 
@@ -22,8 +21,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	private UserWalletManager userWalletManager;
 	private DynamicDataCache dynamicDataCache;
 	private ButtonClickObserver buttonClickObserver;
-
-	private bool loadWalletOnFinish;
 
 	/// <summary>
 	/// Adds the required dependencies to this popup.
@@ -45,18 +42,18 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		this.buttonClickObserver = buttonClickObserver;
 	}
 
-	public void SetPopupDetails(Action popupClosed, bool loadWalletOnFinish)
-	{
-		this.popupClosed = popupClosed;
-		this.loadWalletOnFinish = loadWalletOnFinish;
-	}
+	/// <summary>
+	/// Sets the popupClosed action to be called when the popup is closed
+	/// </summary>
+	/// <param name="popupClosed"> The finishing action </param>
+	public void SetOnCloseAction(Action popupClosed) => this.popupClosed = popupClosed;
 
 	/// <summary>
 	/// Adds the button listener.
 	/// </summary>
 	protected override void OnStart()
 	{
-		unlockWalletButton.onClick.AddListener(loadWalletOnFinish ? (UnityAction)LoadWallet : ClosePopup);
+		unlockWalletButton.onClick.AddListener(LoadWallet);
 		unlockWalletPopupAnimator = Animator as UnlockWalletPopupAnimator;
 	}
 
@@ -77,14 +74,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		UserWalletManager.OnWalletLoadSuccessful -= OnWalletLoad;
 		buttonClickObserver.UnsubscribeObservable(this);
 		popupClosed?.Invoke();
-	}
-
-	protected override void OnExitClicked()
-	{
-		if (!loadWalletOnFinish)
-		{
-			//Go back to wallet list menu
-		}
 	}
 
 	/// <summary>
@@ -108,12 +97,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
             else
                 dynamicDataCache.SetData("pass", new ProtectedString(text));
         }).SubscribeOnMainThread().Subscribe(_ => userWalletManager.UnlockWallet());
-	}
-
-	private void ClosePopup()
-	{
-		//Close this popup if password is correct
-		popupManager.CloseActivePopup();
 	}
 
 	/// <summary>

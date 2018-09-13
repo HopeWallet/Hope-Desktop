@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -41,8 +40,6 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 		this.walletInfoManager = walletInfoManager;
         this.walletSettings = walletSettings;
         this.settings = settings;
-
-		
     }
 
     /// <summary>

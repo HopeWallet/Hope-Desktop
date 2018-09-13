@@ -11,13 +11,10 @@ public class IdleTimeoutManager : MonoBehaviour
 
 	private int currentIdleTime, maxIdleTime;
 
-	private PopupManager popupManager;
+	private UIManager uiManager;
 
 	[Inject]
-	public void Construct(PopupManager popupManager)
-	{
-		this.popupManager = popupManager;
-	}
+	public void Construct(UIManager uiManager) => this.uiManager = uiManager;
 
 	private void Start()
 	{
@@ -36,7 +33,7 @@ public class IdleTimeoutManager : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1);
 
-		if (!SecurePlayerPrefs.GetBool("idle timeout") || popupManager.ActivePopupType == typeof(UnlockWalletPopup))
+		if (!SecurePlayerPrefs.GetBool("idle timeout"))
 			yield break;
 
 		currentIdleTime.Log();
@@ -45,7 +42,7 @@ public class IdleTimeoutManager : MonoBehaviour
 		{
 			if ((currentIdleTime / 60) == maxIdleTime)
 			{
-				popupManager.GetPopup<UnlockWalletPopup>().SetPopupDetails(() => CheckIfIdle().StartCoroutine(), false);
+				uiManager.OpenMenu<ReEnterPasswordMenu>();
 				yield break;
 			}
 			else

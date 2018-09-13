@@ -20,6 +20,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	[SerializeField] private Button[] subButtons;
 
 	private PopupManager popupManager;
+	private UIManager uiManager;
 
 	private bool dropdownOpen, hovering, popupIsOpen;
 
@@ -27,8 +28,13 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// Sets the popupManager
 	/// </summary>
 	/// <param name="popupManager"> The active PopupManager </param>
+	/// <param name="uiManager"> The active UIManager </param>
 	[Inject]
-	public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
+	public void Construct(PopupManager popupManager, UIManager uiManager)
+	{
+		this.popupManager = popupManager;
+		this.uiManager = uiManager;
+	}
 
 	/// <summary>
 	/// Sets the button listeners
@@ -131,7 +137,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				//Go back to wallet list menu (logout)
+				uiManager.OpenMenu<WalletListMenu>();
 				break;
 		}
 

@@ -48,6 +48,6 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 		Button.interactable = false;
 
 		dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-		popupManager.GetPopup<UnlockWalletPopup>().SetPopupDetails(() => Button.interactable = true, true);
+		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => Button.interactable = true);
 	}
 }
