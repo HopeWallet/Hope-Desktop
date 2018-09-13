@@ -36,7 +36,7 @@ public class IdleTimeoutManager : MonoBehaviour
 		if (!SecurePlayerPrefs.GetBool("idle timeout"))
 			yield break;
 
-		//currentIdleTime.Log();
+		currentIdleTime.Log();
 
 		if (previousMousePosition == Input.mousePosition)
 		{

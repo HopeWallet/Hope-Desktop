@@ -138,11 +138,19 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				break;
 			case 3:
 				uiManager.OpenMenu<WalletListMenu>();
+
 				break;
 		}
 
-		popupIsOpen = true;
-		subButtons[num].interactable = false;
-		PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
+		if (num != 3)
+		{
+			popupIsOpen = true;
+			subButtons[num].interactable = false;
+			PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
+		}
+		else
+		{
+			MoreButtonClicked();
+		}
 	}
 }
