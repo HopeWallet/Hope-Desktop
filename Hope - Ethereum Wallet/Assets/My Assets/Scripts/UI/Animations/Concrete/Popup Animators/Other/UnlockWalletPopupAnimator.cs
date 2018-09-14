@@ -10,19 +10,19 @@ public class UnlockWalletPopupAnimator : UIAnimator
 	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject loadingIcon;
 
-    /// <summary>
-    /// Initializes the necessary variables that haven't already been initialized in the inspector
-    /// </summary>
-    private void Awake()
-    {
-        passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
-        unlockButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
-    }
+	/// <summary>
+	/// Initializes the necessary variables that haven't already been initialized in the inspector
+	/// </summary>
+	private void Awake()
+	{
+		passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
+		unlockButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
+	}
 
-    /// <summary>
-    /// Animates the unique elements of this form into view
-    /// </summary>
-    protected override void AnimateUniqueElementsIn()
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
 	{
 		passwordInputField.InputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
@@ -59,17 +59,19 @@ public class UnlockWalletPopupAnimator : UIAnimator
 		if (startingProcess)
 		{
 			loadingIcon.SetActive(true);
-            Animating = true;
+			Animating = true;
+			unlockButton.AnimateGraphicAndScale(0f, 0f, 0.15f, () => loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f));
 			passwordInputField.InputFieldBase.DeactivateInputField();
 		}
 
-		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);
-		unlockButton.AnimateGraphicAndScale(startingProcess ? 0f : 1f, startingProcess ? 0f : 1f, 0.15f);
-
 		if (!startingProcess)
 		{
-			loadingIcon.SetActive(false);
-			Animating = false;
+			loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f, () =>
+			{
+				loadingIcon.SetActive(false);
+				unlockButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
+				Animating = false;
+			});
 		}
 	}
 }
