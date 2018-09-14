@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class ReEnterPasswordMenuAnimator : UIAnimator
 {
+	[SerializeField] private GameObject plainBackground;
 	[SerializeField] private GameObject walletName;
 	[SerializeField] private GameObject line;
 	[SerializeField] private HopeInputField passwordInputField;
