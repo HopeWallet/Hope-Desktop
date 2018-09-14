@@ -30,6 +30,8 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 	private PRPS prpsContract;
 	private CurrencyManager currencyManager;
 
+	public UIManager UiManager { get; private set; }
+
 	private const int MAX_ASSET_NAME_LENGTH = 36;
 	private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
@@ -53,7 +55,8 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		LockedPRPSManager lockedPrpsManager,
 		PRPS prpsContract,
 		UIManager.Settings uiSettings,
-		CurrencyManager currencyManager)
+		CurrencyManager currencyManager,
+		UIManager uiManager)
 	{
 		this.tokenContractManager = tokenContractManager;
 		this.tradableAssetManager = tradableAssetManager;
@@ -62,6 +65,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		this.lockedPrpsManager = lockedPrpsManager;
 		this.prpsContract = prpsContract;
 		this.currencyManager = currencyManager;
+		this.uiManager = uiManager;
 	}
 
 	/// <summary>
@@ -72,6 +76,8 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
 		lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
 		tokenContractManager.StartTokenLoad(OpenMenu);
+
+		new IdleTimeoutManager(uiManager);
 	}
 
 	/// <summary>

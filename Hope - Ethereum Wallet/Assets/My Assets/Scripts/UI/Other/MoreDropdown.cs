@@ -137,8 +137,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				uiManager.OpenMenu<WalletListMenu>();
-
+				uiManager.OpenMenu<ChooseWalletMenu>();
 				break;
 		}
 

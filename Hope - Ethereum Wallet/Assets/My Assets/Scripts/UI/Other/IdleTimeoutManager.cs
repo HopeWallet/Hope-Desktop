@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using Zenject;
 
 public class IdleTimeoutManager : MonoBehaviour
 {
@@ -13,11 +12,10 @@ public class IdleTimeoutManager : MonoBehaviour
 
 	private UIManager uiManager;
 
-	[Inject]
-	public void Construct(UIManager uiManager) => this.uiManager = uiManager;
-
-	private void Start()
+	public IdleTimeoutManager(UIManager uiManager)
 	{
+		this.uiManager = uiManager;
+
 		IdleTimeoutEnabled = () => CheckIfIdle().StartCoroutine();
 
 		if (SecurePlayerPrefs.GetBool("idle timeout"))
@@ -35,8 +33,6 @@ public class IdleTimeoutManager : MonoBehaviour
 
 		if (!SecurePlayerPrefs.GetBool("idle timeout"))
 			yield break;
-
-		currentIdleTime.Log();
 
 		if (previousMousePosition == Input.mousePosition)
 		{

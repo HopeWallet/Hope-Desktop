@@ -2,7 +2,6 @@
 
 public class OpenWalletMenuAnimator : UIAnimator
 {
-
 	[SerializeField] private GameObject background;
 	[SerializeField] private GameObject assetList;
 	[SerializeField] private GameObject taskBarButtons;
@@ -15,7 +14,12 @@ public class OpenWalletMenuAnimator : UIAnimator
 
 	protected override void AnimateUniqueElementsIn()
 	{
-		throw new System.NotImplementedException();
+		FinishedAnimating();
+	}
+
+	protected override void ResetElementValues()
+	{
+		FinishedAnimating();
 	}
 
 	/// <summary>

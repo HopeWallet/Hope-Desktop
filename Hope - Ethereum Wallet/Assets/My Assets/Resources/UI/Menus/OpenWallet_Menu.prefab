@@ -1039,6 +1039,7 @@ GameObject:
   - component: {fileID: 223244604500764324}
   - component: {fileID: 114033238578421206}
   - component: {fileID: 114026699628265170}
+  - component: {fileID: 114121064316673466}
   m_Layer: 5
   m_Name: OpenWallet_Menu
   m_TagString: Untagged
@@ -1487,6 +1488,33 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114121064316673466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1928204962434420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36618c17d1c37ef4fb2705fe90a0fbe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animateOnEnable: 0
+  blocker: {fileID: 0}
+  dim: {fileID: 0}
+  form: {fileID: 0}
+  blur: {fileID: 0}
+  formTitle: {fileID: 0}
+  popupContainer: {fileID: 0}
+  background: {fileID: 0}
+  assetList: {fileID: 0}
+  taskBarButtons: {fileID: 0}
+  transactionList: {fileID: 0}
+  assetIcon: {fileID: 0}
+  assetName: {fileID: 0}
+  assetAmount: {fileID: 0}
+  buyButton: {fileID: 0}
+  sellButton: {fileID: 0}
 --- !u!114 &114121923202464452
 MonoBehaviour:
   m_ObjectHideFlags: 1
