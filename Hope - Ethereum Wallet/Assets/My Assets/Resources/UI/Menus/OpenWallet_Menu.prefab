@@ -1038,8 +1038,8 @@ GameObject:
   - component: {fileID: 224063981933358800}
   - component: {fileID: 223244604500764324}
   - component: {fileID: 114033238578421206}
-  - component: {fileID: 114026699628265170}
   - component: {fileID: 114121064316673466}
+  - component: {fileID: 114026699628265170}
   m_Layer: 5
   m_Name: OpenWallet_Menu
   m_TagString: Untagged

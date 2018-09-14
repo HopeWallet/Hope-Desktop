@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -34,7 +35,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 		unlockButton.interactable = !passwordField.Error;
 	}
 
-	private void HomeButtonClicked() => uiManager.OpenMenu<WalletListMenu>();
+	private void HomeButtonClicked() => uiManager.OpenMenu<ChooseWalletMenu>();
 
 	private void UnlockButtonClicked()
 	{
