@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UniRx;
 
 /// <summary>
@@ -18,7 +17,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     private readonly TradableAssetManager tradableAssetManager;
     private readonly UserWalletManager userWalletManager;
     private readonly EtherscanApiService apiService;
-    //private readonly EthereumAPI api;
 
     private bool isScraping;
 
@@ -56,10 +54,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// </summary>
     /// <param name="address"> The address of the asset to find transactions for. </param>
     /// <returns> The list of transactions. </returns>
-    public List<TransactionInfo> GetTransactionListByAddress(string address)
-    {
-        return transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
-    }
+    public List<TransactionInfo> GetTransactionListByAddress(string address) => transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
 
     /// <summary>
     /// Adds each asset to the list of assets to scrape for a routine check of their transactions.
@@ -94,19 +89,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
                 });
             });
         });
-
-        //Observable.WhenAll(ObservableWWW.Get(asset1.Query), ObservableWWW.Get(asset2.Query)).Subscribe(resultData =>
-        //{
-        //    Observable.Start(() =>
-        //    {
-        //        asset1.ProcessTransactionList(resultData[0], asset1.AssetAddress, asset1.IgnoreReceipt);
-        //        asset2.ProcessTransactionList(resultData[1], asset2.AssetAddress, asset2.IgnoreReceipt);
-        //    }).SubscribeOnMainThread().Subscribe(_ =>
-        //    {
-        //        MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
-        //        isScraping = false;
-        //    });
-        //});
     }
 
     /// <summary>

@@ -1,11 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 public sealed class OptimizedScrollview : MonoBehaviour
 {
+    public event Action<List<GameObject>> OnVisibleItemsChanged;
+
+    public string scrollviewKey;
+
+    private static readonly Dictionary<string, OptimizedScrollview> ActiveScrollviews = new Dictionary<string, OptimizedScrollview>();
+
     private readonly List<GameObject> items = new List<GameObject>();
+
+    private readonly List<bool> previouslyActiveList = new List<bool>();
 
     private ScrollRect scrollRect;
 
@@ -20,6 +30,8 @@ public sealed class OptimizedScrollview : MonoBehaviour
                 previousTopIndex,
                 previousBottomIndex;
 
+    public List<GameObject> VisibleItemList => items.Where(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
+
     public void Refresh() => GetEnabledItems();
 
     private void Start()
@@ -29,7 +41,13 @@ public sealed class OptimizedScrollview : MonoBehaviour
         scrollRect = rectTransform.parent.GetComponent<ScrollRect>();
         viewportHeight = rectTransform.rect.size.y;
 
-        Observable.EveryUpdate().Where(_ => itemCount != listParent.childCount).Subscribe(_ => ItemCountChanged());
+        Observable.EveryUpdate()
+                  .Where(_ => itemCount != listParent.childCount)
+                  .Subscribe(_ => ItemCountChanged());
+
+        Observable.EveryUpdate()
+                  .Where(_ => !items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).SequenceEqual(previouslyActiveList))
+                  .Subscribe(_ => ActiveItemsUpdated());
 
         scrollRect.onValueChanged.AddListener(_ => ScrollRectChanged());
     }
@@ -114,5 +132,13 @@ public sealed class OptimizedScrollview : MonoBehaviour
 
         previousTopIndex = topIndex;
         previousBottomIndex = bottomIndex;
+    }
+
+    private void ActiveItemsUpdated()
+    {
+        previouslyActiveList.Clear();
+        previouslyActiveList.AddRange(items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy));
+
+        OnVisibleItemsChanged?.Invoke(VisibleItemList);
     }
 }
