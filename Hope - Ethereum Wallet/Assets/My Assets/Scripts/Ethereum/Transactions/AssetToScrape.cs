@@ -2,9 +2,9 @@
 using System;
 
 /// <summary>
-/// Class which represents an asset that needs its transactions scraped from the web.
+/// Class which represents a query for an asset that needs its transactions scraped from the web.
 /// </summary>
-public class AssetToScrape
+public sealed class AssetTransactionQuery
 {
     /// <summary>
     /// Action to execute which processes the list of transactions found.
@@ -27,13 +27,13 @@ public class AssetToScrape
     public bool IgnoreReceipt { get; }
 
     /// <summary>
-    /// Initializes the AssetToScrape.
+    /// Initializes the AssetTransactionQuery.
     /// </summary>
     /// <param name="query"> The url which contains the transaction list to scrape for. </param>
     /// <param name="assetAddress"> The asset's address. </param>
     /// <param name="ignoreReceipt"> Whether the tx_receipt should be ignored for this asset. </param>
     /// <param name="processTxlist"> Action to execute which processes the transaction list. </param>
-    public AssetToScrape(Func<SimplePromise<string>> query, string assetAddress, bool ignoreReceipt, Action<string, string, bool> processTxlist)
+    public AssetTransactionQuery(Func<SimplePromise<string>> query, string assetAddress, bool ignoreReceipt, Action<string, string, bool> processTxlist)
     {
         Query = query;
         AssetAddress = assetAddress;

@@ -13,7 +13,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 {
     public static event Action OnTransactionsAdded;
 
-    private readonly Queue<AssetToScrape> assetsToScrape = new Queue<AssetToScrape>();
+    private readonly Queue<AssetTransactionQuery> transactionQueryQueue = new Queue<AssetTransactionQuery>();
     private readonly Dictionary<string, List<TransactionInfo>> transactionsByAddress = new Dictionary<string, List<TransactionInfo>>();
     private readonly Dictionary<string, long> addressLastUpdatedTimes = new Dictionary<string, long>();
 
@@ -83,31 +83,42 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// </summary>
     public void UpdaterUpdate()
     {
-        if (assetsToScrape.Count == 0 || isScraping)
+        if (transactionQueryQueue.Count == 0 || isScraping)
             return;
 
         isScraping = true;
 
-        var asset1 = assetsToScrape.Dequeue();
-        var asset2 = assetsToScrape.Dequeue();
+        var query1 = transactionQueryQueue.Dequeue();
+        var query2 = transactionQueryQueue.Dequeue();
 
-        if ((addressLastUpdatedTimes.ContainsKey(asset1.AssetAddress) && addressLastUpdatedTimes[asset1.AssetAddress] + (long)UpdateInterval >= DateTimeUtils.GetCurrentUnixTime())
-            || (scrollview != null && !GetVisibleAssetList().Select(asset => asset.AssetAddress).ContainsIgnoreCase(asset1.AssetAddress)))
+        if ((addressLastUpdatedTimes.ContainsKey(query1.AssetAddress) && addressLastUpdatedTimes[query1.AssetAddress] + (long)UpdateInterval >= DateTimeUtils.GetCurrentUnixTime())
+            || (scrollview != null && !GetVisibleAssetList().Select(asset => asset.AssetAddress).ContainsIgnoreCase(query1.AssetAddress)))
         {
+            isScraping = false;
             return;
         }
 
-        asset1.Query?.Invoke().OnSuccess(txData1 =>
+        QueryTransactionData(query1, query2);
+    }
+
+    /// <summary>
+    /// Queries the transaction data for a TradableAsset.
+    /// </summary>
+    /// <param name="query1"> The first query for the TradableAsset's transaction data. </param>
+    /// <param name="query2"> The second query for the TradableAsset's transaction data. </param>
+    private void QueryTransactionData(AssetTransactionQuery query1, AssetTransactionQuery query2)
+    {
+        query1.Query?.Invoke().OnSuccess(txData1 =>
         {
-            asset2.Query?.Invoke().OnSuccess(txData2 =>
+            query2.Query?.Invoke().OnSuccess(txData2 =>
             {
                 Observable.Start(() =>
                 {
-                    asset1.ProcessTransactionList(txData1, asset1.AssetAddress, asset1.IgnoreReceipt);
-                    asset2.ProcessTransactionList(txData2, asset2.AssetAddress, asset2.IgnoreReceipt);
+                    query1.ProcessTransactionList(txData1, query1.AssetAddress, query1.IgnoreReceipt);
+                    query2.ProcessTransactionList(txData2, query2.AssetAddress, query2.IgnoreReceipt);
                 }).SubscribeOnMainThread().Subscribe(_ =>
                 {
-                    addressLastUpdatedTimes.AddOrReplace(asset1.AssetAddress, DateTimeUtils.GetCurrentUnixTime());
+                    addressLastUpdatedTimes.AddOrReplace(query1.AssetAddress, DateTimeUtils.GetCurrentUnixTime());
 
                     MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
                     isScraping = false;
@@ -116,6 +127,11 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         });
     }
 
+    /// <summary>
+    /// Gets the visible asset list based on the currently visible game objects.
+    /// </summary>
+    /// <param name="visibleGameObjects"> The list of currently visible game objects. </param>
+    /// <returns> The list of currently visible TradableAssets. </returns>
     private List<TradableAsset> GetVisibleAssetList(List<GameObject> visibleGameObjects = null)
     {
         List<GameObject> list = visibleGameObjects ?? scrollview.VisibleItemList;
@@ -130,7 +146,6 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="asset"> The asset to scrape transactions for. </param>
     private void AddAssetToScrape(TradableAsset asset)
     {
-        Debug.Log(asset.AssetSymbol);
         if (asset is EtherAsset)
             QueueEther(userWalletManager.WalletAddress);
         else
@@ -171,8 +186,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="processTransactionsAction"> Called after the transaction list has been received, which processes the transactions. </param>
     private void QueueAsset(Func<SimplePromise<string>> query1, Func<SimplePromise<string>> query2, string assetAddress, Action<string, string, bool> processTransactionsAction)
     {
-        assetsToScrape.Enqueue(new AssetToScrape(query1, assetAddress, true, processTransactionsAction));
-        assetsToScrape.Enqueue(new AssetToScrape(query2, assetAddress, false, processTransactionsAction));
+        transactionQueryQueue.Enqueue(new AssetTransactionQuery(query1, assetAddress, true, processTransactionsAction));
+        transactionQueryQueue.Enqueue(new AssetTransactionQuery(query2, assetAddress, false, processTransactionsAction));
     }
 
     /// <summary>

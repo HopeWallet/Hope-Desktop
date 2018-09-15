@@ -194,6 +194,6 @@ public sealed class TradableAssetImageManager
         var www = new WWW("file://" + GetFilePath(assetSymbol));
         yield return www;
 
-        onTextureReceived?.Invoke(string.IsNullOrEmpty(www.error) ? null : www.texture);
+        onTextureReceived?.Invoke(!string.IsNullOrEmpty(www.error) ? null : www.texture);
     }
 }
