@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using DG.Tweening;
-using System.Collections.Generic;
 
 public sealed class ExitConfirmationPopup : OkCancelPopupComponent<ExitConfirmationPopup>
 {
-
 	public GameObject noteText;
-	
+
 	/// <summary>
 	/// Closes the wallet
 	/// </summary>
