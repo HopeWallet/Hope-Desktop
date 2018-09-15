@@ -67,7 +67,7 @@ MonoBehaviour:
       popups:
       - {fileID: 1120657717184104, guid: b13e683ad7d232746a6a33077e53025e, type: 2}
       - {fileID: 1095592712460054, guid: 3035794ec750a12419e3c4e25ff4c6b2, type: 2}
-      - {fileID: 1282295889785612, guid: 538ab8f64e943274aa9b80b9cc80da0a, type: 2}
+      - {fileID: 1721916094273986, guid: 5e60a1921975c044ca674e0239e1b74e, type: 2}
       - {fileID: 1108669729117044, guid: 0241c9f30f541024b8573290c8e85955, type: 2}
       - {fileID: 1364737141961984, guid: 56a531c57a4831a43a98f6f5e61c7b57, type: 2}
       - {fileID: 1911524679015626, guid: 43c64668eaffd2e4ab277098efa1c283, type: 2}
@@ -86,6 +86,7 @@ MonoBehaviour:
       - {fileID: 1535748500373604, guid: 67ab6b3e8cbfe4047816e960ad313165, type: 2}
       - {fileID: 1736856466228382, guid: da7f2219878e4f2499afdbca320773b0, type: 2}
       - {fileID: 1197982402732530, guid: 4ff1801d87d59d6459d30f747c679e79, type: 2}
+      - {fileID: 1282295889785612, guid: 538ab8f64e943274aa9b80b9cc80da0a, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75

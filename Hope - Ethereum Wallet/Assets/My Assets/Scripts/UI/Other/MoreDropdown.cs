@@ -120,6 +120,10 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="num"> The number of the button in the dropdown hiearchy </param>
 	private void DropdownButtonClicked(int num)
 	{
+		popupIsOpen = true;
+		subButtons[num].interactable = false;
+		PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
+
 		switch (num)
 		{
 			case 0:
@@ -132,19 +136,8 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				SceneManager.LoadScene("HopeWallet");
+				popupManager.GetPopup<GeneralOkCancelPopup>().SetSubText("Are you sure you want to logout?").OnOkClicked(() => SceneManager.LoadScene("HopeWallet")).OnFinish(PopupClosed);
 				break;
-		}
-
-		if (num != 3)
-		{
-			popupIsOpen = true;
-			subButtons[num].interactable = false;
-			PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
-		}
-		else
-		{
-			MoreButtonClicked();
 		}
 	}
 }

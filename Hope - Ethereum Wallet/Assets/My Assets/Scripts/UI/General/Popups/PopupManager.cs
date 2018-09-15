@@ -38,7 +38,7 @@ public sealed class PopupManager
         LockedPRPSPopup.Factory lockedPrpsPopupFactory,
         LockPRPSPopup.Factory lockPrpsPopupFactory,
         ConfirmLockPopup.Factory confirmPrpsLockPopupFactory,
-        GeneralTransactionConfirmationPopup.Factory generalConfirmationPopupFactory,
+        GeneralOkCancelPopup.Factory generalOkCancelPopupFactory,
         UnlockWalletPopup.Factory unlockWalletPopupFactory,
         ContactsPopup.Factory contactsPopupFactory,
         AddOrEditContactPopup.Factory addOrEditContactPopupFactory,
@@ -49,7 +49,8 @@ public sealed class PopupManager
 		ConnectionLostPopup.Factory conectionLostPopupFactory,
 		SettingsPopup.Factory settingsPopupFactory,
 		AccountsPopup.Factory accountsPopupFactory,
-		AboutPopup.Factory aboutPopupFactory)
+		AboutPopup.Factory aboutPopupFactory,
+		GeneralTransactionConfirmationPopup.Factory generalTransactionConfirmationPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -60,7 +61,7 @@ public sealed class PopupManager
                                lockedPrpsPopupFactory,
                                lockPrpsPopupFactory,
                                confirmPrpsLockPopupFactory,
-                               generalConfirmationPopupFactory,
+							   generalOkCancelPopupFactory,
                                unlockWalletPopupFactory,
                                contactsPopupFactory,
                                addOrEditContactPopupFactory,
@@ -71,7 +72,8 @@ public sealed class PopupManager
 							   conectionLostPopupFactory,
 							   settingsPopupFactory,
 							   accountsPopupFactory,
-							   aboutPopupFactory);
+							   aboutPopupFactory,
+							   generalTransactionConfirmationPopupFactory);
     }
 
     /// <summary>

@@ -21,6 +21,9 @@ public class SettingsPopupAnimator : UIAnimator
 
 	private CategoryButtons settingsCategories;
 
+	/// <summary>
+	/// Sets the necessary values
+	/// </summary>
 	private void Awake()
 	{
 		EditWallet = AnimateOtherFields;
@@ -30,6 +33,9 @@ public class SettingsPopupAnimator : UIAnimator
 		settingsCategories.OnButtonChanged += CategoryChanged;
 	}
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		settingsCategoriesParent.AnimateScaleY(1f, 0.25f);

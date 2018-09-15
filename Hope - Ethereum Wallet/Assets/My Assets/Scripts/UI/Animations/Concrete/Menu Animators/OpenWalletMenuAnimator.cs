@@ -12,6 +12,9 @@ public class OpenWalletMenuAnimator : UIAnimator
 	[SerializeField] private GameObject buyButton;
 	[SerializeField] private GameObject sellButton;
 
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		FinishedAnimating();
