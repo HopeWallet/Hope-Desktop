@@ -27,7 +27,6 @@ public sealed class TradableAssetButtonManager
         this.buttonFactory = buttonFactory;
         this.tokenContractManager = tokenContractManager;
 
-        TradableAssetManager.OnBalancesUpdated += UpdateButtonBalances;
         TradableAssetManager.OnTradableAssetAdded += AddAssetButton;
         TradableAssetManager.OnTradableAssetRemoved += RemoveButton;
 
@@ -81,11 +80,6 @@ public sealed class TradableAssetButtonManager
             }
         }
     }
-
-    /// <summary>
-    /// Updates the balances on all the asset buttons.
-    /// </summary>
-    public void UpdateButtonBalances() => assetButtons.SafeForEach(button => button.UpdateButtonBalance());
 
     /// <summary>
     /// Enables a new asset button by making it interactable, and disabling the old one by making it non interactable.

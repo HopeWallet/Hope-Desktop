@@ -76,7 +76,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         var valSymbol = sendTransaction ? "-" : "+";
         var tradableAsset = tradableAssetManager.GetTradableAsset(transactionInfo.AssetAddress);
 
-        tradableAssetImageManager.LoadImage(tradableAsset.AssetSymbol, img => assetImage.sprite = img);
+        assetImage.sprite = tradableAsset.AssetImage;
 
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 

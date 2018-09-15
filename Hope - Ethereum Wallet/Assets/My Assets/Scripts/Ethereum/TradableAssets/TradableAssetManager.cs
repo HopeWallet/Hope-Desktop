@@ -6,7 +6,6 @@ using System.Collections.Generic;
 /// </summary>
 public class TradableAssetManager : IPeriodicUpdater
 {
-
     public static event Action OnBalancesUpdated;
     public static event Action<TradableAsset> OnTradableAssetAdded;
     public static event Action<TradableAsset> OnTradableAssetRemoved;
@@ -14,7 +13,7 @@ public class TradableAssetManager : IPeriodicUpdater
     /// <summary>
     /// The dictionary of active tradable assets.
     /// </summary>
-    public Dictionary<string, TradableAsset> TradableAssets { get; private set; }
+    public Dictionary<string, TradableAsset> TradableAssets { get; } = new Dictionary<string, TradableAsset>();
 
     /// <summary>
     /// The actively selected TradableAsset in the wallet.
@@ -37,8 +36,6 @@ public class TradableAssetManager : IPeriodicUpdater
     /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use to run this class's periodic updates. </param>
     public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager)
     {
-        TradableAssets = new Dictionary<string, TradableAsset>();
-
         TokenContractManager.OnTokenAdded += AddTradableAsset;
         TokenContractManager.OnTokenRemoved += RemoveTradableAsset;
 
@@ -102,5 +99,4 @@ public class TradableAssetManager : IPeriodicUpdater
     /// <param name="address"> The address of the asset to receive. </param>
     /// <returns></returns>
     public TradableAsset GetTradableAsset(string address) => TradableAssets.ContainsKey(address) ? TradableAssets[address] : null;
-
 }

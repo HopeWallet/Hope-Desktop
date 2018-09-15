@@ -76,11 +76,13 @@ public abstract class TradableAsset
     {
         GetBalance(userWalletManager, balance =>
         {
-            if (balance != AssetBalance)
-                OnAssetBalanceChanged?.Invoke(balance);
+            bool changed = balance != AssetBalance;
 
             AssetBalance = balance;
             onBalanceReceived?.Invoke();
+
+            if (changed)
+                OnAssetBalanceChanged?.Invoke(AssetBalance);
         });
     }
 
@@ -99,7 +101,9 @@ public abstract class TradableAsset
         tradableAssetImageManager.LoadImage(AssetSymbol, image =>
         {
             AssetImage = image;
-            UpdateBalance(() => onInfoInitialized(this));
+
+            UpdateBalance();
+            onInfoInitialized?.Invoke(this);
         });
     }
 

@@ -74,7 +74,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// <param name="currencyManager"> The active CurrencyManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     /// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
     /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
     /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
@@ -88,7 +87,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         CurrencyManager currencyManager,
         UserWalletManager userWalletManager,
         TradableAssetManager tradableAssetManager,
-        TradableAssetImageManager tradableAssetImageManager,
         TradableAssetPriceManager tradableAssetPriceManager,
         EtherBalanceObserver etherBalanceObserver,
         GasPriceObserver gasPriceObserver,
@@ -102,7 +100,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
 
-        Asset = new AssetManager(tradableAssetManager, tradableAssetImageManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
+        Asset = new AssetManager(tradableAssetManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
         Address = new AddressManager(addressField, contactName, contactsManager);
         Amount = new AmountManager(currencyManager, tradableAssetPriceManager, maxToggle, maxText, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);

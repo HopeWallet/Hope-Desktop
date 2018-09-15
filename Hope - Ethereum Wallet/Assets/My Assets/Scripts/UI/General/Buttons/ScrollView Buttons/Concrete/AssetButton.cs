@@ -6,7 +6,7 @@ using Zenject;
 /// <summary>
 /// Class which manages the click events for an asset button.
 /// </summary>
-public class AssetButton : InfoButton<AssetButton, TradableAsset>
+public sealed class AssetButton : InfoButton<AssetButton, TradableAsset>
 {
     public GameObject notificationImageObj,
                       loadingTransactionsObj;
@@ -57,6 +57,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     private void OnDestroy()
     {
         notificationManager.OnNotificationsUpdated -= UpdateAssetNotifications;
+        ButtonInfo.OnAssetBalanceChanged -= _ => UpdateButtonBalance();
     }
 
     /// <summary>
@@ -65,6 +66,8 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <param name="info"> The TradableAsset to use to set the visuals of this button. </param>
     protected override void OnValueUpdated(TradableAsset info)
     {
+        SubscribeBalanceEventListener();
+
         UpdateButtonBalance();
         UpdateButtonSymbol();
         UpdateButtonImage();
@@ -88,9 +91,12 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <summary>
     /// Sets the balance text of the button.
     /// </summary>
-    public void UpdateButtonBalance()
+    private void UpdateButtonBalance()
     {
-        string balanceText = ButtonInfo.AssetBalance + "";
+        if (ButtonInfo.AssetBalance == null)
+            return;
+
+        string balanceText = ButtonInfo.AssetBalance.ToString();
         amountText.text = balanceText.LimitEnd(7, "...");
     }
 
@@ -109,6 +115,11 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     }
 
     /// <summary>
+    /// Adds the UpdateButtonBalance method callback to the TradableAsset.OnAssetBalanceChanged event.
+    /// </summary>
+    private void SubscribeBalanceEventListener() => ButtonInfo.OnAssetBalanceChanged += _ => UpdateButtonBalance();
+
+    /// <summary>
     /// Updates the symbol of this button to reflect this button's TradableAsset.
     /// </summary>
     private void UpdateButtonSymbol() => symbolText.text = ButtonInfo.AssetSymbol.LimitEnd(5, "...");
@@ -116,7 +127,7 @@ public class AssetButton : InfoButton<AssetButton, TradableAsset>
     /// <summary>
     /// Updates the image of this button.
     /// </summary>
-    private void UpdateButtonImage() => tradableAssetImageManager.LoadImage(ButtonInfo.AssetSymbol, image => assetImage.sprite = image);
+    private void UpdateButtonImage() => assetImage.sprite = ButtonInfo.AssetImage;
 
     /// <summary>
     /// Updates the order of this transform to reflect the proper order of the AssetButtons.
