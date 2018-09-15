@@ -73,10 +73,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <summary>
     /// Adds each asset to the list of assets to scrape for a routine check of their transactions.
     /// </summary>
-    public void PeriodicUpdate()
-    {
-        GetVisibleAssetList().ForEach(AddAssetToScrape);
-    }
+    public void PeriodicUpdate() => GetVisibleAssetList().ForEach(AddAssetToScrape);
 
     /// <summary>
     /// Scrapes the transaction list for each tradable asset sequentially.
@@ -134,10 +131,14 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <returns> The list of currently visible TradableAssets. </returns>
     private List<TradableAsset> GetVisibleAssetList(List<GameObject> visibleGameObjects = null)
     {
-        List<GameObject> list = visibleGameObjects ?? scrollview.VisibleItemList;
-        return list.Select(item => item.GetComponentInChildren<AssetButton>())
-                                       .Where(button => button != null)
-                                       .Select(button => button.ButtonInfo).ToList();
+        List<TradableAsset> list = (visibleGameObjects ?? scrollview.VisibleItemList).Select(item => item.GetComponentInChildren<AssetButton>())
+                                                                                     .Where(button => button != null)
+                                                                                     .Select(button => button.ButtonInfo).ToList();
+
+        if (!list.Contains(tradableAssetManager.ActiveTradableAsset))
+            list.Add(tradableAssetManager.ActiveTradableAsset);
+
+        return list;
     }
 
     /// <summary>
@@ -228,18 +229,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="getTransaction"> Action called to get the TransactionInfo object from the json. </param>
     private void ReadJsonData<T>(string transactionList, string assetAddress, Func<T, bool> isValidTransaction, Func<T, TransactionInfo> getTransaction)
     {
-        EtherscanAPIJson<T> transactionsJson = null;
-
-        try
-        {
-            transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
-        }
-        catch (Exception e)
-        {
-            UnityEngine.Debug.Log(e);
-            UnityEngine.Debug.Log(transactionList);
-        }
-
+        EtherscanAPIJson<T> transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<T>>(transactionList);
         if (transactionsJson == null)
             return;
 
