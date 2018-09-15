@@ -1,8 +1,10 @@
 ﻿using Hope.Utils.Promises;
+using NBitcoin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
+using UnityEngine;
 
 /// <summary>
 /// Class which manages the loading and updating of ethereum and token transaction data.
@@ -13,10 +15,13 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
     private readonly Queue<AssetToScrape> assetsToScrape = new Queue<AssetToScrape>();
     private readonly Dictionary<string, List<TransactionInfo>> transactionsByAddress = new Dictionary<string, List<TransactionInfo>>();
+    private readonly Dictionary<string, long> addressLastUpdatedTimes = new Dictionary<string, long>();
 
     private readonly TradableAssetManager tradableAssetManager;
     private readonly UserWalletManager userWalletManager;
     private readonly EtherscanApiService apiService;
+
+    private OptimizedScrollview scrollview;
 
     private bool isScraping;
 
@@ -40,7 +45,16 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         EtherscanApiService apiService)
     {
         TradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
-        TokenContractManager.OnTokensLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this);
+        OptimizedScrollview.OnOptimizedScrollviewInitialized += optimizedScrollview =>
+        {
+            if (optimizedScrollview.scrollviewKey.Equals("asset_scrollview"))
+            {
+                scrollview = optimizedScrollview;
+                scrollview.OnVisibleItemsChanged += list => GetVisibleAssetList(list).ForEach(AddAssetToScrape);
+
+                periodicUpdateManager.AddPeriodicUpdater(this);
+            }
+        };
 
         this.tradableAssetManager = tradableAssetManager;
         this.userWalletManager = userWalletManager;
@@ -59,7 +73,10 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <summary>
     /// Adds each asset to the list of assets to scrape for a routine check of their transactions.
     /// </summary>
-    public void PeriodicUpdate() => tradableAssetManager.TradableAssets.ForEach(asset => AddAssetToScrape(asset.Value));
+    public void PeriodicUpdate()
+    {
+        GetVisibleAssetList().ForEach(AddAssetToScrape);
+    }
 
     /// <summary>
     /// Scrapes the transaction list for each tradable asset sequentially.
@@ -74,6 +91,12 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         var asset1 = assetsToScrape.Dequeue();
         var asset2 = assetsToScrape.Dequeue();
 
+        if ((addressLastUpdatedTimes.ContainsKey(asset1.AssetAddress) && addressLastUpdatedTimes[asset1.AssetAddress] + (long)UpdateInterval >= DateTimeUtils.GetCurrentUnixTime())
+            || (scrollview != null && !GetVisibleAssetList().Select(asset => asset.AssetAddress).ContainsIgnoreCase(asset1.AssetAddress)))
+        {
+            return;
+        }
+
         asset1.Query?.Invoke().OnSuccess(txData1 =>
         {
             asset2.Query?.Invoke().OnSuccess(txData2 =>
@@ -84,11 +107,21 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
                     asset2.ProcessTransactionList(txData2, asset2.AssetAddress, asset2.IgnoreReceipt);
                 }).SubscribeOnMainThread().Subscribe(_ =>
                 {
+                    addressLastUpdatedTimes.AddOrReplace(asset1.AssetAddress, DateTimeUtils.GetCurrentUnixTime());
+
                     MainThreadExecutor.QueueAction(() => OnTransactionsAdded?.Invoke());
                     isScraping = false;
                 });
             });
         });
+    }
+
+    private List<TradableAsset> GetVisibleAssetList(List<GameObject> visibleGameObjects = null)
+    {
+        List<GameObject> list = visibleGameObjects ?? scrollview.VisibleItemList;
+        return list.Select(item => item.GetComponentInChildren<AssetButton>())
+                                       .Where(button => button != null)
+                                       .Select(button => button.ButtonInfo).ToList();
     }
 
     /// <summary>
@@ -97,6 +130,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <param name="asset"> The asset to scrape transactions for. </param>
     private void AddAssetToScrape(TradableAsset asset)
     {
+        Debug.Log(asset.AssetSymbol);
         if (asset is EtherAsset)
             QueueEther(userWalletManager.WalletAddress);
         else

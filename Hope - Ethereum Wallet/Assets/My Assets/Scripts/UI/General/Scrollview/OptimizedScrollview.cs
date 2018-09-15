@@ -7,14 +7,13 @@ using UnityEngine.UI;
 
 public sealed class OptimizedScrollview : MonoBehaviour
 {
+    public static event Action<OptimizedScrollview> OnOptimizedScrollviewInitialized;
     public event Action<List<GameObject>> OnVisibleItemsChanged;
 
     public string scrollviewKey;
 
     private static readonly Dictionary<string, OptimizedScrollview> ActiveScrollviews = new Dictionary<string, OptimizedScrollview>();
-
     private readonly List<GameObject> items = new List<GameObject>();
-
     private readonly List<bool> previouslyActiveList = new List<bool>();
 
     private ScrollRect scrollRect;
@@ -31,6 +30,8 @@ public sealed class OptimizedScrollview : MonoBehaviour
                 previousBottomIndex;
 
     public List<GameObject> VisibleItemList => items.Where(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
+
+    public static OptimizedScrollview GetScrollview(string scrollviewKey) => ActiveScrollviews.ContainsKey(scrollviewKey) ? ActiveScrollviews[scrollviewKey] : null;
 
     public void Refresh() => GetEnabledItems();
 
@@ -50,6 +51,11 @@ public sealed class OptimizedScrollview : MonoBehaviour
                   .Subscribe(_ => ActiveItemsUpdated());
 
         scrollRect.onValueChanged.AddListener(_ => ScrollRectChanged());
+
+        if (!string.IsNullOrEmpty(scrollviewKey))
+            ActiveScrollviews.Add(scrollviewKey, this);
+
+        OnOptimizedScrollviewInitialized?.Invoke(this);
     }
 
     private void ItemCountChanged()
