@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NBitcoin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
@@ -16,6 +17,9 @@ public sealed class OptimizedScrollview : MonoBehaviour
     private readonly List<GameObject> items = new List<GameObject>();
     private readonly List<bool> previouslyActiveList = new List<bool>();
 
+    private IDisposable itemCountChangedDisposable,
+                        activeItemsChangedDisposable;
+
     private ScrollRect scrollRect;
 
     private Transform listParent;
@@ -31,8 +35,6 @@ public sealed class OptimizedScrollview : MonoBehaviour
 
     public List<GameObject> VisibleItemList => items.Where(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
 
-    public static OptimizedScrollview GetScrollview(string scrollviewKey) => ActiveScrollviews.ContainsKey(scrollviewKey) ? ActiveScrollviews[scrollviewKey] : null;
-
     public void Refresh() => GetEnabledItems();
 
     private void Start()
@@ -42,20 +44,21 @@ public sealed class OptimizedScrollview : MonoBehaviour
         scrollRect = rectTransform.parent.GetComponent<ScrollRect>();
         viewportHeight = rectTransform.rect.size.y;
 
-        Observable.EveryUpdate()
-                  .Where(_ => itemCount != listParent.childCount)
-                  .Subscribe(_ => ItemCountChanged());
-
-        Observable.EveryUpdate()
-                  .Where(_ => !items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).SequenceEqual(previouslyActiveList))
-                  .Subscribe(_ => ActiveItemsUpdated());
+        itemCountChangedDisposable = Observable.EveryUpdate().Where(_ => itemCount != listParent.childCount).Subscribe(_ => ItemCountChanged());
+        activeItemsChangedDisposable = Observable.EveryUpdate().Where(_ => !items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).SequenceEqual(previouslyActiveList)).Subscribe(_ => ActiveItemsUpdated());
 
         scrollRect.onValueChanged.AddListener(_ => ScrollRectChanged());
 
         if (!string.IsNullOrEmpty(scrollviewKey))
-            ActiveScrollviews.Add(scrollviewKey, this);
+            ActiveScrollviews.AddOrReplace(scrollviewKey, this);
 
         OnOptimizedScrollviewInitialized?.Invoke(this);
+    }
+
+    private void OnDisable()
+    {
+        itemCountChangedDisposable.Dispose();
+        activeItemsChangedDisposable.Dispose();
     }
 
     private void ItemCountChanged()
