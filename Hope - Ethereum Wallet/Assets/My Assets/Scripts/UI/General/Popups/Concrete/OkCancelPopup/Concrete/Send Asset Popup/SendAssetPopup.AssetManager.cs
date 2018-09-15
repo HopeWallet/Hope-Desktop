@@ -15,7 +15,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         public event Action OnAssetBalanceChanged;
 
         private readonly TradableAssetManager tradableAssetManager;
-        private readonly TradableAssetImageManager tradableAssetImageManager;
         private readonly EtherBalanceObserver etherBalanceObserver;
         private readonly UpdateManager updateManager;
 
@@ -46,7 +45,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// Initializes the <see cref="AssetManager"/> by assigning all required references.
         /// </summary>
         /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
-        /// <param name="tradableAssetImageManager"> The active <see cref="TradableAssetImageManager"/>. </param>
         /// <param name="etherBalanceObserver"> The active <see cref="EtherBalanceObserver"/>. </param>
         /// <param name="updateManager"> The active <see cref="UpdateManager"/>. </param>
         /// <param name="assetSymbol"> The asset symbol text component. </param>
@@ -54,7 +52,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="assetImage"> The image component used for assigning the asset image. </param>
         public AssetManager(
             TradableAssetManager tradableAssetManager,
-            TradableAssetImageManager tradableAssetImageManager,
             EtherBalanceObserver etherBalanceObserver,
             UpdateManager updateManager,
             TMP_Text assetSymbol,
@@ -62,7 +59,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             Image assetImage)
         {
             this.tradableAssetManager = tradableAssetManager;
-            this.tradableAssetImageManager = tradableAssetImageManager;
             this.etherBalanceObserver = etherBalanceObserver;
             this.updateManager = updateManager;
             this.assetSymbol = assetSymbol;
@@ -134,6 +130,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <summary>
         /// Updates the image of the active tradable asset.
         /// </summary>
-        private void UpdateImage() => tradableAssetImageManager.LoadImage(tradableAssetManager.ActiveTradableAsset.AssetSymbol, img => assetImage.sprite = img);
+        private void UpdateImage() => assetImage.sprite = tradableAssetManager.ActiveTradableAsset.AssetImage;
     }
 }
