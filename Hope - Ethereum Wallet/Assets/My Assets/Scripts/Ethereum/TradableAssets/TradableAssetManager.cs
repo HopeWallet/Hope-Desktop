@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Class which manages all TradableAssets.
 /// </summary>
-public class TradableAssetManager : IPeriodicUpdater
+public sealed class TradableAssetManager : IPeriodicUpdater
 {
     public static event Action OnBalancesUpdated;
     public static event Action<TradableAsset> OnTradableAssetAdded;
@@ -75,7 +75,7 @@ public class TradableAssetManager : IPeriodicUpdater
     }
 
     /// <summary>
-    /// Removecs a TradbaleAsset from this class.
+    /// Removes a TradbaleAsset from this class.
     /// </summary>
     /// <param name="address"> The address of the asset to remove. </param>
     public void RemoveTradableAsset(string address)
@@ -97,6 +97,6 @@ public class TradableAssetManager : IPeriodicUpdater
     /// Gets a TradableAsset given its address.
     /// </summary>
     /// <param name="address"> The address of the asset to receive. </param>
-    /// <returns></returns>
+    /// <returns> The TradableAsset located at the address. </returns>
     public TradableAsset GetTradableAsset(string address) => TradableAssets.ContainsKey(address) ? TradableAssets[address] : null;
 }
