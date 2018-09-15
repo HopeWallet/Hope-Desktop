@@ -42,12 +42,17 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
             return;
 
         if (removedTokens.Count(token => token.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address) && addableTokenInfo.Listed) > 0)
-            removedTokens.RemoveAt(removedTokens.IndexOf(removedTokens.Where(token => token.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).First()));
+            removedTokens.RemoveAt(removedTokens.IndexOf(removedTokens.First(token => token.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address))));
 
 		if (AddableTokens.Select(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address).ContainsIgnoreCase(addableTokenInfo.TokenInfo.Address))
+        {
             AddableTokens.First(tokenButton => tokenButton.ButtonInfo.TokenInfo.Address.EqualsIgnoreCase(addableTokenInfo.TokenInfo.Address)).SetButtonInfo(addableTokenInfo);
+        }
         else
+        {
             AddableTokens.Add(CreateNewButton(addableTokenInfo));
+            SortTokenList();
+        }
     }
 
     public void RemoveToken(AddableTokenInfo addableTokenInfo)
@@ -97,7 +102,10 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
         popupManager.CloseActivePopup();
     }
 
-    private void CustomTokenButtonClicked() => popupManager.GetPopup<AddTokenPopup>(true);
+    private void CustomTokenButtonClicked()
+    {
+        popupManager.GetPopup<AddTokenPopup>(true);
+    }
 
     private void SearchInputChanged()
     {
@@ -129,5 +137,20 @@ public sealed class ModifyTokensPopup : ExitablePopupComponent<ModifyTokensPopup
 		OnAddableTokenAdded?.Invoke(tokenButton);
 
         return tokenButton;
+    }
+
+    private void SortTokenList()
+    {
+        Comparison<AddableTokenButton> comparison = (b1, b2) => b1.ButtonInfo.TokenInfo.Symbol.CompareTo(b2.ButtonInfo.TokenInfo.Symbol);
+
+        List<AddableTokenButton> enabledButtons = AddableTokens.Where(button => button.ButtonInfo.Enabled).ToList();
+        enabledButtons.Sort(comparison);
+
+        List<AddableTokenButton> disabledButtons = AddableTokens.Where(button => !button.ButtonInfo.Enabled).ToList();
+        disabledButtons.Sort(comparison);
+
+        AddableTokens.Clear();
+        AddableTokens.AddRange(enabledButtons.Concat(disabledButtons));
+        AddableTokens.ForEach(button => button.transform.parent.SetAsLastSibling());
     }
 }
