@@ -91,20 +91,20 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
             return;
 
         string assetBalance = tradableAsset.AssetBalance?.ToString();
+        string assetSymbol = tradableAsset.AssetSymbol;
 
         if (!string.IsNullOrEmpty(assetBalance))
-            balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH, "...");
-
-        lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
+            balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + "<size=60%> " + assetSymbol + " </size>";
 
         assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
 
-        netWorthText.gameObject.SetActive(tradableAsset.AssetBalance != 0);
+        lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
+        netWorthText.gameObject.SetActive(tradableAsset.AssetBalance > 0);
 
         if (netWorthText.gameObject.activeInHierarchy)
         {
             decimal netWorth = tradableAssetPriceManager.GetPrice(tradableAsset.AssetSymbol) * tradableAsset.AssetBalance;
-            netWorthText.text = netWorth.ToString("0.00") + " " + currencyManager.ActiveCurrency.ToString();
+            netWorthText.text = "<size=90%>$ </size>" + netWorth.ToString("0.00") + " <size=60%>" + currencyManager.ActiveCurrency.ToString() + "</size>";
         }
 
         assetImage.sprite = tradableAsset.AssetImage;

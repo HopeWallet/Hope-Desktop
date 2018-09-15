@@ -3,7 +3,6 @@
 /// </summary>
 public class EtherBalanceObserver : EventObserver<IEtherBalanceObservable>, IPeriodicUpdater
 {
-
     private EtherAsset etherAsset;
 
     private dynamic etherBalance;
@@ -37,21 +36,23 @@ public class EtherBalanceObserver : EventObserver<IEtherBalanceObservable>, IPer
     private void StartObserver(PeriodicUpdateManager periodicUpdateManager, TradableAssetManager tradableAssetManager)
     {
         etherAsset = tradableAssetManager.EtherAsset;
+        etherAsset.OnAssetBalanceChanged += OnEtherBalanceChanged;
+
         periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     /// <summary>
     /// Updates the ether balance and notifies each observable if the balance changes.
     /// </summary>
-    public void PeriodicUpdate()
-    {
-        etherAsset.UpdateBalance(() =>
-        {
-            var oldBalance = etherBalance;
-            etherBalance = etherAsset.AssetBalance;
+    public void PeriodicUpdate() => etherAsset.UpdateBalance();
 
-            if (oldBalance != etherBalance)
-                observables.SafeForEach(observable => observable.EtherBalance = etherAsset.AssetBalance);
-        });
+    /// <summary>
+    /// Notifies observables of an ether balance change.
+    /// </summary>
+    /// <param name="balance"> The new ether balance. </param>
+    private void OnEtherBalanceChanged(dynamic balance)
+    {
+        etherBalance = balance;
+        observables.SafeForEach(observable => observable.EtherBalance = balance);
     }
 }

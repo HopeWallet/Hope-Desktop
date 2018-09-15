@@ -60,6 +60,8 @@ public sealed class TradableAssetManager : IPeriodicUpdater
         }
 
         TradableAssets.Add(address, tradableAsset);
+        tradableAsset.OnAssetBalanceChanged += _ => OnBalancesUpdated?.Invoke();
+
         OnTradableAssetAdded?.Invoke(tradableAsset);
     }
 
@@ -83,15 +85,17 @@ public sealed class TradableAssetManager : IPeriodicUpdater
         if (!TradableAssets.ContainsKey(address))
             return;
 
-        var asset = TradableAssets[address];
+        var tradableAsset = TradableAssets[address];
         TradableAssets.Remove(address);
-        OnTradableAssetRemoved?.Invoke(asset);
+        tradableAsset.OnAssetBalanceChanged -= _ => OnBalancesUpdated?.Invoke();
+
+        OnTradableAssetRemoved?.Invoke(tradableAsset);
     }
 
     /// <summary>
     /// Updates the balance of a TradableAsset every so often to reflect realtime changes that might go on.
     /// </summary>
-    public void PeriodicUpdate() => TradableAssets.Values.ForEach(asset => asset.UpdateBalance(() => OnBalancesUpdated?.Invoke()));
+    public void PeriodicUpdate() => TradableAssets.Values.ForEach(asset => asset.UpdateBalance());
 
     /// <summary>
     /// Gets a TradableAsset given its address.

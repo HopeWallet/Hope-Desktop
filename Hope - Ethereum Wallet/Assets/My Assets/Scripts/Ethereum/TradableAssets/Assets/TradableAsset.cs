@@ -71,15 +71,13 @@ public abstract class TradableAsset
     /// <summary>
     /// Updates this asset balance belonging in the user's wallet. 
     /// </summary>
-    /// <param name="onBalanceReceived"> Called when the balance has successfully been retrieved. </param>
-    public void UpdateBalance(Action onBalanceReceived = null)
+    public void UpdateBalance()
     {
         GetBalance(userWalletManager, balance =>
         {
             bool changed = balance != AssetBalance;
 
             AssetBalance = balance;
-            onBalanceReceived?.Invoke();
 
             if (changed)
                 OnAssetBalanceChanged?.Invoke(AssetBalance);
