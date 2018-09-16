@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,17 +8,17 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-    public static event Action<TabType> OnTabChanged;
+    [SerializeField] private GameObject lockPurposeSection,
+										lockPurposeNotificationSection;
 
-    public GameObject lockPurposeSection,
-                      lockPurposeNotificationSection;
+    [SerializeField] private TMP_Text walletNameText,
+									  walletAccountText,
+									  assetText,
+									  balanceText,
+									  netWorthText,
+									  lockPrpsNotificationText;
 
-    public TMP_Text walletNameText,
-					walletAccountText,
-					assetText,
-                    balanceText,
-                    netWorthText,
-                    lockPrpsNotificationText;
+	[SerializeField] private GeneralRadioButtons transactionTabs;
 
     public Image assetImage;
 
@@ -73,12 +72,13 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		this.userWalletManager = userWalletManager;
 
 		walletAccountText.GetComponent<Button>().onClick.AddListener(() => popupManager.GetPopup<AccountsPopup>());
+		transactionTabs.OnButtonChanged += TabChanged;
 	}
 
-    /// <summary>
-    /// Initializes the instance and the wallet parent object.
-    /// </summary>
-    private void Start()
+	/// <summary>
+	/// Initializes the instance and the wallet parent object.
+	/// </summary>
+	private void Start()
     {
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
@@ -142,5 +142,19 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
     }
 
-	public enum TabType { All, Sent, Received }
+	private void TabChanged(int tabNum)
+	{
+		if (tabNum == 0)
+		{
+			//All
+		}
+		else if (tabNum == 1)
+		{
+			//Sent
+		}
+		else
+		{
+			//Recieved
+		}
+	}
 }
