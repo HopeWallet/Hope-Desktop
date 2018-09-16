@@ -1,22 +1,19 @@
 ﻿using Nethereum.Signer;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AccountsPopupAnimator : UIAnimator
 {
-	public Action<int, int> AnimatePageChange { get; private set; }
-
 	[SerializeField] private GameObject topSection;
 	[SerializeField] private GameObject line;
 	[SerializeField] private Transform addressSection;
 	[SerializeField] private Transform pageSection;
 	[SerializeField] private GameObject unlockButton;
 
-	private void Awake() => AnimatePageChange = AnimateAddresses;
+    private void Awake() => GetComponent<AccountsPopup>().OnPageChanged += AnimateAddresses;
 
-	protected override void AnimateUniqueElementsIn()
+    protected override void AnimateUniqueElementsIn()
 	{
 		topSection.AnimateScaleX(1f, 0.175f);
 		line.AnimateScaleX(1f, 0.2f);

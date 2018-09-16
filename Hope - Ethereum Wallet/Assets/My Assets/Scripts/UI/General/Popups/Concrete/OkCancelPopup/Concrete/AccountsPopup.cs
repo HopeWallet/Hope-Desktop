@@ -1,25 +1,32 @@
 ﻿using Nethereum.Signer;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
+    public event Action<int, int> OnPageChanged;
+
 	[SerializeField] private GeneralRadioButtons addressesCategories;
 	[SerializeField] private Transform addressesSection;
 	[SerializeField] private Button previousPageButton, nextPageButton;
 	[SerializeField] private TextMeshProUGUI pageNumText;
 	[SerializeField] private GameObject loadingIcon;
 
-	private AccountsPopupAnimator accountsPopupAnimator;
+    private UserWalletManager userWalletManager;
 
-	private int pageNum = 1, firstAddressNumInList = 1, currentlySelectedAddress = 1, currentlyUnlockedAddress = 1;
+	private int pageNum = 1,
+                firstAddressNumInList = 1,
+                currentlySelectedAddress = 1,
+                currentlyUnlockedAddress = 1;
+
+    public void Construct(UserWalletManager userWalletManager) => this.userWalletManager = userWalletManager;
 
 	protected override void Awake()
 	{
 		base.Awake();
 
-		accountsPopupAnimator = Animator as AccountsPopupAnimator;
 		addressesCategories.OnButtonChanged += AddressCategoryChanged;
 		previousPageButton.onClick.AddListener(() => PageChanged(false));
 		nextPageButton.onClick.AddListener(() => PageChanged(true));
@@ -57,8 +64,8 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		firstAddressNumInList = (pageNum * 5) - 4;
 		pageNumText.text = pageNum.ToString();
 
-		//When addresses are done loading:
-		accountsPopupAnimator.AnimatePageChange(firstAddressNumInList, currentlySelectedAddress);
+        //When addresses are done loading:
+        OnPageChanged?.Invoke(firstAddressNumInList, currentlySelectedAddress);
 	}
 
 	private void AddressCategoryChanged(int num)
