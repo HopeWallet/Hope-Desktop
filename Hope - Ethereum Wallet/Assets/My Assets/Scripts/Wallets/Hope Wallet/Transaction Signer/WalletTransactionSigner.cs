@@ -36,13 +36,14 @@ public sealed class WalletTransactionSigner
     /// Signs a transaction and passes the result through an Action as a <see cref="TransactionSignedUnityRequest"/>.
     /// </summary>
     /// <param name="walletAddress"> The wallet address to sign the transaction with. </param>
+    /// <param name="path"> The path of the wallet to sign the transaction with. </param>
     /// <param name="encryptedPasswordBytes"> The encrypted password to use to decrypt the wallet. </param>
     /// <param name="onRequestReceived"> Action called with the <see cref="TransactionSignedUnityRequest"/> once the transaction was signed. </param>
     [SecureCallEnd]
-    public void SignTransaction(string walletAddress, byte[] encryptedPasswordBytes, Action<TransactionSignedUnityRequest> onRequestReceived)
+    public void SignTransaction(string walletAddress, string path, byte[] encryptedPasswordBytes, Action<TransactionSignedUnityRequest> onRequestReceived)
     {
         var plainTextBytes = passwordEncryptor.Decrypt(encryptedPasswordBytes);
-        walletDecryptor.DecryptWallet(plainTextBytes, (seed, path) =>
+        walletDecryptor.DecryptWallet(plainTextBytes, seed =>
         {
             TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, path).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
             MainThreadExecutor.QueueAction(() => onRequestReceived?.Invoke(request));

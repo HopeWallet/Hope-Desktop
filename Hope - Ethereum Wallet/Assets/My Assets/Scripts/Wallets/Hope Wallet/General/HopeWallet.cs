@@ -1,5 +1,6 @@
 using Hope.Security.ProtectedTypes.Types;
 using Hope.Utils.Promises;
+using Nethereum.HdWallet;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Numerics;
@@ -114,6 +115,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// <param name="addressFrom"> The address of the wallet signing the transaction. </param>
     /// <param name="addressTo"> The address the transaction is being sent to. </param>
     /// <param name="data"> The data sent along with the transaction. </param>
+    /// <param name="path"> The path of the wallet to sign the transaction with. </param>
     /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
     [SecureCaller]
     [ReflectionProtect]
@@ -125,6 +127,7 @@ public sealed class HopeWallet : SecureObject, IWallet
         string addressFrom,
         string addressTo,
         string data,
+        string path,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
         DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
@@ -132,7 +135,7 @@ public sealed class HopeWallet : SecureObject, IWallet
         {
             byte[] encryptedPasswordBytes = GetEncryptedPass(disposableData.ByteValue);
             popupManager.GetPopup<T>(true)
-                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(addressFrom, encryptedPasswordBytes, onTransactionSigned),
+                        .SetConfirmationValues(() => walletTransactionSigner.SignTransaction(addressFrom, path, encryptedPasswordBytes, onTransactionSigned),
                                                gasLimit,
                                                gasPrice,
                                                displayInput);

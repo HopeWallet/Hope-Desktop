@@ -38,7 +38,7 @@ public sealed class HopeWalletInfoManager
     /// </summary>
     /// <param name="walletName"> The name of the wallet. </param>
     /// <param name="walletAddresses"> The array of addresses associated with the wallet. </param>
-    public void AddWalletInfo(string walletName, string[] walletAddresses)
+    public void AddWalletInfo(string walletName, string[][] walletAddresses)
     {
         SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count + 1);
         wallets.Add(new WalletInfo(walletName, walletAddresses, wallets.Count));
@@ -90,7 +90,6 @@ public sealed class HopeWalletInfoManager
         [RandomizeText] public string walletDataPrefName;
         [RandomizeText] public string walletNamePrefName;
         [RandomizeText] public string walletPasswordPrefName;
-        [RandomizeText] public string walletDerivationPrefName;
         [RandomizeText] public string walletCountPrefName;
         [RandomizeText] public string walletHashLvlPrefName;
         [RandomizeText] public string walletInfoPrefName;

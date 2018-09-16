@@ -52,9 +52,8 @@ public sealed class WalletCreator : WalletLoaderBase
         int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
 
-        userWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses);
+        userWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addressesToSave);
 
-        SecurePlayerPrefs.SetString(walletSettings.walletDerivationPrefName + walletNum, dynamicDataCache.GetData("path"));
         SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, saltedPasswordHash);
         SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString(walletSettings.walletNamePrefName + walletNum, dynamicDataCache.GetData("name"));

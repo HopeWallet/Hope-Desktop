@@ -39,7 +39,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenHopeWallet()
     {
-        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Hope);
+        userWalletManager.SwitchWalletType(UserWalletManager.WalletType.Hope);
 
         if (SecurePlayerPrefs.HasKey(walletSettings.walletCountPrefName) && SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) > 0)
             uiManager.OpenMenu<WalletListMenu>();
@@ -52,7 +52,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     /// </summary>
     private void OpenLedgerWallet()
     {
-        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Ledger);
+        userWalletManager.SwitchWalletType(UserWalletManager.WalletType.Ledger);
 
         uiManager.OpenMenu<OpenLedgerWalletMenu>();
     }
@@ -62,7 +62,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	/// </summary>
 	private void OpenTrezorWallet()
 	{
-        userWalletManager.SwitchWallet(UserWalletManager.WalletType.Trezor);
+        userWalletManager.SwitchWalletType(UserWalletManager.WalletType.Trezor);
 
         uiManager.OpenMenu<OpenTrezorWalletMenu>();
 	}

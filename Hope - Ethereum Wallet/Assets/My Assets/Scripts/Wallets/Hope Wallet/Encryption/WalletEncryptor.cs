@@ -65,7 +65,6 @@ public sealed class WalletEncryptor : SecureObject
                 new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
-                walletSettings.walletDerivationPrefName,
                 walletSettings.walletEncryptionEntropy,
                 walletSettings.walletHashLvlPrefName,
                 walletSettings.walletInfoPrefName,

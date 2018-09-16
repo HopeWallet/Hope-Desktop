@@ -35,8 +35,8 @@ public sealed class WalletDecryptor : SecureObject
     /// Decrypts the wallet given the user's password.
     /// </summary>
     /// <param name="password"> The user's password to the wallet. </param>
-    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet and <see langword="string"/> wallet derivation. </param>
-    public void DecryptWallet(byte[] password, Action<byte[], string> onWalletDecrypted)
+    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
+    public void DecryptWallet(byte[] password, Action<byte[]> onWalletDecrypted)
     {
         int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
@@ -49,9 +49,8 @@ public sealed class WalletDecryptor : SecureObject
                 hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
 
             string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
-            string path = SecurePlayerPrefs.GetString(walletSettings.walletDerivationPrefName + walletNum);
 
-            Task.Factory.StartNew(() => AsyncDecryptWallet(hashLvls, encryptedSeed, path, password, walletNum, onWalletDecrypted));
+            Task.Factory.StartNew(() => AsyncDecryptWallet(hashLvls, encryptedSeed, password, walletNum, onWalletDecrypted));
         });
     }
 
@@ -60,17 +59,15 @@ public sealed class WalletDecryptor : SecureObject
     /// </summary>
     /// <param name="hashes"> Different hash levels used for multi level encryption of the wallet seed. </param>
     /// <param name="encryptedSeed"> The encrypted seed of the wallet. </param>
-    /// <param name="path"> The wallet's derivation path. </param>
     /// <param name="password"> The user's password to the wallet. </param>
     /// <param name="walletNum"> The number of the wallet to decrypt. </param>
-    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet and the <see langword="string"/> wallet derivation. </param>
+    /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
     private void AsyncDecryptWallet(
         string[] hashes,
         string encryptedSeed,
-        string path,
         byte[] password,
         int walletNum,
-        Action<byte[], string> onWalletDecrypted)
+        Action<byte[]> onWalletDecrypted)
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);
 
@@ -78,7 +75,6 @@ public sealed class WalletDecryptor : SecureObject
                 new Blake2bDigest(512),
                 walletSettings.walletCountPrefName,
                 walletSettings.walletDataPrefName,
-                walletSettings.walletDerivationPrefName,
                 walletSettings.walletEncryptionEntropy,
                 walletSettings.walletHashLvlPrefName,
                 walletSettings.walletInfoPrefName,
@@ -99,6 +95,6 @@ public sealed class WalletDecryptor : SecureObject
             lvl2EncryptHash.ClearBytes();
         }
 
-        onWalletDecrypted?.Invoke(decryptedSeed, path);
+        onWalletDecrypted?.Invoke(decryptedSeed);
     }
 }

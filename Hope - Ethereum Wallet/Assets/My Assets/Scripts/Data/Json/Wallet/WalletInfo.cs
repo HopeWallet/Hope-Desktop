@@ -19,7 +19,7 @@ public sealed class WalletInfo
     /// <summary>
     /// The addresses of the wallet.
     /// </summary>
-    public string[] WalletAddresses { get; set; }
+    public string[][] WalletAddresses { get; set; }
 
     /// <summary>
     /// Initializes the WalletInfo with the name and number of the wallet.
@@ -27,7 +27,7 @@ public sealed class WalletInfo
     /// <param name="walletName"> The name of the wallet. </param>
     /// <param name="walletAddresses"> The addresses of this wallet. </param>
     /// <param name="walletNum"> The number of the wallet. </param>
-    public WalletInfo(string walletName, string[] walletAddresses, int walletNum)
+    public WalletInfo(string walletName, string[][] walletAddresses, int walletNum)
     {
         WalletNum = walletNum;
         WalletAddresses = walletAddresses;

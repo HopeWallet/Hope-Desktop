@@ -1,4 +1,5 @@
-﻿using Nethereum.Hex.HexTypes;
+﻿using Nethereum.HdWallet;
+using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Numerics;
@@ -23,6 +24,11 @@ public sealed class UserWalletManager
     /// The address of the main UserWallet.
     /// </summary>
     public string WalletAddress => activeWallet.GetAddress(accountNumber);
+
+    /// <summary>
+    /// The wallet derivation path.
+    /// </summary>
+    public string WalletPath { get; private set; }
 
     /// <summary>
     /// The currently opened, currently active wallet type.
@@ -64,7 +70,6 @@ public sealed class UserWalletManager
         hopeWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
     }
 
-
     /// <summary>
     /// Wrapper method for transferring a specified asset from the user's wallet to another ethereum address.
     /// </summary>
@@ -97,27 +102,51 @@ public sealed class UserWalletManager
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, displayInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", accountNumber.ToString()), displayInput);
     }
 
     /// <summary>
     /// Switches the active WalletType.
     /// </summary>
     /// <param name="newWalletType"> The new WalletType to use to get addresses/sign transactions. </param>
-    public void SwitchWallet(WalletType newWalletType)
+    public void SwitchWalletType(WalletType newWalletType)
     {
         switch (newWalletType)
         {
             case WalletType.Ledger:
                 activeWallet = ledgerWallet;
+                WalletPath = Wallet.ELECTRUM_LEDGER_PATH;
                 break;
             case WalletType.Trezor:
                 activeWallet = trezorWallet;
+                WalletPath = Wallet.DEFAULT_PATH;
                 break;
             case WalletType.Hope:
                 activeWallet = hopeWallet;
+                WalletPath = Wallet.DEFAULT_PATH;
                 break;
         }
+    }
+
+    /// <summary>
+    /// Switches the active derivation path of the wallet.
+    /// </summary>
+    /// <param name="newPath"> The new derivation path to use. </param>
+    public void SwitchWalletPath(string newPath)
+    {
+        if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) || !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
+            return;
+
+        WalletPath = newPath;
+    }
+
+    /// <summary>
+    /// Switches the current account number of the wallet.
+    /// </summary>
+    /// <param name="newAccountNumber"> The new account number of the wallet to use. </param>
+    public void SwitchWalletAccount(int newAccountNumber)
+    {
+        accountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
     }
 
     /// <summary>

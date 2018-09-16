@@ -35,6 +35,7 @@ public interface IWallet
     /// <param name="addressFrom"> The address of the wallet signing the transaction. </param>
     /// <param name="addressTo"> The address the transaction is being sent to. </param>
     /// <param name="data"> The data sent along with the transaction. </param>
+    /// <param name="path"> The path of the wallet to sign the transaction with. </param>
     /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
     void SignTransaction<T>(Action<TransactionSignedUnityRequest> onTransactionSigned,
                             BigInteger gasLimit,
@@ -43,5 +44,6 @@ public interface IWallet
                             string addressFrom,
                             string addressTo,
                             string data,
+                            string path,
                             params object[] displayInput) where T : ConfirmTransactionPopupBase<T>;
 }
