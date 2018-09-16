@@ -84,8 +84,9 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
 
-        var walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
-        walletNameText.text = string.IsNullOrEmpty(walletName) ? userWalletManager.ActiveWalletType.ToString() : walletName;
+        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
+            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName
+            : userWalletManager.ActiveWalletType.ToString();
 
 		new IdleTimeoutManager(uiManager);
     }
