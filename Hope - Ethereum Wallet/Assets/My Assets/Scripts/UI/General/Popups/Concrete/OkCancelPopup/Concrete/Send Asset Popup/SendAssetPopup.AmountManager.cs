@@ -211,7 +211,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			bool emptyField = string.IsNullOrEmpty(amountInputField.Text);
 
-			amountInputField.Error = emptyField || SendableAmount == 0 || (usingTokenCurrency ? SendableAmount > MaxSendableAmount : (SendableAmount / tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol)) > MaxSendableAmount);
+			amountInputField.Error = emptyField || SendableAmount == 0 || SendableAmount > MaxSendableAmount;
 
 			if (!emptyField)
 				amountInputField.errorMessage.text = SendableAmount == 0 ? "Invalid amount" : "Exceeds " + tradableTokenSymbol + " balance";
