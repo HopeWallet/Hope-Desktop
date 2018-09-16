@@ -14,7 +14,9 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     public GameObject lockPurposeSection,
                       lockPurposeNotificationSection;
 
-    public TMP_Text assetText,
+    public TMP_Text walletNameText,
+					walletAccountText,
+					assetText,
                     balanceText,
                     netWorthText,
                     lockPrpsNotificationText;
@@ -28,22 +30,27 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     private LockedPRPSManager lockedPrpsManager;
     private PRPS prpsContract;
     private CurrencyManager currencyManager;
+	private HopeWalletInfoManager hopeWalletInfoManager;
+	private UserWalletManager userWalletManager;
 
-    private const int MAX_ASSET_NAME_LENGTH = 36;
+	private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
-    /// <summary>
-    /// Injects the required dependency into this class.
-    /// </summary>
-    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetPriceManager">The active TradableAssetPriceManager. </param>
-    /// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
-    /// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
-    /// <param name="prpsContract"> The active PRPS contract. </param>
-    /// <param name="uiSettings"> The ui settings. </param>
-    /// <param name="currencyManager"> The active CurrencyManager. </param>
-    [Inject]
+	/// <summary>
+	/// Injects the required dependency into this class.
+	/// </summary>
+	/// <param name="tokenContractManager"> The active TokenContractManager. </param>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetPriceManager">The active TradableAssetPriceManager. </param>
+	/// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
+	/// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
+	/// <param name="prpsContract"> The active PRPS contract. </param>
+	/// <param name="uiSettings"> The ui settings. </param>
+	/// <param name="currencyManager"> The active CurrencyManager. </param>
+	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="popupManager"> The active PopupManager</param>
+	[Inject]
     public void Construct(
         TokenContractManager tokenContractManager,
         TradableAssetManager tradableAssetManager,
@@ -52,7 +59,10 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract,
         UIManager.Settings uiSettings,
-        CurrencyManager currencyManager)
+        CurrencyManager currencyManager,
+		HopeWalletInfoManager hopeWalletInfoManager,
+		UserWalletManager userWalletManager,
+		PopupManager popupManager)
     {
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
@@ -61,7 +71,11 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
         this.currencyManager = currencyManager;
-    }
+		this.hopeWalletInfoManager = hopeWalletInfoManager;
+		this.userWalletManager = userWalletManager;
+
+		walletAccountText.GetComponent<Button>().onClick.AddListener(() => popupManager.GetPopup<AccountsPopup>());
+	}
 
     /// <summary>
     /// Initializes the instance and the wallet parent object.
@@ -72,13 +86,15 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
 
-        new IdleTimeoutManager(uiManager);
+		walletNameText.text = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
+
+		new IdleTimeoutManager(uiManager);
     }
 
-    /// <summary>
-    /// Called when the OpenWalletMenu is first opened.
-    /// </summary>
-    private void OpenMenu() => transform.GetChild(0).gameObject.SetActive(true);
+	/// <summary>
+	/// Called when the OpenWalletMenu is first opened.
+	/// </summary>
+	private void OpenMenu() => transform.GetChild(0).gameObject.SetActive(true);
 
     /// <summary>
     /// Updates the ui for the newest TradableAsset.
@@ -125,5 +141,5 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
     }
 
-    public enum TabType { All, Sent, Received }
+	public enum TabType { All, Sent, Received }
 }
