@@ -31,7 +31,7 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		}
 	}
 
-	private void SetButtonListener(int num) => addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
+    private void SetButtonListener(int num) => addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
 
 	private void AddressClicked(int num)
 	{
@@ -44,8 +44,6 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
 		okButton.interactable = currentlyUnlockedAddress != currentlySelectedAddress;
 	}
-
-	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
 
 	private void PageChanged(bool movingForward)
 	{

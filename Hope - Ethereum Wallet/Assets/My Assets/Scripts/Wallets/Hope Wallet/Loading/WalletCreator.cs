@@ -9,6 +9,8 @@ public sealed class WalletCreator : WalletLoaderBase
     private readonly WalletEncryptor walletEncryptor;
     private readonly HopeWalletInfoManager.Settings walletSettings;
 
+    private string[][] addressesToSave;
+
     /// <summary>
     /// Initializes the WalletCreator with all required references.
     /// </summary>
@@ -64,7 +66,6 @@ public sealed class WalletCreator : WalletLoaderBase
 
         ((byte[])dynamicDataCache.GetData("seed")).ClearBytes();
         dynamicDataCache.SetData("seed", null);
-        dynamicDataCache.SetData("path", null);
     }
 
     /// <summary>
@@ -90,11 +91,12 @@ public sealed class WalletCreator : WalletLoaderBase
 
         try
         {
-            Wallet wallet = new Wallet((byte[])dynamicDataCache.GetData("seed"), (string)dynamicDataCache.GetData("path"));
-            string[] addresses = wallet.GetAddresses(50);
+            addressesToSave = new string[2][];
+            addressesToSave[0] = new Wallet((byte[])dynamicDataCache.GetData("seed"), Wallet.DEFAULT_PATH).GetAddresses(50);
+            addressesToSave[1] = new Wallet((byte[])dynamicDataCache.GetData("seed"), Wallet.ELECTRUM_LEDGER_PATH).GetAddresses(50);
 
-            AssignAddresses(addresses);
-            walletEncryptor.EncryptWallet(wallet.Seed, password, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
+            AssignAddresses(addressesToSave[0]);
+            walletEncryptor.EncryptWallet((byte[])dynamicDataCache.GetData("seed"), password, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
         }
         catch (Exception e)
         {

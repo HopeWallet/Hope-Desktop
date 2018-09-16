@@ -82,7 +82,6 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, ITabButtonObs
     {
         Wallet wallet = new Wallet(Wordlist.English, WordCount.Twelve);
         dynamicDataCache.SetData("seed", wallet.Seed);
-        dynamicDataCache.SetData("path", wallet.Path);
         dynamicDataCache.SetData("mnemonic", wallet.Phrase);
     }
 

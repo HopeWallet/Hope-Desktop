@@ -82,6 +82,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
+
         tokenContractManager.StartTokenLoad(OpenMenu);
 
         walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope

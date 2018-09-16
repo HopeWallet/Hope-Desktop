@@ -12,7 +12,7 @@ public class TokenListButton : MonoBehaviour
 	private PopupManager popupManager;
 
 	/// <summary>
-	/// Adds the dependencies to the LockPRPSButton.
+	/// Adds the dependencies to the TokenListButton.
 	/// </summary>
 	/// <param name="popupManager"> The active PopupManager. </param>
 	[Inject]
@@ -28,7 +28,7 @@ public class TokenListButton : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Opens the ModifyTokensPopup
+	/// Opens the ModifyTokensPopup.
 	/// </summary>
 	private void ButtonClicked()
 	{

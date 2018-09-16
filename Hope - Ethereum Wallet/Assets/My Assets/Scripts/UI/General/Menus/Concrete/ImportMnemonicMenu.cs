@@ -153,7 +153,6 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     private void SetWalletInfo(Wallet wallet)
     {
         dynamicDataCache.SetData("seed", wallet.Seed);
-        dynamicDataCache.SetData("path", wallet.Path);
         dynamicDataCache.SetData("mnemonic", null);
     }
 }
