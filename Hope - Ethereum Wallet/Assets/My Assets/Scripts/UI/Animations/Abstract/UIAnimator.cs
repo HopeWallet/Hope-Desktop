@@ -93,7 +93,7 @@ public abstract class UIAnimator : MonoBehaviour
 
 		if (blur != null) blur.AnimateScale(endValue, 0.2f);
 
-		if (formTitle != null) formTitle.AnimateGraphicAndScale(1f, 1f, animateIn ? 0.3f : 0.2f);
+		if (formTitle != null) formTitle.AnimateGraphicAndScale(1f, 1f, animateIn ? 0.35f : 0.2f);
 
 		if (form != null)
 			form.AnimateGraphicAndScale(1f, endValue, 0.2f, () => OnCompleteAction(animateIn));

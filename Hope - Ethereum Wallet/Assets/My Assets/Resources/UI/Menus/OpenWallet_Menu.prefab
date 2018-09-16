@@ -1218,7 +1218,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224950740150149568}
-  - component: {fileID: 114877122333817958}
+  - component: {fileID: 114369457546923850}
   m_Layer: 5
   m_Name: TransactionTabs
   m_TagString: Untagged
@@ -1306,6 +1306,7 @@ MonoBehaviour:
   balanceText: {fileID: 114125277020657546}
   netWorthText: {fileID: 114262674153539580}
   lockPrpsNotificationText: {fileID: 114649127489800408}
+  transactionTabs: {fileID: 114369457546923850}
   assetImage: {fileID: 114967936315283588}
 --- !u!114 &114030602193728692
 MonoBehaviour:
@@ -3048,6 +3049,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitableButton: 1
+--- !u!114 &114369457546923850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1994638068630716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114385305284041444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5221,17 +5233,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29e2f520bf7d1fb44a7340da19bb4d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114877122333817958
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1994638068630716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d896c6449378a7146a6b8831c7cd8d52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114885553983256332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7072,7 +7073,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 94, y: 220}
-  m_SizeDelta: {x: 400, y: 40}
+  m_SizeDelta: {x: 400, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224628347357294072
 RectTransform:
