@@ -45,7 +45,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// <param name="notificationManager"> The active TradableAssetNotificationManager. </param>
 	/// <param name="lockedPrpsManager"> The active LockedPRPSManager. </param>
 	/// <param name="prpsContract"> The active PRPS contract. </param>
-	/// <param name="uiSettings"> The ui settings. </param>
 	/// <param name="currencyManager"> The active CurrencyManager. </param>
 	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
 	/// <param name="userWalletManager"> The active UserWalletManager. </param>
@@ -58,7 +57,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         TradableAssetNotificationManager notificationManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract,
-        UIManager.Settings uiSettings,
         CurrencyManager currencyManager,
 		HopeWalletInfoManager hopeWalletInfoManager,
 		UserWalletManager userWalletManager,
@@ -86,7 +84,8 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
         tokenContractManager.StartTokenLoad(OpenMenu);
 
-		walletNameText.text = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
+        var walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
+        walletNameText.text = string.IsNullOrEmpty(walletName) ? userWalletManager.ActiveWalletType.ToString() : walletName;
 
 		new IdleTimeoutManager(uiManager);
     }
