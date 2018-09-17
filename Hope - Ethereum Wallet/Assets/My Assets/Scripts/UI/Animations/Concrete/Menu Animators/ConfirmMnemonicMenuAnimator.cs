@@ -44,6 +44,7 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     /// </summary>
     protected override void AnimateUniqueElementsIn()
     {
+		wordInputField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
 		FinishedAnimating();
         //wordInputField.AnimateScaleX(1f, 0.2f);
         //nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
