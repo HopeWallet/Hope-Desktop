@@ -21,9 +21,12 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
                 currentlySelectedAddress = 1,
                 currentlyUnlockedAddress = 1;
 
-    public void Construct(UserWalletManager userWalletManager) => this.userWalletManager = userWalletManager;
+    public void Construct(UserWalletManager userWalletManager)
+    {
+        this.userWalletManager = userWalletManager;
+    }
 
-	protected override void Awake()
+    protected override void Awake()
 	{
 		base.Awake();
 

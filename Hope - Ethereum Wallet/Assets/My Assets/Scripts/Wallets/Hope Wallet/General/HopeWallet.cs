@@ -23,7 +23,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     private readonly WalletUnlocker walletUnlocker;
     private readonly WalletTransactionSigner walletTransactionSigner;
 
-    private string[] addresses;
+    private readonly string[][] addresses = new string[2][];
 
     /// <summary>
     /// Initializes the UserWallet with the PlayerPrefPassword object.
@@ -54,11 +54,12 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// Gets the address of the wallet given the index of the address.
     /// </summary>
     /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>
-    /// <returns> Returns the address found at the index. </returns>
+    /// <param name="path"> The path of the address. </param>
+    /// <returns> Returns the address found at the index and path. </returns>
     [SecureCallEnd]
-    public string GetAddress(int addressIndex)
+    public string GetAddress(int addressIndex, string path)
     {
-        return addresses[addressIndex];
+        return path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? addresses[0][addressIndex] : addresses[1][addressIndex];
     }
 
     /// <summary>
@@ -89,7 +90,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     [ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
     {
-        walletLoader.Load(out addresses, OnWalletLoadSuccessful);
+        walletLoader.Load(addresses, OnWalletLoadSuccessful);
     }
 
     /// <summary>

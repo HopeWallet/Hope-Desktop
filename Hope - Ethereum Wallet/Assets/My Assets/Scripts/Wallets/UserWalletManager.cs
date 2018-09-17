@@ -23,7 +23,7 @@ public sealed class UserWalletManager
     /// <summary>
     /// The address of the main UserWallet.
     /// </summary>
-    public string WalletAddress => activeWallet.GetAddress(accountNumber);
+    public string WalletAddress => activeWallet.GetAddress(accountNumber, WalletPath);
 
     /// <summary>
     /// The wallet derivation path.
