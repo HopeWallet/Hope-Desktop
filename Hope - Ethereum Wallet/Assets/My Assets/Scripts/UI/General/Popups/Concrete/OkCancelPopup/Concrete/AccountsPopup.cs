@@ -38,18 +38,24 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     {
         base.Awake();
 
+        InitializeValues();
+        AssignListeners();
+        AssignAddresses();
+        InitializePageAndCategories();
+    }
+
+    private void InitializePageAndCategories()
+    {
+        addressesCategories.ButtonClicked(addressesIndex);
+        pageNumText.text = pageNum.ToString();
+    }
+
+    private void InitializeValues()
+    {
         pageNum = (userWalletManager.AccountNumber / 5) + 1;
         firstAddressNumInList = pageNum == 0 ? 1 : (pageNum * 5) - 4;
         currentlySelectedAddress = userWalletManager.AccountNumber + 1;
         unlockedAccount = userWalletManager.WalletAddress;
-
-        Debug.Log(pageNum + " " + firstAddressNumInList + " " + currentlySelectedAddress + " " + unlockedAccount + " " + userWalletManager.WalletPath);
-
-        AssignListeners();
-        AssignAddresses();
-        //PageChanged(true);
-
-        addressesCategories.ButtonClicked(addressesIndex);
     }
 
     private void AssignListeners()
@@ -88,7 +94,7 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     private void AddressClicked(int num)
     {
-        SetAddressButtonInteractability(addressesSection.GetChild(currentlySelectedAddress % 5), true);
+        SetAddressButtonInteractability(addressesSection.GetChild((currentlySelectedAddress - 1) % 5), true);
 
         Transform selectedAddressTransform = addressesSection.GetChild(num);
 
