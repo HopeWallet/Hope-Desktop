@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class which animates the transitions for the ImportOrCreateMnemonicMenu.
+/// The animator class of the ImportOrCreateMnemonicMenu
 /// </summary>
-public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
+public sealed class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject importWalletButton;
 	[SerializeField] private GameObject importWalletDesc;
@@ -13,25 +13,18 @@ public class ImportOrCreateMnemonicMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
-		//importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
-		//importWalletDesc.AnimateScaleX(1f, 0.2f);
-		//createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		//createWalletDesc.AnimateScaleX(1f, 0.3f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
-
-		//importWalletButton.SetGraphicAndScale(Vector2.zero);
-		//importWalletDesc.SetScale(new Vector2(0f, 1f));
-		//createWalletButton.SetGraphicAndScale(Vector2.zero);
-		//createWalletDesc.SetScale(new Vector2(0f, 1f));
 	}
 }

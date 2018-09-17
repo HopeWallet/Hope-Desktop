@@ -1,13 +1,24 @@
 ﻿using UnityEngine;
 
-public class WalletCreatedMenuAnimator : UIAnimator
+/// <summary>
+/// The animator class of the WalletCreatedMenu
+/// </summary>
+public sealed class WalletCreatedMenuAnimator : MenuAnimator
 {
-	protected override void AnimateUniqueElementsIn()
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
 	}
 
-	protected override void ResetElementValues()
+	/// <summary>
+	/// Animates the form out of view
+	/// </summary>
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
 	}

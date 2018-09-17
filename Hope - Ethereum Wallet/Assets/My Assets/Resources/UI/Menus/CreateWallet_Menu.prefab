@@ -2078,11 +2078,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1475811618508708}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 1839463719505436}
-  popupContainer: {fileID: 0}
+  line: {fileID: 1265691747917532}
   walletNameField: {fileID: 1158675541128030}
   password1Field: {fileID: 1948198633804592}
   password2Field: {fileID: 1386529655050340}

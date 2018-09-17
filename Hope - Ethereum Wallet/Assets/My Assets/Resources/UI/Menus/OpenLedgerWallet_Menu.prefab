@@ -1607,12 +1607,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animateOnEnable: 0
-  blocker: {fileID: 0}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
-  formTitle: {fileID: 0}
-  popupContainer: {fileID: 0}
+  blocker: {fileID: 1637952505016494}
+  formTitle: {fileID: 1099291146052992}
+  line: {fileID: 1796914677723112}
   awaitingConnectionText: {fileID: 1211755166444842}
   deviceConnectedText: {fileID: 1136455584542856}
   loadingIcon: {fileID: 1483256693071194}

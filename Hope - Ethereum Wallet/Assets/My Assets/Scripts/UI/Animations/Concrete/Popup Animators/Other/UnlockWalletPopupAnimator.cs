@@ -2,9 +2,9 @@
 using UnityEngine.UI;
 
 /// <summary>
-/// Class which animates the UnlockWalletPopup
+/// The animator class of the UnlockWalletPopup
 /// </summary>
-public class UnlockWalletPopupAnimator : UIAnimator
+public class UnlockWalletPopupAnimator : PopupAnimator
 {
 	[SerializeField] private HopeInputField passwordInputField;
 	[SerializeField] private GameObject unlockButton;

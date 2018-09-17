@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class ConfirmLockPopupAnimator : CountdownTimerAnimator
+/// <summary>
+/// The animator class of the ConfirmLockPopup
+/// </summary>
+public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject prpsSection;
 	[SerializeField] private GameObject dubiSection;

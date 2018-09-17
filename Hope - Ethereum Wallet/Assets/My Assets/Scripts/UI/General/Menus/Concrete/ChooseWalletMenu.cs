@@ -66,12 +66,4 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 
         uiManager.OpenMenu<OpenTrezorWalletMenu>();
 	}
-
-	/// <summary>
-	/// Opens the ExitConfirmationPopup which allows the user to exit the wallet.
-	/// </summary>
-	protected override void OnBackPressed()
-    {
-		popupManager.GetPopup<ExitConfirmationPopup>();
-    }
 }

@@ -647,11 +647,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1156373289734128}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 1673670772772310}
-  popupContainer: {fileID: 0}
+  line: {fileID: 1380347367919476}
   importWalletButton: {fileID: 1961381870567516}
   importWalletDesc: {fileID: 1928413761496124}
   createWalletButton: {fileID: 1936300157801342}

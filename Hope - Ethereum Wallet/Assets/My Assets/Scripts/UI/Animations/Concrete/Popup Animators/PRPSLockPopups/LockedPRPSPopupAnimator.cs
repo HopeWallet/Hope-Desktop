@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class LockedPRPSPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the LockedPRPSPopup
+/// </summary>
+public sealed class LockedPRPSPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject topText;
 	[SerializeField] private GameObject line;

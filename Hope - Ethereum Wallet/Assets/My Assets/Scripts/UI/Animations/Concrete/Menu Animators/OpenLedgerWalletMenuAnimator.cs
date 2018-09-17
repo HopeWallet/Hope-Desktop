@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public sealed class OpenLedgerWalletMenuAnimator : UIAnimator
+/// <summary>
+/// The animator class of the OpenLedgerWalletMenu
+/// </summary>
+public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject awaitingConnectionText;
 	[SerializeField] private GameObject deviceConnectedText;
@@ -16,17 +19,19 @@ public sealed class OpenLedgerWalletMenuAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the unique elements into view
+	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
 	}

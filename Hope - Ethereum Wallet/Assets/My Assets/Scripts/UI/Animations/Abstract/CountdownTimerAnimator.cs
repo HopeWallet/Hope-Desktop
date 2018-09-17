@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class CountdownTimerAnimator : UIAnimator
+public abstract class CountdownTimerAnimator : PopupAnimator
 {
 
 	[SerializeField] protected GameObject timerText;

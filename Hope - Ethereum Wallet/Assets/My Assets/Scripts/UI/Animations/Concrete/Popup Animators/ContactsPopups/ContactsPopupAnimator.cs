@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class ContactsPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ContactsPopup
+/// </summary>
+public sealed class ContactsPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject addContactButton;
 	[SerializeField] private GameObject sortBySection;

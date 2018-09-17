@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// The animator to the OpenWalletMenu
+/// The animator class of the OpenWalletMenu
 /// </summary>
-public sealed class OpenWalletMenuAnimator : UIAnimator
+public sealed class OpenWalletMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject background;
 	[SerializeField] private GameObject assetList;
@@ -18,13 +18,20 @@ public sealed class OpenWalletMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
 	}
 
-	protected override void ResetElementValues()
+	/// <summary>
+	/// Animates the form out of view
+	/// </summary>
+	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 }

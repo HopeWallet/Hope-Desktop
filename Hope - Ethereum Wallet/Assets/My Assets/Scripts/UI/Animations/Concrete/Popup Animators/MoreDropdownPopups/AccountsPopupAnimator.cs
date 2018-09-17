@@ -1,9 +1,11 @@
-﻿using Nethereum.Signer;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AccountsPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the AccountsPopup
+/// </summary>
+public sealed class AccountsPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject topSection;
 	[SerializeField] private GameObject line;
@@ -13,7 +15,10 @@ public class AccountsPopupAnimator : UIAnimator
 
     private void Awake() => GetComponent<AccountsPopup>().OnPageChanged += AnimateAddresses;
 
-    protected override void AnimateUniqueElementsIn()
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
 	{
 		topSection.AnimateScaleX(1f, 0.175f);
 		line.AnimateScaleX(1f, 0.2f);

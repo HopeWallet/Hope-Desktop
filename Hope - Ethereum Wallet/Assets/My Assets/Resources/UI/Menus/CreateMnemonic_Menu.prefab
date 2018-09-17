@@ -3476,11 +3476,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1741409687112006}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 1773587553229086}
-  popupContainer: {fileID: 0}
+  line: {fileID: 1588558522747116}
   passphrase: {fileID: 1601232707927276}
   generateNewButton: {fileID: 1148146881530552}
   copyAllButton: {fileID: 1368249272141420}

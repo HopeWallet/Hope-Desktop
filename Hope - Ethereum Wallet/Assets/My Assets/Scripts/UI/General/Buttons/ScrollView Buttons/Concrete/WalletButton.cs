@@ -46,8 +46,9 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 	private void WalletButtonClicked()
 	{
 		Button.interactable = false;
+		walletNameText.gameObject.AnimateColor(UIColors.White, 0.2f);
 
 		dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => Button.interactable = true);
+		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => { Button.interactable = true; walletNameText.gameObject.AnimateColor(UIColors.LightGrey, 0.2f); });
 	}
 }

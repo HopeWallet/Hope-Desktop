@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
-public class DeleteContactPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the DeleteContactPopup
+/// </summary>
+public sealed class DeleteContactPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject contactName;
 	[SerializeField] private GameObject contactAddress;

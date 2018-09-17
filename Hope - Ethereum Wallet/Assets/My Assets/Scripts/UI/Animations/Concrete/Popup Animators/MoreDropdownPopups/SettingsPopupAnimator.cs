@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public class SettingsPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the SettingsPopup
+/// </summary>
+public sealed class SettingsPopupAnimator : PopupAnimator
 {
 	public Action<bool> VerifyingPassword;
 	public Action EditWallet;

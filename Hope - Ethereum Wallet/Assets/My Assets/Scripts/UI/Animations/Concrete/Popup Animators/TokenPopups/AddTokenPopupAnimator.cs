@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class AddTokenPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the AddTokenPopup
+/// </summary>
+public sealed class AddTokenPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject addressInputField;
 	[SerializeField] private GameObject loadingIcon;

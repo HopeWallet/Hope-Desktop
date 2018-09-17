@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ReEnterPasswordMenuAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ReEnterPasswordMenu
+/// </summary>
+public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject plainBackground;
 	[SerializeField] private GameObject walletName;
@@ -14,15 +17,17 @@ public class ReEnterPasswordMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
 	}

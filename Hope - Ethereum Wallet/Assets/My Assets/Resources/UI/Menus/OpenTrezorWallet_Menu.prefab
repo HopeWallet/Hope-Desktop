@@ -1928,12 +1928,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animateOnEnable: 0
-  blocker: {fileID: 0}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
-  formTitle: {fileID: 0}
-  popupContainer: {fileID: 0}
+  blocker: {fileID: 1910257928389530}
+  formTitle: {fileID: 1456068196917956}
+  line: {fileID: 1759742700248098}
 --- !u!114 &114775579488840438
 MonoBehaviour:
   m_ObjectHideFlags: 1

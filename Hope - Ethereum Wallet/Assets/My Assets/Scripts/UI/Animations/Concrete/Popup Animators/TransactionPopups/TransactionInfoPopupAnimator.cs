@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class TransactionInfoPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the TransactionInfoPopup
+/// </summary>
+public sealed class TransactionInfoPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject transactionHashSection;
 	[SerializeField] private GameObject fromAddressSection;

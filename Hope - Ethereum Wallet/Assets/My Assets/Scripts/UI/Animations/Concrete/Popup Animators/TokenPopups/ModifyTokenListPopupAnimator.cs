@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
-public class ModifyTokenListPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ModifyTokensPopup
+/// </summary>
+public sealed class ModifyTokenListPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject addTokenButton;
 	[SerializeField] private GameObject searchInputField;

@@ -1,13 +1,16 @@
 ﻿
-public class LoadingPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the LoadingPopup
+/// </summary>
+public sealed class LoadingPopupAnimator : UIAnimator
 {
-	/// <summary>
-	/// Animates the unique elements of this form into view
-	/// </summary>
-	protected override void AnimateUniqueElementsIn() => gameObject.AnimateGraphicAndScale(1f, 1f, 0.1f, FinishedAnimating);
+	protected override void AnimateIn()
+	{
+		gameObject.AnimateGraphicAndScale(1f, 1f, 0.1f, FinishedAnimating);
+	}
 
-	/// <summary>
-	/// Animates the unique elements of this form out of view
-	/// </summary>
-	protected override void ResetElementValues() => gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
+	protected override void AnimateOut()
+	{
+		gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
+	}
 }

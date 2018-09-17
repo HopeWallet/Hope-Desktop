@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
-/// Class which animates the CreateWalletMenu.
+/// The animator class of the CreateWalletMenu
 /// </summary>
-public class CreateWalletMenuAnimator : UIAnimator
+public sealed class CreateWalletMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject walletNameField;
 	[SerializeField] private GameObject password1Field;
@@ -14,25 +13,18 @@ public class CreateWalletMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
-		//walletNameField.AnimateScaleX(1f, 0.1f);
-		//password1Field.AnimateScaleX(1f, 0.2f);
-		//password2Field.AnimateScaleX(1f, 0.2f);
-		//nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
-
-		//walletNameField.SetScale(new Vector2(0f, 1f));
-		//password1Field.SetScale(new Vector2(0f, 1f));
-		//password2Field.SetScale(new Vector2(0f, 1f));
-		//nextButton.SetGraphicAndScale(Vector2.zero);
 	}
 }

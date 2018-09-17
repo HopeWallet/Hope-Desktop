@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class SendAssetPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the SendAssetPopup
+/// </summary>
+public sealed class SendAssetPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject tokenSection;
 	[SerializeField] private GameObject advancedModeSection;

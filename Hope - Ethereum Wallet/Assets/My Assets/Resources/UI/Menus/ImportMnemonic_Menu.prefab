@@ -5136,11 +5136,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1099519179730166}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 1292688382551098}
-  popupContainer: {fileID: 0}
+  line: {fileID: 1508836914459982}
   passphrase: {fileID: 1303115964071376}
   wordCountSection: {fileID: 1538880947978200}
   pastePhraseButton: {fileID: 1571834563377346}

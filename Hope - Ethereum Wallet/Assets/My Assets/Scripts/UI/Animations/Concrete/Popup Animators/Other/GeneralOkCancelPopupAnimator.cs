@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class GeneralOkCancelPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the GeneralOkCancelPopup
+/// </summary>
+public sealed class GeneralOkCancelPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject subText;
 	[SerializeField] private GameObject yesButton;

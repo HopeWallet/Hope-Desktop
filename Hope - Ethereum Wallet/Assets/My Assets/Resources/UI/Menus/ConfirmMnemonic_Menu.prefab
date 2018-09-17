@@ -1650,11 +1650,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1549381224271326}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 1031474946569154}
-  popupContainer: {fileID: 0}
+  line: {fileID: 1366363883034768}
   wordInputField: {fileID: 1555105055339500}
   nextButton: {fileID: 1441365224990672}
   checkBoxes:

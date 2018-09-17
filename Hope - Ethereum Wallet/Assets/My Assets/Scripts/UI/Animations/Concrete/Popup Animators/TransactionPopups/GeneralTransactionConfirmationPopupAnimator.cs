@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public sealed class GeneralTransactionConfirmationPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the GeneralTransactionConfirmationPopup
+/// </summary>
+public sealed class GeneralTransactionConfirmationPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject subText;
 	[SerializeField] private GameObject yesButton;

@@ -2,12 +2,11 @@
 using Hope.Utils.Ethereum;
 using UnityEngine.UI;
 using System.Linq;
-using NBitcoin;
 
 /// <summary>
-/// Class used for animating the ImportMnemonicMenu.
+/// The animator class of the ImportMnemonicMenu
 /// </summary>
-public class ImportMnemonicMenuAnimator : UIAnimator
+public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject passphrase;
 	[SerializeField] private GameObject wordCountSection;
@@ -67,15 +66,17 @@ public class ImportMnemonicMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
 	}

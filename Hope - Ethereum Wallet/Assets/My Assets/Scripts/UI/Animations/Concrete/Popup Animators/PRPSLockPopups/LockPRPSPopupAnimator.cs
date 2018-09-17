@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class LockPRPSPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the LockPRPSPopup
+/// </summary>
+public sealed class LockPRPSPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject prpsTokenSection;
 	[SerializeField] private GameObject dubiTokenSection;

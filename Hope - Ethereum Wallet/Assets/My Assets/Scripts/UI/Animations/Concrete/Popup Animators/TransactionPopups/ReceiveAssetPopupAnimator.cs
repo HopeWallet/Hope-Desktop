@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ReceiveAssetPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ReceiveAssetPopup
+/// </summary>
+public sealed class ReceiveAssetPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject noteText;
 	[SerializeField] private GameObject line1;

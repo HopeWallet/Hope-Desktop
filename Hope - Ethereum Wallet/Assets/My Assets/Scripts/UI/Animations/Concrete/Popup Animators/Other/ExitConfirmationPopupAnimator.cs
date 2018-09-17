@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class ExitConfirmationPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ExitConfirmationPopup
+/// </summary>
+public sealed class ExitConfirmationPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject subText;
 	[SerializeField] private GameObject yesButton;

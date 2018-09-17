@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using Hope.Utils.Ethereum;
 
-public class AddOrEditContactPopupAnimator : UIAnimator
+/// <summary>
+/// The animator class of the AddOrEditContactPopup
+/// </summary>
+public sealed class AddOrEditContactPopupAnimator : PopupAnimator
 {
 	[SerializeField] private HopeInputField nameInputField;
 	[SerializeField] private HopeInputField addressInputField;

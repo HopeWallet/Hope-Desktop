@@ -3,7 +3,10 @@ using UnityEngine.UI;
 using Zenject;
 using System.Linq;
 
-public class ConfirmMnemonicMenuAnimator : UIAnimator
+/// <summary>
+/// The animator class of the ConfirmMnemonicMenu
+/// </summary>
+public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 {
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
@@ -39,37 +42,29 @@ public class ConfirmMnemonicMenuAnimator : UIAnimator
     /// </summary>
     private void Start() => SetWordText();
 
-    /// <summary>
-    /// Animates the unique elements of this form into view
-    /// </summary>
-    protected override void AnimateUniqueElementsIn()
-    {
-		wordInputField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateIn()
+	{
+		base.AnimateIn();
+
 		FinishedAnimating();
-        //wordInputField.AnimateScaleX(1f, 0.2f);
-        //nextButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-        //AnimateCheckboxes(0);
-    }
+	}
 
-    /// <summary>
-    /// Resets the unique elements of the form back to the starting positions
-    /// </summary>
-    protected override void ResetElementValues()
-    {
-        FinishedAnimating();
+	/// <summary>
+	/// Animates the form out of view
+	/// </summary>
+	protected override void AnimateOut()
+	{
+		FinishedAnimating();
+	}
 
-        //for (int i = 0; i < 4; i++)
-        //    checkBoxes[i].SetScale(Vector2.zero);
-
-        //wordInputField.SetScale(new Vector2(0f, 1f));
-        //nextButton.SetGraphicAndScale(Vector2.zero);
-    }
-
-    /// <summary>
-    /// Animates the checkboxes one by one
-    /// </summary>
-    /// <param name="index"> The index of the checkboxes array being animated </param>
-    private void AnimateCheckboxes(int index)
+	/// <summary>
+	/// Animates the checkboxes one by one
+	/// </summary>
+	/// <param name="index"> The index of the checkboxes array being animated </param>
+	private void AnimateCheckboxes(int index)
     {
         if (index != 3)
             checkBoxes[index].AnimateScale(1f, 0.075f, () => AnimateCheckboxes(++index));

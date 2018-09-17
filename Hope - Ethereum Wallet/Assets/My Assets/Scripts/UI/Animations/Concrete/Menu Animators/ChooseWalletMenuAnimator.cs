@@ -1,31 +1,35 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class which animates the ChooseWalletMenu.
+/// The animator class of the ChooseWalletMenu
 /// </summary>
-public sealed class ChooseWalletMenuAnimator : UIAnimator
+public sealed class ChooseWalletMenuAnimator : MenuAnimator
 {
     [SerializeField] private GameObject ledgerButton;
-    [SerializeField] private GameObject hopeButton;
+	[SerializeField] private GameObject trezorButton;
+	[SerializeField] private GameObject hopeButton;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
-		FinishedAnimating();
-		//ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		//hopeButton.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating);
+		base.AnimateIn();
+
+		ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		trezorButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
+		hopeButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
-		FinishedAnimating();
+		base.AnimateOut();
 
-		//hopeButton.SetScale(Vector2.zero);
-		//ledgerButton.SetScale(Vector2.zero);
+		ledgerButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		trezorButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		hopeButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
 }

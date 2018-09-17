@@ -7,9 +7,9 @@ using Zenject;
 using Hope.Utils.Ethereum;
 
 /// <summary>
-/// Class which animates the CreateMnemonicMenu.
+/// The animator class of the CreateMnemonicMenu
 /// </summary>
-public class CreateMnemonicMenuAnimator : UIAnimator
+public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject passphrase;
 	[SerializeField] private GameObject generateNewButton;
@@ -54,29 +54,19 @@ public class CreateMnemonicMenuAnimator : UIAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateUniqueElementsIn()
+	protected override void AnimateIn()
 	{
+		base.AnimateIn();
+
 		FinishedAnimating();
-		//AnimatePassphrase(0);
-		//generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		//copyAllButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		//nextButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
-
 	/// <summary>
-	/// Resets the unique elements of the form back to the starting positions
+	/// Animates the form out of view
 	/// </summary>
-	protected override void ResetElementValues()
+	protected override void AnimateOut()
 	{
 		FinishedAnimating();
-
-		//for (int i = 0; i < 12; i++)
-		//	wordObjects[i].SetScale(new Vector2(0f, 1f));
-
-		//generateNewButton.SetGraphicAndScale(Vector2.zero);
-		//copyAllButton.SetGraphicAndScale(Vector2.zero);
-		//nextButton.SetGraphicAndScale(Vector2.zero);
 	}
 
 	/// <summary>
