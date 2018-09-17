@@ -33,6 +33,8 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 

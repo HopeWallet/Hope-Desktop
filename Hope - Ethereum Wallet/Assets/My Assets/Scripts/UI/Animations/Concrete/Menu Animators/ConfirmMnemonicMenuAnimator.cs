@@ -57,6 +57,8 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 

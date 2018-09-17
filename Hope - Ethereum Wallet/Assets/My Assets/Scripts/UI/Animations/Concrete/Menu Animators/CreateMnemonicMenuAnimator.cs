@@ -66,6 +66,8 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 

@@ -1275,10 +1275,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1034897842174296}
+  formTitle: {fileID: 1129665577006342}
   dim: {fileID: 1148166611220310}
   form: {fileID: 1386968431977172}
   blur: {fileID: 1575214688805658}
-  formTitle: {fileID: 1129665577006342}
   popupContainer: {fileID: 1426109855679710}
   noteText: {fileID: 1952569820110272}
   line1: {fileID: 1207057116201688}

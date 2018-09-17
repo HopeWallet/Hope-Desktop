@@ -1155,10 +1155,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1155031746067014}
+  formTitle: {fileID: 1933140208486970}
   dim: {fileID: 1846604698793444}
   form: {fileID: 1556526267740450}
   blur: {fileID: 1682876523595610}
-  formTitle: {fileID: 1933140208486970}
   popupContainer: {fileID: 1369501422783230}
   passwordInputField: {fileID: 114335822126248120}
   unlockButton: {fileID: 1754134967957440}

@@ -409,10 +409,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1395972892304014}
+  formTitle: {fileID: 1062430611844804}
   dim: {fileID: 1650052671654500}
   form: {fileID: 1841633691269756}
   blur: {fileID: 1520288251594672}
-  formTitle: {fileID: 1062430611844804}
   popupContainer: {fileID: 1617529342043482}
   addTokenButton: {fileID: 1920197590972318}
   searchInputField: {fileID: 1415083623569806}

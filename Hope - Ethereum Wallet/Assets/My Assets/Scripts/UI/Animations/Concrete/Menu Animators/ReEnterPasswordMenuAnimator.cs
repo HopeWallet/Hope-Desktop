@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject plainBackground;
-	[SerializeField] private GameObject walletName;
-	[SerializeField] private GameObject line;
 	[SerializeField] private HopeInputField passwordInputField;
 	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject homeButton;
@@ -29,6 +27,8 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 

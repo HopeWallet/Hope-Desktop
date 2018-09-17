@@ -25,6 +25,8 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 }

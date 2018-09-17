@@ -531,10 +531,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1402826377935688}
+  formTitle: {fileID: 1244924179980204}
   dim: {fileID: 1326146421513740}
   form: {fileID: 1550957606454108}
   blur: {fileID: 1787141908265812}
-  formTitle: {fileID: 1244924179980204}
   popupContainer: {fileID: 1788528053716288}
   hopeVersionSection: {fileID: 1700060185566134}
 --- !u!114 &114399158424124474

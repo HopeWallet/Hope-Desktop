@@ -42,9 +42,7 @@ public abstract class PopupAnimator : UIAnimator
 		dim.AnimateGraphic(1f, 0.2f);
 		blur.AnimateScale(1f, 0.2f);
 		formTitle.AnimateGraphicAndScale(1f, 1f, 0.35f);
-		form.AnimateGraphicAndScale(1f, 1f, 0.2f);
-
-		CoroutineUtils.ExecuteAfterWait(0.15f, AnimateUniqueElementsIn);
+		form.AnimateGraphicAndScale(1f, 1f, 0.2f, AnimateUniqueElementsIn);
 	}
 
 	protected override void AnimateOut()

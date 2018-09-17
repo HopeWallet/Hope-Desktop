@@ -2003,10 +2003,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1723833976538692}
+  formTitle: {fileID: 1048027916124398}
   dim: {fileID: 1797056869447446}
   form: {fileID: 1939771600462456}
   blur: {fileID: 1113793206744462}
-  formTitle: {fileID: 1048027916124398}
   popupContainer: {fileID: 1430298483723054}
   tokenSection: {fileID: 1525232378018896}
   advancedModeSection: {fileID: 1631802693033418}

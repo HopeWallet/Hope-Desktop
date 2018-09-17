@@ -3674,10 +3674,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1703185279988006}
+  formTitle: {fileID: 1555268013797752}
   dim: {fileID: 1112261637883846}
   form: {fileID: 1802618026693432}
   blur: {fileID: 1743739778662668}
-  formTitle: {fileID: 1555268013797752}
   popupContainer: {fileID: 1185524048512786}
   topSection: {fileID: 1034784819435056}
   line: {fileID: 1473645158274800}

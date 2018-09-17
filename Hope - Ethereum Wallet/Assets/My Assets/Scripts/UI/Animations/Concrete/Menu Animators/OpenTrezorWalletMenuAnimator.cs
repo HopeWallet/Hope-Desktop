@@ -19,6 +19,8 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		base.AnimateOut();
+
 		FinishedAnimating();
 	}
 }
