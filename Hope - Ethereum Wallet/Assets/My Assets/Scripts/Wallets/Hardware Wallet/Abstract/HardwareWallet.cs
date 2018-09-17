@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Numerics;
 using Hope.Utils.Ethereum;
+using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RLP;
@@ -12,7 +12,7 @@ public abstract class HardwareWallet : IWallet
     public event Action OnWalletLoadSuccessful;
     public event Action OnWalletLoadUnsuccessful;
 
-    protected readonly string[] addresses = new string[50];
+    protected readonly string[][] addresses = new string[2][];
 
     protected readonly EthereumNetworkManager ethereumNetworkManager;
     protected readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
@@ -32,7 +32,10 @@ public abstract class HardwareWallet : IWallet
 
     protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
 
-    public string GetAddress(int addressIndex) => addresses[addressIndex];
+    public string GetAddress(int addressIndex, string path)
+    {
+        return path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? addresses[0][addressIndex] : addresses[1][addressIndex];
+    }
 
     /// <summary>
     /// Signs a transaction using this IWallet.
@@ -67,16 +70,14 @@ public abstract class HardwareWallet : IWallet
             byte[] valueBytes = value.ToBytesForRLPEncoding();
             byte[] dataBytes = data.HexToByteArray();
 
-            uint index = (uint)addresses.ToList().IndexOf(addresses.First(address => address.EqualsIgnoreCase(addressFrom)));
-
             SignTransaction(
                 onTransactionSigned,
                 new Transaction(nonceBytes, gasPriceBytes, gasLimitBytes, addressBytes, valueBytes, dataBytes, new byte[] { 0 }, new byte[] { 0 }, (byte)ethereumNetworkSettings.networkType),
-                index);
+                path);
         });
     }
 
     public abstract void InitializeAddresses();
 
-    protected abstract void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, uint addressIndex);
+    protected abstract void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path);
 }

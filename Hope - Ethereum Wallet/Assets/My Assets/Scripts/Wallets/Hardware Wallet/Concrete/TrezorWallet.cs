@@ -15,7 +15,7 @@ public sealed class TrezorWallet : HardwareWallet
     {
     }
 
-    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, uint addressIndex)
+    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
     {
     }
 }

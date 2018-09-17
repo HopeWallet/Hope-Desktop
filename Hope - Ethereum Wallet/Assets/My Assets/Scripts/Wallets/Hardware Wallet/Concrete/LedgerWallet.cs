@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Ledger.Net;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
+using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Signer;
@@ -28,29 +30,55 @@ public sealed class LedgerWallet : HardwareWallet
             return;
         }
 
-        for (uint i = 0; i < addresses.Length; i++)
-        {
-            var address = await ledgerManager.GetAddressAsync(0, i).ConfigureAwait(false);
-            addresses[i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
 
-            if (string.IsNullOrEmpty(address))
-            {
-                MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
-                return;
-            }
-        }
+        if (!await AssignAddresses(ledgerManager, Wallet.DEFAULT_PATH) || !await AssignAddresses(ledgerManager, Wallet.ELECTRUM_LEDGER_PATH))
+            return;
 
         MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
-    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, uint addressIndex)
+    private async Task<bool> AssignAddresses(LedgerManager ledgerManager, string path)
+    {
+        App app = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? App.Bitcoin : App.Ethereum;
+        int addressesIndex = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
+
+        for (uint i = 0; i < addresses[addressesIndex].Length; i++)
+        {
+            byte[] data = GetDerivationPathData(app, i);
+
+            var request = new EthereumAppGetPublicKeyRequest(false, false, data);
+            var response = await ledgerManager.SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(request).ConfigureAwait(false);
+
+            var address = response.IsSuccess ? response.Address : null;
+            addresses[addressesIndex][i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
+
+            if (string.IsNullOrEmpty(address))
+            {
+                MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private byte[] GetDerivationPathData(App app, uint index)
+    {
+        return Helpers.GetDerivationPathData(app, 60, 0, index, false, false);
+    }
+
+    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
 
         if (ledgerManager == null)
             return;
 
-        var derivationData = Helpers.GetDerivationPathData(ledgerManager.CurrentCoin.App, ledgerManager.CurrentCoin.CoinNumber, 0, addressIndex, false, ledgerManager.CurrentCoin.IsSegwit);
+        var isLegacyPath = !path.EqualsIgnoreCase(Wallet.DEFAULT_PATH);
+        var derivationData = GetDerivationPathData(isLegacyPath ? App.Ethereum : App.Bitcoin, new NBitcoin.KeyPath(path).Indexes[isLegacyPath ? 3 : 4]);
+
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);
 

@@ -76,7 +76,9 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <param name="password"> The entered password. </param>
     private void CorrectPassword(string password)
     {
-        AssignAddresses(userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).WalletAddresses[0]);
+        var walletInfo = userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum"));
+        AssignAddresses(walletInfo.WalletAddresses[0], walletInfo.WalletAddresses[1]);
+
         dynamicDataCache.SetData("pass", new ProtectedString(password, this));
 
         onWalletLoaded?.Invoke();

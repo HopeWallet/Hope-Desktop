@@ -1,91 +1,143 @@
-﻿using Nethereum.Signer;
+﻿using Nethereum.HdWallet;
+using Nethereum.Signer;
+using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
-	[SerializeField] private GeneralRadioButtons addressesCategories;
-	[SerializeField] private Transform addressesSection;
-	[SerializeField] private Button previousPageButton, nextPageButton;
-	[SerializeField] private TextMeshProUGUI pageNumText;
-	[SerializeField] private GameObject loadingIcon;
+    public event Action<string[], int, int> OnPageChanged;
 
-	private AccountsPopupAnimator accountsPopupAnimator;
+    [SerializeField] private GeneralRadioButtons addressesCategories;
+    [SerializeField] private Transform addressesSection;
+    [SerializeField] private Button previousPageButton, nextPageButton;
+    [SerializeField] private TextMeshProUGUI pageNumText;
+    [SerializeField] private GameObject loadingIcon;
 
-	private int pageNum = 1, firstAddressNumInList = 1, currentlySelectedAddress = 1, currentlyUnlockedAddress = 1;
+    private UserWalletManager userWalletManager;
 
-	protected override void Awake()
-	{
-		base.Awake();
+    private readonly string[][] addresses = new string[2][];
 
-		accountsPopupAnimator = Animator as AccountsPopupAnimator;
-		addressesCategories.OnButtonChanged += AddressCategoryChanged;
-		previousPageButton.onClick.AddListener(() => PageChanged(false));
-		nextPageButton.onClick.AddListener(() => PageChanged(true));
+    private string unlockedAccount;
 
-		for (int i = 0; i < 5; i++)
-		{
-			SetButtonListener(i);
-			addressesSection.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = EthECKey.GenerateKey().GetPublicAddress();
-		}
-	}
+    private int pageNum,
+                firstAddressNumInList,
+                currentlySelectedAddress,
+                addressesIndex;
 
-    private void SetButtonListener(int num) => addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
+    [Inject]
+    public void Construct(UserWalletManager userWalletManager)
+    {
+        this.userWalletManager = userWalletManager;
+    }
 
-	private void AddressClicked(int num)
-	{
-		SetAddressInteractable(addressesSection.GetChild(currentlySelectedAddress % 5), true);
+    protected override void Awake()
+    {
+        base.Awake();
 
-		Transform selectedAddressTransform = addressesSection.GetChild(num);
+        pageNum = (userWalletManager.AccountNumber / 5) + 1;
+        firstAddressNumInList = pageNum == 0 ? 1 : (pageNum * 5) - 4;
+        currentlySelectedAddress = userWalletManager.AccountNumber + 1;
+        unlockedAccount = userWalletManager.WalletAddress;
 
-		SetAddressInteractable(selectedAddressTransform, false);
-		currentlySelectedAddress = int.Parse(selectedAddressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        Debug.Log(pageNum + " " + firstAddressNumInList + " " + currentlySelectedAddress + " " + unlockedAccount + " " + userWalletManager.WalletPath);
 
-		okButton.interactable = currentlyUnlockedAddress != currentlySelectedAddress;
-	}
+        AssignListeners();
+        AssignAddresses();
+        //PageChanged(true);
 
-	private void PageChanged(bool movingForward)
-	{
-		if (pageNum == 1 && !movingForward)
-			pageNum = 10;
-		else if (pageNum == 10 && movingForward)
-			pageNum = 1;
-		else
-			pageNum = movingForward ? ++pageNum : --pageNum;
+        addressesCategories.ButtonClicked(addressesIndex);
+    }
 
-		firstAddressNumInList = (pageNum * 5) - 4;
-		pageNumText.text = pageNum.ToString();
+    private void AssignListeners()
+    {
+        for (int i = 0; i < 5; i++)
+            AddButtonListeners(i);
 
-		//When addresses are done loading:
-		accountsPopupAnimator.AnimatePageChange(firstAddressNumInList, currentlySelectedAddress);
-	}
+        addressesCategories.OnButtonChanged += AddressCategoryChanged;
+        previousPageButton.onClick.AddListener(() => PageChanged(false));
+        nextPageButton.onClick.AddListener(() => PageChanged(true));
+    }
 
-	private void AddressCategoryChanged(int num)
-	{
-		if (num == 0)
-		{
-			//Default addresses
-		}
-		else
-		{
-			//Ledger legacy addresses
-		}
-	}
+    private void AddButtonListeners(int i)
+    {
+        addressesSection.GetChild(i).GetComponent<Button>().onClick.AddListener(() => AddressClicked(i));
+    }
 
-	private void SetAddressInteractable(Transform addressTransform, bool interactable)
-	{
-		addressTransform.GetComponent<Button>().interactable = interactable;
+    private void AssignAddresses()
+    {
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
 
-		for (int i = 0; i < addressTransform.childCount; i++)
-			addressTransform.GetChild(i).gameObject.AnimateColor(interactable ? UIColors.LightGrey : UIColors.White, 0.15f);
-	}
+        for (int i = 0; i < 50; i++)
+            addresses[0][i] = userWalletManager.GetAddress(i, Wallet.DEFAULT_PATH);
+        for (int i = 0; i < 50; i++)
+            addresses[1][i] = userWalletManager.GetAddress(i, Wallet.ELECTRUM_LEDGER_PATH);
 
-	private void SetLoadingIcon(bool active)
-	{
-		if (active)
-			loadingIcon.SetActive(true);
+        addressesIndex = userWalletManager.WalletPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
+    }
 
-		loadingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.1f, () => { if (!active) loadingIcon.SetActive(false); });
-	}
+    protected override void OnOkClicked()
+    {
+        userWalletManager.SwitchWalletAccount(currentlySelectedAddress - 1);
+        userWalletManager.SwitchWalletPath(addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH);
+    }
+
+    private void AddressClicked(int num)
+    {
+        SetAddressButtonInteractability(addressesSection.GetChild(currentlySelectedAddress % 5), true);
+
+        Transform selectedAddressTransform = addressesSection.GetChild(num);
+
+        SetAddressButtonInteractability(selectedAddressTransform, false);
+        currentlySelectedAddress = int.Parse(selectedAddressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+
+        SetUnlockButtonInteractability();
+    }
+
+    private void PageChanged(bool movingForward)
+    {
+        if (pageNum == 1 && !movingForward)
+            pageNum = 10;
+        else if (pageNum == 10 && movingForward)
+            pageNum = 1;
+        else
+            pageNum = movingForward ? ++pageNum : --pageNum;
+
+        firstAddressNumInList = (pageNum * 5) - 4;
+        pageNumText.text = pageNum.ToString();
+
+        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
+    }
+
+    private void AddressCategoryChanged(int num)
+    {
+        addressesIndex = num;
+        SetUnlockButtonInteractability();
+        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
+    }
+
+    private void SetAddressButtonInteractability(Transform addressTransform, bool interactable)
+    {
+        addressTransform.GetComponent<Button>().interactable = interactable;
+
+        for (int i = 0; i < addressTransform.childCount; i++)
+            addressTransform.GetChild(i).gameObject.AnimateColor(interactable ? UIColors.LightGrey : UIColors.White, 0.15f);
+    }
+
+    private void SetUnlockButtonInteractability()
+    {
+        okButton.interactable = !unlockedAccount.EqualsIgnoreCase(userWalletManager.GetAddress(currentlySelectedAddress - 1, addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH));
+    }
+
+    private void SetLoadingIcon(bool active)
+    {
+        if (active)
+            loadingIcon.SetActive(true);
+
+        loadingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.1f, () => { if (!active) loadingIcon.SetActive(false); });
+    }
 }

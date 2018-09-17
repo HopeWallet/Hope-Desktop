@@ -18,17 +18,20 @@ public sealed class UserWalletManager
 
     private IWallet activeWallet;
 
-    private int accountNumber;
-
     /// <summary>
     /// The address of the main UserWallet.
     /// </summary>
-    public string WalletAddress => activeWallet.GetAddress(accountNumber);
+    public string WalletAddress => activeWallet.GetAddress(AccountNumber, WalletPath);
 
     /// <summary>
     /// The wallet derivation path.
     /// </summary>
     public string WalletPath { get; private set; }
+
+    /// <summary>
+    /// The current wallet account number.
+    /// </summary>
+    public int AccountNumber { get; private set; }
 
     /// <summary>
     /// The currently opened, currently active wallet type.
@@ -102,7 +105,7 @@ public sealed class UserWalletManager
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", accountNumber.ToString()), displayInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", AccountNumber.ToString()), displayInput);
     }
 
     /// <summary>
@@ -128,13 +131,18 @@ public sealed class UserWalletManager
         }
     }
 
+    public string GetAddress(int accountNumber, string path)
+    {
+        return activeWallet.GetAddress(accountNumber, path);
+    }
+
     /// <summary>
     /// Switches the active derivation path of the wallet.
     /// </summary>
     /// <param name="newPath"> The new derivation path to use. </param>
     public void SwitchWalletPath(string newPath)
     {
-        if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) || !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
+        if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) && !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
             return;
 
         WalletPath = newPath;
@@ -146,7 +154,7 @@ public sealed class UserWalletManager
     /// <param name="newAccountNumber"> The new account number of the wallet to use. </param>
     public void SwitchWalletAccount(int newAccountNumber)
     {
-        accountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
+        AccountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
     }
 
     /// <summary>

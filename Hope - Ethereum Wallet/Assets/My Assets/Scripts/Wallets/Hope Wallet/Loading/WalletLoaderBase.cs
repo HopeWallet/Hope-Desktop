@@ -13,7 +13,7 @@ public abstract class WalletLoaderBase : SecureObject
 
     protected Action onWalletLoaded;
 
-    protected string[] addresses;
+    protected string[][] addresses;
 
     /// <summary>
     /// Initializes the WalletLoaderBase with all required references.
@@ -40,11 +40,12 @@ public abstract class WalletLoaderBase : SecureObject
     /// <param name="addresses"> The output array of wallet addresses. </param>
     /// <param name="onWalletLoaded"> Action to call once the wallet is loaded. </param>
     [SecureCaller]
-    public void Load(out string[] addresses, Action onWalletLoaded)
+    public void Load(string[][] addresses, Action onWalletLoaded)
     {
         SetupLoadActions(onWalletLoaded);
 
-        addresses = new string[50];
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
         this.addresses = addresses;
 
         (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData().OnSuccess(disposableData => LoadWallet(disposableData.Value));
@@ -68,8 +69,13 @@ public abstract class WalletLoaderBase : SecureObject
     /// <summary>
     /// Assigns the addresses to the wallet.
     /// </summary>
-    /// <param name="walletAddresses"> The addresses to assign to the UserWallet. </param>
-    protected void AssignAddresses(string[] walletAddresses) => Array.Copy(walletAddresses, addresses, addresses.Length);
+    /// <param name="addressSetOne"> The first set of addresses to assign to the HopeWallet. </param>
+    /// <param name="addressSetTwo"> The second set of addresses to assign to the HopeWallet. </param>
+    protected void AssignAddresses(string[] addressSetOne, string[] addressSetTwo)
+    {
+        Array.Copy(addressSetOne, addresses[0], addressSetOne.Length);
+        Array.Copy(addressSetTwo, addresses[1], addressSetTwo.Length);
+    }
 
     /// <summary>
     /// Loads the wallet given the user password.

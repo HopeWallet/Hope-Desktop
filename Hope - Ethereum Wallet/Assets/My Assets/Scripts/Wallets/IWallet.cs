@@ -21,8 +21,9 @@ public interface IWallet
     /// Gets the address of the wallet given the index of the address.
     /// </summary>
     /// <param name="addressIndex"> The index to use to retrieve the address. Valid indices range from 0-49. </param>
-    /// <returns> Returns the address found at the index. </returns>
-    string GetAddress(int addressIndex);
+    /// <param name="path"> The path of the address. </param>
+    /// <returns> Returns the address found at the index and path. </returns>
+    string GetAddress(int addressIndex, string path);
 
     /// <summary>
     /// Signs a transaction using this IWallet.

@@ -23,7 +23,6 @@ MonoBehaviour:
       walletDataPrefName: wallet
       walletNamePrefName: wallet_name
       walletPasswordPrefName: wallet_password
-      walletDerivationPrefName: wallet_derivation
       walletCountPrefName: wallet_count
       walletHashLvlPrefName: wallet_hash
       walletInfoPrefName: wallet_info
