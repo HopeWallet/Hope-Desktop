@@ -12,8 +12,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 {
     public static Action popupClosed;
 
-    [SerializeField]
-    private TMP_Text amountText,
+    [SerializeField] private TMP_Text amountText,
                                       timeFromNowText,
                                       addressText,
                                       dateText,
@@ -84,7 +83,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
         circle.color = sending ? UIColors.Red : UIColors.Green;
         statusText.text = sending ? "OUT" : "IN";
         directionText.text = sending ? "To:" : "From:";
-        addressText.transform.localPosition = new Vector2(sending ? -205f : -180f, addressText.transform.localPosition.y);
+        addressText.transform.localPosition = new Vector2(sending ? -210f : -185f, addressText.transform.localPosition.y);
     }
 
     /// <summary>
