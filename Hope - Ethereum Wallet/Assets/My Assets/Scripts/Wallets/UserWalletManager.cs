@@ -142,7 +142,7 @@ public sealed class UserWalletManager
     /// <param name="newPath"> The new derivation path to use. </param>
     public void SwitchWalletPath(string newPath)
     {
-        if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) || !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
+        if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) && !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
             return;
 
         WalletPath = newPath;
