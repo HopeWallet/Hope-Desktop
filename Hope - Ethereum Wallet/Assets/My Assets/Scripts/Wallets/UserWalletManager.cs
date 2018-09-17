@@ -18,17 +18,20 @@ public sealed class UserWalletManager
 
     private IWallet activeWallet;
 
-    private int accountNumber;
-
     /// <summary>
     /// The address of the main UserWallet.
     /// </summary>
-    public string WalletAddress => activeWallet.GetAddress(accountNumber, WalletPath);
+    public string WalletAddress => activeWallet.GetAddress(AccountNumber, WalletPath);
 
     /// <summary>
     /// The wallet derivation path.
     /// </summary>
     public string WalletPath { get; private set; }
+
+    /// <summary>
+    /// The current wallet account number.
+    /// </summary>
+    public int AccountNumber { get; private set; }
 
     /// <summary>
     /// The currently opened, currently active wallet type.
@@ -102,7 +105,7 @@ public sealed class UserWalletManager
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", accountNumber.ToString()), displayInput);
+        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", AccountNumber.ToString()), displayInput);
     }
 
     /// <summary>
@@ -146,7 +149,7 @@ public sealed class UserWalletManager
     /// <param name="newAccountNumber"> The new account number of the wallet to use. </param>
     public void SwitchWalletAccount(int newAccountNumber)
     {
-        accountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
+        AccountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
     }
 
     /// <summary>

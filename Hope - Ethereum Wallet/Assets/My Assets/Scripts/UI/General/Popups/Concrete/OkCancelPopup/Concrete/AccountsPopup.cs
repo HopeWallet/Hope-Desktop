@@ -1,8 +1,10 @@
-﻿using Nethereum.Signer;
+﻿using Nethereum.HdWallet;
+using Nethereum.Signer;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
@@ -16,11 +18,12 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     private UserWalletManager userWalletManager;
 
-	private int pageNum = 1,
-                firstAddressNumInList = 1,
-                currentlySelectedAddress = 1,
-                currentlyUnlockedAddress = 1;
+	private int pageNum,
+                firstAddressNumInList,
+                currentlySelectedAddress,
+                currentlyUnlockedAddress;
 
+    [Inject]
     public void Construct(UserWalletManager userWalletManager)
     {
         this.userWalletManager = userWalletManager;
@@ -30,7 +33,13 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 	{
 		base.Awake();
 
-		addressesCategories.OnButtonChanged += AddressCategoryChanged;
+        pageNum = 1;
+        firstAddressNumInList = 1;
+        currentlySelectedAddress = 1;
+        currentlyUnlockedAddress = userWalletManager.AccountNumber + 1;
+
+        addressesCategories.ButtonClicked(userWalletManager.WalletPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1);
+        addressesCategories.OnButtonChanged += AddressCategoryChanged;
 		previousPageButton.onClick.AddListener(() => PageChanged(false));
 		nextPageButton.onClick.AddListener(() => PageChanged(true));
 
@@ -41,9 +50,12 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		}
 	}
 
-    private void SetButtonListener(int num) => addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
+    private void SetButtonListener(int num)
+    {
+        addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
+    }
 
-	private void AddressClicked(int num)
+    private void AddressClicked(int num)
 	{
 		SetAddressInteractable(addressesSection.GetChild(currentlySelectedAddress % 5), true);
 
@@ -67,7 +79,6 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		firstAddressNumInList = (pageNum * 5) - 4;
 		pageNumText.text = pageNum.ToString();
 
-        //When addresses are done loading:
         OnPageChanged?.Invoke(firstAddressNumInList, currentlySelectedAddress);
 	}
 
@@ -75,11 +86,13 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 	{
 		if (num == 0)
 		{
-			//Default addresses
-		}
-		else
+            //Default addresses
+            userWalletManager.SwitchWalletPath(Wallet.DEFAULT_PATH);
+        }
+        else
 		{
-			//Ledger legacy addresses
+            //Ledger legacy addresses
+            userWalletManager.SwitchWalletPath(Wallet.ELECTRUM_LEDGER_PATH);
 		}
 	}
 
