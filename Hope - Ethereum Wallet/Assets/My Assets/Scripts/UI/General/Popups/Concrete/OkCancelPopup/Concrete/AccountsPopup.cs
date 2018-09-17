@@ -15,7 +15,6 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     [SerializeField] private Transform addressesSection;
     [SerializeField] private Button previousPageButton, nextPageButton;
     [SerializeField] private TextMeshProUGUI pageNumText;
-    [SerializeField] private GameObject loadingIcon;
 
     private UserWalletManager userWalletManager;
 
@@ -137,13 +136,5 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     private void SetUnlockButtonInteractability()
     {
         okButton.interactable = !unlockedAccount.EqualsIgnoreCase(userWalletManager.GetAddress(currentlySelectedAddress - 1, addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH));
-    }
-
-    private void SetLoadingIcon(bool active)
-    {
-        if (active)
-            loadingIcon.SetActive(true);
-
-        loadingIcon.AnimateGraphicAndScale(active ? 1f : 0f, active ? 1f : 0f, 0.1f, () => { if (!active) loadingIcon.SetActive(false); });
     }
 }

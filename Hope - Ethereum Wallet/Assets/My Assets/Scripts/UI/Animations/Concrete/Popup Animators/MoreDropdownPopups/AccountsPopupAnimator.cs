@@ -21,7 +21,7 @@ public class AccountsPopupAnimator : UIAnimator
 		float duration = 0.2f;
 		for (int i = 0; i < addressSection.childCount; i++)
 		{
-			addressSection.GetChild(i).gameObject.AnimateScaleX(1f, duration);
+			addressSection.GetChild(i).gameObject.AnimateScale(1f, duration);
 			duration += 0.1f;
 		}
 
@@ -58,7 +58,7 @@ public class AccountsPopupAnimator : UIAnimator
 	{
 		addressObject.GetComponent<Button>().interactable = interactable;
 
-		for (int i = 0; i < addressObject.transform.childCount; i++)
+		for (int i = 0; i < 3; i++)
 			addressObject.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = interactable ? UIColors.LightGrey : UIColors.White;
 	}
 }
