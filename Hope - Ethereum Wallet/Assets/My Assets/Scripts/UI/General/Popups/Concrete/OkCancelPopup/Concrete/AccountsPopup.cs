@@ -1,6 +1,7 @@
 ﻿using Nethereum.HdWallet;
 using Nethereum.Signer;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ using Zenject;
 
 public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
-    public event Action<int, int> OnPageChanged;
+    public event Action<string[], int, int> OnPageChanged;
 
 	[SerializeField] private GeneralRadioButtons addressesCategories;
 	[SerializeField] private Transform addressesSection;
@@ -18,10 +19,14 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     private UserWalletManager userWalletManager;
 
+    private readonly string[][] addresses = new string[2][];
+
+    private string unlockedAccount;
+
 	private int pageNum,
                 firstAddressNumInList,
                 currentlySelectedAddress,
-                currentlyUnlockedAddress;
+                addressesIndex;
 
     [Inject]
     public void Construct(UserWalletManager userWalletManager)
@@ -30,44 +35,73 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     }
 
     protected override void Awake()
-	{
-		base.Awake();
+    {
+        base.Awake();
 
         pageNum = 1;
         firstAddressNumInList = 1;
         currentlySelectedAddress = 1;
-        currentlyUnlockedAddress = userWalletManager.AccountNumber + 1;
+        unlockedAccount = userWalletManager.WalletAddress;
+
+        AssignListeners();
+        AssignAddresses();
+
+        for (int i = 0; i < 5; i++)
+            addressesSection.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = addresses[addressesIndex][i];
+    }
+
+    private void AssignListeners()
+    {
+        for (int i = 0; i < 5; i++)
+            AddButtonListeners(i);
 
         addressesCategories.ButtonClicked(userWalletManager.WalletPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1);
         addressesCategories.OnButtonChanged += AddressCategoryChanged;
-		previousPageButton.onClick.AddListener(() => PageChanged(false));
-		nextPageButton.onClick.AddListener(() => PageChanged(true));
+        previousPageButton.onClick.AddListener(() => PageChanged(false));
+        nextPageButton.onClick.AddListener(() => PageChanged(true));
+    }
 
-		for (int i = 0; i < 5; i++)
-		{
-			SetButtonListener(i);
-			addressesSection.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = EthECKey.GenerateKey().GetPublicAddress();
-		}
-	}
-
-    private void SetButtonListener(int num)
+    private void AddButtonListeners(int i)
     {
-        addressesSection.GetChild(num).GetComponent<Button>().onClick.AddListener(() => AddressClicked(num));
+        addressesSection.GetChild(i).GetComponent<Button>().onClick.AddListener(() => AddressClicked(i));
+    }
+
+    private void AssignAddresses()
+    {
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
+
+        for (int i = 0; i < 50; i++)
+            addresses[0][i] = userWalletManager.GetAddress(i, Wallet.DEFAULT_PATH);
+        for (int i = 0; i < 50; i++)
+            addresses[1][i] = userWalletManager.GetAddress(i, Wallet.ELECTRUM_LEDGER_PATH);
+
+        addressesIndex = userWalletManager.WalletPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
+    }
+
+    protected override void OnOkClicked()
+    {
+
     }
 
     private void AddressClicked(int num)
-	{
-		SetAddressInteractable(addressesSection.GetChild(currentlySelectedAddress % 5), true);
+    {
+        SetAddressInteractable(addressesSection.GetChild(currentlySelectedAddress % 5), true);
 
-		Transform selectedAddressTransform = addressesSection.GetChild(num);
+        Transform selectedAddressTransform = addressesSection.GetChild(num);
 
-		SetAddressInteractable(selectedAddressTransform, false);
-		currentlySelectedAddress = int.Parse(selectedAddressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        SetAddressInteractable(selectedAddressTransform, false);
+        currentlySelectedAddress = int.Parse(selectedAddressTransform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
-		okButton.interactable = currentlyUnlockedAddress != currentlySelectedAddress;
-	}
+        UpdateButtonInteractability();
+    }
 
-	private void PageChanged(bool movingForward)
+    private void UpdateButtonInteractability()
+    {
+        okButton.interactable = !unlockedAccount.EqualsIgnoreCase(userWalletManager.GetAddress(currentlySelectedAddress - 1, addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH));
+    }
+
+    private void PageChanged(bool movingForward)
 	{
 		if (pageNum == 1 && !movingForward)
 			pageNum = 10;
@@ -79,22 +113,15 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		firstAddressNumInList = (pageNum * 5) - 4;
 		pageNumText.text = pageNum.ToString();
 
-        OnPageChanged?.Invoke(firstAddressNumInList, currentlySelectedAddress);
+        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
 	}
 
 	private void AddressCategoryChanged(int num)
 	{
-		if (num == 0)
-		{
-            //Default addresses
-            userWalletManager.SwitchWalletPath(Wallet.DEFAULT_PATH);
-        }
-        else
-		{
-            //Ledger legacy addresses
-            userWalletManager.SwitchWalletPath(Wallet.ELECTRUM_LEDGER_PATH);
-		}
-	}
+        addressesIndex = num;
+        UpdateButtonInteractability();
+        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
+    }
 
 	private void SetAddressInteractable(Transform addressTransform, bool interactable)
 	{

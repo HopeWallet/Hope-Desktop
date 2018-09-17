@@ -131,6 +131,11 @@ public sealed class UserWalletManager
         }
     }
 
+    public string GetAddress(int accountNumber, string path)
+    {
+        return activeWallet.GetAddress(accountNumber, path);
+    }
+
     /// <summary>
     /// Switches the active derivation path of the wallet.
     /// </summary>

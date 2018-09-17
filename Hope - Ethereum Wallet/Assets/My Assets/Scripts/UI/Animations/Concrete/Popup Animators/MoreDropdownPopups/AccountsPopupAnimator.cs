@@ -35,21 +35,21 @@ public class AccountsPopupAnimator : UIAnimator
 		unlockButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
-	private void AnimateAddresses(int firstAddressNumInList, int currentlySelectedAddress)
+	private void AnimateAddresses(string[] addresses, int firstAddressNumInList, int currentlySelectedAddress)
 	{
 		for (int i = 0; i < 5; i++)
-			AnimateAddress(i, firstAddressNumInList, currentlySelectedAddress);
+			AnimateAddress(addresses[i], i, firstAddressNumInList, currentlySelectedAddress);
 	}
 
-	private void AnimateAddress(int i, int firstAddressNumInList, int currentlySelectedAddress)
+	private void AnimateAddress(string address, int index, int firstAddressNumInList, int currentlySelectedAddress)
 	{
-		GameObject addressObject = addressSection.transform.GetChild(i).gameObject;
+		GameObject addressObject = addressSection.transform.GetChild(index).gameObject;
 
 		addressObject.AnimateScaleY(0f, 0.15f, () =>
 		{
-			addressObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = EthECKey.GenerateKey().GetPublicAddress();
-			addressObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (firstAddressNumInList + i).ToString();
-			SetAddressButtonInteractable(addressObject, currentlySelectedAddress != (firstAddressNumInList + i));
+			addressObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = address;
+			addressObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (firstAddressNumInList + index).ToString();
+			SetAddressButtonInteractable(addressObject, currentlySelectedAddress != (firstAddressNumInList + index));
 			addressObject.AnimateScaleY(1f, 0.15f);
 		});
 	}
