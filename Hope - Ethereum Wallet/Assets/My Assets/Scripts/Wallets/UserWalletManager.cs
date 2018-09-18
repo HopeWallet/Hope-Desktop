@@ -74,17 +74,6 @@ public sealed class UserWalletManager
     }
 
     /// <summary>
-    /// Wrapper method for transferring a specified asset from the user's wallet to another ethereum address.
-    /// </summary>
-    /// <param name="tradableAsset"> The asset to transfer from the user's wallet. </param>
-    /// <param name="gasLimit"> The gas limit to use for this asset transfer transaction. </param>
-    /// <param name="gasPrice"> The gas price to use for this asset transfer transaction. </param>
-    /// <param name="address"> The address to transfer the asset to. </param>
-    /// <param name="amount"> The amount of the specified asset to send. </param>
-    public void TransferAsset(TradableAsset tradableAsset, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, dynamic amount)
-        => tradableAsset.Transfer(this, gasLimit, gasPrice, address, amount);
-
-    /// <summary>
     /// Signs a transaction using the main UserWallet.
     /// </summary>
     /// <typeparam name="T"> The type of the popup to display the transaction confirmation for. </typeparam>
@@ -112,7 +101,7 @@ public sealed class UserWalletManager
     /// Switches the active WalletType.
     /// </summary>
     /// <param name="newWalletType"> The new WalletType to use to get addresses/sign transactions. </param>
-    public void SwitchWalletType(WalletType newWalletType)
+    public void SetWalletType(WalletType newWalletType)
     {
         switch (newWalletType)
         {
@@ -131,7 +120,12 @@ public sealed class UserWalletManager
         }
     }
 
-    public string GetAddress(int accountNumber, string path)
+    public string GetWalletAddress()
+    {
+        return activeWallet.GetAddress(AccountNumber, WalletAddress);
+    }
+
+    public string GetWalletAddress(int accountNumber, string path)
     {
         return activeWallet.GetAddress(accountNumber, path);
     }
@@ -140,7 +134,7 @@ public sealed class UserWalletManager
     /// Switches the active derivation path of the wallet.
     /// </summary>
     /// <param name="newPath"> The new derivation path to use. </param>
-    public void SwitchWalletPath(string newPath)
+    public void SetWalletPath(string newPath)
     {
         if (!newPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) && !newPath.EqualsIgnoreCase(Wallet.ELECTRUM_LEDGER_PATH))
             return;
@@ -152,7 +146,7 @@ public sealed class UserWalletManager
     /// Switches the current account number of the wallet.
     /// </summary>
     /// <param name="newAccountNumber"> The new account number of the wallet to use. </param>
-    public void SwitchWalletAccount(int newAccountNumber)
+    public void SetWalletAccount(int newAccountNumber)
     {
         AccountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
     }

@@ -105,17 +105,17 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         addresses[1] = new string[50];
 
         for (int i = 0; i < 50; i++)
-            addresses[0][i] = userWalletManager.GetAddress(i, Wallet.DEFAULT_PATH);
+            addresses[0][i] = userWalletManager.GetWalletAddress(i, Wallet.DEFAULT_PATH);
         for (int i = 0; i < 50; i++)
-            addresses[1][i] = userWalletManager.GetAddress(i, Wallet.ELECTRUM_LEDGER_PATH);
+            addresses[1][i] = userWalletManager.GetWalletAddress(i, Wallet.ELECTRUM_LEDGER_PATH);
 
         addressesIndex = userWalletManager.WalletPath.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
     }
 
     protected override void OnOkClicked()
     {
-        userWalletManager.SwitchWalletAccount(currentlySelectedAddress - 1);
-        userWalletManager.SwitchWalletPath(addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH);
+        userWalletManager.SetWalletAccount(currentlySelectedAddress - 1);
+        userWalletManager.SetWalletPath(addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH);
 
         tradableAssetNotificationManager.LoadNewNotificationList();
 
@@ -219,6 +219,6 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     private void SetUnlockButtonInteractability()
     {
-        okButton.interactable = !unlockedAccount.EqualsIgnoreCase(userWalletManager.GetAddress(currentlySelectedAddress - 1, addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH));
+        okButton.interactable = !unlockedAccount.EqualsIgnoreCase(userWalletManager.GetWalletAddress(currentlySelectedAddress - 1, addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH));
     }
 }
