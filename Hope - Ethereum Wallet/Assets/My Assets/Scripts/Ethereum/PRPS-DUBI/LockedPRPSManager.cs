@@ -47,7 +47,18 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// <summary>
     /// Searches for any new locked items, or any locked items that are now unlocked.
     /// </summary>
-    public void PeriodicUpdate() => StartNewItemSearch();
+    public void PeriodicUpdate()
+    {
+        StartNewItemSearch();
+    }
+
+    /// <summary>
+    /// Clears the list of items.
+    /// </summary>
+    public void ClearList()
+    {
+        lockedItems.Clear();
+    }
 
     private void CheckIfPRPSAdded(TradableAsset tradableAsset)
     {

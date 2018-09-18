@@ -34,10 +34,33 @@ public sealed class TradableAssetButtonManager
     }
 
     /// <summary>
+    /// Resets the notifications for the list of AssetButtons.
+    /// </summary>
+    public void ResetButtonNotifications()
+    {
+        assetButtons.ForEach(asset => asset.ResetButtonNotifications());
+    }
+
+    /// <summary>
+    /// Enables a new asset button by making it interactable, and disabling the old one by making it non interactable.
+    /// </summary>
+    /// <param name="newAssetButton"> The new button to set as interactable. </param>
+    public void EnableNewTokenButton(AssetButton newAssetButton)
+    {
+        if (activeAssetButton != null)
+            activeAssetButton.Button.interactable = true;
+
+        newAssetButton.Button.interactable = false;
+        activeAssetButton = newAssetButton;
+
+        OnActiveButtonChanged?.Invoke(activeAssetButton);
+    }
+
+    /// <summary>
     /// Adds a asset button to the list of asset buttons visible.
     /// </summary>
     /// <param name="tradableAsset"> The TokenContract which will be assigned to this button. </param>
-    public void AddAssetButton(TradableAsset tradableAsset)
+    private void AddAssetButton(TradableAsset tradableAsset)
     {
         var assetButton = buttonFactory.Create().SetButtonInfo(tradableAsset);
 
@@ -48,21 +71,10 @@ public sealed class TradableAssetButtonManager
     }
 
     /// <summary>
-    /// Sorts the buttons in the order they were originally added.
-    /// </summary>
-    public void SortButtons()
-    {
-        assetButtons.Sort((b1, b2) => tokenContractManager.GetTokenIndex(b1.ButtonInfo.AssetAddress)
-                                                          .CompareTo(tokenContractManager.GetTokenIndex(b2.ButtonInfo.AssetAddress)));
-
-        assetButtons.ForEach(asset => asset.transform.parent.SetAsLastSibling());
-    }
-
-    /// <summary>
     /// Removes a TradableAsset's button from the list of buttons, and destroys the gameobject.
     /// </summary>
     /// <param name="assetToRemove"> The TradableAsset to remove. </param>
-    public void RemoveButton(TradableAsset assetToRemove)
+    private void RemoveButton(TradableAsset assetToRemove)
     {
         for (int i = 0; i < assetButtons.Count; i++)
         {
@@ -82,18 +94,14 @@ public sealed class TradableAssetButtonManager
     }
 
     /// <summary>
-    /// Enables a new asset button by making it interactable, and disabling the old one by making it non interactable.
+    /// Sorts the buttons in the order they were originally added.
     /// </summary>
-    /// <param name="newAssetButton"> The new button to set as interactable. </param>
-    public void EnableNewTokenButton(AssetButton newAssetButton)
+    private void SortButtons()
     {
-        if (activeAssetButton != null)
-            activeAssetButton.Button.interactable = true;
+        assetButtons.Sort((b1, b2) => tokenContractManager.GetTokenIndex(b1.ButtonInfo.AssetAddress)
+                                                          .CompareTo(tokenContractManager.GetTokenIndex(b2.ButtonInfo.AssetAddress)));
 
-        newAssetButton.Button.interactable = false;
-        activeAssetButton = newAssetButton;
-
-        OnActiveButtonChanged?.Invoke(activeAssetButton);
+        assetButtons.ForEach(asset => asset.transform.parent.SetAsLastSibling());
     }
 
     /// <summary>

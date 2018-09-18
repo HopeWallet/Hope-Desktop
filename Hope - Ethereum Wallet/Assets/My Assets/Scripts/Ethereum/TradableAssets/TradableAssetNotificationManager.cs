@@ -6,9 +6,13 @@ public sealed class TradableAssetNotificationManager
 {
     public event Action OnNotificationsUpdated;
 
-    private readonly SecurePlayerPrefList<AddressTransactionCount> transactionsByAddress;
-    private readonly Dictionary<string, int?> notificationsByAddress;
+    private SecurePlayerPrefList<AddressTransactionCount> transactionsByAddress;
+    private Dictionary<string, int?> notificationsByAddress = new Dictionary<string, int?>();
 
+    private readonly Settings settings;
+    private readonly EthereumNetworkManager.Settings networkSettings;
+
+    private readonly UserWalletManager userWalletManager;
     private readonly EthereumTransactionManager ethereumTransactionManager;
     private readonly LockedPRPSManager lockedPrpsManager;
     private readonly PRPS prpsContract;
@@ -16,21 +20,34 @@ public sealed class TradableAssetNotificationManager
     public TradableAssetNotificationManager(
         Settings settings,
         EthereumNetworkManager.Settings networkSettings,
+        UserWalletManager userWalletManager,
         EthereumTransactionManager ethereumTransactionManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract)
     {
+        this.settings = settings;
+        this.networkSettings = networkSettings;
+        this.userWalletManager = userWalletManager;
         this.ethereumTransactionManager = ethereumTransactionManager;
         this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
 
-        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType);
-        notificationsByAddress = new Dictionary<string, int?>();
+        UserWalletManager.OnWalletLoadSuccessful += LoadNewNotificationList;
 
         TradableAssetManager.OnTradableAssetAdded += AssetAdded;
         TradableAssetManager.OnTradableAssetRemoved += AssetRemoved;
+
         EthereumTransactionManager.OnTransactionsAdded += TransactionsUpdated;
+
         lockedPrpsManager.OnLockedPRPSUpdated += TransactionsUpdated;
+    }
+
+    public void LoadNewNotificationList()
+    {
+        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType + userWalletManager.WalletAddress);
+
+        foreach (var address in notificationsByAddress.Keys.ToList())
+            notificationsByAddress[address] = null;
     }
 
     public int? GetAssetNotificationCount(string assetAddress)

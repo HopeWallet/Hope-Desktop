@@ -73,7 +73,7 @@ public abstract class TradableAsset
     /// </summary>
     public void UpdateBalance()
     {
-        GetBalance(userWalletManager, balance =>
+        GetBalance(userWalletManager.WalletAddress, balance =>
         {
             bool changed = balance != AssetBalance;
 
@@ -106,11 +106,11 @@ public abstract class TradableAsset
     }
 
     /// <summary>
-    /// Gets the balance of this asset currently in a UserWallet.
+    /// Gets this asset's balance of an address.
     /// </summary>
-    /// <param name="userWalletManager"> The wallet to get the balance for. </param>
+    /// <param name="address"> The address to get the balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balnce has been received, with the amount as a param. </param>
-    public abstract void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived);
+    public abstract void GetBalance(string address, Action<dynamic> onBalanceReceived);
 
     /// <summary>
     /// Transfers a certain number of this asset from a UserWallet to a specified ethereum address.

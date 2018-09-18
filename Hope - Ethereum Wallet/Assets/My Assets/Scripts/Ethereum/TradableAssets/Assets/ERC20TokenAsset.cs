@@ -29,13 +29,14 @@ public sealed class ERC20TokenAsset : TradableAsset
     }
 
     /// <summary>
-    /// Gets the balance of this token of a specified UserWallet.
+    /// Gets the token balance of a given address.
     /// </summary>
     /// <param name="userWalletManager"> The wallet to get the balance for. </param>
+    /// <param name="address"> The address to get the balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the balance as a parameter. </param>
-    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived)
+    public override void GetBalance(string address, Action<dynamic> onBalanceReceived)
     {
-        erc20TokenContract.BalanceOf(userWalletManager.WalletAddress, onBalanceReceived);
+        erc20TokenContract.BalanceOf(address, onBalanceReceived);
     }
 
     /// <summary>

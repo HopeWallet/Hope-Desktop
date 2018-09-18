@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Security.HashGeneration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     private readonly List<string> serializedItemList = new List<string>();
 
     private readonly string keyName;
-    private readonly int? listId;
+    private readonly object listId;
 
     /// <summary>
     /// The <see langword="string"/> which holds all serialized list data.
@@ -30,7 +31,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// </summary>
     /// <param name="keyName"> The key of the <see cref="SecurePlayerPrefs"/> containing the list data. </param>
     /// <param name="listId"> The id of this list. Can be used to have multiple versions of the same list. </param>
-    public SecurePlayerPrefList(string keyName, int? listId)
+    public SecurePlayerPrefList(string keyName, object listId)
     {
         this.keyName = keyName;
         this.listId = listId;
@@ -50,7 +51,7 @@ public sealed class SecurePlayerPrefList<T> : IList<T>
     /// Gets the full key name based on the keyName string and unique listId.
     /// </summary>
     /// <returns> The full key name which can be used to set/get the prefs. </returns>
-    private string GetFullKeyName() => listId.HasValue? string.Concat(keyName, listId.Value) : keyName;
+    private string GetFullKeyName() => listId != null ? string.Concat(keyName, listId.ToString()).Keccak_128() : keyName;
 
     /// <summary>
     /// Initializes all values in the <see cref="SecurePlayerPrefList"/>.

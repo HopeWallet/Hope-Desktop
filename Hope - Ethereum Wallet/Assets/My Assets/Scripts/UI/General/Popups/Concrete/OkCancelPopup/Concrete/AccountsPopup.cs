@@ -1,14 +1,17 @@
-﻿using Nethereum.HdWallet;
-using Nethereum.Signer;
+﻿using Hope.Utils.Ethereum;
+using Nethereum.HdWallet;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
+public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
+    public static Action<int> OnAccountChanged;
+
     public event Action<string[], int, int> OnPageChanged;
 
     [SerializeField] private GeneralRadioButtons addressesCategories;
@@ -17,6 +20,14 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     [SerializeField] private TextMeshProUGUI pageNumText;
 
     private UserWalletManager userWalletManager;
+    private EthereumTransactionManager ethereumTransactionManager;
+    private EthereumTransactionButtonManager ethereumTransactionButtonManager;
+    private TradableAssetManager tradableAssetManager;
+    private TradableAssetButtonManager tradableAssetButtonManager;
+    private TradableAssetNotificationManager tradableAssetNotificationManager;
+    private LockedPRPSManager lockedPRPSManager;
+
+    private readonly Dictionary<string, decimal> addressBalances = new Dictionary<string, decimal>();
 
     private readonly string[][] addresses = new string[2][];
 
@@ -28,9 +39,22 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
                 addressesIndex;
 
     [Inject]
-    public void Construct(UserWalletManager userWalletManager)
+    public void Construct(
+        UserWalletManager userWalletManager,
+        EthereumTransactionManager ethereumTransactionManager,
+        EthereumTransactionButtonManager ethereumTransactionButtonManager,
+        TradableAssetManager tradableAssetManager,
+        TradableAssetButtonManager tradableAssetButtonManager,
+        TradableAssetNotificationManager tradableAssetNotificationManager,
+        LockedPRPSManager lockedPRPSManager)
     {
         this.userWalletManager = userWalletManager;
+        this.ethereumTransactionManager = ethereumTransactionManager;
+        this.ethereumTransactionButtonManager = ethereumTransactionButtonManager;
+        this.tradableAssetManager = tradableAssetManager;
+        this.tradableAssetButtonManager = tradableAssetButtonManager;
+        this.tradableAssetNotificationManager = tradableAssetNotificationManager;
+        this.lockedPRPSManager = lockedPRPSManager;
     }
 
     protected override void Awake()
@@ -89,6 +113,20 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     {
         userWalletManager.SwitchWalletAccount(currentlySelectedAddress - 1);
         userWalletManager.SwitchWalletPath(addressesIndex == 0 ? Wallet.DEFAULT_PATH : Wallet.ELECTRUM_LEDGER_PATH);
+
+        tradableAssetNotificationManager.LoadNewNotificationList();
+
+        lockedPRPSManager.ClearList();
+        lockedPRPSManager.PeriodicUpdate();
+
+        ethereumTransactionManager.ClearTransactionList();
+        ethereumTransactionManager.PeriodicUpdate();
+        ethereumTransactionButtonManager.ProcessNewAssetList();
+
+        tradableAssetButtonManager.ResetButtonNotifications();
+        tradableAssetManager.PeriodicUpdate();
+
+        OnAccountChanged?.Invoke(currentlySelectedAddress - 1);
     }
 
     private void AddressClicked(int num)
@@ -115,14 +153,56 @@ public class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         firstAddressNumInList = (pageNum * 5) - 4;
         pageNumText.text = pageNum.ToString();
 
-        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
+        LoadNewAddresses();
     }
 
     private void AddressCategoryChanged(int num)
     {
         addressesIndex = num;
+
         SetUnlockButtonInteractability();
-        OnPageChanged?.Invoke(addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray(), firstAddressNumInList, currentlySelectedAddress);
+        LoadNewAddresses();
+    }
+
+    private void LoadNewAddresses()
+    {
+        string[] addressGroup = addresses[addressesIndex].Skip(firstAddressNumInList - 1).Take(5).ToArray();
+
+        LoadAddressBalances(addressGroup);
+        OnPageChanged?.Invoke(addressGroup, firstAddressNumInList, currentlySelectedAddress);
+    }
+
+    private void LoadAddressBalances(string[] addressGroup)
+    {
+        for (int i = 0; i < addressGroup.Length; i++)
+        {
+            var address = addressGroup[i];
+            var num = i;
+            if (addressBalances.ContainsKey(address))
+            {
+                SetAddressBalance(i, address);
+            }
+            else
+            {
+                tradableAssetManager.ActiveTradableAsset.GetBalance(address, balance =>
+                {
+                    addressBalances.Add(address, balance);
+
+                    if (addresses[addressesIndex][firstAddressNumInList - 1 + num].Equals(address))
+                        SetAddressBalance(num, address);
+                });
+            }
+        }
+    }
+
+    private void SetAddressBalance(int addressIndex, string address)
+    {
+        TMP_Text textComponent = addressesSection.GetChild(addressIndex).transform.GetChild(2).GetComponent<TMP_Text>();
+
+        string balanceText = addressBalances[address].ConvertDecimalToString().LimitEnd(5).TrimEnd('.');
+        string symbolText = " <size=60%>" + tradableAssetManager.ActiveTradableAsset.AssetSymbol.LimitEnd(5) + "</size>";
+
+        textComponent.text = string.Concat(balanceText, symbolText);
     }
 
     private void SetAddressButtonInteractability(Transform addressTransform, bool interactable)

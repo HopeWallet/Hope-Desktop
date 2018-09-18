@@ -25,13 +25,13 @@ public sealed class EtherAsset : TradableAsset
     }
 
     /// <summary>
-    /// Gets the ether balance of a UserWallet using the WalletExtensions method for getting ether balances.
+    /// Gets the ether balance of a given address.
     /// </summary>
-    /// <param name="userWalletManager"> The wallet to get the current amount of ether for. </param>
+    /// <param name="address"> The address to get the Ether balance for. </param>
     /// <param name="onBalanceReceived"> Callback to execute once the balance has been received, with the amount as a parameter. </param>
-    public override void GetBalance(UserWalletManager userWalletManager, Action<dynamic> onBalanceReceived)
+    public override void GetBalance(string address, Action<dynamic> onBalanceReceived)
     {
-        EthUtils.GetEtherBalance(userWalletManager.WalletAddress).OnSuccess(onBalanceReceived);
+        EthUtils.GetEtherBalance(address).OnSuccess(onBalanceReceived);
     }
 
     /// <summary>

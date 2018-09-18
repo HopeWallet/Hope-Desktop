@@ -76,6 +76,15 @@ public sealed class AssetButton : InfoButton<AssetButton, TradableAsset>
     }
 
     /// <summary>
+    /// Resets the notifications on the button.
+    /// </summary>
+    public void ResetButtonNotifications()
+    {
+        loadingTransactionsObj.SetActive(true);
+        notificationImageObj.SetActive(false);
+    }
+
+    /// <summary>
     /// Sets the current button to be the active button in the wallet.
     /// </summary>
     public override void ButtonLeftClicked()

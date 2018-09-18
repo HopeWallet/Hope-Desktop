@@ -80,6 +80,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// </summary>
 	private void Start()
     {
+        AccountsPopup.OnAccountChanged += AccountChanged;
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
 
@@ -92,15 +93,23 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
 		new IdleTimeoutManager(uiManager);
     }
 
-	/// <summary>
-	/// Called when the OpenWalletMenu is first opened.
-	/// </summary>
-	private void OpenMenu() => transform.GetChild(0).gameObject.SetActive(true);
+    private void AccountChanged(int account)
+    {
+        walletAccountText.text = "(Account <size=90%>#" + (account + 1) + "</size>)";
+    }
+
+    /// <summary>
+    /// Called when the OpenWalletMenu is first opened.
+    /// </summary>
+    private void OpenMenu()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+    }
 
     /// <summary>
     /// Updates the ui for the newest TradableAsset.
     /// </summary>
-    public void UpdateAssetUI()
+    private void UpdateAssetUI()
     {
         var tradableAsset = tradableAssetManager.ActiveTradableAsset;
 

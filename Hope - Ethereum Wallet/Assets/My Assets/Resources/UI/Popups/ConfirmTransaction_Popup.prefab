@@ -665,10 +665,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1770147059065634}
+  formTitle: {fileID: 1682868860239068}
   dim: {fileID: 1244733206111716}
   form: {fileID: 1224930428793392}
   blur: {fileID: 1482005523935632}
-  formTitle: {fileID: 1682868860239068}
   popupContainer: {fileID: 1997054381496326}
   timerText: {fileID: 1347740901878196}
   confirmButton: {fileID: 1340001275404532}

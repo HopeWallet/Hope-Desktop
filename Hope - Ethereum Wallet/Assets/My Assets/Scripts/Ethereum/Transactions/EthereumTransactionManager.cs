@@ -64,6 +64,15 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     }
 
     /// <summary>
+    /// Clears all transaction lists.
+    /// </summary>
+    public void ClearTransactionList()
+    {
+        transactionsByAddress.Clear();
+        addressLastUpdatedTimes.Clear();
+    }
+
+    /// <summary>
     /// Gets the list of transactions of a specific asset address.
     /// </summary>
     /// <param name="address"> The address of the asset to find transactions for. </param>
