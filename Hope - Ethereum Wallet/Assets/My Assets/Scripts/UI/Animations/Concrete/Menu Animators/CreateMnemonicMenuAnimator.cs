@@ -11,9 +11,9 @@ using Hope.Utils.Ethereum;
 /// </summary>
 public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 {
-	[SerializeField] private GameObject passphrase;
+	[SerializeField] private Transform passphrase;
 	[SerializeField] private GameObject generateNewButton;
-	[SerializeField] private GameObject copyAllButton;
+	[SerializeField] private GameObject copyPhraseButton;
 	[SerializeField] private GameObject nextButton;
 	[SerializeField] private GameObject checkMarkIcon;
 
@@ -47,7 +47,7 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	private void Start()
 	{
 		generateNewButton.transform.GetComponent<Button>().onClick.AddListener(StartWordAnimation);
-		copyAllButton.transform.GetComponent<Button>().onClick.AddListener(() => { if (!animatingIcon) AnimateCheckMarkIcon(); });
+		copyPhraseButton.transform.GetComponent<Button>().onClick.AddListener(() => { if (!animatingIcon) AnimateCheckMarkIcon(); });
 		nextButton.GetComponent<Button>().onClick.AddListener(() => Animating = true);
 	}
 
@@ -58,7 +58,18 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
-		FinishedAnimating();
+		float duration = 0.24f;
+		for (int i = 0; i < 12; i++)
+		{
+			passphrase.GetChild(i).gameObject.AnimateScaleX(1f, duration);
+
+			if (i == 2 || i == 5 || i == 8)
+				duration += 0.03f;
+		}
+
+		generateNewButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
+		copyPhraseButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -68,7 +79,12 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-		FinishedAnimating();
+		for (int i = 0; i < 12; i++)
+			passphrase.GetChild(i).gameObject.AnimateScaleX(0f, 0.3f);
+
+		generateNewButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		copyPhraseButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
 
 	/// <summary>

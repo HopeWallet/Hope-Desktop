@@ -49,6 +49,21 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
+		wordInputField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
+		wordInputField.AnimateScaleX(1f, 0.25f);
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+
+		float duration = 0.325f;
+		for (int i = 0; i < 4; i ++)
+		{
+			if (i != 3)
+				checkBoxes[i].AnimateScale(1f, duration);
+			else
+				checkBoxes[i].AnimateScale(1f, duration, FinishedAnimating);
+
+			duration += 0.025f;
+		}
+
 		FinishedAnimating();
 	}
 
@@ -59,7 +74,11 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-		FinishedAnimating();
+		wordInputField.AnimateScale(0f, 0.3f);
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
+
+		for (int i = 0; i < 4; i++)
+			checkBoxes[i].AnimateScale(0f, 0.3f);
 	}
 
 	/// <summary>
@@ -120,10 +139,10 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
                 ++wordIndex;
 				SetWordText();
+				wordInputField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
 			}
             else
             {
-				nextButton.GetComponent<InteractableButton>().OnCustomPointerExit();
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
 				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
 			}
