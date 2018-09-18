@@ -2349,10 +2349,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1522686782153248}
+  formTitle: {fileID: 1496376508153186}
   dim: {fileID: 1423816650933150}
   form: {fileID: 1793795486942498}
   blur: {fileID: 1349807023389412}
-  formTitle: {fileID: 1496376508153186}
   popupContainer: {fileID: 1635264781330352}
   addContactButton: {fileID: 1229902686074586}
   sortBySection: {fileID: 1039949454515724}

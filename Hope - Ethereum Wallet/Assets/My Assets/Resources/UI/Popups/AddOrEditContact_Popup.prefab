@@ -1277,10 +1277,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1739605925257890}
+  formTitle: {fileID: 1296677741870750}
   dim: {fileID: 1483104290532846}
   form: {fileID: 1149969681636900}
   blur: {fileID: 1959627367157078}
-  formTitle: {fileID: 1296677741870750}
   popupContainer: {fileID: 1709855280524786}
   nameInputField: {fileID: 114852361863598848}
   addressInputField: {fileID: 114479456952593572}

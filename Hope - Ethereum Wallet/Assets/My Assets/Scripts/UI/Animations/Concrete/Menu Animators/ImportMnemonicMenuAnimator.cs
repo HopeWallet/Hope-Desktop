@@ -8,7 +8,7 @@ using System.Linq;
 /// </summary>
 public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 {
-	[SerializeField] private GameObject passphrase;
+	[SerializeField] private Transform passphrase;
 	[SerializeField] private GameObject wordCountSection;
 	[SerializeField] private GameObject pastePhraseButton;
 	[SerializeField] private GameObject nextButton;
@@ -99,7 +99,7 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	/// <param name="i"> The index of the input field in the hiearchy </param>
 	private void SetInputFieldVariables(int i)
 	{
-		wordInputFields[i] = passphrase.transform.GetChild(i).GetComponent<HopeInputField>();
+		wordInputFields[i] = passphrase.GetChild(i).GetComponent<HopeInputField>();
 		wordTextObjects[i] = wordInputFields[i].transform.GetChild(1).GetChild(0).gameObject;
 
 		wordInputFields[i].OnInputUpdated += _ => CheckIfValidInput(i);

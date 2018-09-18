@@ -5138,7 +5138,7 @@ MonoBehaviour:
   blocker: {fileID: 1099519179730166}
   formTitle: {fileID: 1292688382551098}
   line: {fileID: 1508836914459982}
-  passphrase: {fileID: 1303115964071376}
+  passphrase: {fileID: 4021593795734146}
   wordCountSection: {fileID: 1538880947978200}
   pastePhraseButton: {fileID: 1571834563377346}
   nextButton: {fileID: 1420176047243196}

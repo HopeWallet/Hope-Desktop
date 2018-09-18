@@ -2771,10 +2771,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1237393750155546}
+  formTitle: {fileID: 1418396771792650}
   dim: {fileID: 1179466260703116}
   form: {fileID: 1487950568724912}
   blur: {fileID: 1212853113808576}
-  formTitle: {fileID: 1418396771792650}
   popupContainer: {fileID: 1786025944301028}
   transactionHashSection: {fileID: 1174246906638460}
   fromAddressSection: {fileID: 1885072690333360}
