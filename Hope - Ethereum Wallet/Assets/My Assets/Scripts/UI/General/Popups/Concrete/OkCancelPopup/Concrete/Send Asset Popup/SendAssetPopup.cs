@@ -139,11 +139,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     public override void OkButton()
     {
         dynamicDataCache.SetData("txfee", Gas.TransactionFee.ToString());
-        userWalletManager.TransferAsset(Asset.ActiveAsset,
-                                        new HexBigInteger(Gas.TransactionGasLimit),
-                                        Gas.TransactionGasPrice.FunctionalGasPrice,
-                                        Address.SendAddress,
-                                        Amount.SendableAmount);
+
+        Asset.ActiveAsset.Transfer(
+            userWalletManager,
+            new HexBigInteger(Gas.TransactionGasLimit),
+            Gas.TransactionGasPrice.FunctionalGasPrice,
+            Address.SendAddress,
+            Amount.SendableAmount);
     }
 
     /// <summary>
