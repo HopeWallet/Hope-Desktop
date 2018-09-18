@@ -26,6 +26,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     private TradableAssetButtonManager tradableAssetButtonManager;
     private TradableAssetNotificationManager tradableAssetNotificationManager;
     private LockedPRPSManager lockedPRPSManager;
+    private LockPRPSManager lockPRPSManager;
 
     private readonly Dictionary<string, decimal> addressBalances = new Dictionary<string, decimal>();
 
@@ -46,7 +47,8 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         TradableAssetManager tradableAssetManager,
         TradableAssetButtonManager tradableAssetButtonManager,
         TradableAssetNotificationManager tradableAssetNotificationManager,
-        LockedPRPSManager lockedPRPSManager)
+        LockedPRPSManager lockedPRPSManager,
+        LockPRPSManager lockPRPSManager)
     {
         this.userWalletManager = userWalletManager;
         this.ethereumTransactionManager = ethereumTransactionManager;
@@ -55,6 +57,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         this.tradableAssetButtonManager = tradableAssetButtonManager;
         this.tradableAssetNotificationManager = tradableAssetNotificationManager;
         this.lockedPRPSManager = lockedPRPSManager;
+        this.lockPRPSManager = lockPRPSManager;
     }
 
     protected override void Awake()
@@ -118,6 +121,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
         lockedPRPSManager.ClearList();
         lockedPRPSManager.PeriodicUpdate();
+        lockPRPSManager.PeriodicUpdate();
 
         ethereumTransactionManager.ClearTransactionList();
         ethereumTransactionManager.PeriodicUpdate();
