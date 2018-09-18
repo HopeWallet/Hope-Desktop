@@ -12,10 +12,16 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject homeButton;
 	[SerializeField] private GameObject loadingIcon;
 
-	/// <summary>
-	/// Animates the unique elements of this form into view
-	/// </summary>
-	protected override void AnimateIn()
+    private void Start()
+    {
+        GetComponent<ReEnterPasswordMenu>().OnPasswordVerificationStarted += VerifyingPassword;
+        GetComponent<ReEnterPasswordMenu>().OnPasswordEnteredIncorrect += PasswordIncorrect;
+    }
+
+    /// <summary>
+    /// Animates the unique elements of this form into view
+    /// </summary>
+    protected override void AnimateIn()
 	{
 		base.AnimateIn();
 
@@ -35,7 +41,7 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Called if the password is incorrect
 	/// </summary>
-	public void PasswordIncorrect()
+	private void PasswordIncorrect()
 	{
 		passwordInputField.Error = true;
 		passwordInputField.UpdateVisuals();
@@ -46,7 +52,7 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the loadingIcon while in or out of view
 	/// </summary>
-	public void VerifyingPassword()
+	private void VerifyingPassword()
 	{
 		bool startingProcess = !loadingIcon.activeInHierarchy;
 
