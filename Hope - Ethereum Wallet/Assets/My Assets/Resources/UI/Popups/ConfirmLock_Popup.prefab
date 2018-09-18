@@ -1221,10 +1221,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1813333453771512}
+  formTitle: {fileID: 1198551032746040}
   dim: {fileID: 1501286304608002}
   form: {fileID: 1788099534252368}
   blur: {fileID: 1549847720255924}
-  formTitle: {fileID: 1198551032746040}
   popupContainer: {fileID: 1615715512475902}
   timerText: {fileID: 1533326129443540}
   confirmButton: {fileID: 1952104791249782}

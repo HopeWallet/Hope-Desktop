@@ -63,7 +63,7 @@ public sealed partial class Hodler : StaticSmartContract
         {
             ContractUtils.SendContractMessage(transactionInput, request)
                          .OnSuccess(_ => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"));
-        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, "Release Purpose Confirmation");
+        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, "Are you sure you would like to release " + amountToRelease.ConvertDecimalToString() + " Purpose?");
     }
 
     /// <summary>

@@ -199,7 +199,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     {
         TMP_Text textComponent = addressesSection.GetChild(addressIndex).transform.GetChild(2).GetComponent<TMP_Text>();
 
-        string balanceText = addressBalances[address].ConvertDecimalToString().LimitEnd(5).TrimEnd('.');
+        string balanceText = addressBalances[address].ConvertDecimalToString().LimitEnd(5, "..");
         string symbolText = " <size=60%>" + tradableAssetManager.ActiveTradableAsset.AssetSymbol.LimitEnd(5) + "</size>";
 
         textComponent.text = string.Concat(balanceText, symbolText);
