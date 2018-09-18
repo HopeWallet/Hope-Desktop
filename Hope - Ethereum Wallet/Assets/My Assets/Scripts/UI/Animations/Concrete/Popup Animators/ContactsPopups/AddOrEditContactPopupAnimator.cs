@@ -35,6 +35,7 @@ public sealed class AddOrEditContactPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		nameInputField.InputFieldBase.ActivateInputField();
 		nameInputField.gameObject.AnimateScaleX(1f, 0.2f);
 		addressInputField.gameObject.AnimateScaleX(1f, 0.25f);
 		AnimateMainButton(true);

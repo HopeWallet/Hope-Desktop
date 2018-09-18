@@ -17,7 +17,10 @@ public sealed class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
-		FinishedAnimating();
+		importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		importWalletDesc.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
+		createWalletDesc.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -27,6 +30,9 @@ public sealed class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-		FinishedAnimating();
+		importWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		importWalletDesc.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		createWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		createWalletDesc.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
 }

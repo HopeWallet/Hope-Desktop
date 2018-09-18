@@ -49,6 +49,51 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateIn()
+	{
+		base.AnimateIn();
+
+		float duration = 0.25f;
+		for (int i = 0; i < 5; i++)
+		{
+			wordCountSection.transform.GetChild(i).gameObject.AnimateScaleX(1f, duration);
+			duration += 0.01f;
+		}
+
+		pastePhraseButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+
+		for (int i = 0; i < 24; i++)
+		{
+			wordInputFields[i].gameObject.AnimateScaleX(1f, duration);
+
+			if (i == 5 || i == 11 || i == 17)
+				duration += 0.03f;
+		}
+
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
+	}
+
+	/// <summary>
+	/// Animates the form out of view
+	/// </summary>
+	protected override void AnimateOut()
+	{
+		base.AnimateOut();
+
+		for (int i = 0; i < 5; i++)
+			wordCountSection.transform.GetChild(i).gameObject.AnimateScaleX(0f, 0.3f);
+
+		pastePhraseButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+
+		for (int i = 0; i < 24; i++)
+			wordInputFields[i].gameObject.AnimateScaleX(0f, 0.3f);
+
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
+	}
+
+	/// <summary>
 	/// Sets the input field variables at a given index
 	/// </summary>
 	/// <param name="i"> The index of the input field in the hiearchy </param>
@@ -61,26 +106,6 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 
 		if (wordInputFields[i].InputFieldBase.interactable)
 			importMnemonicMenu.SelectableFields.Add(wordInputFields[i].InputFieldBase);
-	}
-
-	/// <summary>
-	/// Animates the unique elements of this form into view
-	/// </summary>
-	protected override void AnimateIn()
-	{
-		base.AnimateIn();
-
-		FinishedAnimating();
-	}
-
-	/// <summary>
-	/// Animates the form out of view
-	/// </summary>
-	protected override void AnimateOut()
-	{
-		base.AnimateOut();
-
-		FinishedAnimating();
 	}
 
 	/// <summary>

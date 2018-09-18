@@ -16,9 +16,9 @@ public sealed class ChooseWalletMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
-		ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
-		trezorButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
-		hopeButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
+		ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
+		trezorButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		hopeButton.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
 	}
 
 	/// <summary>

@@ -17,7 +17,11 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
-		FinishedAnimating();
+		walletNameField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
+		walletNameField.AnimateScale(1f, 0.25f);
+		password1Field.AnimateScale(1f, 0.3f);
+		password2Field.AnimateScale(1f, 0.35f);
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -27,6 +31,9 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-		FinishedAnimating();
+		walletNameField.AnimateScale(0f, 0.3f);
+		password1Field.AnimateScale(0f, 0.3f);
+		password2Field.AnimateScale(0f, 0.3f);
+		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
 }
