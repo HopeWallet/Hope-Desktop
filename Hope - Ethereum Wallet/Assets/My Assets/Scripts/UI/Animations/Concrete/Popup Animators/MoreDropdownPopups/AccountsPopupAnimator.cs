@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class AccountsPopupAnimator : PopupAnimator
 {
-	[SerializeField] private GameObject topSection;
+	[SerializeField] private GameObject addressCategories;
 	[SerializeField] private GameObject line;
 	[SerializeField] private Transform addressSection;
 	[SerializeField] private Transform pageSection;
@@ -20,7 +20,7 @@ public sealed class AccountsPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		topSection.AnimateScaleX(1f, 0.175f);
+		addressCategories.AnimateScaleX(1f, 0.175f);
 		line.AnimateScaleX(1f, 0.2f);
 
 		float duration = 0.2f;
