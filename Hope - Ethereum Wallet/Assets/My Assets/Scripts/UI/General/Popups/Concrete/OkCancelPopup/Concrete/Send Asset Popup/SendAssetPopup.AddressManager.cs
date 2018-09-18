@@ -55,7 +55,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			addressField.Error = !AddressUtils.IsValidEthereumAddress(address);
 
 			if (!addressField.Error)
-				CheckIfSavedAddress(address);
+				CheckIfSavedContact(address);
 			else
 				contactName.text = string.Empty;
 		}
@@ -64,10 +64,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// Checks if the inputted address is from a saved contact.
 		/// </summary>
 		/// <param name="address"> The address in the input field. </param>
-		public void CheckIfSavedAddress(string address)
+		public void CheckIfSavedContact(string address)
 		{
 			address = address.ToLower();
-			contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].ContactName + " ]" : string.Empty;
+			contactName.text = contactsManager.ContactList.Contains(address) ? "<style=Contact>" + contactsManager.ContactList[address].ContactName + "</style>" : string.Empty;
 		}
 	}
 }

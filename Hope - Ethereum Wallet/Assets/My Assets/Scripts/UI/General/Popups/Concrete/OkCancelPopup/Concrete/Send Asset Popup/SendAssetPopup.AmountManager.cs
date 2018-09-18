@@ -94,7 +94,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
             currencyText.text = currencyManager.ActiveCurrency.ToString();
 
-            amountInputField.SetPlaceholderText("Amount (" + tokenSymbol + ")");
+            amountInputField.SetPlaceholderText("Amount<style=Symbol> (" + tokenSymbol + ")</style>");
 			SetupListeners();
 		}
 
@@ -143,7 +143,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			usingTokenCurrency = !usingTokenCurrency;
 
-			amountInputField.SetPlaceholderText("Amount (" + currencyText.text + ")");
+			amountInputField.SetPlaceholderText("Amount<style=Symbol> (" + currencyText.text + ")</style>");
 			currencyText.text = usingTokenCurrency ? currencyManager.ActiveCurrency.ToString() : tradableTokenSymbol;
 
 			if (!string.IsNullOrEmpty(amountInputField.Text))
@@ -201,7 +201,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00").LimitEnd(8, "...") : oppositeCurrencyValue.ToString().LimitEnd(8, "...");
 
-			oppositeCurrencyAmountText.text = usingTokenCurrency ? "= " + oppositeCurrencyValueText + " " + currencyManager.ActiveCurrency.ToString() : "= " + oppositeCurrencyValueText + " " + tradableTokenSymbol;
+			oppositeCurrencyAmountText.text = usingTokenCurrency ? "=" + oppositeCurrencyValueText + "<style=Symbol> " + currencyManager.ActiveCurrency.ToString() + "</style>" : "=" + oppositeCurrencyValueText + "<style=Symbol> " + tradableTokenSymbol + "</style>";
 		}
 
 		/// <summary>

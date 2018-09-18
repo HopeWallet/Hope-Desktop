@@ -42,10 +42,10 @@ public static class DateTimeUtils
     {
         int hour = dateTime.Hour;
 
-        string timeConvention = hour >= 12 && hour != 24 ? "PM" : "AM";
+        string timeConvention = "<style=Symbol> " + (hour >= 12 && hour != 24 ? "PM" : "AM") + "</style>";
         string twelveHourTime = hour > 12 ? (hour - 12).ToString() : hour == 0 ? 12.ToString() : hour.ToString();
 
-        return twelveHourTime + ":" + dateTime.Minute.ToString("00") + " " + timeConvention;
+        return twelveHourTime + ":" + dateTime.Minute.ToString("00") + timeConvention;
     }
 
     /// <summary>

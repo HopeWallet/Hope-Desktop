@@ -121,7 +121,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 				? TransactionFee <= (tradableAssetManager.EtherAsset.AssetBalance - amountManager.SendableAmount)
 				: TransactionFee < tradableAssetManager.EtherAsset.AssetBalance;
 
-			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
+			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + "<style=Symbol> ETH</style>" : "Not enough ETH";
 			transactionFeeText.color = !hasEnoughETH ? UIColors.Red : UIColors.White;
 		}
 

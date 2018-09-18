@@ -72,7 +72,7 @@ public sealed partial class LockPRPSPopup
 		private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
-			transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + " ETH" : "Not enough ETH";
+			transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + "<style=Symbol> ETH</style>" : "Not enough ETH";
 			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
 		}
     }

@@ -26,20 +26,31 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
     private PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
+	private ContactsManager contactsManager;
+	private Hodler hodler;
 
-    /// <summary>
-    /// Adds the required dependencies to this class.
-    /// </summary>
-    /// <param name="popupManager"> The active PopupManager. </param>
-    /// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
-    /// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
-    [Inject]
-    public void Construct(PopupManager popupManager, TradableAssetManager tradableAssetManager, TradableAssetImageManager tradableAssetImageManager)
+	/// <summary>
+	/// Adds the required dependencies to this class.
+	/// </summary>
+	/// <param name="popupManager"> The active PopupManager. </param>
+	/// <param name="tradableAssetManager"> The current active TradableAssetManager. </param>
+	/// <param name="tradableAssetImageManager"> The current active TradableAssetImageManager. </param>
+	/// <param name="contactsManager"> The current active ContactsManager. </param>
+	/// <param name="hodler"> The current active Hodler. </param>
+	[Inject]
+    public void Construct(
+		PopupManager popupManager,
+		TradableAssetManager tradableAssetManager,
+		TradableAssetImageManager tradableAssetImageManager,
+		ContactsManager contactsManager,
+		Hodler hodler)
     {
         this.popupManager = popupManager;
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
-    }
+		this.contactsManager = contactsManager;
+		this.hodler = hodler;
+	}
 
     /// <summary>
     /// Adds the display popup method to the button listener.
@@ -98,7 +109,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
         var amount = start + SolidityUtils.ConvertFromUInt(transaction.Value, tradableAsset.AssetDecimals);
         var symbol = tradableAsset.AssetSymbol;
 
-        amountText.SetText(amount.LimitEnd(18 - symbol.Length, "...") + " " + symbol);
+        amountText.SetText(amount.LimitEnd(18 - symbol.Length, "...") + "<style=Symbol> " + symbol + "</style>");
         amountText.color = send ? UIColors.Red : UIColors.Green;
     }
 
@@ -109,14 +120,30 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
     private void SetAddress(TransactionInfo transaction)
     {
         var address = transaction.Type == TransactionInfo.TransactionType.Send ? transaction.To : transaction.From;
-        addressText.SetText(address.LimitEnd(10) + "...." + address.Substring(address.Length - 10, 10));
+
+		string contactName = CheckIfSavedContact(address);
+		addressText.SetText(string.IsNullOrEmpty(contactName) ? address.LimitEnd(10) + "...." + address.Substring(address.Length - 10, 10) : contactName);
     }
 
-    /// <summary>
-    /// Sets the date this transaction took place.
-    /// </summary>    
-    /// <param name="transaction"> The info of this transaction. </param>
-    private void SetDate(TransactionInfo transaction)
+	/// <summary>
+	/// Checks if the inputted address is from a saved contact.
+	/// </summary>
+	/// <param name="address"> The address in the input field. </param>
+	public string CheckIfSavedContact(string address)
+	{
+		address = address.ToLower();
+
+		if (address == hodler.ContractAddress)
+			return "<style=Contact>PRPS Smart Contract</style>";
+
+		return contactsManager.ContactList.Contains(address) ? "<style=Contact>" + contactsManager.ContactList[address].ContactName + "</style>" : string.Empty;
+	}
+
+	/// <summary>
+	/// Sets the date this transaction took place.
+	/// </summary>    
+	/// <param name="transaction"> The info of this transaction. </param>
+	private void SetDate(TransactionInfo transaction)
     {
         dateText.SetText(DateTimeUtils.TimeStampToDateTime(transaction.TimeStamp).GetStringFormattedDate());
     }

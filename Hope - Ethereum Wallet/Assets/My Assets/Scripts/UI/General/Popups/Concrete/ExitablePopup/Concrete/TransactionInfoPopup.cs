@@ -31,6 +31,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
 	private ContactsManager contactsManager;
+	private Hodler hodler;
 
 	/// <summary>
 	/// Injects the required dependencies.
@@ -38,17 +39,22 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
 	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
 	/// <param name="contactsManager"> The active ContactsManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="userWalletInfoManager"> The active userWalletInfoManager. </param>
+	/// <param name="hodler"> The active Hodler. </param>
 	[Inject]
     public void Construct(
 		TradableAssetManager tradableAssetManager,
 		TradableAssetImageManager tradableAssetImageManager,
 		ContactsManager contactsManager,
 		UserWalletManager userWalletManager,
-		HopeWalletInfoManager userWalletInfoManager)
+		HopeWalletInfoManager userWalletInfoManager,
+		Hodler hodler)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
 		this.contactsManager = contactsManager;
+		this.hodler = hodler;
 
 		walletAddress = userWalletManager.WalletAddress;
 		walletName = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope ? userWalletInfoManager.GetWalletInfo(walletAddress).WalletName : userWalletManager.ActiveWalletType.ToString();
@@ -81,18 +87,19 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         transactionHash.text = transactionInfo.TxHash;
-        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + " " + tradableAsset.AssetSymbol;
-        fromAddress.text = transactionInfo.From;
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + "<style=Symbol> " + tradableAsset.AssetSymbol + "</style>";
+
+		fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
-        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + " Ether";
+        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<style=Symbol> Ether</style>";
 		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);
 		CheckIfContact(transactionInfo.To.ToLower(), toAddressName);
 
 		TransactionUtils.GetTransactionDetails(transactionInfo.TxHash).OnSuccess(tx =>
         {
-            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + " Gwei");
+            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + "<style=Symbol> Gwei</style>");
             gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }
@@ -108,9 +115,11 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		address = address.ToLower();
 
 		if (contactsManager.ContactList.Contains(address))
-			nameTextObject.text = "[ " + contactsManager.ContactList[address].ContactName + " ]";
+			nameTextObject.text = "<style=Contact>" + contactsManager.ContactList[address].ContactName + "</style>";
 		else if (address.EqualsIgnoreCase(walletAddress))
-			nameTextObject.text = "[ " + walletName + " ]";
+			nameTextObject.text = "<style=Contact>" + walletName + "</style>";
+		else if (address == hodler.ContractAddress)
+			nameTextObject.text = "<style=Contact>PRPS Smart Contract</style>";
 
 		nameTextObject.gameObject.SetActive(!string.IsNullOrEmpty(nameTextObject.text));
 	}

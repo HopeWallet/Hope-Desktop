@@ -81,7 +81,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		sendAssetPopup.contactsClosed?.Invoke();
 
 		if (!sendAssetPopup.Address.addressField.Error)
-			sendAssetPopup.Address.CheckIfSavedAddress(sendAssetPopup.Address.addressField.Text);
+			sendAssetPopup.Address.CheckIfSavedContact(sendAssetPopup.Address.addressField.Text);
 	}
 
 	/// <summary>

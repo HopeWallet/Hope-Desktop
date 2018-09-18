@@ -63,7 +63,7 @@ public sealed class AccountsPopupAnimator : PopupAnimator
 	{
 		addressObject.GetComponent<Button>().interactable = interactable;
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < addressObject.transform.childCount; i++)
 			addressObject.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = interactable ? UIColors.LightGrey : UIColors.White;
 	}
 }

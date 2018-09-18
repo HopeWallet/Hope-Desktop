@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -7,14 +8,14 @@ using Zenject;
 /// </summary>
 public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<ConfirmTransactionPopup>
 {
-    public Image assetImage;
+    [SerializeField] private Image assetImage;
 
-    public TMP_Text amountText,
-                    fromAddress,
-                    toAddress,
-                    walletName,
-                    contactName,
-                    feeText;
+    [SerializeField] private TextMeshProUGUI amountText,
+											 fromAddress,
+											 toAddress,
+											 walletName,
+											 contactName,
+											 feeText;
 
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
@@ -22,6 +23,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     private HopeWalletInfoManager userWalletInfoManager;
     private DynamicDataCache dynamicDataCache;
 	private ContactsManager contactsManager;
+
+	private string walletAddress;
 
 	/// <summary>
 	/// Adds the required dependencies to this popup.
@@ -46,6 +49,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         this.userWalletInfoManager = userWalletInfoManager;
         this.dynamicDataCache = dynamicDataCache;
 		this.contactsManager = contactsManager;
+
+		walletAddress = userWalletManager.WalletAddress;
 	}
 
     /// <summary>
@@ -56,21 +61,29 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     {
         tradableAssetImageManager.LoadImage(tradableAssetManager.GetTradableAsset(transactionInput[1].ToString()).AssetSymbol, img => assetImage.sprite = img);
         amountText.text = transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " " + transactionInput[3];
+
         toAddress.text = transactionInput[0].ToString();
-        fromAddress.text = userWalletManager.WalletAddress;
-        feeText.text = dynamicDataCache.GetData("txfee") + " ETH";
-        walletName.text = "[ " + userWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName + " ]";
-		CheckIfSendingToContact();
-    }
+		CheckIfSavedContact(toAddress.text, contactName);
+
+		fromAddress.text = userWalletManager.WalletAddress;
+		CheckIfSavedContact(fromAddress.text, walletName);
+
+		feeText.text = dynamicDataCache.GetData("txfee") + "<style=Symbol> ETH</style>";
+	}
 
 	/// <summary>
-	/// Checks if sending a transaction to a saved contact
+	/// Checks if this address is saved under a contact name
 	/// </summary>
-	private void CheckIfSendingToContact()
+	private void CheckIfSavedContact(string address, TMP_Text textObject)
 	{
-		string address = toAddress.text.ToLower();
+		address = address.ToLower();
 
-		contactName.text = contactsManager.ContactList.Contains(address) ? "[ " + contactsManager.ContactList[address].ContactName + " ]" : string.Empty;
+		if (contactsManager.ContactList.Contains(address))
+			textObject.text = "<style=Contact>" + contactsManager.ContactList[address].ContactName + "</style>";
+		else if (address.EqualsIgnoreCase(walletAddress))
+			textObject.text = "<style=Contact>" + walletName + "</style>";
+		else
+			textObject.text = string.Empty;
 
 		contactName.gameObject.SetActive(!string.IsNullOrEmpty(contactName.text));
 	}

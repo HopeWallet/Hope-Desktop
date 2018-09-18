@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class SliderManager : MonoBehaviour
 {
-	[SerializeField] private GameObject slowText, fastText;
+	[SerializeField] private TextMeshProUGUI slowText, fastText;
 
 	/// <summary>
 	/// Adds the listener for the sliders
@@ -19,14 +20,19 @@ public sealed class SliderManager : MonoBehaviour
 	/// <param name="value"> The current value of the slider</param>
 	private void SliderChanged(float value)
 	{
-		ModifyText(slowText, ((1 - value) * 0.4f) + 0.6f);
-		ModifyText(fastText, (value * 0.4f) + 0.6f);
+		ModifyText(slowText, ((1 - value) * 0.4f) + 0.6f, 1 - value);
+		ModifyText(fastText, (value * 0.4f) + 0.6f, value);
 	}
 
 	/// <summary>
 	/// Animates the given text's color depending on the value
 	/// </summary>
-	/// <param name="text"> The text object </param>
-	/// <param name="value"> The value of color </param>
-	private void ModifyText(GameObject text, float value) => text.AnimateColor(new Color(value, value, value), 0.05f);
+	/// <param name="text"> The text component </param>
+	/// <param name="colorValue"> The value of color </param>
+	/// <param name="value"> The value of the slider </param>
+	private void ModifyText(TextMeshProUGUI text, float colorValue, float value)
+	{
+		text.gameObject.AnimateColor(new Color(colorValue, colorValue, colorValue), 0.05f);
+		text.fontSize = (5f * value) + 15f;
+	}
 }
