@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,12 +7,14 @@ using Zenject;
 
 public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 {
+    public event Action OnPasswordVerificationStarted;
+    public event Action OnPasswordEnteredCorrect;
+    public event Action OnPasswordEnteredIncorrect;
+
 	[SerializeField] private TextMeshProUGUI walletName;
 
 	[SerializeField] private Button unlockButton, homeButton;
 	[SerializeField] private HopeInputField passwordField;
-
-	private ReEnterPasswordMenuAnimator reEnterPasswordMenuAnimator;
 
 	[Inject]
 	public void Construct(HopeWalletInfoManager hopeWalletInfoManager, UserWalletManager userWalletManager)
@@ -21,8 +24,6 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 
 	private void Awake()
 	{
-		reEnterPasswordMenuAnimator = Animator as ReEnterPasswordMenuAnimator;
-
 		homeButton.onClick.AddListener(HomeButtonClicked);
 		unlockButton.onClick.AddListener(UnlockButtonClicked);
 
@@ -39,16 +40,16 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 
 	private void UnlockButtonClicked()
 	{
-		reEnterPasswordMenuAnimator.VerifyingPassword();
+        OnPasswordVerificationStarted?.Invoke();
 
 		CoroutineUtils.ExecuteAfterWait(1f, () =>
 		{
 			bool passwordIsCorrect = true;
 
-			if (passwordIsCorrect)
-				uiManager.CloseMenu();
-			else
-				reEnterPasswordMenuAnimator.PasswordIncorrect();
+            if (passwordIsCorrect)
+                uiManager.CloseMenu();
+            else
+                OnPasswordEnteredIncorrect?.Invoke();
 		});
 
 		//Check if password is correct
