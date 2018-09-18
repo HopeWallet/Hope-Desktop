@@ -33,7 +33,7 @@ public sealed class OptimizedScrollview : MonoBehaviour
                 previousTopIndex,
                 previousBottomIndex;
 
-    public List<GameObject> VisibleItemList => items.Where(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
+    public List<GameObject> VisibleItemList => items.Where(obj => obj != null && obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
 
     public void Refresh() => GetEnabledItems();
 
@@ -45,7 +45,7 @@ public sealed class OptimizedScrollview : MonoBehaviour
         viewportHeight = rectTransform.rect.size.y;
 
         itemCountChangedDisposable = Observable.EveryUpdate().Where(_ => itemCount != listParent.childCount).Subscribe(_ => ItemCountChanged());
-        activeItemsChangedDisposable = Observable.EveryUpdate().Where(_ => !items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).SequenceEqual(previouslyActiveList)).Subscribe(_ => ActiveItemsUpdated());
+        activeItemsChangedDisposable = Observable.EveryUpdate().Where(_ => !items.Where(obj => obj != null).Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy).SequenceEqual(previouslyActiveList)).Subscribe(_ => ActiveItemsUpdated());
 
         scrollRect.onValueChanged.AddListener(_ => ScrollRectChanged());
 
@@ -146,7 +146,7 @@ public sealed class OptimizedScrollview : MonoBehaviour
     private void ActiveItemsUpdated()
     {
         previouslyActiveList.Clear();
-        previouslyActiveList.AddRange(items.Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy));
+        previouslyActiveList.AddRange(items.Where(obj => obj != null).Select(obj => obj.transform.GetChild(0).gameObject.activeInHierarchy));
 
         OnVisibleItemsChanged?.Invoke(VisibleItemList);
     }
