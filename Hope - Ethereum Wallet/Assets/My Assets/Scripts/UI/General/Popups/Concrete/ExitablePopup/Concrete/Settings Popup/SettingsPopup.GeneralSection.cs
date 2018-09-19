@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using System.Linq;
 
+/// <summary>
+/// The general section of the settings popup
+/// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
 	public sealed class GeneralSection

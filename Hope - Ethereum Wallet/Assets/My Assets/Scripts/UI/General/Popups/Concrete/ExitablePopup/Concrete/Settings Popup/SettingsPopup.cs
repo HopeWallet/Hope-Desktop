@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// The main settings popup class
+/// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>, ITabButtonObservable, IEnterButtonObservable
 {
 	[SerializeField] private CategoryButtons categoryButtons;
