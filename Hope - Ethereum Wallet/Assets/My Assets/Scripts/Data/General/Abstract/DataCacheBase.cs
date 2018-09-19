@@ -5,7 +5,6 @@
 /// </summary>
 public abstract class DataCache<T>
 {
-
     private readonly Dictionary<string, T> data = new Dictionary<string, T>();
 
     /// <summary>
@@ -30,5 +29,4 @@ public abstract class DataCache<T>
     {
         return data.ContainsKey(key) ? data[key] : default(T);
     }
-
 }

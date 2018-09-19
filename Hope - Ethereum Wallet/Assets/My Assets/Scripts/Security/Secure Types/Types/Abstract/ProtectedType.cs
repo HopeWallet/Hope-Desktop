@@ -10,12 +10,14 @@ namespace Hope.Security.ProtectedTypes.Types.Base
     /// </summary>
     /// <typeparam name="TType"> The type of the original data. </typeparam>
     /// <typeparam name="TDisposable"> The <see cref="DisposableData"/> of type TType. </typeparam>
-    public abstract class ProtectedType<TType, TDisposable> : SecureObject where TDisposable : DisposableData<TType>
+    public abstract class ProtectedType<TType, TDisposable> : SecureObject, IDisposable where TDisposable : DisposableData<TType>
     {
         private readonly MemoryEncryptor memoryEncryptor;
 
         private TDisposable disposableData;
         private byte[] protectedData;
+
+        private bool disposed;
 
         /// <summary>
         /// The string representation of this <see cref="ProtectedType"/>.
@@ -41,6 +43,21 @@ namespace Hope.Security.ProtectedTypes.Types.Base
 
             memoryEncryptor = new MemoryEncryptor(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
             SetValue(value);
+        }
+
+        /// <summary>
+        /// Disposes of the ProtectedType.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                disposableData?.Dispose();
+                memoryEncryptor.Dispose();
+                protectedData.ClearBytes();
+
+                disposed = true;
+            }
         }
 
         /// <summary>

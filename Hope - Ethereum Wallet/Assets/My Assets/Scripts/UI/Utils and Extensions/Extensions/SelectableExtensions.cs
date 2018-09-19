@@ -7,7 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public static class SelectableExtensions
 {
-
     /// <summary>
     /// Moves the current selected component to the next in a list of <see cref="Selectable"/>.
     /// </summary>
@@ -55,5 +54,4 @@ public static class SelectableExtensions
     /// <param name="selectable"> The <see cref="Selectable"/> component to select. </param>
     /// <param name="system"> The current <see cref="EventSystem"/>. </param>
     private static void SelectAsInputField(Selectable selectable, EventSystem system) => (selectable as IPointerClickHandler)?.OnPointerClick(new PointerEventData(system));
-
 }

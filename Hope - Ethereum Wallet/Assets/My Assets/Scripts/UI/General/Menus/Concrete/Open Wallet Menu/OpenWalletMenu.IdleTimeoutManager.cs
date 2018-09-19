@@ -8,6 +8,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         public static Action IdleTimeoutEnabled;
 
+        private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
+
         private readonly UIManager uiManager;
         private readonly int maxIdleTime;
 
@@ -31,26 +33,29 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         private IEnumerator CheckIfIdle()
         {
-            yield return new WaitForSeconds(1);
+            yield return waiter;
 
             if (!SecurePlayerPrefs.GetBool("idle timeout"))
                 yield break;
 
-            if (previousMousePosition == Input.mousePosition)
+            if (uiManager.ActiveMenuType != typeof(ReEnterPasswordMenu))
             {
-                if ((currentIdleTime / 60) == maxIdleTime)
+                if (previousMousePosition == Input.mousePosition)
                 {
-                    uiManager.OpenMenu<ReEnterPasswordMenu>();
-                    yield break;
+                    if ((currentIdleTime / 1) == maxIdleTime)
+                    {
+                        uiManager.OpenMenu<ReEnterPasswordMenu>();
+                        currentIdleTime = 0;
+                    }
+                    else
+                    {
+                        currentIdleTime++;
+                    }
                 }
                 else
                 {
-                    currentIdleTime++;
+                    currentIdleTime = 0;
                 }
-            }
-            else
-            {
-                currentIdleTime = 0;
             }
 
             previousMousePosition = Input.mousePosition;

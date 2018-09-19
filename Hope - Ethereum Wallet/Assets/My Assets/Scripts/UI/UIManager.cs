@@ -24,6 +24,11 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     private Menu closingMenu;
 
     /// <summary>
+    /// The actively opened menu type.
+    /// </summary>
+    public Type ActiveMenuType => menus.Count > 0 ? menus.Peek().GetType() : null;
+
+    /// <summary>
     /// Initializes the UIManager with all the required dependencies.
     /// </summary>
     /// <param name="buttonObserver"> The active ButtonObserver. </param>
@@ -43,12 +48,15 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         buttonObserver.SubscribeObservable(this);
     }
 
-	private void Awake() => SetScreenResolution();
+    private void Awake()
+    {
+        SetScreenResolution();
+    }
 
-	/// <summary>
-	/// Starts the UIManager by choosing the first menu to open.
-	/// </summary>
-	private void Start()
+    /// <summary>
+    /// Starts the UIManager by choosing the first menu to open.
+    /// </summary>
+    private void Start()
     {
         createdMenus.AddItems(extraMenus);
 		SetDefaultSettings();
