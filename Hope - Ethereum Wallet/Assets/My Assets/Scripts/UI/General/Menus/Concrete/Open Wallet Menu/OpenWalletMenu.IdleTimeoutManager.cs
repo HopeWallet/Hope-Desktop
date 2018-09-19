@@ -8,11 +8,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         public static Action IdleTimeoutEnabled;
 
+        private readonly UIManager uiManager;
+        private readonly int maxIdleTime;
+
         private Vector3 previousMousePosition;
-
-        private int currentIdleTime, maxIdleTime;
-
-        private UIManager uiManager;
+        private int currentIdleTime;
 
         public IdleTimeoutManager(UIManager uiManager)
         {

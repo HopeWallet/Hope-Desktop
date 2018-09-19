@@ -89,7 +89,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     {
         buttonClickObserver.UnsubscribeObservable(this);
         MoreDropdown.PopupClosed?.Invoke();
-        currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.previouslySelectedButton);
+
+        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.previouslySelectedButton)
+            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.previouslySelectedButton);
     }
 
     public void TabButtonPressed(ClickType clickType)

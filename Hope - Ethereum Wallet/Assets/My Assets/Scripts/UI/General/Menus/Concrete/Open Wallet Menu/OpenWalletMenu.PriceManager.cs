@@ -42,7 +42,7 @@ public sealed partial class OpenWalletMenu
                 decimal netWorth = tradableAssetPriceManager.GetPrice(tradableAsset.AssetSymbol) * tradableAsset.AssetBalance;
 
                 priceText.gameObject.SetActive(netWorth > 0);
-                priceText.text = "<size=90%>" + currencyManager.ActiveCurrencySymbol + "</size>" + netWorth.ToString("0.00") + "<style=Symbol> " + currencyManager.ActiveCurrency.ToString() + "</style>";
+                priceText.text = currencyManager.GetCurrencyFormattedValue(netWorth);
             }
         }
     }

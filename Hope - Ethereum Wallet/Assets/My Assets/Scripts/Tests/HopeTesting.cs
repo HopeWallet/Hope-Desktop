@@ -71,6 +71,7 @@ using Ledger.Net.Responses;
 using Hid.Net.Unity;
 using UniRx;
 using Nethereum.ABI.JsonDeserialisation;
+using System.Globalization;
 
 public sealed class HopeTesting : MonoBehaviour
 {
