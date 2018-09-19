@@ -39,7 +39,7 @@ public abstract class PopupAnimator : UIAnimator
 	protected override void AnimateIn()
 	{
 		popupContainer.AnimateTransform(Vector2.one, 0.2f);
-		dim.AnimateGraphic(1f, 0.2f);
+		dim.AnimateGraphic(1f, 0.3f);
 		blur.AnimateScale(1f, 0.2f);
 		formTitle.AnimateGraphicAndScale(1f, 1f, 0.35f);
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f, AnimateUniqueElementsIn);
@@ -49,6 +49,8 @@ public abstract class PopupAnimator : UIAnimator
 	{
 		popupContainer.AnimateTransform(startingPosition, 0.2f);
 		form.AnimateScale(0f, 0.2f, FinishedAnimating);
+		dim.AnimateGraphic(0f, 0.2f);
+		blur.AnimateScale(0f, 0.2f);
 	}
 
 	/// <summary>
