@@ -1566,7 +1566,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Address
+  m_text: Name/Symbol/Address
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -1635,10 +1635,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 114460878462704122}
-    characterCount: 7
+    characterCount: 19
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -2304,10 +2304,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 1698738944957740}
+  formTitle: {fileID: 1110735936930750}
   dim: {fileID: 1288046035112286}
   form: {fileID: 1812202577482296}
   blur: {fileID: 1267439325032914}
-  formTitle: {fileID: 1110735936930750}
   popupContainer: {fileID: 1766570820739256}
   addressInputField: {fileID: 1352922611676374}
   loadingIcon: {fileID: 1422634460862138}
