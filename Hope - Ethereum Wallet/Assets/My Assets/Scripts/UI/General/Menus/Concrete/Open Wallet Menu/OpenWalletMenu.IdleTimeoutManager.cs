@@ -42,7 +42,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             {
                 if (previousMousePosition == Input.mousePosition)
                 {
-                    if ((currentIdleTime / 1) == maxIdleTime)
+                    if ((currentIdleTime / 60) == maxIdleTime)
                     {
                         uiManager.OpenMenu<ReEnterPasswordMenu>();
                         currentIdleTime = 0;
