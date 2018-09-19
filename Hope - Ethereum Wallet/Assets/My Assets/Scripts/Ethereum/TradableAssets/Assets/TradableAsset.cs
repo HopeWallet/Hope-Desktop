@@ -73,7 +73,7 @@ public abstract class TradableAsset
     /// </summary>
     public void UpdateBalance()
     {
-        GetBalance(userWalletManager.WalletAddress, balance =>
+        GetBalance(userWalletManager.GetWalletAddress(), balance =>
         {
             bool changed = balance != AssetBalance;
 

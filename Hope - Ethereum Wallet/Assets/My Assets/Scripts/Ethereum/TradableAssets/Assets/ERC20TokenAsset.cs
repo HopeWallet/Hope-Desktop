@@ -61,7 +61,7 @@ public sealed class ERC20TokenAsset : TradableAsset
     public override void GetTransferGasLimit(string receivingAddress, dynamic amount, Action<BigInteger> onLimitReceived)
     {
         GasUtils.EstimateContractGasLimit<ERC20.Messages.Transfer>(erc20TokenContract.ContractAddress,
-                                                                   userWalletManager.WalletAddress,
+                                                                   userWalletManager.GetWalletAddress(),
                                                                    receivingAddress,
                                                                    SolidityUtils.ConvertToUInt(amount, AssetDecimals)).OnSuccess(onLimitReceived);
     }

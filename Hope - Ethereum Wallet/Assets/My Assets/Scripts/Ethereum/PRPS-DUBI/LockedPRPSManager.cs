@@ -77,7 +77,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     /// </summary>
     private void StartNewItemSearch()
     {
-        apiService.SendTokenTransfersFromAndToAddressRequest(userWalletManager.WalletAddress, hodlerContract.ContractAddress, prpsContract.ContractAddress)
+        apiService.SendTokenTransfersFromAndToAddressRequest(userWalletManager.GetWalletAddress(), hodlerContract.ContractAddress, prpsContract.ContractAddress)
                   .OnSuccess(ProcessTxList);
     }
 
@@ -109,7 +109,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
 
     private void GetItemFromHodlerContract(string[] inputData, BigInteger lockedTimeStamp)
     {
-        hodlerContract.GetItem(userWalletManager.WalletAddress, inputData[1].ConvertFromHex(), item => UpdateItemList(item, lockedTimeStamp));
+        hodlerContract.GetItem(userWalletManager.GetWalletAddress(), inputData[1].ConvertFromHex(), item => UpdateItemList(item, lockedTimeStamp));
     }
 
     private void UpdateItemList(Hodler.Output.Item item, BigInteger lockedTimeStamp)
@@ -145,7 +145,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         if (item.Unlockable && !item.UnlockableGasLimit.HasValue)
         {
             GasUtils.EstimateContractGasLimit<Hodler.Messages.Release>(hodlerContract.ContractAddress,
-                                                                       userWalletManager.WalletAddress,
+                                                                       userWalletManager.GetWalletAddress(),
                                                                        item.Id).OnSuccess(limit => item.UnlockableGasLimit = limit);
         }
     }

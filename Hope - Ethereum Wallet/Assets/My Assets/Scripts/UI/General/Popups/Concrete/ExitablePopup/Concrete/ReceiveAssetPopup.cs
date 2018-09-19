@@ -39,7 +39,7 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
     /// </summary>
     protected override void OnStart()
     {
-        var walletAddress = userWalletManager.WalletAddress;
+        var walletAddress = userWalletManager.GetWalletAddress();
         var tradableAsset = tradableAssetManager.ActiveTradableAsset;
         var symbol = tradableAsset.AssetSymbol;
 
@@ -54,6 +54,6 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 	/// <summary>
 	/// Copies the user's main wallet address to the clipboard.
 	/// </summary>
-	private void CopyAddressClicked() => ClipboardUtils.CopyToClipboard(userWalletManager.WalletAddress);
+	private void CopyAddressClicked() => ClipboardUtils.CopyToClipboard(userWalletManager.GetWalletAddress());
 
 }

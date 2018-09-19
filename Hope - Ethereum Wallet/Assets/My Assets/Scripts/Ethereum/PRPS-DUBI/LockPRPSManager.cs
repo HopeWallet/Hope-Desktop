@@ -69,8 +69,8 @@ public sealed class LockPRPSManager : IPeriodicUpdater
     /// </summary>
     public void PeriodicUpdate()
     {
-        GetDUBIBalance(dubiContract.ContractAddress, userWalletManager.WalletAddress);
-        GetPRPSBalance(prpsContract.ContractAddress, userWalletManager.WalletAddress);
+        GetDUBIBalance(dubiContract.ContractAddress, userWalletManager.GetWalletAddress());
+        GetPRPSBalance(prpsContract.ContractAddress, userWalletManager.GetWalletAddress());
     }
 
     /// <summary>
@@ -126,7 +126,7 @@ public sealed class LockPRPSManager : IPeriodicUpdater
 
         object[] funcParams = new object[] { estimationId, prpsBalance.Value, estimationMonths };
         GasUtils.EstimateContractGasLimit<Hodler.Messages.Hodl>(hodlerContract.ContractAddress,
-                                                                userWalletManager.WalletAddress,
+                                                                userWalletManager.GetWalletAddress(),
                                                                 funcParams).OnSuccess(limit => GasLimit = limit);
 
         OnAmountsUpdated?.Invoke();

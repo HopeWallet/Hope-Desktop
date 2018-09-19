@@ -162,7 +162,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 		SimpleContractQueries.QueryStringOutput<Name>(addressText, null, output => NameQueryCompleted(output.Value));
         SimpleContractQueries.QueryStringOutput<Symbol>(addressText, null, output => SymbolQueryCompleted(output.Value));
         SimpleContractQueries.QueryUInt256Output<Decimals>(addressText, null, output => DecimalsQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.WalletAddress, output => BalanceQueryCompleted(output.Value), userWalletManager.WalletAddress);
+        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), output => BalanceQueryCompleted(output.Value), userWalletManager.GetWalletAddress());
     }
 
     private void NameQueryCompleted(string value)

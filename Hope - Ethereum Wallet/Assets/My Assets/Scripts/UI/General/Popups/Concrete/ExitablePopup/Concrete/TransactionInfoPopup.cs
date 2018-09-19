@@ -56,7 +56,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		this.contactsManager = contactsManager;
 		this.hodler = hodler;
 
-		walletAddress = userWalletManager.WalletAddress;
+		walletAddress = userWalletManager.GetWalletAddress();
 		walletName = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope ? userWalletInfoManager.GetWalletInfo(walletAddress).WalletName : userWalletManager.ActiveWalletType.ToString();
     }
 

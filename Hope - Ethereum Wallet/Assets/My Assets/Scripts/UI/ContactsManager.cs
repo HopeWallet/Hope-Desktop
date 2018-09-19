@@ -23,7 +23,7 @@ public sealed class ContactsManager
         ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
         UserWalletManager.OnWalletLoadSuccessful += () =>
         {
-            var walletAddress = userWalletManager.WalletAddress;
+            var walletAddress = userWalletManager.GetWalletAddress();
             var info = userWalletInfoManager.GetWalletInfo(walletAddress);
 
             if (!string.IsNullOrEmpty(info?.WalletName))

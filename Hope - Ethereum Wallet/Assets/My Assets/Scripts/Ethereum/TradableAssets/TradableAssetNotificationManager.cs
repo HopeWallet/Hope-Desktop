@@ -44,7 +44,7 @@ public sealed class TradableAssetNotificationManager
 
     public void LoadNewNotificationList()
     {
-        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType + userWalletManager.WalletAddress);
+        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType + userWalletManager.GetWalletAddress());
 
         foreach (var address in notificationsByAddress.Keys.ToList())
             notificationsByAddress[address] = null;

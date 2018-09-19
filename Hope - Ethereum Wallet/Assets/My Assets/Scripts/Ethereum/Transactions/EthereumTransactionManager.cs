@@ -157,9 +157,9 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     private void AddAssetToScrape(TradableAsset asset)
     {
         if (asset is EtherAsset)
-            QueueEther(userWalletManager.WalletAddress);
+            QueueEther(userWalletManager.GetWalletAddress());
         else
-            QueueToken(asset.AssetAddress, userWalletManager.WalletAddress);
+            QueueToken(asset.AssetAddress, userWalletManager.GetWalletAddress());
     }
 
     /// <summary>

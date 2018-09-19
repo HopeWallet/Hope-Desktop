@@ -50,7 +50,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         this.dynamicDataCache = dynamicDataCache;
 		this.contactsManager = contactsManager;
 
-		walletAddress = userWalletManager.WalletAddress;
+		walletAddress = userWalletManager.GetWalletAddress();
 	}
 
     /// <summary>
@@ -65,7 +65,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
         toAddress.text = transactionInput[0].ToString();
 		CheckIfSavedContact(toAddress.text, contactName);
 
-		fromAddress.text = userWalletManager.WalletAddress;
+		fromAddress.text = userWalletManager.GetWalletAddress();
 		CheckIfSavedContact(fromAddress.text, walletName);
 
 		feeText.text = dynamicDataCache.GetData("txfee") + "<style=Symbol> ETH</style>";

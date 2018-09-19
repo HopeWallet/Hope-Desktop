@@ -87,7 +87,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		tokenContractManager.StartTokenLoad(OpenMenu);
 
 		walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
-			? hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName
+			? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
 			: userWalletManager.ActiveWalletType.ToString();
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)

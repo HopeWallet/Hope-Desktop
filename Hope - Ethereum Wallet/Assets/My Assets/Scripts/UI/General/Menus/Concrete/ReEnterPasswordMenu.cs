@@ -14,46 +14,49 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
     public event Action OnPasswordEnteredCorrect;
     public event Action OnPasswordEnteredIncorrect;
 
-	[SerializeField] private TextMeshProUGUI walletName;
+    [SerializeField] private TextMeshProUGUI walletName;
 
-	[SerializeField] private Button unlockButton, homeButton;
-	[SerializeField] private HopeInputField passwordField;
+    [SerializeField] private Button unlockButton, homeButton;
+    [SerializeField] private HopeInputField passwordField;
 
     private HopeWalletInfoManager.Settings walletSettings;
 
     private int walletNum;
 
-	[Inject]
-	public void Construct(
+    [Inject]
+    public void Construct(
         HopeWalletInfoManager hopeWalletInfoManager,
         UserWalletManager userWalletManager,
         HopeWalletInfoManager.Settings walletSettings)
-	{
+    {
         this.walletSettings = walletSettings;
 
-        var walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress);
+        var walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress());
         walletName.text = walletInfo.WalletName;
         walletNum = walletInfo.WalletNum + 1;
-	}
+    }
 
-	private void Awake()
-	{
-		homeButton.onClick.AddListener(HomeButtonClicked);
-		unlockButton.onClick.AddListener(UnlockButtonClicked);
+    protected override void OnAwake()
+    {
+        homeButton.onClick.AddListener(HomeButtonClicked);
+        unlockButton.onClick.AddListener(UnlockButtonClicked);
 
-		passwordField.OnInputUpdated += PasswordFieldChanged;
-	}
+        passwordField.OnInputUpdated += PasswordFieldChanged;
+    }
 
-	private void PasswordFieldChanged(string text)
-	{
-		passwordField.Error = string.IsNullOrEmpty(text);
-		unlockButton.interactable = !passwordField.Error;
-	}
+    private void PasswordFieldChanged(string text)
+    {
+        passwordField.Error = string.IsNullOrEmpty(text);
+        unlockButton.interactable = !passwordField.Error;
+    }
 
-	private void HomeButtonClicked() => SceneManager.LoadScene("Hope Wallet");
+    private void HomeButtonClicked()
+    {
+        SceneManager.LoadScene("Hope Wallet");
+    }
 
-	private void UnlockButtonClicked()
-	{
+    private void UnlockButtonClicked()
+    {
         OnPasswordVerificationStarted?.Invoke();
 
         var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
@@ -73,8 +76,8 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
     private void CorrectPassword()
     {
         OnPasswordEnteredCorrect?.Invoke();
-        uiManager.OpenMenu<OpenWalletMenu>();
+        uiManager.CloseMenu();
     }
 
-	private void IncorrectPassword() => OnPasswordEnteredIncorrect?.Invoke();
+    private void IncorrectPassword() => OnPasswordEnteredIncorrect?.Invoke();
 }

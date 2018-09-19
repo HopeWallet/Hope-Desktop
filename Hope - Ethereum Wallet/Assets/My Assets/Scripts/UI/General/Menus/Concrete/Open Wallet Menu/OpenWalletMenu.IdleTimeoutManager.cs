@@ -44,7 +44,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
                     yield break;
                 }
                 else
+                {
                     currentIdleTime++;
+                }
             }
             else
             {

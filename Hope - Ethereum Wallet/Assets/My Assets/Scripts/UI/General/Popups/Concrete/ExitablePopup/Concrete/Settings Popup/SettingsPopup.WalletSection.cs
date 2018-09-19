@@ -69,7 +69,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			currentPasswordField.Error = false;
 			saveButtonText = saveButton.transform.GetChild(0).gameObject;
-			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
+			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
 			walletNameField.Text = walletName;
 		}
 

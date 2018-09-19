@@ -19,7 +19,7 @@ public class TransactionSimplifier
         if (transaction.from == transaction.to || value == 0)
             return null;
 
-        return new TransactionInfo(GetTransactionType(transaction.from.EqualsIgnoreCase(userWalletManager.WalletAddress)),
+        return new TransactionInfo(GetTransactionType(transaction.from.EqualsIgnoreCase(userWalletManager.GetWalletAddress())),
                                          transaction.from,
                                          transaction.to,
                                          EtherAsset.ETHER_ADDRESS,
@@ -45,7 +45,7 @@ public class TransactionSimplifier
         if (tokenSender == tokenReceiver)
             return null;
 
-        return new TransactionInfo(GetTransactionType(tokenSender.EqualsIgnoreCase(userWalletManager.WalletAddress)),
+        return new TransactionInfo(GetTransactionType(tokenSender.EqualsIgnoreCase(userWalletManager.GetWalletAddress())),
                                         tokenSender,
                                         tokenReceiver,
                                         tokenTransaction.address,

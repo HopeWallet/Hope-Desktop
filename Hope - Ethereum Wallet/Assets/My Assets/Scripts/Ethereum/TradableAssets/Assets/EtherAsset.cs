@@ -45,7 +45,7 @@ public sealed class EtherAsset : TradableAsset
     public override void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
         userWalletManager.SignTransaction<ConfirmTransactionPopup>(
-                              request => EthUtils.SendEther(request, gasLimit, gasPrice, userWalletManager.WalletAddress, address, amount).OnSuccess(UnityEngine.Debug.Log).OnError(UnityEngine.Debug.Log),
+                              request => EthUtils.SendEther(request, gasLimit, gasPrice, userWalletManager.GetWalletAddress(), address, amount).OnSuccess(UnityEngine.Debug.Log).OnError(UnityEngine.Debug.Log),
                               gasLimit,
                               gasPrice,
                               SolidityUtils.ConvertToUInt(amount, 18),

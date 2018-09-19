@@ -19,11 +19,6 @@ public sealed class UserWalletManager
     private IWallet activeWallet;
 
     /// <summary>
-    /// The address of the main UserWallet.
-    /// </summary>
-    public string WalletAddress => activeWallet.GetAddress(AccountNumber, WalletPath);
-
-    /// <summary>
     /// The wallet derivation path.
     /// </summary>
     public string WalletPath { get; private set; }
@@ -94,7 +89,16 @@ public sealed class UserWalletManager
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(onTransactionSigned, gasLimit, gasPrice, value, WalletAddress, addressTo, data, WalletPath.Replace("x", AccountNumber.ToString()), displayInput);
+        activeWallet.SignTransaction<T>(
+            onTransactionSigned,
+            gasLimit,
+            gasPrice,
+            value,
+            GetWalletAddress(),
+            addressTo,
+            data,
+            WalletPath.Replace("x", AccountNumber.ToString()),
+            displayInput);
     }
 
     /// <summary>
@@ -122,7 +126,7 @@ public sealed class UserWalletManager
 
     public string GetWalletAddress()
     {
-        return activeWallet.GetAddress(AccountNumber, WalletAddress);
+        return activeWallet.GetAddress(AccountNumber, WalletPath);
     }
 
     public string GetWalletAddress(int accountNumber, string path)

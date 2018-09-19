@@ -81,7 +81,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         pageNum = (userWalletManager.AccountNumber / 5) + 1;
         firstAddressNumInList = pageNum == 0 ? 1 : (pageNum * 5) - 4;
         currentlySelectedAddress = userWalletManager.AccountNumber + 1;
-        unlockedAccount = userWalletManager.WalletAddress;
+        unlockedAccount = userWalletManager.GetWalletAddress();
     }
 
     private void AssignListeners()
