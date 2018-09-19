@@ -84,6 +84,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
         var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
 
         checkingPassword = true;
+        passwordField.InputFieldBase.interactable = false;
 
         Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(passwordField.Text) ? false : pbkdf2.VerifyPassword(passwordField.Text, saltedHash)))
                   .ObserveOnMainThread()
@@ -93,9 +94,6 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
                           IncorrectPassword();
                       else
                           CorrectPassword(passwordField.Text);
-
-                      checkingPassword = false;
-                      passwordField.InputFieldBase.interactable = true;
                   });
     }
 
@@ -110,6 +108,8 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
     private void IncorrectPassword()
     {
         OnPasswordEnteredIncorrect?.Invoke();
+        passwordField.InputFieldBase.interactable = true;
+        checkingPassword = false;
     }
 
     public void TabButtonPressed(ClickType clickType)
@@ -127,13 +127,8 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
             return;
 
         if (unlockButton.interactable && !checkingPassword)
-        {
             unlockButton.Press();
-            passwordField.InputFieldBase.interactable = false;
-        }
         else if (!checkingPassword)
-        {
             passwordField.InputFieldBase.SelectSelectable();
-        }
     }
 }

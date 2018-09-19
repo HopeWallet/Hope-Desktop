@@ -59,10 +59,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeInputField.Text = enabled ? "5" : string.Empty;
 
 			if (enabled)
-			{
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
-				OpenWalletMenu.IdleTimeoutManager.IdleTimeoutEnabled?.Invoke();
-			}
 		}
 
 		private void IdleTimeoutFieldChanged(string text)
@@ -78,7 +75,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			{
 				SecurePlayerPrefs.SetBool("idle timeout", true);
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
-				OpenWalletMenu.IdleTimeoutManager.IdleTimeoutEnabled?.Invoke();
 			}
 		}
 	}

@@ -46,7 +46,7 @@ public sealed class CurrencyManager
             case CurrencyType.NZD:
             case CurrencyType.SGD:
             case CurrencyType.USD:
-                return value.ToString("C", CultureInfo.CreateSpecificCulture("en-US"));
+                return value.ToString("C", CultureInfo.CreateSpecificCulture("en-US")) + " <style=Symbol>" + ActiveCurrency + "</style>";
             case CurrencyType.BRL:
                 return value.ToString("C", CultureInfo.CreateSpecificCulture("pt-BR"));
             case CurrencyType.CHF:

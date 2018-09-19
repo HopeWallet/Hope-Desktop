@@ -1,5 +1,4 @@
 ﻿using Nethereum.HdWallet;
-using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Numerics;

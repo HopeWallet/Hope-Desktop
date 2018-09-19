@@ -17,6 +17,7 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	{
 		passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
 		unlockButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
+        GetComponent<UnlockWalletPopup>().OnPasswordEnteredIncorrect += PasswordIncorrect;
 	}
 
 	/// <summary>
