@@ -23,9 +23,14 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
     /// </summary>
     protected override void AnimateIn()
 	{
+		plainBackground.AnimateGraphic(1f, 0.2f);
+
 		base.AnimateIn();
 
-		FinishedAnimating();
+		passwordInputField.InputFieldBase.ActivateInputField();
+		passwordInputField.gameObject.AnimateScale(1f, 0.3f);
+		homeButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
+		unlockButton.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
 	}
 
 	/// <summary>
@@ -35,7 +40,10 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-		FinishedAnimating();
+		plainBackground.AnimateGraphic(0f, 0.2f);
+		passwordInputField.gameObject.AnimateScale(0f, 0.2f);
+		homeButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		unlockButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating);
 	}
 
 	/// <summary>

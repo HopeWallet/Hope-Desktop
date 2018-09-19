@@ -74,10 +74,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
 			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 142f : 132f, 0.15f);
 
-			if (!idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
+			if (!idleTimeoutTimeInputField.Error && !idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
 			{
-				SecurePlayerPrefs.SetBool("idle timeout", !idleTimeoutTimeInputField.Error);
+				SecurePlayerPrefs.SetBool("idle timeout", true);
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+				OpenWalletMenu.IdleTimeoutManager.IdleTimeoutEnabled?.Invoke();
 			}
 		}
 	}
