@@ -18,6 +18,7 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
     public TradableAssetPriceManager(
         CoinMarketCapDataManager coinMarketCapDataManager,
         DubiExDataManager dubiexDataManager,
+        CurrencyManager currencyManager,
         TradableAssetManager tradableAssetManager,
         TradableAssetButtonManager tradableAssetButtonManager,
         PeriodicUpdateManager periodicUpdateManager)
@@ -27,8 +28,16 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
         this.tradableAssetManager = tradableAssetManager;
 
         tradableAssetButtonManager.OnActiveButtonChanged += activeButton => UpdatePrice(activeButton.ButtonInfo);
+        currencyManager.OnCurrencyChanged += ClearPrices;
 
         UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
+    }
+
+    public void ClearPrices()
+    {
+        prices.Clear();
+
+        UpdatePrice(tradableAssetManager.ActiveTradableAsset);
     }
 
     public decimal GetPrice(string assetSymbol)

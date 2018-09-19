@@ -2,6 +2,8 @@
 
 public sealed class CurrencyManager
 {
+    public event Action OnCurrencyChanged;
+
     private readonly Settings settings;
 
     public CurrencyType ActiveCurrency { get; private set; }
@@ -20,6 +22,8 @@ public sealed class CurrencyManager
     {
         ActiveCurrency = newActiveCurrency;
         SecurePlayerPrefs.SetInt(settings.prefName, (int)newActiveCurrency);
+
+        OnCurrencyChanged?.Invoke();
     }
 
     public enum CurrencyType

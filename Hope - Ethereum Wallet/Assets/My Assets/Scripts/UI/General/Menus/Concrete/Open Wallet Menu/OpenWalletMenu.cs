@@ -6,7 +6,7 @@ using Zenject;
 /// <summary>
 /// Class which manages the opened wallet ui.
 /// </summary>
-public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
+public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
     [SerializeField] private GameObject lockPurposeSection,
 										lockPurposeNotificationSection;
@@ -91,6 +91,7 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
             : userWalletManager.ActiveWalletType.ToString();
 
 		new IdleTimeoutManager(uiManager);
+        new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
     }
 
     private void AccountChanged(int account)
@@ -125,13 +126,6 @@ public sealed class OpenWalletMenu : Menu<OpenWalletMenu>
         assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
 
         lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
-        netWorthText.gameObject.SetActive(tradableAsset.AssetBalance > 0);
-
-        if (netWorthText.gameObject.activeInHierarchy)
-        {
-            decimal netWorth = tradableAssetPriceManager.GetPrice(tradableAsset.AssetSymbol) * tradableAsset.AssetBalance;
-            netWorthText.text = "<size=90%>$</size>" + netWorth.ToString("0.00") + "<style=Symbol> " + currencyManager.ActiveCurrency.ToString() + "</style>";
-        }
 
         assetImage.sprite = tradableAsset.AssetImage;
 
