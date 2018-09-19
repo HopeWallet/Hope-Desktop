@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Hope.Security.PBKDF2;
+using Hope.Security.PBKDF2.Engines.Blake2b;
+using System;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,10 +19,21 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 	[SerializeField] private Button unlockButton, homeButton;
 	[SerializeField] private HopeInputField passwordField;
 
+    private HopeWalletInfoManager.Settings walletSettings;
+
+    private int walletNum;
+
 	[Inject]
-	public void Construct(HopeWalletInfoManager hopeWalletInfoManager, UserWalletManager userWalletManager)
+	public void Construct(
+        HopeWalletInfoManager hopeWalletInfoManager,
+        UserWalletManager userWalletManager,
+        HopeWalletInfoManager.Settings walletSettings)
 	{
-		walletName.text = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName;
+        this.walletSettings = walletSettings;
+
+        var walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress);
+        walletName.text = walletInfo.WalletName;
+        walletNum = walletInfo.WalletNum + 1;
 	}
 
 	private void Awake()
@@ -45,22 +59,28 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 	{
         OnPasswordVerificationStarted?.Invoke();
 
-		CoroutineUtils.ExecuteAfterWait(1f, () =>
-		{
-			bool passwordIsCorrect = true;
+        var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + walletNum);
+        var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
 
-            if (passwordIsCorrect)
-                uiManager.CloseMenu();
-            else
-                OnPasswordEnteredIncorrect?.Invoke();
-		});
+        Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(passwordField.Text) ? false : pbkdf2.VerifyPassword(passwordField.Text, saltedHash)))
+                  .ObserveOnMainThread()
+                  .Subscribe(correctPass =>
+                  {
+                      if (!correctPass[0])
+                          IncorrectPassword();
+                      else
+                          CorrectPassword();
+                  });
+    }
 
-		//Check if password is correct
-		//bool passwordIsCorrect = true;
+    private void CorrectPassword()
+    {
+        OnPasswordEnteredCorrect?.Invoke();
+        uiManager.CloseMenu();
+    }
 
-		//if (passwordIsCorrect)
-		//	uiManager.CloseMenu();
-		//else
-		//	reEnterPasswordMenuAnimator.PasswordIncorrect();
-	}
+    private void IncorrectPassword()
+    {
+        OnPasswordEnteredIncorrect?.Invoke();
+    }
 }
