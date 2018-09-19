@@ -1,5 +1,7 @@
-﻿using Hope.Security.Encryption.DPAPI;
+﻿using Hope.Random;
+using Hope.Security.Encryption.DPAPI;
 using Hope.Security.Encryption.Symmetric;
+using Org.BouncyCastle.Crypto.Digests;
 using System.Diagnostics;
 
 /// <summary>
@@ -20,9 +22,9 @@ public sealed class MemoryEncryptor : CrossPlatformEncryptor<WindowsMemoryEncryp
     /// </summary>
     /// <param name="encryptors"> The additional encryptors to use as our advanced entropy. </param>
     public MemoryEncryptor(params object[] encryptors) : base(
-        Process.GetCurrentProcess().Id,
-        Process.GetCurrentProcess().MainModule.ModuleName.GetHashCode(),
-        encryptors)
+        new AdvancedSecureRandom(new Sha3Digest(512), Process.GetCurrentProcess().Id).NextBytes(128),
+        new AdvancedSecureRandom(new KeccakDigest(512), Process.GetCurrentProcess().MainModule.ModuleName.GetHashCode()).NextBytes(128),
+        new AdvancedSecureRandom(new Blake2bDigest(512), encryptors).NextBytes(128))
     {
     }
 }
