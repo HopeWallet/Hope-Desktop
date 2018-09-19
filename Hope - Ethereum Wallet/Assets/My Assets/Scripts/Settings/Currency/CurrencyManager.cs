@@ -6,6 +6,44 @@ public sealed class CurrencyManager
 
     private readonly Settings settings;
 
+    private readonly string[] currencySymbols = new string[]
+    {
+        "$",
+        "R$",
+        "$",
+        "",
+        "$",
+        "¥",
+        "Kč",
+        "Kr.",
+        "€",
+        "£",
+        "$",
+        "Ft",
+        "Rp",
+        "₪",
+        "₹",
+        "¥",
+        "₩",
+        "$",
+        "RM",
+        "kr",
+        "$",
+        "₱",
+        "Rs",
+        "zł",
+        "₽",
+        "kr",
+        "$",
+        "฿",
+        "₺",
+        "NT$",
+        "$",
+        "R"
+    };
+
+    public string ActiveCurrencySymbol => currencySymbols[(int)ActiveCurrency];
+
     public CurrencyType ActiveCurrency { get; private set; }
 
     public CurrencyManager(Settings settings)
