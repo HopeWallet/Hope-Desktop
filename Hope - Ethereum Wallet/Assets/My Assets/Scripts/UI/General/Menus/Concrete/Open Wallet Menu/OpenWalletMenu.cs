@@ -8,10 +8,10 @@ using Zenject;
 /// </summary>
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-    [SerializeField] private GameObject lockPurposeSection,
+	[SerializeField] private GameObject lockPurposeSection,
 										lockPurposeNotificationSection;
 
-    [SerializeField] private TMP_Text walletNameText,
+	[SerializeField] private TMP_Text walletNameText,
 									  walletAccountText,
 									  assetText,
 									  balanceText,
@@ -20,20 +20,20 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 	[SerializeField] private GeneralRadioButtons transactionTabs;
 
-    public Image assetImage;
+	public Image assetImage;
 
-    private TokenContractManager tokenContractManager;
-    private TradableAssetManager tradableAssetManager;
-    private TradableAssetPriceManager tradableAssetPriceManager;
-    private TradableAssetNotificationManager notificationManager;
-    private LockedPRPSManager lockedPrpsManager;
-    private PRPS prpsContract;
-    private CurrencyManager currencyManager;
+	private TokenContractManager tokenContractManager;
+	private TradableAssetManager tradableAssetManager;
+	private TradableAssetPriceManager tradableAssetPriceManager;
+	private TradableAssetNotificationManager notificationManager;
+	private LockedPRPSManager lockedPrpsManager;
+	private PRPS prpsContract;
+	private CurrencyManager currencyManager;
 	private HopeWalletInfoManager hopeWalletInfoManager;
 	private UserWalletManager userWalletManager;
 
 	private const int MAX_ASSET_NAME_LENGTH = 36;
-    private const int MAX_ASSET_BALANCE_LENGTH = 54;
+	private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
 	/// <summary>
 	/// Injects the required dependency into this class.
@@ -49,25 +49,25 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// <param name="userWalletManager"> The active UserWalletManager. </param>
 	/// <param name="popupManager"> The active PopupManager</param>
 	[Inject]
-    public void Construct(
-        TokenContractManager tokenContractManager,
-        TradableAssetManager tradableAssetManager,
-        TradableAssetPriceManager tradableAssetPriceManager,
-        TradableAssetNotificationManager notificationManager,
-        LockedPRPSManager lockedPrpsManager,
-        PRPS prpsContract,
-        CurrencyManager currencyManager,
+	public void Construct(
+		TokenContractManager tokenContractManager,
+		TradableAssetManager tradableAssetManager,
+		TradableAssetPriceManager tradableAssetPriceManager,
+		TradableAssetNotificationManager notificationManager,
+		LockedPRPSManager lockedPrpsManager,
+		PRPS prpsContract,
+		CurrencyManager currencyManager,
 		HopeWalletInfoManager hopeWalletInfoManager,
 		UserWalletManager userWalletManager,
 		PopupManager popupManager)
-    {
-        this.tokenContractManager = tokenContractManager;
-        this.tradableAssetManager = tradableAssetManager;
-        this.tradableAssetPriceManager = tradableAssetPriceManager;
-        this.notificationManager = notificationManager;
-        this.lockedPrpsManager = lockedPrpsManager;
-        this.prpsContract = prpsContract;
-        this.currencyManager = currencyManager;
+	{
+		this.tokenContractManager = tokenContractManager;
+		this.tradableAssetManager = tradableAssetManager;
+		this.tradableAssetPriceManager = tradableAssetPriceManager;
+		this.notificationManager = notificationManager;
+		this.lockedPrpsManager = lockedPrpsManager;
+		this.prpsContract = prpsContract;
+		this.currencyManager = currencyManager;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
 		this.userWalletManager = userWalletManager;
 
@@ -79,71 +79,73 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// Initializes the instance and the wallet parent object.
 	/// </summary>
 	private void Start()
-    {
-        AccountsPopup.OnAccountChanged += AccountChanged;
-        TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
-        lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
+	{
+		AccountsPopup.OnAccountChanged += AccountChanged;
+		TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
+		lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
 
-        tokenContractManager.StartTokenLoad(OpenMenu);
+		tokenContractManager.StartTokenLoad(OpenMenu);
 
-        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
-            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName
-            : userWalletManager.ActiveWalletType.ToString();
+		walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
+			? hopeWalletInfoManager.GetWalletInfo(userWalletManager.WalletAddress).WalletName
+			: userWalletManager.ActiveWalletType.ToString();
 
-		new IdleTimeoutManager(uiManager);
-        new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
-    }
+		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
+			new IdleTimeoutManager(uiManager);
 
-    private void AccountChanged(int account)
-    {
-        walletAccountText.text = "(Account <size=90%>#</size>" + (account + 1) + ")";
-    }
+		new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
+	}
 
-    /// <summary>
-    /// Called when the OpenWalletMenu is first opened.
-    /// </summary>
-    private void OpenMenu()
-    {
-        transform.GetChild(0).gameObject.SetActive(true);
-    }
+	private void AccountChanged(int account)
+	{
+		walletAccountText.text = "(Account <size=90%>#</size>" + (account + 1) + ")";
+	}
 
-    /// <summary>
-    /// Updates the ui for the newest TradableAsset.
-    /// </summary>
-    private void UpdateAssetUI()
-    {
-        var tradableAsset = tradableAssetManager.ActiveTradableAsset;
+	/// <summary>
+	/// Called when the OpenWalletMenu is first opened.
+	/// </summary>
+	private void OpenMenu()
+	{
+		transform.GetChild(0).gameObject.SetActive(true);
+	}
 
-        if (tradableAsset == null)
-            return;
+	/// <summary>
+	/// Updates the ui for the newest TradableAsset.
+	/// </summary>
+	private void UpdateAssetUI()
+	{
+		var tradableAsset = tradableAssetManager.ActiveTradableAsset;
 
-        string assetBalance = tradableAsset.AssetBalance?.ToString();
-        string assetSymbol = tradableAsset.AssetSymbol;
+		if (tradableAsset == null)
+			return;
 
-        if (!string.IsNullOrEmpty(assetBalance))
-            balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + "<style=Symbol> " + assetSymbol + " </size>";
+		string assetBalance = tradableAsset.AssetBalance?.ToString();
+		string assetSymbol = tradableAsset.AssetSymbol;
 
-        assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
+		if (!string.IsNullOrEmpty(assetBalance))
+			balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + "<style=Symbol> " + assetSymbol + " </size>";
 
-        lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
+		assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
 
-        assetImage.sprite = tradableAsset.AssetImage;
+		lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
-        UpdateAssetNotifications();
-    }
+		assetImage.sprite = tradableAsset.AssetImage;
 
-    /// <summary>
-    /// Updates the notifications for locked purpose and saves the transaction count of the current asset.
-    /// </summary>
-    private void UpdateAssetNotifications()
-    {
-        var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
-        lockPurposeNotificationSection.SetActive(lockedPrpsCount > 0);
-        lockPrpsNotificationText.text = lockedPrpsCount.ToString();
-        lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
+		UpdateAssetNotifications();
+	}
 
-        notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
-    }
+	/// <summary>
+	/// Updates the notifications for locked purpose and saves the transaction count of the current asset.
+	/// </summary>
+	private void UpdateAssetNotifications()
+	{
+		var lockedPrpsCount = lockedPrpsManager.UnlockableItems.Count;
+		lockPurposeNotificationSection.SetActive(lockedPrpsCount > 0);
+		lockPrpsNotificationText.text = lockedPrpsCount.ToString();
+		lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
+
+		notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
+	}
 
 	private void TabChanged(int tabNum)
 	{

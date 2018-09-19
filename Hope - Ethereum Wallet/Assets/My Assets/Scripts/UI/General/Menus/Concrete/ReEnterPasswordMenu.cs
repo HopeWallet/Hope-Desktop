@@ -50,12 +50,9 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
 		unlockButton.interactable = !passwordField.Error;
 	}
 
-    private void HomeButtonClicked()
-    {
-        SceneManager.LoadScene("Hope Wallet");
-    }
+	private void HomeButtonClicked() => SceneManager.LoadScene("Hope Wallet");
 
-    private void UnlockButtonClicked()
+	private void UnlockButtonClicked()
 	{
         OnPasswordVerificationStarted?.Invoke();
 
@@ -76,11 +73,8 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>
     private void CorrectPassword()
     {
         OnPasswordEnteredCorrect?.Invoke();
-        uiManager.CloseMenu();
+        uiManager.OpenMenu<OpenWalletMenu>();
     }
 
-    private void IncorrectPassword()
-    {
-        OnPasswordEnteredIncorrect?.Invoke();
-    }
+	private void IncorrectPassword() => OnPasswordEnteredIncorrect?.Invoke();
 }
