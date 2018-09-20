@@ -8,23 +8,30 @@ using Object = UnityEngine.Object;
 /// </summary>
 public sealed class TradableAssetButtonManager
 {
-    public event Action<AssetButton> OnActiveButtonChanged;
+    public event Action<ITradableAssetButton> OnActiveButtonChanged;
 
     private readonly TokenContractManager tokenContractManager;
-    private readonly AssetButton.Factory buttonFactory;
 
-    private readonly List<AssetButton> assetButtons = new List<AssetButton>();
+    private readonly EtherAssetButton.Factory etherAssetButtonFactory;
+    private readonly ERC20TokenAssetButton.Factory erc20TokenButtonFactory;
 
-    private AssetButton activeAssetButton;
+    private readonly List<ITradableAssetButton> assetButtons = new List<ITradableAssetButton>();
+
+    private ITradableAssetButton activeAssetButton;
 
     /// <summary>
     /// Initializes the TradableAssetButtonManager by injecting the settings and assigning all required methods to events.
     /// </summary>
-    /// <param name="buttonFactory"> The factory which creates AssetButtons. </param>
+    /// <param name="erc20TokenButtonFactory"> The factory which creates ERC20TokenAssetButtons. </param>
+    /// <param name="etherAssetButtonFactory"> The factory which creates EtherAssetButtons. </param>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    public TradableAssetButtonManager(AssetButton.Factory buttonFactory, TokenContractManager tokenContractManager)
+    public TradableAssetButtonManager(
+        ERC20TokenAssetButton.Factory erc20TokenButtonFactory,
+        EtherAssetButton.Factory etherAssetButtonFactory,
+        TokenContractManager tokenContractManager)
     {
-        this.buttonFactory = buttonFactory;
+        this.erc20TokenButtonFactory = erc20TokenButtonFactory;
+        this.etherAssetButtonFactory = etherAssetButtonFactory;
         this.tokenContractManager = tokenContractManager;
 
         TradableAssetManager.OnTradableAssetAdded += AddAssetButton;
@@ -45,7 +52,7 @@ public sealed class TradableAssetButtonManager
     /// Enables a new asset button by making it interactable, and disabling the old one by making it non interactable.
     /// </summary>
     /// <param name="newAssetButton"> The new button to set as interactable. </param>
-    public void EnableNewTokenButton(AssetButton newAssetButton)
+    public void EnableNewTokenButton(ITradableAssetButton newAssetButton)
     {
         if (activeAssetButton != null)
             activeAssetButton.Button.interactable = true;
@@ -62,12 +69,19 @@ public sealed class TradableAssetButtonManager
     /// <param name="tradableAsset"> The TokenContract which will be assigned to this button. </param>
     private void AddAssetButton(TradableAsset tradableAsset)
     {
-        var assetButton = buttonFactory.Create().SetButtonInfo(tradableAsset);
-
-        assetButtons.Add(assetButton);
+        ITradableAssetButton assetButton;
 
         if (tradableAsset is EtherAsset)
+        {
+            assetButton = etherAssetButtonFactory.Create().SetButtonInfo(tradableAsset);
             EnableNewTokenButton(assetButton);
+        }
+        else
+        {
+            assetButton = erc20TokenButtonFactory.Create().SetButtonInfo(tradableAsset);
+        }
+
+        assetButtons.Add(assetButton);
     }
 
     /// <summary>
@@ -111,5 +125,6 @@ public sealed class TradableAssetButtonManager
     public class Settings
     {
         public Transform spawnTransform;
+        public Transform etherSpawnTransform;
     }
 }

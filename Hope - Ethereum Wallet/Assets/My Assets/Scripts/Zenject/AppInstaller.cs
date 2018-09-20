@@ -120,8 +120,10 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     /// </summary>
     private void BindButtonFactories()
     {
+        BindButtonFactory<ERC20TokenAssetButton>(tradableAssetButtonSettings.spawnTransform);
+        BindButtonFactory<EtherAssetButton>(tradableAssetButtonSettings.etherSpawnTransform);
+
         BindButtonFactory<TransactionInfoButton>(transactionButtonSettings.spawnTransform);
-        BindButtonFactory<AssetButton>(tradableAssetButtonSettings.spawnTransform);
         BindButtonFactory<WalletButton>(walletListMenuSettings.walletButtonSpawnTransform);
         BindButtonFactory<LockedPRPSItemButton>(null);
         BindButtonFactory<ContactButton>(null);

@@ -140,7 +140,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <returns> The list of currently visible TradableAssets. </returns>
     private List<TradableAsset> GetVisibleAssetList(List<GameObject> visibleGameObjects = null)
     {
-        List<TradableAsset> list = (visibleGameObjects ?? scrollview.VisibleItemList).Select(item => item.GetComponentInChildren<AssetButton>())
+        List<TradableAsset> list = (visibleGameObjects ?? scrollview.VisibleItemList).Select(item => item.GetComponentInChildren<ERC20TokenAssetButton>())
                                                                                      .Where(button => button != null)
                                                                                      .Select(button => button.ButtonInfo).ToList();
 
