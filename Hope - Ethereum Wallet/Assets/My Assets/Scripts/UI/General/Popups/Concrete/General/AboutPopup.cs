@@ -9,6 +9,9 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 
 	private float currentVersion = 1.05f, latestVersion = 1.07f;
 
+	/// <summary>
+	/// Checks if there is a new hope version available
+	/// </summary>
 	protected override void Awake()
 	{
 		base.Awake();
@@ -24,5 +27,11 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
 	}
 
-	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
+	/// <summary>
+	/// Calls the PopupClosed action
+	/// </summary>
+	private void OnDestroy()
+	{
+		MoreDropdown.PopupClosed?.Invoke();
+	}
 }

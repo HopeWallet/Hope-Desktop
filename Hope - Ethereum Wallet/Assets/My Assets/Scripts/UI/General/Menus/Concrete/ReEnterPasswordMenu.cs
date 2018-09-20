@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
-public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservable, IEnterButtonObservable
+public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObservable
 {
     public event Action OnPasswordVerificationStarted;
     public event Action OnPasswordEnteredCorrect;
@@ -27,6 +27,14 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
     private bool checkingPassword;
     private int walletNum;
 
+	/// <summary>
+	/// Sets the necessary dependencies
+	/// </summary>
+	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
+	/// <param name="userWalletManager"> The active UserWalletManager </param>
+	/// <param name="walletSettings"> The active HopeWalletInfoManager.Settings </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache</param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
     [Inject]
     public void Construct(
         HopeWalletInfoManager hopeWalletInfoManager,
@@ -47,6 +55,9 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
         dynamicDataCache.SetData("pass", null);
     }
 
+	/// <summary>
+	/// Sets all the listeners
+	/// </summary>
     protected override void OnAwake()
     {
         homeButton.onClick.AddListener(HomeButtonClicked);
@@ -55,27 +66,37 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
         passwordField.OnInputUpdated += PasswordFieldChanged;
     }
 
-    private void OnEnable()
-    {
-        buttonClickObserver.SubscribeObservable(this);
-    }
+	/// <summary>
+	/// Subscribes the buttonClickObserver
+	/// </summary>
+	private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
 
-    private void OnDisable()
-    {
-        buttonClickObserver.UnsubscribeObservable(this);
-    }
+	/// <summary>
+	/// Unsubscribes the buttonClickObserver
+	/// </summary>
+	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
-    private void PasswordFieldChanged(string text)
+	/// <summary>
+	/// Password field has been changed
+	/// </summary>
+	/// <param name="text"> The current text in the input field </param>
+	private void PasswordFieldChanged(string text)
     {
         passwordField.Error = string.IsNullOrEmpty(text);
         unlockButton.interactable = !passwordField.Error;
     }
 
+	/// <summary>
+	/// Home button has been clicked
+	/// </summary>
     private void HomeButtonClicked()
     {
         SceneManager.LoadScene("Hope Wallet");
     }
 
+	/// <summary>
+	/// Unlock button has been clicked and password is checked
+	/// </summary>
     private void UnlockButtonClicked()
     {
         OnPasswordVerificationStarted?.Invoke();
@@ -97,14 +118,21 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
                   });
     }
 
+	/// <summary>
+	/// The password is correct and the user is brought back to the OpenWalletMenu
+	/// </summary>
+	/// <param name="password"> The password string</param>
     private void CorrectPassword(string password)
     {
         dynamicDataCache.SetData("pass", new ProtectedString(password));
 
         OnPasswordEnteredCorrect?.Invoke();
-        uiManager.CloseMenu();
+        uiManager.OpenMenu<OpenWalletMenu>();
     }
 
+	/// <summary>
+	/// The password is incorrect and the user is given an error
+	/// </summary>
     private void IncorrectPassword()
     {
         OnPasswordEnteredIncorrect?.Invoke();
@@ -112,15 +140,10 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, ITabButtonObservab
         checkingPassword = false;
     }
 
-    public void TabButtonPressed(ClickType clickType)
-    {
-        if (clickType != ClickType.Down)
-            return;
-
-        if (!checkingPassword)
-            passwordField.InputFieldBase.SelectSelectable();
-    }
-
+	/// <summary>
+	/// Clicks the unlockButton if the input field is selected and the unlock button is interactable
+	/// </summary>
+	/// <param name="clickType"> The enter button ClickType </param>
     public void EnterButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)

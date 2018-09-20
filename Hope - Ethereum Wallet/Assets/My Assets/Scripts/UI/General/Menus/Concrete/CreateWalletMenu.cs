@@ -132,8 +132,12 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     /// Checks if passwords match, are above 7 characters, and all fields are filled in
     /// </summary>
     private void SetButtonInteractable() => nextButton.interactable = !walletNameField.Error && !password1Field.Error && !password2Field.Error;
-
-    public void EnterButtonPressed(ClickType clickType)
+	
+	/// <summary>
+	/// Moves to the next input field
+	/// </summary>
+	/// <param name="clickType"> The tab button ClickType </param>
+	public void EnterButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)
             return;
@@ -144,7 +148,11 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
             SelectableExtensions.MoveToNextSelectable(inputFields);
     }
 
-    public void TabButtonPressed(ClickType clickType)
+	/// <summary>
+	/// Moves to next input field, unless at the last input field, then it presses the button if it is interactable
+	/// </summary>
+	/// <param name="clickType"> The enter button ClickType </param>
+	public void TabButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)
             return;

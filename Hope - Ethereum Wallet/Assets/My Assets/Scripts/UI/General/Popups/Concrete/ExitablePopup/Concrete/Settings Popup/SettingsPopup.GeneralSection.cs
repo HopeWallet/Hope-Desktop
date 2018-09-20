@@ -5,6 +5,9 @@
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
+	/// <summary>
+	/// The generel settings section
+	/// </summary>
 	public sealed class GeneralSection
 	{
 		private GameObject idleTimeoutTimeSection;
@@ -13,11 +16,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		private int idleTimeValue;
 
+		/// <summary>
+		/// Sets the necessary variables
+		/// </summary>
+		/// <param name="idleTimeoutTimeCheckbox"> The idle timeout time checkbox </param>
+		/// <param name="countdownTimerCheckbox"> The countdown timer checkbox</param>
+		/// <param name="transactionNotificationCheckbox"> The transaction notification checkbox </param>
+		/// <param name="updateNotificationCheckbox"> The update notification checkbox </param>
+		/// <param name="idleTimeoutTimeInputField"> The idle timeout time input field </param>
+		/// <param name="usingHopeWallet"> Whether the user is using Hope or not </param>
 		public GeneralSection(CheckBox idleTimeoutTimeCheckbox,
 							  CheckBox countdownTimerCheckbox,
 							  CheckBox transactionNotificationCheckbox,
 							  CheckBox updateNotificationCheckbox,
-							  HopeInputField idleTimeoutTimeInputField)
+							  HopeInputField idleTimeoutTimeInputField,
+							  bool usingHopeWallet)
 		{
 			this.idleTimeoutTimeCheckbox = idleTimeoutTimeCheckbox;
 			this.countdownTimerCheckbox = countdownTimerCheckbox;
@@ -28,8 +41,17 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			SetListeners();
 			SetCurrentSettings();
+
+			if (!usingHopeWallet)
+			{
+				idleTimeoutTimeCheckbox.gameObject.SetActive(false);
+				idleTimeoutTimeInputField.gameObject.SetActive(false);
+			}
 		}
 
+		/// <summary>
+		/// Sets all the necessary listeners
+		/// </summary>
 		private void SetListeners()
 		{
 			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
@@ -39,6 +61,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			updateNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("update notification", boolean);
 		}
 
+		/// <summary>
+		/// Sets the current checkbox and input field values to what is currently saved
+		/// </summary>
 		private void SetCurrentSettings()
 		{
 			idleTimeoutTimeCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("idle timeout"));
@@ -53,6 +78,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// The idle timeout checkbox has been clicked
+		/// </summary>
+		/// <param name="enabled"> Whether the setting is enabled or not </param>
 		private void IdleTimeoutCheckboxClicked(bool enabled)
 		{
 			SecurePlayerPrefs.SetBool("idle timeout", enabled);
@@ -62,6 +91,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
 		}
 
+		/// <summary>
+		/// The idle timeout input field has been changed
+		/// </summary>
+		/// <param name="text"> The current text in the input field </param>
 		private void IdleTimeoutFieldChanged(string text)
 		{
 			int.TryParse(text, out idleTimeValue);

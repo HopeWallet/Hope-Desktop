@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -6,6 +7,9 @@ using UnityEngine.UI;
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
+	/// <summary>
+	/// The wallet section where the user can edit the wallet name or password
+	/// </summary>
 	public sealed class WalletSection
 	{
 		private HopeInputField currentPasswordField, walletNameField, newPasswordField, confirmPasswordField;
@@ -15,6 +19,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private HopeWalletInfoManager hopeWalletInfoManager;
 		private UserWalletManager userWalletManager;
 		private SettingsPopupAnimator settingsPopupAnimator;
+		private PopupManager popupManager;
 
 		private string walletName;
 		private bool animatingIcon;
@@ -29,8 +34,24 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// Sets the necessary variables and dependencies
+		/// </summary>
+		/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
+		/// <param name="userWalletManager"> The active UserWalletManager </param>
+		/// <param name="popupManager"> The active PopupManager </param>
+		/// <param name="settingsPopupAnimator"> The active SettingPopupAnimator </param>
+		/// <param name="currentPasswordField"> The current password intput field </param>
+		/// <param name="walletNameField"> The wallet name input field </param>
+		/// <param name="newPasswordField"> The new password input field </param>
+		/// <param name="confirmPasswordField"> The confirm password input field</param>
+		/// <param name="editWalletButton"></param>
+		/// <param name="saveButton"> The save button </param>
+		/// <param name="deleteButton"> The delete button </param>
+		/// <param name="checkMarkIcon"> The chechmark icon for if the save button was clicked </param>
 		public WalletSection(HopeWalletInfoManager hopeWalletInfoManager,
 							 UserWalletManager userWalletManager,
+							 PopupManager popupManager,
 							 SettingsPopupAnimator settingsPopupAnimator,
 							 HopeInputField currentPasswordField,
 							 HopeInputField walletNameField,
@@ -43,6 +64,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.userWalletManager = userWalletManager;
+			this.popupManager = popupManager;
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.currentPasswordField = currentPasswordField;
 			this.walletNameField = walletNameField;
@@ -56,6 +78,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SetListeners();
 		}
 
+		/// <summary>
+		/// Sets all the necessary listeners
+		/// </summary>
 		private void SetListeners()
 		{
 			saveButton.onClick.AddListener(SaveButtonClicked);
@@ -73,6 +98,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			walletNameField.Text = walletName;
 		}
 
+		/// <summary>
+		/// The edit wallet button was clicked and the password is verified
+		/// </summary>
 		private void EditWalletButtonClicked()
 		{
 			settingsPopupAnimator.VerifyingPassword.Invoke(true);
@@ -91,10 +119,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
-		private void WalletNameFieldChanged(string textInField)
+		/// <summary>
+		/// Wallet name field has been changed
+		/// </summary>
+		/// <param name="text"> The current text in the input field</param>
+		private void WalletNameFieldChanged(string text)
 		{
-			bool emptyName = string.IsNullOrEmpty(textInField.Trim());
-			bool usedName = WalletNameExists(textInField);
+			bool emptyName = string.IsNullOrEmpty(text.Trim());
+			bool usedName = WalletNameExists(text);
 			walletNameField.Error = emptyName || usedName;
 
 			if (emptyName)
@@ -142,6 +174,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// Sets the save button to interactable depending on if the input fields have errors or not
+		/// </summary>
 		private void SetSaveButtonInteractable()
 		{
 			if (animatingIcon)
@@ -151,6 +186,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			saveButtonText.AnimateColor(saveButton.interactable ? UIColors.White : UIColors.DarkGrey, 0.15f);
 		}
 
+		/// <summary>
+		/// The save button is clicked, and the necessary wallet information is changed
+		/// </summary>
 		private void SaveButtonClicked()
 		{
 			//Change wallet details
@@ -160,9 +198,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			confirmPasswordField.Text = string.Empty;
 		}
 
+		/// <summary>
+		/// Delete button has been clicked and opens up a confirmation popup
+		/// </summary>
 		private void DeleteButtonClicked()
 		{
-
+			deleteButton.interactable = false;
+			popupManager.GetPopup<GeneralOkCancelPopup>().SetSubText("Are you sure you want to delete " + walletName + "?").OnOkClicked(() => SceneManager.LoadScene("HopeWallet")).OnFinish(() => deleteButton.interactable = true);
 		}
 
 		/// <summary>

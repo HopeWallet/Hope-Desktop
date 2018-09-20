@@ -7,6 +7,9 @@ using UnityEngine.UI;
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
+	/// <summary>
+	/// The two-factor authentication section in the settings, where user can set it up, enable or disable it
+	/// </summary>
 	public sealed class TwoFactorAuthenticationSection
 	{
 		private CheckBox twoFactorAuthenticationCheckbox;
@@ -16,6 +19,15 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private HopeInputField codeInputField;
 		private Button confirmButton;
 
+		/// <summary>
+		/// Sets the necessary variables
+		/// </summary>
+		/// <param name="twoFactorAuthenticationCheckbox"> The checkbox to enable two-factor authentication or not </param>
+		/// <param name="setUpSection"> The set-up section </param>
+		/// <param name="keyText"> The key text element </param>
+		/// <param name="qrCodeImage"> The qr code image </param>
+		/// <param name="codeInputField"> The input field for the user to input the code </param>
+		/// <param name="confirmButton"> The confirm button </param>
 		public TwoFactorAuthenticationSection(CheckBox twoFactorAuthenticationCheckbox,
 											  GameObject setUpSection,
 											  TextMeshProUGUI keyText,
@@ -33,6 +45,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SetUpVisuals();
 		}
 
+		/// <summary>
+		/// Sets up the visuals depending on if two-factor authentication has already been set up
+		/// </summary>
 		private void SetUpVisuals()
 		{
 			bool setUp2FA = !SecurePlayerPrefs.GetBool("2FA set up");
@@ -55,12 +70,19 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// The code input field has been changed
+		/// </summary>
+		/// <param name="code"> the current string in the input field </param>
 		private void CodeInputFieldChanged(string code)
 		{
 			codeInputField.Error = string.IsNullOrEmpty(code);
 			confirmButton.interactable = !codeInputField.Error;
 		}
 
+		/// <summary>
+		/// The confirm button has been clicked
+		/// </summary>
 		private void ConfirmButtonClicked()
 		{
 			//If code is correct:

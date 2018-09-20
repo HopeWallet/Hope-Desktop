@@ -40,12 +40,25 @@ public sealed class AccountsPopupAnimator : PopupAnimator
 		unlockButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 
+	/// <summary>
+	/// Animates the addresses
+	/// </summary>
+	/// <param name="addresses"> The array of address strings being set </param>
+	/// <param name="firstAddressNumInList"> The number of the first address </param>
+	/// <param name="currentlySelectedAddress"> The number of the currently selected address </param>
 	private void AnimateAddresses(string[] addresses, int firstAddressNumInList, int currentlySelectedAddress)
 	{
 		for (int i = 0; i < 5; i++)
 			AnimateAddress(addresses[i], i, firstAddressNumInList, currentlySelectedAddress);
 	}
 
+	/// <summary>
+	/// Animates the given address object
+	/// </summary>
+	/// <param name="address"> The address string being set </param>
+	/// <param name="index"> The address index </param>
+	/// <param name="firstAddressNumInList"> The number of the first address </param>
+	/// <param name="currentlySelectedAddress"> The number of the currently selected address </param>
 	private void AnimateAddress(string address, int index, int firstAddressNumInList, int currentlySelectedAddress)
 	{
 		GameObject addressObject = addressSection.transform.GetChild(index).gameObject;
@@ -59,6 +72,11 @@ public sealed class AccountsPopupAnimator : PopupAnimator
 		});
 	}
 
+	/// <summary>
+	/// Sets the given address button to interactable or not
+	/// </summary>
+	/// <param name="addressObject"> The address object </param>
+	/// <param name="interactable"> Whether it should be interactable or not </param>
 	private void SetAddressButtonInteractable(GameObject addressObject, bool interactable)
 	{
 		addressObject.GetComponent<Button>().interactable = interactable;

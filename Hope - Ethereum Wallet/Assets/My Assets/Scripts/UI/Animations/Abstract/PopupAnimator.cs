@@ -12,9 +12,11 @@ public abstract class PopupAnimator : UIAnimator
 
 	protected Vector2 startingPosition;
 
+	/// <summary>
+	/// Sets the current starting position given by the current mouse position at the time of the click
+	/// </summary>
 	private void OnEnable()
 	{
-
 		Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 		Vector2 updatedPosition = new Vector2(GetUpdatedValue(Screen.width / 2, currentMousePosition.x), GetUpdatedValue(Screen.height / 2, currentMousePosition.y));
 
@@ -34,7 +36,7 @@ public abstract class PopupAnimator : UIAnimator
 	}
 
 	/// <summary>
-	/// Animates the basic elements of the form, such as the dim, blur, form and title
+	/// Animates the basic elements of the popup into view
 	/// </summary>
 	protected override void AnimateIn()
 	{
@@ -45,6 +47,9 @@ public abstract class PopupAnimator : UIAnimator
 		form.AnimateGraphicAndScale(1f, 1f, 0.2f, AnimateUniqueElementsIn);
 	}
 
+	/// <summary>
+	/// Animates the basic elements out of view
+	/// </summary>
 	protected override void AnimateOut()
 	{
 		popupContainer.AnimateTransform(startingPosition, 0.2f);

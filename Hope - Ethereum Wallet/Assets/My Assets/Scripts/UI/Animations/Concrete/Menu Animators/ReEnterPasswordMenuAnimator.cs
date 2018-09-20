@@ -12,6 +12,9 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject homeButton;
 	[SerializeField] private GameObject loadingIcon;
 
+	/// <summary>
+	/// Sets the necessary events
+	/// </summary>
     private void Start()
     {
         GetComponent<ReEnterPasswordMenu>().OnPasswordVerificationStarted += VerifyingPassword;
@@ -57,6 +60,7 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 		VerifyingPassword();
 	}
 
+
 	/// <summary>
 	/// Animates the loadingIcon while in or out of view
 	/// </summary>
@@ -68,16 +72,18 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 		{
 			loadingIcon.SetActive(true);
 			Animating = true;
+			unlockButton.AnimateGraphicAndScale(0f, 0f, 0.15f, () => loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f));
 			passwordInputField.InputFieldBase.DeactivateInputField();
 		}
 
-		loadingIcon.AnimateGraphicAndScale(startingProcess ? 1f : 0f, startingProcess ? 1f : 0f, 0.15f);
-		unlockButton.AnimateGraphicAndScale(startingProcess ? 0f : 1f, startingProcess ? 0f : 1f, 0.15f);
-
 		if (!startingProcess)
 		{
-			loadingIcon.SetActive(false);
-			Animating = false;
+			loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.15f, () =>
+			{
+				loadingIcon.SetActive(false);
+				unlockButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
+				Animating = false;
+			});
 		}
 	}
 }

@@ -46,11 +46,18 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 		sections[0].AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 
+	/// <summary>
+	/// Animates the current category out, and the new category in
+	/// </summary>
+	/// <param name="categoryNum"> The number of the category in the array</param>
 	private void CategoryChanged(int categoryNum)
 	{
 		sections[settingsCategories.previouslySelectedButton].AnimateScale(0f, 0.15f, () => sections[categoryNum].AnimateScale(1f, 0.15f));
 	}
 
+	/// <summary>
+	/// Animates the other input fields when user has input the correct password in the wallet section
+	/// </summary>
 	private void AnimateOtherFields()
 	{
 		currentPasswordField.AnimateScale(0f, 0.15f);
@@ -65,6 +72,10 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 		});
 	}
 
+	/// <summary>
+	/// Animates the loading icon in or out of view
+	/// </summary>
+	/// <param name="verifying"> Whether the password is currently being checked or not </param>
 	private void AnimateLoadingIcon(bool verifying)
 	{
 		if (verifying)
