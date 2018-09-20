@@ -4,7 +4,12 @@
 public sealed class EtherAssetButton : TradableAssetButton<EtherAssetButton>
 {
     /// <summary>
-    /// The display text for the EtherAsset.
+    /// The name/symbol display text for the EtherAsset.
     /// </summary>
     protected override string AssetDisplayText => "Ether (ETH)";
+
+    /// <summary>
+    /// The balance display text for the EtherAsset.
+    /// </summary>
+    protected override string AssetBalanceText => StringUtils.LimitEnd(ButtonInfo.AssetBalance.ToString(), 12, "...");
 }

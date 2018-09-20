@@ -26,9 +26,14 @@ public abstract class TradableAssetButton<T> : InfoButton<T, TradableAsset>, ITr
     private TradableAssetNotificationManager notificationManager;
 
     /// <summary>
-    /// The display text for the asset button.
+    /// The display text for the symbol/name of the asset button.
     /// </summary>
     protected abstract string AssetDisplayText { get; }
+
+    /// <summary>
+    /// The display text for the balance of the asset button.
+    /// </summary>
+    protected abstract string AssetBalanceText { get; }
 
     /// <summary>
     /// Injects the required dependencies into this class.
@@ -111,8 +116,7 @@ public abstract class TradableAssetButton<T> : InfoButton<T, TradableAsset>, ITr
         if (ButtonInfo.AssetBalance == null)
             return;
 
-        string balanceText = ButtonInfo.AssetBalance.ToString();
-        amountText.text = balanceText.LimitEnd(7, "...");
+        amountText.text = AssetBalanceText;
     }
 
     /// <summary>
