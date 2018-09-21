@@ -64,19 +64,28 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     /// Sets the transaction info of this popup.
     /// </summary>
     /// <param name="transactionInfo"> The transaction info for this popup to display. </param>
-    public void SetTransactionInfo(TransactionInfo transactionInfo) => this.transactionInfo = transactionInfo;
+    public void SetTransactionInfo(TransactionInfo transactionInfo)
+    {
+        this.transactionInfo = transactionInfo;
+    }
 
-	/// <summary>
-	/// Initializes the popup by setting up the popup info.
-	/// </summary>
-	protected override void OnStart() => AssignTransactionInfo();
+    /// <summary>
+    /// Initializes the popup by setting up the popup info.
+    /// </summary>
+    protected override void OnStart()
+    {
+        AssignTransactionInfo();
+    }
 
-	private void OnDestroy() => TransactionInfoButton.popupClosed?.Invoke();
+    private void OnDestroy()
+    {
+        TransactionInfoButton.popupClosed?.Invoke();
+    }
 
-	/// <summary>
-	/// Assigns the transaction info to all elements in this popup.
-	/// </summary>
-	private void AssignTransactionInfo()
+    /// <summary>
+    /// Assigns the transaction info to all elements in this popup.
+    /// </summary>
+    private void AssignTransactionInfo()
     {
         var sendTransaction = transactionInfo.Type == TransactionInfo.TransactionType.Send;
         var valSymbol = sendTransaction ? "-" : "+";
@@ -87,19 +96,19 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         transactionHash.text = transactionInfo.TxHash;
-        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + "<style=Symbol> " + tradableAsset.AssetSymbol + "</style>";
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + "<size=80%> " + tradableAsset.AssetSymbol + "</size>";
 
 		fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
-        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<style=Symbol> Ether</style>";
+        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<size=80%> Ether</size>";
 		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);
 		CheckIfContact(transactionInfo.To.ToLower(), toAddressName);
 
 		TransactionUtils.GetTransactionDetails(transactionInfo.TxHash).OnSuccess(tx =>
         {
-            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + "<style=Symbol> Gwei</style>");
+            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + "<size=80%> Gwei</size>");
             gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }
