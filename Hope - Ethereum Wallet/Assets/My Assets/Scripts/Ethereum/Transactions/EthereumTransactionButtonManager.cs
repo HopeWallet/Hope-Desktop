@@ -149,7 +149,7 @@ public sealed class EthereumTransactionButtonManager
     private void RefreshScrollBar()
     {
         settings.scrollBar.value = 1;
-        settings.spawnTransform.parent.GetComponent<OptimizedScrollview>().Refresh();
+        OptimizedScrollview.GetScrollview("transactions_scrollview").Refresh();
     }
 
     /// <summary>

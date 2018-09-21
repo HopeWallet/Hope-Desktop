@@ -35,7 +35,7 @@ public sealed class OptimizedScrollview : MonoBehaviour
 
     public List<GameObject> VisibleItemList => items.Where(obj => obj != null && obj.transform.GetChild(0).gameObject.activeInHierarchy).ToList();
 
-    public void Refresh() => GetEnabledItems();
+    public static OptimizedScrollview GetScrollview(string scrollviewKey) => ActiveScrollviews.ContainsKey(scrollviewKey) ? ActiveScrollviews[scrollviewKey] : null;
 
     private void Start()
     {
@@ -59,6 +59,11 @@ public sealed class OptimizedScrollview : MonoBehaviour
     {
         itemCountChangedDisposable.Dispose();
         activeItemsChangedDisposable.Dispose();
+    }
+
+    public void Refresh()
+    {
+        GetEnabledItems();
     }
 
     private void ItemCountChanged()

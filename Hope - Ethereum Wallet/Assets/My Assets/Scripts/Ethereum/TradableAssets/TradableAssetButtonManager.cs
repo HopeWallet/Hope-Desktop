@@ -82,6 +82,8 @@ public sealed class TradableAssetButtonManager
         }
 
         assetButtons.Add(assetButton);
+
+        OptimizedScrollview.GetScrollview("asset_scrollview")?.Refresh();
     }
 
     /// <summary>

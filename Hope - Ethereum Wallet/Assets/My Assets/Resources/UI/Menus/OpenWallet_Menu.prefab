@@ -1988,7 +1988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8a27fcd9d2f934497e5ed89f6b2ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollviewKey: 
+  scrollviewKey: transactions_scrollview
 --- !u!114 &114139730210564124
 MonoBehaviour:
   m_ObjectHideFlags: 1
