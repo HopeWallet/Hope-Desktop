@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 {
 	[SerializeField] private GameObject plainBackground;
+	[SerializeField] private GameObject messageText;
 	[SerializeField] private HopeInputField passwordInputField;
 	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject homeButton;
@@ -30,6 +31,7 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 
 		base.AnimateIn();
 
+		messageText.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		passwordInputField.InputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScale(1f, 0.3f);
 		homeButton.AnimateGraphicAndScale(1f, 1f, 0.35f);

@@ -16,7 +16,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
     public event Action OnPasswordEnteredIncorrect;
 
     [SerializeField] private TextMeshProUGUI walletName;
-
+	[SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Button unlockButton, homeButton;
     [SerializeField] private HopeInputField passwordField;
 
@@ -51,7 +51,9 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         walletName.text = walletInfo.WalletName;
         walletNum = walletInfo.WalletNum + 1;
 
-        (dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
+		SetMessageText();
+
+		(dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
         dynamicDataCache.SetData("pass", null);
     }
 
@@ -75,6 +77,22 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
 	/// Unsubscribes the buttonClickObserver
 	/// </summary>
 	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
+
+	/// <summary>
+	/// Sets the main message text
+	/// </summary>
+	private void SetMessageText()
+	{
+		int idleTime = SecurePlayerPrefs.GetInt("idle time");
+		string minuteWord;
+
+		if (idleTime == 1)
+			minuteWord = " minute";
+		else
+			minuteWord = " minutes";
+
+		messageText.text = "You have been idle for " + idleTime  + minuteWord + ", please re-enter your password or go back to the main menu.";
+	}
 
 	/// <summary>
 	/// Password field has been changed
