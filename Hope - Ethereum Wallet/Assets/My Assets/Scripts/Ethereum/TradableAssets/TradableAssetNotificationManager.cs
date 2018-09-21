@@ -37,8 +37,7 @@ public sealed class TradableAssetNotificationManager
         TradableAssetManager.OnTradableAssetAdded += AssetAdded;
         TradableAssetManager.OnTradableAssetRemoved += AssetRemoved;
 
-        EthereumTransactionManager.OnTransactionsAdded += TransactionsUpdated;
-
+        ethereumTransactionManager.OnTransactionsAdded += TransactionsUpdated;
         lockedPrpsManager.OnLockedPRPSUpdated += TransactionsUpdated;
     }
 

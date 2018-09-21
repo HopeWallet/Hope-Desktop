@@ -11,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 {
-    public static event Action OnTransactionsAdded;
+    public event Action OnTransactionsAdded;
 
     private readonly Queue<AssetTransactionQuery> transactionQueryQueue = new Queue<AssetTransactionQuery>();
     private readonly Dictionary<string, List<TransactionInfo>> transactionsByAddress = new Dictionary<string, List<TransactionInfo>>();

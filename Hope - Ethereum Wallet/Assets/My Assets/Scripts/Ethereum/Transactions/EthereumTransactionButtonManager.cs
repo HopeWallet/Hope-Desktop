@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TabType = OpenWalletMenu.TransactionTabManager.TabType;
+using TransactionType = TransactionInfo.TransactionType;
 
 /// <summary>
 /// Class which manages the transaction buttons.
@@ -15,6 +18,8 @@ public sealed class EthereumTransactionButtonManager
     private readonly TransactionInfoButton.Factory buttonFactory;
 
     private readonly List<TransactionInfoButton> transactionButtons = new List<TransactionInfoButton>();
+
+    private TabType activeTabType;
 
     /// <summary>
     /// Initializes the EthereumTransactionButtonManager by assigning the settings.
@@ -33,7 +38,8 @@ public sealed class EthereumTransactionButtonManager
         this.transactionManager = transactionManager;
         this.buttonFactory = buttonFactory;
 
-        EthereumTransactionManager.OnTransactionsAdded += ProcessTransactions;
+        transactionManager.OnTransactionsAdded += ProcessTransactions;
+        OpenWalletMenu.TransactionTabManager.OnTabChanged += OnTransactionTabChanged;
     }
 
     /// <summary>
@@ -50,13 +56,33 @@ public sealed class EthereumTransactionButtonManager
     /// </summary>
     private void ProcessTransactions()
     {
-        var activeAsset = tradableAssetManager.ActiveTradableAsset;
-        var address = activeAsset == null ? EtherAsset.ETHER_ADDRESS : activeAsset.AssetAddress;
-        var transactionList = transactionManager.GetTransactionListByAddress(address);
+        var transactionList = GetValidTransactionList();
 
         UpdateButtons(transactionList);
         UpdateTransactionList(transactionList);
         UpdateLoadingVisuals(transactionList);
+    }
+
+    /// <summary>
+    /// Gets the valid transaction list based on the current tab.
+    /// </summary>
+    /// <returns> The transaction list filtered to only include transactions valid based on the current tab. </returns>
+    private List<TransactionInfo> GetValidTransactionList()
+    {
+        var activeAsset = tradableAssetManager.ActiveTradableAsset;
+        var address = activeAsset == null ? EtherAsset.ETHER_ADDRESS : activeAsset.AssetAddress;
+        var transactionList = transactionManager.GetTransactionListByAddress(address);
+
+        if (transactionList != null)
+        {
+            bool isAllTab = activeTabType == TabType.All;
+            Func<TransactionInfo, bool> sentTransactionActiveCheck = transaction => activeTabType == TabType.Sent && transaction.Type == TransactionType.Send;
+            Func<TransactionInfo, bool> receivedTransactionActiveCheck = transaction => activeTabType == TabType.Received && transaction.Type == TransactionType.Receive;
+
+            transactionList = transactionList.Where(transaction => isAllTab || sentTransactionActiveCheck(transaction) || receivedTransactionActiveCheck(transaction)).ToList();
+        }
+
+        return transactionList;
     }
 
     /// <summary>
@@ -124,6 +150,16 @@ public sealed class EthereumTransactionButtonManager
     {
         settings.scrollBar.value = 1;
         settings.spawnTransform.parent.GetComponent<OptimizedScrollview>().Refresh();
+    }
+
+    /// <summary>
+    /// Called when the transaction tab changes.
+    /// </summary>
+    /// <param name="tabType"> The new transaction tab type. </param>
+    private void OnTransactionTabChanged(TabType tabType)
+    {
+        activeTabType = tabType;
+        ProcessNewAssetList();
     }
 
     /// <summary>
