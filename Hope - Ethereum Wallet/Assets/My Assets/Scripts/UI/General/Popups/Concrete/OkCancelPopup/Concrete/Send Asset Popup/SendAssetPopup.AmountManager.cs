@@ -15,19 +15,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	{
 		public event Action OnAmountChanged;
 
-		private TMP_Text currencyText, oppositeCurrencyAmountText;
-
-		private GameObject maxText;
-
-		private Button currencyButton;
-
         private GasManager gasManager;
         private AssetManager assetManager;
-        private CurrencyManager currencyManager;
-        private TradableAssetPriceManager tradableAssetPriceManager;
-
-		private bool usingTokenCurrency = true, priceFound;
-		private decimal oppositeCurrencyValue;
+        private readonly CurrencyManager currencyManager;
+        private readonly TradableAssetPriceManager tradableAssetPriceManager;
 
         private readonly string tradableTokenSymbol;
 
@@ -35,10 +26,19 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		private readonly HopeInputField amountInputField;
 
-		/// <summary>
-		/// Whether the amount input field is empty or not.
-		/// </summary>
-		public bool IsEmpty { get { return string.IsNullOrEmpty(amountInputField.Text); } }
+        private readonly TMP_Text currencyText, oppositeCurrencyAmountText;
+
+        private readonly GameObject maxText;
+
+        private readonly Button currencyButton;
+
+        private bool usingTokenCurrency = true, priceFound;
+        private decimal oppositeCurrencyValue;
+
+        /// <summary>
+        /// Whether the amount input field is empty or not.
+        /// </summary>
+        public bool IsEmpty { get { return string.IsNullOrEmpty(amountInputField.Text); } }
 
 		/// <summary>
 		/// The amount that will be sent.

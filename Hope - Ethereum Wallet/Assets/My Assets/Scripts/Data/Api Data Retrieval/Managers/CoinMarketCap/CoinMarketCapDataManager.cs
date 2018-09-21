@@ -9,20 +9,20 @@ public sealed class CoinMarketCapDataManager
 {
     private readonly Dictionary<string, int> CoinIDs = new Dictionary<string, int>();
 
+    private readonly CoinMarketCapApiService coinMarketCapApiService;
     private readonly CurrencyManager currencyManager;
-
-    private const string LISTING_API_URL = "https://api.coinmarketcap.com/v2/listings/";
-    private const string TICKER_API_URL = "https://api.coinmarketcap.com/v2/ticker/";
 
     /// <summary>
     /// Initializes the CoinList.
     /// </summary>
+    /// <param name="coinMarketCapApiService"> The active <see cref="CoinMarketCapApiService"/>. </param>
     /// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
-    public CoinMarketCapDataManager(CurrencyManager currencyManager)
+    public CoinMarketCapDataManager(CoinMarketCapApiService coinMarketCapApiService, CurrencyManager currencyManager)
     {
+        this.coinMarketCapApiService = coinMarketCapApiService;
         this.currencyManager = currencyManager;
 
-        UnityWebUtils.DownloadString(LISTING_API_URL, RetrieveData);
+        coinMarketCapApiService.SendListingRequest().OnSuccess(RetrieveData);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public sealed class CoinMarketCapDataManager
         if (!CoinIDs.ContainsKey(symbol))
             return promise.ResolveResult(null);
 
-        UnityWebUtils.DownloadString(TICKER_API_URL + CoinIDs[symbol] + "/?convert=" + currencyManager.ActiveCurrency.ToString(), jsonData => promise.ResolveResult((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
+        coinMarketCapApiService.SendTickerRequest(CoinIDs[symbol], currencyManager.ActiveCurrency).OnSuccess(jsonData => promise.ResolveResult((decimal?)GetCoinPriceData(JsonUtils.DeserializeDynamic(jsonData).data.quotes).price));
 
         return promise;
     }
