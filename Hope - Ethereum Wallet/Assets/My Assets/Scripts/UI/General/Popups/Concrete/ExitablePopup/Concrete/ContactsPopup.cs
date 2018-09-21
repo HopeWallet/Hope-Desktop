@@ -110,7 +110,6 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	private void ConfirmButtonClicked()
 	{
 		sendAssetPopup.Address.addressField.Text = ActiveContactButton.RealContactAddress;
-		sendAssetPopup.Address.contactName.gameObject.AnimateGraphic(1f, 0.15f);
 		popupManager.CloseActivePopup();
 	}
 

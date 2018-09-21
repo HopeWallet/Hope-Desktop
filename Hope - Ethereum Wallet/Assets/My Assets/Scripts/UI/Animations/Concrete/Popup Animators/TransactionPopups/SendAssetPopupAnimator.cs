@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using TMPro;
 
 /// <summary>
 /// The animator class of the SendAssetPopup
@@ -22,11 +21,7 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 	/// <summary>
 	/// Initializes the button and input field listeners
 	/// </summary>
-	private void Start()
-	{
-		transform.GetComponent<SendAssetPopup>().AnimateAdvancedMode += AdvancedModeClicked;
-		addressField.OnInputUpdated += _ => AnimateContactName(!string.IsNullOrEmpty(contactNameObject.GetComponent<TextMeshProUGUI>().text));
-	}
+	private void Start() => transform.GetComponent<SendAssetPopup>().AnimateAdvancedMode += AdvancedModeClicked;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
@@ -71,10 +66,4 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 				() => transactionSpeedSection.AnimateScale(1f, 0.1f,
 				() => Animating = false));
 	}
-
-	/// <summary>
-	/// Animates the contact name in or out of sight
-	/// </summary>
-	/// <param name="animateIn"> Checks if animating in or out </param>
-	private void AnimateContactName(bool animateIn) => contactNameObject.AnimateGraphic(animateIn ? 1f : 0f, 0.15f);
 }

@@ -96,19 +96,19 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
         valueText.color = sendTransaction ? UIColors.Red : UIColors.Green;
 
         transactionHash.text = transactionInfo.TxHash;
-        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + "<size=80%> " + tradableAsset.AssetSymbol + "</size>";
+        valueText.text = StringUtils.LimitEnd(valSymbol + SolidityUtils.ConvertFromUInt(transactionInfo.Value, tradableAsset.AssetDecimals).ConvertDecimalToString(), 18, "...") + "<style=Symbol> " + tradableAsset.AssetSymbol + "</style>";
 
 		fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
 		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
-        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<size=80%> Ether</size>";
+        txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<style=Symbol> Ether</style>";
 		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);
 		CheckIfContact(transactionInfo.To.ToLower(), toAddressName);
 
 		TransactionUtils.GetTransactionDetails(transactionInfo.TxHash).OnSuccess(tx =>
         {
-            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + "<size=80%> Gwei</size>");
+            gasPriceText.SetText(UnitConversion.Convert.FromWei(tx.GasPrice.Value, UnitConversion.EthUnit.Gwei) + "<style=Symbol> Gwei</style>");
             gasLimitText.SetText(tx.Gas.Value.ToString());
         });
     }

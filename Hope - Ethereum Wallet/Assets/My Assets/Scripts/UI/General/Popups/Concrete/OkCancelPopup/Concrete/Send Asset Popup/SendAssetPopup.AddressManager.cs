@@ -68,6 +68,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		{
 			address = address.ToLower();
 			contactName.text = contactsManager.ContactList.Contains(address) ? "<style=Contact>" + contactsManager.ContactList[address].ContactName + "</style>" : string.Empty;
+			contactName.gameObject.AnimateGraphic(contactName.text == string.Empty ? 0f : 1f, 0.15f);
 		}
 	}
 }
