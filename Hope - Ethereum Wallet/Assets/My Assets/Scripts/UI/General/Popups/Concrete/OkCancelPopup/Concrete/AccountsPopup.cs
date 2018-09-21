@@ -190,7 +190,10 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
             {
                 tradableAssetManager.ActiveTradableAsset.GetBalance(address, balance =>
                 {
-                    addressBalances.Add(address, balance);
+                    if (!addressBalances.ContainsKey(address))
+                        addressBalances.Add(address, balance);
+                    else
+                        addressBalances[address] = balance;
 
                     if (addresses[addressesIndex][firstAddressNumInList - 1 + num].Equals(address))
                         SetAddressBalance(num, address);
@@ -201,7 +204,15 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     private void SetAddressBalance(int addressIndex, string address)
     {
-        TMP_Text textComponent = addressesSection.GetChild(addressIndex).transform.GetChild(2).GetComponent<TMP_Text>();
+        if (addressesSection == null)
+            return;
+
+        Transform child = addressesSection.GetChild(addressIndex);
+
+        if (child == null)
+            return;
+
+        TMP_Text textComponent = child.GetChild(2).GetComponent<TMP_Text>();
 
         string balanceText = addressBalances[address].ConvertDecimalToString().LimitEnd(5, "..");
         string symbolText = " <size=60%>" + tradableAssetManager.ActiveTradableAsset.AssetSymbol.LimitEnd(5) + "</size>";
