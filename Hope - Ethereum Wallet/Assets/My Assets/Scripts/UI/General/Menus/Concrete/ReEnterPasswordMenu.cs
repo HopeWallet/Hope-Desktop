@@ -145,7 +145,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         dynamicDataCache.SetData("pass", new ProtectedString(password));
 
         OnPasswordEnteredCorrect?.Invoke();
-        uiManager.OpenMenu<OpenWalletMenu>();
+		uiManager.CloseMenu();
     }
 
 	/// <summary>
