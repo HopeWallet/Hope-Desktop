@@ -81,14 +81,8 @@ public sealed class EthereumTransactionButtonManager
         var address = activeAsset == null ? EtherAsset.ETHER_ADDRESS : activeAsset.AssetAddress;
         var transactionList = transactionManager.GetTransactionListByAddress(address);
 
-        if (transactionList != null)
-        {
-            bool isAllTab = activeTabType == TabType.All;
-            Func<TransactionInfo, bool> sentTransactionActiveCheck = transaction => activeTabType == TabType.Sent && transaction.Type == TransactionType.Send;
-            Func<TransactionInfo, bool> receivedTransactionActiveCheck = transaction => activeTabType == TabType.Received && transaction.Type == TransactionType.Receive;
-
-            transactionList = transactionList.Where(transaction => isAllTab || sentTransactionActiveCheck(transaction) || receivedTransactionActiveCheck(transaction)).ToList();
-        }
+        if (transactionList != null && activeTabType != TabType.All)
+            transactionList = transactionManager.GetTransactionsByAddressAndType(address, activeTabType == TabType.Received ? TransactionType.Receive : TransactionType.Send);
 
         return transactionList;
     }
