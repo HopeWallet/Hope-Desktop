@@ -135,7 +135,10 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// <summary>
     /// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.
     /// </summary>
-    private void Update() => okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
+    private void Update()
+    {
+        okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
+    }
 
     /// <summary>
     /// Starts the asset transfer.
@@ -163,9 +166,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         buttonClickObserver.UnsubscribeObservable(this);
         TopBarButtons.popupClosed?.Invoke();
 
-        ethereumTransactionButtonManager.ProcessNewAssetList();
+        ethereumTransactionButtonManager.Refresh();
     }
 
+    /// <summary>
+    /// Called when the advanced mode toggle is pressed.
+    /// </summary>
     private void AdvancedModeClicked()
     {
         advancedMode = !advancedMode;

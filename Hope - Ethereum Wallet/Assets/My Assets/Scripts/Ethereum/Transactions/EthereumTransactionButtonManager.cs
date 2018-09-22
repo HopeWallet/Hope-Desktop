@@ -43,6 +43,14 @@ public sealed class EthereumTransactionButtonManager
     }
 
     /// <summary>
+    /// Refreshes the transaction info for all transaction buttons.
+    /// </summary>
+    public void Refresh()
+    {
+        transactionButtons.ForEach(transaction => transaction.SetButtonInfo(transaction.ButtonInfo));
+    }
+
+    /// <summary>
     /// Method called when a new asset is set to active.
     /// </summary>
     public void ProcessNewAssetList()
