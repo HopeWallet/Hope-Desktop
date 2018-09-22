@@ -146,6 +146,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
 
         if (!list.Contains(tradableAssetManager.ActiveTradableAsset))
             list.Add(tradableAssetManager.ActiveTradableAsset);
+        if (!list.Contains(tradableAssetManager.EtherAsset))
+            list.Add(tradableAssetManager.EtherAsset);
 
         return list;
     }
