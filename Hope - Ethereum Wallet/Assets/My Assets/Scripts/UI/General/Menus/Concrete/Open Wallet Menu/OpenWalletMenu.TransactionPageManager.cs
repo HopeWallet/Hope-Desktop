@@ -94,7 +94,7 @@ public sealed partial class OpenWalletMenu
             var upperLimit = EthereumTransactionButtonManager.MAX_TRANSACTIONS_PER_PAGE * (pageNumber + 1);
 
             pageNumText.text = (pageNumber + 1).ToString();
-            rightButton.interactable = transactionList.Count > upperLimit;
+            rightButton.interactable = transactionList?.Count > upperLimit;
             leftButton.interactable = pageNumber != 0;
         }
 
