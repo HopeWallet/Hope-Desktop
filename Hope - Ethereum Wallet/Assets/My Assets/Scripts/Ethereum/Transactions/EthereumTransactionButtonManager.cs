@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +19,8 @@ public sealed class EthereumTransactionButtonManager
     private readonly List<TransactionInfoButton> transactionButtons = new List<TransactionInfoButton>();
 
     private TabType activeTabType;
+
+    public const int MAX_TRANSACTIONS_PER_PAGE = 50;
 
     /// <summary>
     /// Initializes the EthereumTransactionButtonManager by assigning the settings.
