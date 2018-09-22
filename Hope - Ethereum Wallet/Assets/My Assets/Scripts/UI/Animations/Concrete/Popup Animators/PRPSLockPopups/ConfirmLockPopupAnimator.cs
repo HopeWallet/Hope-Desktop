@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the ConfirmLockPopup
@@ -8,6 +9,15 @@ public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject prpsSection;
 	[SerializeField] private GameObject dubiSection;
 	[SerializeField] private GameObject noteText;
+
+	/// <summary>
+	/// Sets the confirm button to interactable if countdown timer setting has been disabled
+	/// </summary>
+	private void Awake()
+	{
+		if (!SecurePlayerPrefs.GetBool("countdown timer"))
+			confirmButton.GetComponent<Button>().interactable = true;
+	}
 
 	/// <summary>
 	/// Animates the unique elements of this form into view

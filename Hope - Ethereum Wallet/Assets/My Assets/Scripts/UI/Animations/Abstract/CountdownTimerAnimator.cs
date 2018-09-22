@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public abstract class CountdownTimerAnimator : PopupAnimator
 {
-
 	[SerializeField] protected GameObject timerText;
 	[SerializeField] protected GameObject confirmButton;
 	[SerializeField] protected GameObject cancelButton;
@@ -12,7 +11,11 @@ public abstract class CountdownTimerAnimator : PopupAnimator
 	/// <summary>
 	/// Starts the countdown timer animation
 	/// </summary>
-	protected void StartTimerAnimation() => new CountdownTimer(AnimateTimerText, SetButtonInteractable, 5f, 1f).StartCountdown();
+	protected void StartTimerAnimation()
+	{
+		if (!confirmButton.GetComponent<Button>().interactable)
+			new CountdownTimer(AnimateTimerText, SetButtonInteractable, 5f, 1f).StartCountdown();
+	}
 
 	/// <summary>
 	/// Sets the text to the next number, and animates the text in, then out

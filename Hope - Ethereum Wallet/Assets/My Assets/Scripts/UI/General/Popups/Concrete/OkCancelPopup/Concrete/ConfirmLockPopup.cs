@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -7,10 +9,12 @@ using Zenject;
 /// </summary>
 public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPopup>
 {
-    public TMP_Text lockPeriodText,
-                    prpsAmountText,
-                    dubiAmountText,
-                    noteText;
+	[SerializeField] private Button confirmButton;
+
+    [SerializeField] private TMP_Text lockPeriodText,
+									  prpsAmountText,
+									  dubiAmountText,
+									  noteText;
 
     private TradableAssetManager tradableAssetManager;
     private TokenContractManager tokenContractManager;
@@ -35,7 +39,7 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
         this.tokenContractManager = tokenContractManager;
         this.tokenListManager = tokenListManager;
         this.dubiContract = dubiContract;
-    }
+	}
 
     /// <summary>
     /// Passes the amount of purpose being locked through to display.

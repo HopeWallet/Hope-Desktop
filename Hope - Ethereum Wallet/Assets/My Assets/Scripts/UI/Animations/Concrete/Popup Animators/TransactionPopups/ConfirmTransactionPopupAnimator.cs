@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
@@ -8,6 +9,15 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject transactionSection;
 	[SerializeField] private GameObject feeSection;
+
+	/// <summary>
+	/// Sets the confirm button to interactable if countdown timer setting has been disabled
+	/// </summary>
+	private void Awake()
+	{
+		if (!SecurePlayerPrefs.GetBool("countdown timer"))
+			confirmButton.GetComponent<Button>().interactable = true;
+	}
 
 	/// <summary>
 	/// Animates the unique elements of this form into view

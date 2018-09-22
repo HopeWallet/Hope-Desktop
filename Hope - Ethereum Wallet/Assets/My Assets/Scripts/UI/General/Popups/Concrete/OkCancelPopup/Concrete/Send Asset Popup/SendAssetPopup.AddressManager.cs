@@ -1,6 +1,5 @@
 ﻿using Hope.Utils.Ethereum;
 using TMPro;
-using UnityEngine;
 
 /// <summary>
 /// Class which displays the popup for sending a TradableAsset.

@@ -9,6 +9,7 @@ using Zenject;
 public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<ConfirmTransactionPopup>
 {
     [SerializeField] private Image assetImage;
+	[SerializeField] private Button confirmButton;
 
     [SerializeField] private TextMeshProUGUI amountText,
 											 fromAddress,

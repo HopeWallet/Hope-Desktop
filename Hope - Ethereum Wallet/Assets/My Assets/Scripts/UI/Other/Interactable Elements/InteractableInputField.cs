@@ -16,6 +16,9 @@ public class InteractableInputField : InteractableBase
 		customCursorPosition = new Vector2(60f, 45f);
 	}
 
+	/// <summary>
+	/// Sets the cursor if the input field is interactable
+	/// </summary>
 	public override void OnCustomPointerEnter()
 	{
 		if (inputField.interactable)
