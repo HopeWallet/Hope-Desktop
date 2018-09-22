@@ -56,17 +56,21 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 	/// </summary>
 	public dynamic EtherBalance { get; set; }
 
-	/// <summary>
-	/// Adds all dependencies to the LockPRPSPopup.
-	/// </summary>
-	/// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
-	/// <param name="lockedPRPSManager"> The active LockedPRPSManager. </param>
-	/// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
-	/// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
-	/// <param name="hodlerContract"> The active Hodler smart contract. </param>
-	/// <param name="userWalletManager"> The active UserWalletManager. </param>
-	[Inject]
+    /// <summary>
+    /// Adds all dependencies to the LockPRPSPopup.
+    /// </summary>
+    /// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
+    /// <param name="currencyManager"> The active CurrencyManager. </param>
+    /// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
+    /// <param name="lockedPRPSManager"> The active LockedPRPSManager. </param>
+    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
+    /// <param name="hodlerContract"> The active Hodler smart contract. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    [Inject]
 	public void Construct(
+        TradableAssetPriceManager tradableAssetPriceManager,
+        CurrencyManager currencyManager,
 		LockPRPSManager lockPRPSManager,
 		LockedPRPSManager lockedPRPSManager,
 		GasPriceObserver gasPriceObserver,
@@ -83,7 +87,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 		etherBalanceObserver.SubscribeObservable(this);
 		buttonClickObserver.SubscribeObservable(this);
 
-		Gas = new GasManager(lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
+		Gas = new GasManager(tradableAssetPriceManager, currencyManager, lockPRPSManager, gasPriceObserver, slider, transactionFeeText, this);
 		Amount = new AmountManager(lockPRPSManager, maxToggle, amountInputField, prpsBalanceText, dubiBalanceText, dubiRewardText);
 		Time = new TimeManager(Amount, threeMonthsButton, sixMonthsButton, twelveMonthsButton, dubiRewardText);
 

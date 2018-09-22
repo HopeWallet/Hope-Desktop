@@ -13,6 +13,8 @@ public sealed partial class LockPRPSPopup
     /// </summary>
     public sealed class GasManager
     {
+        private readonly TradableAssetPriceManager tradableAssetPriceManager;
+        private readonly CurrencyManager currencyManager;
         private readonly LockPRPSManager lockPRPSManager;
         private readonly TransactionSpeedSlider transactionSpeedSlider;
         private readonly TMP_Text transactionFeeText;
@@ -41,17 +43,24 @@ public sealed partial class LockPRPSPopup
         /// <summary>
         /// Initializes the GasMAnager by assigning required dependencies.
         /// </summary>
+        /// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
+        /// <param name="currencyManager"> The active CurrencyManager. </param>
         /// <param name="lockPRPSManager"> The active LockPRPSManager. </param>
         /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
         /// <param name="slider"> The slider for controlling the gas prices. </param>
         /// <param name="transactionFeeText"> The text used for displaying the gas cost of the transaction. </param>
+        /// <param name="lockPRPSPopup"></param>
         public GasManager(
+            TradableAssetPriceManager tradableAssetPriceManager,
+            CurrencyManager currencyManager,
             LockPRPSManager lockPRPSManager,
             GasPriceObserver gasPriceObserver,
             Slider slider,
             TMP_Text transactionFeeText,
 			LockPRPSPopup lockPRPSPopup)
         {
+            this.tradableAssetPriceManager = tradableAssetPriceManager;
+            this.currencyManager = currencyManager;
             this.lockPRPSManager = lockPRPSManager;
             this.transactionFeeText = transactionFeeText;
 			this.lockPRPSPopup = lockPRPSPopup;
@@ -72,7 +81,10 @@ public sealed partial class LockPRPSPopup
 		private void UpdateGasPriceEstimate(GasPrice gasPrice)
         {
             TransactionGasPrice = gasPrice;
-			transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + "<style=Symbol> ETH</style>" : "Not enough ETH";
+
+            string txFeeText = $"~ {TransactionFee.ToString().LimitEnd(14).TrimEnd('0')}<style=Symbol> ETH</style> | {currencyManager.GetCurrencyFormattedValue(tradableAssetPriceManager.GetPrice("ETH") * TransactionFee)}";
+
+            transactionFeeText.text = TransactionFee < lockPRPSPopup.EtherBalance ? txFeeText : "Not enough ETH";
 			transactionFeeText.color = transactionFeeText.text == "Not enough ETH" ? UIColors.Red : UIColors.White;
 		}
     }
