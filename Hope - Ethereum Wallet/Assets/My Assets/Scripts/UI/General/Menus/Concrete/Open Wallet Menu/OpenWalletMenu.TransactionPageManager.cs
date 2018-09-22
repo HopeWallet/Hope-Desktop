@@ -79,6 +79,8 @@ public sealed partial class OpenWalletMenu
 
             var transactionList = GetTransactionList();
             UpdatePageSection(transactionList);
+
+            OnPageChanged?.Invoke(pageNumber);
         }
 
         private void ResetPageSection()

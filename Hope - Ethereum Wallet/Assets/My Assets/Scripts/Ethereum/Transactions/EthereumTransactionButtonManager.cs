@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,9 @@ public sealed class EthereumTransactionButtonManager
 
     private TabType activeTabType;
 
+    private int activePageNum;
+    private string previousAssetAddress;
+
     public const int MAX_TRANSACTIONS_PER_PAGE = 50;
 
     /// <summary>
@@ -29,7 +33,8 @@ public sealed class EthereumTransactionButtonManager
     /// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
     /// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
     /// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
-    public EthereumTransactionButtonManager(Settings settings,
+    public EthereumTransactionButtonManager(
+        Settings settings,
         TradableAssetManager tradableAssetManager,
         EthereumTransactionManager transactionManager,
         TransactionInfoButton.Factory buttonFactory)
@@ -40,7 +45,9 @@ public sealed class EthereumTransactionButtonManager
         this.buttonFactory = buttonFactory;
 
         transactionManager.OnTransactionsAdded += ProcessTransactions;
+
         OpenWalletMenu.TransactionTabManager.OnTabChanged += OnTransactionTabChanged;
+        OpenWalletMenu.TransactionPageManager.OnPageChanged += OnPageChanged;
     }
 
     /// <summary>
@@ -65,11 +72,16 @@ public sealed class EthereumTransactionButtonManager
     /// </summary>
     private void ProcessTransactions()
     {
+        if (!previousAssetAddress.EqualsIgnoreCase(tradableAssetManager.ActiveTradableAsset.AssetAddress))
+            activePageNum = 0;
+
         var transactionList = GetValidTransactionList();
 
         UpdateButtons(transactionList);
         UpdateTransactionList(transactionList);
         UpdateLoadingVisuals(transactionList);
+
+        previousAssetAddress = tradableAssetManager.ActiveTradableAsset.AssetAddress;
     }
 
     /// <summary>
@@ -84,6 +96,20 @@ public sealed class EthereumTransactionButtonManager
 
         if (transactionList != null && activeTabType != TabType.All)
             transactionList = transactionManager.GetTransactionsByAddressAndType(address, activeTabType == TabType.Received ? TransactionType.Receive : TransactionType.Send);
+
+        if (transactionList != null)
+        {
+            if (transactionList.Count > MAX_TRANSACTIONS_PER_PAGE)
+            {
+                var transactionStartNum = (activePageNum + 1) * MAX_TRANSACTIONS_PER_PAGE;
+                var transactionListSkip = transactionList.Count - transactionStartNum;
+                var transactionListTake = transactionList.Count / transactionStartNum >= 1
+                    ? MAX_TRANSACTIONS_PER_PAGE
+                    : MAX_TRANSACTIONS_PER_PAGE - (transactionStartNum % transactionList.Count);
+
+                transactionList = transactionList.Skip(transactionListSkip).Take(transactionListTake).ToList();
+            }
+        }
 
         return transactionList;
     }
@@ -162,6 +188,17 @@ public sealed class EthereumTransactionButtonManager
     private void OnTransactionTabChanged(TabType tabType)
     {
         activeTabType = tabType;
+        activePageNum = 0;
+        ProcessNewAssetList();
+    }
+
+    /// <summary>
+    /// Called when the page changes.
+    /// </summary>
+    /// <param name="pageNum"> The new page number. </param>
+    private void OnPageChanged(int pageNum)
+    {
+        activePageNum = pageNum;
         ProcessNewAssetList();
     }
 
