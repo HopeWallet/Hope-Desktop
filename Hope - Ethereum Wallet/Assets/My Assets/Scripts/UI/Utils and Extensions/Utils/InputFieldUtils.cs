@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public static class InputFieldUtils
 {
-    private const int MAX_BALANCE_FIELD_LENGTH = 30;
+    private const int MAX_BALANCE_FIELD_LENGTH = 25;
 
     /// <summary>
     /// Restricts the field to not go over the tradable asset's decimal limit or the overall decimal limit.

@@ -197,11 +197,30 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		private void ChangeOppositeCurrencyValue(decimal newSendableAmount)
 		{
 			decimal currentTokenPrice = tradableAssetPriceManager.GetPrice(assetManager.ActiveAsset.AssetSymbol);
-            oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
 
-			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00").LimitEnd(8, "...") : oppositeCurrencyValue.ToString().LimitEnd(8, "...");
+            try
+            {
+                oppositeCurrencyValue = usingTokenCurrency ? newSendableAmount * currentTokenPrice : newSendableAmount / currentTokenPrice;
+            }
+            catch
+            {
+                oppositeCurrencyValue = usingTokenCurrency ? decimal.MaxValue : newSendableAmount / currentTokenPrice;
+            }
 
-			oppositeCurrencyAmountText.text = usingTokenCurrency ? "=" + oppositeCurrencyValueText + "<style=Symbol> " + currencyManager.ActiveCurrency.ToString() + "</style>" : "=" + oppositeCurrencyValueText + "<style=Symbol> " + tradableTokenSymbol + "</style>";
+			string oppositeCurrencyValueText = usingTokenCurrency ? oppositeCurrencyValue.ToString("0.00") : oppositeCurrencyValue.ToString();
+
+            if (usingTokenCurrency)
+            {
+                var limit = oppositeCurrencyValueText.Length > 7;
+                var formattedText = currencyManager.GetCurrencyFormattedValue(decimal.Parse(oppositeCurrencyValueText.LimitEnd(8)));
+                var lastSpace = formattedText.LastIndexOf(' ');
+
+                oppositeCurrencyAmountText.text = "= " + (!limit ? formattedText : lastSpace == -1 ? string.Concat(formattedText, "+") : formattedText.Insert(lastSpace, "+"));
+            }
+            else
+            {
+                oppositeCurrencyAmountText.text = "= " + oppositeCurrencyValueText.LimitEnd(8, "+") + "<style=Symbol> " + tradableTokenSymbol + "</style>";
+            }
 		}
 
 		/// <summary>
