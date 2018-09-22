@@ -37,6 +37,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     private readonly List<Selectable> simpleModeSelectableFields = new List<Selectable>();
     private readonly List<Selectable> advancedModeSelectableFields = new List<Selectable>();
 
+    private EthereumTransactionButtonManager ethereumTransactionButtonManager;
     private UserWalletManager userWalletManager;
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
@@ -75,6 +76,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     /// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
+    /// <param name="ethereumTransactionButtonManager"> The active EthereumTransactionButtonManager. </param>
     /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
     /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
     /// <param name="updateManager"> The active UpdateManager. </param>
@@ -88,6 +90,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         UserWalletManager userWalletManager,
         TradableAssetManager tradableAssetManager,
         TradableAssetPriceManager tradableAssetPriceManager,
+        EthereumTransactionButtonManager ethereumTransactionButtonManager,
         EtherBalanceObserver etherBalanceObserver,
         GasPriceObserver gasPriceObserver,
         UpdateManager updateManager,
@@ -96,6 +99,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         ContactsManager contactsManager,
         ButtonClickObserver buttonClickObserver)
     {
+        this.ethereumTransactionButtonManager = ethereumTransactionButtonManager;
         this.userWalletManager = userWalletManager;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
@@ -155,8 +159,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     {
         Asset.Destroy();
         Gas.Destroy();
+
         buttonClickObserver.UnsubscribeObservable(this);
         TopBarButtons.popupClosed?.Invoke();
+
+        ethereumTransactionButtonManager.ProcessNewAssetList();
     }
 
     private void AdvancedModeClicked()

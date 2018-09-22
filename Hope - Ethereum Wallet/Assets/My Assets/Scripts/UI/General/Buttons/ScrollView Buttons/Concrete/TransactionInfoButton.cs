@@ -62,8 +62,8 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
     /// </summary>
     private void DisplayTransactionInfoPopup()
     {
-        popupClosed = () => this.Button.interactable = true;
-        this.Button.interactable = false;
+        popupClosed = () => Button.interactable = true;
+        Button.interactable = false;
         popupManager.GetPopup<TransactionInfoPopup>().SetTransactionInfo(ButtonInfo);
     }
 
@@ -129,7 +129,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	/// Checks if the inputted address is from a saved contact.
 	/// </summary>
 	/// <param name="address"> The address in the input field. </param>
-	public string CheckIfSavedContact(string address)
+	private string CheckIfSavedContact(string address)
 	{
 		address = address.ToLower();
 
