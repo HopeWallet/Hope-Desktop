@@ -59,7 +59,7 @@ public sealed class TransactionSpeedSlider : IStandardGasPriceObservable
     /// <param name="value"> The current value of the slider to use to estimate the gas price. </param>
     private void UpdateGasPriceEstimate(float value)
     {
-        decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.6f, 1.4f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.45f), 2, MidpointRounding.AwayFromZero);
+        decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.65f, 1.4f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.45f), 2, MidpointRounding.AwayFromZero);
         onGasPriceChanged?.Invoke(new GasPrice(new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value)));
     }
 

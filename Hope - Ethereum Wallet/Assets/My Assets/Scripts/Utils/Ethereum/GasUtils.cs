@@ -108,11 +108,11 @@ namespace Hope.Utils.Ethereum
             switch (priceTarget)
             {
                 case GasPriceTarget.Slow:
-                    return (currentPrice * 2) / 3;
+                    return currentPrice * 3 / 4;
                 case GasPriceTarget.Fast:
                     return currentPrice * 2;
                 default:
-                    return currentPrice;
+                    return currentPrice * 10 / 9;
             }
         }
 

@@ -6,12 +6,11 @@ using System.Linq;
 /// <summary>
 /// Class used for observing and giving updates to other classes on the current gas price estimates.
 /// </summary>
-public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodicUpdater
+public sealed class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodicUpdater
 {
-
-    private GasPrice slowGasPrice = default(GasPrice);
-    private GasPrice standardGasPrice = default(GasPrice);
-    private GasPrice fastGasPrice = default(GasPrice);
+    private GasPrice slowGasPrice;
+    private GasPrice standardGasPrice;
+    private GasPrice fastGasPrice;
 
     /// <summary>
     /// The update interval in which the gas prices will be re-estimated.
@@ -53,7 +52,7 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
             return;
 
         UpdateObservable<ISlowGasPriceObservable>(ref slowGasPrice,
-                                                  new GasPrice(new HexBigInteger((price.Value * 2) / 3)),
+                                                  new GasPrice(new HexBigInteger(price.Value * 3 / 4)),
                                                   observable => observable.SlowGasPrice = slowGasPrice);
 
         UpdateObservable<IStandardGasPriceObservable>(ref standardGasPrice,
@@ -77,6 +76,6 @@ public class GasPriceObserver : EventObserver<IGasPriceObservableBase>, IPeriodi
     private void UpdateObservable<T>(ref GasPrice gasPriceVariable, GasPrice gasPriceValue, Action<T> updateObservableAction) where T : IGasPriceObservableBase
     {
         gasPriceVariable = gasPriceValue;
-        observables.OfType<T>().ToList().SafeForEach(observable => updateObservableAction(observable));
+        observables.OfType<T>().ToList().SafeForEach(updateObservableAction);
     }
 }

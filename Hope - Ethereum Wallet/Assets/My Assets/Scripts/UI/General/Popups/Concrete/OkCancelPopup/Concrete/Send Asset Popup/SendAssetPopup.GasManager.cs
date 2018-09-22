@@ -17,7 +17,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	{
 		public event Action OnGasChanged;
 
+        private readonly TradableAssetPriceManager tradableAssetPriceManager;
 		private readonly TradableAssetManager tradableAssetManager;
+        private readonly CurrencyManager currencyManager;
 		private readonly PeriodicUpdateManager periodicUpdateManager;
 
 		private readonly Toggle advancedModeToggle;
@@ -68,6 +70,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// Initializes the <see cref="GasManager"/> by assigning all required references.
         /// </summary>
         /// <param name="tradableAssetManager"> The active <see cref="TradableAssetManager"/>. </param>
+        /// <param name="tradableAssetPriceManager"> The active <see cref="TradableAssetPriceManager"/>. </param>
+        /// <param name="currencyManager"> The active <see cref="CurrencyManager"/>. </param>
         /// <param name="gasPriceObserver"> The active <see cref="GasPriceObserver"/>. </param>
         /// <param name="periodicUpdateManager"> The active <see cref="PeriodicUpdateManager"/>. </param>
         /// <param name="advancedModeToggle"> The toggle for switching between advanced and simple mode. </param>
@@ -77,6 +81,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         /// <param name="transactionFeeText"> The text component to use to set the transaction fee. </param>
         public GasManager(
 			TradableAssetManager tradableAssetManager,
+            TradableAssetPriceManager tradableAssetPriceManager,
+            CurrencyManager currencyManager,
 			GasPriceObserver gasPriceObserver,
 			PeriodicUpdateManager periodicUpdateManager,
 			Toggle advancedModeToggle,
@@ -86,6 +92,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			TMP_Text transactionFeeText)
 		{
 			this.tradableAssetManager = tradableAssetManager;
+            this.tradableAssetPriceManager = tradableAssetPriceManager;
+            this.currencyManager = currencyManager;
 			this.periodicUpdateManager = periodicUpdateManager;
 			this.advancedModeToggle = advancedModeToggle;
 			this.gasLimitField = gasLimitField;
@@ -121,9 +129,12 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 				? TransactionFee <= (tradableAssetManager.EtherAsset.AssetBalance - amountManager.SendableAmount)
 				: TransactionFee < tradableAssetManager.EtherAsset.AssetBalance;
 
-			transactionFeeText.text = hasEnoughETH ? "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + "<style=Symbol> ETH</style>" : "Not enough ETH";
-			transactionFeeText.color = !hasEnoughETH ? UIColors.Red : UIColors.White;
-		}
+            string txFeeText = "~ " + TransactionFee.ToString().LimitEnd(14).TrimEnd('0') + "<style=Symbol> ETH</style> | "
+                + currencyManager.GetCurrencyFormattedValue(tradableAssetPriceManager.GetPrice("ETH") * TransactionFee);
+
+            transactionFeeText.text = hasEnoughETH ? txFeeText : "Not enough ETH";
+            transactionFeeText.color = !hasEnoughETH ? UIColors.Red : UIColors.White;
+        }
 
 		/// <summary>
 		/// Unsubscribes the gas price observable and removes the periodic updater.
