@@ -80,6 +80,14 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     public List<TransactionInfo> GetTransactionListByAddress(string address) => transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
 
     /// <summary>
+    /// Gets the list of transactions of a specific asset address and specific transaction type.
+    /// </summary>
+    /// <param name="address"> The address of the asset to find transactions for. </param>
+    /// <param name="transactionType"> The type of transactions to filter for. </param>
+    /// <returns> The valid list of transactions. </returns>
+    public List<TransactionInfo> GetTransactionsByAddressAndType(string address, TransactionInfo.TransactionType transactionType) => transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address].Where(transaction => transaction.Type == transactionType).ToList() : null;
+
+    /// <summary>
     /// Adds each asset to the list of assets to scrape for a routine check of their transactions.
     /// </summary>
     public void PeriodicUpdate() => GetVisibleAssetList().ForEach(AddAssetToScrape);

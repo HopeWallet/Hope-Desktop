@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +20,8 @@ public sealed class EthereumTransactionButtonManager
 
     private TabType activeTabType;
 
+    public const int MAX_TRANSACTIONS_PER_PAGE = 50;
+
     /// <summary>
     /// Initializes the EthereumTransactionButtonManager by assigning the settings.
     /// </summary>
@@ -40,6 +41,14 @@ public sealed class EthereumTransactionButtonManager
 
         transactionManager.OnTransactionsAdded += ProcessTransactions;
         OpenWalletMenu.TransactionTabManager.OnTabChanged += OnTransactionTabChanged;
+    }
+
+    /// <summary>
+    /// Refreshes the transaction info for all transaction buttons.
+    /// </summary>
+    public void Refresh()
+    {
+        transactionButtons.ForEach(transaction => transaction.SetButtonInfo(transaction.ButtonInfo));
     }
 
     /// <summary>
@@ -73,14 +82,8 @@ public sealed class EthereumTransactionButtonManager
         var address = activeAsset == null ? EtherAsset.ETHER_ADDRESS : activeAsset.AssetAddress;
         var transactionList = transactionManager.GetTransactionListByAddress(address);
 
-        if (transactionList != null)
-        {
-            bool isAllTab = activeTabType == TabType.All;
-            Func<TransactionInfo, bool> sentTransactionActiveCheck = transaction => activeTabType == TabType.Sent && transaction.Type == TransactionType.Send;
-            Func<TransactionInfo, bool> receivedTransactionActiveCheck = transaction => activeTabType == TabType.Received && transaction.Type == TransactionType.Receive;
-
-            transactionList = transactionList.Where(transaction => isAllTab || sentTransactionActiveCheck(transaction) || receivedTransactionActiveCheck(transaction)).ToList();
-        }
+        if (transactionList != null && activeTabType != TabType.All)
+            transactionList = transactionManager.GetTransactionsByAddressAndType(address, activeTabType == TabType.Received ? TransactionType.Receive : TransactionType.Send);
 
         return transactionList;
     }

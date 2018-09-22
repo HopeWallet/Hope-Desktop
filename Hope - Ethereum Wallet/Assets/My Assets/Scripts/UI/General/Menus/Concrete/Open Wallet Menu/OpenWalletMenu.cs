@@ -10,7 +10,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
     [SerializeField]
     private GameObject lockPurposeSection,
-                                        lockPurposeNotificationSection;
+                       lockPurposeNotificationSection,
+                       pagesSection;
 
     [SerializeField]
     private TMP_Text walletNameText,
@@ -86,6 +87,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
         new TransactionTabManager(tradableAssetManager, ethereumTransactionManager, transactionTabs);
+        new TransactionPageManager(tradableAssetManager, ethereumTransactionManager, pagesSection);
     }
 
     private void AccountChanged(int account)

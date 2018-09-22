@@ -55,7 +55,10 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
     /// <summary>
     /// Adds the display popup method to the button listener.
     /// </summary>
-    protected override void OnAwake() => Button.onClick.AddListener(DisplayTransactionInfoPopup);
+    protected override void OnAwake()
+    {
+        Button.onClick.AddListener(DisplayTransactionInfoPopup);
+    }
 
     /// <summary>
     /// Displays the transaction info popup.

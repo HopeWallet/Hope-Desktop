@@ -377,7 +377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1257019652818050
 GameObject:
   m_ObjectHideFlags: 1
@@ -1439,6 +1439,7 @@ MonoBehaviour:
   backButton: {fileID: 0}
   lockPurposeSection: {fileID: 1828604087628714}
   lockPurposeNotificationSection: {fileID: 1520066508619918}
+  pagesSection: {fileID: 1214977154125236}
   walletNameText: {fileID: 114251727738910832}
   walletAccountText: {fileID: 114188047697984526}
   assetText: {fileID: 114267425624172482}
