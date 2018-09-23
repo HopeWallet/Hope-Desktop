@@ -53,12 +53,9 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// </summary>
 	private void Update()
 	{
-		if (dropdownOpen && !hovering)
-		{
-			if (Input.GetMouseButtonDown(0) && !popupIsOpen)
-				MoreButtonClicked();
-		}
-	}
+        if (dropdownOpen && !hovering && Input.GetMouseButtonDown(0) && !popupIsOpen)
+            MoreButtonClicked();
+    }
 
 	/// <summary>
 	/// Sets the given button onClick listener
@@ -140,7 +137,15 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				popupManager.GetPopup<GeneralOkCancelPopup>().SetSubText("Are you sure you want to logout?").OnOkClicked(() => logoutHandler.Logout()).OnFinish(PopupClosed);
+				popupManager
+					.GetPopup<GeneralOkCancelPopup>()
+					.SetSubText("Are you sure you want to logout?")
+					.OnOkClicked(() =>
+                    {
+                        MoreButtonClicked();
+                        logoutHandler.Logout();
+                    })
+					.OnFinish(PopupClosed);
 				break;
 		}
 	}

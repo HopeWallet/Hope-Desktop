@@ -14,6 +14,8 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	[SerializeField] private Button newWalletButton;
 
+    private readonly List<GameObject> walletObjects = new List<GameObject>();
+
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
 	private HopeWalletInfoManager walletInfoManager;
@@ -45,21 +47,38 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// <summary>
     /// Creates WalletButtons for each wallet that exists currently in the PlayerPrefs.
     /// </summary>
-    protected override void OnAwake()
-    {
-        List<GameObject> walletObjects = new List<GameObject>();
+ //   protected override void OnAwake()
+ //   {
+ //       List<GameObject> walletObjects = new List<GameObject>();
 
+ //       for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
+ //       {
+ //           walletObjects.Add(walletButtonFactory.Create()
+ //                        .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
+ //       } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
+	//}
+
+    private void OnEnable()
+    {
         for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
         {
             walletObjects.Add(walletButtonFactory.Create()
                          .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
         } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
-	}
+    }
 
-	/// <summary>
-	/// Adds the button click events on start.
-	/// </summary>
-	private void Start() => newWalletButton.onClick.AddListener(CreateNewWallet);
+    private void OnDisable()
+    {
+        for (int i = 0; i < walletObjects.Count; i++)
+            Destroy(walletObjects[i].transform.parent.gameObject);
+
+        walletObjects.Clear();
+    }
+
+    /// <summary>
+    /// Adds the button click events on start.
+    /// </summary>
+    private void Start() => newWalletButton.onClick.AddListener(CreateNewWallet);
 
 	/// <summary>
 	/// Opens the CreateWalletMenu to allow for creating a new wallet.

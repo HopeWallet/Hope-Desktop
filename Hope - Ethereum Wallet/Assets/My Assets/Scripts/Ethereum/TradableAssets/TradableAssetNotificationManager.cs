@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public sealed class TradableAssetNotificationManager
+public sealed class TradableAssetNotificationManager : IDisposable
 {
     public event Action OnNotificationsUpdated;
 
@@ -20,6 +20,7 @@ public sealed class TradableAssetNotificationManager
     public TradableAssetNotificationManager(
         Settings settings,
         EthereumNetworkManager.Settings networkSettings,
+        DisposableComponentManager disposableComponentManager,
         UserWalletManager userWalletManager,
         EthereumTransactionManager ethereumTransactionManager,
         LockedPRPSManager lockedPrpsManager,
@@ -32,6 +33,8 @@ public sealed class TradableAssetNotificationManager
         this.lockedPrpsManager = lockedPrpsManager;
         this.prpsContract = prpsContract;
 
+        disposableComponentManager.AddDisposable(this);
+
         UserWalletManager.OnWalletLoadSuccessful += LoadNewNotificationList;
 
         TradableAssetManager.OnTradableAssetAdded += AssetAdded;
@@ -39,6 +42,11 @@ public sealed class TradableAssetNotificationManager
 
         ethereumTransactionManager.OnTransactionsAdded += TransactionsUpdated;
         lockedPrpsManager.OnLockedPRPSUpdated += TransactionsUpdated;
+    }
+
+    public void Dispose()
+    {
+        notificationsByAddress.Clear();
     }
 
     public void LoadNewNotificationList()

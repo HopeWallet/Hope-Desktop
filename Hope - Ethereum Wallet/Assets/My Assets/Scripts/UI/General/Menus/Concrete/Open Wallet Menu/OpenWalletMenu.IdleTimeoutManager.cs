@@ -3,9 +3,9 @@ using UnityEngine;
 
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-	/// <summary>
-	/// The class that manages the user's idle time
-	/// </summary>
+    /// <summary>
+    /// The class that manages the user's idle time
+    /// </summary>
     public sealed class IdleTimeoutManager : MonoBehaviour
     {
         private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
@@ -15,10 +15,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         private Vector3 previousMousePosition;
         private int currentIdleTime;
 
-		/// <summary>
-		/// Sets the UIManager and starts the idle time couroutine
-		/// </summary>
-		/// <param name="uiManager"></param>
+        private bool stopped;
+
+        /// <summary>
+        /// Sets the UIManager and starts the idle time couroutine
+        /// </summary>
+        /// <param name="uiManager"></param>
         public IdleTimeoutManager(UIManager uiManager)
         {
             this.uiManager = uiManager;
@@ -26,10 +28,15 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             CheckIfIdle().StartCoroutine();
         }
 
-		/// <summary>
-		/// Waits one second, and then checks if the idle time has been met, if not, it continues
-		/// </summary>
-		/// <returns> Returns one WaitForSeconds </returns>
+        public void Stop()
+        {
+            stopped = true;
+        }
+
+        /// <summary>
+        /// Waits one second, and then checks if the idle time has been met, if not, it continues
+        /// </summary>
+        /// <returns> Returns one WaitForSeconds </returns>
         private IEnumerator CheckIfIdle()
         {
             yield return waiter;
@@ -55,7 +62,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             }
 
             previousMousePosition = Input.mousePosition;
-            CheckIfIdle().StartCoroutine();
+
+            if (!stopped)
+                CheckIfIdle().StartCoroutine();
         }
     }
 }

@@ -36,6 +36,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private HopeWalletInfoManager hopeWalletInfoManager;
     private UserWalletManager userWalletManager;
 
+    private IdleTimeoutManager idleTimeoutManager;
+
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
@@ -67,6 +69,23 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         walletAccountText.GetComponent<Button>().onClick.AddListener(() => popupManager.GetPopup<AccountsPopup>());
     }
 
+    private void OnEnable()
+    {
+        tokenContractManager.StartTokenLoad(OpenMenu);
+
+        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
+            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
+            : userWalletManager.ActiveWalletType.ToString();
+
+        if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
+            idleTimeoutManager = new IdleTimeoutManager(uiManager);
+    }
+
+    private void OnDisable()
+    {
+        idleTimeoutManager?.Stop();
+    }
+
     /// <summary>
     /// Initializes the instance and the wallet parent object.
     /// </summary>
@@ -75,15 +94,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         AccountsPopup.OnAccountChanged += AccountChanged;
         TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
-
-        tokenContractManager.StartTokenLoad(OpenMenu);
-
-        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
-            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
-            : userWalletManager.ActiveWalletType.ToString();
-
-        if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
-            new IdleTimeoutManager(uiManager);
 
         new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
         new TransactionTabManager(tradableAssetManager, ethereumTransactionManager, transactionTabs);

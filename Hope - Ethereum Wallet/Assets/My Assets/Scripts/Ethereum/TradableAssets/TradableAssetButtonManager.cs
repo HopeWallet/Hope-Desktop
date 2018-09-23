@@ -53,6 +53,7 @@ public sealed class TradableAssetButtonManager : IDisposable
             Object.Destroy(assetButtons[i].transform.parent.gameObject);
 
         assetButtons.Clear();
+        activeAssetButton = null;
     }
 
     /// <summary>
