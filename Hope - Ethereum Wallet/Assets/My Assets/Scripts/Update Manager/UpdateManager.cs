@@ -6,7 +6,6 @@ using Zenject;
 /// </summary>
 public class UpdateManager : ITickable, ILateTickable
 {
-
     private List<IUpdater> updaters = new List<IUpdater>();
     private List<ILateUpdater> lateUpdaters = new List<ILateUpdater>();
 

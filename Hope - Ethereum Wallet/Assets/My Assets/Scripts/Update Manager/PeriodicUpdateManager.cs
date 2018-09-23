@@ -1,20 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class which updates IPeriodicUpdaters repeatedly in periodic intervals.
 /// </summary>
-public sealed class PeriodicUpdateManager : IUpdater
+public sealed class PeriodicUpdateManager : IUpdater, IDisposable
 {
-    private readonly Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>> periodicUpdaters;
+    private readonly Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>> periodicUpdaters = new Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>>();
 
     /// <summary>
     /// Initializes the PeriodicUpdateManager by creating the dictionary and adding itself to the UpdateManager.
     /// </summary>
     /// <param name="updateManager"> The UpdateManager to run the periodic updates off of. </param>
-    public PeriodicUpdateManager(UpdateManager updateManager)
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
+    public PeriodicUpdateManager(UpdateManager updateManager, DisposableComponentManager disposableComponentManager)
     {
-        periodicUpdaters = new Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>>();
         updateManager.AddUpdater(this);
+        disposableComponentManager.AddDisposable(this);
+    }
+
+    /// <summary>
+    /// Disposes of all PeriodicUpdaters.
+    /// </summary>
+    public void Dispose()
+    {
+        periodicUpdaters.Clear();
     }
 
     /// <summary>
@@ -22,12 +32,11 @@ public sealed class PeriodicUpdateManager : IUpdater
     /// </summary>
     public void UpdaterUpdate()
     {
-        new List<IPeriodicUpdater>(periodicUpdaters.Keys).ForEach(updater =>
+        foreach (var updater in new List<IPeriodicUpdater>(periodicUpdaters.Keys))
         {
             var pair = periodicUpdaters[updater];
-
             CheckUpdaterStatus(updater, pair.Key, pair.Value);
-        });
+        }
     }
 
     /// <summary>
@@ -83,5 +92,4 @@ public sealed class PeriodicUpdateManager : IUpdater
         periodicUpdaters[updater] = new KeyValuePair<float, bool>(waitTime, false);
         updater.PeriodicUpdate();
     }
-
 }

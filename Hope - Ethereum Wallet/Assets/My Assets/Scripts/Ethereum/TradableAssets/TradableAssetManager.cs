@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Class which manages all TradableAssets.
 /// </summary>
-public sealed class TradableAssetManager : IPeriodicUpdater
+public sealed class TradableAssetManager : IPeriodicUpdater, IDisposable
 {
     public static event Action OnBalancesUpdated;
     public static event Action<TradableAsset> OnTradableAssetAdded;
@@ -34,12 +34,26 @@ public sealed class TradableAssetManager : IPeriodicUpdater
     /// Initializes the TradableAssetManager by adding required methods to events and adding this class to the PeriodicUpdateManager.
     /// </summary>
     /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use to run this class's periodic updates. </param>
-    public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager)
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
+    public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager, DisposableComponentManager disposableComponentManager)
     {
         TokenContractManager.OnTokenAdded += AddTradableAsset;
         TokenContractManager.OnTokenRemoved += RemoveTradableAsset;
 
-        periodicUpdateManager.AddPeriodicUpdater(this);
+        disposableComponentManager.AddDisposable(this);
+
+        UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
+    }
+
+    /// <summary>
+    /// Disposes of the loaded TradableAssets.
+    /// </summary>
+    public void Dispose()
+    {
+        TradableAssets.Clear();
+
+        ActiveTradableAsset = null;
+        EtherAsset = null;
     }
 
     /// <summary>

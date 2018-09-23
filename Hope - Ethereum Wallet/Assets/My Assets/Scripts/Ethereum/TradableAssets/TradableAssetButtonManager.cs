@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 /// <summary>
 /// Class which manages the adding/enabling/disabling of tradable asset buttons.
 /// </summary>
-public sealed class TradableAssetButtonManager
+public sealed class TradableAssetButtonManager : IDisposable
 {
     public event Action<ITradableAssetButton> OnActiveButtonChanged;
 
@@ -24,20 +24,35 @@ public sealed class TradableAssetButtonManager
     /// </summary>
     /// <param name="erc20TokenButtonFactory"> The factory which creates ERC20TokenAssetButtons. </param>
     /// <param name="etherAssetButtonFactory"> The factory which creates EtherAssetButtons. </param>
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     public TradableAssetButtonManager(
         ERC20TokenAssetButton.Factory erc20TokenButtonFactory,
         EtherAssetButton.Factory etherAssetButtonFactory,
+        DisposableComponentManager disposableComponentManager,
         TokenContractManager tokenContractManager)
     {
         this.erc20TokenButtonFactory = erc20TokenButtonFactory;
         this.etherAssetButtonFactory = etherAssetButtonFactory;
         this.tokenContractManager = tokenContractManager;
 
+        disposableComponentManager.AddDisposable(this);
+
         TradableAssetManager.OnTradableAssetAdded += AddAssetButton;
         TradableAssetManager.OnTradableAssetRemoved += RemoveButton;
 
         TokenContractManager.OnTokensLoaded += SortButtons;
+    }
+
+    /// <summary>
+    /// Disposes of all created AssetButtons and clears the list.
+    /// </summary>
+    public void Dispose()
+    {
+        for (int i = 0; i < assetButtons.Count; i++)
+            Object.Destroy(assetButtons[i].transform.parent.gameObject);
+
+        assetButtons.Clear();
     }
 
     /// <summary>

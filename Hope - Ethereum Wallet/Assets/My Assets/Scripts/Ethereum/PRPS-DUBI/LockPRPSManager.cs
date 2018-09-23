@@ -111,7 +111,8 @@ public sealed class LockPRPSManager : IPeriodicUpdater
     /// <param name="walletAddress"> The current wallet address. </param>
     private void GetPRPSBalance(string contractAddress, string walletAddress)
     {
-        SimpleContractQueries.QueryUInt256Output<ERC20.Queries.BalanceOf>(contractAddress, walletAddress, walletAddress).OnSuccess(GetLockableGasLimit);
+        SimpleContractQueries.QueryUInt256Output<ERC20.Queries.BalanceOf>(contractAddress, walletAddress, walletAddress)
+                             .OnSuccess(GetLockableGasLimit);
     }
 
     /// <summary>

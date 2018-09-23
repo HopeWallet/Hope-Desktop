@@ -10,7 +10,7 @@ using TransactionType = TransactionInfo.TransactionType;
 /// <summary>
 /// Class which manages the transaction buttons.
 /// </summary>
-public sealed class EthereumTransactionButtonManager
+public sealed class EthereumTransactionButtonManager : IDisposable
 {
     private readonly Settings settings;
     private readonly TradableAssetManager tradableAssetManager;
@@ -30,11 +30,13 @@ public sealed class EthereumTransactionButtonManager
     /// Initializes the EthereumTransactionButtonManager by assigning the settings.
     /// </summary>
     /// <param name="settings"> The settings of this manager. </param>
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
     /// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
     /// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
     public EthereumTransactionButtonManager(
         Settings settings,
+        DisposableComponentManager disposableComponentManager,
         TradableAssetManager tradableAssetManager,
         EthereumTransactionManager transactionManager,
         TransactionInfoButton.Factory buttonFactory)
@@ -44,10 +46,23 @@ public sealed class EthereumTransactionButtonManager
         this.transactionManager = transactionManager;
         this.buttonFactory = buttonFactory;
 
+        disposableComponentManager.AddDisposable(this);
+
         transactionManager.OnTransactionsAdded += ProcessTransactions;
 
         OpenWalletMenu.TransactionTabManager.OnTabChanged += OnTransactionTabChanged;
         OpenWalletMenu.TransactionPageManager.OnPageChanged += OnPageChanged;
+    }
+
+    /// <summary>
+    /// Disposes of all created TransactionInfoButtons and clears the list.
+    /// </summary>
+    public void Dispose()
+    {
+        for (int i = 0; i < transactionButtons.Count; i++)
+            UnityEngine.Object.Destroy(transactionButtons[i].transform.parent.gameObject);
+
+        transactionButtons.Clear();
     }
 
     /// <summary>

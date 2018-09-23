@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-public sealed class LockedPRPSManager : IPeriodicUpdater
+public sealed class LockedPRPSManager : IPeriodicUpdater, IDisposable
 {
     public event Action OnLockedPRPSUpdated;
 
@@ -14,7 +14,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     private readonly PeriodicUpdateManager periodicUpdateManager;
     private readonly Hodler hodlerContract;
     private readonly PRPS prpsContract;
-    private EtherscanApiService apiService;
+    private readonly EtherscanApiService apiService;
 
     private int updateCount;
     private int updateCounter;
@@ -28,6 +28,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
     public List<BigInteger> UsedIds { get; } = new List<BigInteger>();
 
     public LockedPRPSManager(
+        DisposableComponentManager disposableComponentManager,
         UserWalletManager userWalletManager,
         Hodler hodlerContract,
         PRPS prpsContract,
@@ -40,8 +41,19 @@ public sealed class LockedPRPSManager : IPeriodicUpdater
         this.prpsContract = prpsContract;
         this.apiService = apiService;
 
+        disposableComponentManager.AddDisposable(this);
+
         TradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
         TradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
+    }
+
+    /// <summary>
+    /// Disposes of the current locked items and stops updating.
+    /// </summary>
+    public void Dispose()
+    {
+        lockedItems.Clear();
+        UsedIds.Clear();
     }
 
     /// <summary>

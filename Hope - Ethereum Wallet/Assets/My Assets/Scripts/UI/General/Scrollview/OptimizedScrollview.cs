@@ -37,7 +37,7 @@ public sealed class OptimizedScrollview : MonoBehaviour
 
     public static OptimizedScrollview GetScrollview(string scrollviewKey) => ActiveScrollviews.ContainsKey(scrollviewKey) ? ActiveScrollviews[scrollviewKey] : null;
 
-    private void Start()
+    private void OnEnable()
     {
         rectTransform = transform as RectTransform;
         listParent = rectTransform.GetChild(0).transform;

@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// Class which manages the loading and updating of ethereum and token transaction data.
 /// </summary>
-public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
+public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater, IDisposable
 {
     public event Action OnTransactionsAdded;
 
@@ -33,12 +33,15 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
     /// <summary>
     /// Initializes the EthereumTransactionManager by initializing all collections and adding the proper methods to the events needed.
     /// </summary>
-    /// <param name="periodicUpdateManager"> Thge PeriodicUpdateManager to use when periodically checking for new transactions. </param>
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
+    /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use when periodically checking for new transactions. </param>
     /// <param name="updateManager"> The UpdateManager to use when getting the transactions for each asset. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="apiService"> The active EtherscanApiService. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    public EthereumTransactionManager(PeriodicUpdateManager periodicUpdateManager,
+    public EthereumTransactionManager(
+        DisposableComponentManager disposableComponentManager,
+        PeriodicUpdateManager periodicUpdateManager,
         UpdateManager updateManager,
         TradableAssetManager tradableAssetManager,
         UserWalletManager userWalletManager,
@@ -50,7 +53,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
             if (optimizedScrollview.scrollviewKey.Equals("asset_scrollview"))
             {
                 scrollview = optimizedScrollview;
-                scrollview.OnVisibleItemsChanged += list => GetVisibleAssetList(list).ForEach(AddAssetToScrape);
+                scrollview.OnVisibleItemsChanged += OnVisibleAssetsChanged;
 
                 periodicUpdateManager.AddPeriodicUpdater(this);
             }
@@ -60,7 +63,20 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
         this.userWalletManager = userWalletManager;
         this.apiService = apiService;
 
+        disposableComponentManager.AddDisposable(this);
         updateManager.AddUpdater(this);
+    }
+
+    /// <summary>
+    /// Disposes of the saved transactions.
+    /// </summary>
+    public void Dispose()
+    {
+        scrollview.OnVisibleItemsChanged -= OnVisibleAssetsChanged;
+
+        transactionQueryQueue.Clear();
+        transactionsByAddress.Clear();
+        addressLastUpdatedTimes.Clear();
     }
 
     /// <summary>
@@ -139,6 +155,15 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater
                 });
             });
         });
+    }
+
+    /// <summary>
+    /// Called when the visible asset list changes.
+    /// </summary>
+    /// <param name="list"> The list of visible asset gameobjects. </param>
+    private void OnVisibleAssetsChanged(List<GameObject> list)
+    {
+        GetVisibleAssetList(list).ForEach(AddAssetToScrape);
     }
 
     /// <summary>

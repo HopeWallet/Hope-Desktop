@@ -6,20 +6,25 @@ using System.Threading.Tasks;
 
 public sealed class LogoutHandler
 {
+    private readonly UIManager uiManager;
+    private readonly DisposableComponentManager disposableComponentManager;
+    private readonly DynamicDataCache dynamicDataCache;
+
     public LogoutHandler(
         UIManager uiManager,
-        PeriodicUpdateManager periodicUpdateManager,
-        EthereumTransactionButtonManager ethereumTransactionButtonManager,
-        EthereumTransactionManager ethereumTransactionManager,
-        TradableAssetButtonManager tradableAssetButtonManager,
-        TradableAssetManager tradableAssetManager,
+        DisposableComponentManager disposableComponentManager,
         DynamicDataCache dynamicDataCache)
     {
-
+        this.uiManager = uiManager;
+        this.disposableComponentManager = disposableComponentManager;
+        this.dynamicDataCache = dynamicDataCache;
     }
 
     public void Logout()
     {
+        dynamicDataCache.ClearAllData();
+        disposableComponentManager.Dispose();
 
+        uiManager.OpenMenu<ChooseWalletMenu>();
     }
 }
