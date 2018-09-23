@@ -9,7 +9,6 @@ using Zenject;
 public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<ConfirmTransactionPopup>
 {
     [SerializeField] private Image assetImage;
-	[SerializeField] private Button confirmButton;
 
     [SerializeField] private TextMeshProUGUI amountText,
 											 fromAddress,
@@ -61,7 +60,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
     protected override void InternalSetConfirmationValues(object[] transactionInput)
     {
         tradableAssetImageManager.LoadImage(tradableAssetManager.GetTradableAsset(transactionInput[1].ToString()).AssetSymbol, img => assetImage.sprite = img);
-        amountText.text = transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " " + transactionInput[3];
+        amountText.text = transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " <style=Symbol>" + transactionInput[3] + "</style>";
 
         toAddress.text = transactionInput[0].ToString();
 		CheckIfSavedContact(toAddress.text, contactName);
@@ -72,10 +71,12 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 		feeText.text = dynamicDataCache.GetData("txfee") + "<style=Symbol> ETH</style>";
 	}
 
-	/// <summary>
-	/// Checks if this address is saved under a contact name
-	/// </summary>
-	private void CheckIfSavedContact(string address, TMP_Text textObject)
+    /// <summary>
+    /// Checks if this address is saved under a contact name
+    /// </summary>
+    /// <param name="address"> The potential contact address. </param>
+    /// <param name="textObject"> The text object. </param>
+    private void CheckIfSavedContact(string address, TMP_Text textObject)
 	{
 		address = address.ToLower();
 

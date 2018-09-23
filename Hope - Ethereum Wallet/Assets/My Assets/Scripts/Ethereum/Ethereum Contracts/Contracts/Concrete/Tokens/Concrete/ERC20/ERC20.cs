@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.Ethereum;
+using Hope.Utils.Promises;
 using Nethereum.Contracts.Extensions;
 using Nethereum.Hex.HexTypes;
 using System;
@@ -20,6 +21,11 @@ public sealed partial class ERC20 : Token
     {
     }
 
+    public ERC20(string contractAddress) : base(contractAddress)
+    {
+
+    }
+
     /// <summary>
     /// Gets the token balance of an address.
     /// </summary>
@@ -27,10 +33,8 @@ public sealed partial class ERC20 : Token
     /// <param name="onBalanceReceived"> Callback action which should pass in the received balance of Gold tokens on the address. </param>
     public void BalanceOf(string address, Action<dynamic> onBalanceReceived)
     {
-        SimpleContractQueries.QueryUInt256Output<Queries.BalanceOf>(ContractAddress,
-                                                                    address,
-                                                                    balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, Decimals.Value)),
-                                                                    address);
+        SimpleContractQueries.QueryUInt256Output<Queries.BalanceOf>(ContractAddress, address, address)
+                             .OnSuccess(balance => onBalanceReceived?.Invoke(SolidityUtils.ConvertFromUInt(balance, Decimals.Value)));
     }
 
     /// <summary>
@@ -39,9 +43,8 @@ public sealed partial class ERC20 : Token
     /// <param name="onSupplyReceived"> Callback action which should pass in the total supply of this token. </param>
     public void TotalSupply(Action<dynamic> onSupplyReceived)
     {
-        SimpleContractQueries.QueryUInt256Output<Queries.TotalSupply>(ContractAddress,
-                                                                      null,
-                                                                      supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, Decimals.Value)));
+        SimpleContractQueries.QueryUInt256Output<Queries.TotalSupply>(ContractAddress, null)
+                             .OnSuccess(supply => onSupplyReceived?.Invoke(SolidityUtils.ConvertFromUInt(supply, Decimals.Value)));
     }
 
     /// <summary>
@@ -61,5 +64,35 @@ public sealed partial class ERC20 : Token
                          .OnSuccess(_ => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address))
                          .OnError(_ => Debug.Log("Transaction failed! " + amount + " " + Symbol + " was not sent."));
         }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, address, ContractAddress, amount, Symbol);
+    }
+
+    public override EthCallPromise<string> QueryName()
+    {
+        EthCallPromise<string> promise = new EthCallPromise<string>();
+        SimpleContractQueries.QueryStringOutput<Queries.Name>(ContractAddress, null)
+                             .OnSuccess(name => promise.Build(() => name?.Value))
+                             .OnError(error => promise.Build(() => "error", () => error));
+
+        return promise;
+    }
+
+    public override EthCallPromise<string> QuerySymbol()
+    {
+        EthCallPromise<string> promise = new EthCallPromise<string>();
+        SimpleContractQueries.QueryStringOutput<Queries.Symbol>(ContractAddress, null)
+                             .OnSuccess(symbol => promise.Build(() => symbol?.Value))
+                             .OnError(error => promise.Build(() => "error", () => error));
+
+        return promise;
+    }
+
+    public override EthCallPromise<int?> QueryDecimals()
+    {
+        EthCallPromise<int?> promise = new EthCallPromise<int?>();
+        SimpleContractQueries.QueryUInt256Output<Queries.Decimals>(ContractAddress, null)
+                             .OnSuccess(decimals => promise.Build(() => (int?)decimals?.Value))
+                             .OnError(error => promise.Build(() => "error", () => error));
+
+        return promise;
     }
 }

@@ -1426,7 +1426,6 @@ MonoBehaviour:
   okButton: {fileID: 114818847430707120}
   cancelButton: {fileID: 114271476612975718}
   assetImage: {fileID: 114045478672242322}
-  confirmButton: {fileID: 114818847430707120}
   amountText: {fileID: 114825318455265160}
   fromAddress: {fileID: 114266401917980864}
   toAddress: {fileID: 114436476729827620}

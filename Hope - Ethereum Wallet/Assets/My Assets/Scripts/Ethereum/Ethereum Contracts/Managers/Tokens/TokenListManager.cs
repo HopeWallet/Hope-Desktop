@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Hope.Utils.Ethereum;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,10 @@ public sealed class TokenListManager
         EthereumNetworkManager.Settings networkSettings)
     {
         addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName, (int)networkSettings.networkType);
+
         InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
+
+        //UserWalletManager.OnWalletLoadSuccessful += () => ScanForNewTokens(userWalletManager);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)
@@ -52,6 +56,24 @@ public sealed class TokenListManager
     public AddableTokenInfo GetToken(string address)
     {
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
+    }
+
+    private void ScanForNewTokens(UserWalletManager userWalletManager)
+    {
+        //var asset = Resources.Load("Data/tokens") as TextAsset;
+        //var text = asset.text;
+
+        //var deserializedData = JsonUtils.DeserializeDynamicCollection(text);
+        //var count = (int)deserializedData.Count;
+        //for (int i = 0; i < count; i++)
+        //{
+        //    var data = deserializedData[i];
+        //    var address = (string)data.address;
+        //    ContractUtils.QueryContract<ERC20.Queries.BalanceOf, SimpleOutputs.UInt256>((string)data.address, null, userWalletManager.GetWalletAddress()).OnSuccess(balance =>
+        //        {
+
+        //        });
+        //}
     }
 
     private void InitializeDefaultTokenList(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)

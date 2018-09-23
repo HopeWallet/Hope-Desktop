@@ -5,6 +5,7 @@ using UInt64 = SimpleOutputs.UInt64;
 using UInt32 = SimpleOutputs.UInt32;
 using UInt16 = SimpleOutputs.UInt16;
 using String = SimpleOutputs.String;
+using Hope.Utils.Promises;
 
 /// <summary>
 /// Class which contains simple output contract queries which return the result based on the query type.
@@ -18,15 +19,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt256"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt256"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt256Output<TFunc>(
+    public static EthCallPromise<UInt256> QueryUInt256Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt256> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt256>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt256>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -36,15 +35,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt128"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt128"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt128Output<TFunc>(
+    public static EthCallPromise<UInt128> QueryUInt128Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt128> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt128>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt128>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -54,15 +51,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt64"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt64"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt64Output<TFunc>(
+    public static EthCallPromise<UInt64> QueryUInt64Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt64> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt64>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt64>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -72,15 +67,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt32"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt32"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt32Output<TFunc>(
+    public static EthCallPromise<UInt32> QueryUInt32Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt32> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt32>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt32>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -90,15 +83,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt16"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt16"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt16Output<TFunc>(
+    public static EthCallPromise<UInt16> QueryUInt16Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt16> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt16>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt16>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -108,15 +99,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="UInt8"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="UInt8"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryUInt8Output<TFunc>(
+    public static EthCallPromise<UInt8> QueryUInt8Output<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<UInt8> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, UInt8>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, UInt8>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -127,13 +116,12 @@ public static class SimpleContractQueries
     /// <param name="senderAddress"> The address sending the query. </param>
     /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="String"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryStringOutput<TFunc>(
+    public static EthCallPromise<String> QueryStringOutput<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<String> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, String>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, String>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -142,15 +130,13 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="Address"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="Address"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryAddressOutput<TFunc>(
+    public static EthCallPromise<Address> QueryAddressOutput<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<Address> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, Address>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, Address>(contractAddress, senderAddress, functionInput);
     }
 
     /// <summary>
@@ -159,14 +145,12 @@ public static class SimpleContractQueries
     /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="Bool"/> type. </typeparam>
     /// <param name="contractAddress"> The contract address of the function to execute. </param>
     /// <param name="senderAddress"> The address sending the query. </param>
-    /// <param name="onQueryCompleted"> Action called once the query has completed, passing the <see cref="Bool"/> result. </param>
     /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
-    public static void QueryBoolOutput<TFunc>(
+    public static EthCallPromise<Bool> QueryBoolOutput<TFunc>(
         string contractAddress,
         string senderAddress,
-        Action<Bool> onQueryCompleted,
         params object[] functionInput) where TFunc : ContractFunction
     {
-        ContractUtils.QueryContract<TFunc, Bool>(contractAddress, senderAddress, functionInput).OnSuccess(onQueryCompleted);
+        return ContractUtils.QueryContract<TFunc, Bool>(contractAddress, senderAddress, functionInput);
     }
 }
