@@ -104,6 +104,8 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<Hodler>().AsSingle().NonLazy();
         Container.Bind<PRPS>().AsSingle().NonLazy();
         Container.Bind<DUBI>().AsSingle().NonLazy();
+
+        Container.Bind<LogoutHandler>().AsSingle().NonLazy();
     }
 
     /// <summary>

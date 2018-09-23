@@ -5,14 +5,13 @@
 /// </summary>
 public sealed class PeriodicUpdateManager : IUpdater
 {
-
     private readonly Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>> periodicUpdaters;
 
     /// <summary>
     /// Initializes the PeriodicUpdateManager by creating the dictionary and adding itself to the UpdateManager.
     /// </summary>
     /// <param name="updateManager"> The UpdateManager to run the periodic updates off of. </param>
-    public PeriodicUpdateManager(UpdateManager updateManager) : base()
+    public PeriodicUpdateManager(UpdateManager updateManager)
     {
         periodicUpdaters = new Dictionary<IPeriodicUpdater, KeyValuePair<float, bool>>();
         updateManager.AddUpdater(this);

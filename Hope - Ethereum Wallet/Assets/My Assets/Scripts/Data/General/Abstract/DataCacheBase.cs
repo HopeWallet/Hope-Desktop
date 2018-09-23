@@ -1,11 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using Hope.Security.ProtectedTypes.Types;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class which contains data for use in different scenarios.
 /// </summary>
+/// <typeparam name="T"> The data type of the cache. </typeparam>
 public abstract class DataCache<T>
 {
     private readonly Dictionary<string, T> data = new Dictionary<string, T>();
+
+    /// <summary>
+    /// Clears all data in the cache.
+    /// </summary>
+    public void ClearAllData()
+    {
+        foreach (var pair in data)
+        {
+            if (pair.Value is ProtectedString)
+                (pair.Value as ProtectedString)?.Dispose();
+        }
+
+        data.Clear();
+    }
 
     /// <summary>
     /// Sets a value to the DataCache with the key.

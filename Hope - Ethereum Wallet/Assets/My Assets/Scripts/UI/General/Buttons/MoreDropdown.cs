@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Zenject;
 using System;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the More button dropdown
@@ -20,21 +19,26 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	[SerializeField] private GameObject triangle;
 	[SerializeField] private Button[] subButtons;
 
+    private LogoutHandler logoutHandler;
 	private PopupManager popupManager;
 
 	private bool dropdownOpen, hovering, popupIsOpen;
 
-	/// <summary>
-	/// Sets the popupManager
-	/// </summary>
-	/// <param name="popupManager"> The active PopupManager </param>
-	[Inject]
-	public void Construct(PopupManager popupManager) => this.popupManager = popupManager;
+    /// <summary>
+    /// Sets the popupManager
+    /// </summary>
+    /// <param name="popupManager"> The active PopupManager </param>
+    [Inject]
+    public void Construct(LogoutHandler logoutHandler, PopupManager popupManager)
+    {
+        this.logoutHandler = logoutHandler;
+        this.popupManager = popupManager;
+    }
 
-	/// <summary>
-	/// Sets the button listeners
-	/// </summary>
-	private void Awake()
+    /// <summary>
+    /// Sets the button listeners
+    /// </summary>
+    private void Awake()
 	{
 		moreButton = transform.GetComponent<Button>();
 		clickedImage = transform.GetChild(0).gameObject;
@@ -136,7 +140,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				popupManager.GetPopup<GeneralOkCancelPopup>().SetSubText("Are you sure you want to logout?").OnOkClicked(() => SceneManager.LoadScene("HopeWallet")).OnFinish(PopupClosed);
+				popupManager.GetPopup<GeneralOkCancelPopup>().SetSubText("Are you sure you want to logout?").OnOkClicked(() => logoutHandler.Logout()).OnFinish(PopupClosed);
 				break;
 		}
 	}
