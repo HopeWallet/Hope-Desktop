@@ -83,7 +83,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     {
         decimals = int.Parse(decimalsField.Text);
 
-		decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value < 36;
+		decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value > 36;
 		okButton.interactable = !decimalsField.Error && !symbolField.Error;
     }
 
