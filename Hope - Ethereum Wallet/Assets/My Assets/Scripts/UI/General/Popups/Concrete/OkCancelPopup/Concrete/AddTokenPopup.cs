@@ -81,7 +81,9 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     private void OnDecimalsChanged()
     {
-        decimals = int.Parse(decimalsField.Text);
+        int newDecimals;
+        int.TryParse(decimalsField.Text, out newDecimals);
+        decimals = newDecimals;
 
 		decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value < 36;
 		okButton.interactable = !decimalsField.Error && !symbolField.Error;
@@ -159,10 +161,10 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
 		string addressText = addressField.Text;
 
-		SimpleContractQueries.QueryStringOutput<Name>(addressText, null, output => NameQueryCompleted(output.Value));
-        SimpleContractQueries.QueryStringOutput<Symbol>(addressText, null, output => SymbolQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<Decimals>(addressText, null, output => DecimalsQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), output => BalanceQueryCompleted(output.Value), userWalletManager.GetWalletAddress());
+		SimpleContractQueries.QueryStringOutput<Name>(addressText, null).OnSuccess(output => NameQueryCompleted(output.Value));
+        SimpleContractQueries.QueryStringOutput<Symbol>(addressText, null).OnSuccess(output => SymbolQueryCompleted(output.Value));
+        SimpleContractQueries.QueryUInt256Output<Decimals>(addressText, null).OnSuccess(output => DecimalsQueryCompleted(output.Value));
+        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), userWalletManager.GetWalletAddress()).OnSuccess(output => BalanceQueryCompleted(output.Value));
     }
 
     private void NameQueryCompleted(string value)

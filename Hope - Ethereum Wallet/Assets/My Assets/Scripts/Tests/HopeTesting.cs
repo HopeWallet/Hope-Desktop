@@ -75,13 +75,6 @@ using System.Globalization;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    //private void Start()
-    //{
-    //    //Nethereum.ABI.JsonDeserialisation.ABIDeserialiser deserializer = new ABIDeserialiser();
-    //    //var abi = deserializer.DeserialiseContract("");
-    //    //abi.Constructor.InputParameters[0].
-    //}
-
     //public string code;
 
     //private string previousCode;

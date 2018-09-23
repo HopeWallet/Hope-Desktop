@@ -28,10 +28,6 @@ public abstract class HardwareWallet : IWallet
         this.popupManager = popupManager;
     }
 
-    protected void WalletLoadSuccessful() => OnWalletLoadSuccessful?.Invoke();
-
-    protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
-
     public string GetAddress(int addressIndex, string path)
     {
         return path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? addresses[0][addressIndex] : addresses[1][addressIndex];
@@ -76,6 +72,10 @@ public abstract class HardwareWallet : IWallet
                 path);
         });
     }
+
+    protected void WalletLoadSuccessful() => OnWalletLoadSuccessful?.Invoke();
+
+    protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
 
     public abstract void InitializeAddresses();
 

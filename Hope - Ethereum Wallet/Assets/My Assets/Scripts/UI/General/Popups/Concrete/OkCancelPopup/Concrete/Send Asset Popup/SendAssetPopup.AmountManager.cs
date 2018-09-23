@@ -215,11 +215,11 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
                 var formattedText = currencyManager.GetCurrencyFormattedValue(decimal.Parse(oppositeCurrencyValueText.LimitEnd(8)));
                 var lastSpace = formattedText.LastIndexOf(' ');
 
-                oppositeCurrencyAmountText.text = "= " + (!limit ? formattedText : lastSpace == -1 ? string.Concat(formattedText, "+") : formattedText.Insert(lastSpace, "+"));
+                oppositeCurrencyAmountText.text = "= " + (!limit ? formattedText : lastSpace == -1 ? string.Concat(formattedText, "...") : formattedText.Insert(lastSpace, "..."));
             }
             else
             {
-                oppositeCurrencyAmountText.text = "= " + oppositeCurrencyValueText.LimitEnd(8, "+") + "<style=Symbol> " + tradableTokenSymbol + "</style>";
+                oppositeCurrencyAmountText.text = "= " + oppositeCurrencyValueText.LimitEnd(8, "...") + "<style=Symbol> " + tradableTokenSymbol + "</style>";
             }
 		}
 
