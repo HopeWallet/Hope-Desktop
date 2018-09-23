@@ -16,6 +16,7 @@ public sealed class TokenListManager
 
     public TokenListManager(
         TokenContractManager tokenContractManager,
+        UserWalletManager userWalletManager,
         PRPS prps,
         DUBI dubi,
         Settings settings,
@@ -25,7 +26,7 @@ public sealed class TokenListManager
 
         InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
 
-        //UserWalletManager.OnWalletLoadSuccessful += () => ScanForNewTokens(userWalletManager);
+        UserWalletManager.OnWalletLoadSuccessful += () => ScanForNewTokens(tokenContractManager, userWalletManager);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals, bool enabled, bool listed)
@@ -58,22 +59,34 @@ public sealed class TokenListManager
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
     }
 
-    private void ScanForNewTokens(UserWalletManager userWalletManager)
+    private void ScanForNewTokens(TokenContractManager tokenContractManager, UserWalletManager userWalletManager)
     {
-        //var asset = Resources.Load("Data/tokens") as TextAsset;
-        //var text = asset.text;
+        var asset = Resources.Load("Data/tokens") as TextAsset;
+        var text = asset.text;
 
-        //var deserializedData = JsonUtils.DeserializeDynamicCollection(text);
-        //var count = (int)deserializedData.Count;
-        //for (int i = 0; i < count; i++)
-        //{
-        //    var data = deserializedData[i];
-        //    var address = (string)data.address;
-        //    ContractUtils.QueryContract<ERC20.Queries.BalanceOf, SimpleOutputs.UInt256>((string)data.address, null, userWalletManager.GetWalletAddress()).OnSuccess(balance =>
-        //        {
+        var deserializedData = JsonUtils.DeserializeDynamicCollection(text);
+        var count = (int)deserializedData.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var data = deserializedData[i];
+            var address = (string)data.address;
 
-        //        });
-        //}
+            if (addableTokens.Contains(address.ToLower()))
+                continue;
+
+            ContractUtils.QueryContract<ERC20.Queries.BalanceOf, SimpleOutputs.UInt256>((string)data.address, null, userWalletManager.GetWalletAddress()).OnSuccess(balance =>
+            {
+                if (balance.Value > 0)
+                {
+                    ERC20 token = new ERC20(address);
+                    token.OnInitializationSuccessful(() =>
+                    {
+                        addableTokens.Add(new AddableTokenInfo(address.ToLower(), token.Name, token.Symbol, token.Decimals.Value, true, true));
+                        tokenContractManager.AddAndUpdateToken(new TokenInfo(address.ToLower(), token.Name, token.Symbol, token.Decimals.Value));
+                    });
+                }
+            });
+        }
     }
 
     private void InitializeDefaultTokenList(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)

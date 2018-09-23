@@ -1,5 +1,15 @@
 [
   {
+	"address": "0x904a34858B7A8714B2459309A004A96F8E092cB2",
+	"symbol": "GLD2",
+	"decimal": 18
+  },
+  {
+	"address": "0xf518e67B86C7a201484c6B50B3Bed092D21Ccef7",
+	"symbol": "RAEON",
+	"decimal": 18
+  },
+  {
     "address": "0x4CEdA7906a5Ed2179785Cd3A40A69ee8bc99C466",
     "symbol": "AION",
     "decimal": 8
