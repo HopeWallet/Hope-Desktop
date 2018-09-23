@@ -34,6 +34,11 @@ public class LoadingTextAnimator : MonoBehaviour
         StartCoroutine(AddDotsToText());
     }
 
+    private void OnDisable()
+    {
+        IsStopped = false;
+    }
+
     /// <summary>
     /// Animates the dots in the string of the text object
     /// </summary>

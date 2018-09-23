@@ -484,6 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114005006171411136}
   cancelButton: {fileID: 114248256784403284}
+  confirmButton: {fileID: 0}
   lockPeriodText: {fileID: 114957870353807308}
   prpsAmountText: {fileID: 114598165327305648}
   dubiAmountText: {fileID: 114770421396573186}

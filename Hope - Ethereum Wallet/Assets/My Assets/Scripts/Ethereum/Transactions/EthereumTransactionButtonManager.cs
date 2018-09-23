@@ -63,6 +63,10 @@ public sealed class EthereumTransactionButtonManager : IDisposable
             UnityEngine.Object.Destroy(transactionButtons[i].transform.parent.gameObject);
 
         transactionButtons.Clear();
+
+        settings.loadingIconObject.SetActive(true);
+        settings.loadingText.gameObject.SetActive(true);
+        settings.loadingText.text = "Loading transactions";
     }
 
     /// <summary>
