@@ -419,6 +419,7 @@ MonoBehaviour:
   line: {fileID: 1902412720823524}
   saveChangesButton: {fileID: 1914641174571360}
   tokenTransform: {fileID: 224901718889209212}
+  scrollBar: {fileID: 114559363209972704}
 --- !u!114 &114040937163923216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1986,7 +1987,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 29196.762}
+  m_AnchoredPosition: {x: 0, y: 29958.98}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224998752051692916

@@ -14,6 +14,8 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     public event Action<string[], int, int> OnPageChanged;
 
+	private Action onClose;
+
     [SerializeField] private GeneralRadioButtons addressesCategories;
     [SerializeField] private Transform addressesSection;
     [SerializeField] private Button previousPageButton, nextPageButton;
@@ -60,7 +62,10 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         this.lockPRPSManager = lockPRPSManager;
     }
 
-    protected override void Awake()
+	public void SetOnCloseAction(Action onClose) => this.onClose = onClose;
+
+
+	protected override void Awake()
     {
         base.Awake();
 
@@ -70,7 +75,12 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         InitializePageAndCategories();
     }
 
-    private void InitializePageAndCategories()
+	private void OnDestroy()
+	{
+		onClose();
+	}
+
+	private void InitializePageAndCategories()
     {
         addressesCategories.ButtonClicked(addressesIndex);
         pageNumText.text = pageNum.ToString();

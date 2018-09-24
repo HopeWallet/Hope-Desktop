@@ -82,9 +82,9 @@ public sealed class EthereumTransactionButtonManager : IDisposable
     /// </summary>
     public void ProcessNewAssetList()
     {
-        ProcessTransactions();
-        RefreshScrollBar();
-    }
+		ProcessTransactions();
+		RefreshScrollBar();
+	}
 
     /// <summary>
     /// Processes the transactions when they are updated in the EthereumTransactionManager.
@@ -196,15 +196,15 @@ public sealed class EthereumTransactionButtonManager : IDisposable
     /// </summary>
     private void RefreshScrollBar()
     {
-        settings.scrollBar.value = 1;
-        OptimizedScrollview.GetScrollview("transactions_scrollview").Refresh();
-    }
+		settings.scrollBar.value = 1;
+		OptimizedScrollview.GetScrollview("transactions_scrollview").Refresh();
+	}
 
-    /// <summary>
-    /// Called when the transaction tab changes.
-    /// </summary>
-    /// <param name="tabType"> The new transaction tab type. </param>
-    private void OnTransactionTabChanged(TabType tabType)
+	/// <summary>
+	/// Called when the transaction tab changes.
+	/// </summary>
+	/// <param name="tabType"> The new transaction tab type. </param>
+	private void OnTransactionTabChanged(TabType tabType)
     {
         activeTabType = tabType;
         activePageNum = 0;

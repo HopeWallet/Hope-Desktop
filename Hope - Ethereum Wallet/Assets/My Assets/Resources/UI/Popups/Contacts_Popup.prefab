@@ -2384,6 +2384,7 @@ MonoBehaviour:
   line: {fileID: 1824795968871358}
   contactsList: {fileID: 1184842143659122}
   confirmButton: {fileID: 1571029723280496}
+  scrollbar: {fileID: 114197697885717454}
 --- !u!222 &222026854114912346
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -2800,7 +2801,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 175.77353}
+  m_AnchoredPosition: {x: 0, y: 1097.6597}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224504459596854990

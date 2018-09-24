@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the ContactsPopup
@@ -11,6 +12,7 @@ public sealed class ContactsPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject contactsList;
 	[SerializeField] private GameObject confirmButton;
+	[SerializeField] private Scrollbar scrollbar;
 
 	private Transform contactsTransform;
 
@@ -24,6 +26,7 @@ public sealed class ContactsPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		scrollbar.value = 1f;
 		addContactButton.AnimateGraphicAndScale(1f, 1f, 0.15f);
 		sortBySection.AnimateScaleX(1f, 0.2f);
 		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateContacts(0));

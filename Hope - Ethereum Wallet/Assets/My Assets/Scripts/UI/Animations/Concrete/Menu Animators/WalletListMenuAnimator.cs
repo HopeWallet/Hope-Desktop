@@ -45,6 +45,7 @@ public class WalletListMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
+		scrollbar.value = 1f;
 		foreach (GameObject wallet in Wallets)
 			wallet.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
@@ -58,9 +59,7 @@ public class WalletListMenuAnimator : MenuAnimator
 	/// <param name="index"> The wallet number in the array </param>
 	private void AnimateWallets(int index)
 	{
-        scrollbar.value = 1f;
-
-		if (index == 4)
+		if (index == 5)
 		{
 			for (int i = index; i < Wallets.Length; i++)
 			{
@@ -72,11 +71,11 @@ public class WalletListMenuAnimator : MenuAnimator
 		}
 		if (index == (Wallets.Length - 1))
 		{
-			Wallets[index].AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating);
+			Wallets[index].AnimateGraphicAndScale(1f, 1f, 0.15f, FinishedAnimating);
 		}
 		else
 		{
-			Wallets[index].AnimateGraphicAndScale(1f, 1f, 0.2f, () => AnimateWallets(++index));
+			Wallets[index].AnimateGraphicAndScale(1f, 1f, 0.15f, () => AnimateWallets(++index));
 		}
 	}
 }

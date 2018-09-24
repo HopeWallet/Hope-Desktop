@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the ModifyTokensPopup
@@ -10,6 +11,7 @@ public sealed class ModifyTokenListPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject saveChangesButton;
 	[SerializeField] private Transform tokenTransform;
+	[SerializeField] private Scrollbar scrollBar;
 
 	private ModifyTokensPopup modifyTokensPopup;
 
@@ -27,6 +29,7 @@ public sealed class ModifyTokenListPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		scrollBar.value = 1f;
 		addTokenButton.AnimateScaleX(1f, 0.2f);
 		searchInputField.AnimateScaleX(1f, 0.2f, () => AnimateTokens(0));
 		line.AnimateScaleX(1f, 0.25f);

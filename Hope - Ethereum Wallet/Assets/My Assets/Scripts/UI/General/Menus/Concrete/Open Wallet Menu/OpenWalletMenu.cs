@@ -8,18 +8,16 @@ using Zenject;
 /// </summary>
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
-    [SerializeField]
-    private GameObject lockPurposeSection,
-                       lockPurposeNotificationSection,
-                       pagesSection;
+	[SerializeField] private GameObject lockPurposeSection,
+										lockPurposeNotificationSection,
+										pagesSection;
 
-    [SerializeField]
-    private TMP_Text walletNameText,
-                                      walletAccountText,
-                                      assetText,
-                                      balanceText,
-                                      netWorthText,
-                                      lockPrpsNotificationText;
+	[SerializeField] private TMP_Text walletNameText,
+									  walletAccountText,
+									  assetText,
+									  balanceText,
+									  netWorthText,
+									  lockPrpsNotificationText;
 
     [SerializeField] private GeneralRadioButtons transactionTabs;
 
@@ -66,7 +64,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.userWalletManager = userWalletManager;
 
-        walletAccountText.GetComponent<Button>().onClick.AddListener(() => popupManager.GetPopup<AccountsPopup>());
+        walletAccountText.GetComponent<Button>().onClick.AddListener
+			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().PopupClosed));
     }
 
     private void OnEnable()
