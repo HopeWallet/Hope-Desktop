@@ -84,6 +84,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private void OnDisable()
     {
         idleTimeoutManager?.Stop();
+
+        balanceText.text = "________\n\n";
+        netWorthText.text = "_____\n\n";
     }
 
     /// <summary>
@@ -129,10 +132,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         if (!string.IsNullOrEmpty(assetBalance))
             balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + "<style=Symbol> " + assetSymbol + " </size>";
 
-        assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
-
         lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
+        assetText.text = tradableAsset.AssetName.LimitEnd(MAX_ASSET_NAME_LENGTH, "...");
         assetImage.sprite = tradableAsset.AssetImage;
 
         UpdateAssetNotifications();
