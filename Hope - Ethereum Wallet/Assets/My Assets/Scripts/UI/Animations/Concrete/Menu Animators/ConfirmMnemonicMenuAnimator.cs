@@ -8,6 +8,7 @@ using System.Linq;
 /// </summary>
 public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 {
+	[SerializeField] private GameObject backButton;
     [SerializeField] private GameObject wordInputField;
     [SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject[] checkBoxes;
@@ -17,6 +18,8 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
     private ConfirmMnemonicMenu confirmMnemonicMenu;
 
     private int wordIndex;
+
+	private bool openingWallet;
 
     /// <summary>
     /// Adds the DynamicDataCache dependency.
@@ -72,6 +75,9 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		if (openingWallet)
+			backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+
 		base.AnimateOut();
 
 		wordInputField.AnimateScale(0f, 0.3f);
@@ -145,6 +151,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
             {
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
 				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
+				openingWallet = true;
 			}
         }
         else
@@ -156,6 +163,9 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 		}
     }
 
+	/// <summary>
+	/// Animates the loading icon into view
+	/// </summary>
 	private void CreateWallet()
 	{
 		Animating = true;

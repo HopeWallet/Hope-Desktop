@@ -8,6 +8,7 @@ using System.Linq;
 /// </summary>
 public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 {
+	[SerializeField] private GameObject backButton;
 	[SerializeField] private Transform passphrase;
 	[SerializeField] private GameObject wordCountSection;
 	[SerializeField] private GameObject pastePhraseButton;
@@ -28,6 +29,8 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	private int wordCount = 12;
 	private bool animatingIcon;
 
+	public bool OpeningWallet { get; set; }
+
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
@@ -45,7 +48,6 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 		wordCountSection.GetComponent<SingleChoiceButtonsBase>().OnButtonChanged += PassphraseWordCountChanged;
 		pastePhraseButton.GetComponent<Button>().onClick.AddListener(PastePhraseClicked);
 		importMnemonicMenu.LastSelectableField = wordInputFields[11].InputFieldBase;
-		nextButton.GetComponent<Button>().onClick.AddListener(() => Animating = true);
 	}
 
 	/// <summary>
@@ -80,6 +82,9 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		if (OpeningWallet)
+			backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+
 		base.AnimateOut();
 
 		for (int i = 0; i < 5; i++)
@@ -263,8 +268,12 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 		}
 	}
 
+	/// <summary>
+	/// Animates the loading icon into view
+	/// </summary>
 	private void CreateWallet()
 	{
+		OpeningWallet = true;
 		Animating = true;
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		loadingIcon.SetActive(true);
