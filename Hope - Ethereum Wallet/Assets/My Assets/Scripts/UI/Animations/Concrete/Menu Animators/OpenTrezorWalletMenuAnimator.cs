@@ -5,6 +5,8 @@
 /// </summary>
 public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 {
+	[SerializeField] private GameObject backButton;
+	[SerializeField] private GameObject trezorLogo;
 	[SerializeField] private GameObject enterPINText;
 	[SerializeField] private GameObject subText;
 	[SerializeField] private Transform keyPadButtons;
@@ -16,6 +18,9 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+
 		base.AnimateIn();
 
 		enterPINText.AnimateGraphicAndScale(1f, 1f, 0.25f);
@@ -39,6 +44,9 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		trezorLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
+
 		base.AnimateOut();
 
 		enterPINText.AnimateGraphicAndScale(0f, 0f, 0.3f);

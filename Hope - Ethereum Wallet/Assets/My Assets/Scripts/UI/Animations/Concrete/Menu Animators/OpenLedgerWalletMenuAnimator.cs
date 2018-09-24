@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the OpenLedgerWalletMenu
 /// </summary>
 public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 {
-	[SerializeField] private GameObject instructionsText;
-	[SerializeField] private GameObject line2;
+	[SerializeField] private GameObject backButton;
+	[SerializeField] private GameObject ledgerLogo;
 	[SerializeField] private GameObject step1Text;
 	[SerializeField] private GameObject step2Text;
 	[SerializeField] private GameObject step3Text;
@@ -29,10 +30,11 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		ledgerLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+
 		base.AnimateIn();
 
-		instructionsText.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		line2.AnimateGraphicAndScale(1f, 1f, 0.265f);
 		step1Text.AnimateGraphicAndScale(1f, 1f, 0.275f);
 		step2Text.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		step3Text.AnimateGraphicAndScale(1f, 1f, 0.325f);
@@ -46,10 +48,11 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
+		backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		ledgerLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
+
 		base.AnimateOut();
 
-		instructionsText.AnimateGraphicAndScale(0f, 0f, 0.3f);
-		line2.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		step1Text.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		step2Text.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		step3Text.AnimateGraphicAndScale(0f, 0f, 0.3f);

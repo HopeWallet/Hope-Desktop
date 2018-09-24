@@ -7,6 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public class WalletListMenuAnimator : MenuAnimator
 {
+	[SerializeField] private GameObject backButton;
+	[SerializeField] private GameObject hopeLogo;
 	[SerializeField] private GameObject line2;
 	[SerializeField] private GameObject newWalletButton;
     [SerializeField] private Scrollbar scrollbar;
@@ -16,11 +18,19 @@ public class WalletListMenuAnimator : MenuAnimator
     /// </summary>
     public GameObject[] Wallets { get; set; }
 
+	private void Awake()
+	{
+		backButton.GetComponent<Button>().onClick.AddListener(() => { backButton.AnimateGraphicAndScale(0f, 0f, 0.3f); hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f); });
+	}
+
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateIn()
 	{
+		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		hopeLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+
 		base.AnimateIn();
 
 		AnimateWallets(0);

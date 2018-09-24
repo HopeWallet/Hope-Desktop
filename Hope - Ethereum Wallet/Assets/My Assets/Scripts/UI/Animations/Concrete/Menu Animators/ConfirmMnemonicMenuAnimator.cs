@@ -158,6 +158,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 
 	private void CreateWallet()
 	{
+		Animating = true;
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		loadingIcon.SetActive(true);
 		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
