@@ -86,6 +86,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         balanceText.text = "________\n\n";
         netWorthText.text = "_____\n\n";
+
+        AccountChanged(0);
     }
 
     /// <summary>

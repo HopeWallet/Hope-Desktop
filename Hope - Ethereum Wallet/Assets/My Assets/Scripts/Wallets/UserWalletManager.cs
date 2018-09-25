@@ -6,7 +6,7 @@ using System.Numerics;
 /// <summary>
 /// Class for managing the ethereum wallet of the user.
 /// </summary>
-public sealed class UserWalletManager
+public sealed class UserWalletManager : IDisposable
 {
     public static event Action OnWalletLoadSuccessful;
     public static event Action OnWalletLoadUnsuccessful;
@@ -36,6 +36,7 @@ public sealed class UserWalletManager
     /// Initializes the UserWallet given the settings to apply.
     /// </summary>
     /// <param name="settings"> The settings to initialize the wallet with. </param>
+    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
@@ -45,6 +46,7 @@ public sealed class UserWalletManager
     /// <param name="walletSettings"> The player pref settings for the UserWallet. </param>
     public UserWalletManager(
         Settings settings,
+        DisposableComponentManager disposableComponentManager,
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
         DynamicDataCache dynamicDataCache,
@@ -56,6 +58,8 @@ public sealed class UserWalletManager
         this.ledgerWallet = ledgerWallet;
         this.trezorWallet = trezorWallet;
 
+        disposableComponentManager.AddDisposable(this);
+
         hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
         activeWallet = hopeWallet;
 
@@ -65,6 +69,15 @@ public sealed class UserWalletManager
         trezorWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
         hopeWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
         hopeWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
+    }
+
+    /// <summary>
+    /// Resets the wallet account and path.
+    /// </summary>
+    public void Dispose()
+    {
+        SetWalletAccount(0);
+        SetWalletPath(Wallet.DEFAULT_PATH);
     }
 
     /// <summary>
