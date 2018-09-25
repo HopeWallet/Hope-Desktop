@@ -31,22 +31,15 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 		this.buttonClickObserver = buttonClickObserver;
 	}
 
-    /// <summary>
-    /// Gets the word numbers and words of the part of the mnemonic that needs confirming.
-    /// </summary>
-    protected override void OnAwake()
-    {
-        GetConfirmationNumbers();
-        GetConfirmationWords();
-    }
-
 	/// <summary>
 	/// Subscribes this button observable.
 	/// </summary>
 	protected override void OnEnable()
 	{
 		base.OnEnable();
-		buttonClickObserver.SubscribeObservable(this);
+        GetConfirmationNumbers();
+        GetConfirmationWords();
+        buttonClickObserver.SubscribeObservable(this);
 	}
 
 	/// <summary>

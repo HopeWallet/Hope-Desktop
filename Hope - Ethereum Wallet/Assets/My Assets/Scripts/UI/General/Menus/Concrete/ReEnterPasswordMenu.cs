@@ -15,7 +15,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
     public event Action OnPasswordEnteredIncorrect;
 
     [SerializeField] private TextMeshProUGUI walletName;
-	[SerializeField] private TextMeshProUGUI messageText;
+    [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Button unlockButton, homeButton;
     [SerializeField] private HopeInputField passwordField;
 
@@ -54,15 +54,15 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         walletName.text = walletInfo.WalletName;
         walletNum = walletInfo.WalletNum + 1;
 
-		SetMessageText();
+        SetMessageText();
 
-		(dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
+        (dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
         dynamicDataCache.SetData("pass", null);
     }
 
-	/// <summary>
-	/// Sets all the listeners
-	/// </summary>
+    /// <summary>
+    /// Sets all the listeners
+    /// </summary>
     protected override void OnAwake()
     {
         homeButton.onClick.AddListener(HomeButtonClicked);
@@ -71,53 +71,53 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         passwordField.OnInputUpdated += PasswordFieldChanged;
     }
 
-	/// <summary>
-	/// Subscribes the buttonClickObserver
-	/// </summary>
-	private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
+    /// <summary>
+    /// Subscribes the buttonClickObserver
+    /// </summary>
+    private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
 
-	/// <summary>
-	/// Unsubscribes the buttonClickObserver
-	/// </summary>
-	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
+    /// <summary>
+    /// Unsubscribes the buttonClickObserver
+    /// </summary>
+    private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
-	/// <summary>
-	/// Sets the main message text
-	/// </summary>
-	private void SetMessageText()
-	{
-		int idleTime = SecurePlayerPrefs.GetInt("idle time");
-		string minuteWord;
+    /// <summary>
+    /// Sets the main message text
+    /// </summary>
+    private void SetMessageText()
+    {
+        int idleTime = SecurePlayerPrefs.GetInt("idle time");
+        string minuteWord;
 
-		if (idleTime == 1)
-			minuteWord = " minute";
-		else
-			minuteWord = " minutes";
+        if (idleTime == 1)
+            minuteWord = " minute";
+        else
+            minuteWord = " minutes";
 
-		messageText.text = "You have been idle for " + idleTime  + minuteWord + ", please re-enter your password or go back to the main menu.";
-	}
+        messageText.text = "You have been idle for " + idleTime + minuteWord + ", please re-enter your password or go back to the main menu.";
+    }
 
-	/// <summary>
-	/// Password field has been changed
-	/// </summary>
-	/// <param name="text"> The current text in the input field </param>
-	private void PasswordFieldChanged(string text)
+    /// <summary>
+    /// Password field has been changed
+    /// </summary>
+    /// <param name="text"> The current text in the input field </param>
+    private void PasswordFieldChanged(string text)
     {
         passwordField.Error = string.IsNullOrEmpty(text);
         unlockButton.interactable = !passwordField.Error;
     }
 
-	/// <summary>
-	/// Home button has been clicked
-	/// </summary>
+    /// <summary>
+    /// Home button has been clicked
+    /// </summary>
     private void HomeButtonClicked()
     {
         logoutHandler.Logout();
     }
 
-	/// <summary>
-	/// Unlock button has been clicked and password is checked
-	/// </summary>
+    /// <summary>
+    /// Unlock button has been clicked and password is checked
+    /// </summary>
     private void UnlockButtonClicked()
     {
         OnPasswordVerificationStarted?.Invoke();
@@ -139,21 +139,21 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
                   });
     }
 
-	/// <summary>
-	/// The password is correct and the user is brought back to the OpenWalletMenu
-	/// </summary>
-	/// <param name="password"> The password string</param>
+    /// <summary>
+    /// The password is correct and the user is brought back to the OpenWalletMenu
+    /// </summary>
+    /// <param name="password"> The password string</param>
     private void CorrectPassword(string password)
     {
         dynamicDataCache.SetData("pass", new ProtectedString(password));
 
         OnPasswordEnteredCorrect?.Invoke();
-		uiManager.CloseMenu();
+        uiManager.CloseMenu();
     }
 
-	/// <summary>
-	/// The password is incorrect and the user is given an error
-	/// </summary>
+    /// <summary>
+    /// The password is incorrect and the user is given an error
+    /// </summary>
     private void IncorrectPassword()
     {
         OnPasswordEnteredIncorrect?.Invoke();
@@ -161,10 +161,10 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         checkingPassword = false;
     }
 
-	/// <summary>
-	/// Clicks the unlockButton if the input field is selected and the unlock button is interactable
-	/// </summary>
-	/// <param name="clickType"> The enter button ClickType </param>
+    /// <summary>
+    /// Clicks the unlockButton if the input field is selected and the unlock button is interactable
+    /// </summary>
+    /// <param name="clickType"> The enter button ClickType </param>
     public void EnterButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)
