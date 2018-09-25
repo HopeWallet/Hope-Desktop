@@ -70,17 +70,23 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// <summary>
     /// Adds the button click events on start.
     /// </summary>
-    private void Start() => newWalletButton.onClick.AddListener(CreateNewWallet);
+    private void Start()
+    {
+        newWalletButton.onClick.AddListener(CreateNewWallet);
+    }
 
-	/// <summary>
-	/// Opens the CreateWalletMenu to allow for creating a new wallet.
-	/// </summary>
-	private void CreateNewWallet() => uiManager.OpenMenu<CreateWalletMenu>();
+    /// <summary>
+    /// Opens the CreateWalletMenu to allow for creating a new wallet.
+    /// </summary>
+    private void CreateNewWallet()
+    {
+        uiManager.OpenMenu<CreateWalletMenu>();
+    }
 
-	/// <summary>
-	/// The settings for this WalletListMenu.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// The settings for this WalletListMenu.
+    /// </summary>
+    [Serializable]
     public class Settings
     {
         public Transform walletButtonSpawnTransform;

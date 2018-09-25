@@ -149,6 +149,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         lockPrpsNotificationText.text = lockedPrpsCount.ToString();
         lockPrpsNotificationText.fontSize = lockedPrpsCount.ToString().Length > 1 ? 15 : 19;
 
+        if (tradableAssetManager.ActiveTradableAsset == null)
+            return;
+
         notificationManager.SaveTransactionCount(tradableAssetManager.ActiveTradableAsset.AssetAddress);
     }
 }

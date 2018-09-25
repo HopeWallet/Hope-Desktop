@@ -1,10 +1,8 @@
 using Hope.Security.ProtectedTypes.Types;
-using Hope.Utils.Promises;
 using Nethereum.HdWallet;
 using Nethereum.JsonRpc.UnityClient;
 using System;
 using System.Numerics;
-using UnityEngine;
 
 /// <summary>
 /// Class which holds the data of the user's ethereum wallet and signs transactions.
@@ -131,7 +129,7 @@ public sealed class HopeWallet : SecureObject, IWallet
         string path,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        DisposableDataPromise<string> promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
+        var promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
         promise.OnSuccess(disposableData =>
         {
             byte[] encryptedPasswordBytes = GetEncryptedPass(disposableData.ByteValue);

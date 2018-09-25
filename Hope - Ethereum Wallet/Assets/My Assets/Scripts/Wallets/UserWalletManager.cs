@@ -123,11 +123,21 @@ public sealed class UserWalletManager
         }
     }
 
+    /// <summary>
+    /// Gets the active wallet address.
+    /// </summary>
+    /// <returns> The active wallet address. </returns>
     public string GetWalletAddress()
     {
         return activeWallet.GetAddress(AccountNumber, WalletPath);
     }
 
+    /// <summary>
+    /// Gets the wallet address given the account number and path.
+    /// </summary>
+    /// <param name="accountNumber"> The account number of the address. </param>
+    /// <param name="path"> The path of the address. </param>
+    /// <returns> The wallet address. </returns>
     public string GetWalletAddress(int accountNumber, string path)
     {
         return activeWallet.GetAddress(accountNumber, path);
