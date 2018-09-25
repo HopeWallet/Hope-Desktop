@@ -96,7 +96,7 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
     public void PopulatePrefDictionary(int walletNum)
     {
         if (prefDictionary.Count > 0)
-            return;
+            prefDictionary.Clear();
 
         keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).Keccak_256()).GetBase64Bytes()));
     }
