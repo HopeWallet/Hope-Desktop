@@ -38,7 +38,7 @@ MonoBehaviour:
   walletSettings:
     safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
   ethereumNetworkSettings:
-    networkType: 4
+    networkType: 1
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
@@ -89,11 +89,11 @@ MonoBehaviour:
       - {fileID: 1282295889785612, guid: 538ab8f64e943274aa9b80b9cc80da0a, type: 2}
   contractManagerSettings:
     hodlerSettings:
-      mainnetAddress: 0x77D0c79c83B3A14092d5C0C12145645cC9CEdc75
+      mainnetAddress: 0xe4D688Bb2d5B7F546052cB6Fef3aEd8af8AF6511
       rinkebyAddress: 0x23EdF403e7da17A0BE3E65CB3318638c826dEd23
     prpsSettings:
-      mainnetAddress: 0xd94F2778e2B3913C53637Ae60647598bE588c570
+      mainnetAddress: 0xE40C374d8805b1dD58CDcEFf998A2F6920Cb52FD
       rinkebyAddress: 0x5831819C84C05DdcD2568dE72963AC9f1e6831b6
     dubiSettings:
-      mainnetAddress: 0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c
+      mainnetAddress: 0xEd7fEA78C393cF7B17B152A8c2D0CD97aC31790B
       rinkebyAddress: 0x8b069Ecf7BF230E153b8Ed903bAbf24403ccA203

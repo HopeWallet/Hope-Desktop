@@ -282,13 +282,13 @@
     "decimals": 18
   },
   {
-    "address": "0xd94f2778e2b3913c53637ae60647598be588c570",
+    "address": "0xE40C374d8805b1dD58CDcEFf998A2F6920Cb52FD",
     "name": "Purpose",
     "symbol": "PRPS",
     "decimals": 18
   },
   {
-    "address": "0x9c6fa42209169bcea032e401188a6fc3e9c9f59c",
+    "address": "0xEd7fEA78C393cF7B17B152A8c2D0CD97aC31790B",
     "name": "Decentralized Universal Basic Income",
     "symbol": "DUBI",
     "decimals": 18

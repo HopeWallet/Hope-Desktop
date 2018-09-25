@@ -310,7 +310,7 @@
     "decimal": 8
   },
   {
-    "address": "0xd94F2778e2B3913C53637Ae60647598bE588c570",
+    "address": "0xE40C374d8805b1dD58CDcEFf998A2F6920Cb52FD",
     "symbol": "PRPS",
     "decimal": 18
   },
@@ -755,7 +755,7 @@
     "decimal": 12
   },
   {
-    "address": "0x9c6Fa42209169bCeA032e401188a6fc3e9C9f59c",
+    "address": "0xEd7fEA78C393cF7B17B152A8c2D0CD97aC31790B",
     "symbol": "DUBI",
     "decimal": 18
   },

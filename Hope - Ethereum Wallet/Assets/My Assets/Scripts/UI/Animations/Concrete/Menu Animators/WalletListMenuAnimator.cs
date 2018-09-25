@@ -63,8 +63,10 @@ public class WalletListMenuAnimator : MenuAnimator
 		{
 			for (int i = index; i < Wallets.Length; i++)
 			{
+                var tmpText = Wallets[i].GetComponent<TextMeshProUGUI>();
+                var currentColor = tmpText.color;
 				Wallets[i].transform.localScale = new Vector2(1f, 1f);
-				Wallets[i].GetComponent<TextMeshProUGUI>().color = UIColors.White;
+                tmpText.color = new Color(tmpText.color.r, tmpText.color.g, tmpText.color.b, 1f);
 			}
 
 			FinishedAnimating();

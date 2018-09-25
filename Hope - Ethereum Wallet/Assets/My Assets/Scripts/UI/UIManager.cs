@@ -59,37 +59,37 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     private void Start()
     {
         createdMenus.AddItems(extraMenus);
-		SetDefaultSettings();
-		OpenMenu<ChooseWalletMenu>();
+        SetDefaultSettings();
+        OpenMenu<ChooseWalletMenu>();
     }
 
-	/// <summary>
-	/// Sets the default setting preferences if there is nothing saved under it already
-	/// </summary>
-	private void SetDefaultSettings()
-	{
-		if (!SecurePlayerPrefs.HasKey("idle timeout"))
-		{
-			SecurePlayerPrefs.SetBool("idle timeout", true);
-			SecurePlayerPrefs.SetInt("idle time", 5);
-			SecurePlayerPrefs.SetBool("countdown timer", true);
-			SecurePlayerPrefs.SetBool("transaction notification", true);
-			SecurePlayerPrefs.SetBool("update notification", true);
-			SecurePlayerPrefs.SetBool("two-factor authentication", false);
-			SecurePlayerPrefs.SetBool("2FA set up", false);
-		}
-	}
+    /// <summary>
+    /// Sets the default setting preferences if there is nothing saved under it already
+    /// </summary>
+    private void SetDefaultSettings()
+    {
+        if (!SecurePlayerPrefs.HasKey("idle timeout"))
+        {
+            SecurePlayerPrefs.SetBool("idle timeout", true);
+            SecurePlayerPrefs.SetInt("idle time", 5);
+            SecurePlayerPrefs.SetBool("countdown timer", true);
+            SecurePlayerPrefs.SetBool("transaction notification", true);
+            SecurePlayerPrefs.SetBool("update notification", true);
+            SecurePlayerPrefs.SetBool("two-factor authentication", false);
+            SecurePlayerPrefs.SetBool("2FA set up", false);
+        }
+    }
 
-	/// <summary>
-	/// Sets the default screen size
-	/// </summary>
-	private void SetScreenResolution()
-	{
-		int screenWidth = (int)(Screen.currentResolution.width * 0.666666666f);
-		int screenHeight = (int)(Screen.currentResolution.height * 0.7407f);
+    /// <summary>
+    /// Sets the default screen size
+    /// </summary>
+    private void SetScreenResolution()
+    {
+        int screenWidth = (int)(Screen.currentResolution.width * 0.666666666f);
+        int screenHeight = (int)(Screen.currentResolution.height * 0.7407f);
 
-		Screen.SetResolution(screenWidth, screenHeight, false, 120);
-	}
+        Screen.SetResolution(screenWidth, screenHeight, false, 120);
+    }
 
     /// <summary>
     /// Closes the active popup if one is open, if not, calls the back button on the active menu.
@@ -108,6 +108,22 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     }
 
     /// <summary>
+    /// Destroys all menus that are not of a specific type.
+    /// </summary>
+    /// <param name="menuTypesToIgnore"> The types of menus to ignore. </param>
+    public void DestroyMenus(params Type[] menuTypesToIgnore)
+    {
+        List<Menu> menuCache = new List<Menu>(createdMenus);
+
+        createdMenus.Clear();
+        menus.Clear();
+
+        menuCache.Where(menu => !menuTypesToIgnore.Contains(menu.GetType()) && !extraMenus.Contains(menu)).ForEach(menu => Destroy(menu.gameObject));
+        //menuCache.Where(menu => !menuTypesToIgnore.Contains(menu.GetType()) && extraMenus.Contains(menu)).ForEach(menu => menu.gameObject.SetActive(false));
+        menuCache.Where(menu => menuTypesToIgnore.Contains(menu.GetType())).ForEach(menu => { menus.Push(menu); createdMenus.Add(menu); });
+    }
+
+    /// <summary>
     /// Opens a menu given the type of menu to open.
     /// </summary>
     /// <typeparam name="T"> The type of menu to open. </typeparam>
@@ -117,6 +133,9 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
         {
             if (menus.Count > 0)
                 menus.Peek().gameObject.SetActive(false);
+
+            //if (typeof(T) == typeof(OpenWalletMenu))
+            //    DestroyMenus(typeof(OpenWalletMenu));
 
             var sameTypeMenus = createdMenus.OfType<T>();
 
