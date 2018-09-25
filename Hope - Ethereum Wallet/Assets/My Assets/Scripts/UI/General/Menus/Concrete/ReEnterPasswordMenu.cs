@@ -5,7 +5,6 @@ using System;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -21,29 +20,33 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
     [SerializeField] private HopeInputField passwordField;
 
     private HopeWalletInfoManager.Settings walletSettings;
+    private LogoutHandler logoutHandler;
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
 
     private bool checkingPassword;
     private int walletNum;
 
-	/// <summary>
-	/// Sets the necessary dependencies
-	/// </summary>
-	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
-	/// <param name="userWalletManager"> The active UserWalletManager </param>
-	/// <param name="walletSettings"> The active HopeWalletInfoManager.Settings </param>
-	/// <param name="dynamicDataCache"> The active DynamicDataCache</param>
-	/// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
+    /// <summary>
+    /// Sets the necessary dependencies
+    /// </summary>
+    /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
+    /// <param name="userWalletManager"> The active UserWalletManager </param>
+    /// <param name="logoutHandler"> The active LogoutHandler. </param>
+    /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache</param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
     [Inject]
     public void Construct(
+        HopeWalletInfoManager.Settings walletSettings,
         HopeWalletInfoManager hopeWalletInfoManager,
         UserWalletManager userWalletManager,
-        HopeWalletInfoManager.Settings walletSettings,
+        LogoutHandler logoutHandler,
         DynamicDataCache dynamicDataCache,
         ButtonClickObserver buttonClickObserver)
     {
         this.walletSettings = walletSettings;
+        this.logoutHandler = logoutHandler;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
 
@@ -109,7 +112,7 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
 	/// </summary>
     private void HomeButtonClicked()
     {
-        SceneManager.LoadScene("Hope Wallet");
+        logoutHandler.Logout();
     }
 
 	/// <summary>

@@ -68,6 +68,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().PopupClosed));
     }
 
+    /// <summary>
+    /// Starts the token load, sets up the wallet name text, and starts the IdleTimeoutManager.
+    /// </summary>
     private void OnEnable()
     {
         tokenContractManager.StartTokenLoad(OpenMenu);
@@ -78,8 +81,15 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
             idleTimeoutManager = new IdleTimeoutManager(uiManager);
+
+        UpdateAssetUI();
+        AccountChanged(userWalletManager.AccountNumber);
+        ReloadNetWorth();
     }
 
+    /// <summary>
+    /// Resets the visuals of the OpenWalletMenu.
+    /// </summary>
     private void OnDisable()
     {
         idleTimeoutManager?.Stop();
@@ -104,6 +114,28 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         new TransactionPageManager(tradableAssetManager, ethereumTransactionManager, pagesSection);
     }
 
+    /// <summary>
+    /// Reloads the net worth of the current account.
+    /// </summary>
+    private void ReloadNetWorth()
+    {
+        var tradableAsset = tradableAssetManager.ActiveTradableAsset;
+
+        if (tradableAsset == null)
+            return;
+
+        var netWorth = tradableAssetPriceManager.GetPrice(tradableAsset.AssetSymbol) * tradableAsset.AssetBalance;
+
+        if (netWorth == null)
+            return;
+
+        netWorthText.text = currencyManager.GetCurrencyFormattedValue(netWorth);
+    }
+
+    /// <summary>
+    /// Called when the account is changed.
+    /// </summary>
+    /// <param name="account"> The new account number. </param>
     private void AccountChanged(int account)
     {
         walletAccountText.text = "(Account <size=90%>#</size>" + (account + 1) + ")";
