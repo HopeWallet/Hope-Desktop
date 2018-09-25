@@ -464,6 +464,7 @@ MonoBehaviour:
   DestroyWhenClosed: 0
   backButton: {fileID: 114038505139223950}
   newWalletButton: {fileID: 114819147229546036}
+  hopeLogo: {fileID: 1349019042545500}
 --- !u!114 &114404939582385194
 MonoBehaviour:
   m_ObjectHideFlags: 1

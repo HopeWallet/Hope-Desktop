@@ -13,6 +13,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	public static Action PopupClosed;
 
 	[SerializeField] private Button newWalletButton;
+	[SerializeField] private GameObject hopeLogo;
 
     private readonly List<GameObject> walletObjects = new List<GameObject>();
 
@@ -75,10 +76,21 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
         newWalletButton.onClick.AddListener(CreateNewWallet);
     }
 
-    /// <summary>
-    /// Opens the CreateWalletMenu to allow for creating a new wallet.
-    /// </summary>
-    private void CreateNewWallet()
+	/// <summary>
+	/// Animates the back button and hope logo out if the user goes back to the ChooseWalletMenu
+	/// </summary>
+	protected override void OnBackPressed()
+	{
+		base.OnBackPressed();
+
+		backButton.gameObject.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
+	}
+
+	/// <summary>
+	/// Opens the CreateWalletMenu to allow for creating a new wallet.
+	/// </summary>
+	private void CreateNewWallet()
     {
         uiManager.OpenMenu<CreateWalletMenu>();
     }
