@@ -33,7 +33,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater, IDisposable
         Hodler hodlerContract,
         PRPS prpsContract,
         PeriodicUpdateManager periodicUpdateManager,
-        EtherscanApiService apiService)
+        EtherscanApiService apiService,
+        TradableAssetManager tradableAssetManager)
     {
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
@@ -43,8 +44,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater, IDisposable
 
         disposableComponentManager.AddDisposable(this);
 
-        TradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
-        TradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
+        tradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
+        tradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
     }
 
     /// <summary>

@@ -41,7 +41,7 @@ public sealed partial class OpenWalletMenu
             pageNumText = pagesSection.GetComponentInChildren<TMP_Text>();
 
             TransactionTabManager.OnTabChanged += TabChanged;
-            TradableAssetManager.OnBalancesUpdated += TransactionListOrAssetUpdated;
+            tradableAssetManager.OnBalancesUpdated += TransactionListOrAssetUpdated;
             ethereumTransactionManager.OnTransactionsAdded += TransactionListOrAssetUpdated;
 
             leftButton.onClick.AddListener(() => PageChanged(true));

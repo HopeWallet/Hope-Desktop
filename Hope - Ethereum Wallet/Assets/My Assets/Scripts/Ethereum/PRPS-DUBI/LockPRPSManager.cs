@@ -47,12 +47,14 @@ public sealed class LockPRPSManager : IPeriodicUpdater
     /// <param name="prpsContract"> The active PRPS smart contract. </param>
     /// <param name="dubiContract"> The active DUBI smart contract. </param>
     /// <param name="hodlerContract"> The active Hodler smart contract. </param>
+    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     public LockPRPSManager(
         UserWalletManager userWalletManager,
         PeriodicUpdateManager periodicUpdateManager,
         PRPS prpsContract,
         DUBI dubiContract,
-        Hodler hodlerContract)
+        Hodler hodlerContract,
+        TradableAssetManager tradableAssetManager)
     {
         this.prpsContract = prpsContract;
         this.dubiContract = dubiContract;
@@ -60,8 +62,8 @@ public sealed class LockPRPSManager : IPeriodicUpdater
         this.userWalletManager = userWalletManager;
         this.periodicUpdateManager = periodicUpdateManager;
 
-        TradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
-        TradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
+        tradableAssetManager.OnTradableAssetAdded += CheckIfPRPSAdded;
+        tradableAssetManager.OnTradableAssetRemoved += CheckIfPRPSRemoved;
     }
 
     /// <summary>

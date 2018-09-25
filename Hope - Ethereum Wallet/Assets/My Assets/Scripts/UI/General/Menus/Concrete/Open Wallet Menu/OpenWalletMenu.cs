@@ -106,7 +106,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private void Start()
     {
         AccountsPopup.OnAccountChanged += AccountChanged;
-        TradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
+        tradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
 
         new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);

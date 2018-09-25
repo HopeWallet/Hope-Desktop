@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Class used for observing and notifying IEtherBalanceObservables what the latest ether balance is in the wallet.
 /// </summary>
-public class EtherBalanceObserver : EventObserver<IEtherBalanceObservable>, IPeriodicUpdater
+public sealed class EtherBalanceObserver : EventObserver<IEtherBalanceObservable>, IPeriodicUpdater
 {
     private EtherAsset etherAsset;
 
@@ -15,11 +15,12 @@ public class EtherBalanceObserver : EventObserver<IEtherBalanceObservable>, IPer
     /// <summary>
     /// Initializes the EtherBalanceObserver once all tokens have been loaded.
     /// </summary>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
     /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    public EtherBalanceObserver(PeriodicUpdateManager periodicUpdateManager, TradableAssetManager tradableAssetManager)
+    public EtherBalanceObserver(TokenContractManager tokenContractManager, PeriodicUpdateManager periodicUpdateManager, TradableAssetManager tradableAssetManager)
     {
-        TokenContractManager.OnTokensLoaded += () => StartObserver(periodicUpdateManager, tradableAssetManager);
+        tokenContractManager.OnTokensLoaded += () => StartObserver(periodicUpdateManager, tradableAssetManager);
     }
 
     /// <summary>

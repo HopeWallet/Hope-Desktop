@@ -22,6 +22,7 @@ public sealed class TradableAssetNotificationManager : IDisposable
         EthereumNetworkManager.Settings networkSettings,
         DisposableComponentManager disposableComponentManager,
         UserWalletManager userWalletManager,
+        TradableAssetManager tradableAssetManager,
         EthereumTransactionManager ethereumTransactionManager,
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract)
@@ -37,8 +38,8 @@ public sealed class TradableAssetNotificationManager : IDisposable
 
         UserWalletManager.OnWalletLoadSuccessful += LoadNewNotificationList;
 
-        TradableAssetManager.OnTradableAssetAdded += AssetAdded;
-        TradableAssetManager.OnTradableAssetRemoved += AssetRemoved;
+        tradableAssetManager.OnTradableAssetAdded += AssetAdded;
+        tradableAssetManager.OnTradableAssetRemoved += AssetRemoved;
 
         ethereumTransactionManager.OnTransactionsAdded += TransactionsUpdated;
         lockedPrpsManager.OnLockedPRPSUpdated += TransactionsUpdated;

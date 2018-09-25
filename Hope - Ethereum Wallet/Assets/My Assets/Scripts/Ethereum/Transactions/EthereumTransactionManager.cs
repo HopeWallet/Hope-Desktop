@@ -47,7 +47,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater, IDi
         UserWalletManager userWalletManager,
         EtherscanApiService apiService)
     {
-        TradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
+        tradableAssetManager.OnTradableAssetAdded += AddAssetToScrape;
         OptimizedScrollview.OnOptimizedScrollviewInitialized += optimizedScrollview =>
         {
             if (optimizedScrollview.scrollviewKey.Equals("asset_scrollview"))

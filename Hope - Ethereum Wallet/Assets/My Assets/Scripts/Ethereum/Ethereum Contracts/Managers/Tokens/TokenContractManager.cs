@@ -7,9 +7,9 @@ using System.Linq;
 /// </summary>
 public sealed class TokenContractManager
 {
-    public static event Action OnTokensLoaded;
-    public static event Action<TradableAsset> OnTokenAdded;
-    public static event Action<string> OnTokenRemoved;
+    public event Action OnTokensLoaded;
+    public event Action<TradableAsset> OnTokenAdded;
+    public event Action<string> OnTokenRemoved;
 
     private readonly PopupManager popupManager;
     private readonly TradableAssetImageManager tradableAssetImageManager;
@@ -105,7 +105,9 @@ public sealed class TokenContractManager
     public void StartTokenLoad(Action onTokensLoaded)
     {
         var popup = popupManager.GetPopup<LoadingPopup>();
-        popup.Text = "Loading wallet";
+
+        if (popup != null)
+            popup.Text = "Loading wallet";
 
         Action onLoadFinished = (() => popupManager.CloseAllPopups()) + onTokensLoaded;
         new EtherAsset(asset => UpdateTradableAssets(asset, () => LoadToken(0, onLoadFinished)), tradableAssetImageManager, userWalletManager);

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class TradableAssetManager : IPeriodicUpdater, IDisposable
 {
-    public static event Action OnBalancesUpdated;
-    public static event Action<TradableAsset> OnTradableAssetAdded;
-    public static event Action<TradableAsset> OnTradableAssetRemoved;
+    public event Action OnBalancesUpdated;
+    public event Action<TradableAsset> OnTradableAssetAdded;
+    public event Action<TradableAsset> OnTradableAssetRemoved;
 
     /// <summary>
     /// The dictionary of active tradable assets.
@@ -33,15 +33,15 @@ public sealed class TradableAssetManager : IPeriodicUpdater, IDisposable
     /// <summary>
     /// Initializes the TradableAssetManager by adding required methods to events and adding this class to the PeriodicUpdateManager.
     /// </summary>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="periodicUpdateManager"> The PeriodicUpdateManager to use to run this class's periodic updates. </param>
     /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
-    public TradableAssetManager(PeriodicUpdateManager periodicUpdateManager, DisposableComponentManager disposableComponentManager)
+    public TradableAssetManager(TokenContractManager tokenContractManager, PeriodicUpdateManager periodicUpdateManager, DisposableComponentManager disposableComponentManager)
     {
-        TokenContractManager.OnTokenAdded += AddTradableAsset;
-        TokenContractManager.OnTokenRemoved += RemoveTradableAsset;
-
         disposableComponentManager.AddDisposable(this);
 
+        tokenContractManager.OnTokenAdded += AddTradableAsset;
+        tokenContractManager.OnTokenRemoved += RemoveTradableAsset;
         UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this);
     }
 

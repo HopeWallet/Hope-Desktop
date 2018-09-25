@@ -30,7 +30,7 @@ public sealed partial class OpenWalletMenu
             sentTabText = transactionTabs.gameObject.GetComponentsInChildren<TMP_Text>()[1];
             receivedTabText = transactionTabs.gameObject.GetComponentsInChildren<TMP_Text>()[2];
 
-            TradableAssetManager.OnBalancesUpdated += ChangeText;
+            tradableAssetManager.OnBalancesUpdated += ChangeText;
             ethereumTransactionManager.OnTransactionsAdded += ChangeText;
             transactionTabs.OnButtonChanged += TabChanged;
         }

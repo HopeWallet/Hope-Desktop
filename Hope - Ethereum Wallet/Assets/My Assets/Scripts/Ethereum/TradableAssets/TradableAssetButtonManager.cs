@@ -26,11 +26,13 @@ public sealed class TradableAssetButtonManager : IDisposable
     /// <param name="etherAssetButtonFactory"> The factory which creates EtherAssetButtons. </param>
     /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
     public TradableAssetButtonManager(
         ERC20TokenAssetButton.Factory erc20TokenButtonFactory,
         EtherAssetButton.Factory etherAssetButtonFactory,
         DisposableComponentManager disposableComponentManager,
-        TokenContractManager tokenContractManager)
+        TokenContractManager tokenContractManager,
+        TradableAssetManager tradableAssetManager)
     {
         this.erc20TokenButtonFactory = erc20TokenButtonFactory;
         this.etherAssetButtonFactory = etherAssetButtonFactory;
@@ -38,10 +40,9 @@ public sealed class TradableAssetButtonManager : IDisposable
 
         disposableComponentManager.AddDisposable(this);
 
-        TradableAssetManager.OnTradableAssetAdded += AddAssetButton;
-        TradableAssetManager.OnTradableAssetRemoved += RemoveButton;
-
-        TokenContractManager.OnTokensLoaded += SortButtons;
+        tradableAssetManager.OnTradableAssetAdded += AddAssetButton;
+        tradableAssetManager.OnTradableAssetRemoved += RemoveButton;
+        tokenContractManager.OnTokensLoaded += SortButtons;
     }
 
     /// <summary>

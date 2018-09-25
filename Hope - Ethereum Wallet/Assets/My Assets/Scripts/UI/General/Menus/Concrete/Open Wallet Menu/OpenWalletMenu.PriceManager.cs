@@ -21,9 +21,8 @@ public sealed partial class OpenWalletMenu
             this.tradableAssetManager = tradableAssetManager;
             this.priceText = priceText;
 
-            TradableAssetManager.OnBalancesUpdated += UpdateAssetValue;
-
             currencyManager.OnCurrencyChanged += OnCurrencyChanged;
+            tradableAssetManager.OnBalancesUpdated += UpdateAssetValue;
             tradableAssetPriceManager.OnPriceUpdateSucceeded += UpdateAssetValue;
         }
 
