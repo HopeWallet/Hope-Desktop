@@ -68,6 +68,8 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     {
         base.OnDisable();
         buttonObserver.UnsubscribeObservable(this);
+
+        wordFields.ForEach(inputField => inputField.Text = string.Empty);
     }
 
     /// <summary>

@@ -75,14 +75,6 @@ using System.Globalization;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    //[DllImport("winId.dll")]
-    //internal static extern ushort getCpuHash();
-
-    //private void Start()
-    //{
-    //    getCpuHash();
-    //}
-
     //public string code;
 
     //private string previousCode;
