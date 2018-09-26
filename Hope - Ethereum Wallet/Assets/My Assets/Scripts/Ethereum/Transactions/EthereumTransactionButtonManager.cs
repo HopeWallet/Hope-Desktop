@@ -100,7 +100,7 @@ public sealed class EthereumTransactionButtonManager : IDisposable
         UpdateTransactionList(transactionList);
         UpdateLoadingVisuals(transactionList);
 
-        previousAssetAddress = tradableAssetManager.ActiveTradableAsset.AssetAddress;
+        previousAssetAddress = tradableAssetManager?.ActiveTradableAsset?.AssetAddress;
     }
 
     /// <summary>
