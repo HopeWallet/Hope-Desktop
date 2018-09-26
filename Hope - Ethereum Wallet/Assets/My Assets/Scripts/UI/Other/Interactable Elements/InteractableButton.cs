@@ -23,10 +23,21 @@ public class InteractableButton : InteractableBase
 			buttonComponent.onClick.AddListener(OnCustomPointerExit);
 	}
 
-	/// <summary>
-	/// If the user is hovering over the button, it sets the cursor depending on if the button is interactable or not
-	/// </summary>
-	private void Update()
+    /// <summary>
+    /// Resets the cursor if currently hovering on when the button is disabled.
+    /// </summary>
+    private void OnDisable()
+    {
+        if (hovering)
+            SetCursor(null);
+
+        hovering = false;
+    }
+
+    /// <summary>
+    /// If the user is hovering over the button, it sets the cursor depending on if the button is interactable or not
+    /// </summary>
+    private void Update()
 	{
 		if (hovering)
 			SetCursor(buttonComponent.interactable ? customCursor : null);

@@ -26,7 +26,9 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
 
     private dynamic etherBalance;
     private decimal lockedPurpose;
-    private bool lockPeriodDone;
+
+    private bool lockPeriodDone,
+                 useUnlockableTime;
 
     private const int MIN_PERCENTAGE_TIME_RINKEBY = 3600; // For use with the rinkeby hodler where the lock period minimum is 1 hour.
     private const int MIN_PERCENTAGE_TIME_MAINNET = 7884000; // For use with the mainnet hodler where the lock period minimum is 3 months.
@@ -48,6 +50,11 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
             RecheckIfFunctionCanBeSent();
         }
     }
+
+    /// <summary>
+    /// Whether the unlockable time should be used.
+    /// </summary>
+    public bool UseUnlockableTime { set { useUnlockableTime = value; OnValueUpdated(ButtonInfo); } }
 
     /// <summary>
     /// Adds the required dependencies to this class.
@@ -115,7 +122,10 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         purposeAmountText.text = lockedPurpose.ConvertDecimalToString().LimitEnd(12, "...");
         dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(11, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
-        timeLeftText.text = currentTimeDifference < 0 ? "Done" : GetTimeLeftString((int)currentTimeDifference);
+
+        timeLeftText.text = currentTimeDifference < 0
+            ? "Done"
+            : !useUnlockableTime ? GetTimeLeftString((int)currentTimeDifference) : DateTimeUtils.TimeStampToDateTime((long)info.ReleaseTime).GetStringFormattedDate();
     }
 
     /// <summary>

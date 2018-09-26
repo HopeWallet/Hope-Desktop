@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,14 +10,22 @@ using Zenject;
 /// </summary>
 public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
 {
-    public Transform itemSpawnTransform;
-    public Button lockPRPSButton;
+    [SerializeField] private Transform itemSpawnTransform;
+
+    [SerializeField]
+    private Button lockPRPSButton,
+                                    nextButton,
+                                    previousButton;
+
+    [SerializeField] private TMP_Text timeLeftText;
 
     private readonly List<LockedPRPSItemButton> lockedPRPSItems = new List<LockedPRPSItemButton>();
 
     private LockedPRPSManager lockedPRPSManager;
     private LockedPRPSItemButton.Factory lockedPRPSItemFactory;
     private LockedPRPSPopupAnimator lockedPRPSAnimator;
+
+    private bool useUnlockableTime;
 
     [Inject]
     public void Construct(
@@ -31,11 +40,16 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     {
         base.Awake();
 
+        SwitchUnlockDateSection(false);
         CreateInitialItemList();
+
         lockedPRPSAnimator = Animator as LockedPRPSPopupAnimator;
         lockedPRPSAnimator.LockedPurposeItems = lockedPRPSItems.Select(item => item.transform.parent.gameObject).ToArray();
 
         lockPRPSButton.onClick.AddListener(() => popupManager.GetPopup<LockPRPSPopup>(true));
+        nextButton.onClick.AddListener(() => SwitchUnlockDateSection(false));
+        previousButton.onClick.AddListener(() => SwitchUnlockDateSection(true));
+
         lockedPRPSManager.OnLockedPRPSUpdated += UpdateList;
     }
 
@@ -43,8 +57,19 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     {
         lockedPRPSManager.OnLockedPRPSUpdated -= UpdateList;
         lockedPRPSItems.ForEach(item => item.EndButtonUpdates());
-		TopBarButtons.popupClosed?.Invoke();
-	}
+        TopBarButtons.popupClosed?.Invoke();
+    }
+
+    private void SwitchUnlockDateSection(bool previousButtonPressed)
+    {
+        useUnlockableTime = previousButtonPressed;
+        lockedPRPSItems.ForEach(item => item.UseUnlockableTime = useUnlockableTime);
+
+        timeLeftText.text = useUnlockableTime ? "Unlock Date" : "Time Left";
+
+        previousButton.gameObject.SetActive(!previousButtonPressed);
+        nextButton.gameObject.SetActive(previousButtonPressed);
+    }
 
     private void UpdateList()
     {
@@ -71,6 +96,8 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
     private void CreateItem(Hodler.Output.Item item, bool initialWalletLoad = true)
     {
         LockedPRPSItemButton itemButton = lockedPRPSItemFactory.Create().SetButtonInfo(item);
+        itemButton.UseUnlockableTime = useUnlockableTime;
+
         Transform componentTransform = itemButton.transform;
         Transform parentTransform = componentTransform.parent;
         itemButton.StartButtonUpdates();

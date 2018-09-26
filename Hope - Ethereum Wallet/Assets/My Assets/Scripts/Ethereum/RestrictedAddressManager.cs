@@ -29,7 +29,6 @@ public class RestrictedAddressManager
     /// <returns> True if the address is restricted and cannot be used. </returns>
     public bool IsRestrictedAddress(string address)
     {
-        UnityEngine.Debug.Log(address);
         return !AddressUtils.IsValidEthereumAddress(address)
             || constantRestrictedAddresses.ContainsIgnoreCase(address)
             || tokenListManager.TokenList.Select(token => token.TokenInfo.Address).ContainsIgnoreCase(address);

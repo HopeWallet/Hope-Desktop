@@ -24,7 +24,7 @@ public static class DateTimeUtils
     /// </summary>
     /// <param name="timeStamp"> The unix time stamp to convert. </param>
     /// <returns> The DateTime of the unix time stamp. </returns>
-    public static DateTime TimeStampToDateTime(double timeStamp) => UnixTimeStart.AddSeconds(timeStamp).ToLocalTime();
+    public static DateTime TimeStampToDateTime(long timeStamp) => UnixTimeStart.AddSeconds(timeStamp).ToLocalTime();
 
     /// <summary>
     /// Gets the formatted date, and the proper 12 hour formatted time.
