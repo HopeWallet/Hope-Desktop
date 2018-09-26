@@ -76,8 +76,8 @@ public sealed class LedgerWallet : HardwareWallet
         if (ledgerManager == null)
             return;
 
-        var isLegacyPath = !path.EqualsIgnoreCase(Wallet.DEFAULT_PATH);
-        var derivationData = GetDerivationPathData(isLegacyPath ? App.Ethereum : App.Bitcoin, new NBitcoin.KeyPath(path).Indexes[isLegacyPath ? 3 : 4]);
+        var addressIndex = path.Count(c => c == '/') - 1;
+        var derivationData = GetDerivationPathData(addressIndex == 3 ? App.Ethereum : App.Bitcoin, new NBitcoin.KeyPath(path).Indexes[addressIndex]);
 
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);

@@ -91,7 +91,7 @@ public sealed class EthereumTransactionButtonManager : IDisposable
     /// </summary>
     private void ProcessTransactions()
     {
-        if (!previousAssetAddress.EqualsIgnoreCase(tradableAssetManager.ActiveTradableAsset.AssetAddress))
+        if (!previousAssetAddress.EqualsIgnoreCase(tradableAssetManager?.ActiveTradableAsset?.AssetAddress))
             activePageNum = 0;
 
         var transactionList = GetValidTransactionList();
