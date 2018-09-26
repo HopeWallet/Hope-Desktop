@@ -32,7 +32,6 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
     private TradableAssetImageManager tradableAssetImageManager;
 	private ContactsManager contactsManager;
 	private Hodler hodler;
-	private RestrictedAddressManager restrictedAddressManager;
 
 	/// <summary>
 	/// Injects the required dependencies.
@@ -43,7 +42,6 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 	/// <param name="userWalletManager"> The active UserWalletManager. </param>
 	/// <param name="userWalletInfoManager"> The active userWalletInfoManager. </param>
 	/// <param name="hodler"> The active Hodler. </param>
-	/// <param name="restrictedAddressManager"> The active RestrictedAddressManager. </param>
 	[Inject]
     public void Construct(
 		TradableAssetManager tradableAssetManager,
@@ -51,14 +49,12 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 		ContactsManager contactsManager,
 		UserWalletManager userWalletManager,
 		HopeWalletInfoManager userWalletInfoManager,
-		Hodler hodler,
-		RestrictedAddressManager restrictedAddressManager)
+		Hodler hodler)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
 		this.contactsManager = contactsManager;
 		this.hodler = hodler;
-		this.restrictedAddressManager = restrictedAddressManager;
 
 		walletAddress = userWalletManager.GetWalletAddress();
 		walletName = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope ? userWalletInfoManager.GetWalletInfo(walletAddress).WalletName : userWalletManager.ActiveWalletType.ToString();

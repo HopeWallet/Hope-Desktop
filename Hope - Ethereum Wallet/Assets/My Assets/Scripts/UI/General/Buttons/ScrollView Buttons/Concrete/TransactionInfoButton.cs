@@ -29,7 +29,6 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	private TradableAssetImageManager tradableAssetImageManager;
 	private ContactsManager contactsManager;
 	private Hodler hodler;
-	private RestrictedAddressManager restrictedAddressManager;
 
 	/// <summary>
 	/// Adds the required dependencies to this class.
@@ -46,15 +45,13 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 		TradableAssetManager tradableAssetManager,
 		TradableAssetImageManager tradableAssetImageManager,
 		ContactsManager contactsManager,
-		Hodler hodler,
-		RestrictedAddressManager restrictedAddressManager)
+		Hodler hodler)
 	{
 		this.popupManager = popupManager;
 		this.tradableAssetManager = tradableAssetManager;
 		this.tradableAssetImageManager = tradableAssetImageManager;
 		this.contactsManager = contactsManager;
 		this.hodler = hodler;
-		this.restrictedAddressManager = restrictedAddressManager;
 	}
 
 	/// <summary>
