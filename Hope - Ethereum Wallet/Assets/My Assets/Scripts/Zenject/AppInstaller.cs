@@ -81,6 +81,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<EthereumTransactionManager>().AsSingle().NonLazy();
         Container.Bind<EthereumTransactionButtonManager>().AsSingle().NonLazy();
         Container.Bind<ContactsManager>().AsSingle().NonLazy();
+        Container.Bind<RestrictedAddressManager>().AsSingle().NonLazy();
 
         Container.Bind<UserWalletManager>().AsSingle().NonLazy();
         Container.Bind<LedgerWallet>().AsSingle().NonLazy();
