@@ -9,6 +9,7 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject transactionSection;
 	[SerializeField] private GameObject feeSection;
+	[SerializeField] private GameObject confirmText;
 
 	/// <summary>
 	/// Sets the confirm button to interactable if countdown timer setting has been disabled
@@ -30,7 +31,12 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 		line.AnimateScaleX(1f, 0.235f);
 		transactionSection.AnimateScaleX(1f, 0.25f);
 		feeSection.AnimateScaleX(1f, 0.27f, StartTimerAnimation);
-		confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+
+		if (confirmButton.activeInHierarchy)
+			confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		else
+			confirmText.AnimateGraphicAndScale(1f, 1f, 0.3f);
+
 		cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
 	}
 }

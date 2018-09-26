@@ -9,36 +9,53 @@ using Zenject;
 /// </summary>
 public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPopup>
 {
-	[SerializeField] private Button confirmButton;
-
     [SerializeField] private TMP_Text lockPeriodText,
 									  prpsAmountText,
 									  dubiAmountText,
 									  noteText;
+
+	[SerializeField] private GameObject confirmText;
 
     private TradableAssetManager tradableAssetManager;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
     private DUBI dubiContract;
 
-    /// <summary>
-    /// Adds required dependencies to this class.
-    /// </summary>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    /// <param name="tokenListManager"> The active TokenListManager. </param>
-    /// <param name="dubiContract"> The active DUBI contract. </param>
-    [Inject]
+	/// <summary>
+	/// Adds required dependencies to this class.
+	/// </summary>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tokenContractManager"> The active TokenContractManager. </param>
+	/// <param name="tokenListManager"> The active TokenListManager. </param>
+	/// <param name="dubiContract"> The active DUBI contract. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager </param>
+	[Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
         TokenContractManager tokenContractManager,
         TokenListManager tokenListManager,
-        DUBI dubiContract)
+        DUBI dubiContract,
+		UserWalletManager userWalletManager)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tokenContractManager = tokenContractManager;
         this.tokenListManager = tokenListManager;
         this.dubiContract = dubiContract;
+
+		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+		{
+			confirmText.SetActive(true);
+			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Ledger.";
+		}
+		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+		{
+			confirmText.SetActive(true);
+			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Trezor.";
+		}
+		else
+		{
+			okButton.gameObject.SetActive(true);
+		}
 	}
 
     /// <summary>

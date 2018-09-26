@@ -17,6 +17,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 											 contactName,
 											 feeText;
 
+	[SerializeField] private GameObject confirmText;
+
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
@@ -35,22 +37,37 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
 	/// <param name="contactsManager"> The active ContactsManager. </param>
 	[Inject]
-    public void Construct(
-        TradableAssetManager tradableAssetManager,
-        TradableAssetImageManager tradableAssetImageManager,
-        UserWalletManager userWalletManager,
-        HopeWalletInfoManager userWalletInfoManager,
-        DynamicDataCache dynamicDataCache,
+	public void Construct(
+		TradableAssetManager tradableAssetManager,
+		TradableAssetImageManager tradableAssetImageManager,
+		UserWalletManager userWalletManager,
+		HopeWalletInfoManager userWalletInfoManager,
+		DynamicDataCache dynamicDataCache,
 		ContactsManager contactsManager)
-    {
-        this.tradableAssetManager = tradableAssetManager;
-        this.tradableAssetImageManager = tradableAssetImageManager;
-        this.userWalletManager = userWalletManager;
-        this.userWalletInfoManager = userWalletInfoManager;
-        this.dynamicDataCache = dynamicDataCache;
+	{
+		this.tradableAssetManager = tradableAssetManager;
+		this.tradableAssetImageManager = tradableAssetImageManager;
+		this.userWalletManager = userWalletManager;
+		this.userWalletInfoManager = userWalletInfoManager;
+		this.dynamicDataCache = dynamicDataCache;
 		this.contactsManager = contactsManager;
 
 		walletAddress = userWalletManager.GetWalletAddress();
+
+		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+		{
+			confirmText.SetActive(true);
+			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Ledger.";
+		}
+		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+		{
+			confirmText.SetActive(true);
+			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Trezor.";
+		}
+		else
+		{
+			okButton.gameObject.SetActive(true);
+		}
 	}
 
     /// <summary>
