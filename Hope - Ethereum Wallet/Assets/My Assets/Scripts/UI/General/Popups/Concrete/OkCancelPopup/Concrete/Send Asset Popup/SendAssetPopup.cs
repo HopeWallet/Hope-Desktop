@@ -69,22 +69,23 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     /// </summary>
     private Selectable LastSelectableField => advancedModeToggle.IsToggledOn ? gasPriceField.InputFieldBase : amountField.InputFieldBase;
 
-    /// <summary>
-    /// Adds the required dependencies to the SendAssetPopup.
-    /// </summary>
-    /// <param name="currencyManager"> The active CurrencyManager. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
-    /// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
-    /// <param name="ethereumTransactionButtonManager"> The active EthereumTransactionButtonManager. </param>
-    /// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
-    /// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
-    /// <param name="updateManager"> The active UpdateManager. </param>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
-    /// <param name="contactsManager"> The active ContactsManager. </param>
-    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
-    [Inject]
+	/// <summary>
+	/// Adds the required dependencies to the SendAssetPopup.
+	/// </summary>
+	/// <param name="currencyManager"> The active CurrencyManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
+	/// <param name="tradableAssetPriceManager"> The active TradableAssetPriceManager. </param>
+	/// <param name="ethereumTransactionButtonManager"> The active EthereumTransactionButtonManager. </param>
+	/// <param name="etherBalanceObserver"> The active EtherBalanceObserver. </param>
+	/// <param name="gasPriceObserver"> The active GasPriceObserver. </param>
+	/// <param name="updateManager"> The active UpdateManager. </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
+	/// <param name="contactsManager"> The active ContactsManager. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+	/// <param name="restrictedAddressManager"> The active RestrictedAddressManager </param>
+	[Inject]
     public void Construct(
         CurrencyManager currencyManager,
         UserWalletManager userWalletManager,
@@ -97,7 +98,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         DynamicDataCache dynamicDataCache,
         PeriodicUpdateManager periodicUpdateManager,
         ContactsManager contactsManager,
-        ButtonClickObserver buttonClickObserver)
+        ButtonClickObserver buttonClickObserver,
+		RestrictedAddressManager restrictedAddressManager)
     {
         this.ethereumTransactionButtonManager = ethereumTransactionButtonManager;
         this.userWalletManager = userWalletManager;
@@ -106,7 +108,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
         Asset = new AssetManager(tradableAssetManager, etherBalanceObserver, updateManager, assetSymbol, assetBalance, assetImage);
         Gas = new GasManager(tradableAssetManager, tradableAssetPriceManager, currencyManager, gasPriceObserver, periodicUpdateManager, advancedModeToggle, transactionSpeedSlider, gasLimitField, gasPriceField, transactionFee);
-        Address = new AddressManager(addressField, contactName, contactsManager);
+        Address = new AddressManager(addressField, contactName, contactsManager, restrictedAddressManager);
         Amount = new AmountManager(currencyManager, tradableAssetPriceManager, maxToggle, maxText, amountField, currencyText, oppositeCurrencyAmountText, currencyButton, assetSymbol.text);
 
         Gas.SetupDependencies(Amount);

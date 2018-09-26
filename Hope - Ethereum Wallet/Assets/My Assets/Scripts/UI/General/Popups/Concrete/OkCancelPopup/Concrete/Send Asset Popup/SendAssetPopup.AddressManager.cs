@@ -15,6 +15,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public readonly TMP_Text contactName;
 
 		private ContactsManager contactsManager;
+		private RestrictedAddressManager restrictedAddressManager;
 
 		/// <summary>
 		/// Whether the address input field is empty or not.
@@ -35,11 +36,13 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		public AddressManager(
 			HopeInputField addressField,
 			TMP_Text contactName,
-			ContactsManager contactsManager)
+			ContactsManager contactsManager,
+			RestrictedAddressManager restrictedAddressManager)
 		{
 			this.addressField = addressField;
 			this.contactName = contactName;
 			this.contactsManager = contactsManager;
+			this.restrictedAddressManager = restrictedAddressManager;
 
 			addressField.OnInputUpdated += _ => CheckAddress();
 		}
@@ -49,9 +52,17 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void CheckAddress()
 		{
-			string address = addressField.Text;
+			string address = addressField.Text.ToLower();
 
-			addressField.Error = !AddressUtils.IsValidEthereumAddress(address);
+			bool invalidEthereumAddress = !AddressUtils.IsValidEthereumAddress(address);
+			bool isRestrictedAddress = restrictedAddressManager.IsRestrictedAddress(address);
+
+			addressField.Error = invalidEthereumAddress || isRestrictedAddress;
+
+			if (invalidEthereumAddress)
+				addressField.errorMessage.text = "Invalid address";
+			else if (isRestrictedAddress)
+				addressField.errorMessage.text = "Restricted address";
 
 			if (!addressField.Error)
 				CheckIfSavedContact(address);

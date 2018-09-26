@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class RestrictedAddressManager
+public class RestrictedAddressManager
 {
-    public bool IsRestricted(string address)
+
+    public bool IsRestrictedAddress(string address)
     {
-        return false;
+		//Make sure all addresses are converted: .ToLower(); before checking
+
+		return false;
     }
 }

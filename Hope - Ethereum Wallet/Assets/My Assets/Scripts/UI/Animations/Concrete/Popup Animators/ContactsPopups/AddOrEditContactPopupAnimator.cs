@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Hope.Utils.Ethereum;
+using Zenject;
 
 /// <summary>
 /// The animator class of the AddOrEditContactPopup
@@ -14,10 +15,21 @@ public sealed class AddOrEditContactPopupAnimator : PopupAnimator
 
 	private AddOrEditContactPopup addOrEditContactPopup;
 	public ContactsManager contactsManager;
+	private RestrictedAddressManager restrictedAddressManager;
 
-    public string PreviousAddress { get; set; }
+	public string PreviousAddress { get; set; }
 
     public bool AddingContact { get; set; }
+
+	/// <summary>
+	/// Sets the required dependency
+	/// </summary>
+	/// <param name="restrictedAddressManager"> The active RestrictedAddressManager </param>
+	[Inject]
+	public void Construct(RestrictedAddressManager restrictedAddressManager)
+	{
+		this.restrictedAddressManager = restrictedAddressManager;
+	}
 
 	/// <summary>
 	/// Initializes the elements
@@ -78,13 +90,16 @@ public sealed class AddOrEditContactPopupAnimator : PopupAnimator
 
 		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool overridingOtherContactAddresses = contactsManager.ContactList.Contains(updatedAddress) && (!AddingContact ? updatedAddress != PreviousAddress : true);
+		bool isRestrictedAddress = restrictedAddressManager.IsRestrictedAddress(updatedAddress);
 
-		addressInputField.Error = !realEthereumAddress || overridingOtherContactAddresses;
+		addressInputField.Error = !realEthereumAddress || overridingOtherContactAddresses || isRestrictedAddress;
 
 		if (!realEthereumAddress)
 			addressInputField.errorMessage.text = "Invalid address";
 		else if (overridingOtherContactAddresses)
 			addressInputField.errorMessage.text = "Address in use";
+		else if (isRestrictedAddress)
+			addressInputField.errorMessage.text = "Restricted address";
 
 		SetMainButtonInteractable();
 	}
