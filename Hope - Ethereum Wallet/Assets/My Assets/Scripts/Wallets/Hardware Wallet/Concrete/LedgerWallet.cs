@@ -5,11 +5,13 @@ using Ledger.Net;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
+using NBitcoin;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Signer;
 using Nethereum.Util;
+using Transaction = Nethereum.Signer.Transaction;
 
 public sealed class LedgerWallet : HardwareWallet
 {
@@ -34,25 +36,35 @@ public sealed class LedgerWallet : HardwareWallet
         addresses[1] = new string[50];
 
         if (!await AssignAddresses(ledgerManager, Wallet.DEFAULT_PATH) || !await AssignAddresses(ledgerManager, Wallet.ELECTRUM_LEDGER_PATH))
+        {
+            MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
             return;
+        }
 
         MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
     private async Task<bool> AssignAddresses(LedgerManager ledgerManager, string path)
     {
-        int addressesIndex = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
+        var addressesIndex = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
+        var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(path.TrimEnd('x', '/'), true, false).ConfigureAwait(false);
+
+        if (!pubKeyResponse.IsSuccess)
+            return false;
+
+        var pubKeyData = pubKeyResponse.PublicKeyData;
+        var chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray();
+
+        var xPub = new ExtPubKey(new PubKey(pubKeyData).Compress(), chainCodeData, (byte)(path.Count(c => c == '/') - 1), new byte[4], (0 | Constants.HARDENING_CONSTANT) >> 0);
+
         for (uint i = 0; i < addresses[addressesIndex].Length; i++)
         {
-            var address = await ledgerManager.GetAddressAsync(path.Replace("x", i.ToString()), false, false);
+            var address = new EthECKey(xPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress();
 
             addresses[addressesIndex][i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
 
             if (string.IsNullOrEmpty(address))
-            {
-                MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
                 return false;
-            }
         }
 
         return true;

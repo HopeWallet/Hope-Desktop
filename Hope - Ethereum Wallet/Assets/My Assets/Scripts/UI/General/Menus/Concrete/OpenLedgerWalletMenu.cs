@@ -66,7 +66,9 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     public async void PeriodicUpdate()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-        var address = ledgerManager == null ? null : await ledgerManager.GetAddressAsync(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false);
+        var address = ledgerManager == null
+            ? null
+            : (await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false))?.Address;
 
         if (string.IsNullOrEmpty(address))
         {

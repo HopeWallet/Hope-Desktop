@@ -78,49 +78,6 @@ using NBitcoin.Crypto;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    private async void Start()
-    {
-        //ExtPubKey extPubKey = new ExtPubKey().
-        //EthECKey ethECKey = new EthECKey()
-
-        var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-
-        if (ledgerManager == null)
-            return;
-
-        var data = Helpers.GetDerivationPathData(/*Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0")*/"m/44'/60'/0'");
-
-        var request = new EthereumAppGetPublicKeyRequest(false, true, data);
-        var response = await ledgerManager.SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(request).ConfigureAwait(false);
-
-        if (!response.IsSuccess)
-        {
-            Debug.LogError(response.StatusMessage);
-            return;
-        }
-
-        //Base58Encoder encoder = new Base58Encoder();
-        //new PubKey().Hash.
-
-        var pubKey = response.PublicKeyData;
-        var chainCode = response.ExtraData.Take(32).ToArray();
-
-        ExtPubKey key = new ExtPubKey(new PubKey(pubKey).Compress(), chainCode, 3, new byte[4], (0 | Constants.HARDENING_CONSTANT) >> 0);
-        //key.IsHardened.Log();
-
-        //Base58Encoder base58Encoder = new Base58Encoder();
-        //base58Encoder.EncodeData(key.ToBytes()).Log();
-
-        //KeyPath keyPath0 = new KeyPath(Wallet.DEFAULT_PATH.Replace("x", "1"));
-
-        //KeyPath keyPath = new KeyPath(44, 60, 0, 1);
-
-        //ExtPubKey extPubKey2 = extPubKey.Derive(keyPath);
-
-        EthECKey ethEcKey = new EthECKey(key.Derive(0).PubKey.ToBytes(), false);
-        ethEcKey.GetPublicAddress().Log();
-    }
-
     //public string code;
 
     //private string previousCode;
@@ -177,278 +134,278 @@ public sealed class HopeTesting : MonoBehaviour
 
 }
 
-public static class Utils
-{
-    internal static byte[] SafeSubarray(this byte[] array, int offset, int count)
-    {
-        if (array == null)
-            throw new ArgumentNullException(nameof(array));
-        if (offset < 0 || offset > array.Length)
-            throw new ArgumentOutOfRangeException("offset");
-        if (count < 0 || offset + count > array.Length)
-            throw new ArgumentOutOfRangeException("count");
-        if (offset == 0 && array.Length == count)
-            return array;
-        var data = new byte[count];
-        Buffer.BlockCopy(array, offset, data, 0, count);
-        return data;
-    }
+//public static class Utils
+//{
+//    internal static byte[] SafeSubarray(this byte[] array, int offset, int count)
+//    {
+//        if (array == null)
+//            throw new ArgumentNullException(nameof(array));
+//        if (offset < 0 || offset > array.Length)
+//            throw new ArgumentOutOfRangeException("offset");
+//        if (count < 0 || offset + count > array.Length)
+//            throw new ArgumentOutOfRangeException("count");
+//        if (offset == 0 && array.Length == count)
+//            return array;
+//        var data = new byte[count];
+//        Buffer.BlockCopy(array, offset, data, 0, count);
+//        return data;
+//    }
 
-    internal static byte[] SafeSubarray(this byte[] array, int offset)
-    {
-        if (array == null)
-            throw new ArgumentNullException(nameof(array));
-        if (offset < 0 || offset > array.Length)
-            throw new ArgumentOutOfRangeException("offset");
+//    internal static byte[] SafeSubarray(this byte[] array, int offset)
+//    {
+//        if (array == null)
+//            throw new ArgumentNullException(nameof(array));
+//        if (offset < 0 || offset > array.Length)
+//            throw new ArgumentOutOfRangeException("offset");
 
-        var count = array.Length - offset;
-        var data = new byte[count];
-        Buffer.BlockCopy(array, offset, data, 0, count);
-        return data;
-    }
-}
+//        var count = array.Length - offset;
+//        var data = new byte[count];
+//        Buffer.BlockCopy(array, offset, data, 0, count);
+//        return data;
+//    }
+//}
 
-/// <summary>
-/// A public HD key
-/// </summary>
-public class ExtPubKey : IBitcoinSerializable, IDestination
-{
-    public static ExtPubKey Parse(string wif, NBitcoin.Network expectedNetwork = null)
-    {
-        return null;
-        //return NBitcoin.Network.Parse<BitcoinExtPubKey>(wif, expectedNetwork).ExtPubKey;
-    }
+///// <summary>
+///// A public HD key
+///// </summary>
+//public class ExtPubKey : IBitcoinSerializable, IDestination
+//{
+//    public static ExtPubKey Parse(string wif, NBitcoin.Network expectedNetwork = null)
+//    {
+//        return null;
+//        //return NBitcoin.Network.Parse<BitcoinExtPubKey>(wif, expectedNetwork).ExtPubKey;
+//    }
 
-    private const int FingerprintLength = 4;
-    private const int ChainCodeLength = 32;
+//    private const int FingerprintLength = 4;
+//    private const int ChainCodeLength = 32;
 
-    static readonly byte[] validPubKey = Encoders.Hex.DecodeData("0374ef3990e387b5a2992797f14c031a64efd80e5cb843d7c1d4a0274a9bc75e55");
-    internal byte nDepth;
-    internal byte[] vchFingerprint = new byte[FingerprintLength];
-    internal uint nChild;
+//    static readonly byte[] validPubKey = Encoders.Hex.DecodeData("0374ef3990e387b5a2992797f14c031a64efd80e5cb843d7c1d4a0274a9bc75e55");
+//    internal byte nDepth;
+//    internal byte[] vchFingerprint = new byte[FingerprintLength];
+//    internal uint nChild;
 
-    internal PubKey pubkey = new PubKey(validPubKey);
-    internal byte[] vchChainCode = new byte[ChainCodeLength];
+//    internal PubKey pubkey = new PubKey(validPubKey);
+//    internal byte[] vchChainCode = new byte[ChainCodeLength];
 
-    public byte Depth
-    {
-        get
-        {
-            return nDepth;
-        }
-    }
+//    public byte Depth
+//    {
+//        get
+//        {
+//            return nDepth;
+//        }
+//    }
 
-    public uint Child
-    {
-        get
-        {
-            return nChild;
-        }
-    }
+//    public uint Child
+//    {
+//        get
+//        {
+//            return nChild;
+//        }
+//    }
 
-    public bool IsHardened
-    {
-        get
-        {
-            return (nChild & 0x80000000u) != 0;
-        }
-    }
-    public PubKey PubKey
-    {
-        get
-        {
-            return pubkey;
-        }
-    }
-    public byte[] ChainCode
-    {
-        get
-        {
-            byte[] chainCodeCopy = new byte[ChainCodeLength];
-            Buffer.BlockCopy(vchChainCode, 0, chainCodeCopy, 0, ChainCodeLength);
+//    public bool IsHardened
+//    {
+//        get
+//        {
+//            return (nChild & 0x80000000u) != 0;
+//        }
+//    }
+//    public PubKey PubKey
+//    {
+//        get
+//        {
+//            return pubkey;
+//        }
+//    }
+//    public byte[] ChainCode
+//    {
+//        get
+//        {
+//            byte[] chainCodeCopy = new byte[ChainCodeLength];
+//            Buffer.BlockCopy(vchChainCode, 0, chainCodeCopy, 0, ChainCodeLength);
 
-            return chainCodeCopy;
-        }
-    }
+//            return chainCodeCopy;
+//        }
+//    }
 
-    internal ExtPubKey()
-    {
-    }
+//    internal ExtPubKey()
+//    {
+//    }
 
-    /// <summary>
-    /// Constructor. Creates a new extended public key from the specified extended public key bytes.
-    /// </summary>
-    public ExtPubKey(byte[] bytes)
-    {
-        if (bytes == null)
-            throw new ArgumentNullException(nameof(bytes));
-        this.ReadWrite(bytes);
-    }
+//    /// <summary>
+//    /// Constructor. Creates a new extended public key from the specified extended public key bytes.
+//    /// </summary>
+//    public ExtPubKey(byte[] bytes)
+//    {
+//        if (bytes == null)
+//            throw new ArgumentNullException(nameof(bytes));
+//        this.ReadWrite(bytes);
+//    }
 
-    /// <summary>
-    /// Constructor. Creates a new extended public key from the specified extended public key bytes, from the given hex string.
-    /// </summary>
-    public ExtPubKey(string hex)
-        : this(Encoders.Hex.DecodeData(hex))
-    {
-    }
+//    /// <summary>
+//    /// Constructor. Creates a new extended public key from the specified extended public key bytes, from the given hex string.
+//    /// </summary>
+//    public ExtPubKey(string hex)
+//        : this(Encoders.Hex.DecodeData(hex))
+//    {
+//    }
 
-    public ExtPubKey(PubKey pubkey, byte[] chainCode, byte depth, byte[] fingerprint, uint child)
-    {
-        if (pubkey == null)
-            throw new ArgumentNullException(nameof(pubkey));
-        if (chainCode == null)
-            throw new ArgumentNullException(nameof(chainCode));
-        if (fingerprint == null)
-            throw new ArgumentNullException(nameof(fingerprint));
-        if (fingerprint.Length != FingerprintLength)
-            throw new ArgumentException(string.Format("The fingerprint must be {0} bytes.", FingerprintLength), "fingerprint");
-        if (chainCode.Length != ChainCodeLength)
-            throw new ArgumentException(string.Format("The chain code must be {0} bytes.", ChainCodeLength), "chainCode");
-        this.pubkey = pubkey;
-        this.nDepth = depth;
-        this.nChild = child;
-        Buffer.BlockCopy(fingerprint, 0, vchFingerprint, 0, FingerprintLength);
-        Buffer.BlockCopy(chainCode, 0, vchChainCode, 0, ChainCodeLength);
-    }
+//    public ExtPubKey(PubKey pubkey, byte[] chainCode, byte depth, byte[] fingerprint, uint child)
+//    {
+//        if (pubkey == null)
+//            throw new ArgumentNullException(nameof(pubkey));
+//        if (chainCode == null)
+//            throw new ArgumentNullException(nameof(chainCode));
+//        if (fingerprint == null)
+//            throw new ArgumentNullException(nameof(fingerprint));
+//        if (fingerprint.Length != FingerprintLength)
+//            throw new ArgumentException(string.Format("The fingerprint must be {0} bytes.", FingerprintLength), "fingerprint");
+//        if (chainCode.Length != ChainCodeLength)
+//            throw new ArgumentException(string.Format("The chain code must be {0} bytes.", ChainCodeLength), "chainCode");
+//        this.pubkey = pubkey;
+//        this.nDepth = depth;
+//        this.nChild = child;
+//        Buffer.BlockCopy(fingerprint, 0, vchFingerprint, 0, FingerprintLength);
+//        Buffer.BlockCopy(chainCode, 0, vchChainCode, 0, ChainCodeLength);
+//    }
 
-    public ExtPubKey(PubKey masterKey, byte[] chainCode)
-    {
-        if (masterKey == null)
-            throw new ArgumentNullException(nameof(masterKey));
-        if (chainCode == null)
-            throw new ArgumentNullException(nameof(chainCode));
-        if (chainCode.Length != ChainCodeLength)
-            throw new ArgumentException(string.Format("The chain code must be {0} bytes.", ChainCodeLength), "chainCode");
-        this.pubkey = masterKey;
-        Buffer.BlockCopy(chainCode, 0, vchChainCode, 0, ChainCodeLength);
-    }
-
-
-    public bool IsChildOf(ExtPubKey parentKey)
-    {
-        if (Depth != parentKey.Depth + 1)
-            return false;
-        return parentKey.CalculateChildFingerprint().SequenceEqual(Fingerprint);
-    }
-    public bool IsParentOf(ExtPubKey childKey)
-    {
-        return childKey.IsChildOf(this);
-    }
-    public byte[] CalculateChildFingerprint()
-    {
-        return pubkey.Hash.ToBytes().SafeSubarray(0, FingerprintLength);
-    }
-
-    public byte[] Fingerprint
-    {
-        get
-        {
-            return vchFingerprint;
-        }
-    }
-
-    public ExtPubKey Derive(uint index)
-    {
-        var result = new ExtPubKey
-        {
-            nDepth = (byte)(nDepth + 1),
-            vchFingerprint = CalculateChildFingerprint(),
-            nChild = index
-        };
-        result.pubkey = pubkey.Derivate(this.vchChainCode, index, out result.vchChainCode);
-        return result;
-    }
-
-    public ExtPubKey Derive(KeyPath derivation)
-    {
-        ExtPubKey result = this;
-        return derivation.Indexes.Aggregate(result, (current, index) => current.Derive(index));
-    }
-
-    public ExtPubKey Derive(int index, bool hardened)
-    {
-        if (index < 0)
-            throw new ArgumentOutOfRangeException("index", "the index can't be negative");
-        uint realIndex = (uint)index;
-        realIndex = hardened ? realIndex | 0x80000000u : realIndex;
-        return Derive(realIndex);
-    }
-
-    public BitcoinExtPubKey GetWif(NBitcoin.Network network)
-    {
-        return null;
-        //return new BitcoinExtPubKey(this, network);
-    }
-
-    #region IBitcoinSerializable Members
-
-    public void ReadWrite(BitcoinStream stream)
-    {
-        using (stream.BigEndianScope())
-        {
-            stream.ReadWrite(ref nDepth);
-            stream.ReadWrite(ref vchFingerprint);
-            stream.ReadWrite(ref nChild);
-            stream.ReadWrite(ref vchChainCode);
-            stream.ReadWrite(ref pubkey);
-        }
-    }
+//    public ExtPubKey(PubKey masterKey, byte[] chainCode)
+//    {
+//        if (masterKey == null)
+//            throw new ArgumentNullException(nameof(masterKey));
+//        if (chainCode == null)
+//            throw new ArgumentNullException(nameof(chainCode));
+//        if (chainCode.Length != ChainCodeLength)
+//            throw new ArgumentException(string.Format("The chain code must be {0} bytes.", ChainCodeLength), "chainCode");
+//        this.pubkey = masterKey;
+//        Buffer.BlockCopy(chainCode, 0, vchChainCode, 0, ChainCodeLength);
+//    }
 
 
-    private uint256 Hash
-    {
-        get
-        {
-            return Hashes.Hash256(this.ToBytes());
-        }
-    }
+//    public bool IsChildOf(ExtPubKey parentKey)
+//    {
+//        if (Depth != parentKey.Depth + 1)
+//            return false;
+//        return parentKey.CalculateChildFingerprint().SequenceEqual(Fingerprint);
+//    }
+//    public bool IsParentOf(ExtPubKey childKey)
+//    {
+//        return childKey.IsChildOf(this);
+//    }
+//    public byte[] CalculateChildFingerprint()
+//    {
+//        return pubkey.Hash.ToBytes().SafeSubarray(0, FingerprintLength);
+//    }
 
-    public override bool Equals(object obj)
-    {
-        ExtPubKey item = obj as ExtPubKey;
-        if (item == null)
-            return false;
-        return Hash.Equals(item.Hash);
-    }
-    public static bool operator ==(ExtPubKey a, ExtPubKey b)
-    {
-        if (System.Object.ReferenceEquals(a, b))
-            return true;
-        if (((object)a == null) || ((object)b == null))
-            return false;
-        return a.Hash == b.Hash;
-    }
+//    public byte[] Fingerprint
+//    {
+//        get
+//        {
+//            return vchFingerprint;
+//        }
+//    }
 
-    public static bool operator !=(ExtPubKey a, ExtPubKey b)
-    {
-        return !(a == b);
-    }
+//    public ExtPubKey Derive(uint index)
+//    {
+//        var result = new ExtPubKey
+//        {
+//            nDepth = (byte)(nDepth + 1),
+//            vchFingerprint = CalculateChildFingerprint(),
+//            nChild = index
+//        };
+//        result.pubkey = pubkey.Derivate(this.vchChainCode, index, out result.vchChainCode);
+//        return result;
+//    }
 
-    public override int GetHashCode()
-    {
-        return Hash.GetHashCode();
-    }
-    #endregion
+//    public ExtPubKey Derive(KeyPath derivation)
+//    {
+//        ExtPubKey result = this;
+//        return derivation.Indexes.Aggregate(result, (current, index) => current.Derive(index));
+//    }
 
-    public string ToString(NBitcoin.Network network)
-    {
-        return "";
-        //return new BitcoinExtPubKey(this, network).ToString();
-    }
+//    public ExtPubKey Derive(int index, bool hardened)
+//    {
+//        if (index < 0)
+//            throw new ArgumentOutOfRangeException("index", "the index can't be negative");
+//        uint realIndex = (uint)index;
+//        realIndex = hardened ? realIndex | 0x80000000u : realIndex;
+//        return Derive(realIndex);
+//    }
 
-    #region IDestination Members
+//    public BitcoinExtPubKey GetWif(NBitcoin.Network network)
+//    {
+//        return null;
+//        //return new BitcoinExtPubKey(this, network);
+//    }
 
-    /// <summary>
-    /// The P2PKH payment script
-    /// </summary>
-    public Script ScriptPubKey
-    {
-        get
-        {
-            return PubKey.Hash.ScriptPubKey;
-        }
-    }
+//    #region IBitcoinSerializable Members
 
-    #endregion
-}
+//    public void ReadWrite(BitcoinStream stream)
+//    {
+//        using (stream.BigEndianScope())
+//        {
+//            stream.ReadWrite(ref nDepth);
+//            stream.ReadWrite(ref vchFingerprint);
+//            stream.ReadWrite(ref nChild);
+//            stream.ReadWrite(ref vchChainCode);
+//            stream.ReadWrite(ref pubkey);
+//        }
+//    }
+
+
+//    private uint256 Hash
+//    {
+//        get
+//        {
+//            return Hashes.Hash256(this.ToBytes());
+//        }
+//    }
+
+//    public override bool Equals(object obj)
+//    {
+//        ExtPubKey item = obj as ExtPubKey;
+//        if (item == null)
+//            return false;
+//        return Hash.Equals(item.Hash);
+//    }
+//    public static bool operator ==(ExtPubKey a, ExtPubKey b)
+//    {
+//        if (System.Object.ReferenceEquals(a, b))
+//            return true;
+//        if (((object)a == null) || ((object)b == null))
+//            return false;
+//        return a.Hash == b.Hash;
+//    }
+
+//    public static bool operator !=(ExtPubKey a, ExtPubKey b)
+//    {
+//        return !(a == b);
+//    }
+
+//    public override int GetHashCode()
+//    {
+//        return Hash.GetHashCode();
+//    }
+//    #endregion
+
+//    public string ToString(NBitcoin.Network network)
+//    {
+//        return "";
+//        //return new BitcoinExtPubKey(this, network).ToString();
+//    }
+
+//    #region IDestination Members
+
+//    /// <summary>
+//    /// The P2PKH payment script
+//    /// </summary>
+//    public Script ScriptPubKey
+//    {
+//        get
+//        {
+//            return PubKey.Hash.ScriptPubKey;
+//        }
+//    }
+
+//    #endregion
+//}
