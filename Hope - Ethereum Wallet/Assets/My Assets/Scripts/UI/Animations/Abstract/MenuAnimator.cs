@@ -38,7 +38,7 @@ public class MenuAnimator : UIAnimator
 			if (animateIn)
 				menuTooltip.AnimateTransformX(50.2f, 0.3f);
 			else
-				CoroutineUtils.ExecuteAfterWait(0.29f, () => menuTooltip.transform.localPosition = new Vector2(100f, 0f));
+				CoroutineUtils.ExecuteAfterWait(0.25f, () => menuTooltip.transform.localPosition = new Vector2(100f, 0f));
 		}
 	}
 }

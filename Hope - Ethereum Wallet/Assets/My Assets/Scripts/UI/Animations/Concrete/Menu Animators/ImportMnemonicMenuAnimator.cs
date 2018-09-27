@@ -60,7 +60,7 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 		float duration = 0.25f;
 		for (int i = 0; i < 5; i++)
 		{
-			wordCountSection.transform.GetChild(i).gameObject.AnimateScaleX(1f, duration);
+			wordCountSection.transform.GetChild(i).gameObject.AnimateScale(1f, duration);
 			duration += 0.01f;
 		}
 
@@ -88,7 +88,7 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 		base.AnimateOut();
 
 		for (int i = 0; i < 5; i++)
-			wordCountSection.transform.GetChild(i).gameObject.AnimateScaleX(0f, 0.3f);
+			wordCountSection.transform.GetChild(i).gameObject.AnimateScale(0f, 0.3f);
 
 		pastePhraseButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
