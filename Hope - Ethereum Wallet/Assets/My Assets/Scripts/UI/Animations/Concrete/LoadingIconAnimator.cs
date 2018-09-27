@@ -16,7 +16,6 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private Transform iconTransform;
 
     private readonly Color LIGHT_COLOR = new Color(1f, 1f, 1f);
-    private readonly Color GRAY_COLOR = new Color(0.7f, 0.7f, 0.7f);
 
     private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -1.2f);
 
@@ -41,7 +40,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private void OnEnable()
     {
 		updateManager.AddUpdater(this);
-		image.color = GRAY_COLOR;
+		image.color = UIColors.LightGrey;
 		AnimateColor(true);
 	}
 
@@ -57,7 +56,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
 	private void AnimateColor(bool isGray)
     {
         if (this.enabled)
-            image.DOColor(isGray ? LIGHT_COLOR : GRAY_COLOR, 1f).OnComplete(() => AnimateColor(!isGray));
+            image.DOColor(isGray ? LIGHT_COLOR : UIColors.LightGrey, 1.25f).OnComplete(() => AnimateColor(!isGray));
     }
 
     /// <summary>

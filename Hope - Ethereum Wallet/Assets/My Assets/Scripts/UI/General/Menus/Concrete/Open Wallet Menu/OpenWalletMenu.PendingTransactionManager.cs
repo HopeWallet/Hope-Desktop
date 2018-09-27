@@ -79,21 +79,25 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		{
 			float value = animateIn ? 1f : 0f;
 
-			pendingTransactionSection.AnimateGraphic(value, animateIn ? 0.2f : 0.4f);
-			triangle.AnimateGraphic(value, animateIn ? 0.2f : 0.4f);
-			statusIcon.gameObject.AnimateGraphic(value, animateIn ? 0.3f : 0.4f);
-			pendingTransactionText.gameObject.AnimateGraphic(value, animateIn ? 0.3f : 0.4f);
+			pendingTransactionSection.AnimateGraphic(value, 0.2f);
+			triangle.AnimateGraphic(value, 0.2f);
+			statusIcon.gameObject.AnimateGraphic(value, 0.3f);
+			pendingTransactionText.gameObject.AnimateGraphic(value, 0.3f);
 			transactionHashText.gameObject.AnimateGraphic(value, 0.4f);
 			copyButton.gameObject.AnimateGraphic(value, 0.4f);
 
+			walletLogo.interactable = !animateIn;
+
 			if (!animateIn)
-				exitButton.gameObject.AnimateGraphic(0f, 0.4f);
+				exitButton.gameObject.AnimateGraphic(0f, 0.2f);
 		}
 
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
 		{
 			pendingTransaction = true;
 			this.transactionHash = transactionHash;
+
+			exitButton.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 
 			statusIcon.sprite = loadingIconSprite;
 			statusIconAnimator.enabled = true;
@@ -103,7 +107,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			pendingTransactionText.text = action + " " + assetSymbol;
 			pendingTransactionTextAnimator.enabled = true;
 
-			walletLogo.interactable = false;
 			logoAnimator.enabled = true;
 
 			AnimatePendingTransactionSection(true);
@@ -111,6 +114,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 		public void TransactionFinished(bool successful)
 		{
+			if (!successful)
+				walletLogo.interactable = true;
+
 			pendingTransaction = false;
 			pendingTransactionTextAnimator.enabled = false;
 
@@ -120,14 +126,13 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			statusIconAnimator.enabled = false;
 			statusIcon.color = FLAT_WHITE;
 			statusIcon.transform.DORotate(Vector3.zero, 0.02f);
-			statusIcon.gameObject.AnimateColor(FLAT_WHITE, 1f);
+			statusIcon.gameObject.AnimateColor(FLAT_WHITE, 1.25f);
 
 			pendingTransactionTextAnimator.enabled = false;
 			pendingTransactionText.text = successful ? "Success!" : "Failed.";
 
-			walletLogo.interactable = true;
 			logoAnimator.enabled = false;
-			walletLogo.gameObject.AnimateColor(FLAT_WHITE, 1f);
+			walletLogo.gameObject.AnimateColor(FLAT_WHITE, 1.25f);
 		}
 	}
 }
