@@ -12,11 +12,9 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject gasLimitInputField;
 	[SerializeField] private GameObject gasPriceInputField;
 	[SerializeField] private GameObject transactionSpeedSection;
+	[SerializeField] private GameObject sendButton;
 
 	[SerializeField] private HopeInputField addressField;
-	[SerializeField] private GameObject contactNameObject;
-
-	[SerializeField] private GameObject sendButton;
 
 	/// <summary>
 	/// Initializes the button and input field listeners
