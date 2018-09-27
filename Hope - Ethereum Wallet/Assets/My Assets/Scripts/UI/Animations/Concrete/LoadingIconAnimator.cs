@@ -8,8 +8,9 @@ using Zenject;
 /// </summary>
 public class LoadingIconAnimator : MonoBehaviour, IUpdater
 {
+	[SerializeField] private bool pulsateOnly;
 
-    private Image image;
+	private Image image;
 
     private GameObject iconObj;
     private Transform iconTransform;
@@ -18,6 +19,8 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     private readonly Color GRAY_COLOR = new Color(0.7f, 0.7f, 0.7f);
 
     private readonly Vector3 ICON_ROTATION = new Vector3(0f, 0f, -1.2f);
+
+	private bool isEnabled = true;
 
     [Inject]
     private UpdateManager updateManager;
@@ -37,16 +40,22 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     /// </summary>
     private void OnEnable()
     {
-        updateManager.AddUpdater(this);
+		isEnabled = true;
 
-        image.color = GRAY_COLOR;
-        AnimateColor(true);
-    }
+		updateManager.AddUpdater(this);
+		image.color = GRAY_COLOR;
+		AnimateColor(true);
+	}
 
     /// <summary>
     /// Removes the updater.
     /// </summary>
-	private void OnDisable() => updateManager.RemoveUpdater(this);
+	private void OnDisable()
+	{
+		isEnabled = false;
+
+		updateManager.RemoveUpdater(this);
+	}
 
 	/// <summary>
 	/// Animates the image's color to a white or a gray
@@ -54,7 +63,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
 	/// <param name="isGray"> Checks what the current color state is </param>
 	private void AnimateColor(bool isGray)
     {
-        if (iconObj.activeInHierarchy)
+        if (isEnabled)
             image.DOColor(isGray ? LIGHT_COLOR : GRAY_COLOR, 1f).OnComplete(() => AnimateColor(!isGray));
     }
 
@@ -63,7 +72,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     /// </summary>
     public void UpdaterUpdate()
     {
-        if (iconObj.activeInHierarchy)
+        if (isEnabled && !pulsateOnly)
             iconTransform.DOLocalRotate(ICON_ROTATION, 0.01f, RotateMode.LocalAxisAdd);
     }
 }

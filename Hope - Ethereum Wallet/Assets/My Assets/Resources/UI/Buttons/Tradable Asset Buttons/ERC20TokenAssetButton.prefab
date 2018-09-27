@@ -445,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9947c0ed14382484c9dc300323e4e443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pulsateOnly: 0
 --- !u!114 &114594409268828120
 MonoBehaviour:
   m_ObjectHideFlags: 1

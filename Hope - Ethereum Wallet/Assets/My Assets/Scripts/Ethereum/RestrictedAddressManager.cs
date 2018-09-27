@@ -29,8 +29,7 @@ public class RestrictedAddressManager
     /// <returns> True if the address is restricted and cannot be used. </returns>
     public bool IsRestrictedAddress(string address)
     {
-        return !AddressUtils.IsValidEthereumAddress(address)
-            || constantRestrictedAddresses.ContainsIgnoreCase(address)
-            || tokenListManager.TokenList.Select(token => token.TokenInfo.Address).ContainsIgnoreCase(address);
+        return constantRestrictedAddresses.ContainsIgnoreCase(address)
+				|| tokenListManager.TokenList.Select(token => token.TokenInfo.Address).ContainsIgnoreCase(address);
     }
 }

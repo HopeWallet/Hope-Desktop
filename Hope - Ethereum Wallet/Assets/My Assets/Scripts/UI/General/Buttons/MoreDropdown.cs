@@ -53,9 +53,9 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// </summary>
 	private void Update()
 	{
-        if (dropdownOpen && !hovering && Input.GetMouseButtonDown(0) && !popupIsOpen)
-            MoreButtonClicked();
-    }
+        if (dropdownOpen && !popupIsOpen && (!hovering && Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape)))
+			MoreButtonClicked();
+	}
 
 	/// <summary>
 	/// Sets the given button onClick listener

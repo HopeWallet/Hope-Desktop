@@ -12,7 +12,7 @@ public class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
 	/// Sets the subText text element
 	/// </summary>
 	/// <param name="subText"> The given string </param>
-	/// <returns></returns>
+	/// <returns> The instance of the class </returns>
 	public GeneralOkCancelPopup SetSubText(string subText)
 	{
 		this.subText.text = subText;
@@ -23,10 +23,20 @@ public class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
 	/// Sets the action to be called when the ok button is clicked
 	/// </summary>
 	/// <param name="onOkClicked"> The given action </param>
-	/// <returns></returns>
+	/// <returns> The instance of the class </returns>
 	public GeneralOkCancelPopup OnOkClicked(Action onOkClicked)
 	{
 		okButton.onClick.AddListener(() => onOkClicked());
+		return this;
+	}
+
+	/// <summary>
+	/// Sets the ok button to uninteractable
+	/// </summary>
+	/// <returns> The instance of the class </returns>
+	public GeneralOkCancelPopup DisableOkButton()
+	{
+		okButton.interactable = false;
 		return this;
 	}
 

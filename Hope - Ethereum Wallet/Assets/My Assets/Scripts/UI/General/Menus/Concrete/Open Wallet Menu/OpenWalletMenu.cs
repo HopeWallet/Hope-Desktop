@@ -19,9 +19,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 									  netWorthText,
 									  lockPrpsNotificationText;
 
-    [SerializeField] private GeneralRadioButtons transactionTabs;
+	[SerializeField] private Image assetImage;
 
-    public Image assetImage;
+	[SerializeField] private GeneralRadioButtons transactionTabs;
+
+	[SerializeField] private Transform pendingTransactionSection;
+	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
 
     private EthereumTransactionManager ethereumTransactionManager;
     private TokenContractManager tokenContractManager;
@@ -35,6 +38,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private UserWalletManager userWalletManager;
 
     private IdleTimeoutManager idleTimeoutManager;
+	private PendingTransactionManager pendingTransactionManager;
 
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
@@ -68,24 +72,45 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().PopupClosed));
     }
 
-    /// <summary>
-    /// Starts the token load, sets up the wallet name text, and starts the IdleTimeoutManager.
-    /// </summary>
-    private void OnEnable()
-    {
-        tokenContractManager.StartTokenLoad(OpenMenu);
+	/// <summary>
+	/// Starts the token load, sets up the wallet name text, and starts the IdleTimeoutManager.
+	/// </summary>
+	private void OnEnable()
+	{
+		tokenContractManager.StartTokenLoad(OpenMenu);
 
-        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
-            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
-            : userWalletManager.ActiveWalletType.ToString();
+		walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
+			? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
+			: userWalletManager.ActiveWalletType.ToString();
 
-        if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
-            idleTimeoutManager = new IdleTimeoutManager(uiManager);
+		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
+		{
+			SetUpWalletType(hopeLogo);
+			idleTimeoutManager = new IdleTimeoutManager(uiManager);
+		}
+		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+		{
+			SetUpWalletType(ledgerLogo);
+		}
+		else
+		{
+			SetUpWalletType(trezorLogo);
+		}
 
-        UpdateAssetUI();
+		UpdateAssetUI();
         AccountChanged(userWalletManager.AccountNumber);
         ReloadNetWorth();
     }
+
+	/// <summary>
+	/// Sets up the corresponding logo with the active wallet type
+	/// </summary>
+	/// <param name="walletLogo"> The corresponding wallet logo </param>
+	private void SetUpWalletType(Button walletLogo)
+	{
+		walletLogo.gameObject.SetActive(true);
+		pendingTransactionManager = new PendingTransactionManager(pendingTransactionSection, walletLogo);
+	}
 
     /// <summary>
     /// Resets the visuals of the OpenWalletMenu.
@@ -114,10 +139,28 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         new TransactionPageManager(tradableAssetManager, ethereumTransactionManager, pagesSection);
     }
 
-    /// <summary>
-    /// Reloads the net worth of the current account.
-    /// </summary>
-    private void ReloadNetWorth()
+	[ContextMenu("New Pending Transaction")]
+	private void StartNewTransaction()
+	{
+		pendingTransactionManager.TransactionStarted("Locking", "PRPS", "0xdf623f1ed83e006b28330a6abf9fe4f9c14435a33ad34be5323cea180aa58c4d");
+	}
+
+	[ContextMenu("Transaction successfully finished")]
+	private void TransactionSuccessful()
+	{
+		pendingTransactionManager.TransactionFinished(true);
+	}
+
+	[ContextMenu("Transaction failed")]
+	private void TransactionFailed()
+	{
+		pendingTransactionManager.TransactionFinished(false);
+	}
+
+	/// <summary>
+	/// Reloads the net worth of the current account.
+	/// </summary>
+	private void ReloadNetWorth()
     {
         var tradableAsset = tradableAssetManager.ActiveTradableAsset;
 
