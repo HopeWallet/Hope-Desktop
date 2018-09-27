@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NBitcoin;
+using System;
 using System.IO;
 
 namespace Ledger.Net
@@ -6,9 +7,9 @@ namespace Ledger.Net
     public static class Helpers
     {
         #region Public Methods
-        public static byte[] GetDerivationPathData(App app, uint coinNumber, uint account, uint index, bool isChange, bool isSegwit)
+        public static byte[] GetDerivationPathData(string path)
         {
-            return GetByteData(GetDerivationIndices(app, coinNumber, account, index, isChange, isSegwit));
+            return GetDerivationPathByteData(new KeyPath(path).Indexes);
         }
         #endregion
 
@@ -98,44 +99,7 @@ namespace Ledger.Net
         #endregion
 
         #region Private Methods
-        private static uint[] GetDerivationIndices(App app, uint coinNumber, uint account, uint index, bool isChange, bool isSegwit)
-        {
-            //BIP 44 - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
-            //Except for Ethereum (https://ledger.readthedocs.io/en/latest/background/hd_use_cases.html)
-            //Coin Numbers here: https://github.com/satoshilabs/slips/blob/master/slip-0044.md
-
-            var isEthereumRelated = app == App.Ethereum;
-
-            var indices = new uint[isEthereumRelated ? 4 : 5];
-
-            //Purpose
-            indices[0] = ((isSegwit ? (uint)49 : 44) | Constants.HARDENING_CONSTANT) >> 0;
-
-            //Coin type (Coin Number)
-            indices[1] = (coinNumber | Constants.HARDENING_CONSTANT) >> 0;
-
-            //Account
-            indices[2] = (account | Constants.HARDENING_CONSTANT) >> 0;
-
-            if (isEthereumRelated)
-            {
-                //BIP44 Deviation for Ledger
-                //Index
-                indices[3] = index;
-            }
-            else
-            {
-                //Change
-                indices[3] = isChange ? 1 : (uint)0;
-
-                //Index
-                indices[4] = index;
-            }
-
-            return indices;
-        }
-
-        private static byte[] GetByteData(uint[] indices)
+        private static byte[] GetDerivationPathByteData(uint[] indices)
         {
             byte[] addressIndicesData;
             using (var memoryStream = new MemoryStream())

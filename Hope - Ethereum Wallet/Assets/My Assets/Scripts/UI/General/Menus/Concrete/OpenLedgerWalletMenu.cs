@@ -1,4 +1,5 @@
 ﻿using Ledger.Net.Connectivity;
+using Nethereum.HdWallet;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,7 +66,7 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     public async void PeriodicUpdate()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-        var address = ledgerManager == null ? null : await ledgerManager.GetAddressAsync(0, 0).ConfigureAwait(false);
+        var address = ledgerManager == null ? null : await ledgerManager.GetAddressAsync(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false);
 
         if (string.IsNullOrEmpty(address))
         {
