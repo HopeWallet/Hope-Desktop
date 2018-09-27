@@ -11,7 +11,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		private GameObject pendingTransactionSection;
 		private GameObject triangle;
 		private TextMeshProUGUI pendingTransactionText, transactionHashText;
-		private Button copyButton, walletLogo;
+		private Button copyButton, walletLogo, exitButton;
 		private GameObject checkmarkIconObject;
 		private Image statusIcon;
 
@@ -24,7 +24,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		private string transactionHash;
 		private bool animatingIcon, pendingTransaction;
 
-		private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f);
+		private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
 
 		public PendingTransactionManager(Transform pendingTransactionSection,
 										 Button walletLogo)
@@ -37,6 +37,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			copyButton = pendingTransactionSection.GetChild(3).GetComponent<Button>();
 			checkmarkIconObject = pendingTransactionSection.GetChild(4).gameObject;
 			triangle = pendingTransactionSection.GetChild(5).gameObject;
+			exitButton = pendingTransactionSection.GetChild(6).GetComponent<Button>();
+			exitButton.onClick.AddListener(() => AnimatePendingTransactionSection(false));
 			this.pendingTransactionSection = pendingTransactionSection.gameObject;
 			this.walletLogo = walletLogo;
 			logoAnimator = walletLogo.GetComponent<LoadingIconAnimator>();
@@ -83,6 +85,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			pendingTransactionText.gameObject.AnimateGraphic(value, animateIn ? 0.3f : 0.4f);
 			transactionHashText.gameObject.AnimateGraphic(value, 0.4f);
 			copyButton.gameObject.AnimateGraphic(value, 0.4f);
+
+			if (!animateIn)
+				exitButton.gameObject.AnimateGraphic(0f, 0.4f);
 		}
 
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
@@ -109,6 +114,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			pendingTransaction = false;
 			pendingTransactionTextAnimator.enabled = false;
 
+			exitButton.GetComponent<Image>().color = FLAT_WHITE;
+
 			statusIcon.sprite = successful ? checkmarkIconSprite : errorIconSprite;
 			statusIconAnimator.enabled = false;
 			statusIcon.color = FLAT_WHITE;
@@ -116,21 +123,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			statusIcon.gameObject.AnimateColor(FLAT_WHITE, 1f);
 
 			pendingTransactionTextAnimator.enabled = false;
-			CoroutineUtils.ExecuteAfterWait(0.2f, () => pendingTransactionText.text = successful ? "Success!" : "Failed.");
+			pendingTransactionText.text = successful ? "Success!" : "Failed.";
 
 			walletLogo.interactable = true;
 			logoAnimator.enabled = false;
 			walletLogo.gameObject.AnimateColor(FLAT_WHITE, 1f);
-
-			CloseAfterWait().StartCoroutine();
-		}
-
-		private IEnumerator CloseAfterWait()
-		{
-			yield return new WaitForSeconds(5f);
-
-			if (!pendingTransaction)
-				AnimatePendingTransactionSection(false);
 		}
 	}
 }

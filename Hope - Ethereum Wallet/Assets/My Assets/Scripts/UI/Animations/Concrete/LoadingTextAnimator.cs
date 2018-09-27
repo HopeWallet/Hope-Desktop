@@ -21,21 +21,26 @@ public class LoadingTextAnimator : MonoBehaviour
         textMeshPro = transform.GetComponent<TextMeshProUGUI>();
     }
 
-    /// <summary>
-    /// Starts the coroutine.
-    /// </summary>
-    private void OnEnable()
-    {
-        StartCoroutine(AddDotsToText());
-    }
+	/// <summary>
+	/// Starts the coroutine.
+	/// </summary>
+	private void OnEnable() => StartCoroutine(AddDotsToText());
 
-    /// <summary>
-    /// Animates the dots in the string of the text object
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator AddDotsToText()
+	/// <summary>
+	/// Trims the extra periods right as it is disabled
+	/// </summary>
+	private void OnDisable() => textMeshPro.text = textMeshPro.text.TrimEnd('.');
+
+	/// <summary>
+	/// Animates the dots in the string of the text object
+	/// </summary>
+	/// <returns></returns>
+	private IEnumerator AddDotsToText()
     {
         yield return new WaitForSeconds(waitTime);
+
+		if (!this.enabled)
+			yield break;
 
         string currentText = textMeshPro.text;
 
@@ -44,12 +49,9 @@ public class LoadingTextAnimator : MonoBehaviour
 
         bool needsMoreDots = firstIndex == -1 || lastIndex - firstIndex < LIMIT;
 
-        textMeshPro.text = needsMoreDots ? currentText + "." : currentText.TrimEnd('.');
-        waitTime = needsMoreDots ? waitTime + 0.05f : 0.2f;
+		textMeshPro.text = needsMoreDots ? currentText + "." : currentText.TrimEnd('.');
+		waitTime = needsMoreDots ? waitTime + 0.05f : 0.2f;
 
-        if (this.enabled)
-            StartCoroutine(AddDotsToText());
-        else
-            textMeshPro.text = textMeshPro.text.TrimEnd('.') + ".";
+		StartCoroutine(AddDotsToText()); 
     }
 }
