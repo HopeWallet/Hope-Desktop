@@ -108,11 +108,9 @@ namespace Ledger.Net
         {
             byte[] data = Helpers.GetDerivationPathData(CurrentCoin.App, CurrentCoin.CoinNumber, account, index, isChange, CurrentCoin.IsSegwit);
 
-            GetPublicKeyResponseBase response;
+            GetPublicKeyResponseBase response = null;
             if (CurrentCoin.App == App.Ethereum)
                 response = await SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(new EthereumAppGetPublicKeyRequest(showDisplay, false, data));
-            else
-                response = await SendRequestAsync<BitcoinAppGetPublicKeyResponse, BitcoinAppGetPublicKeyRequest>(new BitcoinAppGetPublicKeyRequest(showDisplay, BitcoinAddressType.Segwit, data));
 
             return response.IsSuccess ? response.Address : null;
         }
