@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
@@ -76,17 +77,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		{
 			float value = animateIn ? 1f : 0f;
 
-			if (animateIn)
-				pendingTransactionSection.SetActive(true);
-
 			pendingTransactionSection.AnimateGraphic(value, animateIn ? 0.2f : 0.4f);
 			triangle.AnimateGraphic(value, animateIn ? 0.2f : 0.4f);
-			statusIcon.gameObject.AnimateGraphicAndScale(value, value, animateIn ? 0.3f : 0.4f);
-			pendingTransactionText.gameObject.AnimateGraphicAndScale(value, value, animateIn ? 0.3f : 0.4f);
-			transactionHashText.gameObject.AnimateGraphicAndScale(value, value, 0.4f);
-			copyButton.gameObject.AnimateGraphicAndScale(value, value, 0.4f, () => { if (!animateIn) pendingTransactionSection.SetActive(false); });
-
-			logoAnimator.enabled = animateIn;
+			statusIcon.gameObject.AnimateGraphic(value, animateIn ? 0.3f : 0.4f);
+			pendingTransactionText.gameObject.AnimateGraphic(value, animateIn ? 0.3f : 0.4f);
+			transactionHashText.gameObject.AnimateGraphic(value, 0.4f);
+			copyButton.gameObject.AnimateGraphic(value, 0.4f);
 		}
 
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
@@ -116,21 +112,22 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			statusIcon.sprite = successful ? checkmarkIconSprite : errorIconSprite;
 			statusIconAnimator.enabled = false;
 			statusIcon.color = FLAT_WHITE;
-			statusIcon.transform.rotation = Quaternion.Euler(Vector3.zero);
+			statusIcon.transform.DORotate(Vector3.zero, 0.02f);
+			statusIcon.gameObject.AnimateColor(FLAT_WHITE, 1f);
 
-			pendingTransactionText.text = successful ? "Success!" : "Failed.";
 			pendingTransactionTextAnimator.enabled = false;
+			CoroutineUtils.ExecuteAfterWait(0.2f, () => pendingTransactionText.text = successful ? "Success!" : "Failed.");
 
 			walletLogo.interactable = true;
 			logoAnimator.enabled = false;
-			walletLogo.GetComponent<Image>().color = FLAT_WHITE;
+			walletLogo.gameObject.AnimateColor(FLAT_WHITE, 1f);
 
 			CloseAfterWait().StartCoroutine();
 		}
 
 		private IEnumerator CloseAfterWait()
 		{
-			yield return new WaitForSeconds(10f);
+			yield return new WaitForSeconds(5f);
 
 			if (!pendingTransaction)
 				AnimatePendingTransactionSection(false);

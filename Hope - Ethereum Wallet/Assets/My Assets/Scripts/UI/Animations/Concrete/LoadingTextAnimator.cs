@@ -12,11 +12,6 @@ public class LoadingTextAnimator : MonoBehaviour
     private float waitTime = 0.2f;
 
     private const int LIMIT = 3;
-
-    /// <summary>
-    /// Whether the LoadingTextAnimator should be stopped.
-    /// </summary>
-    public bool IsStopped { get; set; }
     
     /// <summary>
     /// Initializes elements.
@@ -32,11 +27,6 @@ public class LoadingTextAnimator : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(AddDotsToText());
-    }
-
-    private void OnDisable()
-    {
-        IsStopped = false;
     }
 
     /// <summary>
@@ -57,7 +47,7 @@ public class LoadingTextAnimator : MonoBehaviour
         textMeshPro.text = needsMoreDots ? currentText + "." : currentText.TrimEnd('.');
         waitTime = needsMoreDots ? waitTime + 0.05f : 0.2f;
 
-        if (!IsStopped)
+        if (this.enabled)
             StartCoroutine(AddDotsToText());
         else
             textMeshPro.text = textMeshPro.text.TrimEnd('.') + ".";
