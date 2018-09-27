@@ -24,6 +24,9 @@ public sealed class LedgerWallet : HardwareWallet
 
     public override async void InitializeAddresses()
     {
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
+
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
 
         if (ledgerManager == null)
@@ -32,42 +35,27 @@ public sealed class LedgerWallet : HardwareWallet
             return;
         }
 
-        addresses[0] = new string[50];
-        addresses[1] = new string[50];
+        var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.TrimEnd('x', '/'), true, false).ConfigureAwait(false);
 
-        if (!await AssignAddresses(ledgerManager, Wallet.DEFAULT_PATH) || !await AssignAddresses(ledgerManager, Wallet.ELECTRUM_LEDGER_PATH))
+        if (!pubKeyResponse.IsSuccess)
         {
             MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
             return;
         }
 
-        MainThreadExecutor.QueueAction(WalletLoadSuccessful);
-    }
-
-    private async Task<bool> AssignAddresses(LedgerManager ledgerManager, string path)
-    {
-        var addressesIndex = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
-        var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(path.TrimEnd('x', '/'), true, false).ConfigureAwait(false);
-
-        if (!pubKeyResponse.IsSuccess)
-            return false;
-
         var pubKeyData = pubKeyResponse.PublicKeyData;
         var chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray();
 
-        var xPub = new ExtPubKey(new PubKey(pubKeyData).Compress(), chainCodeData, (byte)(path.Count(c => c == '/') - 1), new byte[4], (0 | Constants.HARDENING_CONSTANT) >> 0);
+        var electrumLedgerXPub = new ExtPubKey(new PubKey(pubKeyData).Compress(), chainCodeData);
+        var defaultXPub = electrumLedgerXPub.Derive(0);
 
-        for (uint i = 0; i < addresses[addressesIndex].Length; i++)
+        for (uint i = 0; i < addresses[0].Length; i++)
         {
-            var address = new EthECKey(xPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress();
-
-            addresses[addressesIndex][i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
-
-            if (string.IsNullOrEmpty(address))
-                return false;
+            addresses[0][i] = new EthECKey(defaultXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
+            addresses[1][i] = new EthECKey(electrumLedgerXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
         }
 
-        return true;
+        MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
     protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)

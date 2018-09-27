@@ -649,6 +649,7 @@ MonoBehaviour:
   blocker: {fileID: 1156373289734128}
   formTitle: {fileID: 1673670772772310}
   line: {fileID: 1380347367919476}
+  menuTooltip: {fileID: 0}
   importWalletButton: {fileID: 1961381870567516}
   importWalletDesc: {fileID: 1928413761496124}
   createWalletButton: {fileID: 1936300157801342}
