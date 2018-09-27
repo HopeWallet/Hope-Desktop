@@ -33,6 +33,8 @@ public sealed partial class OpenWalletMenu
             tradableAssetManager.OnBalancesUpdated += ChangeText;
             ethereumTransactionManager.OnTransactionsAdded += ChangeText;
             transactionTabs.OnButtonChanged += TabChanged;
+
+            AccountsPopup.OnAccountChanged += _ => ChangeText();
         }
 
         private void ChangeText()
