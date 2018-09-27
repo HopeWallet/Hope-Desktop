@@ -41,17 +41,11 @@ public sealed class LedgerWallet : HardwareWallet
 
     private async Task<bool> AssignAddresses(LedgerManager ledgerManager, string path)
     {
-        App app = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? App.Bitcoin : App.Ethereum;
         int addressesIndex = path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? 0 : 1;
-
         for (uint i = 0; i < addresses[addressesIndex].Length; i++)
         {
-            byte[] data = GetDerivationPathData(app, i);
+            var address = await ledgerManager.GetAddressAsync(path.Replace("x", i.ToString()), false, false);
 
-            var request = new EthereumAppGetPublicKeyRequest(false, false, data);
-            var response = await ledgerManager.SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(request).ConfigureAwait(false);
-
-            var address = response.IsSuccess ? response.Address : null;
             addresses[addressesIndex][i] = string.IsNullOrEmpty(address) ? null : address.ConvertToEthereumChecksumAddress();
 
             if (string.IsNullOrEmpty(address))
@@ -64,11 +58,6 @@ public sealed class LedgerWallet : HardwareWallet
         return true;
     }
 
-    private byte[] GetDerivationPathData(App app, uint index)
-    {
-        return Helpers.GetDerivationPathData(app, 60, 0, index, false, false);
-    }
-
     protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
@@ -77,7 +66,7 @@ public sealed class LedgerWallet : HardwareWallet
             return;
 
         var addressIndex = path.Count(c => c == '/') - 1;
-        var derivationData = GetDerivationPathData(addressIndex == 3 ? App.Ethereum : App.Bitcoin, new NBitcoin.KeyPath(path).Indexes[addressIndex]);
+        var derivationData = Helpers.GetDerivationPathData(path);
 
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);

@@ -99,18 +99,13 @@ namespace Ledger.Net
             CurrentCoin = CoinUtility.GetCoinInfo(getCoinVersionRequest.ShortCoinName);
         }
 
-        public Task<string> GetAddressAsync(uint account, uint index)
+        public async Task<string> GetAddressAsync(string path, bool getChainCode, bool showDisplay)
         {
-            return GetAddressAsync(account, false, index, false);
-        }
-
-        public async Task<string> GetAddressAsync(uint account, bool isChange, uint index, bool showDisplay)
-        {
-            byte[] data = Helpers.GetDerivationPathData(CurrentCoin.App, CurrentCoin.CoinNumber, account, index, isChange, CurrentCoin.IsSegwit);
+            byte[] data = Helpers.GetDerivationPathData(path);
 
             GetPublicKeyResponseBase response = null;
             if (CurrentCoin.App == App.Ethereum)
-                response = await SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(new EthereumAppGetPublicKeyRequest(showDisplay, false, data));
+                response = await SendRequestAsync<EthereumAppGetPublicKeyResponse, EthereumAppGetPublicKeyRequest>(new EthereumAppGetPublicKeyRequest(showDisplay, getChainCode, data));
 
             return response.IsSuccess ? response.Address : null;
         }
