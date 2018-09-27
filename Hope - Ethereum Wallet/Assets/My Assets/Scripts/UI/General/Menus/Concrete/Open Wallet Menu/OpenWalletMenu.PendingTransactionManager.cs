@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+/// <summary>
+/// Class which manages the opened wallet ui.
+/// </summary>
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
+	/// <summary>
+	/// Class which manages the visuals of the pending transactions
+	/// </summary>
 	public sealed class PendingTransactionManager
 	{
 		private GameObject pendingTransactionSection;
@@ -26,6 +31,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 		private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
 
+		/// <summary>
+		/// Sets the necessary variables needed for the pending transaction section
+		/// </summary>
+		/// <param name="pendingTransactionSection"> The parent transform of the pending transaction section </param>
+		/// <param name="walletLogo"> The active wallet logo button</param>
 		public PendingTransactionManager(Transform pendingTransactionSection,
 										 Button walletLogo)
 		{
@@ -61,6 +71,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
 		}
 
+		/// <summary>
+		/// Copy button is clicked and copies the transaction hash to the clipboard
+		/// </summary>
 		private void CopyButtonClicked()
 		{
 			ClipboardUtils.CopyToClipboard(transactionHash);
@@ -75,6 +88,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			}
 		}
 
+		/// <summary>
+		/// Animates the pending transaction section in or out of view
+		/// </summary>
+		/// <param name="animateIn"> Whether animating in or out </param>
 		private void AnimatePendingTransactionSection(bool animateIn)
 		{
 			float value = animateIn ? 1f : 0f;
@@ -92,6 +109,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 				exitButton.gameObject.AnimateGraphic(0f, 0.2f);
 		}
 
+		/// <summary>
+		/// New pending transaction has started
+		/// </summary>
+		/// <param name="action"> The given action that is being done with an asset </param>
+		/// <param name="assetSymbol"> The given asset symbol </param>
+		/// <param name="transactionHash"> The transaction hash of the pending transaction </param>
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
 		{
 			pendingTransaction = true;
@@ -112,6 +135,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			AnimatePendingTransactionSection(true);
 		}
 
+		/// <summary>
+		/// The transaction has finished
+		/// </summary>
+		/// <param name="successful"> Whether the transaction has finished successfully or not </param>
 		public void TransactionFinished(bool successful)
 		{
 			if (!successful)

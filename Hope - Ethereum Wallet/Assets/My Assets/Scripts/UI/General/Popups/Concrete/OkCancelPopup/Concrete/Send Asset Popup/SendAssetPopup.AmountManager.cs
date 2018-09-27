@@ -174,7 +174,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 			decimal newSendableAmount;
 			decimal.TryParse(amountInputField.Text, out newSendableAmount);
 
-			oppositeCurrencyAmountText.gameObject.AnimateGraphicAndScale(string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, 0.15f);
+			oppositeCurrencyAmountText.gameObject.AnimateGraphic(string.IsNullOrEmpty(amountInputField.Text) ? 0f : 1f, 0.15f);
 
 			if (priceFound)
 				ChangeOppositeCurrencyValue(newSendableAmount);
