@@ -385,6 +385,7 @@ MonoBehaviour:
   blocker: {fileID: 1365734454095788}
   formTitle: {fileID: 1939518735993706}
   line: {fileID: 1136158665931390}
+  menuTooltip: {fileID: 0}
   ledgerButton: {fileID: 1174975173140284}
   trezorButton: {fileID: 1744140067405156}
   hopeButton: {fileID: 1621187565130776}
