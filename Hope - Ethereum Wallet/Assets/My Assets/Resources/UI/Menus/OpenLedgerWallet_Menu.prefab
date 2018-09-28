@@ -1436,6 +1436,7 @@ MonoBehaviour:
   blocker: {fileID: 1637952505016494}
   formTitle: {fileID: 1099291146052992}
   line: {fileID: 1796914677723112}
+  menuTooltip: {fileID: 0}
   backButton: {fileID: 1814733390970646}
   ledgerLogo: {fileID: 1249908733382422}
   step1Text: {fileID: 1047096693189682}
@@ -1645,7 +1646,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 1280, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224292792452783530
 RectTransform:

@@ -375,6 +375,7 @@ MonoBehaviour:
   blocker: {fileID: 1631756096198790}
   formTitle: {fileID: 1346855990253306}
   line: {fileID: 1794950354598942}
+  menuTooltip: {fileID: 0}
   hopeLogo: {fileID: 1757926446764242}
   noteText: {fileID: 1578635106281622}
   openWalletButton: {fileID: 1014106051998552}
@@ -766,7 +767,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 1280, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224875298933100254
 RectTransform:

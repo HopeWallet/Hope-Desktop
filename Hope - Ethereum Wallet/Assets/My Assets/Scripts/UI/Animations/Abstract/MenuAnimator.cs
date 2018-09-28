@@ -36,7 +36,7 @@ public class MenuAnimator : UIAnimator
 				menuTooltip.transform.GetChild(i).gameObject.AnimateGraphic(animateIn ? 1f : 0f, 0.3f);
 
 			if (animateIn)
-				menuTooltip.AnimateTransformX(50.2f, 0.3f);
+				menuTooltip.AnimateTransformX(49f, 0.3f);
 			else
 				CoroutineUtils.ExecuteAfterWait(0.25f, () => menuTooltip.transform.localPosition = new Vector2(100f, 0f));
 		}

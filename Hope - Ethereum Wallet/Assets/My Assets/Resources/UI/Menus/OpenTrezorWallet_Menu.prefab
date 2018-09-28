@@ -1931,6 +1931,7 @@ MonoBehaviour:
   blocker: {fileID: 1910257928389530}
   formTitle: {fileID: 1456068196917956}
   line: {fileID: 1759742700248098}
+  menuTooltip: {fileID: 0}
   backButton: {fileID: 1644532062175266}
   trezorLogo: {fileID: 1428384421983902}
   enterPINText: {fileID: 1992580116368844}
@@ -2678,7 +2679,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 1280, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224512984763484316
 RectTransform:
