@@ -105,8 +105,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 			walletLogo.interactable = !animateIn;
 
-			if (!animateIn)
-				exitButton.gameObject.AnimateGraphic(0f, 0.2f);
+			exitButton.gameObject.AnimateGraphic(0f, 0.2f, () => exitButton.gameObject.SetActive(false));
 		}
 
 		/// <summary>
@@ -118,13 +117,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
 		{
 			pendingTransaction = true;
-			this.transactionHash = transactionHash;
-
-			exitButton.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 
 			statusIcon.sprite = loadingIconSprite;
 			statusIconAnimator.enabled = true;
 
+			this.transactionHash = transactionHash;
 			transactionHashText.text = transactionHash.LimitEnd(12, "...");
 
 			pendingTransactionText.text = action + " " + assetSymbol;
@@ -141,13 +138,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		/// <param name="successful"> Whether the transaction has finished successfully or not </param>
 		public void TransactionFinished(bool successful)
 		{
-			if (!successful)
-				walletLogo.interactable = true;
-
 			pendingTransaction = false;
-			pendingTransactionTextAnimator.enabled = false;
 
-			exitButton.GetComponent<Image>().color = FLAT_WHITE;
+			exitButton.gameObject.SetActive(true);
+			exitButton.gameObject.AnimateGraphic(1f, 0.2f);
+
+			pendingTransactionTextAnimator.enabled = false;
 
 			statusIcon.sprite = successful ? checkmarkIconSprite : errorIconSprite;
 			statusIconAnimator.enabled = false;
@@ -160,6 +156,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 			logoAnimator.enabled = false;
 			walletLogo.gameObject.AnimateColor(FLAT_WHITE, 1.25f);
+
+			if (!successful)
+				walletLogo.interactable = true;
 		}
 	}
 }

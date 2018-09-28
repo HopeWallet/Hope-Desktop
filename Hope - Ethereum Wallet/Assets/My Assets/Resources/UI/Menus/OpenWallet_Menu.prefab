@@ -1432,7 +1432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1906303985831968
 GameObject:
   m_ObjectHideFlags: 1
@@ -2174,6 +2174,7 @@ MonoBehaviour:
   blocker: {fileID: 0}
   formTitle: {fileID: 0}
   line: {fileID: 0}
+  menuTooltip: {fileID: 0}
   background: {fileID: 0}
   assetList: {fileID: 0}
   taskBarButtons: {fileID: 0}
