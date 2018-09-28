@@ -38,20 +38,14 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     }
 
     /// <summary>
-    /// Subscribes the the current buttonClickObserver
+    /// Subscribes the the current buttonClickObserver.
     /// </summary>
     private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
 
     /// <summary>
-    /// Unsubscribes the the current buttonClickObserver and resets the text.
+    /// Unsubscribes the the current buttonClickObserver.
     /// </summary>
-    private void OnDisable()
-    {
-        buttonClickObserver.UnsubscribeObservable(this);
-        walletNameField.Text = string.Empty;
-        password1Field.Text = string.Empty;
-        password2Field.Text = string.Empty;
-    }
+    private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
     /// <summary>
     /// Adds the button listeners.
