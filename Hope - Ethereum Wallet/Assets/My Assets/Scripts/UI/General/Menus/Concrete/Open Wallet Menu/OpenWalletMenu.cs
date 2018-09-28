@@ -72,6 +72,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().PopupClosed));
     }
 
+	private void Update()
+	{
+		if (pendingTransactionManager.PendingTransactionSectionOpen && !pendingTransactionManager.PendingTransaction && Input.GetKeyDown(KeyCode.Escape) && !popupManager.ActivePopupExists)
+			pendingTransactionManager.AnimatePendingTransactionSection(false);
+	}
+
 	/// <summary>
 	/// Starts the token load, sets up the wallet name text, and starts the IdleTimeoutManager.
 	/// </summary>

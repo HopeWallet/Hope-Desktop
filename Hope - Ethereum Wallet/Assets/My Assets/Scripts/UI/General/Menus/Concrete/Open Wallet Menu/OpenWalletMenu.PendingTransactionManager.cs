@@ -27,7 +27,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		private LoadingIconAnimator logoAnimator;
 
 		private string transactionHash;
-		private bool animatingIcon, pendingTransaction;
+		private bool animatingIcon;
+
+		public bool PendingTransaction { get; private set; }
+
+		public bool PendingTransactionSectionOpen { get; private set; }
 
 		private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
 
@@ -92,7 +96,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		/// Animates the pending transaction section in or out of view
 		/// </summary>
 		/// <param name="animateIn"> Whether animating in or out </param>
-		private void AnimatePendingTransactionSection(bool animateIn)
+		public void AnimatePendingTransactionSection(bool animateIn)
 		{
 			float value = animateIn ? 1f : 0f;
 
@@ -106,6 +110,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			walletLogo.interactable = !animateIn;
 
 			exitButton.gameObject.AnimateGraphic(0f, 0.2f, () => exitButton.gameObject.SetActive(false));
+
+			PendingTransactionSectionOpen = animateIn;
 		}
 
 		/// <summary>
@@ -116,7 +122,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		/// <param name="transactionHash"> The transaction hash of the pending transaction </param>
 		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
 		{
-			pendingTransaction = true;
+			PendingTransaction = true;
 
 			statusIcon.sprite = loadingIconSprite;
 			statusIconAnimator.enabled = true;
@@ -138,7 +144,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		/// <param name="successful"> Whether the transaction has finished successfully or not </param>
 		public void TransactionFinished(bool successful)
 		{
-			pendingTransaction = false;
+			PendingTransaction = false;
 
 			exitButton.gameObject.SetActive(true);
 			exitButton.gameObject.AnimateGraphic(1f, 0.2f);
