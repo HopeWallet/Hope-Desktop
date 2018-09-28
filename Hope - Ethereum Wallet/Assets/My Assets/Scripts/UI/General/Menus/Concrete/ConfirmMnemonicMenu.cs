@@ -102,7 +102,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
 
 	public void EnterButtonPressed(ClickType clickType)
 	{
-		if (clickType == ClickType.Down && nextButton.interactable)
+		if (clickType == ClickType.Down && nextButton.interactable && !GetComponent<ConfirmMnemonicMenuAnimator>().OpeningWallet)
 			nextButton.Press();
 	}
 }

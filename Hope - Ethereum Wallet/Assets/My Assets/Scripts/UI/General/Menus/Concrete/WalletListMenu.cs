@@ -10,18 +10,23 @@ using Zenject;
 public sealed class WalletListMenu : Menu<WalletListMenu>
 {
 	public event Action<bool> BottomButtonsVisible;
+    public event Action OnWalletsLoaded;
+
 	public static Action PopupClosed;
 
 	[SerializeField] private Button newWalletButton;
 	[SerializeField] private GameObject hopeLogo;
-
-    private readonly List<GameObject> walletObjects = new List<GameObject>();
 
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
 	private HopeWalletInfoManager walletInfoManager;
 	private HopeWalletInfoManager.Settings walletSettings;
     private Settings settings;
+
+    /// <summary>
+    /// The list of wallet objects.
+    /// </summary>
+    public List<GameObject> Wallets { get; } = new List<GameObject>();
 
     /// <summary>
     /// Adds the dependencies required for this menu.
@@ -52,9 +57,11 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     {
         for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
         {
-            walletObjects.Add(walletButtonFactory.Create()
-                         .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
-        } (Animator as WalletListMenuAnimator).Wallets = walletObjects.ToArray();
+            Wallets.Add(walletButtonFactory.Create()
+                   .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
+        }
+
+        OnWalletsLoaded?.Invoke();
     }
 
     /// <summary>
@@ -62,10 +69,10 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// </summary>
     private void OnDisable()
     {
-        for (int i = 0; i < walletObjects.Count; i++)
-            Destroy(walletObjects[i].transform.parent.gameObject);
+        for (int i = 0; i < Wallets.Count; i++)
+            Destroy(Wallets[i].transform.parent.gameObject);
 
-        walletObjects.Clear();
+        Wallets.Clear();
     }
 
     /// <summary>
