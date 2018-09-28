@@ -19,7 +19,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 
     private int wordIndex;
 
-	private bool openingWallet;
+	public bool OpeningWallet { get; private set; }
 
     /// <summary>
     /// Adds the DynamicDataCache dependency.
@@ -75,7 +75,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateOut()
 	{
-		if (openingWallet)
+		if (OpeningWallet)
 			backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
 		base.AnimateOut();
@@ -149,9 +149,10 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 			}
             else
             {
+                OpeningWallet = true;
+                inputField.InputFieldBase.interactable = false;
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
 				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
-				openingWallet = true;
 			}
         }
         else

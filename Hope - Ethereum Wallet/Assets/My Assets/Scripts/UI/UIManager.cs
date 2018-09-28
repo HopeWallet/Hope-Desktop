@@ -21,7 +21,8 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     private readonly Stack<Menu> menus = new Stack<Menu>();
     private readonly List<Menu> createdMenus = new List<Menu>();
 
-    private Menu closingMenu;
+    private Menu closingMenu,
+                 menuToDestroy;
 
     /// <summary>
     /// The actively opened menu type.
@@ -58,9 +59,19 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// </summary>
     private void Start()
     {
-        createdMenus.AddItems(extraMenus);
+        createdMenus.AddRange(extraMenus);
+
         SetDefaultSettings();
         OpenMenu<ChooseWalletMenu>();
+    }
+
+    private void Update()
+    {
+        if (menuToDestroy != null && menus.Count > 0 && menuToDestroy != menus.Peek())
+        {
+            Destroy(menuToDestroy.gameObject);
+            menuToDestroy = null;
+        }
     }
 
     /// <summary>
@@ -108,19 +119,20 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     }
 
     /// <summary>
-    /// Destroys all menus that are not of a specific type.
+    /// Destroys all menus that are not currently in use.
     /// </summary>
-    /// <param name="menuTypesToIgnore"> The types of menus to ignore. </param>
-    public void DestroyMenus(params Type[] menuTypesToIgnore)
+    public void DestroyUnusedMenus()
     {
         List<Menu> menuCache = new List<Menu>(createdMenus);
+        Menu currentMenu = menus.Peek();
 
         createdMenus.Clear();
         menus.Clear();
 
-        menuCache.Where(menu => !menuTypesToIgnore.Contains(menu.GetType()) && !extraMenus.Contains(menu)).ForEach(menu => Destroy(menu.gameObject));
-        //menuCache.Where(menu => !menuTypesToIgnore.Contains(menu.GetType()) && extraMenus.Contains(menu)).ForEach(menu => menu.gameObject.SetActive(false));
-        menuCache.Where(menu => menuTypesToIgnore.Contains(menu.GetType())).ForEach(menu => { menus.Push(menu); createdMenus.Add(menu); });
+        menuCache.Where(menu => !extraMenus.Contains(menu) && menu != currentMenu).ForEach(menu => Destroy(menu.gameObject));
+        menuToDestroy = menuCache.Find(menu => !extraMenus.Contains(menu) && menu == currentMenu);
+
+        createdMenus.AddRange(extraMenus);
     }
 
     /// <summary>
@@ -129,13 +141,14 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
     /// <typeparam name="T"> The type of menu to open. </typeparam>
     public void OpenMenu<T>() where T : Menu<T>
     {
+        Menu lastMenu = null;
+        if (menus.Count > 0)
+            lastMenu = menus.Peek();
+
         Action openMenuAction = () =>
         {
-            if (menus.Count > 0)
-                menus.Peek().gameObject.SetActive(false);
-
-            //if (typeof(T) == typeof(OpenWalletMenu))
-            //    DestroyMenus(typeof(OpenWalletMenu));
+            if (lastMenu != null)
+                lastMenu.gameObject.SetActive(false);
 
             var sameTypeMenus = createdMenus.OfType<T>();
 
@@ -151,8 +164,8 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
             }
         };
 
-        if (menus.Count > 0)
-            menus.Peek().Animator.AnimateDisable(openMenuAction);
+        if (lastMenu != null)
+            lastMenu.Animator.AnimateDisable(openMenuAction);
         else
             openMenuAction();
     }

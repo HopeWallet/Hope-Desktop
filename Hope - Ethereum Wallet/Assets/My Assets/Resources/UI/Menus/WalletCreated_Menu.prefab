@@ -375,6 +375,7 @@ MonoBehaviour:
   blocker: {fileID: 1631756096198790}
   formTitle: {fileID: 1346855990253306}
   line: {fileID: 1794950354598942}
+  menuTooltip: {fileID: 0}
   hopeLogo: {fileID: 1757926446764242}
   noteText: {fileID: 1578635106281622}
   openWalletButton: {fileID: 1014106051998552}

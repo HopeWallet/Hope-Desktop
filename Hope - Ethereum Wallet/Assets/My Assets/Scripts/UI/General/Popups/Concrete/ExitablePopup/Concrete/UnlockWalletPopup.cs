@@ -90,6 +90,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     private void OnWalletLoad()
     {
         uiManager.OpenMenu<OpenWalletMenu>();
+        uiManager.DestroyUnusedMenus();
     }
 
     /// <summary>

@@ -11,5 +11,12 @@ public class WalletCreatedMenu : Menu<WalletCreatedMenu>
     /// <summary>
     /// Adds the listener to the openWalletButton which opens the OpenWalletMenu.
     /// </summary>
-    private void Start() => openWalletButton.onClick.AddListener((UnityEngine.Events.UnityAction)(() => uiManager.OpenMenu<OpenWalletMenu>()));
+    private void Start()
+    {
+        openWalletButton.onClick.AddListener(() =>
+        {
+            uiManager.OpenMenu<OpenWalletMenu>();
+            uiManager.DestroyUnusedMenus();
+        });
+    }
 }

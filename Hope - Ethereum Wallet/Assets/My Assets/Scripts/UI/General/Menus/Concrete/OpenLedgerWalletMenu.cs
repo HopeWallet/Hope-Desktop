@@ -48,6 +48,7 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     private void OpenMainWalletMenu()
     {
         uiManager.OpenMenu<OpenWalletMenu>();
+        uiManager.DestroyUnusedMenus();
     }
 
     private void OpenWallet()

@@ -22,6 +22,8 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     private ButtonClickObserver buttonObserver;
     private DynamicDataCache dynamicDataCache;
 
+    private bool checkingWallet;
+
 	public List<Selectable> SelectableFields { get; } = new List<Selectable>();
 
 	public Selectable LastSelectableField { get; set; }
@@ -78,7 +80,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
     /// <param name="clickType"> The enter button ClickType </param>
     public void EnterButtonPressed(ClickType clickType)
     {
-		if (clickType != ClickType.Down)
+		if (clickType != ClickType.Down || checkingWallet)
 			return;
 
 		if (InputFieldUtils.GetActiveInputField() == LastSelectableField && nextButton.interactable)
@@ -93,7 +95,7 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 	/// <param name="clickType"> The tab button ClickType </param>
 	public void TabButtonPressed(ClickType clickType)
 	{
-		if (clickType != ClickType.Down)
+		if (clickType != ClickType.Down || checkingWallet)
 			return;
 
 		SelectableFields.MoveToNextSelectable();
@@ -104,11 +106,17 @@ public sealed class ImportMnemonicMenu : WalletLoadMenuBase<ImportMnemonicMenu>,
 	/// </summary>
     public override void LoadWallet()
     {
+        checkingWallet = true;
+
         if (CheckCreatedMnemonic())
 		{
 			OnWalletLoading?.Invoke();
 			userWalletManager.CreateWallet();
 		}
+        else
+        {
+            checkingWallet = false;
+        }
 	}
 
     /// <summary>

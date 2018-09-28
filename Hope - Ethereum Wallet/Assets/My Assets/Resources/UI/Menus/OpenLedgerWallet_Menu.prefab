@@ -1436,6 +1436,7 @@ MonoBehaviour:
   blocker: {fileID: 1637952505016494}
   formTitle: {fileID: 1099291146052992}
   line: {fileID: 1796914677723112}
+  menuTooltip: {fileID: 0}
   backButton: {fileID: 1814733390970646}
   ledgerLogo: {fileID: 1249908733382422}
   step1Text: {fileID: 1047096693189682}
