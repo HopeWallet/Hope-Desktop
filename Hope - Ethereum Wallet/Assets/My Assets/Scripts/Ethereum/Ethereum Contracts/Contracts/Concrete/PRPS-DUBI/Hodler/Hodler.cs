@@ -41,11 +41,16 @@ public sealed partial class Hodler : StaticSmartContract
     public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
         var transactionInput = ContractFunction.CreateFunction<Messages.Hodl>(gasPrice, gasLimit, id, SolidityUtils.ConvertToUInt(value, 18), new BigInteger(monthsToLock)).CreateTransactionInput(ContractAddress);
-        userWalletManager.SignTransaction<ConfirmLockPopup>(request =>
-        {
-            ContractUtils.SendContractMessage(transactionInput, request)
-                         .OnSuccess(_ => UnityEngine.Debug.Log("Successfully locked " + value + " PRPS"));
-        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, monthsToLock, value);
+
+        userWalletManager.SignTransaction<ConfirmLockPopup>(
+            request => ContractUtils.SendContractMessage("Locking PRPS", transactionInput, request),
+            gasLimit,
+            gasPrice,
+            0,
+            ContractAddress,
+            transactionInput.Data,
+            monthsToLock,
+            value);
     }
 
     /// <summary>
@@ -59,11 +64,15 @@ public sealed partial class Hodler : StaticSmartContract
     public void Release(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
     {
         var transactionInput = ContractFunction.CreateFunction<Messages.Release>(gasPrice, gasLimit, id).CreateTransactionInput(ContractAddress);
-        userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(request =>
-        {
-            ContractUtils.SendContractMessage(transactionInput, request)
-                         .OnSuccess(_ => UnityEngine.Debug.Log("Successfully released " + amountToRelease + " Purpose"));
-        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, "Are you sure you would like to release " + amountToRelease.ConvertDecimalToString() + " Purpose?");
+
+        userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(
+            request => ContractUtils.SendContractMessage("Releasing PRPS", transactionInput, request),
+            gasLimit,
+            gasPrice,
+            0,
+            ContractAddress,
+            transactionInput.Data,
+            "Are you sure you would like to release " + amountToRelease.ConvertDecimalToString() + " Purpose?");
     }
 
     /// <summary>

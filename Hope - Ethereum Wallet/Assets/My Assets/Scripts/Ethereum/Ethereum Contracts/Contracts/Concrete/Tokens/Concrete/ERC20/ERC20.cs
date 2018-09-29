@@ -58,12 +58,18 @@ public sealed partial class ERC20 : Token
     public void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
         var transactionInput = ContractFunction.CreateFunction<Messages.Transfer>(gasPrice, gasLimit, address, SolidityUtils.ConvertToUInt(amount, Decimals.Value)).CreateTransactionInput(ContractAddress);
-        userWalletManager.SignTransaction<ConfirmTransactionPopup>(request =>
-        {
-            ContractUtils.SendContractMessage(transactionInput, request)
-                         .OnSuccess(_ => Debug.Log("Successfully sent " + amount + " " + Symbol + " to address " + address))
-                         .OnError(_ => Debug.Log("Transaction failed! " + amount + " " + Symbol + " was not sent."));
-        }, gasLimit, gasPrice, 0, ContractAddress, transactionInput.Data, address, ContractAddress, amount, Symbol);
+
+        userWalletManager.SignTransaction<ConfirmTransactionPopup>(
+            request => ContractUtils.SendContractMessage($"Sending {Symbol}", transactionInput, request),
+            gasLimit,
+            gasPrice,
+            0,
+            ContractAddress,
+            transactionInput.Data,
+            address,
+            ContractAddress,
+            amount,
+            Symbol);
     }
 
     public override EthCallPromise<string> QueryName()

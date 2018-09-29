@@ -14,14 +14,17 @@ namespace Hope.Utils.Ethereum
     public class ContractUtils
     {
         private static EthereumNetwork EthereumNetwork;
+        private static EthereumPendingTransactionManager EthereumPendingTransactionManager;
 
         /// <summary>
         /// Initializes the <see cref="ContractUtils"/> by assigning the reference to the active network.
         /// </summary>
         /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
-        public ContractUtils(EthereumNetworkManager ethereumNetworkManager)
+        /// <param name="ethereumPendingTransactionManager"> The active <see cref="EthereumPendingTransactionManager"/>. </param>
+        public ContractUtils(EthereumNetworkManager ethereumNetworkManager, EthereumPendingTransactionManager ethereumPendingTransactionManager)
         {
             EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+            EthereumPendingTransactionManager = ethereumPendingTransactionManager;
         }
 
         /// <summary>
@@ -29,49 +32,53 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute on the blockchain given the contract address. </typeparam>
         /// <param name="contractAddress"> The contract address to execute the <see cref="ContractFunction"/> on. </param>
+        /// <param name="message"> The message representing the transaction. </param>
         /// <param name="signedUnityRequest"> The <see cref="TransactionSignedUnityRequest"/> to use to send the message. </param>
         /// <param name="gasPrice"> The <see cref="HexBigInteger"/> gas price to use with the transaction. </param>
         /// <param name="gasLimit"> The <see cref="HexBigInteger"/> gas limit to use with the transaction. </param>
         /// <param name="functionInput"> The input parameters of the <see cref="ContractFunction"/>. </param>
         /// <returns> Promise of the transaction result of sending the contract message. </returns>
-        public static EthTransactionPromise SendContractMessage<TFunc>(
+        public static void SendContractMessage<TFunc>(
             string contractAddress,
+            string message,
             TransactionSignedUnityRequest signedUnityRequest,
             HexBigInteger gasPrice,
             HexBigInteger gasLimit,
             params object[] functionInput) where TFunc : ContractFunction
         {
-            var promise = new EthTransactionPromise();
-            _SendContractMessageCoroutine(promise, ContractFunction.CreateFunction<TFunc>(gasPrice, gasLimit, functionInput).CreateTransactionInput(contractAddress), signedUnityRequest).StartCoroutine();
-
-            return promise;
+            _SendContractMessageCoroutine(
+                message,
+                ContractFunction.CreateFunction<TFunc>(gasPrice, gasLimit, functionInput).CreateTransactionInput(contractAddress),
+                signedUnityRequest).StartCoroutine();
         }
 
         /// <summary>
         /// Sends a message to an ethereum smart contract given the <see cref="TransactionInput"/> and <see cref="TransactionSignedUnityRequest"/>.
         /// </summary>
+        /// <param name="message"> The message representing the transaction. </param>
         /// <param name="transactionInput"> The <see cref="TransactionInput"/> of the message to send. </param>
         /// <param name="signedUnityRequest"> The <see cref="TransactionSignedUnityRequest"/> to use to send the message. </param>
         /// <returns> Promise of the transaction result of sending the contract message. </returns>
-        public static EthTransactionPromise SendContractMessage(TransactionInput transactionInput, TransactionSignedUnityRequest signedUnityRequest)
+        public static void SendContractMessage(
+            string message,
+            TransactionInput transactionInput,
+            TransactionSignedUnityRequest signedUnityRequest)
         {
-            var promise = new EthTransactionPromise();
-            _SendContractMessageCoroutine(promise, transactionInput, signedUnityRequest).StartCoroutine();
-
-            return promise;
+            _SendContractMessageCoroutine(message, transactionInput, signedUnityRequest).StartCoroutine();
         }
 
         /// <summary>
         /// Coroutine which sends a message to an ethereum smart contract.
         /// </summary>
-        /// <param name="promise"> <see cref="EthTransactionPromise"/> of the transaction result of sending the contract message. </param>
+        /// <param name="message"> The message representing the transaction. </param>
         /// <param name="transactionInput"> The <see cref="TransactionInput"/> of the message to send. </param>
         /// <param name="signedUnityRequest"> The <see cref="TransactionSignedUnityRequest"/> to use to send the message. </param>
         private static IEnumerator _SendContractMessageCoroutine(
-            EthTransactionPromise promise,
+            string message,
             TransactionInput transactionInput,
             TransactionSignedUnityRequest signedUnityRequest)
         {
+            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, message);
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
             promise.Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetwork.NetworkUrl);
