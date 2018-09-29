@@ -25,7 +25,7 @@ public static class StringUtils
     /// <param name="maxLength"> The maximum length of this string. </param>
     /// <param name="endCharacters"> The characters to add to the end of the string if it is over the maximum length. </param>
     /// <returns> The trimmed string if it was over the maximum length, otherwise the same string. </returns>
-    public static string LimitEnd(this string str, int maxLength, string endCharacters = "") => str.Length <= maxLength ? str : str.Substring(0, maxLength) + endCharacters;
+    public static string LimitEnd(this string str, int maxLength, string endCharacters = "") => string.IsNullOrEmpty(str) ? string.Empty : str.Length <= maxLength ? str : str.Substring(0, maxLength) + endCharacters;
 
     /// <summary>
     /// Checks if there is a string in a collection that matches with another string, ignoring case sensitivity.

@@ -55,7 +55,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 				dynamic activeAssetBalance = assetManager.ActiveAssetBalance;
 				dynamic max = assetManager.ActiveAsset is EtherAsset ? activeAssetBalance - gasManager.TransactionFee : activeAssetBalance;
 
-				return max < 0 ? 0 : max;
+				return max == null || max < 0 ? 0 : max;
 			}
 		}
 

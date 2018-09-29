@@ -113,7 +113,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
             var newAssetBalance = tradableAssetManager.ActiveTradableAsset.AssetBalance;
             var newEtherBalance = EtherBalance;
 
-            assetBalance.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset.AssetBalance.ToString(), 14, "...");
+            assetBalance.text = StringUtils.LimitEnd(tradableAssetManager.ActiveTradableAsset?.AssetBalance?.ToString(), 14, "...");
 
             if (lastAssetBalance != newAssetBalance || lastEtherBalance != newEtherBalance)
                 OnAssetBalanceChanged?.Invoke();

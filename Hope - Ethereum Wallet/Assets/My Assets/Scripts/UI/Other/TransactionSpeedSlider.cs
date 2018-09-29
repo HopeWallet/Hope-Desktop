@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,6 +60,9 @@ public sealed class TransactionSpeedSlider : IStandardGasPriceObservable
     /// <param name="value"> The current value of the slider to use to estimate the gas price. </param>
     private void UpdateGasPriceEstimate(float value)
     {
+        if (EqualityComparer<GasPrice>.Default.Equals(StandardGasPrice, default(GasPrice)))
+            return;
+
         decimal multiplier = decimal.Round((decimal)Mathf.Lerp(0.65f, 1.4f, value) * (decimal)Mathf.Lerp(1f, 4f, value - 0.45f), 2, MidpointRounding.AwayFromZero);
         onGasPriceChanged?.Invoke(new GasPrice(new BigInteger(multiplier * (decimal)StandardGasPrice.FunctionalGasPrice.Value)));
     }

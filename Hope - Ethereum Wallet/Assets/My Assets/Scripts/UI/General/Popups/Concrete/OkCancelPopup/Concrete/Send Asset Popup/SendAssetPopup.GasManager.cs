@@ -207,6 +207,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		/// </summary>
 		private void EstimateGasLimit()
 		{
+            if (tradableAssetManager.ActiveTradableAsset.AssetBalance == null)
+                return;
+
 			tradableAssetManager.ActiveTradableAsset.GetTransferGasLimit(RAND_ADDRESS, (decimal)tradableAssetManager.ActiveTradableAsset.AssetBalance, OnGasLimitReceived);
 		}
 
