@@ -59,11 +59,7 @@ namespace Hope.Utils.Promises
             }
 
             if (ethereumPendingTransactionManager != null)
-            {
-                ethereumPendingTransactionManager.StartNewPendingTransaction(txHash, message);
-                OnSuccess(_ => ethereumPendingTransactionManager.PendingTransactionSuccessful(txHash));
-                OnError(_ => ethereumPendingTransactionManager.PendingTransactionUnsuccessful(txHash));
-            }
+                ethereumPendingTransactionManager.StartNewPendingTransaction(this, txHash, message);
 
             var request = new EthGetTransactionReceiptUnityRequest(networkUrl);
 

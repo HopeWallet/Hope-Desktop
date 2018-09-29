@@ -9,7 +9,7 @@ using DG.Tweening;
 public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 {
 	/// <summary>
-	/// Class which manages the visuals of the pending transactions
+	/// Class which manages the visuals of the pending transactions.
 	/// </summary>
 	public sealed class PendingTransactionManager
 	{

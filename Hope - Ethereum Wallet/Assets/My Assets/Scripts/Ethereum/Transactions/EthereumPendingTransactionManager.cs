@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Hope.Utils.Promises;
+using System;
 
+/// <summary>
+/// Class used for managing the pending transactions.
+/// </summary>
 public sealed class EthereumPendingTransactionManager
 {
     public event Action<string, string> OnNewTransactionPending;
@@ -8,13 +12,25 @@ public sealed class EthereumPendingTransactionManager
 
     private string pendingTxHash;
 
-    public void StartNewPendingTransaction(string txHash, string message)
+    /// <summary>
+    /// Starts a new pending transaction.
+    /// </summary>
+    /// <param name="ethTransactionPromise"> The transaction promise returning the result of the transaction. </param>
+    /// <param name="txHash"> The transaction hash of the transaction. </param>
+    /// <param name="message"> The message representing the transaction. </param>
+    public void StartNewPendingTransaction(EthTransactionPromise ethTransactionPromise, string txHash, string message)
     {
         pendingTxHash = txHash;
         OnNewTransactionPending?.Invoke(txHash, message);
+
+        ethTransactionPromise.OnSuccess(_ => PendingTransactionSuccessful(txHash)).OnError(_ => PendingTransactionUnsuccessful(txHash));
     }
 
-    public void PendingTransactionSuccessful(string txHash)
+    /// <summary>
+    /// Called when the transaction returns a successful result.
+    /// </summary>
+    /// <param name="txHash"> The transaction hash of the transaction. </param>
+    private void PendingTransactionSuccessful(string txHash)
     {
         if (txHash != pendingTxHash)
             return;
@@ -22,7 +38,11 @@ public sealed class EthereumPendingTransactionManager
         OnTransactionSuccessful?.Invoke();
     }
 
-    public void PendingTransactionUnsuccessful(string txHash)
+    /// <summary>
+    /// Called when the transaction returns an unsuccessful result.
+    /// </summary>
+    /// <param name="txHash"> The transaction of the transaction. </param>
+    private void PendingTransactionUnsuccessful(string txHash)
     {
         if (txHash != pendingTxHash)
             return;
