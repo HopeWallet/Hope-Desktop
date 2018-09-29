@@ -39,7 +39,7 @@ public sealed partial class OpenWalletMenu
 
         private void ChangeText()
         {
-            var transactionList = ethereumTransactionManager.GetTransactionListByAddress(tradableAssetManager.ActiveTradableAsset.AssetAddress);
+            var transactionList = ethereumTransactionManager.GetTransactionListByAddress(tradableAssetManager.ActiveTradableAsset?.AssetAddress);
 
             if (transactionList == null)
             {

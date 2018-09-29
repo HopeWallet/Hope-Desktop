@@ -93,7 +93,8 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater, IDi
     /// </summary>
     /// <param name="address"> The address of the asset to find transactions for. </param>
     /// <returns> The list of transactions. </returns>
-    public List<TransactionInfo> GetTransactionListByAddress(string address) => transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
+    public List<TransactionInfo> GetTransactionListByAddress(string address)
+        => !string.IsNullOrEmpty(address) && transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address] : null;
 
     /// <summary>
     /// Gets the list of transactions of a specific asset address and specific transaction type.

@@ -53,6 +53,9 @@ public sealed partial class OpenWalletMenu
             var transactionList = GetTransactionList();
             var enableSection = transactionList?.Count > EthereumTransactionButtonManager.MAX_TRANSACTIONS_PER_PAGE;
 
+            if (tradableAssetManager.ActiveTradableAsset == null)
+                return;
+
             if ((enableSection && !pagesSection.activeInHierarchy) || !tradableAssetManager.ActiveTradableAsset.AssetAddress.EqualsIgnoreCase(previousAssetAddress))
                 ResetPageSection();
             else
