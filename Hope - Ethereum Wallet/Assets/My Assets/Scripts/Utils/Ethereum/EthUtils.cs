@@ -12,14 +12,17 @@ namespace Hope.Utils.Ethereum
     public sealed class EthUtils
     {
         private static EthereumNetwork EthereumNetwork;
+        private static EthereumPendingTransactionManager EthereumPendingTransactionManager;
 
         /// <summary>
-        /// Initializes the <see cref="WalletUtils"/> by assigning the reference to the active network.
+        /// Initializes the <see cref="EthUtils"/> by assigning the reference to the active network.
         /// </summary>
         /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
-        public EthUtils(EthereumNetworkManager ethereumNetworkManager)
+        /// <param name="ethereumPendingTransactionManager"> The active <see cref="EthereumPendingTransactionManager"/>. </param>
+        public EthUtils(EthereumNetworkManager ethereumNetworkManager, EthereumPendingTransactionManager ethereumPendingTransactionManager)
         {
             EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+            EthereumPendingTransactionManager = ethereumPendingTransactionManager;
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="addressTo"> The address to send the ether to. </param>
         /// <param name="amount"> The amount of ether to send. </param>
         /// <returns> The promise which will contain the result of a successful/unsuccessful transaction. </returns>
-        public static EthTransactionPromise SendEther(
+        public static void SendEther(
             TransactionSignedUnityRequest signedUnityRequest,
             HexBigInteger gasLimit,
             HexBigInteger gasPrice,
@@ -68,16 +71,12 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             decimal amount)
         {
-            var promise = new EthTransactionPromise();
-            _SendEtherCoroutine(promise, signedUnityRequest, gasLimit, gasPrice, walletAddress, addressTo, amount).StartCoroutine();
-
-            return promise;
+            _SendEtherCoroutine(signedUnityRequest, gasLimit, gasPrice, walletAddress, addressTo, amount).StartCoroutine();
         }
 
         /// <summary>
         /// Sends ether from one address to another.
         /// </summary>
-        /// <param name="promise"> Promise of the transaction result of sending ether. </param>
         /// <param name="signedUnityRequest"> The signed request to send the ether with. </param>
         /// <param name="walletAddress"> The address of the wallet sending the ether. </param>
         /// <param name="gasLimit"> The gas limit of the ether send transaction. </param>
@@ -86,7 +85,6 @@ namespace Hope.Utils.Ethereum
         /// <param name="amount"> The amount to send in ether. </param>
         /// <returns> The time waited for the request to be broadcast to the network. </returns>
         private static IEnumerator _SendEtherCoroutine(
-            EthTransactionPromise promise,
             TransactionSignedUnityRequest signedUnityRequest,
             HexBigInteger gasLimit,
             HexBigInteger gasPrice,
@@ -94,6 +92,7 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             dynamic amount)
         {
+            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, "Sending ETH");
             var transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 

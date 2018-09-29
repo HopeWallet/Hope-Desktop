@@ -78,6 +78,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<LockPRPSManager>().AsSingle().NonLazy();
         Container.Bind<LockedPRPSManager>().AsSingle().NonLazy();
+        Container.Bind<EthereumPendingTransactionManager>().AsSingle().NonLazy();
         Container.Bind<EthereumTransactionManager>().AsSingle().NonLazy();
         Container.Bind<EthereumTransactionButtonManager>().AsSingle().NonLazy();
         Container.Bind<ContactsManager>().AsSingle().NonLazy();

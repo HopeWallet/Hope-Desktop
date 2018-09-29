@@ -13,7 +13,28 @@ namespace Hope.Utils.Promises
     {
         private readonly WaitForSeconds Waiter = new WaitForSeconds(UPDATE_INTERVAL);
 
+        private readonly EthereumPendingTransactionManager ethereumPendingTransactionManager;
+        private readonly string message;
+
         private const float UPDATE_INTERVAL = 5f;
+
+        /// <summary>
+        /// Initializes the EthTransactionPromise with the pending transaction manager.
+        /// </summary>
+        /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
+        /// <param name="message"> The message representing the transaction. </param>
+        public EthTransactionPromise(EthereumPendingTransactionManager ethereumPendingTransactionManager, string message)
+        {
+            this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
+            this.message = message;
+        }
+
+        /// <summary>
+        /// Initializes the EthTransactionPromise without any EthereumPendingTransactionManager.
+        /// </summary>
+        public EthTransactionPromise()
+        {
+        }
 
         /// <summary>
         /// Starts the transaction receipt polling system.
@@ -35,6 +56,13 @@ namespace Hope.Utils.Promises
             {
                 InternalInvokeError("Invalid transaction hash");
                 yield return null;
+            }
+
+            if (ethereumPendingTransactionManager != null)
+            {
+                ethereumPendingTransactionManager.StartNewPendingTransaction(txHash, message);
+                OnSuccess(_ => ethereumPendingTransactionManager.PendingTransactionSuccessful(txHash));
+                OnError(_ => ethereumPendingTransactionManager.PendingTransactionUnsuccessful(txHash));
             }
 
             var request = new EthGetTransactionReceiptUnityRequest(networkUrl);

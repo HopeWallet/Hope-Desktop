@@ -13,18 +13,18 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// </summary>
 	public sealed class PendingTransactionManager
 	{
-		private GameObject pendingTransactionSection;
-		private GameObject triangle;
-		private TextMeshProUGUI pendingTransactionText, transactionHashText;
-		private Button copyButton, walletLogo, exitButton;
-		private GameObject checkmarkIconObject;
-		private Image statusIcon;
+		private readonly GameObject pendingTransactionSection;
+		private readonly GameObject triangle;
+		private readonly TextMeshProUGUI pendingTransactionText, transactionHashText;
+		private readonly Button copyButton, walletLogo, exitButton;
+		private readonly GameObject checkmarkIconObject;
+		private readonly Image statusIcon;
 
-		private Sprite loadingIconSprite, checkmarkIconSprite, errorIconSprite;
+		private readonly Sprite loadingIconSprite, checkmarkIconSprite, errorIconSprite;
 
-		private LoadingTextAnimator pendingTransactionTextAnimator;
-		private LoadingIconAnimator statusIconAnimator;
-		private LoadingIconAnimator logoAnimator;
+		private readonly LoadingTextAnimator pendingTransactionTextAnimator;
+		private readonly LoadingIconAnimator statusIconAnimator;
+		private readonly LoadingIconAnimator logoAnimator;
 
 		private string transactionHash;
 		private bool animatingIcon;
@@ -35,14 +35,17 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 		private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
 
-		/// <summary>
-		/// Sets the necessary variables needed for the pending transaction section
-		/// </summary>
-		/// <param name="pendingTransactionSection"> The parent transform of the pending transaction section </param>
-		/// <param name="walletLogo"> The active wallet logo button</param>
-		public PendingTransactionManager(Transform pendingTransactionSection,
-										 Button walletLogo)
-		{
+        /// <summary>
+        /// Sets the necessary variables needed for the pending transaction section
+        /// </summary>
+        /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
+        /// <param name="pendingTransactionSection"> The parent transform of the pending transaction section </param>
+        /// <param name="walletLogo"> The active wallet logo button</param>
+        public PendingTransactionManager(
+            EthereumPendingTransactionManager ethereumPendingTransactionManager,
+            Transform pendingTransactionSection,
+            Button walletLogo)
+        {
 			statusIcon = pendingTransactionSection.GetChild(0).GetComponent<Image>();
 			statusIconAnimator = statusIcon.GetComponent<LoadingIconAnimator>();
 			pendingTransactionText = pendingTransactionSection.GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -62,6 +65,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			SetSprite(ref errorIconSprite, "Error_Icon");
 
 			copyButton.onClick.AddListener(CopyButtonClicked);
+
+            ethereumPendingTransactionManager.OnNewTransactionPending += TransactionStarted;
+            ethereumPendingTransactionManager.OnTransactionSuccessful += () => TransactionFinished(true);
+            ethereumPendingTransactionManager.OnTransactionUnsuccessful += () => TransactionFinished(false);
 		}
 
 		/// <summary>
@@ -117,10 +124,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		/// <summary>
 		/// New pending transaction has started
 		/// </summary>
-		/// <param name="action"> The given action that is being done with an asset </param>
-		/// <param name="assetSymbol"> The given asset symbol </param>
+		/// <param name="message"> The message which represents the transaction being sent. </param>
 		/// <param name="transactionHash"> The transaction hash of the pending transaction </param>
-		public void TransactionStarted(string action, string assetSymbol, string transactionHash)
+		public void TransactionStarted(string transactionHash, string message)
 		{
 			PendingTransaction = true;
 
@@ -130,7 +136,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 			this.transactionHash = transactionHash;
 			transactionHashText.text = transactionHash.LimitEnd(12, "...");
 
-			pendingTransactionText.text = action + " " + assetSymbol;
+			pendingTransactionText.text = message;
 			pendingTransactionTextAnimator.enabled = true;
 
 			logoAnimator.enabled = true;

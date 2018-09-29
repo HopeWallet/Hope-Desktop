@@ -27,6 +27,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
 
     private EthereumTransactionManager ethereumTransactionManager;
+    private EthereumPendingTransactionManager ethereumPendingTransactionManager;
     private TokenContractManager tokenContractManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetPriceManager tradableAssetPriceManager;
@@ -46,6 +47,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     [Inject]
     public void Construct(
         EthereumTransactionManager ethereumTransactionManager,
+        EthereumPendingTransactionManager ethereumPendingTransactionManager,
         TokenContractManager tokenContractManager,
         TradableAssetManager tradableAssetManager,
         TradableAssetPriceManager tradableAssetPriceManager,
@@ -58,6 +60,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         PopupManager popupManager)
     {
         this.ethereumTransactionManager = ethereumTransactionManager;
+        this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetManager = tradableAssetManager;
         this.tradableAssetPriceManager = tradableAssetPriceManager;
@@ -115,7 +118,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	private void SetUpWalletType(Button walletLogo)
 	{
 		walletLogo.gameObject.SetActive(true);
-		pendingTransactionManager = new PendingTransactionManager(pendingTransactionSection, walletLogo);
+		pendingTransactionManager = new PendingTransactionManager(ethereumPendingTransactionManager, pendingTransactionSection, walletLogo);
 	}
 
     /// <summary>
@@ -148,7 +151,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	[ContextMenu("New Pending Transaction")]
 	private void StartNewTransaction()
 	{
-		pendingTransactionManager.TransactionStarted("Locking", "PRPS", "0xdf623f1ed83e006b28330a6abf9fe4f9c14435a33ad34be5323cea180aa58c4d");
+		pendingTransactionManager.TransactionStarted("Locking PRPS", "0xdf623f1ed83e006b28330a6abf9fe4f9c14435a33ad34be5323cea180aa58c4d");
 	}
 
 	[ContextMenu("Transaction successfully finished")]
