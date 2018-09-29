@@ -142,16 +142,15 @@ namespace Nethereum.JsonRpc.UnityClient
 
                 _account.PrivateKey.ClearBytes();
                 GC.Collect();
+            }
 
-                if (_ethSendTransactionRequest.Exception == null)
-                {
-                    this.Result = _ethSendTransactionRequest.Result;
-                }
-                else
-                {
-                    this.Exception = _ethSendTransactionRequest.Exception;
-                    yield break;
-                }
+            if (_ethSendTransactionRequest.Exception == null)
+            {
+                Result = _ethSendTransactionRequest.Result;
+            }
+            else
+            {
+                Exception = _ethSendTransactionRequest.Exception;
             }
         }
     }
