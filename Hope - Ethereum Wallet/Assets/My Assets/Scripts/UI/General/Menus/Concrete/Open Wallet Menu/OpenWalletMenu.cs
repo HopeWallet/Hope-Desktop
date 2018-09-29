@@ -148,24 +148,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         new TransactionPageManager(tradableAssetManager, ethereumTransactionManager, pagesSection);
     }
 
-	[ContextMenu("New Pending Transaction")]
-	private void StartNewTransaction()
-	{
-		pendingTransactionManager.TransactionStarted("Locking PRPS", "0xdf623f1ed83e006b28330a6abf9fe4f9c14435a33ad34be5323cea180aa58c4d");
-	}
-
-	[ContextMenu("Transaction successfully finished")]
-	private void TransactionSuccessful()
-	{
-		pendingTransactionManager.TransactionFinished(true);
-	}
-
-	[ContextMenu("Transaction failed")]
-	private void TransactionFailed()
-	{
-		pendingTransactionManager.TransactionFinished(false);
-	}
-
 	/// <summary>
 	/// Reloads the net worth of the current account.
 	/// </summary>
