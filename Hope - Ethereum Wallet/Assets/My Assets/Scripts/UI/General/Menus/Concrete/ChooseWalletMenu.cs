@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -7,6 +8,8 @@ using Zenject;
 /// </summary>
 public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 {
+    public static event Action OnAppLoaded;
+
 	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
 
     private UserWalletManager userWalletManager;
@@ -34,10 +37,15 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 		hopeButton.onClick.AddListener(OpenHopeWallet);
     }
 
-	/// <summary>
-	/// Opens the Hope wallet.
-	/// </summary>
-	private void OpenHopeWallet()
+    private void OnEnable()
+    {
+        OnAppLoaded?.Invoke();
+    }
+
+    /// <summary>
+    /// Opens the Hope wallet.
+    /// </summary>
+    private void OpenHopeWallet()
     {
         userWalletManager.SetWalletType(UserWalletManager.WalletType.Hope);
 

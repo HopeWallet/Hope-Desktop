@@ -23,7 +23,7 @@ public sealed class GasPriceObserver : EventObserver<IGasPriceObservableBase>, I
     /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
     public GasPriceObserver(PeriodicUpdateManager periodicUpdateManager)
     {
-        UserWalletManager.OnWalletLoadSuccessful += () => periodicUpdateManager.AddPeriodicUpdater(this, true);
+        ChooseWalletMenu.OnAppLoaded += () => periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
     /// <summary>
