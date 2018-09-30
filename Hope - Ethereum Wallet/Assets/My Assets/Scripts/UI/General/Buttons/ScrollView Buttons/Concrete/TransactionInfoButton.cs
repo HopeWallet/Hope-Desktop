@@ -150,7 +150,7 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	/// <param name="transaction"> The info of this transaction. </param>
 	private void SetDate(TransactionInfo transaction)
 	{
-		dateText.SetText(DateTimeUtils.TimeStampToDateTime(transaction.TimeStamp).GetStringFormattedDate());
+		dateText.SetText(DateTimeUtils.TimeStampToDateTime(transaction.TimeStamp).GetStringFormattedDate(false));
 	}
 
 	/// <summary>

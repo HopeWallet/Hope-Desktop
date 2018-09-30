@@ -26,12 +26,13 @@ public static class DateTimeUtils
     /// <returns> The DateTime of the unix time stamp. </returns>
     public static DateTime TimeStampToDateTime(long timeStamp) => UnixTimeStart.AddSeconds(timeStamp).ToLocalTime();
 
-    /// <summary>
-    /// Gets the formatted date, and the proper 12 hour formatted time.
-    /// </summary>
-    /// <param name="dateTime"> The DateTime object to get the string representation for. </param>
-    /// <returns></returns>
-    public static string GetFormattedDateString(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year + " - " + dateTime.GetTimeString();
+	/// <summary>
+	/// Gets the formatted date, and the proper 12 hour formatted time.
+	/// </summary>
+	/// <param name="dateTime"> The DateTime object to get the string representation for. </param>
+	/// <param name="shortForm"> Whether the month string should be in short form or not </param>
+	/// <returns> The formatted date string </returns>
+	public static string GetFormattedDateAndTimeString(this DateTime dateTime, bool shortForm) => GetMonthString(dateTime, shortForm) + " " + dateTime.Day + ", " + dateTime.Year + " - " + dateTime.GetTimeString();
 
     /// <summary>
     /// Gets the formatted 12 hour time, not including the seconds
@@ -48,13 +49,14 @@ public static class DateTimeUtils
         return twelveHourTime + ":" + dateTime.Minute.ToString("00") + timeConvention;
     }
 
-    /// <summary>
-    /// Gets a formatted string in the form of month day, year.
-    /// Example: January 1, 2018
-    /// </summary>
-    /// <param name="dateTime"> The DateTime object to get the string representation for. </param>
-    /// <returns> The formatted string of this DateTime object. </returns>
-    public static string GetStringFormattedDate(this DateTime dateTime) => GetMonthString(dateTime) + " " + dateTime.Day + ", " + dateTime.Year;
+	/// <summary>
+	/// Gets a formatted string in the form of month day, year.
+	/// Example: January 1, 2018
+	/// </summary>
+	/// <param name="dateTime"> The DateTime object to get the string representation for. </param>
+	/// <param name="shortForm"> Whether the month string should be in short form or not </param>
+	/// <returns> The formatted string of this DateTime object. </returns>
+	public static string GetStringFormattedDate(this DateTime dateTime, bool shortForm) => GetMonthString(dateTime, shortForm) + " " + dateTime.Day + ", " + dateTime.Year;
 
     /// <summary>
     /// Gets the maximum time interval in a unix time.
@@ -102,29 +104,48 @@ public static class DateTimeUtils
     /// <returns> The extra character to add at the end of the string if it is plural. </returns>
     private static string GetAddedCharacter(dynamic val) => val != 1 ? "s" : "";
 
-    /// <summary>
-    /// Gets the string representation of the Month of a DateTime object.
-    /// </summary>
-    /// <param name="dateTime"> The DateTime object to get the month for. </param>
-    /// <returns> The month in string format. </returns>
-    private static string GetMonthString(DateTime dateTime)
+	/// <summary>
+	/// Gets the string representation of the Month of a DateTime object.
+	/// </summary>
+	/// <param name="dateTime"> The DateTime object to get the month for. </param>
+	/// <param name="shortForm"> Whether the month string should be in short form or not </param>
+	/// <returns> The month in string format. </returns>
+	private static string GetMonthString(DateTime dateTime, bool shortForm)
     {
+		string month = "";
+
         switch (dateTime.Month)
         {
-            case 1: return "January";
-            case 2: return "February";
-            case 3: return "March";
-            case 4: return "April";
-            case 5: return "May";
-            case 6: return "June";
-            case 7: return "July";
-            case 8: return "August";
-            case 9: return "September";
-            case 10: return "October";
-            case 11: return "November";
-            case 12: return "December";
-            default: return null;
-        }
+            case 1: month = "January";
+				break;
+            case 2: month = "February";
+				break;
+            case 3: month = "March";
+				break;
+			case 4: month = "April";
+				break;
+			case 5: month = "May";
+				break;
+			case 6: month = "June";
+				break;
+			case 7: month = "July";
+				break;
+			case 8: month = "August";
+				break;
+			case 9: month = "September";
+				break;
+			case 10: month = "October";
+				break;
+			case 11: month = "November";
+				break;
+			case 12: month = "December";
+				break;
+		}
+
+		if (shortForm && month.Length > 5)
+			return month.Substring(0, 3) + ".";
+		else
+			return month;
     }
 
 }

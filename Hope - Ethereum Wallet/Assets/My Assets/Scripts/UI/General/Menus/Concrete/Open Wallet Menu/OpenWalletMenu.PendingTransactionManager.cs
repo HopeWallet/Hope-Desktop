@@ -107,9 +107,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 		{
 			float value = animateIn ? 1f : 0f;
 
+			if (animateIn)
+				statusIcon.gameObject.SetActive(true);
+
 			pendingTransactionSection.AnimateGraphic(value, 0.2f);
 			triangle.AnimateGraphic(value, 0.2f);
-			statusIcon.gameObject.AnimateGraphic(value, 0.3f);
+			statusIcon.gameObject.AnimateGraphic(value, 0.3f, () => { if (!animateIn) statusIcon.gameObject.SetActive(false); });
 			pendingTransactionText.gameObject.AnimateGraphic(value, 0.3f);
 			transactionHashText.gameObject.AnimateGraphic(value, 0.4f);
 			copyButton.gameObject.AnimateGraphic(value, 0.4f);

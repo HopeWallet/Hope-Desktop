@@ -13,7 +13,7 @@ public abstract class CountdownTimerAnimator : PopupAnimator
 	/// </summary>
 	protected void StartTimerAnimation()
 	{
-		if (!confirmButton.GetComponent<Button>().interactable)
+		if (confirmButton.activeInHierarchy && !confirmButton.GetComponent<Button>().interactable)
 			new CountdownTimer(AnimateTimerText, SetButtonInteractable, 5f, 1f).StartCountdown();
 	}
 

@@ -11,7 +11,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	public sealed class GeneralSection
 	{
 		private GameObject idleTimeoutTimeSection;
-		private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
+		private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox;
 		private HopeInputField idleTimeoutTimeInputField;
 
 		private int idleTimeValue;
@@ -21,7 +21,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		/// <param name="idleTimeoutTimeCheckbox"> The idle timeout time checkbox </param>
 		/// <param name="countdownTimerCheckbox"> The countdown timer checkbox</param>
-		/// <param name="transactionNotificationCheckbox"> The transaction notification checkbox </param>
+		/// <param name="showTooltipsCheckbox"> The show tooltips checkbox </param>
 		/// <param name="updateNotificationCheckbox"> The update notification checkbox </param>
 		/// <param name="idleTimeoutTimeInputField"> The idle timeout time input field </param>
 		/// <param name="usingHopeWallet"> Whether the user is using Hope or not </param>
@@ -34,7 +34,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			this.idleTimeoutTimeCheckbox = idleTimeoutTimeCheckbox;
 			this.countdownTimerCheckbox = countdownTimerCheckbox;
-			this.transactionNotificationCheckbox = transactionNotificationCheckbox;
+			this.showTooltipsCheckbox = transactionNotificationCheckbox;
 			this.updateNotificationCheckbox = updateNotificationCheckbox;
 			this.idleTimeoutTimeInputField = idleTimeoutTimeInputField;
 			idleTimeoutTimeSection = idleTimeoutTimeInputField.transform.parent.gameObject;
@@ -44,8 +44,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			if (!usingHopeWallet)
 			{
-				idleTimeoutTimeCheckbox.gameObject.SetActive(false);
-				idleTimeoutTimeInputField.gameObject.SetActive(false);
+				idleTimeoutTimeSection.SetActive(false);
+				countdownTimerCheckbox.gameObject.SetActive(false);
 			}
 		}
 
@@ -57,7 +57,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
 			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
 			countdownTimerCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("countdown timer", boolean);
-			transactionNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("transaction notification", boolean);
+			showTooltipsCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("show tooltips", boolean);
 			updateNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("update notification", boolean);
 		}
 
@@ -68,7 +68,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			idleTimeoutTimeCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("idle timeout"));
 			countdownTimerCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("countdown timer"));
-			transactionNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("transaction notification"));
+			showTooltipsCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("show tooltips"));
 			updateNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("update notification"));
 
 			if (idleTimeoutTimeCheckbox.ToggledOn)
@@ -102,7 +102,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			idleTimeoutTimeInputField.Error = string.IsNullOrEmpty(text) || idleTimeValue <= 0;
 
 			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
-			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? 142f : 132f, 0.15f);
+			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? -60f : -75f, 0.15f);
 
 			if (!idleTimeoutTimeInputField.Error && !idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
 			{

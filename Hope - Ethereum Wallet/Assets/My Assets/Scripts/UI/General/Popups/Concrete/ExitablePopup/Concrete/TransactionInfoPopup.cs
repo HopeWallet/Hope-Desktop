@@ -100,7 +100,7 @@ public class TransactionInfoPopup : ExitablePopupComponent<TransactionInfoPopup>
 
 		fromAddress.text = transactionInfo.From;
         toAddress.text = transactionInfo.To;
-		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateString();
+		timestampText.text = DateTimeUtils.TimeStampToDateTime(transactionInfo.TimeStamp).GetFormattedDateAndTimeString(true);
 		gasUsedText.text = transactionInfo.GasUsed.ToString();
         txCostText.text = (UnitConversion.Convert.FromWei(transactionInfo.GasPrice) * transactionInfo.GasUsed).ConvertDecimalToString() + "<style=Symbol> Ether</style>";
 		CheckIfContact(transactionInfo.From.ToLower(), fromAddressName);

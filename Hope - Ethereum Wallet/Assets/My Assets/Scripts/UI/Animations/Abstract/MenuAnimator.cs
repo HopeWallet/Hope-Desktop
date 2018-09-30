@@ -30,7 +30,7 @@ public class MenuAnimator : UIAnimator
 			line.AnimateScaleX(animateIn ? 1f : 0f, 0.25f);
 		}
 
-		if (menuTooltip != null)
+		if (menuTooltip != null && SecurePlayerPrefs.GetBool("show tooltips"))
 		{
 			for (int i = 0; i < 3; i++)
 				menuTooltip.transform.GetChild(i).gameObject.AnimateGraphic(animateIn ? 1f : 0f, 0.3f);

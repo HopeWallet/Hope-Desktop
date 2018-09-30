@@ -33,11 +33,10 @@ public class WalletListMenuAnimator : MenuAnimator
 
         base.AnimateIn();
 
-        if (GetComponent<WalletListMenu>().Wallets.Count > 0)
-            AnimateWallets(0);
+		CoroutineUtils.ExecuteAfterWait(0.1f, () => AnimateWallets(0));
 
-        line2.AnimateScaleX(1f, 0.25f);
-        newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+        line2.AnimateScaleX(1f, 0.35f);
+        newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.4f);
     }
 
     /// <summary>

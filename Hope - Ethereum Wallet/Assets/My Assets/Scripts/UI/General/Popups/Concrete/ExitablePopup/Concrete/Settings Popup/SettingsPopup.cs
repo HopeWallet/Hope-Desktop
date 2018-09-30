@@ -10,7 +10,7 @@ using Zenject;
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>, ITabButtonObservable, IEnterButtonObservable
 {
     [SerializeField] private CategoryButtons categoryButtons;
-    [SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox;
+    [SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox;
     [SerializeField] private HopeInputField idleTimeoutTimeInputField;
 
     [SerializeField] private GeneralRadioButtons defaultCurrencyOptions;
@@ -71,7 +71,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		bool usingHopeWallet = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope;
 
-		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, transactionNotificationCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField, usingHopeWallet);
+		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField, usingHopeWallet);
 
         if (usingHopeWallet)
         {

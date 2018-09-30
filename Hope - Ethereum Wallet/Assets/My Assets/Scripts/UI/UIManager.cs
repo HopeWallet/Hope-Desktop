@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
             SecurePlayerPrefs.SetBool("idle timeout", true);
             SecurePlayerPrefs.SetInt("idle time", 5);
             SecurePlayerPrefs.SetBool("countdown timer", true);
-            SecurePlayerPrefs.SetBool("transaction notification", true);
+            SecurePlayerPrefs.SetBool("show tooltips", true);
             SecurePlayerPrefs.SetBool("update notification", true);
             SecurePlayerPrefs.SetBool("two-factor authentication", false);
             SecurePlayerPrefs.SetBool("2FA set up", false);

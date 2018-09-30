@@ -123,10 +123,9 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(11, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
 
-        timeLeftText.text = currentTimeDifference < 0
-            ? "Done"
-            : !useUnlockableTime ? GetTimeLeftString((int)currentTimeDifference) : DateTimeUtils.TimeStampToDateTime((long)info.ReleaseTime).GetStringFormattedDate();
-    }
+		timeLeftText.text = currentTimeDifference < 0 ? "Done"
+			: !useUnlockableTime ? GetTimeLeftString((int)currentTimeDifference) : DateTimeUtils.TimeStampToDateTime((long)info.ReleaseTime).GetStringFormattedDate(true);
+	}
 
     /// <summary>
     /// Called when the gas prices have changed.
