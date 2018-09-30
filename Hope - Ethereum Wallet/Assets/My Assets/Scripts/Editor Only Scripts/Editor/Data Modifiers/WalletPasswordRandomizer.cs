@@ -18,31 +18,31 @@ public static class WalletPasswordRandomizer
     /// <summary>
     /// Replaces the values of the arrays.
     /// </summary>
-    [PostProcessScene(2)]
-    public static void ReplaceValues()
-    {
-        if (EditorApplication.isPlayingOrWillChangePlaymode)
-        {
-            return;
-        }
+    //[PostProcessScene(2)]
+    //public static void ReplaceValues()
+    //{
+    //    if (EditorApplication.isPlayingOrWillChangePlaymode)
+    //    {
+    //        return;
+    //    }
 
-        ReplacePrefNames();
-        //ReplaceOpValues();
-        SaveChanges();
-    }
+    //    ReplacePrefNames();
+    //    //ReplaceOpValues();
+    //    SaveChanges();
+    //}
 
     /// <summary>
     /// Restores the original values to the arrays.
     /// </summary>
     /// <param name="target"> The target playform of the build. </param>
     /// <param name="result"> The result of the build. </param>
-    [PostProcessBuild(2)]
-    public static void RestoreValues(BuildTarget target, string result)
-    {
-        Array.Copy(SavedKeys, PasswordObj.keys, SavedKeys.Length);
+    //[PostProcessBuild(2)]
+    //public static void RestoreValues(BuildTarget target, string result)
+    //{
+    //    Array.Copy(SavedKeys, PasswordObj.keys, SavedKeys.Length);
 
-        SaveChanges();
-    }
+    //    SaveChanges();
+    //}
 
     /// <summary>
     /// Replaces the PlayerPref names by changing the name of each key to a random password.
