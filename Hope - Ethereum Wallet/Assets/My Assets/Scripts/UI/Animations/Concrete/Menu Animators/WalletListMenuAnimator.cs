@@ -19,8 +19,6 @@ public class WalletListMenuAnimator : MenuAnimator
     {
         walletListMenu = GetComponent<WalletListMenu>();
         backButton.GetComponent<Button>().onClick.AddListener(() => { backButton.AnimateGraphicAndScale(0f, 0f, 0.3f); hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f); });
-
-        walletListMenu.OnWalletsLoaded += () => AnimateWallets(0);
     }
 
     /// <summary>
@@ -33,9 +31,9 @@ public class WalletListMenuAnimator : MenuAnimator
 
         base.AnimateIn();
 
-		CoroutineUtils.ExecuteAfterWait(0.1f, () => AnimateWallets(0));
+		CoroutineUtils.ExecuteAfterWait(0.1f, () => { scrollbar.value = 1f; AnimateWallets(0); });
 
-        line2.AnimateScaleX(1f, 0.35f);
+		line2.AnimateScaleX(1f, 0.35f);
         newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.4f);
     }
 
@@ -46,7 +44,6 @@ public class WalletListMenuAnimator : MenuAnimator
     {
         base.AnimateOut();
 
-        scrollbar.value = 1f;
         foreach (GameObject wallet in walletListMenu.Wallets)
             wallet.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
@@ -64,10 +61,8 @@ public class WalletListMenuAnimator : MenuAnimator
         {
             for (int i = index; i < walletListMenu.Wallets.Count; i++)
             {
-                var tmpText = walletListMenu.Wallets[i].GetComponent<TextMeshProUGUI>();
-                var currentColor = tmpText.color;
                 walletListMenu.Wallets[i].transform.localScale = new Vector2(1f, 1f);
-                tmpText.color = new Color(tmpText.color.r, tmpText.color.g, tmpText.color.b, 1f);
+				walletListMenu.Wallets[i].GetComponent<TextMeshProUGUI>().color = new Color(0.85f, 0.85f, 0.85f, 1f);
             }
 
             FinishedAnimating();

@@ -16,9 +16,9 @@ public sealed class WalletCreatedMenuAnimator : MenuAnimator
 	{
 		base.AnimateIn();
 
-		hopeLogo.AnimateTransformY(31f, 0.2f);
-        hopeLogo.AnimateGraphicAndScale(1f, 2f, 0.2f);
-		noteText.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		hopeLogo.AnimateTransformY(31f, 0.25f);
+        hopeLogo.AnimateGraphicAndScale(1f, 2f, 0.25f);
+		noteText.AnimateGraphicAndScale(1f, 1f, 0.35f);
 		openWalletButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
 	}
 
@@ -29,9 +29,8 @@ public sealed class WalletCreatedMenuAnimator : MenuAnimator
 	{
 		base.AnimateOut();
 
-        hopeLogo.AnimateTransformY(336f, 0.2f);
-		hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.2f);
+		hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		noteText.AnimateGraphicAndScale(0f, 0f, 0.3f);
-		openWalletButton.AnimateGraphicAndScale(0f, 0f, 0.4f, FinishedAnimating);
+		openWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
 }

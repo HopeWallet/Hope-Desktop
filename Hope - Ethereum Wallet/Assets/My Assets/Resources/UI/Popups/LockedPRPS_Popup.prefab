@@ -964,7 +964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1385,6 +1385,7 @@ MonoBehaviour:
   line: {fileID: 1075028241277392}
   lockPRPSButton: {fileID: 1927151215292780}
   listTransform: {fileID: 224771168584083524}
+  scrollbar: {fileID: 114472251949504100}
 --- !u!114 &114719212956894954
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1589,7 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2203,7 +2204,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 94.6}
-  m_SizeDelta: {x: 748.2, y: 50}
+  m_SizeDelta: {x: 748.2, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224737343615346516
 RectTransform:
@@ -2238,7 +2239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 304.40988}
+  m_AnchoredPosition: {x: 0, y: 4181.331}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224823887397847352

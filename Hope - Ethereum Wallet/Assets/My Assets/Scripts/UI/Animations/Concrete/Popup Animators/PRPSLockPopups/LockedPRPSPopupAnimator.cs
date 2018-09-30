@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the LockedPRPSPopup
@@ -10,17 +11,19 @@ public sealed class LockedPRPSPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject lockPRPSButton;
 	[SerializeField] private Transform listTransform;
+	[SerializeField] private Scrollbar scrollbar;
 
-    /// <summary>
-    /// Array of initial locked purpose items.
-    /// </summary>
-    public GameObject[] LockedPurposeItems { get; set; }
+	/// <summary>
+	/// Array of initial locked purpose items.
+	/// </summary>
+	public GameObject[] LockedPurposeItems { get; set; }
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		scrollbar.value = 1f;
 		topText.AnimateScaleX(1f, 0.2f, () => AnimateList(0));
 		line.AnimateScaleX(1f, 0.25f);
 		lockPRPSButton.AnimateGraphicAndScale(1f, 1f, 0.3f);

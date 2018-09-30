@@ -9,9 +9,6 @@ using Zenject;
 /// </summary>
 public sealed class WalletListMenu : Menu<WalletListMenu>
 {
-	public event Action<bool> BottomButtonsVisible;
-    public event Action OnWalletsLoaded;
-
 	public static Action PopupClosed;
 
 	[SerializeField] private Button newWalletButton;
@@ -60,8 +57,6 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
             Wallets.Add(walletButtonFactory.Create()
                    .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
         }
-
-        OnWalletsLoaded?.Invoke();
     }
 
     /// <summary>
