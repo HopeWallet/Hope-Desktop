@@ -123,8 +123,11 @@ public sealed class LockedPRPSItemButton : InfoButton<LockedPRPSItemButton, Hodl
         dubiAmountText.text = (multiplier * lockedPurpose).ConvertDecimalToString().LimitEnd(11, "...");
         lockPeriodText.text = DateTimeUtils.GetMaxTimeInterval((int)releaseTimeDifference);
 
-		timeLeftText.text = currentTimeDifference < 0 ? "Done"
-			: !useUnlockableTime ? GetTimeLeftString((int)currentTimeDifference) : DateTimeUtils.TimeStampToDateTime((long)info.ReleaseTime).GetStringFormattedDate(true);
+		timeLeftText.text = currentTimeDifference < 0 && !useUnlockableTime
+			? "Done"
+			: !useUnlockableTime
+				? GetTimeLeftString((int)currentTimeDifference)
+				: DateTimeUtils.TimeStampToDateTime((long)info.ReleaseTime).GetStringFormattedDate(true);
 	}
 
     /// <summary>

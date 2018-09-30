@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using Hope.Utils.Ethereum;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -197,7 +199,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         string assetSymbol = tradableAsset.AssetSymbol;
 
         if (!string.IsNullOrEmpty(assetBalance))
-            balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + "<style=Symbol> " + assetSymbol + " </size>";
+            balanceText.text = assetBalance.LimitEnd(MAX_ASSET_BALANCE_LENGTH - (assetSymbol.Length + 1), "...") + $"<style=Symbol> {assetSymbol}</size>";
+
+        if (!string.IsNullOrEmpty(assetBalance) && tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress) && lockedPrpsManager.UnfulfilledItems.Count > 0)
+            balanceText.text = $"{balanceText.text} <style=Symbol>({SolidityUtils.ConvertFromUInt(lockedPrpsManager.UnfulfilledItems.Select(item => item.Value).Aggregate((v1, v2) => v1 + v2), 18)} Locked)</style>";
 
         lockPurposeSection.SetActive(tradableAsset.AssetAddress.EqualsIgnoreCase(prpsContract.ContractAddress));
 
