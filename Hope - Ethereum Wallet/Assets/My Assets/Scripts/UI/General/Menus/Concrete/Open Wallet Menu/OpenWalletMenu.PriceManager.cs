@@ -34,6 +34,10 @@ public sealed partial class OpenWalletMenu
         private void UpdateAssetValue()
         {
             var tradableAsset = tradableAssetManager.ActiveTradableAsset;
+
+            if (tradableAsset == null)
+                return;
+
             priceText.gameObject.SetActive(tradableAsset.AssetBalance > 0);
 
             if (priceText.gameObject.activeInHierarchy)

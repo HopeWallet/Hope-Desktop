@@ -80,6 +80,10 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	protected override void OnValueUpdated(TransactionInfo info)
 	{
 		var tradableAsset = tradableAssetManager.GetTradableAsset(info.AssetAddress);
+
+        if (tradableAsset == null)
+            return;
+
 		SetAmount(info, tradableAsset);
 		SetAddress(info);
 		SetDate(info);
