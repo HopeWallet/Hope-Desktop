@@ -143,7 +143,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         AccountsPopup.OnAccountChanged += AccountChanged;
         tradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
-        lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetNotifications;
+        lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetUI;
 
         new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
         new TransactionTabManager(tradableAssetManager, ethereumTransactionManager, transactionTabs);
