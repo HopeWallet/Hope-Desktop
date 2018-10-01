@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the ConfirmTransactionPopup

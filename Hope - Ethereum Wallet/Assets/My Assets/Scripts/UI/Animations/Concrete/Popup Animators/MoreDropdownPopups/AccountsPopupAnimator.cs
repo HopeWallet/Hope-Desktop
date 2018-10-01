@@ -63,12 +63,12 @@ public sealed class AccountsPopupAnimator : PopupAnimator
 	{
 		GameObject addressObject = addressSection.transform.GetChild(index).gameObject;
 
-		addressObject.AnimateScaleY(0f, 0.15f, () =>
+		addressObject.AnimateScaleY(0f, 0.12f, () =>
 		{
 			addressObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = address;
 			addressObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (firstAddressNumInList + index).ToString();
 			SetAddressButtonInteractable(addressObject, currentlySelectedAddress != (firstAddressNumInList + index));
-			addressObject.AnimateScaleY(1f, 0.15f);
+			addressObject.AnimateScaleY(1f, 0.12f);
 		});
 	}
 

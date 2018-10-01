@@ -31,6 +31,10 @@ public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 		}
 	}
 
+	/// <summary>
+	/// Animates the child objects of the given section
+	/// </summary>
+	/// <param name="tokenSection"> The given section being animated in </param>
 	private void AnimateSection(GameObject tokenSection)
 	{
 		float duration = 0.1f;
