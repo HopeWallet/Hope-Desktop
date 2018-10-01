@@ -13,6 +13,11 @@ public sealed class EthereumPendingTransactionManager
     private string pendingTxHash;
 
     /// <summary>
+    /// Whether a transaction is currently pending or not.
+    /// </summary>
+    public bool IsTransactionPending { get; private set; }
+
+    /// <summary>
     /// Starts a new pending transaction.
     /// </summary>
     /// <param name="ethTransactionPromise"> The transaction promise returning the result of the transaction. </param>
@@ -22,6 +27,8 @@ public sealed class EthereumPendingTransactionManager
     {
         pendingTxHash = txHash;
         OnNewTransactionPending?.Invoke(txHash, message);
+
+        IsTransactionPending = true;
 
         ethTransactionPromise.OnSuccess(_ => PendingTransactionSuccessful(txHash)).OnError(_ => PendingTransactionUnsuccessful(txHash));
     }
@@ -35,6 +42,7 @@ public sealed class EthereumPendingTransactionManager
         if (txHash != pendingTxHash)
             return;
 
+        IsTransactionPending = false;
         OnTransactionSuccessful?.Invoke();
     }
 
@@ -47,6 +55,7 @@ public sealed class EthereumPendingTransactionManager
         if (txHash != pendingTxHash)
             return;
 
+        IsTransactionPending = false;
         OnTransactionUnsuccessful?.Invoke();
     }
 }
