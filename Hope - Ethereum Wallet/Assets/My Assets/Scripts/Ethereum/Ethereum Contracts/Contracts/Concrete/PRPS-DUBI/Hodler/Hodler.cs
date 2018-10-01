@@ -65,14 +65,14 @@ public sealed partial class Hodler : StaticSmartContract
     {
         var transactionInput = ContractFunction.CreateFunction<Messages.Release>(gasPrice, gasLimit, id).CreateTransactionInput(ContractAddress);
 
-        userWalletManager.SignTransaction<GeneralTransactionConfirmationPopup>(
+        userWalletManager.SignTransaction<ConfirmReleasePopup>(
             request => ContractUtils.SendContractMessage("Releasing PRPS", transactionInput, request),
             gasLimit,
             gasPrice,
             0,
             ContractAddress,
             transactionInput.Data,
-            "Are you sure you would like to release " + amountToRelease.ConvertDecimalToString() + " Purpose?");
+            amountToRelease);
     }
 
     /// <summary>
