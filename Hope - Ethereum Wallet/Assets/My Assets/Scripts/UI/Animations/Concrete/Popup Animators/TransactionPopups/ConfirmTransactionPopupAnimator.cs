@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// The animator class of the ConfirmTransactionPopup
+/// </summary>
 public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject tokenIcon;
@@ -9,16 +12,6 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	[SerializeField] private GameObject line;
 	[SerializeField] private GameObject transactionSection;
 	[SerializeField] private GameObject feeSection;
-	[SerializeField] private GameObject confirmText;
-
-	/// <summary>
-	/// Sets the confirm button to interactable if countdown timer setting has been disabled
-	/// </summary>
-	private void Awake()
-	{
-		if (!SecurePlayerPrefs.GetBool("countdown timer"))
-			confirmButton.GetComponent<Button>().interactable = true;
-	}
 
 	/// <summary>
 	/// Animates the unique elements of this form into view
@@ -32,11 +25,14 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 		transactionSection.AnimateScaleX(1f, 0.25f);
 		feeSection.AnimateScaleX(1f, 0.27f, StartTimerAnimation);
 
-		if (confirmButton.activeInHierarchy)
-			confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		if (confirmText.activeInHierarchy)
+		{
+			confirmText.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+		}
 		else
-			confirmText.AnimateGraphicAndScale(1f, 1f, 0.3f);
-
-		cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+		{
+			confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
+			cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -14,48 +13,29 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
 									  dubiAmountText,
 									  noteText;
 
-	[SerializeField] private GameObject confirmText;
-
     private TradableAssetManager tradableAssetManager;
     private TokenContractManager tokenContractManager;
     private TokenListManager tokenListManager;
     private DUBI dubiContract;
 
 	/// <summary>
-	/// Adds required dependencies to this class.
+	/// Adds the required dependencies to this popup.
 	/// </summary>
 	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
 	/// <param name="tokenContractManager"> The active TokenContractManager. </param>
 	/// <param name="tokenListManager"> The active TokenListManager. </param>
 	/// <param name="dubiContract"> The active DUBI contract. </param>
-	/// <param name="userWalletManager"> The active UserWalletManager </param>
 	[Inject]
     public void Construct(
         TradableAssetManager tradableAssetManager,
         TokenContractManager tokenContractManager,
         TokenListManager tokenListManager,
-        DUBI dubiContract,
-		UserWalletManager userWalletManager)
+        DUBI dubiContract)
     {
         this.tradableAssetManager = tradableAssetManager;
         this.tokenContractManager = tokenContractManager;
         this.tokenListManager = tokenListManager;
         this.dubiContract = dubiContract;
-
-		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
-		{
-			confirmText.SetActive(true);
-			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Ledger.";
-		}
-		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
-		{
-			confirmText.SetActive(true);
-			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Trezor.";
-		}
-		else
-		{
-			okButton.gameObject.SetActive(true);
-		}
 	}
 
     /// <summary>

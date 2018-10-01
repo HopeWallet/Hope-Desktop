@@ -17,11 +17,8 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 											 contactName,
 											 feeText;
 
-	[SerializeField] private GameObject confirmText;
-
     private TradableAssetManager tradableAssetManager;
     private TradableAssetImageManager tradableAssetImageManager;
-    private UserWalletManager userWalletManager;
     private HopeWalletInfoManager userWalletInfoManager;
     private DynamicDataCache dynamicDataCache;
 	private ContactsManager contactsManager;
@@ -33,48 +30,28 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	/// </summary>
 	/// <param name="tradableAssetManager"> The active TradableAssetManager. </param>
 	/// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
-	/// <param name="userWalletManager"> The active UserWalletManager. </param>
 	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
 	/// <param name="contactsManager"> The active ContactsManager. </param>
 	[Inject]
 	public void Construct(
 		TradableAssetManager tradableAssetManager,
 		TradableAssetImageManager tradableAssetImageManager,
-		UserWalletManager userWalletManager,
 		HopeWalletInfoManager userWalletInfoManager,
 		DynamicDataCache dynamicDataCache,
 		ContactsManager contactsManager)
 	{
 		this.tradableAssetManager = tradableAssetManager;
 		this.tradableAssetImageManager = tradableAssetImageManager;
-		this.userWalletManager = userWalletManager;
 		this.userWalletInfoManager = userWalletInfoManager;
 		this.dynamicDataCache = dynamicDataCache;
 		this.contactsManager = contactsManager;
-
-		walletAddress = userWalletManager.GetWalletAddress();
-
-		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
-		{
-			confirmText.SetActive(true);
-			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Ledger.";
-		}
-		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
-		{
-			confirmText.SetActive(true);
-			confirmText.GetComponent<TextMeshProUGUI>().text = "Confirm on your Trezor.";
-		}
-		else
-		{
-			okButton.gameObject.SetActive(true);
-		}
 	}
 
-    /// <summary>
-    /// Displays the asset transfer request details.
-    /// </summary>
-    /// <param name="transactionInput"> The input of the send asset transaction request. </param>
-    protected override void InternalSetConfirmationValues(object[] transactionInput)
+	/// <summary>
+	/// Displays the asset transfer request details.
+	/// </summary>
+	/// <param name="transactionInput"> The input of the send asset transaction request. </param>
+	protected override void InternalSetConfirmationValues(object[] transactionInput)
     {
         tradableAssetImageManager.LoadImage(tradableAssetManager.GetTradableAsset(transactionInput[1].ToString()).AssetSymbol, img => assetImage.sprite = img);
         amountText.text = transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " <style=Symbol>" + transactionInput[3] + "</style>";

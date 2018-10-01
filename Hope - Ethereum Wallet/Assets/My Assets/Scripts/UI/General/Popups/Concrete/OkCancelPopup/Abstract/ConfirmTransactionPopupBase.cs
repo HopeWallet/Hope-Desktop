@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Numerics;
+using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
 
 /// <summary>
 /// Base class used for confirming transaction requests.
@@ -7,10 +10,35 @@ using System.Numerics;
 /// <typeparam name="T"> The type of the request to confirm. </typeparam>
 public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T> where T : FactoryPopup<T>
 {
-    private Action onConfirmPressed;
+	[SerializeField] private GameObject confirmText, exitButton;
+
+	private Action onConfirmPressed;
 
     private BigInteger gasLimit,
                        gasPrice;
+
+	protected UserWalletManager userWalletManager;
+
+	/// <summary>
+	/// Checks if the user is using a hardware wallet, and changes popup elements accordingly.
+	/// </summary>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	[Inject]
+	public void Construct(UserWalletManager userWalletManager)
+	{
+		this.userWalletManager = userWalletManager;
+
+		if (userWalletManager.ActiveWalletType != UserWalletManager.WalletType.Hope)
+		{
+			confirmText.SetActive(true);
+			exitButton.SetActive(true);
+			exitButton.GetComponent<Button>().onClick.AddListener(CancelButton);
+		}
+		else if (!SecurePlayerPrefs.GetBool("countdown timer"))
+		{
+			okButton.GetComponent<Button>().interactable = true;
+		}
+	}
 
     /// <summary>
     /// Sets the transaction request values that need to be confirmed.

@@ -2,18 +2,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that manages the countdown timer for a transaction if the user has the setting enabled
+/// </summary>
 public abstract class CountdownTimerAnimator : PopupAnimator
 {
 	[SerializeField] protected GameObject timerText;
 	[SerializeField] protected GameObject confirmButton;
 	[SerializeField] protected GameObject cancelButton;
+	[SerializeField] protected GameObject confirmText;
 
 	/// <summary>
 	/// Starts the countdown timer animation
 	/// </summary>
 	protected void StartTimerAnimation()
 	{
-		if (confirmButton.activeInHierarchy && !confirmButton.GetComponent<Button>().interactable)
+		if (!confirmButton.GetComponent<Button>().interactable && !confirmText.activeInHierarchy)
 			new CountdownTimer(AnimateTimerText, SetButtonInteractable, 5f, 1f).StartCountdown();
 	}
 
