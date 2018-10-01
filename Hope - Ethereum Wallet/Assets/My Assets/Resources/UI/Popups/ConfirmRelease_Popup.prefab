@@ -962,6 +962,8 @@ MonoBehaviour:
   confirmText: {fileID: 1752764039514480}
   exitButton: {fileID: 1201296234609034}
   questionText: {fileID: 114774452015815722}
+  currentPurposeBalanceText: {fileID: 114620676624109678}
+  releaseAmountText: {fileID: 114823542448614978}
 --- !u!114 &114774452015815722
 MonoBehaviour:
   m_ObjectHideFlags: 1

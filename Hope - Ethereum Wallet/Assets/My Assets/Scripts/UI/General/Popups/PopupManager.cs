@@ -50,7 +50,8 @@ public sealed class PopupManager
 		SettingsPopup.Factory settingsPopupFactory,
 		AccountsPopup.Factory accountsPopupFactory,
 		AboutPopup.Factory aboutPopupFactory,
-		GeneralTransactionConfirmationPopup.Factory generalTransactionConfirmationPopupFactory)
+		GeneralTransactionConfirmationPopup.Factory generalTransactionConfirmationPopupFactory,
+        ConfirmReleasePopup.Factory confirmReleasePopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
                                addTokenPopupFactory,
@@ -73,7 +74,8 @@ public sealed class PopupManager
 							   settingsPopupFactory,
 							   accountsPopupFactory,
 							   aboutPopupFactory,
-							   generalTransactionConfirmationPopupFactory);
+							   generalTransactionConfirmationPopupFactory,
+                               confirmReleasePopupFactory);
     }
 
     /// <summary>
