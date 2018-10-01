@@ -57,9 +57,4 @@ public abstract class PopupAnimator : UIAnimator
 		dim.AnimateGraphic(0f, 0.2f);
 		blur.AnimateScale(0f, 0.2f);
 	}
-
-	/// <summary>
-	/// Animate the unique elements of the form in
-	/// </summary>
-	protected abstract void AnimateUniqueElementsIn();
 }

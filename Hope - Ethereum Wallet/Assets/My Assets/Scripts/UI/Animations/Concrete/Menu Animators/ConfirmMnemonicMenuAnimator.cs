@@ -48,10 +48,8 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		wordInputField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
 		wordInputField.AnimateScaleX(1f, 0.25f);
 		nextButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
@@ -66,19 +64,15 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 
 			duration += 0.025f;
 		}
-
-		FinishedAnimating();
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
 		if (OpeningWallet)
 			backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
-
-		base.AnimateOut();
 
 		wordInputField.AnimateScale(0f, 0.3f);
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);

@@ -22,15 +22,12 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
         GetComponent<ReEnterPasswordMenu>().OnPasswordEnteredIncorrect += PasswordIncorrect;
     }
 
-    /// <summary>
-    /// Animates the unique elements of this form into view
-    /// </summary>
-    protected override void AnimateIn()
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
 	{
 		plainBackground.AnimateGraphic(1f, 0.2f);
-
-		base.AnimateIn();
-
 		messageText.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		passwordInputField.InputFieldBase.ActivateInputField();
 		passwordInputField.gameObject.AnimateScale(1f, 0.3f);
@@ -39,12 +36,10 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		plainBackground.AnimateGraphic(0f, 0.2f);
 		passwordInputField.gameObject.AnimateScale(0f, 0.2f);
 		homeButton.AnimateGraphicAndScale(0f, 0f, 0.2f);

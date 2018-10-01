@@ -54,10 +54,8 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		float duration = 0.24f;
 		for (int i = 0; i < 12; i++)
 		{
@@ -73,12 +71,10 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		for (int i = 0; i < 12; i++)
 			passphrase.GetChild(i).gameObject.AnimateScaleX(0f, 0.3f);
 

@@ -13,10 +13,8 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		walletNameField.GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
 		walletNameField.AnimateScale(1f, 0.25f);
 		password1Field.AnimateScale(1f, 0.3f);
@@ -25,12 +23,10 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		walletNameField.AnimateScale(0f, 0.3f);
 		password1Field.AnimateScale(0f, 0.3f);
 		password2Field.AnimateScale(0f, 0.3f);

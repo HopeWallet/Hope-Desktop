@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// The class that manages the state of animation for the form
+/// </summary>
 public abstract class UIAnimator : MonoBehaviour
 {
 	[SerializeField] private bool animateOnEnable;
@@ -51,6 +54,11 @@ public abstract class UIAnimator : MonoBehaviour
 	/// Animates the elements of the form into view
 	/// </summary>
 	protected abstract void AnimateIn();
+
+	/// <summary>
+	/// Animate the unique elements of the form into view
+	/// </summary>
+	protected abstract void AnimateUniqueElementsIn();
 
 	/// <summary>
 	/// Animates the elements of the form out of view

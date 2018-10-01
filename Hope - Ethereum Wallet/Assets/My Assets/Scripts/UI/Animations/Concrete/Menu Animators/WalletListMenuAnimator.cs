@@ -24,12 +24,10 @@ public class WalletListMenuAnimator : MenuAnimator
     /// <summary>
     /// Animates the unique elements of this form into view
     /// </summary>
-    protected override void AnimateIn()
+    protected override void AnimateUniqueElementsIn()
     {
         backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
         hopeLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
-
-        base.AnimateIn();
 
 		CoroutineUtils.ExecuteAfterWait(0.1f, () => { scrollbar.value = 1f; AnimateWallets(0); });
 
@@ -37,13 +35,11 @@ public class WalletListMenuAnimator : MenuAnimator
         newWalletButton.AnimateGraphicAndScale(1f, 1f, 0.4f);
     }
 
-    /// <summary>
-    /// Animates the form out of view
-    /// </summary>
-    protected override void AnimateOut()
+	/// <summary>
+	/// Animate the unique elements of the form out of view
+	/// </summary>
+	protected override void AnimateUniqueElementsOut()
     {
-        base.AnimateOut();
-
         foreach (GameObject wallet in walletListMenu.Wallets)
             wallet.AnimateGraphicAndScale(0f, 0f, 0.3f);
 

@@ -18,20 +18,16 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		FinishedAnimating();
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		FinishedAnimating();
 	}
 }

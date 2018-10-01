@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the ConfirmLockPopup
@@ -15,9 +14,11 @@ public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		prpsSection.AnimateScale(1f, 0.2f);
-		dubiSection.AnimateScale(1f, 0.2f, StartTimerAnimation);
+		AnimateSection(prpsSection);
+		AnimateSection(dubiSection);
 		noteText.AnimateScaleX(1f, 0.25f);
+
+		CoroutineUtils.ExecuteAfterWait(0.2f, StartTimerAnimation);
 
 		if (confirmText.activeInHierarchy)
 		{
@@ -27,6 +28,16 @@ public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 		{
 			confirmButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 			cancelButton.AnimateGraphicAndScale(1f, 1f, 0.3f, FinishedAnimating);
+		}
+	}
+
+	private void AnimateSection(GameObject tokenSection)
+	{
+		float duration = 0.1f;
+		for (int i = 0; i < tokenSection.transform.childCount; i++)
+		{
+			tokenSection.transform.GetChild(i).gameObject.AnimateGraphicAndScale(1f, 1f, duration);
+			duration += 0.05f;
 		}
 	}
 }

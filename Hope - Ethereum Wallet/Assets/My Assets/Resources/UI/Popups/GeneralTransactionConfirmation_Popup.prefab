@@ -609,6 +609,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114376268059602730}
   cancelButton: {fileID: 114819276848479398}
+  confirmText: {fileID: 0}
+  exitButton: {fileID: 0}
   transactionText: {fileID: 114422691476690726}
 --- !u!114 &114742485823833254
 MonoBehaviour:

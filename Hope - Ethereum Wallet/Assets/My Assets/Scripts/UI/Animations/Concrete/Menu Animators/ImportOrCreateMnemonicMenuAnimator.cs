@@ -13,10 +13,8 @@ public sealed class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		importWalletButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		importWalletDesc.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		createWalletButton.AnimateGraphicAndScale(1f, 1f, 0.35f);
@@ -24,12 +22,10 @@ public sealed class ImportOrCreateMnemonicMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		importWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		importWalletDesc.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		createWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);

@@ -16,12 +16,10 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
 		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
-
-		base.AnimateIn();
 
 		enterPINText.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		subText.AnimateGraphicAndScale(1f, 1f, 0.275f);
@@ -40,14 +38,12 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
 		backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		trezorLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
-
-		base.AnimateOut();
 
 		enterPINText.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		subText.AnimateGraphicAndScale(0f, 0f, 0.3f);

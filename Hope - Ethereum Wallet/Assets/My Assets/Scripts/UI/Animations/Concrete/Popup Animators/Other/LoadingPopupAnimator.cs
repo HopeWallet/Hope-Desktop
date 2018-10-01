@@ -13,4 +13,9 @@ public sealed class LoadingPopupAnimator : UIAnimator
 	{
 		gameObject.AnimateGraphicAndScale(0f, 0f, 0.1f, FinishedAnimating);
 	}
+
+	protected override void AnimateUniqueElementsIn()
+	{
+		gameObject.AnimateGraphicAndScale(1f, 1f, 0.1f, FinishedAnimating);
+	}
 }

@@ -12,22 +12,18 @@ public sealed class ChooseWalletMenuAnimator : MenuAnimator
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
-	protected override void AnimateIn()
+	protected override void AnimateUniqueElementsIn()
 	{
-		base.AnimateIn();
-
 		ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		trezorButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		hopeButton.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
 	}
 
 	/// <summary>
-	/// Animates the form out of view
+	/// Animate the unique elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateUniqueElementsOut()
 	{
-		base.AnimateOut();
-
 		ledgerButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		trezorButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		hopeButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);

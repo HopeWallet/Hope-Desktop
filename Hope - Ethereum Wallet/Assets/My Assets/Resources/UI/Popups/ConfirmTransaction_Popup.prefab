@@ -709,13 +709,13 @@ MonoBehaviour:
   timerText: {fileID: 1415756786416310}
   confirmButton: {fileID: 1340001275404532}
   cancelButton: {fileID: 1860594637604522}
+  confirmText: {fileID: 1347740901878196}
   tokenIcon: {fileID: 1340966430302080}
   fromAddressSection: {fileID: 1657738479704500}
   toAddressSection: {fileID: 1652613014689216}
   line: {fileID: 1714291504871558}
   transactionSection: {fileID: 1290507730292600}
   feeSection: {fileID: 1299648684512638}
-  confirmText: {fileID: 1347740901878196}
 --- !u!114 &114154809725486296
 MonoBehaviour:
   m_ObjectHideFlags: 1
