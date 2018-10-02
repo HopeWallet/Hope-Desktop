@@ -2,7 +2,10 @@
 using TMPro;
 using UnityEngine;
 
-public class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
+/// <summary>
+/// Class that manages a general ok/cancel popup
+/// </summary>
+public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
 {
 	[SerializeField] private TextMeshProUGUI subText;
 
@@ -27,16 +30,6 @@ public class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
 	public GeneralOkCancelPopup OnOkClicked(Action onOkClicked)
 	{
 		okButton.onClick.AddListener(() => onOkClicked());
-		return this;
-	}
-
-	/// <summary>
-	/// Sets the ok button to uninteractable
-	/// </summary>
-	/// <returns> The instance of the class </returns>
-	public GeneralOkCancelPopup DisableOkButton()
-	{
-		okButton.interactable = false;
 		return this;
 	}
 

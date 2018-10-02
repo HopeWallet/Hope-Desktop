@@ -45,13 +45,13 @@ public sealed class PopupManager
         InfoPopup.Factory infoPopupFactory,
         ModifyTokensPopup.Factory modifyTokensPopupFactory,
         ExitConfirmationPopup.Factory exitConfirmationPopupFactory,
-        DeleteContactPopup.Factory deleteContactPopupFactory,
 		ConnectionLostPopup.Factory conectionLostPopupFactory,
 		SettingsPopup.Factory settingsPopupFactory,
 		AccountsPopup.Factory accountsPopupFactory,
 		AboutPopup.Factory aboutPopupFactory,
         ConfirmReleasePopup.Factory confirmReleasePopupFactory,
-		TransactionWarningPopup.Factory transactionWarningPopupFactory)
+		TransactionWarningPopup.Factory transactionWarningPopupFactory,
+		HopeUpdatePopup.Factory hopeUpdatePopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
 							   addTokenPopupFactory,
@@ -69,13 +69,13 @@ public sealed class PopupManager
 							   infoPopupFactory,
 							   modifyTokensPopupFactory,
 							   exitConfirmationPopupFactory,
-							   deleteContactPopupFactory,
 							   conectionLostPopupFactory,
 							   settingsPopupFactory,
 							   accountsPopupFactory,
 							   aboutPopupFactory,
                                confirmReleasePopupFactory,
-							   transactionWarningPopupFactory);
+							   transactionWarningPopupFactory,
+							   hopeUpdatePopupFactory);
     }
 
     /// <summary>

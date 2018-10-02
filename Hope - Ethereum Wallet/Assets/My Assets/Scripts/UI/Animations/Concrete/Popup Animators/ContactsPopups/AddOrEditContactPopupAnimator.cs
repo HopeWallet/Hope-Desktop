@@ -88,7 +88,7 @@ public sealed class AddOrEditContactPopupAnimator : PopupAnimator
 	{
 		string updatedAddress = addressInputField.Text.ToLower();
 
-		bool realEthereumAddress = string.IsNullOrEmpty(updatedAddress) || AddressUtils.IsValidEthereumAddress(updatedAddress);
+		bool realEthereumAddress = AddressUtils.IsValidEthereumAddress(updatedAddress);
 		bool overridingOtherContactAddresses = contactsManager.ContactList.Contains(updatedAddress) && (!AddingContact ? updatedAddress != PreviousAddress : true);
 		bool isRestrictedAddress = restrictedAddressManager.IsRestrictedAddress(updatedAddress);
 
