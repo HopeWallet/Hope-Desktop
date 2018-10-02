@@ -11,6 +11,9 @@ public sealed class UserWalletManager : IDisposable
     public static event Action OnWalletLoadSuccessful;
     public static event Action OnWalletLoadUnsuccessful;
 
+    private readonly EthereumPendingTransactionManager ethereumPendingTransactionManager;
+    private readonly PopupManager popupManager;
+
     private readonly LedgerWallet ledgerWallet;
     private readonly TrezorWallet trezorWallet;
     private readonly HopeWallet hopeWallet;
@@ -36,6 +39,7 @@ public sealed class UserWalletManager : IDisposable
     /// Initializes the UserWallet given the settings to apply.
     /// </summary>
     /// <param name="settings"> The settings to initialize the wallet with. </param>
+    /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
     /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
     /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager to assign to the wallet. </param>
@@ -46,6 +50,7 @@ public sealed class UserWalletManager : IDisposable
     /// <param name="walletSettings"> The player pref settings for the UserWallet. </param>
     public UserWalletManager(
         Settings settings,
+        EthereumPendingTransactionManager ethereumPendingTransactionManager,
         DisposableComponentManager disposableComponentManager,
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
@@ -55,6 +60,9 @@ public sealed class UserWalletManager : IDisposable
         HopeWalletInfoManager userWalletInfoManager,
         HopeWalletInfoManager.Settings walletSettings)
     {
+        this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
+        this.popupManager = popupManager;
+
         this.ledgerWallet = ledgerWallet;
         this.trezorWallet = trezorWallet;
 
@@ -91,7 +99,6 @@ public sealed class UserWalletManager : IDisposable
     /// <param name="addressTo"> The address the transaction is being sent to. </param>
     /// <param name="data"> The data to pass along with the transaction. </param>
     /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
-    [SecureCallEnd]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         BigInteger gasLimit,
@@ -101,16 +108,24 @@ public sealed class UserWalletManager : IDisposable
         string data,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        activeWallet.SignTransaction<T>(
-            onTransactionSigned,
-            gasLimit,
-            gasPrice,
-            value,
-            GetWalletAddress(),
-            addressTo,
-            data,
-            WalletPath.Replace("x", AccountNumber.ToString()),
-            displayInput);
+        Action signTxAction = () =>
+        {
+            activeWallet.SignTransaction<T>(
+                onTransactionSigned,
+                gasLimit,
+                gasPrice,
+                value,
+                GetWalletAddress(),
+                addressTo,
+                data,
+                WalletPath.Replace("x", AccountNumber.ToString()),
+                displayInput);
+        };
+
+        if (ethereumPendingTransactionManager.IsTransactionPending)
+            popupManager.GetPopup<TransactionWarningPopup>(true).OnProceed(signTxAction);
+        else
+            signTxAction?.Invoke();
     }
 
     /// <summary>
