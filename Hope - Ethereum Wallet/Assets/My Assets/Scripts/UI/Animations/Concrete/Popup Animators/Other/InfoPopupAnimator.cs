@@ -9,7 +9,6 @@ public sealed class InfoPopupAnimator : UIAnimator
 	[SerializeField] private GameObject infoTitle;
 	[SerializeField] private GameObject bodyText;
 	[SerializeField] private GameObject icon;
-	[SerializeField] private GameObject errorIcon;
 	[SerializeField] private GameObject exitButton;
 
 	/// <summary>
