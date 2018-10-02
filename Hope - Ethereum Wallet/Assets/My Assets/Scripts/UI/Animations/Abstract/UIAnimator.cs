@@ -56,11 +56,6 @@ public abstract class UIAnimator : MonoBehaviour
 	protected abstract void AnimateIn();
 
 	/// <summary>
-	/// Animate the unique elements of the form into view
-	/// </summary>
-	protected abstract void AnimateUniqueElementsIn();
-
-	/// <summary>
 	/// Animates the elements of the form out of view
 	/// </summary>
 	protected abstract void AnimateOut();

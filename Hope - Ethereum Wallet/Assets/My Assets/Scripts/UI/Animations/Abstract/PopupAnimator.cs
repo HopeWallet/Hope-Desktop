@@ -10,18 +10,21 @@ public abstract class PopupAnimator : UIAnimator
 	[SerializeField] private GameObject blur;
 	[SerializeField] private GameObject popupContainer;
 
-	protected Vector2 startingPosition;
+	private Vector2 startingPosition;
 
 	/// <summary>
 	/// Sets the current starting position given by the current mouse position at the time of the click
 	/// </summary>
 	private void OnEnable()
 	{
-		Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-		Vector2 updatedPosition = new Vector2(GetUpdatedValue(Screen.width / 2, currentMousePosition.x), GetUpdatedValue(Screen.height / 2, currentMousePosition.y));
+		if (popupContainer != null)
+		{
+			Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			Vector2 updatedPosition = new Vector2(GetUpdatedValue(Screen.width / 2, currentMousePosition.x), GetUpdatedValue(Screen.height / 2, currentMousePosition.y));
 
-		popupContainer.transform.localPosition = updatedPosition;
-		startingPosition = updatedPosition;
+			popupContainer.transform.localPosition = updatedPosition;
+			startingPosition = updatedPosition;
+		}
 	}
 
 	/// <summary>
@@ -57,4 +60,9 @@ public abstract class PopupAnimator : UIAnimator
 		dim.AnimateGraphic(0f, 0.2f);
 		blur.AnimateScale(0f, 0.2f);
 	}
+
+	/// <summary>
+	/// Animate the unique elements of the form into view
+	/// </summary>
+	protected abstract void AnimateUniqueElementsIn();
 }

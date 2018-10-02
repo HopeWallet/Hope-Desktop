@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 114546034813517254}
   - component: {fileID: 114353076853818284}
   m_Layer: 0
-  m_Name: Text
+  m_Name: Loading_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,8 @@ MonoBehaviour:
   animateOnEnable: 0
   blocker: {fileID: 0}
   formTitle: {fileID: 0}
+  loadingText: {fileID: 1697144743846782}
+  loadingIcon: {fileID: 1198707539821814}
 --- !u!114 &114353076853818284
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,8 +146,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292467161
-  m_fontColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+    rgba: 14277081
+  m_fontColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -257,7 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -312,7 +314,7 @@ RectTransform:
   m_GameObject: {fileID: 1364737141961984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224649933507835870}
   - {fileID: 224735803561277798}
@@ -332,7 +334,7 @@ RectTransform:
   m_GameObject: {fileID: 1697144743846782}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 224213536837083970}
   m_RootOrder: 0
@@ -350,7 +352,7 @@ RectTransform:
   m_GameObject: {fileID: 1198707539821814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 224213536837083970}
   m_RootOrder: 1

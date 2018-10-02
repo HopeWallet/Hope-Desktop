@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222200468929190768}
   - component: {fileID: 114910073211746036}
   m_Layer: 0
-  m_Name: Form_Title
+  m_Name: ConnectionLost_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 114704374501882820}
   - component: {fileID: 114328443540507704}
   m_Layer: 0
-  m_Name: Sub_Text
+  m_Name: RetryingConnection_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,12 +129,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 0}
-  formTitle: {fileID: 1204471502021662}
+  formTitle: {fileID: 0}
   dim: {fileID: 1731812974213732}
-  form: {fileID: 1592301973492014}
   blur: {fileID: 1446915376990388}
-  popupContainer: {fileID: 0}
-  subText: {fileID: 1865071377868356}
+  form: {fileID: 1592301973492014}
+  connectionLostText: {fileID: 1204471502021662}
+  retryingConnectionText: {fileID: 1865071377868356}
 --- !u!114 &114085818271073626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -599,7 +599,7 @@ RectTransform:
   m_GameObject: {fileID: 1592301973492014}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224016544221049884}
   m_RootOrder: 2

@@ -58,6 +58,11 @@ public abstract class MenuAnimator : UIAnimator
 	}
 
 	/// <summary>
+	/// Animate the unique elements of the form into view
+	/// </summary>
+	protected abstract void AnimateUniqueElementsIn();
+
+	/// <summary>
 	/// Animate the unique elements of the form out of view
 	/// </summary>
 	protected abstract void AnimateUniqueElementsOut();

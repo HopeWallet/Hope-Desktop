@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222012207264807182}
   - component: {fileID: 114488900292772716}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Form
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,8 +146,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292467161
-  m_fontColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+    rgba: 14277081
+  m_fontColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -329,16 +329,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animateOnEnable: 0
   blocker: {fileID: 0}
-  dim: {fileID: 0}
-  form: {fileID: 0}
-  blur: {fileID: 0}
   formTitle: {fileID: 0}
-  popupContainer: {fileID: 0}
-  background: {fileID: 1230293958381616}
+  form: {fileID: 1230293958381616}
   infoTitle: {fileID: 1275573915461422}
   bodyText: {fileID: 1686184764146868}
-  infoIcon: {fileID: 1793351088775364}
+  icon: {fileID: 1793351088775364}
   errorIcon: {fileID: 1793351088775364}
+  exitButton: {fileID: 1632017880667102}
 --- !u!114 &114608412471033442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -351,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -395,8 +392,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4289045925
-  m_fontColor: {r: 0.64705884, g: 0.64705884, b: 0.64705884, a: 1}
+    rgba: 10855845
+  m_fontColor: {r: 0.64705884, g: 0.64705884, b: 0.64705884, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -599,7 +596,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.399963, y: 33.90001}
+  m_AnchoredPosition: {x: 15.399963, y: 35.196335}
   m_SizeDelta: {x: 233.6, y: 24.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224186082226889298
@@ -622,8 +619,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 501.5, y: 244.9}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 778.3, y: 244.9}
+  m_SizeDelta: {x: 275.47, y: 105.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224417800877678920
 RectTransform:
@@ -640,7 +637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 124.42999, y: 37.66002}
+  m_AnchoredPosition: {x: 124.42999, y: 38.956345}
   m_SizeDelta: {x: 22, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224562687394406762
@@ -658,7 +655,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.2, y: 1.7}
+  m_AnchoredPosition: {x: 2.2, y: 2.9963257}
   m_SizeDelta: {x: 350, y: 171}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224682161629292974
@@ -676,7 +673,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -118.400024, y: 33.90364}
+  m_AnchoredPosition: {x: -118.400024, y: 35.2}
   m_SizeDelta: {x: 22, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224795336682272768
@@ -694,6 +691,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.5, y: -16.499985}
+  m_AnchoredPosition: {x: 0.5, y: -15.203659}
   m_SizeDelta: {x: 261.6, y: 65.7}
   m_Pivot: {x: 0.5, y: 0.5}

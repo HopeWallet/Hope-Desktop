@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class HopeUpdatePopup : ExitablePopupComponent<HopeUpdatePopup>
+public sealed class HopeUpdatePopup : OkCancelPopupComponent<HopeUpdatePopup>
 {
 
 }
