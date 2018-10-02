@@ -46,14 +46,14 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
     /// <param name="onConfirmPressed"> Action to call if the transaction is confirmed to be sent through. </param>
     /// <param name="gasLimit"> The gas limit of the transaction request. </param>
     /// <param name="gasPrice"> The gas price of the transaction request. </param>
-    /// <param name="transactionInput"> The transaction input of the request being called. </param>
-    public void SetConfirmationValues(Action onConfirmPressed, BigInteger gasLimit, BigInteger gasPrice, params object[] transactionInput)
+    /// <param name="displayInput"> The transaction input of the request being called. </param>
+    public void SetConfirmationValues(Action onConfirmPressed, BigInteger gasLimit, BigInteger gasPrice, params object[] displayInput)
     {
         this.onConfirmPressed = onConfirmPressed;
         this.gasLimit = gasLimit;
         this.gasPrice = gasPrice;
 
-        InternalSetConfirmationValues(transactionInput);
+        InternalSetConfirmationValues(displayInput);
     }
 
 	/// <summary>

@@ -57,6 +57,8 @@ public abstract class HardwareWallet : IWallet
         string path,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
+        popupManager.GetPopup<T>(true).SetConfirmationValues(null, gasLimit, gasPrice, displayInput);
+
         TransactionUtils.GetAddressTransactionCount(addressFrom).OnSuccess(txCount =>
         {
             byte[] nonceBytes = txCount.ToBytesForRLPEncoding();
