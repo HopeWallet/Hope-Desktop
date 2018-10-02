@@ -116,7 +116,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// <param name="data"> The data sent along with the transaction. </param>
     /// <param name="path"> The path of the wallet to sign the transaction with. </param>
     /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
-    [SecureCaller]
+    [SecureCallEnd]
     [ReflectionProtect]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
