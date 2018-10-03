@@ -13,7 +13,8 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject step4Text;
 	[SerializeField] private GameObject awaitingConnectionText;
 	[SerializeField] private GameObject deviceConnectedText;
-	[SerializeField] private GameObject loadingIcon;
+    [SerializeField] private GameObject loadingLedgerText;
+    [SerializeField] private GameObject loadingIcon;
 	[SerializeField] private GameObject openWalletButton;
 
 	/// <summary>
@@ -25,6 +26,8 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 
 		openLedgerWalletMenu.OnLedgerConnected += () => ChangeLedgerStatus(true);
 		openLedgerWalletMenu.OnLedgerDisconnected += () => ChangeLedgerStatus(false);
+        openLedgerWalletMenu.OnLedgerLoadStart += () => ChangeLoadStatus(true);
+        openLedgerWalletMenu.OnLedgerLoadEnd += () => ChangeLoadStatus(false);
 	}
 
 	/// <summary>
@@ -60,6 +63,13 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 		deviceConnectedText.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		openWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f, FinishedAnimating);
 	}
+
+    private void ChangeLoadStatus(bool loadingLedger)
+    {
+        Animating = loadingLedger;
+        SwitchObjects(loadingLedger ? deviceConnectedText : loadingLedgerText, loadingLedger ? loadingLedgerText : awaitingConnectionText);
+        SwitchObjects(loadingLedger ? openWalletButton : loadingIcon, loadingLedger ? loadingIcon : loadingIcon);
+    }
 
 	/// <summary>
 	/// Switches the button and text according to the status of the Ledger

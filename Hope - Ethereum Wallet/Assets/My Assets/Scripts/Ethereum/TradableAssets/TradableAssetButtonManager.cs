@@ -99,7 +99,6 @@ public sealed class TradableAssetButtonManager : IDisposable
         }
 
         assetButtons.Add(assetButton);
-
         SortButtons();
 
         OptimizedScrollview.GetScrollview("asset_scrollview")?.Refresh();
@@ -113,10 +112,9 @@ public sealed class TradableAssetButtonManager : IDisposable
     {
         for (int i = 0; i < assetButtons.Count; i++)
         {
-            var assetButton = assetButtons[i];
-            var asset = assetButton.ButtonInfo;
+            ITradableAssetButton assetButton = assetButtons[i];
 
-            if (asset == assetToRemove)
+            if (assetButton.ButtonInfo == assetToRemove)
             {
                 if (assetButton == activeAssetButton)
                     assetButtons[0].ButtonLeftClicked();

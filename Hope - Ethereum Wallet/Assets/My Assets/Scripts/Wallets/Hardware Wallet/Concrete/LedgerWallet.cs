@@ -48,7 +48,7 @@ public sealed class LedgerWallet : HardwareWallet
 
         var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.TrimEnd('x', '/'), true, false).ConfigureAwait(false);
 
-        if (!pubKeyResponse.IsSuccess)
+        if (pubKeyResponse?.IsSuccess != true)
         {
             MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
             return;
