@@ -8,7 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObservable
+/// <summary>
+/// The class that manages the re-login of the user after being idle
+/// </summary>
+public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObservable
 {
     public event Action OnPasswordVerificationStarted;
     public event Action OnPasswordEnteredCorrect;
@@ -90,11 +93,12 @@ public class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButtonObserv
         string minuteWord;
 
         if (idleTime == 1)
-            minuteWord = " minute";
+            minuteWord = " minute.";
         else
-            minuteWord = " minutes";
+            minuteWord = " minutes.";
 
-        messageText.text = "You have been idle for " + idleTime + minuteWord + ", please re-enter your password or go back to the main menu.";
+        messageText.text = "You have been idle for " + idleTime + minuteWord + Environment.NewLine +
+			" Please re-enter your password or go back to the main menu.";
     }
 
     /// <summary>

@@ -131,7 +131,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         if (pendingTransactionManager.PendingTransactionSectionOpen)
             pendingTransactionManager.AnimatePendingTransactionSection(false);
 
-        idleTimeoutManager?.Stop();
+		hopeLogo.gameObject.SetActive(false);
+		ledgerLogo.gameObject.SetActive(false);
+		trezorLogo.gameObject.SetActive(false);
+
+		idleTimeoutManager?.Stop();
         pendingTransactionManager.Reset();
 
         balanceText.text = "________\n\n";
