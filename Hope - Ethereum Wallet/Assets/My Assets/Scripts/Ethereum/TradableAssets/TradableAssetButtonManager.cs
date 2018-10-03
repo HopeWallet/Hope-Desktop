@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -42,7 +43,6 @@ public sealed class TradableAssetButtonManager : IDisposable
 
         tradableAssetManager.OnTradableAssetAdded += AddAssetButton;
         tradableAssetManager.OnTradableAssetRemoved += RemoveButton;
-        tokenContractManager.OnTokensLoaded += SortButtons;
     }
 
     /// <summary>
@@ -100,6 +100,8 @@ public sealed class TradableAssetButtonManager : IDisposable
 
         assetButtons.Add(assetButton);
 
+        SortButtons();
+
         OptimizedScrollview.GetScrollview("asset_scrollview")?.Refresh();
     }
 
@@ -131,10 +133,11 @@ public sealed class TradableAssetButtonManager : IDisposable
     /// </summary>
     private void SortButtons()
     {
-        assetButtons.Sort((b1, b2) => tokenContractManager.GetTokenIndex(b1.ButtonInfo.AssetAddress)
-                                                          .CompareTo(tokenContractManager.GetTokenIndex(b2.ButtonInfo.AssetAddress)));
+        Comparison<ITradableAssetButton> comparison = (b1, b2) => b1.ButtonInfo.AssetSymbol.CompareTo(b2.ButtonInfo.AssetSymbol);
+        List<ITradableAssetButton> scrollviewAssetButtons = assetButtons.Where(button => !button.ButtonInfo.AssetAddress.EqualsIgnoreCase(EtherAsset.ETHER_ADDRESS)).ToList();
 
-        assetButtons.ForEach(asset => asset.transform.parent.SetAsLastSibling());
+        scrollviewAssetButtons.Sort(comparison);
+        scrollviewAssetButtons.ForEach(button => button.transform.parent.SetAsLastSibling());
     }
 
     /// <summary>

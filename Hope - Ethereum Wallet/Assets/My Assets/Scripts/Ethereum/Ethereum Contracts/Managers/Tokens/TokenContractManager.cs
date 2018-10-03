@@ -44,19 +44,6 @@ public sealed class TokenContractManager
     }
 
     /// <summary>
-    /// Gets the index of an asset which was saved to the prefs.
-    /// </summary>
-    /// <param name="tokenAddress"> The address of the token to find the index for. </param>
-    /// <returns> The index of the token. </returns>
-    public int GetTokenIndex(string tokenAddress)
-    {
-        if (!tokens.Contains(tokenAddress))
-            return 0;
-
-        return tokens.IndexOf(tokenAddress);
-    }
-
-    /// <summary>
     /// Adds a token given the info of the token.
     /// </summary>
     /// <param name="tokenInfo"> The info of the token to add. </param>
