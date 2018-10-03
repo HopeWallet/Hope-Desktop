@@ -12,8 +12,17 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Transaction = Nethereum.Signer.Transaction;
 
+/// <summary>
+/// Class which manages the Ledger hardware wallet.
+/// </summary>
 public sealed class LedgerWallet : HardwareWallet
 {
+    /// <summary>
+    /// Initializes the LedgerWallet by passing all info to the base HardwareWallet class.
+    /// </summary>
+    /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager. </param>
+    /// <param name="ethereumNetworkSettings"> The settings for the EthereumNetworkManager. </param>
+    /// <param name="popupManager"> The active PopupManager. </param>
     public LedgerWallet(
         EthereumNetworkManager ethereumNetworkManager,
         EthereumNetworkManager.Settings ethereumNetworkSettings,
@@ -21,6 +30,9 @@ public sealed class LedgerWallet : HardwareWallet
     {
     }
 
+    /// <summary>
+    /// Initializes all of the addresses for this Ledger wallet.
+    /// </summary>
     public override async void InitializeAddresses()
     {
         addresses[0] = new string[50];
@@ -57,6 +69,12 @@ public sealed class LedgerWallet : HardwareWallet
         MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
+    /// <summary>
+    /// Signs a transaction using the Ledger wallet.
+    /// </summary>
+    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
+    /// <param name="transaction"> The Transaction object containing all the data to sign. </param>
+    /// <param name="path"> The path of the address signing the transaction. </param>
     protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();

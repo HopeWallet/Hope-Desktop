@@ -7,6 +7,9 @@ using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RLP;
 using Nethereum.Signer;
 
+/// <summary>
+/// Base class used for any concrete hardware wallet implementations.
+/// </summary>
 public abstract class HardwareWallet : IWallet
 {
     public event Action OnWalletLoadSuccessful;
@@ -18,6 +21,12 @@ public abstract class HardwareWallet : IWallet
     protected readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
     protected readonly PopupManager popupManager;
 
+    /// <summary>
+    /// Initializes the HardwareWallet instance.
+    /// </summary>
+    /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager. </param>
+    /// <param name="ethereumNetworkSettings"> The settings for the EthereumNetworkManager. </param>
+    /// <param name="popupManager"> The active PopupManager. </param>
     protected HardwareWallet(
         EthereumNetworkManager ethereumNetworkManager,
         EthereumNetworkManager.Settings ethereumNetworkSettings,
@@ -28,6 +37,12 @@ public abstract class HardwareWallet : IWallet
         this.popupManager = popupManager;
     }
 
+    /// <summary>
+    /// Gets the address given the index of the address and the path.
+    /// </summary>
+    /// <param name="addressIndex"> The index of the address to retrieve. </param>
+    /// <param name="path"> The path of the address to retrieve. </param>
+    /// <returns> The address located at that index and derivation path. </returns>
     public string GetAddress(int addressIndex, string path)
     {
         return path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? addresses[0][addressIndex] : addresses[1][addressIndex];
@@ -75,11 +90,26 @@ public abstract class HardwareWallet : IWallet
         });
     }
 
+    /// <summary>
+    /// Invokes the OnWalletLoadSuccessful event if the wallet successfully loaded.
+    /// </summary>
     protected void WalletLoadSuccessful() => OnWalletLoadSuccessful?.Invoke();
 
+    /// <summary>
+    /// Invokes the OnWalletLoadUnsuccessful event if the wallet did not successfully load.
+    /// </summary>
     protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
 
+    /// <summary>
+    /// Abstract method used for initializing all the addresses for this hardware wallet.
+    /// </summary>
     public abstract void InitializeAddresses();
 
+    /// <summary>
+    /// Abstract method used for signing a transaction using this hardware wallet.
+    /// </summary>
+    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
+    /// <param name="transaction"> The Transaction object containing all the data to sign. </param>
+    /// <param name="path"> The path of the address signing the transaction. </param>
     protected abstract void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path);
 }

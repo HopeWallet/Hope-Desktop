@@ -30,9 +30,12 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
         checkBox.SetCheckboxValue(info.Enabled);
     }
 
-	private void OnDeleteClicked() => GetComponentInParent<ModifyTokensPopup>().RemoveToken(ButtonInfo);
+    private void OnDeleteClicked()
+    {
+        GetComponentInParent<ModifyTokensPopup>().RemoveToken(ButtonInfo);
+    }
 
-	private void OnCheckboxChanged(bool enabled)
+    private void OnCheckboxChanged(bool enabled)
     {
         tokenListManager.UpdateToken(ButtonInfo.TokenInfo.Address, enabled, true);
         ButtonInfo.Enabled = enabled;
