@@ -34,6 +34,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     protected override void LoadWallet(string userPass)
     {
         var walletInfo = userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum"));
+
         AssignAddresses(walletInfo.WalletAddresses[0], walletInfo.WalletAddresses[1]);
 
         (dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();

@@ -31,7 +31,7 @@ public sealed class HopeWalletInfoManager
     /// </summary>
     /// <param name="address"> The address of the wallet to get the info for. </param>
     /// <returns> The WalletInfo of the given wallet address. </returns>
-    public WalletInfo GetWalletInfo(string address) => wallets.Contains(address) ? wallets[address] : new WalletInfo("", null, 0);
+    public WalletInfo GetWalletInfo(string address) => !string.IsNullOrEmpty(address) && wallets.Contains(address) ? wallets[address] : new WalletInfo("", null, 0);
 
     /// <summary>
     /// Adds a new wallet to the list of WalletInfo.

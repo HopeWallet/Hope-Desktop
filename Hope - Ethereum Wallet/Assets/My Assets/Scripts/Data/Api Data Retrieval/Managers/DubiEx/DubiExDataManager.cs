@@ -1,4 +1,5 @@
 ﻿using Hope.Utils.Promises;
+using System;
 using System.Linq;
 
 public sealed class DubiExDataManager
@@ -16,8 +17,15 @@ public sealed class DubiExDataManager
     {
         SimplePromise<decimal?> promise = new SimplePromise<decimal?>();
 
-        dubiExApiService.SendTradeHistoryRequest(tradableAssetManager.TradableAssets.Values.First(asset => asset.AssetSymbol == assetSymbol).AssetAddress)
+        if (tradableAssetManager.TradableAssets.Values.Select(asset => asset.AssetSymbol).ContainsIgnoreCase(assetSymbol))
+        {
+            dubiExApiService.SendTradeHistoryRequest(tradableAssetManager.TradableAssets.Values.First(asset => asset.AssetSymbol == assetSymbol).AssetAddress)
                         .OnSuccess(jsonData => ProcessData(promise, jsonData));
+        }
+        else
+        {
+            promise.ResolveException(new Exception("Asset symbol not found in TradableAsset collection."));
+        }
 
         return promise;
     }

@@ -197,14 +197,20 @@ public sealed class UserWalletManager : IDisposable
     /// Calls the action if the wallet loaded successfully.
     /// </summary>
     [SecureCallEnd]
-    public void UnlockWallet() => hopeWallet.Unlock();
+    public void UnlockWallet()
+    {
+        hopeWallet.Unlock();
+    }
 
     /// <summary>
     /// Attempts to create a wallet given a mnemonic phrase.
     /// Calls the action with the state of successful or unsuccessful wallet creation.
     /// </summary>
     [SecureCallEnd]
-    public void CreateWallet() => hopeWallet.Create();
+    public void CreateWallet()
+    {
+        hopeWallet.Create();
+    }
 
     /// <summary>
     /// Enum representing the type of the wallet.
