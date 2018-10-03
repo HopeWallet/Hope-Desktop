@@ -120,7 +120,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	private void SetUpWalletType(Button walletLogo)
 	{
 		walletLogo.gameObject.SetActive(true);
-		pendingTransactionManager = new PendingTransactionManager(ethereumPendingTransactionManager, pendingTransactionSection, walletLogo);
+		pendingTransactionManager = new PendingTransactionManager(ethereumPendingTransactionManager, userWalletManager, pendingTransactionSection, walletLogo);
 	}
 
     /// <summary>
@@ -129,6 +129,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private void OnDisable()
     {
         idleTimeoutManager?.Stop();
+        pendingTransactionManager.Reset();
 
         balanceText.text = "________\n\n";
         netWorthText.text = "_____\n\n";

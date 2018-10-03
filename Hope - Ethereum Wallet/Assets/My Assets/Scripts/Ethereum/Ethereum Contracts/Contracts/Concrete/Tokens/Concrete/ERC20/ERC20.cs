@@ -64,8 +64,6 @@ public sealed partial class ERC20 : Token
             address,
             SolidityUtils.ConvertToUInt(amount, Decimals.Value)).CreateTransactionInput(ContractAddress);
 
-        transactionInput.From.Log();
-
         userWalletManager.SignTransaction<ConfirmTransactionPopup>(
             request => ContractUtils.SendContractMessage($"Sending {Symbol}", transactionInput, request),
             gasLimit,

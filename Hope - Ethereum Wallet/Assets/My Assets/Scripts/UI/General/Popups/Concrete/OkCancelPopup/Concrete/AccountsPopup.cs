@@ -10,7 +10,7 @@ using Zenject;
 
 public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 {
-    public static Action<int> OnAccountChanged;
+    public static event Action<int> OnAccountChanged;
 
     public event Action<string[], int, int> OnPageChanged;
 

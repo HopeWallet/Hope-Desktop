@@ -9,8 +9,8 @@ using NBitcoin;
 public sealed partial class EthereumPendingTransactionManager
 {
     public event Action<string, string> OnNewTransactionPending;
-    public event Action OnTransactionSuccessful;
-    public event Action OnTransactionUnsuccessful;
+    public event Action<string> OnTransactionSuccessful;
+    public event Action<string> OnTransactionUnsuccessful;
 
     private readonly Dictionary<string, PendingTransaction> transactionsByAddress = new Dictionary<string, PendingTransaction>();
     private readonly Dictionary<string, PendingTransaction> transactionsByHash = new Dictionary<string, PendingTransaction>();
@@ -59,6 +59,8 @@ public sealed partial class EthereumPendingTransactionManager
     /// <param name="txHash"> The transaction hash of the transaction. </param>
     private void PendingTransactionSuccessful(string txHash)
     {
+        txHash = txHash.ToLower();
+
         var txByHash = transactionsByHash[txHash];
         var txByAddress = transactionsByAddress[txByHash.addressFrom];
 
@@ -68,7 +70,7 @@ public sealed partial class EthereumPendingTransactionManager
         if (txByHash.txHash != txByAddress.txHash)
             return;
 
-        OnTransactionSuccessful?.Invoke();
+        OnTransactionSuccessful?.Invoke(txHash);
     }
 
     /// <summary>
@@ -77,6 +79,8 @@ public sealed partial class EthereumPendingTransactionManager
     /// <param name="txHash"> The transaction of the transaction. </param>
     private void PendingTransactionUnsuccessful(string txHash)
     {
+        txHash = txHash.ToLower();
+
         var txByHash = transactionsByHash[txHash];
         var txByAddress = transactionsByAddress[txByHash.addressFrom];
 
@@ -86,6 +90,6 @@ public sealed partial class EthereumPendingTransactionManager
         if (txByHash.txHash != txByAddress.txHash)
             return;
 
-        OnTransactionUnsuccessful?.Invoke();
+        OnTransactionUnsuccessful?.Invoke(txHash);
     }
 }
