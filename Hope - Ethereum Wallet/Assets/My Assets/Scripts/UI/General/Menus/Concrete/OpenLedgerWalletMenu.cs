@@ -56,16 +56,12 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
 
     private void OpenWallet()
     {
-        //popupManager.GetPopup<LoadingPopup>();
-        //openLedgerWalletButton.interactable = false;
         OnLedgerLoadStart?.Invoke();
         ledgerWallet.InitializeAddresses();
     }
 
     private void OnWalletLoadUnsuccessful()
     {
-        //popupManager.CloseAllPopups();
-        //openLedgerWalletButton.interactable = true;
         OnLedgerLoadEnd?.Invoke();
     }
 
