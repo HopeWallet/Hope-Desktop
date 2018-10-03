@@ -128,6 +128,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     /// </summary>
     private void OnDisable()
     {
+        if (pendingTransactionManager.PendingTransactionSectionOpen)
+            pendingTransactionManager.AnimatePendingTransactionSection(false);
+
         idleTimeoutManager?.Stop();
         pendingTransactionManager.Reset();
 

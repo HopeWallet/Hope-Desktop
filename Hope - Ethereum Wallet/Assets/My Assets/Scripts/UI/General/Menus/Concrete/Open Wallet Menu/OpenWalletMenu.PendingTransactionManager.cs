@@ -125,10 +125,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             if ((PendingTransactionSectionOpen && pendingTransaction == null) || (PendingTransactionSectionOpen && !pendingTransaction.isPending && pendingTransaction.result == null))
             {
                 AnimatePendingTransactionSection(false);
-
-                logoAnimator.enabled = false;
-                walletLogo.gameObject.AnimateColor(FLAT_WHITE, 0.25f);
-                walletLogo.interactable = true;
             }
             else if (!PendingTransactionSectionOpen && pendingTransaction?.isPending == true)
             {
@@ -195,7 +191,16 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             walletLogo.interactable = !animateIn;
 
             if (animateExit)
+            {
                 exitButton.gameObject.AnimateGraphic(0f, 0.2f, () => exitButton.gameObject.SetActive(false));
+            }
+
+            if (!animateIn)
+            {
+                logoAnimator.enabled = false;
+                walletLogo.gameObject.AnimateColor(FLAT_WHITE, 0.25f);
+                walletLogo.interactable = true;
+            }
 
             PendingTransactionSectionOpen = animateIn;
         }
@@ -219,8 +224,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             pendingTransactionTextAnimator.enabled = true;
 
             logoAnimator.enabled = true;
-
-            //exitButton.gameObject.SetActive(false);
 
             if (!PendingTransactionSectionOpen)
                 AnimatePendingTransactionSection(true);
