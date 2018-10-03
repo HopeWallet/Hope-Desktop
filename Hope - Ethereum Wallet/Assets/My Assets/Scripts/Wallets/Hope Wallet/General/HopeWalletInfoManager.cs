@@ -41,7 +41,7 @@ public sealed class HopeWalletInfoManager
     public void AddWalletInfo(string walletName, string[][] walletAddresses)
     {
         SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count + 1);
-        wallets.Add(new WalletInfo(walletName, walletAddresses, wallets.Count));
+        wallets.Add(new WalletInfo(walletName, (string[][])walletAddresses.Clone(), wallets.Count));
     }
 
     /// <summary>
