@@ -57,7 +57,14 @@ public sealed partial class ERC20 : Token
     /// <param name="amount"> The amount of tokens to transfer. </param>
     public void Transfer(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, string address, decimal amount)
     {
-        var transactionInput = ContractFunction.CreateFunction<Messages.Transfer>(gasPrice, gasLimit, address, SolidityUtils.ConvertToUInt(amount, Decimals.Value)).CreateTransactionInput(ContractAddress);
+        var transactionInput = ContractFunction.CreateFunction<Messages.Transfer>(
+            userWalletManager,
+            gasPrice,
+            gasLimit,
+            address,
+            SolidityUtils.ConvertToUInt(amount, Decimals.Value)).CreateTransactionInput(ContractAddress);
+
+        transactionInput.From.Log();
 
         userWalletManager.SignTransaction<ConfirmTransactionPopup>(
             request => ContractUtils.SendContractMessage($"Sending {Symbol}", transactionInput, request),

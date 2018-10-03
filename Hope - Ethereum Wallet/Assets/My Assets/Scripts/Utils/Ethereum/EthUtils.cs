@@ -92,7 +92,7 @@ namespace Hope.Utils.Ethereum
             string addressTo,
             dynamic amount)
         {
-            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, "Sending ETH");
+            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, walletAddress, "Sending ETH");
             var transactionInput = new TransactionInput("", addressTo, walletAddress, gasLimit, gasPrice, new HexBigInteger(SolidityUtils.ConvertToUInt(amount, 18)));
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 

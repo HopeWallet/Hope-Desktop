@@ -40,7 +40,13 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="monthsToLock"> How many months the purpose should be locked for. </param>
     public void Hodl(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal value, int monthsToLock)
     {
-        var transactionInput = ContractFunction.CreateFunction<Messages.Hodl>(gasPrice, gasLimit, id, SolidityUtils.ConvertToUInt(value, 18), new BigInteger(monthsToLock)).CreateTransactionInput(ContractAddress);
+        var transactionInput = ContractFunction.CreateFunction<Messages.Hodl>(
+            userWalletManager,
+            gasPrice,
+            gasLimit,
+            id,
+            SolidityUtils.ConvertToUInt(value, 18),
+            new BigInteger(monthsToLock)).CreateTransactionInput(ContractAddress);
 
         userWalletManager.SignTransaction<ConfirmLockPopup>(
             request => ContractUtils.SendContractMessage("Locking PRPS", transactionInput, request),
@@ -63,7 +69,11 @@ public sealed partial class Hodler : StaticSmartContract
     /// <param name="amountToRelease"> The amount of purpose that will be released. </param>
     public void Release(UserWalletManager userWalletManager, HexBigInteger gasLimit, HexBigInteger gasPrice, BigInteger id, decimal amountToRelease)
     {
-        var transactionInput = ContractFunction.CreateFunction<Messages.Release>(gasPrice, gasLimit, id).CreateTransactionInput(ContractAddress);
+        var transactionInput = ContractFunction.CreateFunction<Messages.Release>(
+            userWalletManager,
+            gasPrice,
+            gasLimit,
+            id).CreateTransactionInput(ContractAddress);
 
         userWalletManager.SignTransaction<ConfirmReleasePopup>(
             request => ContractUtils.SendContractMessage("Releasing PRPS", transactionInput, request),

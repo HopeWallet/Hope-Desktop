@@ -122,7 +122,7 @@ public sealed class UserWalletManager : IDisposable
                 displayInput);
         };
 
-        if (ethereumPendingTransactionManager.IsTransactionPending)
+        if (ethereumPendingTransactionManager.GetPendingTransaction(GetWalletAddress())?.isPending == true)
             popupManager.GetPopup<TransactionWarningPopup>(true).OnProceed(signTxAction);
         else
             signTxAction?.Invoke();

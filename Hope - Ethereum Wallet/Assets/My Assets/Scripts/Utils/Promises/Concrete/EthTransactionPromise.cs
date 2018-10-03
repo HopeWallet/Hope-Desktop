@@ -14,6 +14,7 @@ namespace Hope.Utils.Promises
         private readonly WaitForSeconds Waiter = new WaitForSeconds(UPDATE_INTERVAL);
 
         private readonly EthereumPendingTransactionManager ethereumPendingTransactionManager;
+        private readonly string addressFrom;
         private readonly string message;
 
         private const float UPDATE_INTERVAL = 5f;
@@ -22,10 +23,12 @@ namespace Hope.Utils.Promises
         /// Initializes the EthTransactionPromise with the pending transaction manager.
         /// </summary>
         /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
+        /// <param name="addressFrom"> The address the transaction was sent from. </param>
         /// <param name="message"> The message representing the transaction. </param>
-        public EthTransactionPromise(EthereumPendingTransactionManager ethereumPendingTransactionManager, string message)
+        public EthTransactionPromise(EthereumPendingTransactionManager ethereumPendingTransactionManager, string addressFrom, string message)
         {
             this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
+            this.addressFrom = addressFrom;
             this.message = message;
         }
 
@@ -59,7 +62,7 @@ namespace Hope.Utils.Promises
             }
 
             if (ethereumPendingTransactionManager != null)
-                ethereumPendingTransactionManager.StartNewPendingTransaction(this, txHash, message);
+                ethereumPendingTransactionManager.StartNewPendingTransaction(this, txHash, addressFrom, message);
 
             var request = new EthGetTransactionReceiptUnityRequest(networkUrl);
 

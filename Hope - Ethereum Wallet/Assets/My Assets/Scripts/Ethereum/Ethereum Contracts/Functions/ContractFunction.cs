@@ -39,13 +39,15 @@ public abstract class ContractFunction : FunctionMessage
     /// Creates an instance of a <see cref="ContractFunction"/> of type <typeparamref name="T"/> to use to send a contract message.
     /// </summary>
     /// <typeparam name="T"> The concrete type of <see cref="ContractFunction"/>. </typeparam>
+    /// <param name="userWalletManager"> The active <see cref="UserWalletManager"/> instance. </param>
     /// <param name="gasPrice"> The <see cref="HexBigInteger"/> gas price to use with the transaction when the function is executed. </param>
     /// <param name="gasLimit"> The <see cref="HexBigInteger"/> gas limit to use with the transaction when the function is executed. </param>
     /// <param name="functionInput"> The input parameters to pass through the function. </param>
     /// <returns> The newly created instance of <see cref="ContractFunction"/> of type <typeparamref name="T"/>. </returns>
-    public static T CreateFunction<T>(HexBigInteger gasPrice, HexBigInteger gasLimit, params object[] functionInput) where T : ContractFunction
+    public static T CreateFunction<T>(UserWalletManager userWalletManager, HexBigInteger gasPrice, HexBigInteger gasLimit, params object[] functionInput) where T : ContractFunction
     {
         T func = CreateFunction<T>(functionInput);
+        func.FromAddress = userWalletManager.GetWalletAddress();
         func.GasPrice = gasPrice.Value;
         func.Gas = gasLimit.Value;
 

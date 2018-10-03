@@ -78,7 +78,7 @@ namespace Hope.Utils.Ethereum
             TransactionInput transactionInput,
             TransactionSignedUnityRequest signedUnityRequest)
         {
-            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, message);
+            var promise = new EthTransactionPromise(EthereumPendingTransactionManager, transactionInput.From, message);
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
             promise.Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetwork.NetworkUrl);
