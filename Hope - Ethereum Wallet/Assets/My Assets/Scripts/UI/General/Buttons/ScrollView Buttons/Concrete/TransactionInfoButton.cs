@@ -12,17 +12,13 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 {
 	public static Action popupClosed;
 
-	[SerializeField]
-	private TMP_Text amountText,
+	[SerializeField]private TMP_Text amountText,
 									  timeFromNowText,
 									  addressText,
 									  dateText,
-									  statusText,
 									  directionText;
 
-	[SerializeField] private Image assetImage, circle;
-
-	[SerializeField] private GameObject loadingLine, newText;
+	[SerializeField] private Image assetImage, transactionIcon;
 
 	private PopupManager popupManager;
 	private TradableAssetManager tradableAssetManager;
@@ -100,8 +96,9 @@ public sealed class TransactionInfoButton : InfoButton<TransactionInfoButton, Tr
 	{
 		var sending = transaction.Type == TransactionInfo.TransactionType.Send;
 
-		circle.color = sending ? UIColors.Red : UIColors.Green;
-		statusText.text = sending ? "OUT" : "IN";
+		transactionIcon.color = sending ? UIColors.Red : UIColors.Green;
+		transactionIcon.transform.localRotation = Quaternion.Euler(sending ? new Vector3(0f, 0f, -90f) : new Vector3(0f, 0f, 90f));
+
 		directionText.text = sending ? "To:" : "From:";
 		addressText.transform.localPosition = new Vector2(sending ? -210f : -185f, addressText.transform.localPosition.y);
 	}
