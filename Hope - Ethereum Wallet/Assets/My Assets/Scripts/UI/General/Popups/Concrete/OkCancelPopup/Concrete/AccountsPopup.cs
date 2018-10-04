@@ -16,7 +16,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
 	private Action onClose;
 
-    [SerializeField] private GeneralRadioButtons addressesCategories;
+    [SerializeField] private IconButtons addressesCategories;
     [SerializeField] private Transform addressesSection;
     [SerializeField] private Button previousPageButton, nextPageButton;
     [SerializeField] private TextMeshProUGUI pageNumText;

@@ -11,7 +11,7 @@ public sealed partial class OpenWalletMenu
         private readonly TradableAssetManager tradableAssetManager;
         private readonly EthereumTransactionManager ethereumTransactionManager;
 
-        private readonly GeneralRadioButtons transactionTabs;
+        private readonly IconButtons transactionTabs;
 
         private readonly TMP_Text allTabText;
         private readonly TMP_Text sentTabText;
@@ -20,7 +20,7 @@ public sealed partial class OpenWalletMenu
         public TransactionTabManager(
             TradableAssetManager tradableAssetManager,
             EthereumTransactionManager ethereumTransactionManager,
-            GeneralRadioButtons transactionTabs)
+            IconButtons transactionTabs)
         {
             this.tradableAssetManager = tradableAssetManager;
             this.ethereumTransactionManager = ethereumTransactionManager;

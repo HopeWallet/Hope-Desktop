@@ -2,15 +2,17 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class that manages the visuals of a text button when a user interacts with it
 /// </summary>
 public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-	public Action PopupClosed { get; private set; }
+	public Action ResetButton { get; private set; }
 
 	private TextMeshProUGUI text;
+	private Button button;
 
 	private bool mouseHeldDown, clicked;
 
@@ -19,8 +21,9 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	/// </summary>
 	private void Awake()
 	{
-		text = transform.GetComponent<TextMeshProUGUI>();
-		PopupClosed = () => { clicked = false; text.fontSize /= 1.1f; text.fontStyle = FontStyles.Normal; };
+		text = GetComponent<TextMeshProUGUI>();
+		button = GetComponent<Button>();
+		ResetButton = () => { clicked = false; text.fontSize /= 1.1f; text.fontStyle = FontStyles.Normal; };
 	}
 
 	/// <summary>
@@ -29,6 +32,9 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
 	{
+		if (!button.interactable)
+			return;
+
 		text.fontSize *= 1.1f;
 
 		if (mouseHeldDown)
@@ -41,6 +47,9 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerExit(PointerEventData eventData)
 	{
+		if (!button.interactable)
+			return;
+
 		if (!clicked)
 		{
 			text.fontSize /= 1.1f;
@@ -54,6 +63,9 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerDown(PointerEventData eventData)
 	{
+		if (!button.interactable)
+			return;
+
 		mouseHeldDown = true;
 		text.fontStyle = FontStyles.Underline;
 	}
@@ -64,6 +76,9 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		if (!button.interactable)
+			return;
+
 		mouseHeldDown = false;
 
 		if (text.fontStyle == FontStyles.Underline)

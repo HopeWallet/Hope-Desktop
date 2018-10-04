@@ -1713,7 +1713,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224950740150149568}
-  - component: {fileID: 114369457546923850}
+  - component: {fileID: 114621966758516780}
   m_Layer: 5
   m_Name: TransactionTabs
   m_TagString: Untagged
@@ -1851,7 +1851,7 @@ MonoBehaviour:
   netWorthText: {fileID: 114262674153539580}
   lockPrpsNotificationText: {fileID: 114649127489800408}
   assetImage: {fileID: 114967936315283588}
-  transactionTabs: {fileID: 114369457546923850}
+  transactionTabs: {fileID: 114621966758516780}
   pendingTransactionSection: {fileID: 224908809276809134}
   hopeLogo: {fileID: 114617382997690964}
   ledgerLogo: {fileID: 114236575031343284}
@@ -4528,17 +4528,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114369457546923850
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1994638068630716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114370786829655158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5858,6 +5847,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &114621966758516780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1994638068630716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b704c829ef3c36448ab29b6f840dc989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteToGreen: 0
 --- !u!114 &114631997620217972
 MonoBehaviour:
   m_ObjectHideFlags: 1

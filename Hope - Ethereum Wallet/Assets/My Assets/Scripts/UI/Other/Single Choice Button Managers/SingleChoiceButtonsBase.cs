@@ -39,7 +39,7 @@ public class SingleChoiceButtonsBase : MonoBehaviour
 	/// <summary>
 	/// Changes the visuals of the newly active, and previously active button
 	/// </summary>
-	/// <param name="activeButton"> the index of the button being changed </param>
+	/// <param name="buttonNum"> the index of the button being changed </param>
 	/// <param name="active"> Whether the button is currently active or not </param>
-	protected virtual void SetButtonVisuals(int activeButton, bool active) => transform.GetChild(activeButton).GetComponent<Button>().interactable = !active;
+	protected virtual void SetButtonVisuals(int buttonNum, bool active) => transform.GetChild(buttonNum).GetComponent<Button>().interactable = !active;
 }

@@ -1291,7 +1291,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224583420538455504}
-  - component: {fileID: 114800448539301362}
+  - component: {fileID: 114205174242919034}
   m_Layer: 0
   m_Name: WordCount_Section
   m_TagString: Untagged
@@ -3735,6 +3735,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114205174242919034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538880947978200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b704c829ef3c36448ab29b6f840dc989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteToGreen: 0
 --- !u!114 &114227134423157558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8480,17 +8492,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7287cd689e8f7b4590e5468f412ed0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114800448539301362
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538880947978200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114803074211768706

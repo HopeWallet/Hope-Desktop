@@ -369,7 +369,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4698834440419144}
-  - component: {fileID: 114296160480553768}
+  - component: {fileID: 114260638868111258}
   m_Layer: 0
   m_Name: AddressCategories
   m_TagString: Untagged
@@ -952,6 +952,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <previouslySelectedButton>k__BackingField: 0
+  whiteToGreen: 0
 --- !u!114 &114063970542414598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -992,7 +994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114917456808073756}
   cancelButton: {fileID: 114628322618493328}
-  addressesCategories: {fileID: 114296160480553768}
+  addressesCategories: {fileID: 114260638868111258}
   addressesSection: {fileID: 4952084033330548}
   previousPageButton: {fileID: 114254595739638916}
   nextPageButton: {fileID: 114867429688102980}
@@ -1579,6 +1581,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114260638868111258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1555624363020680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b704c829ef3c36448ab29b6f840dc989, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteToGreen: 0
 --- !u!114 &114290945634919012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1606,17 +1620,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114296160480553768
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1555624363020680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 746c711f952c4e049becfa4044f7b5ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114314828897798348
 MonoBehaviour:
   m_ObjectHideFlags: 1

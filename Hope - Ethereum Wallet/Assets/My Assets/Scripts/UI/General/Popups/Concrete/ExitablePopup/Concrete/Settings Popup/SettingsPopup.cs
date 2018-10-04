@@ -9,11 +9,11 @@ using Zenject;
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>, ITabButtonObservable, IEnterButtonObservable
 {
-    [SerializeField] private CategoryButtons categoryButtons;
+    [SerializeField] private IconButtons categoryButtons;
     [SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox;
     [SerializeField] private HopeInputField idleTimeoutTimeInputField;
 
-    [SerializeField] private GeneralRadioButtons defaultCurrencyOptions;
+    [SerializeField] private IconButtons defaultCurrencyOptions;
 
     [SerializeField] private Button walletCategoryButton;
     [SerializeField] private HopeInputField currentPasswordField, walletNameField, newPasswordField, confirmPasswordField;

@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -10,7 +11,8 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	public Action EditWallet;
 
 	[SerializeField] private GameObject settingsCategoriesParent;
-	[SerializeField] private GameObject line;
+	[SerializeField] private GameObject line1;
+	[SerializeField] private GameObject line2;
 	[SerializeField] private GameObject[] sections;
 
 	[SerializeField] private GameObject editWalletButton,
@@ -22,7 +24,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 										saveButton,
 										loadingIcon;
 
-	private CategoryButtons settingsCategories;
+	private IconButtons settingsCategories;
 
 	/// <summary>
 	/// Sets the necessary values
@@ -32,7 +34,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 		EditWallet = AnimateOtherFields;
 		VerifyingPassword = AnimateLoadingIcon;
 
-		settingsCategories = settingsCategoriesParent.GetComponent<CategoryButtons>();
+		settingsCategories = settingsCategoriesParent.GetComponent<IconButtons>();
 		settingsCategories.OnButtonChanged += CategoryChanged;
 	}
 
@@ -42,7 +44,8 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	protected override void AnimateUniqueElementsIn()
 	{
 		settingsCategoriesParent.AnimateScaleY(1f, 0.25f);
-		line.AnimateScaleX(1f, 0.25f);
+		line1.AnimateScaleX(1f, 0.25f);
+		line2.AnimateScaleX(1f, 0.25f);
 		sections[0].AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 

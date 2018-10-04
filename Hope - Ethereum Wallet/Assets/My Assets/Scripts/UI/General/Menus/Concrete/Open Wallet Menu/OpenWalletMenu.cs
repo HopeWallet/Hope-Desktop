@@ -23,7 +23,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
 	[SerializeField] private Image assetImage;
 
-	[SerializeField] private GeneralRadioButtons transactionTabs;
+	[SerializeField] private IconButtons transactionTabs;
 
 	[SerializeField] private Transform pendingTransactionSection;
 	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
@@ -74,7 +74,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         this.userWalletManager = userWalletManager;
 
         walletAccountText.GetComponent<Button>().onClick.AddListener
-			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().PopupClosed));
+			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().ResetButton));
     }
 
 	private void Update()
