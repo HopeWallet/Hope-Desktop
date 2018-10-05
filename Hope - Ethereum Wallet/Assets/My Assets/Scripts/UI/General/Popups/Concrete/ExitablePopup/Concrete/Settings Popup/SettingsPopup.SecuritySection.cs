@@ -17,9 +17,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 							   loginAttemptsInputField,
 							   lockoutTimeInputField;
 
-		private GameObject idleTimeoutTimeSection;
-
-		private int idleTimeValue;
+		private int idleTimeValue, maxLoginAttempts, lockoutTime;
 
 		/// <summary>
 		/// Sets the necessary variables
@@ -42,12 +40,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.lockoutTimeInputField = lockoutTimeInputField;
 
 			SetListeners();
+			SetCurrentSettings();
 		}
 
 		private void SetListeners()
 		{
-			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
 			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
+			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
 			loginAttemptsCheckbox.OnCheckboxClicked += LoginAttemptsChecboxClicked;
 			loginAttemptsInputField.OnInputUpdated += LoginAttemptsChanged;
 			lockoutTimeInputField.OnInputUpdated += LockoutTimeChanged;
@@ -65,6 +64,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				idleTimeValue = SecurePlayerPrefs.GetInt("idle time");
 				idleTimeoutTimeInputField.Text = idleTimeValue.ToString();
 			}
+
+			loginAttemptsCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("limit login attempts"));
+
+			if (loginAttemptsCheckbox.ToggledOn)
+				loginAttemptsInputField.Text = SecurePlayerPrefs.GetInt("max login attempts").ToString();
+
+			lockoutTimeInputField.Text = SecurePlayerPrefs.GetInt("lock out time").ToString();
 		}
 
 		/// <summary>
@@ -74,10 +80,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void IdleTimeoutCheckboxClicked(bool enabled)
 		{
 			SecurePlayerPrefs.SetBool("idle timeout", enabled);
-			idleTimeoutTimeInputField.Text = enabled ? "5" : string.Empty;
-
-			if (enabled)
-				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+			idleTimeoutTimeInputField.Text = enabled ? SecurePlayerPrefs.GetInt("idle time").ToString() : string.Empty;
 		}
 
 		/// <summary>
@@ -87,35 +90,56 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void IdleTimeoutFieldChanged(string text)
 		{
 			int.TryParse(text, out idleTimeValue);
-
 			idleTimeoutTimeInputField.Error = string.IsNullOrEmpty(text) || idleTimeValue <= 0;
 
-			idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
-			idleTimeoutTimeSection.AnimateTransformY(string.IsNullOrEmpty(text) ? -60f : -75f, 0.15f);
-
-			if (!idleTimeoutTimeInputField.Error && !idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
+			if (!idleTimeoutTimeInputField.InputFieldBase.wasCanceled)
 			{
-				SecurePlayerPrefs.SetBool("idle timeout", true);
-				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+				idleTimeoutTimeCheckbox.AnimateElements(!idleTimeoutTimeInputField.Error);
+				SecurePlayerPrefs.SetBool("idle timeout", !idleTimeoutTimeInputField.Error);
+
+				if (!idleTimeoutTimeInputField.Error)
+					SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
 			}
 		}
 
 		private void LoginAttemptsChecboxClicked(bool enabled)
 		{
-			loginAttemptsInputField.Text = enabled ? "5" : string.Empty;
-			lockoutTimeInputField.Text = enabled ? "5" : string.Empty;
-
-			lockoutTimeInputField.gameObject.AnimateScale(enabled ? 1f : 0f, 0.2f);
+			loginAttemptsCheckbox.SetCheckboxValue(enabled);
+			loginAttemptsInputField.Text = enabled ? SecurePlayerPrefs.GetInt("max login attempts").ToString() : string.Empty;
 		}
 
 		private void LoginAttemptsChanged(string text)
 		{
+			int.TryParse(text, out maxLoginAttempts);
+			loginAttemptsInputField.Error = string.IsNullOrEmpty(text) || maxLoginAttempts <= 0;
 
+			if (!loginAttemptsInputField.InputFieldBase.wasCanceled)
+			{
+				loginAttemptsCheckbox.AnimateElements(!loginAttemptsInputField.Error);
+				SecurePlayerPrefs.SetBool("limit login attempts", !loginAttemptsInputField.Error);
+
+				lockoutTimeInputField.gameObject.AnimateScale(!loginAttemptsInputField.Error ? 1f : 0f, 0.2f);
+				if (string.IsNullOrEmpty(lockoutTimeInputField.Text))
+					lockoutTimeInputField.Text = "5";
+
+				if (!loginAttemptsInputField.Error)
+					SecurePlayerPrefs.SetInt("max login attempts", maxLoginAttempts);
+			}
 		}
 
 		private void LockoutTimeChanged(string text)
 		{
+			int.TryParse(text, out lockoutTime);
+			lockoutTimeInputField.Error = string.IsNullOrEmpty(text) || lockoutTime <= 0;
 
+			if (!lockoutTimeInputField.InputFieldBase.wasCanceled)
+			{
+				loginAttemptsCheckbox.AnimateElements(!lockoutTimeInputField.Error);
+				SecurePlayerPrefs.SetBool("limit login attempts", !lockoutTimeInputField.Error);
+
+				if (!lockoutTimeInputField.Error)
+					SecurePlayerPrefs.SetInt("lock out time", lockoutTime);
+			}
 		}
 	}
 }
