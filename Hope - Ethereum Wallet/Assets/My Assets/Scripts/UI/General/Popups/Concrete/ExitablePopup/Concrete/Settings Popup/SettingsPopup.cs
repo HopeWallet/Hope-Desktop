@@ -97,21 +97,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			categoryLines[1].SetActive(false);
 		}
 
-        //selectables.Add(walletNameField.InputFieldBase);
-        //selectables.Add(newPasswordField.InputFieldBase);
-        //selectables.Add(confirmPasswordField.InputFieldBase);
-    }
+		//selectables.Add(walletNameField.InputFieldBase);
+		//selectables.Add(newPasswordField.InputFieldBase);
+		//selectables.Add(confirmPasswordField.InputFieldBase);
+	}
 
 	/// <summary>
 	/// Sets the current user settings
 	/// </summary>
 	private void SetCurrentSettings()
 	{
-		countdownTimerCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("countdown timer"));
-		showTooltipsCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("show tooltips"));
-		updateNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("update notification"));
-		startupAccountCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("start on last account"));
-		PasswordForTransactionCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("password required for transaction"));
+		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool("countdown timer"));
+		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool("show tooltips"));
+		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool("update notification"));
+		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool("start on last account"));
+		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool("password required for transaction"));
 	}
 
 	/// <summary>
@@ -125,10 +125,12 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
             currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
-		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.ToggledOn);
-		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.ToggledOn);
-		SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.ToggledOn);
-		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.ToggledOn);
+		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
+		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
+		SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.IsToggledOn);
+		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
+		SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
+		SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
 	}
 
 	/// <summary>

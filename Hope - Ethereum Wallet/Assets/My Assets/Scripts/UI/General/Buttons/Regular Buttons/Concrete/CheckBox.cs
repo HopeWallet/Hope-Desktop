@@ -15,7 +15,7 @@ public sealed class CheckBox : MonoBehaviour
     /// <summary>
     /// Whether the checkbox is toggled on or not.
     /// </summary>
-    public bool ToggledOn { get; set; }
+    public bool IsToggledOn { get; private set; }
 
     /// <summary>
     /// Initializes the CheckBox.
@@ -25,19 +25,19 @@ public sealed class CheckBox : MonoBehaviour
 		checkBoxButton = transform.GetComponent<Button>();
 		checkBoxButton.onClick.AddListener(CheckboxClicked);
 		checkMarkIcon = transform.GetChild(0).gameObject;
-        ToggledOn = checkMarkIcon.transform.localScale.x > 0;
+        IsToggledOn = checkMarkIcon.transform.localScale.x > 0;
 	}
 
     /// <summary>
     /// Toggles the checkbox on/off without animation.
     /// </summary>
-    /// <param name="toggledOn"> Whether it should be toggled on or off. </param>
-    public void SetCheckboxValue(bool toggledOn)
+    /// <param name="isToggledOn"> Whether it should be toggled on or off. </param>
+    public void SetValue(bool isToggledOn)
     {
-		ToggledOn = toggledOn;
-		gameObject.GetComponent<Image>().color = ToggledOn ? UIColors.Green : UIColors.Blue;
-        checkMarkIcon.transform.localScale = ToggledOn ? Vector2.one : Vector2.zero;
-        checkMarkIcon.GetComponent<Image>().color = ToggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
+		IsToggledOn = isToggledOn;
+		gameObject.GetComponent<Image>().color = IsToggledOn ? UIColors.Green : UIColors.Blue;
+        checkMarkIcon.transform.localScale = IsToggledOn ? Vector2.one : Vector2.zero;
+        checkMarkIcon.GetComponent<Image>().color = IsToggledOn ? new Color(1f, 1f, 1f, 1f) : new Color(1f, 1f, 1f, 0f);
     }
 
 	/// <summary>
@@ -45,18 +45,18 @@ public sealed class CheckBox : MonoBehaviour
 	/// </summary>
 	private void CheckboxClicked()
 	{
-		ToggledOn = !ToggledOn;
-		AnimateElements(ToggledOn);
-		OnCheckboxClicked?.Invoke(ToggledOn);
+		IsToggledOn = !IsToggledOn;
+		ToggleCheckbox(IsToggledOn);
+		OnCheckboxClicked?.Invoke(IsToggledOn);
 	}
 
     /// <summary>
     /// Animates the checkmark icon and the box colour
     /// </summary>
-	public void AnimateElements(bool toggledOn)
+	public void ToggleCheckbox(bool isToggledOn)
 	{
-		ToggledOn = toggledOn;
-		checkMarkIcon.AnimateGraphicAndScale(ToggledOn ? 1f : 0f, ToggledOn ? 1f : 0f, 0.15f);
-		gameObject.AnimateColor(ToggledOn ? UIColors.Green : UIColors.Blue, 0.15f);
+		IsToggledOn = isToggledOn;
+		checkMarkIcon.AnimateGraphicAndScale(IsToggledOn ? 1f : 0f, IsToggledOn ? 1f : 0f, 0.15f);
+		gameObject.AnimateColor(IsToggledOn ? UIColors.Green : UIColors.Blue, 0.15f);
 	}
 }

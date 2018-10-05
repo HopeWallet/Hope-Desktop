@@ -27,7 +27,7 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, AddableT
     {
         tokenDisplayText.text = info.TokenInfo.Name.LimitEnd(55, "...") + " (" + info.TokenInfo.Symbol + ")";
         tradableAssetImageManager.LoadImage(info.TokenInfo.Symbol, icon => tokenIcon.sprite = icon);
-        checkBox.SetCheckboxValue(info.Enabled);
+        checkBox.SetValue(info.Enabled);
     }
 
     private void OnDeleteClicked()

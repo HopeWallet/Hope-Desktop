@@ -48,12 +48,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 		sections[settingsCategories.PreviouslyActiveButton].AnimateScale(0f, 0.15f, () => sections[categoryNum].AnimateScale(1f, 0.15f));
 
 		if (categoryNum == 4 || categoryNum == 5 || categoryNum == 6)
-		{
-			HopeInputField currentPasswordField = sections[categoryNum].transform.GetChild(0).GetComponent<HopeInputField>();
-
-			if (currentPasswordField.Text == string.Empty)
-				currentPasswordField.InputFieldBase.ActivateInputField();
-		}
+			sections[categoryNum].transform.GetChild(0).GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
 	}
 
 	/// <summary>
