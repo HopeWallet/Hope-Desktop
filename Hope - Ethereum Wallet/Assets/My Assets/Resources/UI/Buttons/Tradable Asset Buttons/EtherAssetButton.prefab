@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 222027640461582382}
   - component: {fileID: 114847123620950888}
   m_Layer: 5
-  m_Name: Circle_Icon
+  m_Name: Notification_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

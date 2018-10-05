@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The two-factor authentication section of the settings popup
+/// The popup that manages the modification of user's settings and preferences
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
 	/// <summary>
-	/// The two-factor authentication section in the settings, where user can set it up, enable or disable it
+	/// The two-factor authentication section, where user can set it up, enable or disable it
 	/// </summary>
 	public sealed class TwoFactorAuthenticationSection
 	{
@@ -50,7 +50,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SetUpVisuals()
 		{
-			bool setUp2FA = !SecurePlayerPrefs.GetBool("2FA set up");
+			bool setUp2FA = !SecurePlayerPrefs.GetBool("2FA is set up");
 
 			twoFactorAuthenticationCheckbox.transform.localScale = setUp2FA ? Vector2.zero : Vector2.one;
 			setUpSection.transform.localScale = setUp2FA ? Vector2.one : Vector2.zero;

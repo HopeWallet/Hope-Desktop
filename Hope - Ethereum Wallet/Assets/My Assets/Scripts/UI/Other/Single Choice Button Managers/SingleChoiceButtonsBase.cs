@@ -9,7 +9,7 @@ public class SingleChoiceButtonsBase : MonoBehaviour
 {
 	public event Action<int> OnButtonChanged;
 
-	public int previouslySelectedButton { get; private set; }
+	public int PreviouslyActiveButton { get; private set; }
 
 	/// <summary>
 	/// Sets the variables of the radio buttons
@@ -26,14 +26,18 @@ public class SingleChoiceButtonsBase : MonoBehaviour
 	/// <param name="index"> The index of the button in the hiearchy </param>
 	private void SetButtonListener(int index) => transform.GetChild(index).GetComponent<Button>().onClick.AddListener(() => ButtonClicked(index));
 
-	public void ButtonClicked(int activeButton)
+	/// <summary>
+	/// A new button has been clicked
+	/// </summary>
+	/// <param name="newlyActiveButton"> The number of the button in the hiearchy that is active </param>
+	public void ButtonClicked(int newlyActiveButton)
 	{
-		SetButtonVisuals(previouslySelectedButton, false);
-		SetButtonVisuals(activeButton, true);
+		SetButtonVisuals(PreviouslyActiveButton, false);
+		SetButtonVisuals(newlyActiveButton, true);
 
-		OnButtonChanged?.Invoke(activeButton);
+		OnButtonChanged?.Invoke(newlyActiveButton);
 
-		previouslySelectedButton = activeButton;
+		PreviouslyActiveButton = newlyActiveButton;
 	}
 
 	/// <summary>

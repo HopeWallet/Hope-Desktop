@@ -5,39 +5,47 @@ using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
-/// The main settings popup class
+/// The popup that manages the modification of user's settings and preferences
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>, ITabButtonObservable, IEnterButtonObservable
 {
-    [SerializeField] private IconButtons categoryButtons;
-    [SerializeField] private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox;
-    [SerializeField] private HopeInputField idleTimeoutTimeInputField;
+    [SerializeField] private CheckBox countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox, startupAccountCheckbox;
 
     [SerializeField] private IconButtons defaultCurrencyOptions;
 
-    [SerializeField] private Button walletCategoryButton;
-    [SerializeField] private HopeInputField currentPasswordField, walletNameField, newPasswordField, confirmPasswordField;
-    [SerializeField] private Button editWalletButton, saveButton, deleteButton;
-    [SerializeField] private GameObject checkMarkIcon;
+	[SerializeField] private CheckBox PasswordForTransactionCheckbox, idleTimeoutTimeCheckbox, loginAttemptsCheckbox;
+	[SerializeField] private HopeInputField idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField;
 
-    [SerializeField] private Button twoFactorAuthCategoryButton;
-    [SerializeField] private CheckBox twoFactorAuthenticationCheckbox;
-    [SerializeField] private GameObject setUpSection;
-    [SerializeField] private TextMeshProUGUI keyText;
-    [SerializeField] private Image qrCodeImage;
-    [SerializeField] private HopeInputField codeInputField;
-    [SerializeField] private Button confirmButton;
+	[SerializeField] private CheckBox twoFactorAuthCheckbox;
+	[SerializeField] private GameObject setUpSection;
+	[SerializeField] private TextMeshProUGUI keyText;
+	[SerializeField] private Image qrCodeImage;
+	[SerializeField] private HopeInputField codeInputField;
+	[SerializeField] private Button confirmButton;
 
-    private readonly List<Selectable> selectables = new List<Selectable>();
+    [SerializeField] private HopeInputField currentWalletNameField, newWalletNameField;
 
-    private GeneralSection generalSection;
-    private WalletSection walletSection;
+	[SerializeField] private HopeInputField newPasswordField, confirmPasswordField;
+
+	[SerializeField] private GameObject[] hopeOnlyCategoryButtons;
+	[SerializeField] private GameObject[] categoryLines;
+	[SerializeField] private HopeInputField[] currentPasswordFields;
+	[SerializeField] private Button[] changingSettingButtons;
+	[SerializeField] private GameObject[] loadingIcons;
+
+	private readonly List<Selectable> selectables = new List<Selectable>();
+
+	private SecuritySection securitySection;
     private TwoFactorAuthenticationSection twoFactorAuthenticationSection;
+	private WalletNameSection walletNameSection;
+	private PasswordSection passwordSection;
+	private DeleteWalletSection deleteWalletSection;
 
-    private UserWalletManager userWalletManager;
+	private UserWalletManager userWalletManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
     private ButtonClickObserver buttonClickObserver;
     private CurrencyManager currencyManager;
+	private LogoutHandler logoutHandler;
 
 	/// <summary>
 	/// Sets the necessary dependencies
@@ -46,21 +54,22 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
 	/// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
 	/// <param name="currencyManager"> The active CurrencyManager </param>
-    [Inject]
-    public void Construct(
-        UserWalletManager userWalletManager,
-        HopeWalletInfoManager hopeWalletInfoManager,
-        ButtonClickObserver buttonClickObserver,
-        CurrencyManager currencyManager)
+	[Inject]
+    public void Construct(UserWalletManager userWalletManager,
+						  HopeWalletInfoManager hopeWalletInfoManager,
+						  ButtonClickObserver buttonClickObserver,
+						  CurrencyManager currencyManager,
+						  LogoutHandler logoutHandler)
     {
-        this.userWalletManager = userWalletManager;
-        this.hopeWalletInfoManager = hopeWalletInfoManager;
+		this.userWalletManager = userWalletManager;
+		this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.buttonClickObserver = buttonClickObserver;
         this.currencyManager = currencyManager;
+		this.logoutHandler = logoutHandler;
 
 		buttonClickObserver.SubscribeObservable(this);
-        defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
-    }
+		defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
+	}
 
 	/// <summary>
 	/// Sets the other partial classes and other necessary variables
@@ -69,47 +78,58 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     {
         base.OnStart();
 
-		bool usingHopeWallet = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope;
+		SetCurrentSettings();
 
-		generalSection = new GeneralSection(idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox, idleTimeoutTimeInputField, usingHopeWallet);
-
-        if (usingHopeWallet)
+		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
-            walletSection = new WalletSection(hopeWalletInfoManager, userWalletManager, popupManager, Animator as SettingsPopupAnimator, currentPasswordField, walletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveButton, deleteButton, checkMarkIcon);
-            twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthenticationCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-        }
-        else
+			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField);
+            twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
+			walletNameSection = new WalletNameSection(hopeWalletInfoManager, userWalletManager, Animator as SettingsPopupAnimator, currentPasswordFields[0], currentWalletNameField, newWalletNameField, changingSettingButtons[0], loadingIcons[0]);
+			passwordSection = new PasswordSection(currentPasswordFields[1], newPasswordField, confirmPasswordField, changingSettingButtons[1], loadingIcons[1]);
+			deleteWalletSection = new DeleteWalletSection(hopeWalletInfoManager, userWalletManager, logoutHandler, currentPasswordFields[2], changingSettingButtons[2], loadingIcons[2]);
+		}
+		else
         {
-            DisabledCategoryButton(walletCategoryButton);
-            DisabledCategoryButton(twoFactorAuthCategoryButton);
-        }
+			foreach (GameObject categoryButton in hopeOnlyCategoryButtons)
+				categoryButton.SetActive(false);
 
-        selectables.Add(walletNameField.InputFieldBase);
-        selectables.Add(newPasswordField.InputFieldBase);
-        selectables.Add(confirmPasswordField.InputFieldBase);
+			categoryLines[0].SetActive(false);
+			categoryLines[1].SetActive(false);
+		}
+
+        //selectables.Add(walletNameField.InputFieldBase);
+        //selectables.Add(newPasswordField.InputFieldBase);
+        //selectables.Add(confirmPasswordField.InputFieldBase);
     }
 
 	/// <summary>
-	/// Disables a given category button on the popup
+	/// Sets the current user settings
 	/// </summary>
-	/// <param name="categoryButton"> The category button being disabled </param>
-    private void DisabledCategoryButton(Button categoryButton)
-    {
-        categoryButton.interactable = false;
-        categoryButton.GetComponent<TextMeshProUGUI>().color = UIColors.LightGrey;
-    }
+	private void SetCurrentSettings()
+	{
+		countdownTimerCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("countdown timer"));
+		showTooltipsCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("show tooltips"));
+		updateNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("update notification"));
+		startupAccountCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("start on last account"));
+		PasswordForTransactionCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("password required for transaction"));
+	}
 
 	/// <summary>
 	/// Switches currency if needed
 	/// </summary>
-    private void OnDestroy()
+	private void OnDestroy()
     {
         buttonClickObserver.UnsubscribeObservable(this);
         MoreDropdown.PopupClosed?.Invoke();
 
-        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.previouslySelectedButton)
-            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.previouslySelectedButton);
-    }
+        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
+            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
+
+		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.ToggledOn);
+		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.ToggledOn);
+		SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.ToggledOn);
+		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.ToggledOn);
+	}
 
 	/// <summary>
 	/// Moves to the next input field
@@ -132,11 +152,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (clickType != ClickType.Down)
             return;
 
-        if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
-            editWalletButton.Press();
-        else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && saveButton.interactable)
-            saveButton.Press();
-        else
-            selectables.MoveToNextSelectable();
+        //if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
+            //editWalletButton.Press();
+        //else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && saveButton.interactable)
+            //saveButton.Press();
+        //else
+            //selectables.MoveToNextSelectable();
     }
 }

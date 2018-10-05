@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// The general section of the settings popup
+/// The popup that manages the modification of user's settings and preferences
 /// </summary>
 public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup>
 {
 	/// <summary>
-	/// The generel settings section
+	/// The security section of the SettingsPopup
 	/// </summary>
-	public sealed class GeneralSection
+	public sealed class SecuritySection
 	{
+		private CheckBox idleTimeoutTimeCheckbox,
+						 loginAttemptsCheckbox;
+
+		private HopeInputField idleTimeoutTimeInputField,
+							   loginAttemptsInputField,
+							   lockoutTimeInputField;
+
 		private GameObject idleTimeoutTimeSection;
-		private CheckBox idleTimeoutTimeCheckbox, countdownTimerCheckbox, showTooltipsCheckbox, updateNotificationCheckbox;
-		private HopeInputField idleTimeoutTimeInputField;
 
 		private int idleTimeValue;
 
@@ -20,56 +25,40 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// Sets the necessary variables
 		/// </summary>
 		/// <param name="idleTimeoutTimeCheckbox"> The idle timeout time checkbox </param>
-		/// <param name="countdownTimerCheckbox"> The countdown timer checkbox</param>
-		/// <param name="showTooltipsCheckbox"> The show tooltips checkbox </param>
-		/// <param name="updateNotificationCheckbox"> The update notification checkbox </param>
+		/// <param name="loginAttemptsCheckbox"> The login attempts checbox </param>
 		/// <param name="idleTimeoutTimeInputField"> The idle timeout time input field </param>
-		/// <param name="usingHopeWallet"> Whether the user is using Hope or not </param>
-		public GeneralSection(CheckBox idleTimeoutTimeCheckbox,
-							  CheckBox countdownTimerCheckbox,
-							  CheckBox transactionNotificationCheckbox,
-							  CheckBox updateNotificationCheckbox,
-							  HopeInputField idleTimeoutTimeInputField,
-							  bool usingHopeWallet)
+		/// <param name="loginAttemptsInputField"> The login attempts input field </param>
+		/// <param name="lockoutTimeInputField"> The lock out time input field </param>
+		public SecuritySection(CheckBox idleTimeoutTimeCheckbox,
+							   CheckBox loginAttemptsCheckbox,
+							   HopeInputField idleTimeoutTimeInputField,
+							   HopeInputField loginAttemptsInputField,
+							   HopeInputField lockoutTimeInputField)
 		{
 			this.idleTimeoutTimeCheckbox = idleTimeoutTimeCheckbox;
-			this.countdownTimerCheckbox = countdownTimerCheckbox;
-			this.showTooltipsCheckbox = transactionNotificationCheckbox;
-			this.updateNotificationCheckbox = updateNotificationCheckbox;
+			this.loginAttemptsCheckbox = loginAttemptsCheckbox;
 			this.idleTimeoutTimeInputField = idleTimeoutTimeInputField;
-			idleTimeoutTimeSection = idleTimeoutTimeInputField.transform.parent.gameObject;
+			this.loginAttemptsInputField = loginAttemptsInputField;
+			this.lockoutTimeInputField = lockoutTimeInputField;
 
 			SetListeners();
-			SetCurrentSettings();
-
-			if (!usingHopeWallet)
-			{
-				idleTimeoutTimeSection.SetActive(false);
-				countdownTimerCheckbox.gameObject.SetActive(false);
-			}
 		}
 
-		/// <summary>
-		/// Sets all the necessary listeners
-		/// </summary>
 		private void SetListeners()
 		{
 			idleTimeoutTimeInputField.OnInputUpdated += IdleTimeoutFieldChanged;
 			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
-			countdownTimerCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("countdown timer", boolean);
-			showTooltipsCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("show tooltips", boolean);
-			updateNotificationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool("update notification", boolean);
+			loginAttemptsCheckbox.OnCheckboxClicked += LoginAttemptsChecboxClicked;
+			loginAttemptsInputField.OnInputUpdated += LoginAttemptsChanged;
+			lockoutTimeInputField.OnInputUpdated += LockoutTimeChanged;
 		}
 
 		/// <summary>
-		/// Sets the current checkbox and input field values to what is currently saved
+		/// Sets the current user settings
 		/// </summary>
 		private void SetCurrentSettings()
 		{
 			idleTimeoutTimeCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("idle timeout"));
-			countdownTimerCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("countdown timer"));
-			showTooltipsCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("show tooltips"));
-			updateNotificationCheckbox.SetCheckboxValue(SecurePlayerPrefs.GetBool("update notification"));
 
 			if (idleTimeoutTimeCheckbox.ToggledOn)
 			{
@@ -109,6 +98,24 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				SecurePlayerPrefs.SetBool("idle timeout", true);
 				SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
 			}
+		}
+
+		private void LoginAttemptsChecboxClicked(bool enabled)
+		{
+			loginAttemptsInputField.Text = enabled ? "5" : string.Empty;
+			lockoutTimeInputField.Text = enabled ? "5" : string.Empty;
+
+			lockoutTimeInputField.gameObject.AnimateScale(enabled ? 1f : 0f, 0.2f);
+		}
+
+		private void LoginAttemptsChanged(string text)
+		{
+
+		}
+
+		private void LockoutTimeChanged(string text)
+		{
+
 		}
 	}
 }
