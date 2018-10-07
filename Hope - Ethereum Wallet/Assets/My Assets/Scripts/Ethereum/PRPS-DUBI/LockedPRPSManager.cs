@@ -101,7 +101,7 @@ public sealed class LockedPRPSManager : IPeriodicUpdater, IDisposable
     private void ProcessTxList(string txList)
     {
         var transactionsJson = JsonUtils.Deserialize<EtherscanAPIJson<TokenTransactionJson>>(txList);
-        if (transactionsJson == null)
+        if (transactionsJson == null || transactionsJson.result == null)
             return;
 
         updateCount = transactionsJson.result.Length;
