@@ -124,11 +124,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// </summary>
 	private void OnDestroy()
     {
-        buttonClickObserver.UnsubscribeObservable(this);
-        MoreDropdown.PopupClosed?.Invoke();
-
-        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
-            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
+		if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
+			currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
 		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
@@ -136,6 +133,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
+
+		buttonClickObserver.UnsubscribeObservable(this);
+        MoreDropdown.PopupClosed?.Invoke();
 	}
 
 	/// <summary>

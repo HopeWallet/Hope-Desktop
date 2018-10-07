@@ -10,7 +10,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// <summary>
 	/// The delete wallet section of the SettingsPopup
 	/// </summary>
-	public sealed class DeleteWalletSection : MonoBehaviour
+	public sealed class DeleteWalletSection
 	{
 		private HopeInputField currentPasswordField;
 		private Button deleteButton;

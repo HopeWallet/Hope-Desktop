@@ -10,7 +10,6 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
 
     public string infoTitle;
     public string infoText;
-    public IconType iconType;
 
 	private bool hoverable;
     private bool hovering;
@@ -22,12 +21,7 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
 	/// <summary>
 	/// Sets the hoverable bool depending on the IconType
 	/// </summary>
-	private void Awake()
-	{
-		handCursor = Resources.Load("UI/Graphics/Textures/Other/Icons/HandCursor_Icon") as Texture2D;
-
-		hoverable = iconType == IconType.Info || iconType == IconType.Error || iconType == IconType.Question;
-	}
+	private void Awake() => handCursor = Resources.Load("UI/Graphics/Textures/Other/Icons/HandCursor_Icon") as Texture2D;
 
 	/// <summary>
 	/// Opens the InfoPopup after a short period of hovering.
@@ -95,11 +89,6 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
 	private void OpenPopup(int currentId)
     {
         if (currentId == clickId)
-            PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, iconType, transform.position);
+            PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, transform.position);
     }
-
-	/// <summary>
-	/// The icon type
-	/// </summary>
-	public enum IconType { Info, Error, Question, Checkmark }
 }
