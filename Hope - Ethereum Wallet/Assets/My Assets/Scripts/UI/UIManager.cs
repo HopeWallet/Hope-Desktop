@@ -49,6 +49,9 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 		buttonObserver.SubscribeObservable(this);
 	}
 
+	/// <summary>
+	/// Sets the default screen resolution depending on the user's screen dimensions
+	/// </summary>
 	private void Awake()
 	{
 		SetScreenResolution();

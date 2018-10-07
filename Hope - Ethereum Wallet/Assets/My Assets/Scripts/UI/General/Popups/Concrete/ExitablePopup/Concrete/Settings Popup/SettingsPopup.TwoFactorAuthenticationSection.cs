@@ -85,11 +85,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void ConfirmButtonClicked()
 		{
-			//If code is correct:
+			//If code in the input field is correct:
 			setUpSection.AnimateScale(0f, 0.15f, () => twoFactorAuthenticationCheckbox.gameObject.AnimateScale(1f, 0.15f));
 			SecurePlayerPrefs.SetBool("two-factor authentication", true);
 
-			//Else codeInputField.Error = true;
+			//Else 
+			//confirmButton.interactable = false;
+			//codeInputField.Error = true;
+			//codeInputField.UpdateVisuals();
 		}
 	}
 }

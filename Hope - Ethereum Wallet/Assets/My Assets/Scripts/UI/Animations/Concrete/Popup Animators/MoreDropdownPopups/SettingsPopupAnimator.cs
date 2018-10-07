@@ -57,9 +57,9 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// <param name="button"> The given button to be animated back in </param>
 	/// <param name="loadingIcon"> The loading icon being animated out </param>
 	/// <param name="finishIcon"> The finish icon to be shown </param>
-	public void VerificationFinished(GameObject button, GameObject loadingIcon, GameObject finishIcon)
+	private void VerificationFinished(GameObject button, GameObject loadingIcon, GameObject finishIcon)
 	{
-		VerifyingPassword.Invoke(button, loadingIcon, false);
+		AnimateLoadingIcon(button, loadingIcon, false);
 
 		finishIcon.transform.localScale = new Vector3(0, 0, 1);
 

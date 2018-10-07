@@ -619,7 +619,7 @@ GameObject:
   - component: {fileID: 222710409431414908}
   - component: {fileID: 114678295524696702}
   m_Layer: 0
-  m_Name: Title_Text
+  m_Name: DeleteWallet_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11339,6 +11339,7 @@ MonoBehaviour:
   newWalletNameField: {fileID: 114042061658661326}
   newPasswordField: {fileID: 114719592777750182}
   confirmPasswordField: {fileID: 114987238897358412}
+  deleteWalletText: {fileID: 114678295524696702}
   hopeOnlyCategoryButtons:
   - {fileID: 1988254324718278}
   - {fileID: 1414887067809666}

@@ -43,6 +43,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SetCurrentSettings();
 		}
 
+		/// <summary>
+		/// Sets the necessary button and input field listeners
+		/// </summary>
 		private void SetListeners()
 		{
 			idleTimeoutTimeCheckbox.OnCheckboxClicked += IdleTimeoutCheckboxClicked;
@@ -52,6 +55,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			lockoutTimeInputField.OnInputUpdated += LockoutTimeFieldChanged;
 		}
 
+		/// <summary>
+		/// Sets the current settings of this section
+		/// </summary>
 		private void SetCurrentSettings()
 		{
 			if (SecurePlayerPrefs.GetBool("idle timeout"))
@@ -95,11 +101,19 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// The limit login attempts checkbox has been toggled
+		/// </summary>
+		/// <param name="enabled"> Whether the checkbox is toggled on or not </param>
 		private void LoginAttemptsChecboxClicked(bool enabled)
 		{
 			loginAttemptsInputField.Text = enabled ? SecurePlayerPrefs.GetInt("max login attempts").ToString() : string.Empty;
 		}
 
+		/// <summary>
+		/// The max login attempts field has been changed
+		/// </summary>
+		/// <param name="text"> The text in the inpu field </param>
 		private void LoginAttemptsFielChanged(string text)
 		{
 			int.TryParse(text, out MaxLoginAttempts);
@@ -116,6 +130,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// The lock out time field has been changed
+		/// </summary>
+		/// <param name="text"> The text in the input field </param>
 		private void LockoutTimeFieldChanged(string text)
 		{
 			int.TryParse(text, out LockoutTime);
