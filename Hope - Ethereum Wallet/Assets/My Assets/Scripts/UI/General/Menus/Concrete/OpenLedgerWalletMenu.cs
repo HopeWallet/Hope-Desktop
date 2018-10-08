@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// Class used for displaying the menu for opening the ledger wallet.
+/// </summary>
 public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodicUpdater
 {
     public event Action OnLedgerLoadStart;
@@ -20,8 +23,16 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
 
     private bool connected;
 
+    /// <summary>
+    /// The interval in which to recheck if the ledger is plugged in.
+    /// </summary>
     public float UpdateInterval => 2f;
 
+    /// <summary>
+    /// Adds required dependencies.
+    /// </summary>
+    /// <param name="ledgerWallet"> The active LedgerWallet instance. </param>
+    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
     [Inject]
     public void Construct(LedgerWallet ledgerWallet, PeriodicUpdateManager periodicUpdateManager)
     {
@@ -29,11 +40,17 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         this.periodicUpdateManager = periodicUpdateManager;
     }
 
+    /// <summary>
+    /// Adds the button listener to the open ledger wallet button.
+    /// </summary>
     private void Start()
     {
         openLedgerWalletButton.onClick.AddListener(OpenWallet);
     }
 
+    /// <summary>
+    /// Adds the periodic updater and subscribes the UserWalletManager events.
+    /// </summary>
     private void OnEnable()
     {
         UserWalletManager.OnWalletLoadSuccessful += OpenMainWalletMenu;
@@ -41,6 +58,9 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
+    /// <summary>
+    /// Removes the periodic updater and unsubscribes all UserWalletManager events.
+    /// </summary>
     private void OnDisable()
     {
         UserWalletManager.OnWalletLoadSuccessful -= OpenMainWalletMenu;
@@ -48,23 +68,35 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         periodicUpdateManager.RemovePeriodicUpdater(this);
     }
 
+    /// <summary>
+    /// Opens the OpenWalletMenu if the ledger loads successful.
+    /// </summary>
     private void OpenMainWalletMenu()
     {
         uiManager.OpenMenu<OpenWalletMenu>();
         uiManager.DestroyUnusedMenus();
     }
 
+    /// <summary>
+    /// Starts the load of the ledger wallet.
+    /// </summary>
     private void OpenWallet()
     {
         OnLedgerLoadStart?.Invoke();
         ledgerWallet.InitializeAddresses();
     }
 
+    /// <summary>
+    /// Called if the ledger is not loaded successfully.
+    /// </summary>
     private void OnWalletLoadUnsuccessful()
     {
         OnLedgerLoadEnd?.Invoke();
     }
 
+    /// <summary>
+    /// Checks if the ledger is connected and executes the OnLedgerConnected and OnLedgerDisconnected events accordingly.
+    /// </summary>
     public async void PeriodicUpdate()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
