@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class which is a base where all unique interactable buttons will inherit.
 /// </summary>
-public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
+public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Button button;
 
@@ -39,7 +39,7 @@ public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
         if (button == null)
             return;
 
-        if (button.interactable && eventData.button == PointerEventData.InputButton.Left)
+		if (button.interactable && eventData.button == PointerEventData.InputButton.Left)
             ButtonLeftClicked();
         else if (eventData.button == PointerEventData.InputButton.Right)
             ButtonRightClicked();
@@ -47,10 +47,22 @@ public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
             ButtonMiddleClicked();
     }
 
-    /// <summary>
-    /// Called when the button is left clicked.
-    /// </summary>
-    public virtual void ButtonLeftClicked() { }
+	/// <summary>
+	/// Called when the pointer hovers over this object.
+	/// </summary>
+	/// <param name="eventData">  The data of the event. </param>
+	public void OnPointerEnter(PointerEventData eventData) => ButtonHovered(true);
+
+	/// <summary>
+	/// Called when the pointer leaves this object.
+	/// </summary>
+	/// <param name="eventData"> The data of the event. </param>
+	public void OnPointerExit(PointerEventData eventData) => ButtonHovered(false);
+
+	/// <summary>
+	/// Called when the button is left clicked.
+	/// </summary>
+	public virtual void ButtonLeftClicked() { }
 
     /// <summary>
     /// Called when the button is right clicked.
@@ -62,4 +74,9 @@ public abstract class ButtonBase : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public virtual void ButtonMiddleClicked() { }
 
+	/// <summary>
+	/// Called when the pointer hover state has been changed.
+	/// </summary>
+	/// <param name="mouseHovering"> Whether the mouse is hovering over this object or not. </param>
+	public virtual void ButtonHovered(bool mouseHovering) { }
 }

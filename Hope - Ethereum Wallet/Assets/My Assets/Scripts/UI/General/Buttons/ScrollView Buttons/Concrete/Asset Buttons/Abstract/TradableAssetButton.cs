@@ -10,7 +10,7 @@ using Zenject;
 public abstract class TradableAssetButton<T> : InfoButton<T, TradableAsset>, ITradableAssetButton where T : InfoButton<T, TradableAsset>, ITradableAssetButton
 {
     public GameObject notificationImageObj,
-                  loadingTransactionsObj;
+					  loadingTransactionsObj;
 
     public TMP_Text amountText,
                     symbolText,
@@ -18,7 +18,7 @@ public abstract class TradableAssetButton<T> : InfoButton<T, TradableAsset>, ITr
 
     public Image assetImage;
 
-    private PopupManager popupManager;
+    protected PopupManager popupManager;
     private TradableAssetManager tradableAssetManager;
     private TradableAssetButtonManager tradableAssetButtonManager;
     private TradableAssetImageManager tradableAssetImageManager;
