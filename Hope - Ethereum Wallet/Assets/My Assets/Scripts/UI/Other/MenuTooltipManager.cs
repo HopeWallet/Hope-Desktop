@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -6,10 +7,17 @@ using UnityEngine.EventSystems;
 /// </summary>
 public sealed class MenuTooltipManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+	public Action CloseMenuTooltip { get; private set; }
+
 	[SerializeField] private GameObject menuTooltip;
 	[SerializeField] private GameObject background;
 	[SerializeField] private GameObject triangle;
 	[SerializeField] private GameObject text;
+
+	/// <summary>
+	/// Sets the CloseMenuTooltip action
+	/// </summary>
+	private void Awake() => CloseMenuTooltip = () => AnimateTooltip(false);
 
 	/// <summary>
 	/// Pointer hovers over the menu tool tip or wallet logo

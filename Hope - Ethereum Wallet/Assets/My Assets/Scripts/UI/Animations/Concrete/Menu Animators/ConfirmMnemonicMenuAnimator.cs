@@ -13,6 +13,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
     [SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject[] checkBoxes;
 	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private Button hopeLogo;
 
 	private DynamicDataCache dynamicDataCache;
     private ConfirmMnemonicMenu confirmMnemonicMenu;
@@ -144,7 +145,7 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
             else
             {
                 OpeningWallet = true;
-                inputField.InputFieldBase.interactable = false;
+				inputField.InputFieldBase.interactable = false;
                 checkBoxes[wordIndex].transform.GetChild(1).gameObject.AnimateGraphicAndScale(1f, 1f, 0.15f, confirmMnemonicMenu.LoadWallet);
 				checkBoxes[wordIndex].transform.GetChild(0).gameObject.AnimateColor(UIColors.Green, 0.15f);
 			}
@@ -163,6 +164,10 @@ public sealed class ConfirmMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	private void CreateWallet()
 	{
+		hopeLogo.interactable = false;
+		hopeLogo.GetComponent<LoadingIconAnimator>().enabled = true;
+		hopeLogo.GetComponent<MenuTooltipManager>().CloseMenuTooltip();
+
 		Animating = true;
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
 		loadingIcon.SetActive(true);

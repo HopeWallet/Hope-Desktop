@@ -2169,6 +2169,7 @@ GameObject:
   - component: {fileID: 114809292855513216}
   - component: {fileID: 114283471487393800}
   - component: {fileID: 114039550430502954}
+  - component: {fileID: 114834003627375116}
   m_Layer: 0
   m_Name: Hope_Logo
   m_TagString: Untagged
@@ -4215,7 +4216,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -5298,6 +5299,7 @@ MonoBehaviour:
   pasteButtonCheckMarkIcon: {fileID: 1852940849832814}
   pasteButtonErrorIcon: {fileID: 1692381482654722}
   loadingIcon: {fileID: 1372133229748790}
+  hopeLogo: {fileID: 114283471487393800}
   nextButtonErrorIcon: {fileID: 1229291247579014}
   nextButtonErrorMessage: {fileID: 1375792533966128}
 --- !u!114 &114384392041482606
@@ -8851,6 +8853,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114834003627375116
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1999149644019830}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9947c0ed14382484c9dc300323e4e443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulsateOnly: 1
 --- !u!114 &114839493960288274
 MonoBehaviour:
   m_ObjectHideFlags: 1

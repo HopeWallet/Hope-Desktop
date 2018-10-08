@@ -577,13 +577,13 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: f819f1c08e0228c4da9812098ed106a2, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 114720634108211364}
   m_OnClick:
     m_PersistentCalls:

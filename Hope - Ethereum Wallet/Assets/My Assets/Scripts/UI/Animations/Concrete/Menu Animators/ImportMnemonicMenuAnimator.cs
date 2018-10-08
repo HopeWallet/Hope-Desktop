@@ -16,6 +16,7 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject pasteButtonCheckMarkIcon;
 	[SerializeField] private GameObject pasteButtonErrorIcon;
 	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private Button hopeLogo;
 
 	public GameObject nextButtonErrorIcon;
 	public GameObject nextButtonErrorMessage;
@@ -269,6 +270,10 @@ public sealed class ImportMnemonicMenuAnimator : MenuAnimator
 	/// </summary>
 	private void CreateWallet()
 	{
+		hopeLogo.interactable = false;
+		hopeLogo.GetComponent<LoadingIconAnimator>().enabled = true;
+		hopeLogo.GetComponent<MenuTooltipManager>().CloseMenuTooltip();
+
 		OpeningWallet = true;
 		Animating = true;
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.15f);
