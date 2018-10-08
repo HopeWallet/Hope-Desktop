@@ -15,20 +15,25 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private Button saveButton;
 		private GameObject loadingIcon;
 
+		private SettingsPopupAnimator settingsPopupAnimator;
+
 		/// <summary>
 		/// Sets the necessary variables and dependencies
 		/// </summary>
+		/// <param name="settingsPopupAnimator"> The SettingsPopupAnimator </param>
 		/// <param name="currentPasswordField"> The current password input field </param>
 		/// <param name="newPasswordField"> The new password field </param>
 		/// <param name="confirmPasswordField"> The confirm password field</param>
 		/// <param name="saveButton"> The save button </param>
 		/// <param name="loadingIcon"> The loading icon </param>
-		public PasswordSection(HopeInputField currentPasswordField,
+		public PasswordSection(SettingsPopupAnimator settingsPopupAnimator,
+							   HopeInputField currentPasswordField,
 							   HopeInputField newPasswordField,
 							   HopeInputField confirmPasswordField,
 							   Button saveButton,
 							   GameObject loadingIcon)
 		{
+			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.currentPasswordField = currentPasswordField;
 			this.newPasswordField = newPasswordField;
 			this.confirmPasswordField = confirmPasswordField;
@@ -38,13 +43,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SetListeners();
 		}
 
+		/// <summary>
+		/// Sets the necessary listeners
+		/// </summary>
 		private void SetListeners()
 		{
 			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
 			newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();
+			saveButton.onClick.AddListener(SaveButtonClicked);
 		}
 
+		/// <summary>
+		/// The current password input field has been changed
+		/// </summary>
+		/// <param name="text"> The text in the input field </param>
 		private void CurrentPasswordFieldChanged(string text)
 		{
 			currentPasswordField.Error = string.IsNullOrEmpty(text);
@@ -70,6 +83,33 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			confirmPasswordField.UpdateVisuals();
 			saveButton.interactable = !currentPasswordField.Error && !newPasswordField.Error && !confirmPasswordField.Error;
+		}
+
+		/// <summary>
+		/// Saves the new password if the current password is correct, else it gives an error
+		/// </summary>
+		private void SaveButtonClicked()
+		{
+			settingsPopupAnimator.VerifyingPassword(saveButton.gameObject, loadingIcon, true);
+
+			//check if passwordIsCorrect
+			bool passwordIsCorrect = true;
+
+			if (passwordIsCorrect)
+			{
+				currentPasswordField.Text = string.Empty;
+				newPasswordField.Text = string.Empty;
+				confirmPasswordField.Text = string.Empty;
+			}
+			else
+			{
+				currentPasswordField.Error = true;
+				currentPasswordField.UpdateVisuals();
+				saveButton.interactable = false;
+			}
+
+			//Implement passwordIsCorrect ternary operator after Hope wallet is done checking password >>>>>>>>>>>>>>>>>>>>>>>>>
+			settingsPopupAnimator.PasswordVerificationFinished(saveButton.gameObject, loadingIcon, saveButton.transform.GetChild(passwordIsCorrect ? 0 : 1).gameObject);
 		}
 	}
 }

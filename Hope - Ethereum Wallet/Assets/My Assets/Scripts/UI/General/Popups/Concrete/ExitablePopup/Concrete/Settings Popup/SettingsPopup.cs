@@ -27,6 +27,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	[SerializeField] private HopeInputField newPasswordField, confirmPasswordField;
 
+	[SerializeField] private TextMeshProUGUI deleteWalletText;
+
 	[SerializeField] private GameObject[] hopeOnlyCategoryButtons;
 	[SerializeField] private GameObject[] categoryLines;
 	[SerializeField] private HopeInputField[] currentPasswordFields;
@@ -46,6 +48,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     private ButtonClickObserver buttonClickObserver;
     private CurrencyManager currencyManager;
 	private LogoutHandler logoutHandler;
+	private SettingsPopupAnimator settingsPopupAnimator;
 
 	/// <summary>
 	/// Sets the necessary dependencies
@@ -80,13 +83,15 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		SetCurrentSettings();
 
+		settingsPopupAnimator = Animator as SettingsPopupAnimator;
+
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			walletNameSection = new WalletNameSection(hopeWalletInfoManager, userWalletManager, Animator as SettingsPopupAnimator, currentPasswordFields[0], currentWalletNameField, newWalletNameField, changingSettingButtons[0], loadingIcons[0]);
-			passwordSection = new PasswordSection(currentPasswordFields[1], newPasswordField, confirmPasswordField, changingSettingButtons[1], loadingIcons[1]);
-			deleteWalletSection = new DeleteWalletSection(hopeWalletInfoManager, userWalletManager, logoutHandler, currentPasswordFields[2], changingSettingButtons[2], loadingIcons[2]);
+			walletNameSection = new WalletNameSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, currentPasswordFields[0], currentWalletNameField, newWalletNameField, changingSettingButtons[0], loadingIcons[0]);
+			passwordSection = new PasswordSection(settingsPopupAnimator, currentPasswordFields[1], newPasswordField, confirmPasswordField, changingSettingButtons[1], loadingIcons[1]);
+			deleteWalletSection = new DeleteWalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordFields[2], deleteWalletText, changingSettingButtons[2], loadingIcons[2]);
 		}
 		else
         {
@@ -119,11 +124,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// </summary>
 	private void OnDestroy()
     {
-        buttonClickObserver.UnsubscribeObservable(this);
-        MoreDropdown.PopupClosed?.Invoke();
-
-        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
-            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
+		if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
+			currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
 		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
@@ -131,6 +133,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
 		SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
+
+		buttonClickObserver.UnsubscribeObservable(this);
+        MoreDropdown.PopupClosed?.Invoke();
 	}
 
 	/// <summary>

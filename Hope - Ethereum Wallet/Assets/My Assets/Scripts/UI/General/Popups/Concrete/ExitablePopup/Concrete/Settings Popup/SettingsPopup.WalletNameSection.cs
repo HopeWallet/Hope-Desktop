@@ -50,9 +50,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.saveButton = saveButton;
 			this.loadingIcon = loadingIcon;
 
-			
 			saveButton.onClick.AddListener(SaveButtonClicked);
-
 			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
 			newWalletNameField.OnInputUpdated += WalletNameFieldChanged;
 			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
@@ -61,6 +59,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			currentWalletNameField.UpdateVisuals();
 		}
 
+		/// <summary>
+		/// The current password field has been changed
+		/// </summary>
+		/// <param name="text"> The text in the input field </param>
 		private void CurrentPasswordFieldChanged(string text)
 		{
 			currentPasswordField.Error = string.IsNullOrEmpty(text);
@@ -102,14 +104,30 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		}
 
 		/// <summary>
-		/// The save button is clicked, and the necessary wallet information is changed
+		/// Saves the new wallet name if the current password is correct, else gives an error
 		/// </summary>
 		private void SaveButtonClicked()
 		{
-			//Change wallet details
+			settingsPopupAnimator.VerifyingPassword(saveButton.gameObject, loadingIcon, true);
 
-			currentWalletNameField.Text = newWalletNameField.Text;
-			newWalletNameField.Text = string.Empty;
+			//check if passwordIsCorrect
+			bool passwordIsCorrect = true;
+
+			if (passwordIsCorrect)
+			{
+				currentPasswordField.Text = string.Empty;
+				currentWalletNameField.Text = newWalletNameField.Text;
+				newWalletNameField.Text = string.Empty;
+			}
+			else
+			{
+				currentPasswordField.Error = true;
+				currentPasswordField.UpdateVisuals();
+				saveButton.interactable = false;
+			}
+
+			//Implement passwordIsCorrect ternary operator after Hope wallet is done checking password >>>>>>>>>>>>>>>>>>>>>>>>>
+			settingsPopupAnimator.PasswordVerificationFinished(saveButton.gameObject, loadingIcon, saveButton.transform.GetChild(passwordIsCorrect ? 0 : 1).gameObject);
 		}
 	}
 }
