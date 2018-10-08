@@ -44,9 +44,9 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 		Animating = true;
 
 		if (advancedMode)
-			transactionSpeedSection.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(true));
+			transactionSpeedSection.AnimateScale(0f, 0.15f, () => AnimateGasLimitAndPrice(true));
 		else
-			gasLimitInputField.AnimateScale(0f, 0.1f, () => AnimateGasLimitAndPrice(false));
+			AnimateGasLimitAndPrice(false);
 	}
 
 	/// <summary>
@@ -55,13 +55,13 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 	/// <param name="animatingIn"> Checks to see if animating these fields in or out </param>
 	private void AnimateGasLimitAndPrice(bool animatingIn)
 	{
-		gasLimitInputField.AnimateScale(animatingIn ? 1f : 0f, 0.1f);
+		gasLimitInputField.AnimateScale(animatingIn ? 1f : 0f, 0.15f);
 
 		if (animatingIn)
-			gasPriceInputField.AnimateScale(1f, 0.1f, () => Animating = false);
+			gasPriceInputField.AnimateScale(1f, 0.15f, () => Animating = false);
 		else
-			gasPriceInputField.AnimateScale(0f, 0.1f,
-				() => transactionSpeedSection.AnimateScale(1f, 0.1f,
+			gasPriceInputField.AnimateScale(0f, 0.15f,
+				() => transactionSpeedSection.AnimateScale(1f, 0.15f,
 				() => Animating = false));
 	}
 }
