@@ -1056,6 +1056,7 @@ GameObject:
   - component: {fileID: 114406758224761886}
   - component: {fileID: 114960000031078782}
   - component: {fileID: 114485833004188632}
+  - component: {fileID: 114183867033949736}
   m_Layer: 5
   m_Name: Send_Button
   m_TagString: Untagged
@@ -2089,6 +2090,20 @@ MonoBehaviour:
   noSpaces: 1
   placeholderFadeAway: 0
   errorMessage: {fileID: 114835707891569490}
+--- !u!114 &114183867033949736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1850029874131590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f197820f500de94d8b8624a8553ca77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoTitle: blah bla blhsac
+  infoText: testing thsi feature how does it loo? blah blah blah neat neat cool coll
+    cooolll
 --- !u!114 &114185239684127186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2368,6 +2383,7 @@ MonoBehaviour:
   transactionSpeedSlider: {fileID: 114457555825200072}
   contactsButton: {fileID: 114250894831834018}
   currencyButton: {fileID: 114236888384557400}
+  tooltipItem: {fileID: 114183867033949736}
 --- !u!114 &114250894831834018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2396,7 +2412,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504,
       type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 6436bffbc674b4448b535ab086a66504, type: 3}
     m_DisabledSprite: {fileID: 21300000, guid: 02b7b3d03d14ab74ab5b6fa0a2c2a700, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -4244,7 +4260,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -4354,11 +4370,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -5139,11 +5155,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -5473,11 +5489,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:

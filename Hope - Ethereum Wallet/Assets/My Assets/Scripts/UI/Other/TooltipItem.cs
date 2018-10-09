@@ -4,24 +4,18 @@ using UnityEngine;
 /// <summary>
 /// The icon class that manages the <see cref="InfoPopup"/> details and icon animations
 /// </summary>
-public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private static int clickId;
 
     public string infoTitle;
     public string infoText;
 
-	private bool hoverable;
     private bool hovering;
 
 	private Texture2D handCursor;
 
     public PopupManager PopupManager { get; set; }
-
-	/// <summary>
-	/// Sets the hoverable bool depending on the IconType
-	/// </summary>
-	private void Awake() => handCursor = Resources.Load("UI/Graphics/Textures/Other/Icons/HandCursor_Icon") as Texture2D;
 
 	/// <summary>
 	/// Opens the InfoPopup after a short period of hovering.
@@ -41,10 +35,6 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
     /// <param name="eventData"> The PointerEventData </param>
     public void OnPointerEnter(PointerEventData eventData)
     {
-		if (!hoverable) return;
-
-		Cursor.SetCursor(handCursor, new Vector2(12f, 0f), CursorMode.Auto);
-
 		clickId++;
         hovering = true;
     }
@@ -55,10 +45,6 @@ public sealed class InteractableIcon : MonoBehaviour, IPointerEnterHandler, IPoi
     /// <param name="eventData"> The PointerEventData </param>
     public void OnPointerExit(PointerEventData eventData)
     {
-		if (!hoverable) return;
-
-		Cursor.SetCursor(null, new Vector2(12f, 0f), CursorMode.Auto);
-
 		clickId++;
         hovering = false;
 

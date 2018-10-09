@@ -19,8 +19,8 @@ public sealed class InfoPopup : FactoryPopup<InfoPopup>
 	/// <param name="iconPosition"> The icon so that the popup can animate next to it </param>
 	public void SetUIElements(string titleText, string bodyText, Vector2 iconPosition)
 	{
+		transform.position = new Vector2(iconPosition.x + 60f, iconPosition.y);
 		title.text = titleText;
 		body.text = bodyText;
-		transform.position = new Vector2(iconPosition.x + 60f, iconPosition.y);
 	}
 }

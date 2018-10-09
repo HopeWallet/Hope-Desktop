@@ -34,6 +34,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private Slider transactionSpeedSlider;
     [SerializeField] private Button contactsButton, currencyButton;
 
+	[SerializeField] private TooltipItem tooltipItem;
+
     private readonly List<Selectable> simpleModeSelectableFields = new List<Selectable>();
     private readonly List<Selectable> advancedModeSelectableFields = new List<Selectable>();
 
@@ -122,7 +124,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         advancedModeSelectableFields.Add(gasPriceField.InputFieldBase);
 
         contactsClosed = () => contactsButton.interactable = true;
-    }
+	}
 
     /// <summary>
     /// Sets up the contacts button and info message.
@@ -132,7 +134,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
         contactsButton.onClick.AddListener(() => { popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this); contactsButton.interactable = false; });
         buttonClickObserver.SubscribeObservable(this);
-    }
+
+		tooltipItem.PopupManager = popupManager;
+	}
 
     /// <summary>
     /// Updates the send button interactability based on the GasManager, AddressManager, AmountManager IsValid properties.

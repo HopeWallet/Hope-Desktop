@@ -6,12 +6,13 @@ using UnityEngine;
 /// </summary>
 public sealed class SettingsPopupAnimator : PopupAnimator
 {
+	public Action<GameObject> AnimateIcon;
 	public Action<GameObject, GameObject, bool> VerifyingPassword;
-	public Action<GameObject, GameObject, GameObject> PasswordVerificationFinished;
 
 	[SerializeField] private GameObject settingsCategoriesParent;
 	[SerializeField] private GameObject line1, line2, line3;
 	[SerializeField] private GameObject[] sections;
+	[SerializeField] private HopeInputField currentPasswordField;
 
 	private IconButtons settingsCategories;
 
@@ -20,7 +21,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// </summary>
 	private void Awake()
 	{
-		PasswordVerificationFinished = VerificationFinished;
+		AnimateIcon = AnimateCheckmark;
 		VerifyingPassword = AnimateLoadingIcon;
 
 		settingsCategories = settingsCategoriesParent.GetComponent<IconButtons>();
@@ -47,24 +48,20 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	{
 		sections[settingsCategories.PreviouslyActiveButton].AnimateScale(0f, 0.15f, () => sections[categoryNum].AnimateScale(1f, 0.15f));
 
-		if (categoryNum == 4 || categoryNum == 5 || categoryNum == 6)
-			sections[categoryNum].transform.GetChild(0).GetComponent<HopeInputField>().InputFieldBase.ActivateInputField();
+		if (categoryNum == 4)
+			currentPasswordField.InputFieldBase.ActivateInputField();
 	}
 
 	/// <summary>
 	/// Animates an icon in and out of view
 	/// </summary>
-	/// <param name="button"> The given button to be animated back in </param>
-	/// <param name="loadingIcon"> The loading icon being animated out </param>
-	/// <param name="finishIcon"> The finish icon to be shown </param>
-	private void VerificationFinished(GameObject button, GameObject loadingIcon, GameObject finishIcon)
+	/// <param name="icon"> The finish icon to be shown </param>
+	private void AnimateCheckmark(GameObject icon)
 	{
-		AnimateLoadingIcon(button, loadingIcon, false);
+		icon.transform.localScale = new Vector3(0, 0, 1);
 
-		finishIcon.transform.localScale = new Vector3(0, 0, 1);
-
-		finishIcon.AnimateGraphicAndScale(1f, 1f, 0.15f,
-			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (finishIcon != null) finishIcon.AnimateGraphic(0f, 0.25f); }));
+		icon.AnimateGraphicAndScale(1f, 1f, 0.15f,
+			() => CoroutineUtils.ExecuteAfterWait(0.6f, () => { if (icon != null) icon.AnimateGraphic(0f, 0.25f); }));
 	}
 
 	/// <summary>
@@ -75,10 +72,12 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// <param name="verifying"> Whether the password is currently being verified or not </param>
 	private void AnimateLoadingIcon(GameObject button, GameObject loadingIcon, bool verifying)
 	{
+		Animating = true;
+
 		if (verifying)
 			loadingIcon.SetActive(true);
 
 		loadingIcon.AnimateGraphicAndScale(verifying ? 1f : 0f, verifying ? 1f : 0f, 0.15f, () => { if (!verifying) loadingIcon.SetActive(false); });
-		button.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f);
+		button.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f, () => Animating = false);
 	}
 }

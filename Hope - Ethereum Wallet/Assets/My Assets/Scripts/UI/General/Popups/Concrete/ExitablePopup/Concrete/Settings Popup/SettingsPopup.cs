@@ -23,25 +23,18 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private HopeInputField codeInputField;
 	[SerializeField] private Button confirmButton;
 
-    [SerializeField] private HopeInputField currentWalletNameField, newWalletNameField;
-
-	[SerializeField] private HopeInputField newPasswordField, confirmPasswordField;
-
-	[SerializeField] private TextMeshProUGUI deleteWalletText;
+	[SerializeField] private GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
+	[SerializeField] private HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
+	[SerializeField] private Button editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
 	[SerializeField] private GameObject[] hopeOnlyCategoryButtons;
 	[SerializeField] private GameObject[] categoryLines;
-	[SerializeField] private HopeInputField[] currentPasswordFields;
-	[SerializeField] private Button[] changingSettingButtons;
-	[SerializeField] private GameObject[] loadingIcons;
 
 	private readonly List<Selectable> selectables = new List<Selectable>();
 
 	private SecuritySection securitySection;
     private TwoFactorAuthenticationSection twoFactorAuthenticationSection;
-	private WalletNameSection walletNameSection;
-	private PasswordSection passwordSection;
-	private DeleteWalletSection deleteWalletSection;
+	private ModifyWalletSection modifyWalletSection;
 
 	private UserWalletManager userWalletManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
@@ -89,9 +82,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			walletNameSection = new WalletNameSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, currentPasswordFields[0], currentWalletNameField, newWalletNameField, changingSettingButtons[0], loadingIcons[0]);
-			passwordSection = new PasswordSection(settingsPopupAnimator, currentPasswordFields[1], newPasswordField, confirmPasswordField, changingSettingButtons[1], loadingIcons[1]);
-			deleteWalletSection = new DeleteWalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordFields[2], deleteWalletText, changingSettingButtons[2], loadingIcons[2]);
+			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
 		}
 		else
         {
@@ -102,9 +93,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			categoryLines[1].SetActive(false);
 		}
 
-		//selectables.Add(walletNameField.InputFieldBase);
-		//selectables.Add(newPasswordField.InputFieldBase);
-		//selectables.Add(confirmPasswordField.InputFieldBase);
+		selectables.Add(newWalletNameField.InputFieldBase);
+		selectables.Add(newPasswordField.InputFieldBase);
+		selectables.Add(confirmPasswordField.InputFieldBase);
 	}
 
 	/// <summary>
@@ -159,11 +150,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (clickType != ClickType.Down)
             return;
 
-        //if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
-            //editWalletButton.Press();
-        //else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && saveButton.interactable)
-            //saveButton.Press();
-        //else
-            //selectables.MoveToNextSelectable();
-    }
+		if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
+			editWalletButton.Press();
+		else if (InputFieldUtils.GetActiveInputField() == newWalletNameField.InputFieldBase && saveWalletNameButton.interactable)
+			saveWalletNameButton.Press();
+		else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && savePasswordButton.interactable)
+			savePasswordButton.Press();
+		else
+			selectables.MoveToNextSelectable();
+	}
 }
