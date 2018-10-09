@@ -54,7 +54,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 	protected override void InternalSetConfirmationValues(object[] transactionInput)
     {
         tradableAssetImageManager.LoadImage(tradableAssetManager.GetTradableAsset(transactionInput[1].ToString()).AssetSymbol, img => assetImage.sprite = img);
-        amountText.text = transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " <style=Symbol>" + transactionInput[3] + "</style>";
+        amountText.text = "-" + transactionInput[2].ToString().LimitEnd(20 - transactionInput[3].ToString().Length, "...") + " <style=Symbol>" + transactionInput[3] + "</style>";
 
         toAddress.text = transactionInput[0].ToString();
 		CheckIfSavedContact(toAddress.text, contactName);
@@ -62,7 +62,7 @@ public sealed class ConfirmTransactionPopup : ConfirmTransactionPopupBase<Confir
 		fromAddress.text = userWalletManager.GetWalletAddress();
 		CheckIfSavedContact(fromAddress.text, walletName);
 
-		feeText.text = dynamicDataCache.GetData("txfee") + "<style=Symbol> ETH</style>";
+		feeText.text = "-" + dynamicDataCache.GetData("txfee") + "<style=Symbol> ETH</style>";
 	}
 
     /// <summary>

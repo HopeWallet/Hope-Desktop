@@ -14,7 +14,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     [SerializeField] private IconButtons defaultCurrencyOptions;
 
 	[SerializeField] private CheckBox PasswordForTransactionCheckbox, idleTimeoutTimeCheckbox, loginAttemptsCheckbox;
-	[SerializeField] private HopeInputField idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField;
+	[SerializeField] private HopeInputField idleTimeoutTimeInputField, loginAttemptsInputField;
 
 	[SerializeField] private CheckBox twoFactorAuthCheckbox;
 	[SerializeField] private GameObject setUpSection;
@@ -80,7 +80,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
-			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField, lockoutTimeInputField);
+			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
 		}
