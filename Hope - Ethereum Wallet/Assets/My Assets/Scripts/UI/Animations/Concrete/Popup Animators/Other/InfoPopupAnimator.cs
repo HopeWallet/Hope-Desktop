@@ -15,7 +15,7 @@ public sealed class InfoPopupAnimator : UIAnimator
 	/// </summary>
 	protected override void AnimateIn()
 	{
-		gameObject.AnimateTransformX(10f, 0.2f);
+		//gameObject.AnimateTransformX(10f, 0.2f);
 
 		triangle.AnimateGraphic(1f, 0.2f);
 		box.AnimateGraphic(1f, 0.2f);

@@ -33,10 +33,10 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
+		line2.AnimateScaleX(1f, 0.2f);
+		line3.AnimateScaleX(1f, 0.2f);
+		settingsCategoriesParent.AnimateScaleX(1f, 0.2f);
 		line1.AnimateScaleX(1f, 0.25f);
-		line2.AnimateScaleX(1f, 0.25f);
-		line3.AnimateScaleX(1f, 0.25f);
-		settingsCategoriesParent.AnimateScaleX(1f, 0.25f);
 		sections[0].AnimateScale(1f, 0.3f, FinishedAnimating);
 	}
 

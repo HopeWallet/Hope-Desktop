@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 {
 	[SerializeField] private TextMeshProUGUI currentVersionText, latestVersionText;
-	[SerializeField] private Button downloadUpdateButton;
+	[SerializeField] private Button downloadUpdateButton, websiteButton, githubButton, redditButton, discordButton;
 
 	private float currentVersion = 1.05f, latestVersion = 1.07f;
 
@@ -25,13 +25,13 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 
 		if (!upToDate)
 			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
+
+		websiteButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
+		githubButton.onClick.AddListener(() => Application.OpenURL("https://github.com/HopeWallet/"));
 	}
 
 	/// <summary>
 	/// Calls the PopupClosed action
 	/// </summary>
-	private void OnDestroy()
-	{
-		MoreDropdown.PopupClosed?.Invoke();
-	}
+	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
 }

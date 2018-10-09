@@ -6,6 +6,7 @@
 public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 {
 	[SerializeField] private GameObject tokenIcon;
+	[SerializeField] private GameObject outIcon;
 	[SerializeField] private GameObject fromAddressSection;
 	[SerializeField] private GameObject toAddressSection;
 	[SerializeField] private GameObject line;
@@ -18,6 +19,7 @@ public sealed class ConfirmTransactionPopupAnimator : CountdownTimerAnimator
 	protected override void AnimateUniqueElementsIn()
 	{
 		tokenIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
+		outIcon.AnimateGraphicAndScale(1f, 1f, 0.15f);
 		fromAddressSection.AnimateScaleX(1f, 0.18f);
 		toAddressSection.AnimateScaleX(1f, 0.22f);
 		line.AnimateScaleX(1f, 0.235f);

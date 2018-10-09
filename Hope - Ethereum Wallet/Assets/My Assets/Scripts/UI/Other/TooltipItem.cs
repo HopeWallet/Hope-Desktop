@@ -6,47 +6,48 @@ using UnityEngine;
 /// </summary>
 public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private static int clickId;
+	private static int clickId;
 
-    public string infoTitle;
-    public string infoText;
+	public string infoTitle;
+	public string infoText;
+	public float itemWidth;
 
-    private bool hovering;
+	private bool hovering;
 
 	private Texture2D handCursor;
 
-    public PopupManager PopupManager { get; set; }
+	public PopupManager PopupManager { get; set; }
 
 	/// <summary>
 	/// Opens the InfoPopup after a short period of hovering.
 	/// </summary>
 	private void Update()
-    {
-        if (!hovering)
-            return;
+	{
+		if (!hovering)
+			return;
 
-        int val = clickId;
+		int val = clickId;
 		OpenPopup(val);
 	}
 
-    /// <summary>
-    /// Mouse entered the icon
-    /// </summary>
-    /// <param name="eventData"> The PointerEventData </param>
-    public void OnPointerEnter(PointerEventData eventData)
-    {
+	/// <summary>
+	/// Mouse entered the icon
+	/// </summary>
+	/// <param name="eventData"> The PointerEventData </param>
+	public void OnPointerEnter(PointerEventData eventData)
+	{
 		clickId++;
-        hovering = true;
-    }
+		hovering = true;
+	}
 
-    /// <summary>
-    /// Mouse exited the icon
-    /// </summary>
-    /// <param name="eventData"> The PointerEventData </param>
-    public void OnPointerExit(PointerEventData eventData)
-    {
+	/// <summary>
+	/// Mouse exited the icon
+	/// </summary>
+	/// <param name="eventData"> The PointerEventData </param>
+	public void OnPointerExit(PointerEventData eventData)
+	{
 		clickId++;
-        hovering = false;
+		hovering = false;
 
 		CloseInfoPopup();
 	}
@@ -73,8 +74,8 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	/// </summary>
 	/// <param name="currentId"> The current click id. </param>
 	private void OpenPopup(int currentId)
-    {
-        if (currentId == clickId)
-            PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, transform.position);
-    }
+	{
+		if (currentId == clickId)
+			PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, transform.position, itemWidth / 2);
+	}
 }

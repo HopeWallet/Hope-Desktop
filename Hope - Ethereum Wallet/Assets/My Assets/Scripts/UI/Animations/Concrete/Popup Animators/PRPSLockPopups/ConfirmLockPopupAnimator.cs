@@ -41,7 +41,7 @@ public sealed class ConfirmLockPopupAnimator : CountdownTimerAnimator
 		for (int i = 0; i < tokenSection.transform.childCount; i++)
 		{
 			tokenSection.transform.GetChild(i).gameObject.AnimateGraphicAndScale(1f, 1f, duration);
-			duration += 0.05f;
+			duration += 0.04f;
 		}
 	}
 }
