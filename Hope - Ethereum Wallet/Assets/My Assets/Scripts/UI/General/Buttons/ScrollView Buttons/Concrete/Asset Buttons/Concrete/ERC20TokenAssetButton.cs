@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 /// <summary>
 /// Class which manages the buttons for ERC20 token assets.
@@ -10,26 +11,41 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 
 	private Button removeButtonComponent;
 
+    private TokenContractManager tokenContractManager;
+    private TokenListManager tokenListManager;
+
 	private bool hovering, removingAssetPopupOpen;
 
-	/// <summary>
-	/// Sets the button component variable and button click listener
-	/// </summary>
-	protected override void OnAwake()
+    /// <summary>
+    /// The symbol display text for the ERC20TokenAsset.
+    /// </summary>
+    protected override string AssetDisplayText => ButtonInfo.AssetSymbol.LimitEnd(5, "...");
+
+    /// <summary>
+    /// The balance display text for the ERC20TokenAsset.
+    /// </summary>
+    protected override string AssetBalanceText => StringUtils.LimitEnd(ButtonInfo.AssetBalance.ToString(), 7, "...");
+
+    /// <summary>
+    /// Adds the required dependencies.
+    /// </summary>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
+    /// <param name="tokenListManager"> The active TokenListManager. </param>
+    [Inject]
+    public void Construct(TokenContractManager tokenContractManager, TokenListManager tokenListManager)
+    {
+        this.tokenContractManager = tokenContractManager;
+        this.tokenListManager = tokenListManager;
+    }
+
+    /// <summary>
+    /// Sets the button component variable and button click listener
+    /// </summary>
+    protected override void OnAwake()
 	{
 		removeButtonComponent = removeButton.GetComponent<Button>();
 		removeButtonComponent.onClick.AddListener(RemoveButtonClicked);
 	}
-
-	/// <summary>
-	/// The symbol display text for the ERC20TokenAsset.
-	/// </summary>
-	protected override string AssetDisplayText => ButtonInfo.AssetSymbol.LimitEnd(5, "...");
-
-	/// <summary>
-	/// The balance display text for the ERC20TokenAsset.
-	/// </summary>
-	protected override string AssetBalanceText => StringUtils.LimitEnd(ButtonInfo.AssetBalance.ToString(), 7, "...");
 
 	/// <summary>
 	/// Called when the pointer hover state has been changed.
@@ -51,9 +67,14 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 		removingAssetPopupOpen = true;
 		removeButtonComponent.interactable = false;
 		popupManager.GetPopup<GeneralOkCancelPopup>()
-			.SetSubText("Are you sure you want to remove " + symbolText.text + "?")
-			.OnOkClicked(() => Debug.Log("Remove token"))
-			.OnFinish(PopupClosed);
+			        .SetSubText("Are you sure you want to remove " + symbolText.text + "?")
+			        .OnOkClicked(() =>
+                    {
+                        //Debug.Log("Remove token");
+                        tokenListManager.UpdateToken(ButtonInfo.AssetAddress, false, true);
+                        tokenContractManager.RemoveToken(ButtonInfo.AssetAddress);
+                    })
+			        .OnFinish(PopupClosed);
 	}
 
 	/// <summary>
@@ -61,6 +82,9 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 	/// </summary>
 	private void PopupClosed()
 	{
+        if (removeButtonComponent == null)
+            return;
+
 		removeButtonComponent.interactable = true;
 		removingAssetPopupOpen = false;
 		ButtonHovered(hovering);
