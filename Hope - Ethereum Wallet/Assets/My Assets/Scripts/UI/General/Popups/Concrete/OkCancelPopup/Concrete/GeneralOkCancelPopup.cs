@@ -1,15 +1,35 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 /// <summary>
 /// Class that manages a general ok/cancel popup
 /// </summary>
-public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>
+public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCancelPopup>, IEnterButtonObservable
 {
 	[SerializeField] private TextMeshProUGUI subText;
 
 	private Action onFinish;
+
+	private ButtonClickObserver buttonClickObserver;
+
+	/// <summary>
+	/// Sets the required dependency and subscribes this button click observer
+	/// </summary>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
+	[Inject]
+	public void Construct(ButtonClickObserver buttonClickObserver)
+	{
+		this.buttonClickObserver = buttonClickObserver;
+
+		buttonClickObserver.SubscribeObservable(this);
+	}
+
+	/// <summary>
+	/// Unsubscribes this buttonClickObserver
+	/// </summary>
+	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
 
 	/// <summary>
 	/// Sets the subText text element
@@ -43,4 +63,16 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 	/// Calls the onFinish action if it has been set
 	/// </summary>
 	private void OnDestroy() => onFinish?.Invoke();
+
+	/// <summary>
+	/// User has hit the enter button
+	/// </summary>
+	/// <param name="clickType"> The ClickType </param>
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		okButton.Press();
+	}
 }
