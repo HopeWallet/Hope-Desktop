@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 114071907965496754}
   - component: {fileID: 114867458225577496}
   m_Layer: 0
-  m_Name: TransactionSpeedInfo_Icon
+  m_Name: Info_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2049,7 +2049,6 @@ MonoBehaviour:
   gasPriceInputField: {fileID: 1531343349901514}
   transactionSpeedSection: {fileID: 1130319798289674}
   sendButton: {fileID: 1850029874131590}
-  transactionSpeedInfoIcon: {fileID: 1071947182234898}
   addressField: {fileID: 114738113987797854}
 --- !u!114 &114155704206949664
 MonoBehaviour:
@@ -2134,7 +2133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f197820f500de94d8b8624a8553ca77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoTitle: Unable To Send
+  infoTitle: Unable to Send
   infoText: Message to be created on google doc...
   itemWidth: 150
   infoIcon: 0

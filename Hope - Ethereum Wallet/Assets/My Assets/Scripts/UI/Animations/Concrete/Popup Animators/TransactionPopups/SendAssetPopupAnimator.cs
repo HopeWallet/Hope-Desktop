@@ -13,7 +13,6 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject gasPriceInputField;
 	[SerializeField] private GameObject transactionSpeedSection;
 	[SerializeField] private GameObject sendButton;
-	[SerializeField] private GameObject transactionSpeedInfoIcon;
 
 	[SerializeField] private HopeInputField addressField;
 
@@ -27,9 +26,6 @@ public sealed class SendAssetPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		if (!SecurePlayerPrefs.GetBool("show tooltips"))
-			transactionSpeedInfoIcon.SetActive(false);
-
 		addressField.InputFieldBase.ActivateInputField();
 		tokenSection.AnimateScale(1f, 0.1f);
 		advancedModeSection.AnimateScale(1f, 0.1f);

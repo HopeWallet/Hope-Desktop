@@ -9096,8 +9096,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: The number of login attempts you can fail before being locked out of the
-    wallet for 10 minutes.
+  m_text: The number of login attempts you can fail before being locked out for 10
+    minutes.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -9166,12 +9166,12 @@ MonoBehaviour:
   m_margin: {x: -0.033744812, y: -0.034555435, z: -0.020309448, w: -0.006246567}
   m_textInfo:
     textComponent: {fileID: 114360745135993916}
-    characterCount: 95
+    characterCount: 81
     spriteCount: 0
-    spaceCount: 17
-    wordCount: 18
+    spaceCount: 14
+    wordCount: 15
     linkCount: 0
-    lineCount: 2
+    lineCount: 1
     pageCount: 1
     materialCount: 1
   m_havePropertiesChanged: 0

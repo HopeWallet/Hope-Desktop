@@ -139,12 +139,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 
 		bool showTooltips = SecurePlayerPrefs.GetBool("show tooltips");
 
-		foreach (TooltipItem item in tooltipItems)
+		foreach (TooltipItem tooltip in tooltipItems)
 		{
 			if (showTooltips)
-				item.PopupManager = popupManager;
+				tooltip.PopupManager = popupManager;
+			else if (tooltip.infoIcon)
+				tooltip.gameObject.SetActive(false);
 			else
-				item.enabled = false;
+				tooltip.enabled = false;
 		}
 	}
 

@@ -30,6 +30,8 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
 	[SerializeField] private Toggle maxToggle;
 
+	[SerializeField] private TooltipItem[] tooltipItems;
+
 	private LockedPRPSManager lockedPRPSManager;
 	private EtherBalanceObserver etherBalanceObserver;
 	private UserWalletManager userWalletManager;
@@ -95,6 +97,18 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 		{
 			maxToggle.SetInteractable(false);
 			maxText.color = UIColors.LightGrey;
+		}
+
+		bool showTooltips = SecurePlayerPrefs.GetBool("show tooltips");
+
+		foreach (TooltipItem tooltip in tooltipItems)
+		{
+			if (showTooltips)
+				tooltip.PopupManager = popupManager;
+			else if (tooltip.infoIcon)
+				tooltip.gameObject.SetActive(false);
+			else
+				tooltip.enabled = false;
 		}
 	}
 
