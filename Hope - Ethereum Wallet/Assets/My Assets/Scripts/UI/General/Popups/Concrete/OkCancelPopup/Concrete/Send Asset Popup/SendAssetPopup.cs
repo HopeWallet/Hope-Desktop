@@ -34,7 +34,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
     [SerializeField] private Slider transactionSpeedSlider;
     [SerializeField] private Button contactsButton, currencyButton;
 
-	[SerializeField] private TooltipItem tooltipItem;
+	[SerializeField] private TooltipItem[] tooltipItems;
 
     private readonly List<Selectable> simpleModeSelectableFields = new List<Selectable>();
     private readonly List<Selectable> advancedModeSelectableFields = new List<Selectable>();
@@ -135,7 +135,8 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
         contactsButton.onClick.AddListener(() => { popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this); contactsButton.interactable = false; });
         buttonClickObserver.SubscribeObservable(this);
 
-		tooltipItem.PopupManager = popupManager;
+		foreach (TooltipItem item in tooltipItems)
+			item.PopupManager = popupManager;
 	}
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The icon class that manages the <see cref="InfoPopup"/> details and icon animations
@@ -11,19 +12,22 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	public string infoTitle;
 	public string infoText;
 	public float itemWidth;
+	public bool infoIcon;
 
 	private bool hovering;
 
-	private Texture2D handCursor;
+	private Button button;
 
 	public PopupManager PopupManager { get; set; }
+
+	private void Awake() => button = GetComponent<Button>();
 
 	/// <summary>
 	/// Opens the InfoPopup after a short period of hovering.
 	/// </summary>
 	private void Update()
 	{
-		if (!hovering)
+		if ((!infoIcon && button.interactable) || !hovering)
 			return;
 
 		int val = clickId;
@@ -76,6 +80,6 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	private void OpenPopup(int currentId)
 	{
 		if (currentId == clickId)
-			PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, transform.position, itemWidth / 2);
+			PopupManager.GetPopup<InfoPopup>(true).SetUIElements(infoTitle, infoText, transform.position, itemWidth / 2, infoIcon);
 	}
 }

@@ -59,6 +59,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SetListeners();
 		}
 
+		/// <summary>
+		/// Sets the necessary input field listeners
+		/// </summary>
 		private void SetListeners()
 		{
 			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
@@ -74,12 +77,19 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			savePasswordButton.onClick.AddListener(SavePasswordButtonClicked);
 		}
 
+		/// <summary>
+		/// The current password input field has been changed
+		/// </summary>
+		/// <param name="text"> The text in the input field </param>
 		private void CurrentPasswordFieldChanged(string text)
 		{
 			currentPasswordField.Error = string.IsNullOrEmpty(text);
 			editWalletButton.interactable = !currentPasswordField.Error;
 		}
 
+		/// <summary>
+		/// The edit wallet button has been clicked
+		/// </summary>
 		private void EditWalletButtonClicked()
 		{
 			settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, true);
@@ -136,6 +146,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 		}
 
+		/// <summary>
+		/// Save wallet name button has been clicked
+		/// </summary>
 		private void SaveWalletNameClicked()
 		{
 			//Save new wallet name internally
@@ -166,6 +179,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			savePasswordButton.interactable = !currentPasswordField.Error && !newPasswordField.Error && !confirmPasswordField.Error;
 		}
 
+		/// <summary>
+		/// Save password button has been clicked
+		/// </summary>
 		private void SavePasswordButtonClicked()
 		{
 			//Save new wallet name internally

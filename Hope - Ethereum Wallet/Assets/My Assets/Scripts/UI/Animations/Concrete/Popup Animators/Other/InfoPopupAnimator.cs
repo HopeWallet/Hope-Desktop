@@ -5,33 +5,31 @@
 /// </summary>
 public sealed class InfoPopupAnimator : UIAnimator
 {
-	[SerializeField] private GameObject triangle;
-	[SerializeField] private GameObject box;
-	[SerializeField] private GameObject infoTitle;
-	[SerializeField] private GameObject bodyText;
+	[SerializeField] private GameObject[] popupElements;
 
 	/// <summary>
 	/// Animates the elements of the form into view
 	/// </summary>
-	protected override void AnimateIn()
-	{
-		//gameObject.AnimateTransformX(10f, 0.2f);
-
-		triangle.AnimateGraphic(1f, 0.2f);
-		box.AnimateGraphic(1f, 0.2f);
-		infoTitle.AnimateGraphic(1f, 0.2f);
-		bodyText.AnimateGraphic(1f, 0.2f, FinishedAnimating);
-	}
+	protected override void AnimateIn() => AnimateVisuals(true);
 
 	/// <summary>
 	/// Animates the elements of the form out of view
 	/// </summary>
-	protected override void AnimateOut()
+	protected override void AnimateOut() => AnimateVisuals(false);
+
+	/// <summary>
+	/// Animates the visuals of the info popup in or out
+	/// </summary>
+	/// <param name="animateIn"> Whether being animated in or out </param>
+	private void AnimateVisuals(bool animateIn)
 	{
-		triangle.AnimateGraphic(0f, 0.2f);
-		box.AnimateGraphic(0f, 0.2f);
-		infoTitle.AnimateGraphic(0f, 0.2f);
-		bodyText.AnimateGraphic(0f, 0.2f, FinishedAnimating);
+		float graphicValue = animateIn ? 1f : 0f;
+		float timeValue = animateIn ? 0.5f : 0.2f;
+
+		foreach (GameObject obj in popupElements)
+			obj.AnimateGraphic(graphicValue, timeValue);
+
+		CoroutineUtils.ExecuteAfterWait(timeValue, FinishedAnimating);
 	}
 
 }
