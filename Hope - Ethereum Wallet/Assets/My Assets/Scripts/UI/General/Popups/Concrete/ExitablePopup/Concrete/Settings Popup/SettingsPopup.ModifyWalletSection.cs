@@ -102,15 +102,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void EditWalletButtonClicked()
 		{
-<<<<<<< HEAD
-			settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, true);
             currentPasswordField.InputFieldBase.interactable = false;
-=======
 			settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, true);
-
-			//Check if password is correct or not
-			//bool passwordIsCorrect = true;
->>>>>>> 205f3ea88aff9c75735a2ed67b3ca143ae8512dd
 
             walletPasswordVerification.VerifyPassword(
                 currentPasswordField.Text,
