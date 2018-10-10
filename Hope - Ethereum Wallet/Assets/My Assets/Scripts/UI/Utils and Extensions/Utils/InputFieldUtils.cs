@@ -41,5 +41,5 @@ public static class InputFieldUtils
 	/// Gets the actively selected input field.
 	/// </summary>
 	/// <returns> The currently active input field. </returns>
-	public static InputField GetActiveInputField() => EventSystem.current.currentSelectedGameObject.GetComponent<InputField>();
+	public static InputField GetActiveInputField() => EventSystem.current.currentSelectedGameObject?.GetComponent<InputField>();
 }

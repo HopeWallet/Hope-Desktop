@@ -8,21 +8,34 @@ using UniRx;
 /// </summary>
 public sealed class WalletPasswordVerification
 {
+    private readonly HopeWalletInfoManager.Settings walletSettings;
+    private readonly DynamicDataCache dynamicDataCache;
+
     /// <summary>
     /// Whether the password is currently being verified.
     /// </summary>
     public bool VerifyingPassword { get; private set; }
 
     /// <summary>
+    /// Initializes the WalletPasswordVerification instance with the wallet settings and data cache.
+    /// </summary>
+    /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    public WalletPasswordVerification(HopeWalletInfoManager.Settings walletSettings, DynamicDataCache dynamicDataCache)
+    {
+        this.walletSettings = walletSettings;
+        this.dynamicDataCache = dynamicDataCache;
+    }
+
+    /// <summary>
     /// Verifies if a password is the correct password for a wallet.
     /// </summary>
     /// <param name="password"> The password to check. </param>
-    /// <param name="passwordPrefKey"> The preference which contains the correct hashed wallet password. </param>
     /// <param name="walletCorrectAction"> The action to execute if the password is correct. </param>
     /// <param name="walletIncorrectAction"> The action to execute if the password is incorrect. </param>
-    public void VerifyPassword(string password, string passwordPrefKey, Action walletCorrectAction, Action walletIncorrectAction)
+    public void VerifyPassword(string password, Action walletCorrectAction, Action walletIncorrectAction)
     {
-        var saltedHash = SecurePlayerPrefs.GetString(passwordPrefKey);
+        var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"));
         var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
 
         VerifyingPassword = true;

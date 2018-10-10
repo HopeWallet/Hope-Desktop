@@ -14,7 +14,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	{
 		private readonly GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
 		private readonly HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
-		private readonly Button editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
+		private readonly Button nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
 		private readonly HopeWalletInfoManager hopeWalletInfoManager;
         private readonly HopeWalletInfoManager.Settings walletSettings;
@@ -41,7 +41,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
             HopeInputField newWalletNameField,
             HopeInputField newPasswordField,
             HopeInputField confirmPasswordField,
-            Button editWalletButton,
+            Button nextButton,
             Button saveWalletNameButton,
             Button savePasswordButton,
             Button deleteWalletButton)
@@ -59,7 +59,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.newWalletNameField = newWalletNameField;
 			this.newPasswordField = newPasswordField;
 			this.confirmPasswordField = confirmPasswordField;
-			this.editWalletButton = editWalletButton;
+			this.nextButton = nextButton;
 			this.saveWalletNameButton = saveWalletNameButton;
 			this.savePasswordButton = savePasswordButton;
 			this.deleteWalletButton = deleteWalletButton;
@@ -75,7 +75,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void SetListeners()
 		{
 			currentPasswordField.OnInputUpdated += CurrentPasswordFieldChanged;
-			editWalletButton.onClick.AddListener(EditWalletButtonClicked);
+			nextButton.onClick.AddListener(EditWalletButtonClicked);
 
 			currentWalletNameField.Error = false;
 			currentWalletNameField.Text = walletName;
@@ -94,7 +94,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private void CurrentPasswordFieldChanged(string text)
 		{
 			currentPasswordField.Error = string.IsNullOrEmpty(text);
-			editWalletButton.interactable = !currentPasswordField.Error;
+			nextButton.interactable = !currentPasswordField.Error;
 		}
 
 		/// <summary>
@@ -102,41 +102,32 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void EditWalletButtonClicked()
 		{
+<<<<<<< HEAD
 			settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, true);
+            currentPasswordField.InputFieldBase.interactable = false;
+=======
+			settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, true);
 
 			//Check if password is correct or not
 			//bool passwordIsCorrect = true;
+>>>>>>> 205f3ea88aff9c75735a2ed67b3ca143ae8512dd
 
             walletPasswordVerification.VerifyPassword(
                 currentPasswordField.Text,
-                walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"),
                 () =>
                 {
-                    settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
+                    settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
                     currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
                 },
                 () =>
                 {
+                    currentPasswordField.InputFieldBase.interactable = true;
                     currentPasswordField.Error = true;
                     currentPasswordField.UpdateVisuals();
-                    editWalletButton.interactable = false;
-                    settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
-                    settingsPopupAnimator.AnimateIcon(editWalletButton.transform.GetChild(0).gameObject);
+                    nextButton.interactable = false;
+                    settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
+                    settingsPopupAnimator.AnimateIcon(nextButton.transform.GetChild(0).gameObject);
                 });
-
-			//if (passwordIsCorrect)
-			//{
-			//	settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
-			//	currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
-			//}
-			//else
-			//{
-			//	currentPasswordField.Error = true;
-			//	currentPasswordField.UpdateVisuals();
-			//	editWalletButton.interactable = false;
-			//	settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
-			//	settingsPopupAnimator.AnimateIcon(editWalletButton.transform.GetChild(0).gameObject);
-			//}
 		}
 
 		/// <summary>

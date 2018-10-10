@@ -25,7 +25,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	[SerializeField] private GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
 	[SerializeField] private HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
-	[SerializeField] private Button editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
+	[SerializeField] private Button nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
 	[SerializeField] private GameObject[] hopeOnlyCategoryButtons;
 	[SerializeField] private GameObject[] categoryLines;
@@ -96,7 +96,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
+			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
 		}
 		else
         {
@@ -164,8 +164,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (clickType != ClickType.Down)
             return;
 
-		if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && editWalletButton.interactable)
-			editWalletButton.Press();
+		if (InputFieldUtils.GetActiveInputField() == currentPasswordField.InputFieldBase && nextButton.interactable)
+			nextButton.Press();
 		else if (InputFieldUtils.GetActiveInputField() == newWalletNameField.InputFieldBase && saveWalletNameButton.interactable)
 			saveWalletNameButton.Press();
 		else if (InputFieldUtils.GetActiveInputField() == confirmPasswordField.InputFieldBase && savePasswordButton.interactable)
