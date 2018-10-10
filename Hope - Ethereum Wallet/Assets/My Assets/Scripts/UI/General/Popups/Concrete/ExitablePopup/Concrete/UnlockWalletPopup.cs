@@ -98,11 +98,11 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		if ((currentTime - lastFailedAttempt) >= 300)
 		{
 			SecurePlayerPrefs.SetInt("current login attempt", 1);
+			passwordField.SetPlaceholderText("Password");
 
 			if (LockedOut)
 			{
 				LockedOut = false;
-				passwordField.SetPlaceholderText("Password");
 				passwordField.Text = string.Empty;
 				passwordField.UpdateVisuals();
 				passwordField.InputFieldBase.ActivateInputField();
