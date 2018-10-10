@@ -12,34 +12,44 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// </summary>
 	public sealed class ModifyWalletSection
 	{
-		private GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
-		private HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
-		private Button editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
+		private readonly GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
+		private readonly HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
+		private readonly Button editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
-		private HopeWalletInfoManager hopeWalletInfoManager;
-		private SettingsPopupAnimator settingsPopupAnimator;
+		private readonly HopeWalletInfoManager hopeWalletInfoManager;
+        private readonly HopeWalletInfoManager.Settings walletSettings;
+        private readonly WalletPasswordVerification walletPasswordVerification;
+        private readonly DynamicDataCache dynamicDataCache;
+		private readonly SettingsPopupAnimator settingsPopupAnimator;
 
-		private string walletName;
+		private readonly string walletName;
 
-		public ModifyWalletSection(HopeWalletInfoManager hopeWalletInfoManager,
-								   UserWalletManager userWalletManager,
-								   SettingsPopupAnimator settingsPopupAnimator,
-								   PopupManager popupManager,
-								   LogoutHandler logoutHandler,
-								   GameObject currentPasswordSection,
-								   GameObject walletDetailsSection,
-								   GameObject loadingIcon,
-								   HopeInputField currentPasswordField,
-								   HopeInputField currentWalletNameField,
-								   HopeInputField newWalletNameField,
-								   HopeInputField newPasswordField,
-								   HopeInputField confirmPasswordField,
-								   Button editWalletButton,
-								   Button saveWalletNameButton,
-								   Button savePasswordButton,
-								   Button deleteWalletButton)
-		{
-			this.hopeWalletInfoManager = hopeWalletInfoManager;
+		public ModifyWalletSection(
+            HopeWalletInfoManager hopeWalletInfoManager,
+            HopeWalletInfoManager.Settings walletSettings,
+            WalletPasswordVerification walletPasswordVerification,
+            DynamicDataCache dynamicDataCache,
+            UserWalletManager userWalletManager,
+            SettingsPopupAnimator settingsPopupAnimator,
+            PopupManager popupManager,
+            LogoutHandler logoutHandler,
+            GameObject currentPasswordSection,
+            GameObject walletDetailsSection,
+            GameObject loadingIcon,
+            HopeInputField currentPasswordField,
+            HopeInputField currentWalletNameField,
+            HopeInputField newWalletNameField,
+            HopeInputField newPasswordField,
+            HopeInputField confirmPasswordField,
+            Button editWalletButton,
+            Button saveWalletNameButton,
+            Button savePasswordButton,
+            Button deleteWalletButton)
+        {
+            this.hopeWalletInfoManager = hopeWalletInfoManager;
+            this.walletSettings = walletSettings;
+            this.walletPasswordVerification = walletPasswordVerification;
+            this.dynamicDataCache = dynamicDataCache;
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.currentPasswordSection = currentPasswordSection;
 			this.walletDetailsSection = walletDetailsSection;
@@ -95,21 +105,38 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, true);
 
 			//Check if password is correct or not
-			bool passwordIsCorrect = true;
+			//bool passwordIsCorrect = true;
 
-			if (passwordIsCorrect)
-			{
-				settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
-				currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
-			}
-			else
-			{
-				currentPasswordField.Error = true;
-				currentPasswordField.UpdateVisuals();
-				editWalletButton.interactable = false;
-				settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
-				settingsPopupAnimator.AnimateIcon(editWalletButton.transform.GetChild(0).gameObject);
-			}
+            walletPasswordVerification.VerifyPassword(
+                currentPasswordField.Text,
+                walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"),
+                () =>
+                {
+                    settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
+                    currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
+                },
+                () =>
+                {
+                    currentPasswordField.Error = true;
+                    currentPasswordField.UpdateVisuals();
+                    editWalletButton.interactable = false;
+                    settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
+                    settingsPopupAnimator.AnimateIcon(editWalletButton.transform.GetChild(0).gameObject);
+                });
+
+			//if (passwordIsCorrect)
+			//{
+			//	settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
+			//	currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
+			//}
+			//else
+			//{
+			//	currentPasswordField.Error = true;
+			//	currentPasswordField.UpdateVisuals();
+			//	editWalletButton.interactable = false;
+			//	settingsPopupAnimator.VerifyingPassword(editWalletButton.gameObject, loadingIcon, false);
+			//	settingsPopupAnimator.AnimateIcon(editWalletButton.transform.GetChild(0).gameObject);
+			//}
 		}
 
 		/// <summary>

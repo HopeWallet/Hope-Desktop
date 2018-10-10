@@ -38,27 +38,41 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 	private UserWalletManager userWalletManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
+    private HopeWalletInfoManager.Settings walletSettings;
+    private WalletPasswordVerification walletPasswordVerification;
+    private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
     private CurrencyManager currencyManager;
 	private LogoutHandler logoutHandler;
 	private SettingsPopupAnimator settingsPopupAnimator;
 
-	/// <summary>
-	/// Sets the necessary dependencies
-	/// </summary>
-	/// <param name="userWalletManager"> The active UserWalletManager </param>
-	/// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
-	/// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
-	/// <param name="currencyManager"> The active CurrencyManager </param>
-	[Inject]
-    public void Construct(UserWalletManager userWalletManager,
-						  HopeWalletInfoManager hopeWalletInfoManager,
-						  ButtonClickObserver buttonClickObserver,
-						  CurrencyManager currencyManager,
-						  LogoutHandler logoutHandler)
+    /// <summary>
+    /// Sets the necessary dependencies
+    /// </summary>
+    /// <param name="userWalletManager"> The active UserWalletManager </param>
+    /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
+    /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings. </param>
+    /// <param name="walletPasswordVerification"> An instance of WalletPasswordVerification. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
+    /// <param name="currencyManager"> The active CurrencyManager </param>
+    /// <param name="logoutHandler"> The active LogoutHandler. </param>
+    [Inject]
+    public void Construct(
+        UserWalletManager userWalletManager,
+        HopeWalletInfoManager hopeWalletInfoManager,
+        HopeWalletInfoManager.Settings walletSettings,
+        WalletPasswordVerification walletPasswordVerification,
+        DynamicDataCache dynamicDataCache,
+        ButtonClickObserver buttonClickObserver,
+        CurrencyManager currencyManager,
+        LogoutHandler logoutHandler)
     {
 		this.userWalletManager = userWalletManager;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
+        this.walletSettings = walletSettings;
+        this.walletPasswordVerification = walletPasswordVerification;
+        this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
         this.currencyManager = currencyManager;
 		this.logoutHandler = logoutHandler;
@@ -82,7 +96,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
+			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, editWalletButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
 		}
 		else
         {
