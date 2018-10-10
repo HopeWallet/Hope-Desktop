@@ -2,9 +2,9 @@
 using UnityEngine;
 
 /// <summary>
-/// The info popup
+/// The tooltip popup
 /// </summary>
-public sealed class InfoPopup : FactoryPopup<InfoPopup>
+public sealed class TooltipPopup : FactoryPopup<TooltipPopup>
 {
 	[SerializeField] private TextMeshProUGUI title;
 	[SerializeField] private TextMeshProUGUI body;

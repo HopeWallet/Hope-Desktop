@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// The animator class of the InfoPopup
+/// The animator class of the TooltipPopup
 /// </summary>
-public sealed class InfoPopupAnimator : UIAnimator
+public sealed class TooltipPopupAnimator : UIAnimator
 {
 	[SerializeField] private GameObject[] popupElements;
 
@@ -24,7 +24,7 @@ public sealed class InfoPopupAnimator : UIAnimator
 	private void AnimateVisuals(bool animateIn)
 	{
 		float graphicValue = animateIn ? 1f : 0f;
-		float timeValue = animateIn ? 0.5f : 0.2f;
+		float timeValue = animateIn ? 0.4f : 0.2f;
 
 		foreach (GameObject obj in popupElements)
 			obj.AnimateGraphic(graphicValue, timeValue);
