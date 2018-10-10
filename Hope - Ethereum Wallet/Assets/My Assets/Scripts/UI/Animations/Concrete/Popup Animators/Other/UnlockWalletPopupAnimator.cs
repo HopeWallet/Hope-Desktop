@@ -9,15 +9,22 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	[SerializeField] private HopeInputField passwordInputField;
 	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject lockedOutSection;
+
+	private UnlockWalletPopup unlockWalletPopup;
 
 	/// <summary>
 	/// Initializes the necessary variables that haven't already been initialized in the inspector
 	/// </summary>
 	private void Awake()
 	{
+		unlockWalletPopup = GetComponent<UnlockWalletPopup>();
+
+		unlockWalletPopup.AnimateLockedOutSection = AnimateLockedOutSection;
+		unlockWalletPopup.OnPasswordEnteredIncorrect = PasswordIncorrect;
+
 		passwordInputField.GetComponent<HopeInputField>().OnInputUpdated += _ => InputFieldChanged();
 		unlockButton.GetComponent<Button>().onClick.AddListener(VerifyingPassword);
-        GetComponent<UnlockWalletPopup>().OnPasswordEnteredIncorrect += PasswordIncorrect;
 	}
 
 	/// <summary>
@@ -25,8 +32,17 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		passwordInputField.InputFieldBase.ActivateInputField();
-		passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
+		if ((SecurePlayerPrefs.GetInt("max login attempts") - SecurePlayerPrefs.GetInt("current login attempt") + 1) == 0)
+		{
+			lockedOutSection.AnimateScale(1f, 0.15f);
+			unlockWalletPopup.LockedOut = true;
+		}
+		else
+		{
+			passwordInputField.InputFieldBase.ActivateInputField();
+			passwordInputField.gameObject.AnimateScaleX(1f, 0.15f);
+		}
+
 		unlockButton.AnimateGraphicAndScale(1f, 1f, 0.25f, FinishedAnimating);
 	}
 
@@ -42,12 +58,24 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	/// <summary>
 	/// Called if the password is incorrect
 	/// </summary>
-	public void PasswordIncorrect()
+	private void PasswordIncorrect()
 	{
 		passwordInputField.Error = true;
 		passwordInputField.UpdateVisuals();
 		unlockButton.GetComponent<Button>().interactable = false;
 		VerifyingPassword();
+	}
+
+	/// <summary>
+	/// Animates the locked out section in or out of view
+	/// </summary>
+	/// <param name="userLockedOut"> Whether the locked out section should be shown or not </param>
+	private void AnimateLockedOutSection(bool userLockedOut)
+	{
+		if (userLockedOut)
+			passwordInputField.gameObject.AnimateScaleX(0f, 0.15f, () => lockedOutSection.AnimateScale(1f, 0.15f));
+		else
+			lockedOutSection.gameObject.AnimateScale(0f, 0.15f, () => passwordInputField.gameObject.AnimateScaleX(1f, 0.15f));
 	}
 
 	/// <summary>

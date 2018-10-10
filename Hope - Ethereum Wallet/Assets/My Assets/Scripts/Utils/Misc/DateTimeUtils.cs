@@ -147,4 +147,16 @@ public static class DateTimeUtils
 		else
 			return month;
     }
+
+	/// <summary>
+	/// Returns a time in analog format (e.g. 5:32)
+	/// </summary>
+	/// <param name="time"> The time in seconds being converted </param>
+	/// <returns></returns>
+	public static string GetAnalogTime(long time)
+	{
+		int minutes = (int)time / 60;
+
+		return minutes + ":" + (time % 60).ToString("00");
+	}
 }

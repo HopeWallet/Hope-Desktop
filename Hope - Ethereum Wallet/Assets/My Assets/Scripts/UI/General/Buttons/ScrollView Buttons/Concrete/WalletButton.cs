@@ -13,7 +13,7 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
     private PopupManager popupManager;
     private DynamicDataCache dynamicDataCache;
 
-	private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f);
+	private readonly Color PURE_WHITE = new Color(1f, 1f, 1f);
 
     /// <summary>
     /// Injects required dependencies.
@@ -48,9 +48,9 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 	private void WalletButtonClicked()
 	{
 		Button.interactable = false;
-		walletNameText.gameObject.AnimateColor(FLAT_WHITE, 0.15f);
+		walletNameText.gameObject.AnimateColor(PURE_WHITE, 0.15f);
 
 		dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => { Button.interactable = true; walletNameText.gameObject.AnimateColor(FLAT_WHITE, 0.15f); });
+		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => { Button.interactable = true; walletNameText.gameObject.AnimateColor(UIColors.White, 0.15f); });
 	}
 }
