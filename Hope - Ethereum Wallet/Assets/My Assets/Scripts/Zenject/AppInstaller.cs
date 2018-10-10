@@ -23,7 +23,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     public override void InstallBindings()
     {
         BindSettings();
-        BindSingletonTypes();
+        BindTypes();
         BindFactories();
     }
 
@@ -41,7 +41,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
     /// <summary>
     /// Binds all singleton types to their required dependencies.
     /// </summary>
-    private void BindSingletonTypes()
+    private void BindTypes()
     {
         Container.BindInterfacesAndSelfTo<UpdateManager>().AsSingle().NonLazy();
         Container.Bind<PeriodicUpdateManager>().AsSingle().NonLazy();
@@ -84,6 +84,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<ContactsManager>().AsSingle().NonLazy();
         Container.Bind<RestrictedAddressManager>().AsSingle().NonLazy();
 
+        Container.Bind<WalletPasswordVerification>().AsTransient().NonLazy();
         Container.Bind<UserWalletManager>().AsSingle().NonLazy();
         Container.Bind<LedgerWallet>().AsSingle().NonLazy();
         Container.Bind<TrezorWallet>().AsSingle().NonLazy();
