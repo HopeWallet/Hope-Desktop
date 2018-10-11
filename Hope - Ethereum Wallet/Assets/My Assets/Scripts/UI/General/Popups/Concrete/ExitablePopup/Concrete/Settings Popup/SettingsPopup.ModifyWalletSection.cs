@@ -105,22 +105,18 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
             currentPasswordField.InputFieldBase.interactable = false;
 			settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, true);
 
-            walletPasswordVerification.VerifyPassword(
-                currentPasswordField.Text,
-                () =>
-                {
-                    settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
-                    currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
-                },
-                () =>
-                {
-                    currentPasswordField.InputFieldBase.interactable = true;
-                    currentPasswordField.Error = true;
-                    currentPasswordField.UpdateVisuals();
-                    nextButton.interactable = false;
-                    settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
-                    settingsPopupAnimator.AnimateIcon(nextButton.transform.GetChild(0).gameObject);
-                });
+            walletPasswordVerification.VerifyPassword(currentPasswordField, null)
+                                      .OnPasswordCorrect(_ =>
+                                      {
+                                          settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
+                                          currentPasswordSection.AnimateScale(0f, 0.15f, () => walletDetailsSection.AnimateScale(1f, 0.15f));
+                                      })
+                                      .OnPasswordIncorrect(() =>
+                                      {
+                                          nextButton.interactable = false;
+                                          settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
+                                          settingsPopupAnimator.AnimateIcon(nextButton.transform.GetChild(0).gameObject);
+                                      });
 		}
 
 		/// <summary>

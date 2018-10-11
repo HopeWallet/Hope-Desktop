@@ -1,10 +1,7 @@
-﻿using Hope.Security.PBKDF2;
-using Hope.Security.PBKDF2.Engines.Blake2b;
-using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Security.ProtectedTypes.Types;
 using System;
 using System.Collections;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -29,38 +26,36 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 
     private UIManager uiManager;
     private UserWalletManager userWalletManager;
-    private HopeWalletInfoManager.Settings walletSettings;
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
-
-    private bool checkingPassword;
+    private WalletPasswordVerification walletPasswordVerification;
 
 	/// <summary>
 	/// If the user is locked out from logging in or not
 	/// </summary>
 	public bool LockedOut { get; set; }
 
-	/// <summary>
-	/// Adds the required dependencies to this popup.
-	/// </summary>
-	/// <param name="uiManager"> The active UIManager. </param>
-	/// <param name="userWalletManager"> The active UserWalletManager. </param>
-	/// <param name="walletSettings"> The wallet settings. </param>
-	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
-	[Inject]
+    /// <summary>
+    /// Adds the required dependencies to this popup.
+    /// </summary>
+    /// <param name="uiManager"> The active UIManager. </param>
+    /// <param name="userWalletManager"> The active UserWalletManager. </param>
+    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+    /// <param name="walletPasswordVerification"> An instance of the WalletPasswordVerification class. </param>
+    [Inject]
 	public void Construct(
 		UIManager uiManager,
 		UserWalletManager userWalletManager,
-		HopeWalletInfoManager.Settings walletSettings,
 		DynamicDataCache dynamicDataCache,
-		ButtonClickObserver buttonClickObserver)
+		ButtonClickObserver buttonClickObserver,
+        WalletPasswordVerification walletPasswordVerification)
 	{
 		this.uiManager = uiManager;
 		this.userWalletManager = userWalletManager;
 		this.dynamicDataCache = dynamicDataCache;
 		this.buttonClickObserver = buttonClickObserver;
-		this.walletSettings = walletSettings;
+        this.walletPasswordVerification = walletPasswordVerification;
 
 		if (SecurePlayerPrefs.GetBool("limit login attempts"))
 		{
@@ -119,23 +114,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// </summary>
 	private void CheckPassword()
 	{
-		string text = passwordField.Text;
-
-		var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"));
-		var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
-
-		passwordField.InputFieldBase.interactable = false;
-		checkingPassword = true;
-
-		Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(passwordField.Text) ? false : pbkdf2.VerifyPassword(passwordField.Text, saltedHash)))
-				  .ObserveOnMainThread()
-				  .Subscribe(correctPass =>
-				  {
-					  if (!correctPass[0])
-						  IncorrectPassword();
-					  else
-						  CorrectPassword(passwordField.Text);
-				  });
+        walletPasswordVerification.VerifyPassword(passwordField, null)
+                                  .OnPasswordCorrect(CorrectPassword)
+                                  .OnPasswordIncorrect(IncorrectPassword);
 	}
 
 	/// <summary>
@@ -160,8 +141,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	private void IncorrectPassword()
 	{
 		OnPasswordEnteredIncorrect?.Invoke();
-		passwordField.InputFieldBase.interactable = true;
-		checkingPassword = false;
 
 		if (!SecurePlayerPrefs.GetBool("limit login attempts"))
 			return;
@@ -205,7 +184,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		if (clickType != ClickType.Down)
 			return;
 
-		if (!checkingPassword)
+		if (!walletPasswordVerification.VerifyingPassword)
 			passwordField.InputFieldBase.SelectSelectable();
 	}
 
@@ -218,9 +197,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		if (clickType != ClickType.Down)
 			return;
 
-		if (unlockWalletButton.interactable && !checkingPassword)
+		if (unlockWalletButton.interactable && !walletPasswordVerification.VerifyingPassword)
 			unlockWalletButton.Press();
-		else if (!checkingPassword)
+		else if (!walletPasswordVerification.VerifyingPassword)
 			passwordField.InputFieldBase.SelectSelectable();
 	}
 
