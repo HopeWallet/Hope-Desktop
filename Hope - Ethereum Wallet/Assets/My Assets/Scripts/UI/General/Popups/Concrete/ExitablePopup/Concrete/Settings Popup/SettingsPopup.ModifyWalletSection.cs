@@ -105,7 +105,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
             currentPasswordField.InputFieldBase.interactable = false;
 			settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, true);
 
-            walletPasswordVerification.VerifyPassword(currentPasswordField, null)
+            walletPasswordVerification.VerifyPassword(currentPasswordField)
                                       .OnPasswordCorrect(_ =>
                                       {
                                           settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);

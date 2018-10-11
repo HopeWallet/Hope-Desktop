@@ -2,7 +2,6 @@
 using Hope.Security.PBKDF2.Engines.Blake2b;
 using System;
 using UniRx;
-using UnityEngine.UI;
 
 /// <summary>
 /// Class used for verifying if a wallet password is correct.
@@ -16,7 +15,6 @@ public sealed class WalletPasswordVerification
     private readonly DynamicDataCache dynamicDataCache;
 
     private HopeInputField passwordInputField;
-    private Button viewPasswordButton;
 
     /// <summary>
     /// Whether the password is currently being verified.
@@ -34,28 +32,37 @@ public sealed class WalletPasswordVerification
         this.dynamicDataCache = dynamicDataCache;
     }
 
-    public WalletPasswordVerification VerifyPassword(HopeInputField passwordInputField, Button viewPasswordButton)
+    /// <summary>
+    /// Verifies the password entered in the password input field.
+    /// </summary>
+    /// <param name="passwordInputField"> The input field containing the password. </param>
+    /// <returns> The current instance of WalletPasswordVerification. </returns>
+    public WalletPasswordVerification VerifyPassword(HopeInputField passwordInputField)
     {
         this.passwordInputField = passwordInputField;
-        this.viewPasswordButton = viewPasswordButton;
 
         if (passwordInputField?.InputFieldBase != null)
             passwordInputField.InputFieldBase.interactable = false;
-
-        if (viewPasswordButton != null)
-            viewPasswordButton.interactable = false;
 
         VerifyPassword(passwordInputField.Text);
 
         return this;
     }
 
+    /// <summary>
+    /// Verifies a password.
+    /// </summary>
+    /// <param name="password"> The password to verify. </param>
+    /// <returns> The current instance of WalletPasswordVerification. </returns>
     public WalletPasswordVerification VerifyPassword(string password)
     {
         var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"));
         var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
 
         VerifyingPassword = true;
+
+        onPasswordCorrect = null;
+        onPasswordIncorrect = null;
 
         Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(password) ? false : pbkdf2.VerifyPassword(password, saltedHash)))
                   .ObserveOnMainThread()
@@ -67,26 +74,44 @@ public sealed class WalletPasswordVerification
                       else
                           PasswordCorrect(password);
                   });
+
         return this;
     }
 
+    /// <summary>
+    /// Calls an action if the password is correct.
+    /// </summary>
+    /// <param name="onPasswordCorrect"> The action to call on correct password. </param>
+    /// <returns> The current instance of WalletPasswordVerification. </returns>
     public WalletPasswordVerification OnPasswordCorrect(Action<string> onPasswordCorrect)
     {
         this.onPasswordCorrect = onPasswordCorrect;
         return this;
     }
 
+    /// <summary>
+    /// Calls an action if the password is incorrect.
+    /// </summary>
+    /// <param name="onPasswordIncorrect"> The action to call on incorrect password. </param>
+    /// <returns> The current instance of WalletPasswordVerification. </returns>
     public WalletPasswordVerification OnPasswordIncorrect(Action onPasswordIncorrect)
     {
         this.onPasswordIncorrect = onPasswordIncorrect;
         return this;
     }
 
+    /// <summary>
+    /// Called if the password verified is correct.
+    /// </summary>
+    /// <param name="password"> The correct password. </param>
     private void PasswordCorrect(string password)
     {
         onPasswordCorrect?.Invoke(password);
     }
 
+    /// <summary>
+    /// Called if the password verified is incorrect.
+    /// </summary>
     private void PasswordIncorrect()
     {
         onPasswordIncorrect?.Invoke();
@@ -97,8 +122,5 @@ public sealed class WalletPasswordVerification
             passwordInputField.Error = true;
             passwordInputField.UpdateVisuals();
         }
-
-        if (viewPasswordButton != null)
-            viewPasswordButton.interactable = true;
     }
 }

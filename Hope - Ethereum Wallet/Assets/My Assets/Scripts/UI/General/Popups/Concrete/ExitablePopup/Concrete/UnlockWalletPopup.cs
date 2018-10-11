@@ -114,7 +114,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// </summary>
 	private void CheckPassword()
 	{
-        walletPasswordVerification.VerifyPassword(passwordField, null)
+        walletPasswordVerification.VerifyPassword(passwordField)
                                   .OnPasswordCorrect(CorrectPassword)
                                   .OnPasswordIncorrect(IncorrectPassword);
 	}
