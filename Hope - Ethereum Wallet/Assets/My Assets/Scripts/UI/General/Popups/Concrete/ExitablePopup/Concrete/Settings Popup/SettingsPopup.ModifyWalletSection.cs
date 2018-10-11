@@ -115,7 +115,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
                                       {
                                           nextButton.interactable = false;
                                           settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
-                                          settingsPopupAnimator.AnimateIcon(nextButton.transform.GetChild(0).gameObject);
                                       });
 		}
 
@@ -191,7 +190,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SavePasswordButtonClicked()
 		{
-			//Save new wallet name internally
+			//Change password internally
 
 			newPasswordField.Text = string.Empty;
 			confirmPasswordField.Text = string.Empty;
