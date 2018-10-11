@@ -14,8 +14,8 @@ using Zenject;
 /// </summary>
 public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup>, ITabButtonObservable, IEnterButtonObservable
 {
-	public Action OnPasswordEnteredIncorrect;
-	public Action<bool> AnimateLockedOutSection;
+	public event Action OnPasswordEnteredIncorrect;
+	public event Action<bool> AnimateLockedOutSection;
 
 	private Action popupClosed;
 
@@ -25,20 +25,20 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 
 	[SerializeField] private TextMeshProUGUI timerText;
 
-	private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
+    private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
+
+    private UIManager uiManager;
+    private UserWalletManager userWalletManager;
+    private HopeWalletInfoManager.Settings walletSettings;
+    private DynamicDataCache dynamicDataCache;
+    private ButtonClickObserver buttonClickObserver;
+
+    private bool checkingPassword;
 
 	/// <summary>
 	/// If the user is locked out from logging in or not
 	/// </summary>
 	public bool LockedOut { get; set; }
-
-	private UIManager uiManager;
-	private UserWalletManager userWalletManager;
-	private HopeWalletInfoManager.Settings walletSettings;
-	private DynamicDataCache dynamicDataCache;
-	private ButtonClickObserver buttonClickObserver;
-
-	private bool checkingPassword;
 
 	/// <summary>
 	/// Adds the required dependencies to this popup.
@@ -69,67 +69,19 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		}
 	}
 
-	/// <summary>
-	/// Updates the password field placeholder text with how many login attempts the user has before being locked out
-	/// </summary>
-	private void UpdatePlaceHolderText()
-	{
-		int currentLoginAttempt = SecurePlayerPrefs.GetInt("current login attempt");
-		int attemptsLeft = SecurePlayerPrefs.GetInt("max login attempts") - currentLoginAttempt + 1;
+    /// <summary>
+    /// Sets the popupClosed action to be called when the popup is closed
+    /// </summary>
+    /// <param name="popupClosed"> The finishing action </param>
+    public void SetOnCloseAction(Action popupClosed)
+    {
+        this.popupClosed = popupClosed;
+    }
 
-		if (currentLoginAttempt != 1)
-		{
-			string word = attemptsLeft == 1 ? " try " : " tries ";
-
-			passwordField.SetPlaceholderText("Password (" + attemptsLeft + word + "left)");
-		}
-	}
-
-	/// <summary>
-	/// Updates the timer text and checks to see if the user can be granted access to the password field again
-	/// </summary>
-	/// <returns> Returns one WaitForSeconds </returns>
-	private IEnumerator TimerChecker()
-	{
-		long currentTime, lastFailedAttempt;
-		long.TryParse(DateTimeUtils.GetCurrentUnixTime().ToString(), out currentTime);
-		long.TryParse(SecurePlayerPrefs.GetString("last failed login attempt"), out lastFailedAttempt);
-
-		if ((currentTime - lastFailedAttempt) >= 300)
-		{
-			SecurePlayerPrefs.SetInt("current login attempt", 1);
-			passwordField.SetPlaceholderText("Password");
-
-			if (LockedOut)
-			{
-				LockedOut = false;
-				passwordField.Text = string.Empty;
-				passwordField.UpdateVisuals();
-				passwordField.InputFieldBase.ActivateInputField();
-				AnimateLockedOutSection?.Invoke(false);
-			}
-		}
-		else
-		{
-			timerText.text = DateTimeUtils.GetAnalogTime(300 - (currentTime - lastFailedAttempt));
-		}
-
-		yield return waiter;
-
-		if (this != null)
-			TimerChecker().StartCoroutine();
-	}
-
-	/// <summary>
-	/// Sets the popupClosed action to be called when the popup is closed
-	/// </summary>
-	/// <param name="popupClosed"> The finishing action </param>
-	public void SetOnCloseAction(Action popupClosed) => this.popupClosed = popupClosed;
-
-	/// <summary>
-	/// Adds the button listener.
-	/// </summary>
-	protected override void OnStart()
+    /// <summary>
+    /// Adds the button listener.
+    /// </summary>
+    protected override void OnStart()
 	{
 		unlockWalletButton.onClick.AddListener(CheckPassword);
 	}
@@ -219,7 +171,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		if ((SecurePlayerPrefs.GetInt("max login attempts") - SecurePlayerPrefs.GetInt("current login attempt") + 1) == 0)
 		{
 			LockedOut = true;
-			AnimateLockedOutSection(true);
+			AnimateLockedOutSection?.Invoke(true);
 		}
 		else
 		{
@@ -228,11 +180,27 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		}
 	}
 
-	/// <summary>
-	/// Moves the cursor to the password input field when tab is pressed.
-	/// </summary>
-	/// <param name="clickType"> The tab button click type. </param>
-	public void TabButtonPressed(ClickType clickType)
+    /// <summary>
+    /// Updates the password field placeholder text with how many login attempts the user has before being locked out
+    /// </summary>
+    private void UpdatePlaceHolderText()
+    {
+        int currentLoginAttempt = SecurePlayerPrefs.GetInt("current login attempt");
+        int attemptsLeft = SecurePlayerPrefs.GetInt("max login attempts") - currentLoginAttempt + 1;
+
+        if (currentLoginAttempt != 1)
+        {
+            string word = attemptsLeft == 1 ? " try " : " tries ";
+
+            passwordField.SetPlaceholderText("Password (" + attemptsLeft + word + "left)");
+        }
+    }
+
+    /// <summary>
+    /// Moves the cursor to the password input field when tab is pressed.
+    /// </summary>
+    /// <param name="clickType"> The tab button click type. </param>
+    public void TabButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)
 			return;
@@ -255,4 +223,39 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		else if (!checkingPassword)
 			passwordField.InputFieldBase.SelectSelectable();
 	}
+
+    /// <summary>
+    /// Updates the timer text and checks to see if the user can be granted access to the password field again
+    /// </summary>
+    /// <returns> Returns one WaitForSeconds </returns>
+    private IEnumerator TimerChecker()
+    {
+        long currentTime, lastFailedAttempt;
+        long.TryParse(DateTimeUtils.GetCurrentUnixTime().ToString(), out currentTime);
+        long.TryParse(SecurePlayerPrefs.GetString("last failed login attempt"), out lastFailedAttempt);
+
+        if ((currentTime - lastFailedAttempt) >= 300)
+        {
+            SecurePlayerPrefs.SetInt("current login attempt", 1);
+            passwordField.SetPlaceholderText("Password");
+
+            if (LockedOut)
+            {
+                LockedOut = false;
+                passwordField.Text = string.Empty;
+                passwordField.UpdateVisuals();
+                passwordField.InputFieldBase.ActivateInputField();
+                AnimateLockedOutSection?.Invoke(false);
+            }
+        }
+        else
+        {
+            timerText.text = DateTimeUtils.GetAnalogTime(300 - (currentTime - lastFailedAttempt));
+        }
+
+        yield return waiter;
+
+        if (this != null)
+            TimerChecker().StartCoroutine();
+    }
 }
