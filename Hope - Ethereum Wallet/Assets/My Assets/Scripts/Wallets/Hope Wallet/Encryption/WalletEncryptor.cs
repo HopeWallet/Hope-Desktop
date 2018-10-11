@@ -1,12 +1,10 @@
 ﻿using Hope.Random;
 using Hope.Random.Bytes;
-using Hope.Security.HashGeneration;
 using Hope.Security.PBKDF2;
 using Hope.Security.PBKDF2.Engines.Blake2b;
 using Hope.Security.ProtectedTypes.Types;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -60,8 +58,6 @@ public sealed class WalletEncryptor : SecureObject
         Action<string[], string, string> onWalletEncrypted)
     {
         byte[] derivedPassword = playerPrefPassword.Derive(password.GetUTF8Bytes());
-
-        //AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword);
 
         string[] encryptedHashes = null;
         string saltedPasswordHash = null;

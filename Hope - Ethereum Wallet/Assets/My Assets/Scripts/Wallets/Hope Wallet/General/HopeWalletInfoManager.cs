@@ -46,7 +46,7 @@ public sealed class HopeWalletInfoManager
         SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count + 1);
 
         var encryptedWalletData = new WalletInfo.EncryptedDataContainer(encryptionHashes, encryptedSeed, passwordHash);
-        var walletInfo = new WalletInfo(encryptedWalletData, walletName, (string[][])walletAddresses.Clone(), wallets.Count);
+        var walletInfo = new WalletInfo(encryptedWalletData, walletName, (string[][])walletAddresses.Clone(), wallets.Count + 1);
 
         wallets.Add(walletInfo);
     }

@@ -1,9 +1,7 @@
 ﻿using Hope.Random;
-using Hope.Security.HashGeneration;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -39,11 +37,11 @@ public sealed class WalletDecryptor : SecureObject
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
     public void DecryptWallet(WalletInfo walletInfo, byte[] password, Action<byte[]> onWalletDecrypted)
     {
-        int walletNum = (int)dynamicDataCache.GetData("walletnum");
+        //int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
         MainThreadExecutor.QueueAction(() =>
         {
-            playerPrefPassword.PopulatePrefDictionary(walletNum);
+            playerPrefPassword.PopulatePrefDictionary(walletInfo.WalletNum);
 
             //string[] hashLvls = new string[2];
             //for (int i = 0; i < hashLvls.Length; i++)
@@ -55,7 +53,7 @@ public sealed class WalletDecryptor : SecureObject
                 walletInfo.EncryptedWalletData.EncryptionHashes,
                 walletInfo.EncryptedWalletData.EncryptedSeed,
                 password,
-                walletNum,
+                walletInfo.WalletNum,
                 onWalletDecrypted));
         });
     }
@@ -77,15 +75,13 @@ public sealed class WalletDecryptor : SecureObject
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);
 
-        //AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword);
-
         byte[] decryptedSeed = null;
         using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword)))
         {
             byte[] hash1 = dataEncryptor.Decrypt(hashes[0].GetBase64Bytes());
             byte[] hash2 = dataEncryptor.Decrypt(hashes[1].GetBase64Bytes());
 
-            decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, hash1), hash2).HexToByteArray();
+            decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, hash2), hash1).HexToByteArray();
 
             hash1.ClearBytes();
             hash2.ClearBytes();
