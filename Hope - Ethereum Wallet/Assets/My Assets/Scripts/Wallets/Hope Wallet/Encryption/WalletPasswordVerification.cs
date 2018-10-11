@@ -11,7 +11,7 @@ public sealed class WalletPasswordVerification
     private Action<string> onPasswordCorrect;
     private Action onPasswordIncorrect;
 
-    private readonly HopeWalletInfoManager.Settings walletSettings;
+    private readonly HopeWalletInfoManager hopeWalletInfoManager;
     private readonly DynamicDataCache dynamicDataCache;
 
     private HopeInputField passwordInputField;
@@ -24,11 +24,11 @@ public sealed class WalletPasswordVerification
     /// <summary>
     /// Initializes the WalletPasswordVerification instance with the wallet settings and data cache.
     /// </summary>
-    /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings. </param>
+    /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    public WalletPasswordVerification(HopeWalletInfoManager.Settings walletSettings, DynamicDataCache dynamicDataCache)
+    public WalletPasswordVerification(HopeWalletInfoManager hopeWalletInfoManager, DynamicDataCache dynamicDataCache)
     {
-        this.walletSettings = walletSettings;
+        this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.dynamicDataCache = dynamicDataCache;
     }
 
@@ -56,7 +56,7 @@ public sealed class WalletPasswordVerification
     /// <returns> The current instance of WalletPasswordVerification. </returns>
     public WalletPasswordVerification VerifyPassword(string password)
     {
-        var saltedHash = SecurePlayerPrefs.GetString(walletSettings.walletPasswordPrefName + (int)dynamicDataCache.GetData("walletnum"));
+        var saltedHash = hopeWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).EncryptedWalletData.PasswordHash;
         var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
 
         VerifyingPassword = true;

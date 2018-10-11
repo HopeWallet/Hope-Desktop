@@ -9,7 +9,7 @@ public abstract class WalletLoaderBase : SecureObject
     protected readonly PopupManager popupManager;
     protected readonly PlayerPrefPasswordDerivation playerPrefPassword;
     protected readonly DynamicDataCache dynamicDataCache;
-    protected readonly HopeWalletInfoManager userWalletInfoManager;
+    protected readonly HopeWalletInfoManager hopeWalletInfoManager;
 
     protected Action onWalletLoaded;
 
@@ -21,17 +21,17 @@ public abstract class WalletLoaderBase : SecureObject
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="playerPrefPassword"> The PlayerPrefPassword used to encrypt the wallet. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
+    /// <param name="hopeWalletInfoManager"> The active UserWalletInfoManager. </param>
     protected WalletLoaderBase(
         PopupManager popupManager,
         PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        HopeWalletInfoManager userWalletInfoManager)
+        HopeWalletInfoManager hopeWalletInfoManager)
     {
         this.popupManager = popupManager;
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
-        this.userWalletInfoManager = userWalletInfoManager;
+        this.hopeWalletInfoManager = hopeWalletInfoManager;
     }
 
     /// <summary>

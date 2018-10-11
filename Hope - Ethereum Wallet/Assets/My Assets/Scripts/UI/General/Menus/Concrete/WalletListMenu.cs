@@ -16,7 +16,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
-	private HopeWalletInfoManager walletInfoManager;
+	private HopeWalletInfoManager hopeWalletInfoManager;
 	private HopeWalletInfoManager.Settings walletSettings;
     private Settings settings;
 
@@ -30,32 +30,33 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// </summary>
     /// <param name="walletButtonFactory"> The factory for creating WalletButtons. </param>
     /// <param name="dynamicDataCache"> The active ByteDataCache. </param>
+    /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
     /// <param name="walletSettings"> The settings for the UserWallet. </param> 
     /// <param name="settings"> The settings of this menu. </param>
     [Inject]
     public void Construct(
         WalletButton.Factory walletButtonFactory,
         DynamicDataCache dynamicDataCache,
-		HopeWalletInfoManager walletInfoManager,
+		HopeWalletInfoManager hopeWalletInfoManager,
         HopeWalletInfoManager.Settings walletSettings,
         Settings settings)
     {
         this.walletButtonFactory = walletButtonFactory;
         this.dynamicDataCache = dynamicDataCache;
-		this.walletInfoManager = walletInfoManager;
+		this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.walletSettings = walletSettings;
         this.settings = settings;
     }
 
     /// <summary>
-    /// Creates WalletButtons for each wallet that exists currently in the PlayerPrefs.
+    /// Creates WalletButtons for each wallet that is currently saved.
     /// </summary>
     private void OnEnable()
     {
-        for (int i = 1; i <= SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName); i++)
+        for (int i = 1; i <= hopeWalletInfoManager.WalletCount; i++)
         {
             Wallets.Add(walletButtonFactory.Create()
-                   .SetButtonInfo(new WalletInfo(SecurePlayerPrefs.GetString(walletSettings.walletNamePrefName + i), null, i)).gameObject.transform.GetChild(0).gameObject);
+                   .SetButtonInfo(hopeWalletInfoManager.GetWalletInfo(i)).gameObject.transform.GetChild(0).gameObject);
         }
     }
 
