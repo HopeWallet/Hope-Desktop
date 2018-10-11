@@ -95,8 +95,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 		SecurePlayerPrefs.SetInt("idle time", 5);
 		SecurePlayerPrefs.SetBool("limit login attempts", true);
 		SecurePlayerPrefs.SetInt("max login attempts", 5);
-		SecurePlayerPrefs.SetInt("current login attempt", 1);
-		SecurePlayerPrefs.SetString("last failed login attempt", "0");
 
 		SecurePlayerPrefs.SetBool("two-factor authentication", false);
 		SecurePlayerPrefs.SetBool("2FA is set up", false);

@@ -35,15 +35,20 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// </summary>
 	public bool LockedOut { get; set; }
 
-    /// <summary>
-    /// Adds the required dependencies to this popup.
-    /// </summary>
-    /// <param name="uiManager"> The active UIManager. </param>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
-    /// <param name="walletPasswordVerification"> An instance of the WalletPasswordVerification class. </param>
-    [Inject]
+	/// <summary>
+	/// The wallet's name
+	/// </summary>
+	public string WalletName { get; private set; }
+
+	/// <summary>
+	/// Adds the required dependencies to this popup.
+	/// </summary>
+	/// <param name="uiManager"> The active UIManager. </param>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
+	/// <param name="buttonClickObserver"> The active ButtonClickObserver. </param>
+	/// <param name="walletPasswordVerification"> An instance of the WalletPasswordVerification class. </param>
+	[Inject]
 	public void Construct(
 		UIManager uiManager,
 		UserWalletManager userWalletManager,
@@ -56,22 +61,30 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		this.dynamicDataCache = dynamicDataCache;
 		this.buttonClickObserver = buttonClickObserver;
         this.walletPasswordVerification = walletPasswordVerification;
+	}
+
+	/// <summary>
+	/// Sets the wallet name and popupClosed action
+	/// </summary>
+	/// <param name="walletName"> The wallet name </param>
+	/// <param name="popupClosed"> The finishing action </param>
+	public void SetVariables(string walletName, Action popupClosed)
+    {
+		this.WalletName = walletName;
+		this.popupClosed = popupClosed;
 
 		if (SecurePlayerPrefs.GetBool("limit login attempts"))
 		{
+			if (!SecurePlayerPrefs.HasKey(walletName + "current login attempt"))
+				SecurePlayerPrefs.SetInt(walletName + "current login attempt", 1);
+
+			if (!SecurePlayerPrefs.HasKey(walletName + "last failed login attempt"))
+				SecurePlayerPrefs.SetString(walletName + "last failed login attempt", DateTimeUtils.GetCurrentUnixTime().ToString());
+
 			UpdatePlaceHolderText();
 			TimerChecker().StartCoroutine();
 		}
 	}
-
-    /// <summary>
-    /// Sets the popupClosed action to be called when the popup is closed
-    /// </summary>
-    /// <param name="popupClosed"> The finishing action </param>
-    public void SetOnCloseAction(Action popupClosed)
-    {
-        this.popupClosed = popupClosed;
-    }
 
     /// <summary>
     /// Adds the button listener.
@@ -130,7 +143,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		else
 			dynamicDataCache.SetData("pass", new ProtectedString(password));
 
-		SecurePlayerPrefs.SetInt("current login attempt", 1);
+		SecurePlayerPrefs.SetInt(WalletName + "current login attempt", 1);
 
 		userWalletManager.UnlockWallet();
 	}
@@ -145,16 +158,16 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 		if (!SecurePlayerPrefs.GetBool("limit login attempts"))
 			return;
 
-		SecurePlayerPrefs.SetInt("current login attempt", SecurePlayerPrefs.GetInt("current login attempt") + 1);
+		SecurePlayerPrefs.SetInt(WalletName + "current login attempt", SecurePlayerPrefs.GetInt(WalletName + "current login attempt") + 1);
+		SecurePlayerPrefs.SetString(WalletName + "last failed login attempt", DateTimeUtils.GetCurrentUnixTime().ToString());
 
-		if ((SecurePlayerPrefs.GetInt("max login attempts") - SecurePlayerPrefs.GetInt("current login attempt") + 1) == 0)
+		if ((SecurePlayerPrefs.GetInt("max login attempts") - SecurePlayerPrefs.GetInt(WalletName + "current login attempt") + 1) == 0)
 		{
 			LockedOut = true;
 			AnimateLockedOutSection?.Invoke(true);
 		}
 		else
 		{
-			SecurePlayerPrefs.SetString("last failed login attempt", DateTimeUtils.GetCurrentUnixTime().ToString());
 			UpdatePlaceHolderText();
 		}
 	}
@@ -164,7 +177,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     /// </summary>
     private void UpdatePlaceHolderText()
     {
-        int currentLoginAttempt = SecurePlayerPrefs.GetInt("current login attempt");
+        int currentLoginAttempt = SecurePlayerPrefs.GetInt(WalletName + "current login attempt");
         int attemptsLeft = SecurePlayerPrefs.GetInt("max login attempts") - currentLoginAttempt + 1;
 
         if (currentLoginAttempt != 1)
@@ -211,11 +224,11 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
     {
         long currentTime, lastFailedAttempt;
         long.TryParse(DateTimeUtils.GetCurrentUnixTime().ToString(), out currentTime);
-        long.TryParse(SecurePlayerPrefs.GetString("last failed login attempt"), out lastFailedAttempt);
+        long.TryParse(SecurePlayerPrefs.GetString(WalletName + "last failed login attempt"), out lastFailedAttempt);
 
         if ((currentTime - lastFailedAttempt) >= 300)
         {
-            SecurePlayerPrefs.SetInt("current login attempt", 1);
+            SecurePlayerPrefs.SetInt(WalletName + "current login attempt", 1);
             passwordField.SetPlaceholderText("Password");
 
             if (LockedOut)

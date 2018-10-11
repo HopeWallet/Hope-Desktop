@@ -13,6 +13,8 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
     private PopupManager popupManager;
     private DynamicDataCache dynamicDataCache;
 
+	private string fullWalletName;
+
 	private readonly Color PURE_WHITE = new Color(1f, 1f, 1f);
 
     /// <summary>
@@ -40,7 +42,11 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 	/// Updates the name of the wallet with the WalletInfo object.
 	/// </summary>
 	/// <param name="info"> The WalletInfo of this WalletButton. </param>
-	protected override void OnValueUpdated(WalletInfo info) => walletNameText.text = info.WalletName?.LimitEnd(20, "...");
+	protected override void OnValueUpdated(WalletInfo info)
+	{
+		fullWalletName = info.WalletName;
+		walletNameText.text = fullWalletName?.LimitEnd(20, "...");
+	}
 
 	/// <summary>
 	/// Sets the wallet num in the data cache and opens the <see cref="UnlockWalletPopup"/>.
@@ -51,6 +57,10 @@ public sealed class WalletButton : InfoButton<WalletButton, WalletInfo>
 		walletNameText.gameObject.AnimateColor(PURE_WHITE, 0.15f);
 
 		dynamicDataCache.SetData("walletnum", ButtonInfo.WalletNum);
-		popupManager.GetPopup<UnlockWalletPopup>().SetOnCloseAction(() => { Button.interactable = true; walletNameText.gameObject.AnimateColor(UIColors.White, 0.15f); });
+		popupManager.GetPopup<UnlockWalletPopup>().SetVariables(fullWalletName, () => 
+		{
+			Button.interactable = true;
+			walletNameText.gameObject.AnimateColor(UIColors.White, 0.15f);
+		});
 	}
 }

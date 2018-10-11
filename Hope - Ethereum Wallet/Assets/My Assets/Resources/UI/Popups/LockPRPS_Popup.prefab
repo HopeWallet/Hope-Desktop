@@ -1309,7 +1309,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Unable to Lock
-  infoText: Message to be created on google doc...
+  infoText: Make sure all possible inputs are filled in correctly, and are not providing
+    any errors.
   itemWidth: 250
   infoIcon: 0
 --- !u!114 &114178843159023534
@@ -2705,7 +2706,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Transaction Speed
-  infoText: Message to be created on google doc...
+  infoText: This is where you can set your gas price. The greater the gas price, the
+    faster the transaction will go through, and vice versa.
   itemWidth: 20
   infoIcon: 1
 --- !u!114 &114492802312943286
@@ -5261,7 +5263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 122.2, y: 32.37372}
+  m_AnchoredPosition: {x: 120.6, y: 32.1}
   m_SizeDelta: {x: 24, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224620152638376046
