@@ -34,9 +34,10 @@ public sealed class WalletDecryptor : SecureObject
     /// <summary>
     /// Decrypts the wallet given the user's password.
     /// </summary>
+    /// <param name="walletInfo"> The wallet to decrypt. </param>
     /// <param name="password"> The user's password to the wallet. </param>
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
-    public void DecryptWallet(byte[] password, Action<byte[]> onWalletDecrypted)
+    public void DecryptWallet(WalletInfo walletInfo, byte[] password, Action<byte[]> onWalletDecrypted)
     {
         int walletNum = (int)dynamicDataCache.GetData("walletnum");
 
@@ -44,13 +45,18 @@ public sealed class WalletDecryptor : SecureObject
         {
             playerPrefPassword.PopulatePrefDictionary(walletNum);
 
-            string[] hashLvls = new string[4];
-            for (int i = 0; i < hashLvls.Length; i++)
-                hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
+            //string[] hashLvls = new string[2];
+            //for (int i = 0; i < hashLvls.Length; i++)
+            //    hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
 
-            string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
+            //string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
 
-            Task.Factory.StartNew(() => AsyncDecryptWallet(hashLvls, encryptedSeed, password, walletNum, onWalletDecrypted));
+            Task.Factory.StartNew(() => AsyncDecryptWallet(
+                walletInfo.EncryptedWalletData.EncryptionHashes,
+                walletInfo.EncryptedWalletData.EncryptedSeed,
+                password,
+                walletNum,
+                onWalletDecrypted));
         });
     }
 
@@ -71,28 +77,18 @@ public sealed class WalletDecryptor : SecureObject
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);
 
-        AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(
-                new Blake2bDigest(512),
-                walletSettings.walletCountPrefName,
-                walletSettings.walletDataPrefName,
-                walletSettings.walletEncryptionEntropy,
-                walletSettings.walletHashLvlPrefName,
-                walletSettings.walletInfoPrefName,
-                walletSettings.walletNamePrefName,
-                walletSettings.walletPasswordPrefName,
-                walletNum,
-                derivedPassword);
+        //AdvancedSecureRandom secureRandom = new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword);
 
         byte[] decryptedSeed = null;
-        using (var dataEncryptor = new DataEncryptor(secureRandom))
+        using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword)))
         {
-            byte[] lvl1EncryptHash = dataEncryptor.Decrypt(hashes[0].GetBase64Bytes()).Concat(dataEncryptor.Decrypt(hashes[1].GetBase64Bytes())).ToArray().SHA3_512();
-            byte[] lvl2EncryptHash = dataEncryptor.Decrypt(hashes[2].GetBase64Bytes()).Concat(dataEncryptor.Decrypt(hashes[3].GetBase64Bytes())).ToArray().SHA3_512();
+            byte[] hash1 = dataEncryptor.Decrypt(hashes[0].GetBase64Bytes());
+            byte[] hash2 = dataEncryptor.Decrypt(hashes[1].GetBase64Bytes());
 
-            decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, lvl2EncryptHash), lvl1EncryptHash).HexToByteArray();
+            decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, hash1), hash2).HexToByteArray();
 
-            lvl1EncryptHash.ClearBytes();
-            lvl2EncryptHash.ClearBytes();
+            hash1.ClearBytes();
+            hash2.ClearBytes();
         }
 
         onWalletDecrypted?.Invoke(decryptedSeed);

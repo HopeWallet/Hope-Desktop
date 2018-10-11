@@ -38,10 +38,17 @@ public sealed class HopeWalletInfoManager
     /// </summary>
     /// <param name="walletName"> The name of the wallet. </param>
     /// <param name="walletAddresses"> The array of addresses associated with the wallet. </param>
-    public void AddWalletInfo(string walletName, string[][] walletAddresses)
+    /// <param name="encryptionHashes"> The encrypted hashes used to encrypt the seed of the wallet. </param>
+    /// <param name="encryptedSeed"> The encrypted wallet seed. </param>
+    /// <param name="passwordHash"> The pbkdf2 password hash of the password used to encrypt the wallet. </param>
+    public void AddWalletInfo(string walletName, string[][] walletAddresses, string[] encryptionHashes, string encryptedSeed, string passwordHash)
     {
         SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count + 1);
-        wallets.Add(new WalletInfo(walletName, (string[][])walletAddresses.Clone(), wallets.Count));
+
+        var encryptedWalletData = new WalletInfo.EncryptedDataContainer(encryptionHashes, encryptedSeed, passwordHash);
+        var walletInfo = new WalletInfo(encryptedWalletData, walletName, (string[][])walletAddresses.Clone(), wallets.Count);
+
+        wallets.Add(walletInfo);
     }
 
     /// <summary>

@@ -33,7 +33,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <param name="userPass"> The password to attempt to unlock the wallet with. </param>
     protected override void LoadWallet(string userPass)
     {
-        var walletInfo = userWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum"));
+        var walletInfo = hopeWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum"));
 
         AssignAddresses(walletInfo.WalletAddresses[0], walletInfo.WalletAddresses[1]);
 

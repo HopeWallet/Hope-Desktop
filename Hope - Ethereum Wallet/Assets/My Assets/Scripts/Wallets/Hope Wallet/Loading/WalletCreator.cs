@@ -42,22 +42,22 @@ public sealed class WalletCreator : WalletLoaderBase
     /// <summary>
     /// Method used to finalize the wallet creation by saving all the data to the SecurePlayerPrefs.
     /// </summary>
-    /// <param name="encryptedHashes"> The hashes used to encrypt the wallet. </param>
-    /// <param name="saltedPasswordHash"> The pbkdf2 salted password hash. </param>
+    /// <param name="encryptionHashes"> The hashes used to encrypt the wallet. </param>
+    /// <param name="passwordHash"> The pbkdf2 salted password hash. </param>
     /// <param name="encryptedSeed"> The encrypted wallet seed. </param>
-    private void FinalizeWalletCreation(string[] encryptedHashes, string saltedPasswordHash, string encryptedSeed)
+    private void FinalizeWalletCreation(string[] encryptionHashes, string passwordHash, string encryptedSeed)
     {
         int walletNum = SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1;
         dynamicDataCache.SetData("walletnum", walletNum);
 
-        userWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses);
+        hopeWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses, encryptionHashes, encryptedSeed, passwordHash);
 
-        SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, saltedPasswordHash);
+        SecurePlayerPrefs.SetString(walletSettings.walletPasswordPrefName + walletNum, passwordHash);
         SecurePlayerPrefs.SetString(walletSettings.walletDataPrefName + walletNum, encryptedSeed);
         SecurePlayerPrefs.SetString(walletSettings.walletNamePrefName + walletNum, dynamicDataCache.GetData("name"));
 
-        for (int i = 0; i < encryptedHashes.Length; i++)
-            SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptedHashes[i]);
+        for (int i = 0; i < encryptionHashes.Length; i++)
+            SecurePlayerPrefs.SetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1), encryptionHashes[i]);
 
         playerPrefPassword.SetupPlayerPrefs(walletNum, onWalletLoaded);
 
@@ -80,19 +80,12 @@ public sealed class WalletCreator : WalletLoaderBase
     /// <param name="password"> The password that was entered by the user. </param>
     private void TryCredentials(string password)
     {
-        if (string.IsNullOrEmpty(password) || password.Length < 8)
-        {
-            ExceptionManager.DisplayException(new Exception("Invalid wallet password. Please use a password with more than 8 characters!"));
-            return;
-        }
-
         try
         {
-            AssignAddresses(
-                new Wallet((byte[])dynamicDataCache.GetData("seed"), Wallet.DEFAULT_PATH).GetAddresses(50),
-                new Wallet((byte[])dynamicDataCache.GetData("seed"), Wallet.ELECTRUM_LEDGER_PATH).GetAddresses(50));
+            byte[] seed = (byte[])dynamicDataCache.GetData("seed");
 
-            walletEncryptor.EncryptWallet((byte[])dynamicDataCache.GetData("seed"), password, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
+            AssignAddresses(new Wallet(seed, Wallet.DEFAULT_PATH).GetAddresses(50), new Wallet(seed, Wallet.ELECTRUM_LEDGER_PATH).GetAddresses(50));
+            walletEncryptor.EncryptWallet(seed, password, SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) + 1, FinalizeWalletCreation);
         }
         catch (Exception e)
         {
