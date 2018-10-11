@@ -9,6 +9,11 @@ public sealed class HopeWalletInfoManager
     private readonly Settings walletSettings;
 
     /// <summary>
+    /// The current wallet count.
+    /// </summary>
+    public int WalletCount => wallets.Count;
+
+    /// <summary>
     /// Initializes the UserWalletInfoManager.
     /// </summary>
     /// <param name="walletSettings"> The settings of the UserWallet. </param>
