@@ -1,10 +1,7 @@
 ﻿using Hope.Random.Bytes;
-using Hope.Security.PBKDF2;
-using Hope.Security.PBKDF2.Engines.Blake2b;
 using Hope.Security.ProtectedTypes.Types;
 using System;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -28,7 +25,6 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
 
-
     /// <summary>
     /// Sets the necessary dependencies
     /// </summary>
@@ -51,7 +47,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
         this.logoutHandler = logoutHandler;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
-        
+
         walletName.text = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
 
         SetMessageText();
@@ -73,12 +69,18 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     /// <summary>
     /// Subscribes the buttonClickObserver
     /// </summary>
-    private void OnEnable() => buttonClickObserver.SubscribeObservable(this);
+    private void OnEnable()
+    {
+        buttonClickObserver.SubscribeObservable(this);
+    }
 
     /// <summary>
     /// Unsubscribes the buttonClickObserver
     /// </summary>
-    private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
+    private void OnDisable()
+    {
+        buttonClickObserver.UnsubscribeObservable(this);
+    }
 
     /// <summary>
     /// Sets the main message text
@@ -86,15 +88,9 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     private void SetMessageText()
     {
         int idleTime = SecurePlayerPrefs.GetInt("idle time");
-        string minuteWord;
+        string minuteWord = idleTime == 1 ? " minute." : " minutes.";
 
-        if (idleTime == 1)
-            minuteWord = " minute.";
-        else
-            minuteWord = " minutes.";
-
-        messageText.text = "You have been idle for " + idleTime + minuteWord + Environment.NewLine +
-			" Please re-enter your password or go back to the main menu.";
+        messageText.text = $"You have been idle for {idleTime}{minuteWord}{Environment.NewLine} Please re-enter your password or go back to the main menu.";
     }
 
     /// <summary>
