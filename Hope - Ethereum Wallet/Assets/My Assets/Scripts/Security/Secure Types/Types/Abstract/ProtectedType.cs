@@ -113,6 +113,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
             if (byteValue == null || byteValue.Length == 0)
                 throw new ArgumentNullException("Invalid value to protect!");
 
+            protectedData?.ClearBytes();
             protectedData = memoryEncryptor.Encrypt(byteValue);
         }
 
