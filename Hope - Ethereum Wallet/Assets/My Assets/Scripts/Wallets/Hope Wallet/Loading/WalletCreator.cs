@@ -1,5 +1,4 @@
 ﻿using Nethereum.HdWallet;
-using System;
 
 /// <summary>
 /// Class used to create a new hope wallet.

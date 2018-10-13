@@ -13,6 +13,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	/// </summary>
 	public sealed class WalletNameSection
 	{
+        public static event Action OnWalletNameChanged;
+
 		private readonly GameObject currentPasswordSection, walletNameSection, loadingIcon;
 		private readonly HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField;
 		private readonly Button nextButton, saveButton;
@@ -24,7 +26,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private readonly DynamicDataCache dynamicDataCache;
 		private readonly SettingsPopupAnimator settingsPopupAnimator;
 
-		private readonly string walletName;
+        private readonly WalletInfo walletInfo;
 
 		public WalletNameSection(
 			HopeWalletInfoManager hopeWalletInfoManager,
@@ -58,7 +60,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.saveButton = saveButton;
 			this.hopeOnlyCategoryButtons = hopeOnlyCategoryButtons;
 
-			walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
+            walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress());
 			SetListeners();
 		}
 
@@ -71,7 +73,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			nextButton.onClick.AddListener(EditWalletButtonClicked);
 
 			currentWalletNameField.Error = false;
-			currentWalletNameField.Text = walletName;
+			currentWalletNameField.Text = walletInfo.WalletName;
 			newWalletNameField.OnInputUpdated += WalletNameFieldChanged;
 			saveButton.onClick.AddListener(SaveWalletNameClicked);
 		}
@@ -154,11 +156,15 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SaveWalletNameClicked()
 		{
-			//Save new wallet name internally
+            hopeWalletInfoManager.UpdateWalletInfo(
+                walletInfo.WalletNum,
+                new WalletInfo(walletInfo.EncryptedWalletData, newWalletNameField.Text, walletInfo.WalletAddresses, walletInfo.WalletNum));
 
 			currentWalletNameField.Text = newWalletNameField.Text;
 			newWalletNameField.Text = string.Empty;
 			settingsPopupAnimator.AnimateIcon(saveButton.transform.GetChild(0).gameObject);
+
+            OnWalletNameChanged?.Invoke();
 		}
 	}
 }

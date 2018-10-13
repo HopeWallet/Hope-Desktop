@@ -87,37 +87,45 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	/// Starts the token load, sets up the wallet name text, and starts the IdleTimeoutManager.
 	/// </summary>
 	private void OnEnable()
-	{
-		tokenContractManager.StartTokenLoad(OpenMenu);
+    {
+        tokenContractManager.StartTokenLoad(OpenMenu);
 
-		walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
-			? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
-			: userWalletManager.ActiveWalletType.ToString();
+        UpdateWalletName();
 
-		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
-		{
-			SetUpWalletType(hopeLogo);
-			idleTimeoutManager = new IdleTimeoutManager(uiManager);
-		}
-		else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
-		{
-			SetUpWalletType(ledgerLogo);
-		}
-		else
-		{
-			SetUpWalletType(trezorLogo);
-		}
+        if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
+        {
+            SetUpWalletType(hopeLogo);
+            idleTimeoutManager = new IdleTimeoutManager(uiManager);
+        }
+        else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
+        {
+            SetUpWalletType(ledgerLogo);
+        }
+        else
+        {
+            SetUpWalletType(trezorLogo);
+        }
 
-		UpdateAssetUI();
+        UpdateAssetUI();
         AccountChanged(userWalletManager.AccountNumber);
         ReloadNetWorth();
     }
 
-	/// <summary>
-	/// Sets up the corresponding logo with the active wallet type
-	/// </summary>
-	/// <param name="walletLogo"> The corresponding wallet logo </param>
-	private void SetUpWalletType(Button walletLogo)
+    /// <summary>
+    /// Updates the wallet name text.
+    /// </summary>
+    private void UpdateWalletName()
+    {
+        walletNameText.text = userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope
+            ? hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName
+            : userWalletManager.ActiveWalletType.ToString();
+    }
+
+    /// <summary>
+    /// Sets up the corresponding logo with the active wallet type
+    /// </summary>
+    /// <param name="walletLogo"> The corresponding wallet logo </param>
+    private void SetUpWalletType(Button walletLogo)
 	{
 		walletLogo.gameObject.SetActive(true);
 		pendingTransactionManager = new PendingTransactionManager(ethereumPendingTransactionManager, userWalletManager, pendingTransactionSection, walletLogo);
@@ -150,6 +158,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private void Start()
     {
         AccountsPopup.OnAccountChanged += AccountChanged;
+        SettingsPopup.WalletNameSection.OnWalletNameChanged += UpdateWalletName;
         tradableAssetManager.OnBalancesUpdated += UpdateAssetUI;
         lockedPrpsManager.OnLockedPRPSUpdated += UpdateAssetUI;
 

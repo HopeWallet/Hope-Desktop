@@ -37,17 +37,9 @@ public sealed class WalletDecryptor : SecureObject
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
     public void DecryptWallet(WalletInfo walletInfo, byte[] password, Action<byte[]> onWalletDecrypted)
     {
-        //int walletNum = (int)dynamicDataCache.GetData("walletnum");
-
         MainThreadExecutor.QueueAction(() =>
         {
             playerPrefPassword.PopulatePrefDictionary(walletInfo.WalletNum);
-
-            //string[] hashLvls = new string[2];
-            //for (int i = 0; i < hashLvls.Length; i++)
-            //    hashLvls[i] = SecurePlayerPrefs.GetString(walletNum + walletSettings.walletHashLvlPrefName + (i + 1));
-
-            //string encryptedSeed = SecurePlayerPrefs.GetString(walletSettings.walletDataPrefName + walletNum);
 
             Task.Factory.StartNew(() => AsyncDecryptWallet(
                 walletInfo.EncryptedWalletData.EncryptionHashes,
