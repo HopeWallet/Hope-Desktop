@@ -96,6 +96,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			walletPasswordVerification.VerifyPassword(currentPasswordField).OnPasswordCorrect(_ =>
 									{
+                                        if (nextButton == null)
+                                            return;
+
 										settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
 										currentPasswordSection.AnimateScale(0f, 0.15f, () => walletNameSection.AnimateScale(1f, 0.15f));
 										hopeOnlyCategoryButtons[2].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Wallet Name";
@@ -104,6 +107,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 									})
 									.OnPasswordIncorrect(() =>
 									{
+                                        if (nextButton == null)
+                                            return;
+
 										nextButton.interactable = false;
 										settingsPopupAnimator.VerifyingPassword(nextButton.gameObject, loadingIcon, false);
 									});
