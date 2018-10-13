@@ -35,6 +35,8 @@ public class HopeInputField : MonoBehaviour
 
 	public bool Error { get; set; }
 
+	//public bool IsPassword { get; private set; }
+
 	/// <summary>
 	/// Sets the variables and inputfield listener
 	/// </summary>
@@ -52,6 +54,8 @@ public class HopeInputField : MonoBehaviour
 
 		Error = true;
 		Text = string.Empty;
+
+		//IsPassword = inputFieldBase.inputType == InputField.InputType.Password;
 	}
 
 	/// <summary>

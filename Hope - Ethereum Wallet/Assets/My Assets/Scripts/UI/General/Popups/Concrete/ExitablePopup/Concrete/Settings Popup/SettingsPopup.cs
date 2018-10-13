@@ -110,7 +110,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, contactsManager, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, currentPasswordloadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
 
-			passwordSection = new PasswordSection(settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton);
+			passwordSection = new PasswordSection(settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton, newPasswordLoadingIcon);
 		}
 		else
         {
