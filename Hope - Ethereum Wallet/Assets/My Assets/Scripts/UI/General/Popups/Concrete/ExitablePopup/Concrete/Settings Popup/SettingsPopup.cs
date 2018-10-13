@@ -23,18 +23,21 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private HopeInputField codeInputField;
 	[SerializeField] private Button confirmButton;
 
-	[SerializeField] private GameObject currentPasswordSection, walletDetailsSection, loadingIcon;
+	[SerializeField] private GameObject currentPasswordSection, changeWalletNameSection, loadingIcon;
 	[SerializeField] private HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
 	[SerializeField] private Button nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
 	[SerializeField] private GameObject[] hopeOnlyCategoryButtons;
 	[SerializeField] private GameObject[] categoryLines;
 
+	private string walletName;
+
 	private readonly List<Selectable> selectables = new List<Selectable>();
 
 	private SecuritySection securitySection;
     private TwoFactorAuthenticationSection twoFactorAuthenticationSection;
-	private ModifyWalletSection modifyWalletSection;
+	private WalletNameSection walletNameSection;
+	private PasswordSection passwordSection;
 
 	private UserWalletManager userWalletManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
@@ -79,12 +82,15 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		buttonClickObserver.SubscribeObservable(this);
 		defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
+
+		walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
+		deleteWalletButton.onClick.AddListener(() => popupManager.GetPopup<GeneralOkCancelPopup>(true).SetSubText("Are you sure you want to delete " + walletName + "?").OnOkClicked(() => logoutHandler.Logout()));
 	}
 
 	/// <summary>
 	/// Sets the other partial classes and other necessary variables
 	/// </summary>
-    protected override void OnStart()
+	protected override void OnStart()
     {
         base.OnStart();
 
@@ -96,7 +102,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField);
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			modifyWalletSection = new ModifyWalletSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, popupManager, logoutHandler, currentPasswordSection, walletDetailsSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField, nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton);
+			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
+			passwordSection = new PasswordSection(settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton);
 		}
 		else
         {
@@ -107,7 +114,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			categoryLines[1].SetActive(false);
 		}
 
-		selectables.Add(newWalletNameField.InputFieldBase);
 		selectables.Add(newPasswordField.InputFieldBase);
 		selectables.Add(confirmPasswordField.InputFieldBase);
 	}
