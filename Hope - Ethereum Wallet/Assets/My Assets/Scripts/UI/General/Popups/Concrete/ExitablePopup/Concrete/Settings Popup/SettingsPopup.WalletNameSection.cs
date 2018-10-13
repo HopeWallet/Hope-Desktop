@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private readonly HopeWalletInfoManager hopeWalletInfoManager;
 		private readonly HopeWalletInfoManager.Settings walletSettings;
 		private readonly WalletPasswordVerification walletPasswordVerification;
+        private readonly ContactsManager contactsManager;
 		private readonly DynamicDataCache dynamicDataCache;
 		private readonly SettingsPopupAnimator settingsPopupAnimator;
 
@@ -32,6 +34,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			HopeWalletInfoManager hopeWalletInfoManager,
 			HopeWalletInfoManager.Settings walletSettings,
 			WalletPasswordVerification walletPasswordVerification,
+            ContactsManager contactsManager,
 			DynamicDataCache dynamicDataCache,
 			UserWalletManager userWalletManager,
 			SettingsPopupAnimator settingsPopupAnimator,
@@ -48,6 +51,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.walletSettings = walletSettings;
 			this.walletPasswordVerification = walletPasswordVerification;
+            this.contactsManager = contactsManager;
 			this.dynamicDataCache = dynamicDataCache;
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.currentPasswordSection = currentPasswordSection;
@@ -156,6 +160,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SaveWalletNameClicked()
 		{
+            var contactList = contactsManager.ContactList;
+            var sameNameContacts = contactList.Where(contact => contact.ContactName.Equals(walletInfo.WalletName)).ToList();
+
+            sameNameContacts.ForEach(contact => contactList[contactList.IndexOf(contact)] = new ContactInfo(contact.ContactAddress, newWalletNameField.Text));
+
             hopeWalletInfoManager.UpdateWalletInfo(
                 walletInfo.WalletNum,
                 new WalletInfo(walletInfo.EncryptedWalletData, newWalletNameField.Text, walletInfo.WalletAddresses, walletInfo.WalletNum));

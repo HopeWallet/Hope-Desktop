@@ -72,7 +72,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		this.WalletName = walletName;
 		this.popupClosed = popupClosed;
-		formTitle.text = walletName.LimitEnd(17, "...");
+		formTitle.text = $"Unlock <size=90%>'{walletName.LimitEnd(17, "...")}'</size>";
 	}
 
 	/// <summary>

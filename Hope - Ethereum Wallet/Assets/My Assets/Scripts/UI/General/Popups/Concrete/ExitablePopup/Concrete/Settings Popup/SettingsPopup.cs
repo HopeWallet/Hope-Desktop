@@ -43,6 +43,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     private HopeWalletInfoManager hopeWalletInfoManager;
     private HopeWalletInfoManager.Settings walletSettings;
     private WalletPasswordVerification walletPasswordVerification;
+    private ContactsManager contactsManager;
     private DynamicDataCache dynamicDataCache;
     private ButtonClickObserver buttonClickObserver;
     private CurrencyManager currencyManager;
@@ -56,6 +57,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
     /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings. </param>
     /// <param name="walletPasswordVerification"> An instance of WalletPasswordVerification. </param>
+    /// <param name="contactsManager"> The active ContactsManager. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
     /// <param name="buttonClickObserver"> The active ButtonClickObserver </param>
     /// <param name="currencyManager"> The active CurrencyManager </param>
@@ -66,6 +68,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         HopeWalletInfoManager hopeWalletInfoManager,
         HopeWalletInfoManager.Settings walletSettings,
         WalletPasswordVerification walletPasswordVerification,
+        ContactsManager contactsManager,
         DynamicDataCache dynamicDataCache,
         ButtonClickObserver buttonClickObserver,
         CurrencyManager currencyManager,
@@ -75,6 +78,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.walletSettings = walletSettings;
         this.walletPasswordVerification = walletPasswordVerification;
+        this.contactsManager = contactsManager;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
         this.currencyManager = currencyManager;
@@ -101,8 +105,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
 			securitySection = new SecuritySection(idleTimeoutTimeCheckbox, loginAttemptsCheckbox, idleTimeoutTimeInputField, loginAttemptsInputField);
+
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
-			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
+
+			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, contactsManager, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
+
 			passwordSection = new PasswordSection(settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton);
 		}
 		else
