@@ -7,7 +7,7 @@ using UnityEngine;
 public sealed class SettingsPopupAnimator : PopupAnimator
 {
 	public Action<GameObject> AnimateIcon;
-	public Action<GameObject, GameObject, bool> VerifyingPassword;
+	public Action<GameObject, GameObject, bool> ShowLoadingIcon;
 
 	[SerializeField] private GameObject settingsCategoriesParent;
 	[SerializeField] private GameObject line1, line2, line3;
@@ -22,7 +22,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	private void Awake()
 	{
 		AnimateIcon = AnimateCheckmark;
-		VerifyingPassword = AnimateLoadingIcon;
+		ShowLoadingIcon = AnimateLoadingIcon;
 
 		settingsCategories = settingsCategoriesParent.GetComponent<IconButtons>();
 		settingsCategories.OnButtonChanged += CategoryChanged;

@@ -23,7 +23,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	[SerializeField] private HopeInputField codeInputField;
 	[SerializeField] private Button confirmButton;
 
-	[SerializeField] private GameObject currentPasswordSection, changeWalletNameSection, loadingIcon;
+	[SerializeField] private GameObject currentPasswordSection, changeWalletNameSection, currentPasswordloadingIcon, newPasswordLoadingIcon;
 	[SerializeField] private HopeInputField currentPasswordField, currentWalletNameField, newWalletNameField, newPasswordField, confirmPasswordField;
 	[SerializeField] private Button nextButton, saveWalletNameButton, savePasswordButton, deleteWalletButton;
 
@@ -108,7 +108,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
             twoFactorAuthenticationSection = new TwoFactorAuthenticationSection(twoFactorAuthCheckbox, setUpSection, keyText, qrCodeImage, codeInputField, confirmButton);
 
-			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, contactsManager, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, loadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
+			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletSettings, walletPasswordVerification, contactsManager, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, currentPasswordloadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
 
 			passwordSection = new PasswordSection(settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton);
 		}

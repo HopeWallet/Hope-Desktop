@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The popup that manages the modification of user's settings and preferences
@@ -12,6 +13,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	{
 		private readonly HopeInputField newPasswordField, confirmPasswordField;
 		private readonly Button saveButton;
+		private readonly GameObject loadingIcon;
 
 		private readonly SettingsPopupAnimator settingsPopupAnimator;
 
@@ -19,12 +21,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			SettingsPopupAnimator settingsPopupAnimator,
 			HopeInputField newPasswordField,
 			HopeInputField confirmPasswordField,
-			Button saveButton)
+			Button saveButton,
+			GameObject loadingIcon)
 		{
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.newPasswordField = newPasswordField;
 			this.confirmPasswordField = confirmPasswordField;
 			this.saveButton = saveButton;
+			this.loadingIcon = loadingIcon;
 
 			newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();
@@ -57,10 +61,14 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SavePasswordButtonClicked()
 		{
+			settingsPopupAnimator.ShowLoadingIcon(saveButton.gameObject, loadingIcon, true);
+
 			//Change password internally
 
+			//WHEN IT IS FINISHED:
 			newPasswordField.Text = string.Empty;
 			confirmPasswordField.Text = string.Empty;
+			settingsPopupAnimator.ShowLoadingIcon(saveButton.gameObject, loadingIcon, false);
 			settingsPopupAnimator.AnimateIcon(saveButton.transform.GetChild(0).gameObject);
 		}
 	}
