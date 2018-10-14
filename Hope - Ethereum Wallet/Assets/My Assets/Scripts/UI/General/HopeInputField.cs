@@ -25,7 +25,7 @@ public class HopeInputField : MonoBehaviour
 
 	public InputField InputFieldBase => inputFieldBase;
 
-	private string characterPlaceholders = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
+	private readonly string characterPlaceholders = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
 
 	public string Text
 	{
@@ -200,9 +200,6 @@ public class HopeInputField : MonoBehaviour
 					}
 				}
 
-				//firstIndexRemoved.Log();
-				//numberOfCharactersRemoved.Log();
-
 				for (int i = 0; i < numberOfCharactersRemoved; i++)
 					Bytes.RemoveAt(firstIndexRemoved);
 			}
@@ -223,9 +220,6 @@ public class HopeInputField : MonoBehaviour
 				Bytes = newByteList;
 			}
 		}
-
-		//Bytes.GetUTF8String().Log();
-		//Bytes.ToArray().LogArray();
 	}
 
 	/// <summary>
