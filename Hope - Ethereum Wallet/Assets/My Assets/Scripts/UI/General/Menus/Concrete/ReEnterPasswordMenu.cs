@@ -99,7 +99,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     /// <param name="text"> The current text in the input field </param>
     private void PasswordFieldChanged(string text)
     {
-        passwordField.Error = string.IsNullOrEmpty(text);
+        passwordField.Error = string.IsNullOrEmpty(passwordField.InputFieldBase.text);
         unlockButton.interactable = !passwordField.Error;
     }
 
