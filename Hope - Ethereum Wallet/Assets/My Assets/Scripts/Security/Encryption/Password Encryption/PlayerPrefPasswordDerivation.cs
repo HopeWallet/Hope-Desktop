@@ -42,7 +42,6 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
         }
 
         derivedSeed = derivedSeed.Concat(startingPassword.Blake2_512()).ToArray();
-        startingPassword.ClearBytes();
 
         return derivedSeed.Blake2_512();
     }
@@ -67,7 +66,6 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
         }
 
         derivedSeed = derivedSeed.Concat(startingPassword.Blake2_512()).ToArray();
-        startingPassword.ClearBytes();
 
         return derivedSeed.Blake2_512();
     }

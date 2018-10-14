@@ -33,11 +33,32 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         }
 
         /// <summary>
+        /// Initializes the <see cref="ProtectedType"/> with the <see cref="byte"/>[] value.
+        /// </summary>
+        /// <param name="value"> The <see cref="byte"/>[] value to protect. </param>
+        protected ProtectedType(byte[] value) : this(value, null)
+        {
+        }
+
+        /// <summary>
         /// Initializes the <see cref="ProtectedType"/> with the TType and additional <see cref="SecureObject"/> instances to use to encrypt the data.
         /// </summary>
         /// <param name="value"> The value to protect. </param>
         /// <param name="encryptionObjects"> The additional <see cref="SecureObject"/> instances to apply to the encryption. </param>
         protected ProtectedType(TType value, params SecureObject[] encryptionObjects)
+        {
+            SecureObject[] currentEncryptionObj = new SecureObject[] { this };
+
+            memoryEncryptor = new MemoryEncryptor(encryptionObjects == null ? currentEncryptionObj : encryptionObjects.Concat(currentEncryptionObj).ToArray());
+            SetValue(value);
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="ProtectedType"/> with the <see cref="byte"/>[] and additional <see cref="SecureObject"/> instances to use to encrypt the data.
+        /// </summary>
+        /// <param name="value"> The <see cref="byte"/>[] value to protect. </param>
+        /// <param name="encryptionObjects"> The additional <see cref="SecureObject"/> instances to apply to the encryption. </param>
+        protected ProtectedType(byte[] value, params SecureObject[] encryptionObjects)
         {
             SecureObject[] currentEncryptionObj = new SecureObject[] { this };
 

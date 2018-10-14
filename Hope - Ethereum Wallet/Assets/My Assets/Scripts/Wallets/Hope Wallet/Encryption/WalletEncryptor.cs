@@ -55,7 +55,7 @@ public sealed class WalletEncryptor : SecureObject
         Action<string[], string, string> onWalletEncrypted)
     {
         string[] encryptedHashes = null;
-        string saltedPasswordHash = new PBKDF2PasswordHashing(new Blake2b_512_Engine()).GetSaltedPasswordHash(password).GetBase64String();
+        string saltedPasswordHash = null;
         string encryptedSeed = null;
 
         byte[] derivedPassword = playerPrefPassword.Derive(password);
@@ -65,6 +65,7 @@ public sealed class WalletEncryptor : SecureObject
             byte[] hash1 = RandomBytes.Secure.Blake2.GetBytes(512);
             byte[] hash2 = RandomBytes.Secure.Blake2.GetBytes(1024);
 
+            saltedPasswordHash = new PBKDF2PasswordHashing(new Blake2b_512_Engine()).GetSaltedPasswordHash(password).GetBase64String();
             encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), hash1), hash2);
 
             encryptedHashes = new string[]
@@ -77,10 +78,8 @@ public sealed class WalletEncryptor : SecureObject
             hash2.ClearBytes();
         }
 
-        dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16), this));
+        dynamicDataCache.SetData("pass", new ProtectedString(password, this));
         dynamicDataCache.SetData("mnemonic", null);
-
-        ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
 
         MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashes, saltedPasswordHash, encryptedSeed));
     }

@@ -35,8 +35,7 @@ public sealed class WalletUnlocker : WalletLoaderBase
         AssignAddresses(walletInfo.WalletAddresses[0], walletInfo.WalletAddresses[1]);
 
         (dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
-        dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16), this));
-        (dynamicDataCache.GetData("pass") as ProtectedString)?.SetValue(password);
+        dynamicDataCache.SetData("pass", new ProtectedString(password, this));
 
         onWalletLoaded?.Invoke();
     }
