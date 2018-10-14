@@ -85,7 +85,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// <param name="text"> The text in the input field </param>
 		private void CurrentPasswordFieldChanged(string text)
 		{
-			currentPasswordField.Error = string.IsNullOrEmpty(text);
+			currentPasswordField.Error = string.IsNullOrEmpty(currentPasswordField.InputFieldBase.text);
 			nextButton.interactable = !currentPasswordField.Error;
 		}
 

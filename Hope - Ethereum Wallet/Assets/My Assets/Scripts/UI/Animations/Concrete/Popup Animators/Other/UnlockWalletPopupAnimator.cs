@@ -51,7 +51,7 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	/// </summary>
 	private void InputFieldChanged()
 	{
-		passwordInputField.Error = string.IsNullOrEmpty(passwordInputField.Text);
+		passwordInputField.Error = string.IsNullOrEmpty(passwordInputField.InputFieldBase.text);
 		unlockButton.GetComponent<Button>().interactable = !passwordInputField.Error;
 	}
 
