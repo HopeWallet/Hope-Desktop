@@ -75,6 +75,7 @@ using System.Globalization;
 using Ledger.Net;
 using NBitcoin.DataEncoders;
 using NBitcoin.Crypto;
+using Org.BouncyCastle.Utilities;
 
 public sealed class HopeTesting : MonoBehaviour
 {

@@ -71,6 +71,6 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 			loadingIcon.SetActive(true);
 
 		loadingIcon.AnimateGraphicAndScale(verifying ? 1f : 0f, verifying ? 1f : 0f, 0.15f, () => { if (!verifying) loadingIcon.SetActive(false); });
-		button.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f, () => Animating = false);
+		button.AnimateGraphicAndScale(verifying ? 0f : 1f, verifying ? 0f : 1f, 0.15f, () => { if (!verifying) Animating = false; });
 	}
 }

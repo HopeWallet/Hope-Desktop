@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Hope.Security.HashGeneration;
 using Hope.Random.Bytes;
 using Hope.Random.Strings;
+using NBitcoin;
 
 /// <summary>
 /// Class which derives a password by hashing a password with many different pieces of data saved to the PlayerPrefs.
@@ -34,7 +35,7 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
             byte[] last = derivedSeed.SHA3_512();
             byte[] newBytes = RandomBytes.Secure.Blake2.GetBytes(32);
 
-            prefDictionary.Add(keys[i], newBytes);
+            prefDictionary.AddOrReplace(keys[i], newBytes);
             derivedSeed = last.Concat(newBytes).ToArray().Keccak_512();
 
             last.ClearBytes();
@@ -54,6 +55,7 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
     public byte[] Restore(byte[] startingPassword)
     {
         byte[] derivedSeed = RandomBytes.Secure.Blake2.GetBytes(startingPassword, 128).Concat(startingPassword).ToArray().SHA3_512();
+
         for (int i = 0; i < keys.Length; i++)
         {
             byte[] last = derivedSeed.SHA3_512();
@@ -75,7 +77,8 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
     /// </summary>
     /// <param name="walletNum"> The wallet number to setup the player prefs for. </param>
     /// <param name="onPrefsSetup"> Action to call once all the PlayerPrefs were setup. </param>
-    public void SetupPlayerPrefs(int walletNum, Action onPrefsSetup = null)
+    /// <param name="generateSpoofKeys"> Whether spoof player pref keys should be created. </param>
+    public void SetupPlayerPrefs(int walletNum, Action onPrefsSetup, bool generateSpoofKeys = true)
     {
         if (prefDictionary == null)
         {
@@ -83,7 +86,9 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
             return;
         }
 
-        GenerateSpoofKeys();
+        if (generateSpoofKeys)
+            GenerateSpoofKeys();
+
         GenerateCorrectKeys(walletNum, onPrefsSetup);
         prefDictionary.Clear();
     }

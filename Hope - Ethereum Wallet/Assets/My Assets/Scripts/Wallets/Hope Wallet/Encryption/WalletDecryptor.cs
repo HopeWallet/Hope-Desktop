@@ -63,8 +63,8 @@ public sealed class WalletDecryptor : SecureObject
         Action<byte[]> onWalletDecrypted)
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);
-
         byte[] decryptedSeed = null;
+
         using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword)))
         {
             byte[] hash1 = dataEncryptor.Decrypt(hashes[0].GetBase64Bytes());
