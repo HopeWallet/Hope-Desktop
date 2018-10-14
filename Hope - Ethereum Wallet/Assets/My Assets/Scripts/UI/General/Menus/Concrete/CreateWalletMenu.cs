@@ -67,7 +67,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     /// </summary>
     private void CreateWalletNameAndPass()
     {
-        dynamicDataCache.SetData("pass", new ProtectedString(password1Field.Text));
+        dynamicDataCache.SetData("pass", new ProtectedString(password1Field.InputFieldBytes));
         dynamicDataCache.SetData("name", walletNameField.Text);
 
         uiManager.OpenMenu<ImportOrCreateMnemonicMenu>();
@@ -113,7 +113,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     private void PasswordsUpdated()
     {
         password1Field.Error = password1Field.InputFieldBase.text.Length < 8;
-        password2Field.Error = password1Field.Equals(password2Field);
+        password2Field.Error = !password1Field.Equals(password2Field);
 
         if (password1Field.Error)
             password1Field.errorMessage.text = "Password too short";

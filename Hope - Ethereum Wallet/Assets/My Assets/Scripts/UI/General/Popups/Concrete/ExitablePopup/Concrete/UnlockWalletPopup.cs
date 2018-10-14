@@ -141,14 +141,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	private void CorrectPassword(byte[] password)
 	{
         if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
-        {
             ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
-        }
         else
-        {
-            dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16)));
-            ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
-        }
+            dynamicDataCache.SetData("pass", new ProtectedString(password));
 
         SecurePlayerPrefs.SetInt(WalletName + "current login attempt", 1);
 

@@ -72,6 +72,7 @@ public sealed class WalletDecryptor : SecureObject
 
             decryptedSeed = dataEncryptor.Decrypt(dataEncryptor.Decrypt(encryptedSeed, hash2), hash1).HexToByteArray();
 
+            password.ClearBytes();
             hash1.ClearBytes();
             hash2.ClearBytes();
         }
