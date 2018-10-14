@@ -127,7 +127,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     /// The password is correct and the user is brought back to the OpenWalletMenu
     /// </summary>
     /// <param name="password"> The password string</param>
-    private void CorrectPassword(string password)
+    private void CorrectPassword(byte[] password)
     {
         (dynamicDataCache.GetData("pass") as ProtectedString)?.SetValue(password);
 

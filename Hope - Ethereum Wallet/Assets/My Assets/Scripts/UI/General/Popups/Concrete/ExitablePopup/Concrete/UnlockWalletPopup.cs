@@ -1,4 +1,5 @@
-﻿using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Random.Strings;
+using Hope.Security.ProtectedTypes.Types;
 using System;
 using System.Collections;
 using TMPro;
@@ -137,14 +138,19 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// Called when the correct password is entered.
 	/// </summary>
 	/// <param name="password"> The correct password. </param>
-	private void CorrectPassword(string password)
+	private void CorrectPassword(byte[] password)
 	{
-		if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
-			((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
-		else
-			dynamicDataCache.SetData("pass", new ProtectedString(password));
+        if (dynamicDataCache.GetData("pass") != null && dynamicDataCache.GetData("pass") is ProtectedString)
+        {
+            ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
+        }
+        else
+        {
+            dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16)));
+            ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
+        }
 
-		SecurePlayerPrefs.SetInt(WalletName + "current login attempt", 1);
+        SecurePlayerPrefs.SetInt(WalletName + "current login attempt", 1);
 
 		userWalletManager.UnlockWallet();
 	}

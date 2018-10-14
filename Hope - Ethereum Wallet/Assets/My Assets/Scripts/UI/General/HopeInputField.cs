@@ -37,6 +37,8 @@ public class HopeInputField : MonoBehaviour
 		}
 	}
 
+    public byte[] InputFieldBytes => Bytes.ToArray();
+
 	public List<byte> Bytes = new List<byte>();
 
 	public bool Error { get; set; }
@@ -79,19 +81,12 @@ public class HopeInputField : MonoBehaviour
 			if (Bytes.Count != hopeInputField.Bytes.Count)
 				return false;
 
-			for (int i = 0; i < Bytes.Count; i++)
-			{
-				if (Bytes[i] != hopeInputField.Bytes[i])
-					return false;
-			}
+            return Bytes.SequenceEqual(hopeInputField.Bytes);
 		}
 		else
 		{
-			if (text != hopeInputField.Text)
-				return false;
+            return text == hopeInputField.Text;
 		}
-
-		return true;
 	}
 
 	/// <summary>

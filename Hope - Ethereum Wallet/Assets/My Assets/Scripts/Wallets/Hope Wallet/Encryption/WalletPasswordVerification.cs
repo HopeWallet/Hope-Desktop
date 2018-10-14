@@ -8,7 +8,7 @@ using UniRx;
 /// </summary>
 public sealed class WalletPasswordVerification
 {
-    private Action<string> onPasswordCorrect;
+    private Action<byte[]> onPasswordCorrect;
     private Action onPasswordIncorrect;
 
     private readonly HopeWalletInfoManager hopeWalletInfoManager;
@@ -44,7 +44,7 @@ public sealed class WalletPasswordVerification
         if (passwordInputField?.InputFieldBase != null)
             passwordInputField.InputFieldBase.interactable = false;
 
-        VerifyPassword(passwordInputField.Text);
+        VerifyPassword(passwordInputField.InputFieldBytes);
 
         return this;
     }
@@ -54,7 +54,7 @@ public sealed class WalletPasswordVerification
     /// </summary>
     /// <param name="password"> The password to verify. </param>
     /// <returns> The current instance of WalletPasswordVerification. </returns>
-    public WalletPasswordVerification VerifyPassword(string password)
+    public WalletPasswordVerification VerifyPassword(byte[] password)
     {
         var saltedHash = hopeWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum")).EncryptedWalletData.PasswordHash;
         var pbkdf2 = new PBKDF2PasswordHashing(new Blake2b_512_Engine());
@@ -64,7 +64,7 @@ public sealed class WalletPasswordVerification
         onPasswordCorrect = null;
         onPasswordIncorrect = null;
 
-        Observable.WhenAll(Observable.Start(() => string.IsNullOrEmpty(password) ? false : pbkdf2.VerifyPassword(password, saltedHash)))
+        Observable.WhenAll(Observable.Start(() => password == null || password.Length == 0 ? false : pbkdf2.VerifyPassword(password, saltedHash)))
                   .ObserveOnMainThread()
                   .Subscribe(correctPass =>
                   {
@@ -83,7 +83,7 @@ public sealed class WalletPasswordVerification
     /// </summary>
     /// <param name="onPasswordCorrect"> The action to call on correct password. </param>
     /// <returns> The current instance of WalletPasswordVerification. </returns>
-    public WalletPasswordVerification OnPasswordCorrect(Action<string> onPasswordCorrect)
+    public WalletPasswordVerification OnPasswordCorrect(Action<byte[]> onPasswordCorrect)
     {
         this.onPasswordCorrect = onPasswordCorrect;
         return this;
@@ -104,7 +104,7 @@ public sealed class WalletPasswordVerification
     /// Called if the password verified is correct.
     /// </summary>
     /// <param name="password"> The correct password. </param>
-    private void PasswordCorrect(string password)
+    private void PasswordCorrect(byte[] password)
     {
         onPasswordCorrect?.Invoke(password);
     }
