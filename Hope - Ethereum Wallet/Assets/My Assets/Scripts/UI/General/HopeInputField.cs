@@ -62,6 +62,11 @@ public class HopeInputField : MonoBehaviour
 		Text = string.Empty;
 	}
 
+	/// <summary>
+	/// Checks if an input field's text is equal to another
+	/// </summary>
+	/// <param name="other"> The given object being checked </param>
+	/// <returns></returns>
 	public override bool Equals(object other)
 	{
 		if (other.GetType() != typeof(HopeInputField))
@@ -142,6 +147,10 @@ public class HopeInputField : MonoBehaviour
 		UpdateVisuals();
 	}
 
+
+	/// <summary>
+	/// Hides the password input field text with character placeholders, and adjusts teh bytes accordingly
+	/// </summary>
 	private void HidePasswordText()
 	{
 		if (assigningCharacterPlaceholders)
@@ -162,6 +171,9 @@ public class HopeInputField : MonoBehaviour
 		inputFieldBase.text = tempString;
 	}
 
+	/// <summary>
+	/// Changes the byte list to what the user has changed in the input field
+	/// </summary>
 	private void SetByteList()
 	{
 		if (Bytes.Count == 0)
