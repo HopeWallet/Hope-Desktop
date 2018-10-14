@@ -1,14 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// The animator class of the SettingsPopup
 /// </summary>
 public sealed class SettingsPopupAnimator : PopupAnimator
 {
-	public Action<GameObject> AnimateIcon;
-	public Action<GameObject, GameObject, bool> ShowLoadingIcon;
-
 	[SerializeField] private GameObject settingsCategoriesParent;
 	[SerializeField] private GameObject line1, line2, line3;
 	[SerializeField] private GameObject[] sections;
@@ -21,9 +17,6 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// </summary>
 	private void Awake()
 	{
-		AnimateIcon = AnimateCheckmark;
-		ShowLoadingIcon = AnimateLoadingIcon;
-
 		settingsCategories = settingsCategoriesParent.GetComponent<IconButtons>();
 		settingsCategories.OnButtonChanged += CategoryChanged;
 	}
@@ -56,7 +49,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// Animates an icon in and out of view
 	/// </summary>
 	/// <param name="icon"> The finish icon to be shown </param>
-	private void AnimateCheckmark(GameObject icon)
+	public void AnimateIcon(GameObject icon)
 	{
 		icon.transform.localScale = new Vector3(0, 0, 1);
 
@@ -70,7 +63,7 @@ public sealed class SettingsPopupAnimator : PopupAnimator
 	/// <param name="button"> The button to be animated </param>
 	/// <param name="loadingIcon"> The loading icon to be animated </param>
 	/// <param name="verifying"> Whether the password is currently being verified or not </param>
-	private void AnimateLoadingIcon(GameObject button, GameObject loadingIcon, bool verifying)
+	public void ShowLoadingIcon(GameObject button, GameObject loadingIcon, bool verifying)
 	{
 		Animating = true;
 

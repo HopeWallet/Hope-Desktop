@@ -47,7 +47,6 @@ public sealed class UserWalletManager : IDisposable
     /// <param name="ledgerWallet"> The active LedgerWallet. </param>
     /// <param name="trezorWallet"> The active TrezorWallet. </param>
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
-    /// <param name="walletSettings"> The player pref settings for the UserWallet. </param>
     public UserWalletManager(
         Settings settings,
         EthereumPendingTransactionManager ethereumPendingTransactionManager,
@@ -57,8 +56,7 @@ public sealed class UserWalletManager : IDisposable
         DynamicDataCache dynamicDataCache,
         LedgerWallet ledgerWallet,
         TrezorWallet trezorWallet,
-        HopeWalletInfoManager userWalletInfoManager,
-        HopeWalletInfoManager.Settings walletSettings)
+        HopeWalletInfoManager userWalletInfoManager)
     {
         this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
         this.popupManager = popupManager;
@@ -68,7 +66,7 @@ public sealed class UserWalletManager : IDisposable
 
         disposableComponentManager.AddDisposable(this);
 
-        hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager, walletSettings);
+        hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager);
         activeWallet = hopeWallet;
 
         ledgerWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();

@@ -11,7 +11,6 @@ public sealed class WalletDecryptor : SecureObject
 {
     private readonly PlayerPrefPasswordDerivation playerPrefPassword;
     private readonly DynamicDataCache dynamicDataCache;
-    private readonly HopeWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Initializes the <see cref="WalletDecryptor"/> with the references to needed objects.
@@ -21,12 +20,10 @@ public sealed class WalletDecryptor : SecureObject
     /// <param name="walletSettings"> The settings for the <see cref="HopeWallet"/>. </param>
     public WalletDecryptor(
         PlayerPrefPasswordDerivation playerPrefPassword,
-        DynamicDataCache dynamicDataCache,
-        HopeWalletInfoManager.Settings walletSettings)
+        DynamicDataCache dynamicDataCache)
     {
         this.playerPrefPassword = playerPrefPassword;
         this.dynamicDataCache = dynamicDataCache;
-        this.walletSettings = walletSettings;
     }
 
     /// <summary>

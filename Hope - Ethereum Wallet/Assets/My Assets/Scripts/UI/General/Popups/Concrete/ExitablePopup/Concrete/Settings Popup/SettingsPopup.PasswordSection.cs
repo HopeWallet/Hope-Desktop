@@ -15,20 +15,35 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private readonly Button saveButton;
 		private readonly GameObject loadingIcon;
 
+        private readonly WalletEncryptor walletEncryptor;
+        private readonly WalletDecryptor walletDecryptor;
+        private readonly HopeWalletInfoManager hopeWalletInfoManager;
+
+        private readonly WalletInfo walletInfo;
+
 		private readonly SettingsPopupAnimator settingsPopupAnimator;
 
 		public PasswordSection(
-			SettingsPopupAnimator settingsPopupAnimator,
+            UserWalletManager.Settings userWalletManagerSettings,
+            UserWalletManager userWalletManager,
+            HopeWalletInfoManager hopeWalletInfoManager,
+            DynamicDataCache dynamicDataCache,
+            SettingsPopupAnimator settingsPopupAnimator,
 			HopeInputField newPasswordField,
 			HopeInputField confirmPasswordField,
 			Button saveButton,
 			GameObject loadingIcon)
 		{
+            this.hopeWalletInfoManager = hopeWalletInfoManager;
 			this.settingsPopupAnimator = settingsPopupAnimator;
 			this.newPasswordField = newPasswordField;
 			this.confirmPasswordField = confirmPasswordField;
 			this.saveButton = saveButton;
 			this.loadingIcon = loadingIcon;
+
+            walletEncryptor = new WalletEncryptor(userWalletManagerSettings.safePassword, dynamicDataCache);
+            walletDecryptor = new WalletDecryptor(userWalletManagerSettings.safePassword, dynamicDataCache);
+            walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress());
 
 			newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
 			confirmPasswordField.OnInputUpdated += _ => PasswordsUpdated();

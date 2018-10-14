@@ -6,7 +6,6 @@
 public sealed class WalletUnlocker : WalletLoaderBase
 {
     private readonly WalletDecryptor walletDecryptor;
-    private readonly HopeWalletInfoManager.Settings walletSettings;
 
     /// <summary>
     /// Initializes the WalletUnlocker with all required references.
@@ -14,17 +13,14 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="playerPrefPassword"> The PlayerPrefPassword used to encrypt the wallet. </param>
     /// <param name="dynamicDataCache"> The active DynamicDataCache. </param>
-    /// <param name="walletSettings"> The settings for the UserWallet. </param>
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
     public WalletUnlocker(
         PopupManager popupManager,
         PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        HopeWalletInfoManager.Settings walletSettings,
         HopeWalletInfoManager hopeWalletInfoManager) : base(popupManager, playerPrefPassword, dynamicDataCache, hopeWalletInfoManager)
     {
-        this.walletSettings = walletSettings;
-        walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache, walletSettings);
+        walletDecryptor = new WalletDecryptor(playerPrefPassword, dynamicDataCache);
     }
 
     /// <summary>

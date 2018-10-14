@@ -22,7 +22,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		private readonly GameObject[] hopeOnlyCategoryButtons;
 
 		private readonly HopeWalletInfoManager hopeWalletInfoManager;
-		private readonly HopeWalletInfoManager.Settings walletSettings;
 		private readonly WalletPasswordVerification walletPasswordVerification;
         private readonly ContactsManager contactsManager;
 		private readonly DynamicDataCache dynamicDataCache;
@@ -32,7 +31,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		public WalletNameSection(
 			HopeWalletInfoManager hopeWalletInfoManager,
-			HopeWalletInfoManager.Settings walletSettings,
 			WalletPasswordVerification walletPasswordVerification,
             ContactsManager contactsManager,
 			DynamicDataCache dynamicDataCache,
@@ -49,7 +47,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			GameObject[] hopeOnlyCategoryButtons)
 		{
 			this.hopeWalletInfoManager = hopeWalletInfoManager;
-			this.walletSettings = walletSettings;
 			this.walletPasswordVerification = walletPasswordVerification;
             this.contactsManager = contactsManager;
 			this.dynamicDataCache = dynamicDataCache;

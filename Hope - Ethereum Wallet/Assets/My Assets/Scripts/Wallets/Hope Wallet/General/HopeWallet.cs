@@ -30,22 +30,20 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="ethereumNetwork"> The active EthereumNetwork. </param>
     /// <param name="dynamicDataCache"> The active ProtectedStringDataCache. </param>
-    /// <param name="walletSettings"> The settings for the UserWallet. </param>
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
     public HopeWallet(PlayerPrefPasswordDerivation prefPassword,
         PopupManager popupManager,
         EthereumNetwork ethereumNetwork,
         DynamicDataCache dynamicDataCache,
-        HopeWalletInfoManager hopeWalletInfoManager,
-        HopeWalletInfoManager.Settings walletSettings)
+        HopeWalletInfoManager hopeWalletInfoManager)
     {
         this.popupManager = popupManager;
         this.dynamicDataCache = dynamicDataCache;
 
         passwordEncryptor = new MemoryEncryptor(this);
-        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, walletSettings, hopeWalletInfoManager);
-        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, walletSettings, hopeWalletInfoManager);
-        walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor, hopeWalletInfoManager, walletSettings);
+        walletCreator = new WalletCreator(popupManager, prefPassword, dynamicDataCache, hopeWalletInfoManager);
+        walletUnlocker = new WalletUnlocker(popupManager, prefPassword, dynamicDataCache, hopeWalletInfoManager);
+        walletTransactionSigner = new WalletTransactionSigner(prefPassword, dynamicDataCache, ethereumNetwork, passwordEncryptor, hopeWalletInfoManager);
     }
 
     /// <summary>
