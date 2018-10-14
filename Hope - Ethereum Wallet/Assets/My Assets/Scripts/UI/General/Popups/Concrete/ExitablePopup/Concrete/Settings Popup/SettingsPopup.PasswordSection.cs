@@ -55,11 +55,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void PasswordsUpdated()
 		{
-			string password1Text = newPasswordField.Text;
-			string password2Text = confirmPasswordField.Text;
-
-			newPasswordField.Error = newPasswordField.Text.Length < 8;
-			confirmPasswordField.Error = password1Text != password2Text;
+			newPasswordField.Error = newPasswordField.InputFieldBase.text.Length < 8;
+			confirmPasswordField.Error = confirmPasswordField.Equals(confirmPasswordField);
 
 			if (newPasswordField.Error)
 				newPasswordField.errorMessage.text = "Password too short";

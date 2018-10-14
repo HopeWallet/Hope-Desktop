@@ -112,11 +112,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     /// </summary>
     private void PasswordsUpdated()
     {
-        string password1Text = password1Field.Text;
-        string password2Text = password2Field.Text;
-
-        password1Field.Error = password1Field.Text.Length < 8;
-        password2Field.Error = password1Text != password2Text;
+        password1Field.Error = password1Field.InputFieldBase.text.Length < 8;
+        password2Field.Error = password1Field.Equals(password2Field);
 
         if (password1Field.Error)
             password1Field.errorMessage.text = "Password too short";

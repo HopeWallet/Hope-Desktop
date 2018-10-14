@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class HopeInputField : MonoBehaviour
 {
 	public event Action<string> OnInputUpdated;
 
-    [SerializeField] private InputField inputFieldBase;
-    [SerializeField] private GameObject placeholder;
+	[SerializeField] private InputField inputFieldBase;
+	[SerializeField] private GameObject placeholder;
 	[SerializeField] private GameObject eye;
 	[SerializeField] private GameObject errorIcon;
 	[SerializeField] private bool noSpaces;
@@ -21,7 +23,9 @@ public class HopeInputField : MonoBehaviour
 
 	private string text;
 
-    public InputField InputFieldBase => inputFieldBase;
+	public InputField InputFieldBase => inputFieldBase;
+
+	private string characterPlaceholders = "頁設是煵엌嫠쯦案煪㍱從つ浳浤搰㍭煤洳橱橱迎事網計簡大㍵畱煵田煱둻睤㌹楤ぱ椹ぱ頹衙";
 
 	public string Text
 	{
@@ -33,9 +37,11 @@ public class HopeInputField : MonoBehaviour
 		}
 	}
 
+	public List<byte> Bytes = new List<byte>();
+
 	public bool Error { get; set; }
 
-	//public bool IsPassword { get; private set; }
+	private bool assigningRandomCharacter;
 
 	/// <summary>
 	/// Sets the variables and inputfield listener
@@ -55,7 +61,38 @@ public class HopeInputField : MonoBehaviour
 		Error = true;
 		Text = string.Empty;
 
-		//IsPassword = inputFieldBase.inputType == InputField.InputType.Password;
+		//byte[] chineseBytes = characterPlaceholders.GetUTF8Bytes();
+		//chineseBytes.Log();
+		//chineseBytes.GetUTF8String().Log();
+		//chineseBytes.Length.Log();
+		//characterPlaceholders.Length.Log();
+	}
+
+	public override bool Equals(object hopeInputField)
+	{
+		if (hopeInputField.GetType() != typeof(HopeInputField))
+			return false;
+
+		HopeInputField inputField = hopeInputField as HopeInputField;
+
+		if (inputFieldBase.inputType == InputField.InputType.Password)
+		{
+			if (Bytes.Count != inputField.Bytes.Count)
+				return false;
+
+			for (int i = 0; i < Bytes.Count; i++)
+			{
+				if (Bytes[i] != inputField.Bytes[i])
+					return false;
+			}
+		}
+		else
+		{
+			if (text != inputField.Text)
+				return false;
+		}
+
+		return true;
 	}
 
 	/// <summary>
@@ -75,7 +112,9 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="emptyString"> Whether the string is empty or not </param>
 	public void UpdateVisuals()
 	{
-		bool emptyString = string.IsNullOrEmpty(Text);
+		bool emptyString = string.IsNullOrEmpty(inputFieldBase.text);
+
+		inputFieldBase.gameObject.AnimateColor(emptyString ? UIColors.White : Error ? UIColors.Red : UIColors.Green, 0.15f);
 
 		if (placeholder != null)
 		{
@@ -84,9 +123,13 @@ public class HopeInputField : MonoBehaviour
 			else
 				placeholder.AnimateTransformY(emptyString ? 0f : 35f, 0.15f);
 		}
-		inputFieldBase.gameObject.AnimateColor(emptyString ? UIColors.White : Error ? UIColors.Red : UIColors.Green, 0.15f);
+
 		if (errorIcon != null) errorIcon.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
+
 		if (errorMessage != null) errorMessage.gameObject.AnimateGraphic(emptyString ? 0f : Error ? 1f : 0f, 0.15f);
+
+		if (eye != null)
+			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.15f);
 	}
 
 	/// <summary>
@@ -95,16 +138,65 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
-		Text = noSpaces ? inputString.Trim() : inputString;
+		if (inputFieldBase.inputType == InputField.InputType.Password)
+			HidePasswordText();
+		else
+			Text = noSpaces ? inputString.Trim() : inputString;
 
 		OnInputUpdated?.Invoke(inputString);
 
-		bool emptyString = string.IsNullOrEmpty(Text);
-
 		UpdateVisuals();
+	}
 
-		if (eye != null)
-			eye.AnimateGraphicAndScale(emptyString ? 0f : 1f, emptyString ? 0f : 1f, 0.15f);
+	private void HidePasswordText()
+	{
+		if (assigningRandomCharacter)
+		{
+			assigningRandomCharacter = false;
+			return;
+		}
+
+		SetByteList();
+
+		string tempString = string.Empty;
+
+		for (int i = 0; i < inputFieldBase.text.Length; i++)
+			tempString += characterPlaceholders[i];
+
+		assigningRandomCharacter = true;
+
+		inputFieldBase.text = tempString;
+	}
+
+	private void SetByteList()
+	{
+		if (Bytes.Count == 0)
+		{
+			Bytes.Add(inputFieldBase.text.GetUTF8Bytes().Single());
+		}
+		else if (inputFieldBase.text.Length == 0)
+		{
+			Bytes = new List<byte>();
+		}
+		else
+		{
+			List<byte> newByteList = new List<byte>();
+
+			for (int i = 0; i < inputFieldBase.text.Length; i++)
+			{
+				if (inputFieldBase.text[i] != characterPlaceholders[i])
+					newByteList.Add(inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
+				else if (i == Bytes.Count)
+					newByteList.Add(characterPlaceholders[i].ToString().GetUTF8Bytes().Single());
+				else
+					newByteList.Add(Bytes[i]);
+			}
+
+			Bytes = newByteList;
+		}
+
+		Bytes.GetUTF8String().Log();
+		Bytes.ToArray().LogArray();
 	}
 
 	/// <summary>
@@ -115,12 +207,12 @@ public class HopeInputField : MonoBehaviour
 		if (inputFieldBase.contentType == InputField.ContentType.Password)
 		{
 			inputFieldBase.contentType = InputField.ContentType.Standard;
-			inputFieldBase.textComponent.text = inputFieldBase.text;
+			inputFieldBase.text = Bytes.GetUTF8String();
 		}
 		else
 		{
 			inputFieldBase.contentType = InputField.ContentType.Password;
-			inputFieldBase.textComponent.text = string.Empty;
+			HidePasswordText();
 			inputFieldBase.text.ForEach(_ => inputFieldBase.textComponent.text += "*");
 		}
 
