@@ -25,7 +25,7 @@ public class HopeInputField : MonoBehaviour
 
 	public InputField InputFieldBase => inputFieldBase;
 
-	private string characterPlaceholders = "頁設是煵엌嫠쯦案煪㍱從つ浳浤搰㍭煤洳橱橱迎事網計簡大㍵畱煵田煱둻睤㌹楤ぱ椹ぱ頹衙";
+	private string characterPlaceholders = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
 
 	public string Text
 	{
@@ -41,7 +41,7 @@ public class HopeInputField : MonoBehaviour
 
 	public bool Error { get; set; }
 
-	private bool assigningRandomCharacter;
+	private bool assigningCharacterPlaceholders;
 
 	/// <summary>
 	/// Sets the variables and inputfield listener
@@ -60,35 +60,29 @@ public class HopeInputField : MonoBehaviour
 
 		Error = true;
 		Text = string.Empty;
-
-		//byte[] chineseBytes = characterPlaceholders.GetUTF8Bytes();
-		//chineseBytes.Log();
-		//chineseBytes.GetUTF8String().Log();
-		//chineseBytes.Length.Log();
-		//characterPlaceholders.Length.Log();
 	}
 
-	public override bool Equals(object hopeInputField)
+	public override bool Equals(object other)
 	{
-		if (hopeInputField.GetType() != typeof(HopeInputField))
+		if (other.GetType() != typeof(HopeInputField))
 			return false;
 
-		HopeInputField inputField = hopeInputField as HopeInputField;
+		HopeInputField hopeInputField = other as HopeInputField;
 
 		if (inputFieldBase.inputType == InputField.InputType.Password)
 		{
-			if (Bytes.Count != inputField.Bytes.Count)
+			if (Bytes.Count != hopeInputField.Bytes.Count)
 				return false;
 
 			for (int i = 0; i < Bytes.Count; i++)
 			{
-				if (Bytes[i] != inputField.Bytes[i])
+				if (Bytes[i] != hopeInputField.Bytes[i])
 					return false;
 			}
 		}
 		else
 		{
-			if (text != inputField.Text)
+			if (text != hopeInputField.Text)
 				return false;
 		}
 
@@ -150,9 +144,9 @@ public class HopeInputField : MonoBehaviour
 
 	private void HidePasswordText()
 	{
-		if (assigningRandomCharacter)
+		if (assigningCharacterPlaceholders)
 		{
-			assigningRandomCharacter = false;
+			assigningCharacterPlaceholders = false;
 			return;
 		}
 
@@ -163,7 +157,7 @@ public class HopeInputField : MonoBehaviour
 		for (int i = 0; i < inputFieldBase.text.Length; i++)
 			tempString += characterPlaceholders[i];
 
-		assigningRandomCharacter = true;
+		assigningCharacterPlaceholders = true;
 
 		inputFieldBase.text = tempString;
 	}
@@ -180,23 +174,46 @@ public class HopeInputField : MonoBehaviour
 		}
 		else
 		{
-			List<byte> newByteList = new List<byte>();
-
-			for (int i = 0; i < inputFieldBase.text.Length; i++)
+			if (Bytes.Count > inputFieldBase.text.Length)
 			{
-				if (inputFieldBase.text[i] != characterPlaceholders[i])
-					newByteList.Add(inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
-				else if (i == Bytes.Count)
-					newByteList.Add(characterPlaceholders[i].ToString().GetUTF8Bytes().Single());
-				else
-					newByteList.Add(Bytes[i]);
-			}
+				int numberOfCharactersRemoved = Bytes.Count - inputFieldBase.text.Length;
+				int firstIndexRemoved = inputFieldBase.text.Length;
 
-			Bytes = newByteList;
+				for (int i = 0; i < inputFieldBase.text.Length; i++)
+				{
+					if (inputFieldBase.text[i] != characterPlaceholders[i])
+					{
+						firstIndexRemoved = i;
+						break;
+					}
+				}
+
+				//firstIndexRemoved.Log();
+				//numberOfCharactersRemoved.Log();
+
+				for (int i = 0; i < numberOfCharactersRemoved; i++)
+					Bytes.RemoveAt(firstIndexRemoved);
+			}
+			else
+			{
+				List<byte> newByteList = new List<byte>();
+
+				for (int i = 0; i < inputFieldBase.text.Length; i++)
+				{
+					if (inputFieldBase.text[i] != characterPlaceholders[i])
+						newByteList.Add(inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
+					else if (i == Bytes.Count)
+						newByteList.Add(characterPlaceholders[i].ToString().GetUTF8Bytes().Single());
+					else
+						newByteList.Add(Bytes[i]);
+				}
+
+				Bytes = newByteList;
+			}
 		}
 
-		Bytes.GetUTF8String().Log();
-		Bytes.ToArray().LogArray();
+		//Bytes.GetUTF8String().Log();
+		//Bytes.ToArray().LogArray();
 	}
 
 	/// <summary>
