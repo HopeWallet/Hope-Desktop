@@ -37,7 +37,7 @@ public class HopeInputField : MonoBehaviour
 		}
 	}
 
-    public byte[] InputFieldBytes => Bytes.ToArray();
+	public byte[] InputFieldBytes => Bytes.ToArray();
 
 	public List<byte> Bytes = new List<byte>();
 
@@ -74,19 +74,25 @@ public class HopeInputField : MonoBehaviour
 		if (other.GetType() != typeof(HopeInputField))
 			return false;
 
-		HopeInputField hopeInputField = other as HopeInputField;
+		HopeInputField otherHopeInputField = other as HopeInputField;
 
-		if (inputFieldBase.inputType == InputField.InputType.Password)
+		if (inputFieldBase.inputType == InputField.InputType.Password && otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password)
 		{
-			if (Bytes.Count != hopeInputField.Bytes.Count)
+			if (Bytes.Count != otherHopeInputField.Bytes.Count)
 				return false;
 
-            return Bytes.SequenceEqual(hopeInputField.Bytes);
+			return Bytes.SequenceEqual(otherHopeInputField.Bytes);
 		}
 		else
 		{
-            return text == hopeInputField.Text;
+			string thisText = inputFieldBase.inputType == InputField.InputType.Password ? Bytes.GetUTF8String() : text;
+			string otherText = otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password ? otherHopeInputField.Bytes.GetUTF8String() : otherHopeInputField.Text;
+
+			if (thisText != otherText)
+				return false;
 		}
+
+		return true;
 	}
 
 	/// <summary>
@@ -132,6 +138,8 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
+		Debug.Log("Hello");
+
 		if (inputFieldBase.inputType == InputField.InputType.Password)
 			HidePasswordText();
 		else
@@ -141,7 +149,6 @@ public class HopeInputField : MonoBehaviour
 
 		UpdateVisuals();
 	}
-
 
 	/// <summary>
 	/// Hides the password input field text with character placeholders, and adjusts teh bytes accordingly
@@ -161,7 +168,8 @@ public class HopeInputField : MonoBehaviour
 		for (int i = 0; i < inputFieldBase.text.Length; i++)
 			tempString += characterPlaceholders[i];
 
-		assigningCharacterPlaceholders = true;
+		if (inputFieldBase.text != tempString)
+			assigningCharacterPlaceholders = true;
 
 		inputFieldBase.text = tempString;
 	}
