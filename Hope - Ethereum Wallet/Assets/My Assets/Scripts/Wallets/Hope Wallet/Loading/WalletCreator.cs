@@ -26,13 +26,13 @@ public sealed class WalletCreator : WalletLoaderBase
     /// <summary>
     /// Creates a new wallet given the password.
     /// </summary>
-    /// <param name="userPass"> The password to encrypt the wallet with. </param>
-    protected override void LoadWallet(string userPass)
+    /// <param name="password"> The password to encrypt the wallet with. </param>
+    protected override void LoadWallet(byte[] password)
     {
         byte[] seed = (byte[])dynamicDataCache.GetData("seed");
 
         AssignAddresses(new Wallet(seed, Wallet.DEFAULT_PATH).GetAddresses(50), new Wallet(seed, Wallet.ELECTRUM_LEDGER_PATH).GetAddresses(50));
-        walletEncryptor.EncryptWallet(seed, userPass, hopeWalletInfoManager.WalletCount + 1, FinalizeWalletCreation);
+        walletEncryptor.EncryptWallet(seed, password, hopeWalletInfoManager.WalletCount + 1, FinalizeWalletCreation);
     }
 
     /// <summary>

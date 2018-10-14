@@ -115,6 +115,8 @@ namespace Hope.Security.ProtectedTypes.Types.Base
 
             protectedData?.ClearBytes();
             protectedData = memoryEncryptor.Encrypt(byteValue);
+
+            byteValue?.ClearBytes();
         }
 
         /// <summary>

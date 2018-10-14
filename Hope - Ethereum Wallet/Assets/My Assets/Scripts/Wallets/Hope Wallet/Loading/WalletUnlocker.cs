@@ -1,4 +1,5 @@
-﻿using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Random.Strings;
+using Hope.Security.ProtectedTypes.Types;
 
 /// <summary>
 /// Class used for unlocking the hope wallet.
@@ -26,15 +27,16 @@ public sealed class WalletUnlocker : WalletLoaderBase
     /// <summary>
     /// Attempts to load the wallet given the password.
     /// </summary>
-    /// <param name="userPass"> The password to attempt to unlock the wallet with. </param>
-    protected override void LoadWallet(string userPass)
+    /// <param name="password"> The password to attempt to unlock the wallet with. </param>
+    protected override void LoadWallet(byte[] password)
     {
         var walletInfo = hopeWalletInfoManager.GetWalletInfo((int)dynamicDataCache.GetData("walletnum"));
 
         AssignAddresses(walletInfo.WalletAddresses[0], walletInfo.WalletAddresses[1]);
 
         (dynamicDataCache.GetData("pass") as ProtectedString)?.Dispose();
-        dynamicDataCache.SetData("pass", new ProtectedString(userPass, this));
+        dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16), this));
+        (dynamicDataCache.GetData("pass") as ProtectedString)?.SetValue(password);
 
         onWalletLoaded?.Invoke();
     }

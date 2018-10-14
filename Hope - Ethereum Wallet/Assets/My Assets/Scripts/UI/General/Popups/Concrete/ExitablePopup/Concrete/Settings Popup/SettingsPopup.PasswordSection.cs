@@ -61,7 +61,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         private void PasswordsUpdated()
         {
             newPasswordField.Error = newPasswordField.InputFieldBase.text.Length < 8;
-            confirmPasswordField.Error = confirmPasswordField.Equals(confirmPasswordField);
+            confirmPasswordField.Error = !confirmPasswordField.Equals(newPasswordField);
 
             if (newPasswordField.Error)
                 newPasswordField.errorMessage.text = "Password too short";
@@ -81,13 +81,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         {
             settingsPopupAnimator.ShowLoadingIcon(saveButton.gameObject, loadingIcon, true);
 
-            string password = confirmPasswordField.Text;
-
             var promise = (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData();
 
             promise.OnSuccess(disposableData =>
                 walletDecryptor.DecryptWallet(walletInfo, (byte[])disposableData.ByteValue.Clone(), seed =>
-                    walletEncryptor.EncryptWallet(seed, password, walletInfo.WalletNum, OnNewWalletEncrypted)));
+                    walletEncryptor.EncryptWallet(seed, confirmPasswordField.InputFieldBytes, walletInfo.WalletNum, OnNewWalletEncrypted)));
         }
 
         private void OnNewWalletEncrypted(string[] hashes, string passwordHash, string encryptedSeed)

@@ -48,7 +48,7 @@ public abstract class WalletLoaderBase : SecureObject
         addresses[1] = new string[50];
         this.addresses = addresses;
 
-        (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData().OnSuccess(disposableData => LoadWallet(disposableData.Value));
+        (dynamicDataCache.GetData("pass") as ProtectedString)?.CreateDisposableData().OnSuccess(disposableData => LoadWallet((byte[])disposableData.ByteValue.Clone()));
     }
 
     /// <summary>
@@ -80,6 +80,6 @@ public abstract class WalletLoaderBase : SecureObject
     /// <summary>
     /// Loads the wallet given the user password.
     /// </summary>
-    /// <param name="userPass"> The password entered by the user. </param>
-    protected abstract void LoadWallet(string userPass);
+    /// <param name="password"> The password entered by the user. </param>
+    protected abstract void LoadWallet(byte[] password);
 }

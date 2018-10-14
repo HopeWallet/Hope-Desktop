@@ -1,5 +1,6 @@
 ﻿using Hope.Random;
 using Hope.Random.Bytes;
+using Hope.Random.Strings;
 using Hope.Security.PBKDF2;
 using Hope.Security.PBKDF2.Engines.Blake2b;
 using Hope.Security.ProtectedTypes.Types;
@@ -35,7 +36,7 @@ public sealed class WalletEncryptor : SecureObject
     /// <param name="password"> The password of the user. </param>
     /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action to call once the wallet has been encrypted. Passing the array of hashes used to encrypt the wallet, the salted password hash, and encrypted seed. </param>
-    public void EncryptWallet(byte[] seed, string password, int walletNum, Action<string[], string, string> onWalletEncrypted)
+    public void EncryptWallet(byte[] seed, byte[] password, int walletNum, Action<string[], string, string> onWalletEncrypted)
     {
         Task.Factory.StartNew(() => AsyncEncryptWallet(seed, password, walletNum, onWalletEncrypted));
     }
@@ -49,15 +50,15 @@ public sealed class WalletEncryptor : SecureObject
     /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
     private void AsyncEncryptWallet(
         byte[] seed,
-        string password,
+        byte[] password,
         int walletNum,
         Action<string[], string, string> onWalletEncrypted)
     {
-        byte[] derivedPassword = playerPrefPassword.Derive(password.GetUTF8Bytes());
-
         string[] encryptedHashes = null;
-        string saltedPasswordHash = null;
+        string saltedPasswordHash = new PBKDF2PasswordHashing(new Blake2b_512_Engine()).GetSaltedPasswordHash(password).GetBase64String();
         string encryptedSeed = null;
+
+        byte[] derivedPassword = playerPrefPassword.Derive(password);
 
         using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword)))
         {
@@ -65,7 +66,6 @@ public sealed class WalletEncryptor : SecureObject
             byte[] hash2 = RandomBytes.Secure.Blake2.GetBytes(1024);
 
             encryptedSeed = dataEncryptor.Encrypt(dataEncryptor.Encrypt(seed.GetHexString(), hash1), hash2);
-            saltedPasswordHash = new PBKDF2PasswordHashing(new Blake2b_512_Engine()).GetSaltedPasswordHash(password);
 
             encryptedHashes = new string[]
             {
@@ -77,8 +77,10 @@ public sealed class WalletEncryptor : SecureObject
             hash2.ClearBytes();
         }
 
-        dynamicDataCache.SetData("pass", new ProtectedString(password, this));
+        dynamicDataCache.SetData("pass", new ProtectedString(RandomString.Fast.GetString(16), this));
         dynamicDataCache.SetData("mnemonic", null);
+
+        ((ProtectedString)dynamicDataCache.GetData("pass")).SetValue(password);
 
         MainThreadExecutor.QueueAction(() => onWalletEncrypted?.Invoke(encryptedHashes, saltedPasswordHash, encryptedSeed));
     }

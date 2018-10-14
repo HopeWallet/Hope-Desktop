@@ -247,7 +247,6 @@ namespace Hope.Security.PBKDF2
             for (int i = 0; i < correctHash.Length && i < hashToCheck.Length; i++)
                 diff |= (uint)(correctHash[i] ^ hashToCheck[i]);
 
-            password.ClearBytes();
             hash.ClearBytes();
             salt.ClearBytes();
 
