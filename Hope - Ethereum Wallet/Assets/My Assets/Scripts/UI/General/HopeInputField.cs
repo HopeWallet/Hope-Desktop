@@ -26,6 +26,7 @@ public class HopeInputField : MonoBehaviour
 	public InputField InputFieldBase => inputFieldBase;
 
 	private readonly string characterPlaceholders = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
+	//private readonly string characterPlaceholders = "abcdefghijklmnopqrstuv";
 
 	public string Text
 	{
@@ -62,6 +63,9 @@ public class HopeInputField : MonoBehaviour
 
 		Error = true;
 		Text = string.Empty;
+
+		//string test = "ｦ";
+		//test.GetUTF8Bytes().Single().Log();
 	}
 
 	/// <summary>
@@ -138,8 +142,6 @@ public class HopeInputField : MonoBehaviour
 	/// <param name="inputString"> The text in the input field s</param>
 	private void InputFieldChanged(string inputString)
 	{
-		Debug.Log("Hello");
-
 		if (inputFieldBase.inputType == InputField.InputType.Password)
 			HidePasswordText();
 		else
@@ -179,49 +181,59 @@ public class HopeInputField : MonoBehaviour
 	/// </summary>
 	private void SetByteList()
 	{
-		if (Bytes.Count == 0)
+		if (Bytes.Count <= inputFieldBase.text.Length)
 		{
-			Bytes.Add(inputFieldBase.text.GetUTF8Bytes().Single());
-		}
-		else if (inputFieldBase.text.Length == 0)
-		{
-			Bytes = new List<byte>();
+			List<byte> newByteList = new List<byte>();
+
+			bool passedNewChar = false;
+
+			for (int i = 0; i < inputFieldBase.text.Length; i++)
+			{
+				if (inputFieldBase.text[i] != characterPlaceholders[i])
+				{
+					newByteList.Add(passedNewChar ? Bytes[i - 1] : inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
+					passedNewChar = true;
+				}
+				else
+				{
+					newByteList.Add(Bytes[i]);
+				}
+			}
+
+			Bytes = newByteList;
 		}
 		else
 		{
-			if (Bytes.Count > inputFieldBase.text.Length)
-			{
-				int numberOfCharactersRemoved = Bytes.Count - inputFieldBase.text.Length;
-				int firstIndexRemoved = inputFieldBase.text.Length;
+			int charactersRemoved = Bytes.Count - inputFieldBase.text.Length;
+			int firstIndexChanged = inputFieldBase.text.Length;
+			bool replacedCharacter = false;
 
-				for (int i = 0; i < inputFieldBase.text.Length; i++)
+			List<byte> tempByteList = new List<byte>();
+
+			for (int i = 0; i < inputFieldBase.text.Length; i++)
+			{
+				if (inputFieldBase.text[i] != characterPlaceholders[i])
 				{
-					if (inputFieldBase.text[i] != characterPlaceholders[i])
+					replacedCharacter = !characterPlaceholders.Contains(inputFieldBase.text[i]);
+
+					if (replacedCharacter)
 					{
-						firstIndexRemoved = i;
-						break;
+						tempByteList.Add(inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
+						charactersRemoved++;
 					}
+
+					firstIndexChanged = i;
+					break;
 				}
-
-				for (int i = 0; i < numberOfCharactersRemoved; i++)
-					Bytes.RemoveAt(firstIndexRemoved);
 			}
-			else
-			{
-				List<byte> newByteList = new List<byte>();
 
-				for (int i = 0; i < inputFieldBase.text.Length; i++)
-				{
-					if (inputFieldBase.text[i] != characterPlaceholders[i])
-						newByteList.Add(inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
-					else if (i == Bytes.Count)
-						newByteList.Add(characterPlaceholders[i].ToString().GetUTF8Bytes().Single());
-					else
-						newByteList.Add(Bytes[i]);
-				}
+			for (int i = (firstIndexChanged + charactersRemoved); i < Bytes.Count; i++)
+				tempByteList.Add(Bytes[i]);
 
-				Bytes = newByteList;
-			}
+			Bytes.RemoveRange(firstIndexChanged, Bytes.Count - firstIndexChanged);
+
+			for (int i = 0; i < tempByteList.Count; i++)
+				Bytes.Add(tempByteList[i]);
 		}
 	}
 
