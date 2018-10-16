@@ -226,7 +226,14 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             logoAnimator.enabled = true;
 
             if (!PendingTransactionSectionOpen)
+            {
                 AnimatePendingTransactionSection(true);
+            }
+            else
+            {
+                exitButton.gameObject.AnimateGraphic(0f, 0.01f);
+                exitButton.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
