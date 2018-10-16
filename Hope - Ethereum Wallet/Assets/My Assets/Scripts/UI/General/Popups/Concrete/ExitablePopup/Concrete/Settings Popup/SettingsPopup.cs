@@ -92,13 +92,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		defaultCurrencyOptions.ButtonClicked((int)currencyManager.ActiveCurrency);
 
 		walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
-		deleteWalletButton.onClick.AddListener(() => popupManager.GetPopup<GeneralOkCancelPopup>(true).SetSubText("Are you sure you want to delete " + walletName + "?").OnOkClicked(() => logoutHandler.Logout()));
+
+        deleteWalletButton.onClick.AddListener(() => popupManager.GetPopup<GeneralOkCancelPopup>(true)
+                                                                 .SetSubText($"Are you sure you want to delete wallet '{walletName}'?\nThis cannot be undone!")
+                                                                 .OnOkClicked(() => DeleteWallet(userWalletManager, hopeWalletInfoManager, logoutHandler)));
 	}
 
-	/// <summary>
-	/// Sets the other partial classes and other necessary variables
-	/// </summary>
-	protected override void OnStart()
+    /// <summary>
+    /// Sets the other partial classes and other necessary variables
+    /// </summary>
+    protected override void OnStart()
     {
         base.OnStart();
 
@@ -129,10 +132,29 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		selectables.Add(confirmPasswordField.InputFieldBase);
 	}
 
-	/// <summary>
-	/// Sets the current user settings
-	/// </summary>
-	private void SetCurrentSettings()
+    /// <summary>
+    /// Switches currency if needed
+    /// </summary>
+    private void OnDestroy()
+    {
+        if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
+            currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
+
+        SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
+
+        buttonClickObserver.UnsubscribeObservable(this);
+        MoreDropdown.PopupClosed?.Invoke();
+    }
+
+    /// <summary>
+    /// Sets the current user settings
+    /// </summary>
+    private void SetCurrentSettings()
 	{
 		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool("countdown timer"));
 		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool("show tooltips"));
@@ -141,29 +163,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool("password required for transaction"));
 	}
 
-	/// <summary>
-	/// Switches currency if needed
-	/// </summary>
-	private void OnDestroy()
+    private void DeleteWallet(UserWalletManager userWalletManager, HopeWalletInfoManager hopeWalletInfoManager, LogoutHandler logoutHandler)
     {
-		if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
-			currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
+        hopeWalletInfoManager.DeleteWalletInfo(hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()));
+        logoutHandler.Logout();
+    }
 
-		SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
-		SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
-		SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.IsToggledOn);
-		SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
-		SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
-		SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
-
-		buttonClickObserver.UnsubscribeObservable(this);
-        MoreDropdown.PopupClosed?.Invoke();
-	}
-
-	/// <summary>
-	/// Moves to the next input field
-	/// </summary>
-	/// <param name="clickType"> The tab button ClickType </param>
+    /// <summary>
+    /// Moves to the next input field
+    /// </summary>
+    /// <param name="clickType"> The tab button ClickType </param>
     public void TabButtonPressed(ClickType clickType)
     {
         if (clickType != ClickType.Down)
