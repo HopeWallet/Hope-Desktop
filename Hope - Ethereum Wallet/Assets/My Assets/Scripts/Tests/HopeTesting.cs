@@ -76,9 +76,16 @@ using Ledger.Net;
 using NBitcoin.DataEncoders;
 using NBitcoin.Crypto;
 using Org.BouncyCastle.Utilities;
+using System.Net;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    private void Start()
+    {
+        //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
+        //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
+    }
+
     //public string code;
 
     //private string previousCode;
