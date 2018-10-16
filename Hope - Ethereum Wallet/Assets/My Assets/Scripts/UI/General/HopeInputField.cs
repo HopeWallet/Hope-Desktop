@@ -63,9 +63,6 @@ public class HopeInputField : MonoBehaviour
 
 		Error = true;
 		Text = string.Empty;
-
-		//string test = "ｦ";
-		//test.GetUTF8Bytes().Single().Log();
 	}
 
 	/// <summary>
@@ -165,15 +162,10 @@ public class HopeInputField : MonoBehaviour
 
 		SetByteList();
 
-		string tempString = string.Empty;
-
-		for (int i = 0; i < inputFieldBase.text.Length; i++)
-			tempString += characterPlaceholders[i];
-
-		if (inputFieldBase.text != tempString)
+		if (inputFieldBase.text != characterPlaceholders.Substring(0, inputFieldBase.text.Length))
 			assigningCharacterPlaceholders = true;
 
-		inputFieldBase.text = tempString;
+		inputFieldBase.text = characterPlaceholders.Substring(0, inputFieldBase.text.Length);
 	}
 
 	/// <summary>
@@ -183,8 +175,6 @@ public class HopeInputField : MonoBehaviour
 	{
 		if (Bytes.Count <= inputFieldBase.text.Length)
 		{
-			Debug.Log("Hello");
-
 			List<byte> newByteList = new List<byte>();
 
 			bool passedNewChar = false;
@@ -251,7 +241,7 @@ public class HopeInputField : MonoBehaviour
 	/// <summary>
 	/// The eye icon is clicked and either enables or disables vision of the password
 	/// </summary>
-	private void EyeClicked()
+	public void EyeClicked()
 	{
 		if (inputFieldBase.contentType == InputField.ContentType.Password)
 		{
@@ -262,13 +252,10 @@ public class HopeInputField : MonoBehaviour
 		{
 			inputFieldBase.contentType = InputField.ContentType.Password;
 
-			string tempString = string.Empty;
-
-			for (int i = 0; i < inputFieldBase.text.Length; i++)
-				tempString += characterPlaceholders[i];
-
+			Bytes = new List<byte>();
+			Bytes.AddRange(inputFieldBase.text.GetUTF8Bytes());
 			assigningCharacterPlaceholders = true;
-			inputFieldBase.text = tempString;
+			inputFieldBase.text = characterPlaceholders.Substring(0, inputFieldBase.text.Length);
 
 			inputFieldBase.text.ForEach(_ => inputFieldBase.textComponent.text += "*");
 		}

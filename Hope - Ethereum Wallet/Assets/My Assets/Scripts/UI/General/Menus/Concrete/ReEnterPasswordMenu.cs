@@ -118,7 +118,10 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     {
         OnPasswordVerificationStarted?.Invoke();
 
-        walletPasswordVerification.VerifyPassword(passwordField)
+		if (passwordField.InputFieldBase.inputType == InputField.InputType.Standard)
+			passwordField.EyeClicked();
+
+		walletPasswordVerification.VerifyPassword(passwordField)
                                   .OnPasswordCorrect(CorrectPassword)
                                   .OnPasswordIncorrect(IncorrectPassword);
     }

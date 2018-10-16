@@ -129,6 +129,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// </summary>
 	private void CheckPassword()
 	{
+		if (passwordField.InputFieldBase.inputType == InputField.InputType.Standard)
+			passwordField.EyeClicked();
+
 		walletPasswordVerification.VerifyPassword(passwordField)
 								  .OnPasswordCorrect(CorrectPassword)
 								  .OnPasswordIncorrect(IncorrectPassword);
