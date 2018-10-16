@@ -183,6 +183,8 @@ public class HopeInputField : MonoBehaviour
 	{
 		if (Bytes.Count <= inputFieldBase.text.Length)
 		{
+			Debug.Log("Hello");
+
 			List<byte> newByteList = new List<byte>();
 
 			bool passedNewChar = false;
@@ -235,6 +237,15 @@ public class HopeInputField : MonoBehaviour
 			for (int i = 0; i < tempByteList.Count; i++)
 				Bytes.Add(tempByteList[i]);
 		}
+
+		try
+		{
+			Bytes.GetUTF8String().Log();
+		}
+		catch
+		{
+			Debug.Log("");
+		}
 	}
 
 	/// <summary>
@@ -250,7 +261,15 @@ public class HopeInputField : MonoBehaviour
 		else
 		{
 			inputFieldBase.contentType = InputField.ContentType.Password;
-			HidePasswordText();
+
+			string tempString = string.Empty;
+
+			for (int i = 0; i < inputFieldBase.text.Length; i++)
+				tempString += characterPlaceholders[i];
+
+			assigningCharacterPlaceholders = true;
+			inputFieldBase.text = tempString;
+
 			inputFieldBase.text.ForEach(_ => inputFieldBase.textComponent.text += "*");
 		}
 
