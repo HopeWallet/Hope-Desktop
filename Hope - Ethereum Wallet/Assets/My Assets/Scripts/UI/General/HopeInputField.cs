@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class HopeInputField : MonoBehaviour
+public sealed class HopeInputField : MonoBehaviour
 {
 	public event Action<string> OnInputUpdated;
 
@@ -18,17 +18,22 @@ public class HopeInputField : MonoBehaviour
 
 	public TextMeshProUGUI errorMessage;
 
-	private Sprite eyeInactiveNormal;
+    private List<byte> passwordBytes = new List<byte>();
+
+    private Sprite eyeInactiveNormal;
 	private Sprite eyeActiveNormal;
 
 	private string text;
 
-	public InputField InputFieldBase => inputFieldBase;
+    private bool assigningCharacterPlaceholders;
 
-	private readonly string characterPlaceholders = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
-	//private readonly string characterPlaceholders = "abcdefghijklmnopqrstuv";
+    private const string CHARACTER_PLACEHOLDERS = "頁ｦء設ｧآ是ｨؤ煵ｩئ엌ｪب嫠ｫة쯦ｬض案ｭظ煪ｮغ㍱ｯف從ｱكつｲو浳ｳي浤ｴﺲ搰ﻼｵ㍭ｶﻨﺺ煤ｷﻫ洳ｸ橱ｹ橱ｺۻ迎ｻ事ﺨｼ網ｽ計ｾ簡ｿ大ﾀ㍵ﾁ畱ﾃ煵ﾄ田ﾅ煱ﾇ۾둻ﾈ睤ﾊ㌹ﾋ楤ﾌぱﾍ椹ﾎぱﾏ頹ﾐ衙";
 
-	public string Text
+    public InputField InputFieldBase => inputFieldBase;
+
+    public bool Error { get; set; }
+
+    public string Text
 	{
 		get { return text; }
 		set
@@ -38,13 +43,7 @@ public class HopeInputField : MonoBehaviour
 		}
 	}
 
-	public byte[] InputFieldBytes => Bytes.ToArray();
-
-	public List<byte> Bytes = new List<byte>();
-
-	public bool Error { get; set; }
-
-	private bool assigningCharacterPlaceholders;
+	public byte[] InputFieldBytes => passwordBytes.ToArray();
 
 	/// <summary>
 	/// Sets the variables and inputfield listener
@@ -79,15 +78,15 @@ public class HopeInputField : MonoBehaviour
 
 		if (inputFieldBase.inputType == InputField.InputType.Password && otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password)
 		{
-			if (Bytes.Count != otherHopeInputField.Bytes.Count)
+			if (passwordBytes.Count != otherHopeInputField.passwordBytes.Count)
 				return false;
 
-			return Bytes.SequenceEqual(otherHopeInputField.Bytes);
+			return passwordBytes.SequenceEqual(otherHopeInputField.passwordBytes);
 		}
 		else
 		{
-			string thisText = inputFieldBase.inputType == InputField.InputType.Password ? Bytes.GetUTF8String() : text;
-			string otherText = otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password ? otherHopeInputField.Bytes.GetUTF8String() : otherHopeInputField.Text;
+			string thisText = inputFieldBase.inputType == InputField.InputType.Password ? passwordBytes.GetUTF8String() : text;
+			string otherText = otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password ? otherHopeInputField.passwordBytes.GetUTF8String() : otherHopeInputField.Text;
 
 			if (thisText != otherText)
 				return false;
@@ -162,10 +161,10 @@ public class HopeInputField : MonoBehaviour
 
 		SetByteList();
 
-		if (inputFieldBase.text != characterPlaceholders.Substring(0, inputFieldBase.text.Length))
+		if (inputFieldBase.text != CHARACTER_PLACEHOLDERS.Substring(0, inputFieldBase.text.Length))
 			assigningCharacterPlaceholders = true;
 
-		inputFieldBase.text = characterPlaceholders.Substring(0, inputFieldBase.text.Length);
+		inputFieldBase.text = CHARACTER_PLACEHOLDERS.Substring(0, inputFieldBase.text.Length);
 	}
 
 	/// <summary>
@@ -173,7 +172,7 @@ public class HopeInputField : MonoBehaviour
 	/// </summary>
 	private void SetByteList()
 	{
-		if (Bytes.Count <= inputFieldBase.text.Length)
+		if (passwordBytes.Count <= inputFieldBase.text.Length)
 		{
 			List<byte> newByteList = new List<byte>();
 
@@ -181,22 +180,22 @@ public class HopeInputField : MonoBehaviour
 
 			for (int i = 0; i < inputFieldBase.text.Length; i++)
 			{
-				if (inputFieldBase.text[i] != characterPlaceholders[i])
+				if (inputFieldBase.text[i] != CHARACTER_PLACEHOLDERS[i])
 				{
-					newByteList.Add(passedNewChar ? Bytes[i - 1] : inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
+					newByteList.Add(passedNewChar ? passwordBytes[i - 1] : inputFieldBase.text[i].ToString().GetUTF8Bytes().Single());
 					passedNewChar = true;
 				}
 				else
 				{
-					newByteList.Add(Bytes[i]);
+					newByteList.Add(passwordBytes[i]);
 				}
 			}
 
-			Bytes = newByteList;
+			passwordBytes = newByteList;
 		}
 		else
 		{
-			int charactersRemoved = Bytes.Count - inputFieldBase.text.Length;
+			int charactersRemoved = passwordBytes.Count - inputFieldBase.text.Length;
 			int firstIndexChanged = inputFieldBase.text.Length;
 			bool replacedCharacter = false;
 
@@ -204,9 +203,9 @@ public class HopeInputField : MonoBehaviour
 
 			for (int i = 0; i < inputFieldBase.text.Length; i++)
 			{
-				if (inputFieldBase.text[i] != characterPlaceholders[i])
+				if (inputFieldBase.text[i] != CHARACTER_PLACEHOLDERS[i])
 				{
-					replacedCharacter = !characterPlaceholders.Contains(inputFieldBase.text[i]);
+					replacedCharacter = !CHARACTER_PLACEHOLDERS.Contains(inputFieldBase.text[i]);
 
 					if (replacedCharacter)
 					{
@@ -219,22 +218,13 @@ public class HopeInputField : MonoBehaviour
 				}
 			}
 
-			for (int i = (firstIndexChanged + charactersRemoved); i < Bytes.Count; i++)
-				tempByteList.Add(Bytes[i]);
+			for (int i = (firstIndexChanged + charactersRemoved); i < passwordBytes.Count; i++)
+				tempByteList.Add(passwordBytes[i]);
 
-			Bytes.RemoveRange(firstIndexChanged, Bytes.Count - firstIndexChanged);
+			passwordBytes.RemoveRange(firstIndexChanged, passwordBytes.Count - firstIndexChanged);
 
 			for (int i = 0; i < tempByteList.Count; i++)
-				Bytes.Add(tempByteList[i]);
-		}
-
-		try
-		{
-			Bytes.GetUTF8String().Log();
-		}
-		catch
-		{
-			Debug.Log("");
+				passwordBytes.Add(tempByteList[i]);
 		}
 	}
 
@@ -246,16 +236,16 @@ public class HopeInputField : MonoBehaviour
 		if (inputFieldBase.contentType == InputField.ContentType.Password)
 		{
 			inputFieldBase.contentType = InputField.ContentType.Standard;
-			inputFieldBase.text = Bytes.GetUTF8String();
+			inputFieldBase.text = passwordBytes.GetUTF8String();
 		}
 		else
 		{
 			inputFieldBase.contentType = InputField.ContentType.Password;
 
-			Bytes = new List<byte>();
-			Bytes.AddRange(inputFieldBase.text.GetUTF8Bytes());
+			passwordBytes = new List<byte>();
+			passwordBytes.AddRange(inputFieldBase.text.GetUTF8Bytes());
 			assigningCharacterPlaceholders = true;
-			inputFieldBase.text = characterPlaceholders.Substring(0, inputFieldBase.text.Length);
+			inputFieldBase.text = CHARACTER_PLACEHOLDERS.Substring(0, inputFieldBase.text.Length);
 
 			inputFieldBase.text.ForEach(_ => inputFieldBase.textComponent.text += "*");
 		}
