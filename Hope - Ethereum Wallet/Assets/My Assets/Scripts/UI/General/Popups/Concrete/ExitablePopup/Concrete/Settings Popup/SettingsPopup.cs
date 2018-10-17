@@ -140,12 +140,12 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
             currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
-        SecurePlayerPrefs.SetBool("countdown timer", countdownTimerCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool("show tooltips", showTooltipsCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool("update notification", updateNotificationCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.COUNTDOWN_TIMER, countdownTimerCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SHOW_TOOLTIPS, showTooltipsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS, updateNotificationCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION, PasswordForTransactionCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.IDLE_TIMEOUT, idleTimeoutTimeCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT, loginAttemptsCheckbox.IsToggledOn);
         SecurePlayerPrefs.SetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT, startupAccountCheckbox.IsToggledOn);
 
         buttonClickObserver.UnsubscribeObservable(this);
@@ -157,11 +157,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// </summary>
     private void SetCurrentSettings()
 	{
-		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool("countdown timer"));
-		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool("show tooltips"));
-		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool("update notification"));
+		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.COUNTDOWN_TIMER));
+		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS));
+		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS));
 		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT));
-		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool("password required for transaction"));
+		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION));
 	}
 
     private void DeleteWallet(UserWalletManager userWalletManager, HopeWalletInfoManager hopeWalletInfoManager, LogoutHandler logoutHandler)

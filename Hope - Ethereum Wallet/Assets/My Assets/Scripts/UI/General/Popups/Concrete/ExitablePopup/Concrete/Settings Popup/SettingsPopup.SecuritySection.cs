@@ -55,16 +55,16 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SetCurrentSettings()
 		{
-			if (SecurePlayerPrefs.GetBool("idle timeout"))
+			if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.IDLE_TIMEOUT))
 			{
 				idleTimeoutTimeCheckbox.SetValue(true);
-				idleTimeoutTimeInputField.Text = SecurePlayerPrefs.GetInt("idle time").ToString();
+				idleTimeoutTimeInputField.Text = SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME).ToString();
 			}
 
-			loginAttemptsCheckbox.ToggleCheckbox(SecurePlayerPrefs.GetBool("limit login attempts"));
+			loginAttemptsCheckbox.ToggleCheckbox(SecurePlayerPrefs.GetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT));
 
 			if (loginAttemptsCheckbox.IsToggledOn)
-				loginAttemptsInputField.Text = SecurePlayerPrefs.GetInt("max login attempts").ToString();
+				loginAttemptsInputField.Text = SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS).ToString();
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// <param name="enabled"> Whether the setting is enabled or not </param>
 		private void IdleTimeoutCheckboxClicked(bool enabled)
 		{
-			idleTimeoutTimeInputField.Text = enabled ? SecurePlayerPrefs.GetInt("idle time").ToString() : string.Empty;
+			idleTimeoutTimeInputField.Text = enabled ? SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME).ToString() : string.Empty;
 		}
 
 		/// <summary>
@@ -90,7 +90,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				idleTimeoutTimeCheckbox.ToggleCheckbox(!idleTimeoutTimeInputField.Error);
 
 				if (!idleTimeoutTimeInputField.Error)
-					SecurePlayerPrefs.SetInt("idle time", idleTimeValue);
+					SecurePlayerPrefs.SetInt(PlayerPrefConstants.IDLE_TIME, idleTimeValue);
 			}
 		}
 
@@ -100,7 +100,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// <param name="enabled"> Whether the checkbox is toggled on or not </param>
 		private void LoginAttemptsChecboxClicked(bool enabled)
 		{
-			loginAttemptsInputField.Text = enabled ? SecurePlayerPrefs.GetInt("max login attempts").ToString() : string.Empty;
+			loginAttemptsInputField.Text = enabled ? SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS).ToString() : string.Empty;
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 				loginAttemptsCheckbox.ToggleCheckbox(!loginAttemptsInputField.Error);
 
 				if (!loginAttemptsInputField.Error)
-					SecurePlayerPrefs.SetInt("max login attempts", maxLoginAttempts);
+					SecurePlayerPrefs.SetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS, maxLoginAttempts);
 			}
 		}
 	}

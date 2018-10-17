@@ -41,11 +41,11 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         {
             yield return waiter;
 
-            if (SecurePlayerPrefs.GetBool("idle timeout") && uiManager.ActiveMenuType != typeof(ReEnterPasswordMenu))
+            if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.IDLE_TIMEOUT) && uiManager.ActiveMenuType != typeof(ReEnterPasswordMenu))
             {
                 if (previousMousePosition == Input.mousePosition)
                 {
-                    if ((currentIdleTime / 60) == SecurePlayerPrefs.GetInt("idle time"))
+                    if ((currentIdleTime / 60) == SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME))
                     {
                         uiManager.OpenMenu<ReEnterPasswordMenu>();
                         currentIdleTime = 0;

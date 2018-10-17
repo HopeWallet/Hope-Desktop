@@ -87,7 +87,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     /// </summary>
     private void SetMessageText()
     {
-        int idleTime = SecurePlayerPrefs.GetInt("idle time");
+        int idleTime = SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME);
         string minuteWord = idleTime == 1 ? " minute." : " minutes.";
 
         messageText.text = $"You have been idle for {idleTime}{minuteWord}{Environment.NewLine} Please re-enter your password or go back to the main menu.";

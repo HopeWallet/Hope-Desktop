@@ -82,22 +82,22 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	private void SetDefaultSettings()
 	{
-		if (SecurePlayerPrefs.HasKey("countdown timer"))
+		if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.COUNTDOWN_TIMER))
 			return;
 
-		SecurePlayerPrefs.SetBool("countdown timer", true);
-		SecurePlayerPrefs.SetBool("show tooltips", true);
-		SecurePlayerPrefs.SetBool("update notification", true);
-		SecurePlayerPrefs.SetBool("start on last account", true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.COUNTDOWN_TIMER, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SHOW_TOOLTIPS, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT, false);
 
-		SecurePlayerPrefs.SetBool("password required for transaction", true);
-		SecurePlayerPrefs.SetBool("idle timeout", true);
-		SecurePlayerPrefs.SetInt("idle time", 5);
-		SecurePlayerPrefs.SetBool("limit login attempts", true);
-		SecurePlayerPrefs.SetInt("max login attempts", 5);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.IDLE_TIMEOUT, true);
+		SecurePlayerPrefs.SetInt(PlayerPrefConstants.IDLE_TIME, 5);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT, true);
+		SecurePlayerPrefs.SetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS, 5);
 
-		SecurePlayerPrefs.SetBool("two-factor authentication", false);
-		SecurePlayerPrefs.SetBool("2FA is set up", false);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_ENABLED, false);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_SETUP, false);
 	}
 
 	/// <summary>

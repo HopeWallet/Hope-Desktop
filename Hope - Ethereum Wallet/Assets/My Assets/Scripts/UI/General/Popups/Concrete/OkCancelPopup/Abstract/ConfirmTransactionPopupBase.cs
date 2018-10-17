@@ -34,7 +34,7 @@ public abstract class ConfirmTransactionPopupBase<T> : OkCancelPopupComponent<T>
 			exitButton.SetActive(true);
 			exitButton.GetComponent<Button>().onClick.AddListener(CancelButton);
 		}
-		else if (!SecurePlayerPrefs.GetBool("countdown timer"))
+		else if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.COUNTDOWN_TIMER))
 		{
 			okButton.GetComponent<Button>().interactable = true;
 		}
