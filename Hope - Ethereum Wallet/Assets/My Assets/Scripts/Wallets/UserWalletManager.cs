@@ -82,8 +82,8 @@ public sealed class UserWalletManager : IDisposable
     /// </summary>
     public void Dispose()
     {
-        SetWalletAccount(0);
-        SetWalletPath(Wallet.DEFAULT_PATH);
+        //SetWalletAccount(0);
+        //SetWalletPath(Wallet.DEFAULT_PATH);
     }
 
     /// <summary>
@@ -132,21 +132,34 @@ public sealed class UserWalletManager : IDisposable
     /// <param name="newWalletType"> The new WalletType to use to get addresses/sign transactions. </param>
     public void SetWalletType(WalletType newWalletType)
     {
+        string walletPath = Wallet.DEFAULT_PATH;
+        int walletAccount = 0;
+
         switch (newWalletType)
         {
             case WalletType.Ledger:
                 activeWallet = ledgerWallet;
-                WalletPath = Wallet.ELECTRUM_LEDGER_PATH;
+                walletPath = Wallet.ELECTRUM_LEDGER_PATH;
                 break;
             case WalletType.Trezor:
                 activeWallet = trezorWallet;
-                WalletPath = Wallet.DEFAULT_PATH;
                 break;
             case WalletType.Hope:
                 activeWallet = hopeWallet;
-                WalletPath = Wallet.DEFAULT_PATH;
                 break;
         }
+
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT))
+        {
+            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
+                walletAccount = SecurePlayerPrefs.GetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString());
+
+            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
+                walletPath = SecurePlayerPrefs.GetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString());
+        }
+
+        SetWalletAccount(walletAccount);
+        SetWalletPath(walletPath);
     }
 
     /// <summary>
@@ -179,6 +192,8 @@ public sealed class UserWalletManager : IDisposable
             return;
 
         WalletPath = newPath;
+
+        SecurePlayerPrefs.SetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString(), WalletPath);
     }
 
     /// <summary>
@@ -188,6 +203,8 @@ public sealed class UserWalletManager : IDisposable
     public void SetWalletAccount(int newAccountNumber)
     {
         AccountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
+
+        SecurePlayerPrefs.SetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString(), AccountNumber);
     }
 
     /// <summary>
@@ -208,6 +225,23 @@ public sealed class UserWalletManager : IDisposable
     public void CreateWallet()
     {
         hopeWallet.Create();
+    }
+
+    /// <summary>
+    /// Gets the previous loaded account and wallet path if the setting is enabled.
+    /// </summary>
+    private void GetPreviousAccount()
+    {
+        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT) || !SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT))
+            return;
+
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
+            SetWalletAccount(SecurePlayerPrefs.GetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()));
+
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
+            SetWalletPath(SecurePlayerPrefs.GetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()));
+
+        UnityEngine.Debug.Log(AccountNumber + " " + WalletPath);
     }
 
     /// <summary>

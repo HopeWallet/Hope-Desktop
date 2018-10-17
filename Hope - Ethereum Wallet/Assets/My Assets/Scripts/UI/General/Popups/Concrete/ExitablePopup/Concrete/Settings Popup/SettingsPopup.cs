@@ -146,6 +146,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         SecurePlayerPrefs.SetBool("password required for transaction", PasswordForTransactionCheckbox.IsToggledOn);
         SecurePlayerPrefs.SetBool("idle timeout", idleTimeoutTimeCheckbox.IsToggledOn);
         SecurePlayerPrefs.SetBool("limit login attempts", loginAttemptsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT, startupAccountCheckbox.IsToggledOn);
 
         buttonClickObserver.UnsubscribeObservable(this);
         MoreDropdown.PopupClosed?.Invoke();
@@ -159,7 +160,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool("countdown timer"));
 		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool("show tooltips"));
 		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool("update notification"));
-		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool("start on last account"));
+		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT));
 		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool("password required for transaction"));
 	}
 
