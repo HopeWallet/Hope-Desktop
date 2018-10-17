@@ -18,7 +18,7 @@ public sealed class HopeInputField : MonoBehaviour
 
 	public TextMeshProUGUI errorMessage;
 
-    private List<byte> passwordBytes = new List<byte>();
+    private byte[] passwordBytes = new byte[0];
 
     private Sprite eyeInactiveNormal;
 	private Sprite eyeActiveNormal;
@@ -78,7 +78,7 @@ public sealed class HopeInputField : MonoBehaviour
 
 		if (inputFieldBase.inputType == InputField.InputType.Password && otherHopeInputField.inputFieldBase.inputType == InputField.InputType.Password)
 		{
-			if (passwordBytes.Count != otherHopeInputField.passwordBytes.Count)
+			if (passwordBytes.Length != otherHopeInputField.passwordBytes.Length)
 				return false;
 
 			return passwordBytes.SequenceEqual(otherHopeInputField.passwordBytes);
@@ -172,7 +172,7 @@ public sealed class HopeInputField : MonoBehaviour
 	/// </summary>
 	private void SetByteList()
 	{
-		if (passwordBytes.Count <= inputFieldBase.text.Length)
+		if (passwordBytes.Length <= inputFieldBase.text.Length)
 		{
 			List<byte> newByteList = new List<byte>();
 
@@ -191,11 +191,11 @@ public sealed class HopeInputField : MonoBehaviour
 				}
 			}
 
-			passwordBytes = newByteList;
+			passwordBytes = newByteList.ToArray();
 		}
 		else
 		{
-			int charactersRemoved = passwordBytes.Count - inputFieldBase.text.Length;
+			int charactersRemoved = passwordBytes.Length - inputFieldBase.text.Length;
 			int firstIndexChanged = inputFieldBase.text.Length;
 			bool replacedCharacter = false;
 
@@ -216,15 +216,16 @@ public sealed class HopeInputField : MonoBehaviour
 					firstIndexChanged = i;
 					break;
 				}
+				else
+				{
+					tempByteList.Add(passwordBytes[i]);
+				}
 			}
 
-			for (int i = (firstIndexChanged + charactersRemoved); i < passwordBytes.Count; i++)
+			for (int i = (firstIndexChanged + charactersRemoved); i < passwordBytes.Length; i++)
 				tempByteList.Add(passwordBytes[i]);
 
-			passwordBytes.RemoveRange(firstIndexChanged, passwordBytes.Count - firstIndexChanged);
-
-			for (int i = 0; i < tempByteList.Count; i++)
-				passwordBytes.Add(tempByteList[i]);
+			passwordBytes = tempByteList.ToArray();
 		}
 	}
 
@@ -242,8 +243,8 @@ public sealed class HopeInputField : MonoBehaviour
 		{
 			inputFieldBase.contentType = InputField.ContentType.Password;
 
-			passwordBytes = new List<byte>();
-			passwordBytes.AddRange(inputFieldBase.text.GetUTF8Bytes());
+			passwordBytes = new byte[inputFieldBase.text.Length];
+			passwordBytes = inputFieldBase.text.GetUTF8Bytes().ToArray();
 			assigningCharacterPlaceholders = true;
 			inputFieldBase.text = CHARACTER_PLACEHOLDERS.Substring(0, inputFieldBase.text.Length);
 
