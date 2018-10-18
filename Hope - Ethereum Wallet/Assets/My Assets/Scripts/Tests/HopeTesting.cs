@@ -78,19 +78,38 @@ using NBitcoin.Crypto;
 using Org.BouncyCastle.Utilities;
 using System.Net;
 using Trezor.Net.Contracts.Ethereum;
+using Trezor.Net.Contracts.Bitcoin;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    public string pin;
+
     private async void Start()
     {
         //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
         //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
 
-        var trezor = TrezorConnector.GetWindowsConnectedLedger(null);
+        var trezor = TrezorConnector.GetWindowsConnectedLedger(EnterPin);
 
         if (trezor == null)
             return;
 
+        //await GetEthereumAddress(trezor);
+
+        GetPublicKey getPublicKey = new GetPublicKey
+        {
+            AddressNs = KeyPath.Parse("m/44'/60'/0'").Indexes,
+            ShowDisplay = false
+        };
+
+        PublicKey publicKey = await trezor.SendMessageAsync<PublicKey, GetPublicKey>(getPublicKey);
+        //publicKey.Xpub.Log();
+        ExtPubKey extPubKey = new ExtPubKey(Encoding.UTF8.GetBytes(publicKey.Xpub));
+        //new EthECKey(extPubKey.Derive(0).Derive(0).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress().Log();
+    }
+
+    private static async Task GetEthereumAddress(Trezor.Net.TrezorManager trezor)
+    {
         EthereumGetAddress ethereumGetAddress = new EthereumGetAddress
         {
             AddressNs = KeyPath.Parse("m/44'/60'/0'/0/0").Indexes,
@@ -106,6 +125,16 @@ public sealed class HopeTesting : MonoBehaviour
         }
 
         address.Address.ToHex(true).Log();
+    }
+
+    private async Task<string> EnterPin()
+    {
+        while (pin.Length < 4)
+        {
+            await Task.Delay(100);
+        }
+
+        return pin;
     }
 
     //public string code;
