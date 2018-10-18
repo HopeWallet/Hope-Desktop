@@ -100,8 +100,6 @@ namespace Trezor.Net
         /// <returns>The result</returns>
         public async Task<TReadMessage> SendMessageAsync<TReadMessage, TWriteMessage>(TWriteMessage message)
         {
-            ValidateInitialization(message);
-
             await _Lock.WaitAsync();
 
             try

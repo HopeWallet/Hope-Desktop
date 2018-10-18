@@ -77,13 +77,35 @@ using NBitcoin.DataEncoders;
 using NBitcoin.Crypto;
 using Org.BouncyCastle.Utilities;
 using System.Net;
+using Trezor.Net.Contracts.Ethereum;
 
 public sealed class HopeTesting : MonoBehaviour
 {
-    private void Start()
+    private async void Start()
     {
         //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
         //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
+
+        var trezor = TrezorConnector.GetWindowsConnectedLedger(null);
+
+        if (trezor == null)
+            return;
+
+        EthereumGetAddress ethereumGetAddress = new EthereumGetAddress
+        {
+            AddressNs = KeyPath.Parse("m/44'/60'/0'/0/0").Indexes,
+            ShowDisplay = false
+        };
+
+        EthereumAddress address = await trezor.SendMessageAsync<EthereumAddress, EthereumGetAddress>(ethereumGetAddress);
+
+        if (address == null)
+        {
+            Debug.Log("NULL");
+            return;
+        }
+
+        address.Address.ToHex(true).Log();
     }
 
     //public string code;
