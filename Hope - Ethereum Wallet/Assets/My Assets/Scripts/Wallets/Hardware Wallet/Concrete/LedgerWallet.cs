@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Ledger.Net;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
-using NBitcoin;
-using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.Signer;
-using Nethereum.Util;
 using Transaction = Nethereum.Signer.Transaction;
 
 /// <summary>
@@ -30,43 +28,17 @@ public sealed class LedgerWallet : HardwareWallet
     {
     }
 
-    /// <summary>
-    /// Initializes all of the addresses for this Ledger wallet.
-    /// </summary>
-    public override async void InitializeAddresses()
+    protected override async Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData()
     {
-        addresses[0] = new string[50];
-        addresses[1] = new string[50];
-
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
-
         if (ledgerManager == null)
-        {
-            MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
-            return;
-        }
+            return null;
 
-        var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.TrimEnd('x', '/'), true, false).ConfigureAwait(false);
-
+        var pubKeyResponse = await ledgerManager.GetPublicKeyResponse(EXTENDED_PUBLIC_KEY_PATH, true, false).ConfigureAwait(false);
         if (pubKeyResponse?.IsSuccess != true)
-        {
-            MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
-            return;
-        }
+            return null;
 
-        var pubKeyData = pubKeyResponse.PublicKeyData;
-        var chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray();
-
-        var electrumLedgerXPub = new ExtPubKey(new PubKey(pubKeyData).Compress(), chainCodeData);
-        var defaultXPub = electrumLedgerXPub.Derive(0);
-
-        for (uint i = 0; i < addresses[0].Length; i++)
-        {
-            addresses[0][i] = new EthECKey(defaultXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
-            addresses[1][i] = new EthECKey(electrumLedgerXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
-        }
-
-        MainThreadExecutor.QueueAction(WalletLoadSuccessful);
+        return new ExtendedPublicKeyDataHolder { publicKeyData = pubKeyResponse.PublicKeyData, chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray() };
     }
 
     /// <summary>

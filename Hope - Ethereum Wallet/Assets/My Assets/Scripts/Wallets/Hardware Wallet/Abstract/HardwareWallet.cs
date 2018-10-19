@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Numerics;
+using System.Threading.Tasks;
 using Hope.Utils.Ethereum;
+using NBitcoin;
 using Nethereum.HdWallet;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.JsonRpc.UnityClient;
 using Nethereum.RLP;
 using Nethereum.Signer;
+using Nethereum.Util;
+using Transaction = Nethereum.Signer.Transaction;
 
 /// <summary>
 /// Base class used for any concrete hardware wallet implementations.
@@ -20,6 +24,8 @@ public abstract class HardwareWallet : IWallet
     protected readonly EthereumNetworkManager ethereumNetworkManager;
     protected readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
     protected readonly PopupManager popupManager;
+
+    protected const string EXTENDED_PUBLIC_KEY_PATH = "m/44'/60'/0'";
 
     /// <summary>
     /// Initializes the HardwareWallet instance.
@@ -46,6 +52,34 @@ public abstract class HardwareWallet : IWallet
     public string GetAddress(int addressIndex, string path)
     {
         return path.EqualsIgnoreCase(Wallet.DEFAULT_PATH) ? addresses[0][addressIndex] : addresses[1][addressIndex];
+    }
+
+    /// <summary>
+    /// Method used for initializing all the addresses for this hardware wallet.
+    /// </summary>
+    public async void InitializeAddresses()
+    {
+        addresses[0] = new string[50];
+        addresses[1] = new string[50];
+
+        var data = await GetExtendedPublicKeyData();
+
+        if (data == null)
+        {
+            MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
+            return;
+        }
+
+        var electrumLedgerXPub = new ExtPubKey(new PubKey(data.publicKeyData).Compress(), data.chainCodeData);
+        var defaultXPub = electrumLedgerXPub.Derive(0);
+
+        for (uint i = 0; i < addresses[0].Length; i++)
+        {
+            addresses[0][i] = new EthECKey(defaultXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
+            addresses[1][i] = new EthECKey(electrumLedgerXPub.Derive(i).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress();
+        }
+
+        MainThreadExecutor.QueueAction(WalletLoadSuccessful);
     }
 
     /// <summary>
@@ -100,10 +134,7 @@ public abstract class HardwareWallet : IWallet
     /// </summary>
     protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
 
-    /// <summary>
-    /// Abstract method used for initializing all the addresses for this hardware wallet.
-    /// </summary>
-    public abstract void InitializeAddresses();
+    protected abstract Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData();
 
     /// <summary>
     /// Abstract method used for signing a transaction using this hardware wallet.
@@ -112,4 +143,13 @@ public abstract class HardwareWallet : IWallet
     /// <param name="transaction"> The Transaction object containing all the data to sign. </param>
     /// <param name="path"> The path of the address signing the transaction. </param>
     protected abstract void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path);
+
+    /// <summary>
+    /// Class holding the data needed to create the extended public key (xpub).
+    /// </summary>
+    protected class ExtendedPublicKeyDataHolder
+    {
+        public byte[] publicKeyData;
+        public byte[] chainCodeData;
+    }
 }

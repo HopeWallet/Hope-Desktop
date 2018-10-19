@@ -82,10 +82,14 @@ using Trezor.Net.Contracts.Bitcoin;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    public static HopeTesting Instance;
+
     public string pin;
 
     private async void Start()
     {
+        Instance = this;
+
         //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
         //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
 
@@ -107,9 +111,9 @@ public sealed class HopeTesting : MonoBehaviour
         };
 
         PublicKey publicKey = await trezor.SendMessageAsync<PublicKey, GetPublicKey>(getPublicKey);
-        publicKey.Xpub.Log();
-        ExtPubKey extPubKey = new ExtPubKey(/*Encoders.Hex.DecodeData*/Encoding.UTF8.GetBytes(publicKey.Xpub.Remove(0, 4)));
-        //new EthECKey(extPubKey.Derive(0).Derive(0).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress().Log();
+
+        ExtPubKey extPubKey = new ExtPubKey(new PubKey(publicKey.Node.PublicKey).Compress(), publicKey.Node.ChainCode);
+        new EthECKey(extPubKey.Derive(0).Derive(0).PubKey.ToBytes(), false).GetPublicAddress().ConvertToEthereumChecksumAddress().Log();
     }
 
     private static async Task GetEthereumAddress(Trezor.Net.TrezorManager trezor)
