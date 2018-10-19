@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using NBitcoin;
 using Nethereum.JsonRpc.UnityClient;
-using Nethereum.Signer;
 using Trezor.Net.Contracts.Bitcoin;
 using Transaction = Nethereum.Signer.Transaction;
 
