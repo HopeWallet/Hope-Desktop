@@ -4,10 +4,21 @@ public abstract class OpenHardwareWalletMenuBaseAnimator : MenuAnimator
 {
 	[SerializeField] protected GameObject loadingWalletText;
 	[SerializeField] protected GameObject awaitingConnectionText;
-	[SerializeField] protected GameObject loadingIcon;
-
 	[SerializeField] protected GameObject deviceConnectedText;
+	[SerializeField] protected GameObject loadingIcon;
 	[SerializeField] protected GameObject openWalletButton;
+
+
+	private void Awake()
+	{
+		var walletMenuClass = transform.GetComponent<OpenLedgerWalletMenu>();
+
+		walletMenuClass.OnHardwareWalletConnected += () => ChangeWalletStatus(true);
+		walletMenuClass.OnHardwareWalletDisconnected += () => ChangeWalletStatus(false);
+		walletMenuClass.OnHardwareWalletLoadStart += () => ChangeLoadStatus(true);
+		walletMenuClass.OnHardwareWalletLoadEnd += () => ChangeLoadStatus(false);
+	}
+
 
 	/// <summary>
 	/// Changes the loading status of the hardware wallet
@@ -24,7 +35,7 @@ public abstract class OpenHardwareWalletMenuBaseAnimator : MenuAnimator
 	/// Switches the button and text according to the status of the Ledger
 	/// </summary>
 	/// <param name="ledgerConnected"></param>
-	protected void ChangeLedgerStatus(bool ledgerConnected)
+	protected void ChangeWalletStatus(bool ledgerConnected)
 	{
 		SwitchObjects(ledgerConnected ? awaitingConnectionText : deviceConnectedText, ledgerConnected ? deviceConnectedText : awaitingConnectionText);
 		SwitchObjects(ledgerConnected ? loadingIcon : openWalletButton, ledgerConnected ? openWalletButton : loadingIcon);

@@ -13,19 +13,6 @@ public sealed class OpenLedgerWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 	[SerializeField] private GameObject step4Text;
 
 	/// <summary>
-	/// Assigns the necessary events with their animations
-	/// </summary>
-	private void Awake()
-	{
-		var openLedgerWalletMenu = transform.GetComponent<OpenLedgerWalletMenu>();
-
-		openLedgerWalletMenu.OnHardwareWalletConnected += () => ChangeLedgerStatus(true);
-		openLedgerWalletMenu.OnHardwareWalletDisconnected += () => ChangeLedgerStatus(false);
-		openLedgerWalletMenu.OnHardwareWalletLoadStart += () => ChangeLoadStatus(true);
-		openLedgerWalletMenu.OnHardwareWalletLoadEnd += () => ChangeLoadStatus(false);
-	}
-
-	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
