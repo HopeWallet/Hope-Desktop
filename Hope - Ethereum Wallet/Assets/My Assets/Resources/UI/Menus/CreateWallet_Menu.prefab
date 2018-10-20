@@ -2011,7 +2011,6 @@ MonoBehaviour:
   noSpaces: 0
   placeholderFadeAway: 0
   errorMessage: {fileID: 114015037938011452}
-  Bytes: 
 --- !u!114 &114746784208049030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2285,7 +2284,6 @@ MonoBehaviour:
   noSpaces: 0
   placeholderFadeAway: 0
   errorMessage: {fileID: 114074237551203694}
-  Bytes: 
 --- !u!114 &114875816836159094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2601,7 +2599,6 @@ MonoBehaviour:
   noSpaces: 0
   placeholderFadeAway: 0
   errorMessage: {fileID: 114967016311071722}
-  Bytes: 
 --- !u!222 &222042671199506396
 CanvasRenderer:
   m_ObjectHideFlags: 1
