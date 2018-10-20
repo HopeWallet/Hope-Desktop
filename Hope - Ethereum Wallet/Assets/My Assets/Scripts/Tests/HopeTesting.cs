@@ -97,9 +97,28 @@ public sealed class HopeTesting : MonoBehaviour
 
         if (trezor == null)
             return;
-        
+
         //await GetEthereumAddress(trezor);
-        await GetPublicKey(trezor);
+        //await GetPublicKey(trezor);
+        await SignTransaction(trezor);
+    }
+
+    private static async Task SignTransaction(Trezor.Net.TrezorManager trezor)
+    {
+        EthereumSignTx ethereumSignTx = new EthereumSignTx
+        {
+            Nonce = 0.ToBytesForRLPEncoding(),
+            AddressNs = KeyPath.Parse("m/44'/60'/0'/0/0").Indexes,
+            GasPrice = 1000000000.ToBytesForRLPEncoding(),
+            GasLimit = 21000.ToBytesForRLPEncoding(),
+            To = "689c56aef474df92d44a1b70850f808488f9769c".HexToByteArray(),
+            Value = BigInteger.Parse("1000000000000000000").ToBytesForRLPEncoding(),
+            DataInitialChunk = new byte[0],
+            DataLength = 0,
+            ChainId = 4
+        };
+
+        var transaction = await trezor.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(ethereumSignTx);
     }
 
     private static async Task GetPublicKey(Trezor.Net.TrezorManager trezor)
