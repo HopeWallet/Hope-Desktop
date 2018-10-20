@@ -24,10 +24,10 @@ public sealed class OpenLedgerWalletMenuAnimator : MenuAnimator
 	{
 		var openLedgerWalletMenu = transform.GetComponent<OpenLedgerWalletMenu>();
 
-		openLedgerWalletMenu.OnLedgerConnected += () => ChangeLedgerStatus(true);
-		openLedgerWalletMenu.OnLedgerDisconnected += () => ChangeLedgerStatus(false);
-        openLedgerWalletMenu.OnLedgerLoadStart += () => ChangeLoadStatus(true);
-        openLedgerWalletMenu.OnLedgerLoadEnd += () => ChangeLoadStatus(false);
+		openLedgerWalletMenu.OnHardwareWalletConnected += () => ChangeLedgerStatus(true);
+		openLedgerWalletMenu.OnHardwareWalletDisconnected += () => ChangeLedgerStatus(false);
+        openLedgerWalletMenu.OnHardwareWalletLoadStart += () => ChangeLoadStatus(true);
+        openLedgerWalletMenu.OnHardwareWalletLoadEnd += () => ChangeLoadStatus(false);
 	}
 
 	/// <summary>

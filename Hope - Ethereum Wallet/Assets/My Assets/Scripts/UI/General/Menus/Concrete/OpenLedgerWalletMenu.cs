@@ -10,11 +10,11 @@ using Zenject;
 /// </summary>
 public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodicUpdater
 {
-    public event Action OnLedgerLoadStart;
-    public event Action OnLedgerLoadEnd;
+    public event Action OnHardwareWalletLoadStart;
+    public event Action OnHardwareWalletLoadEnd;
 
-    public event Action OnLedgerConnected;
-    public event Action OnLedgerDisconnected;
+    public event Action OnHardwareWalletConnected;
+    public event Action OnHardwareWalletDisconnected;
 
     [SerializeField] private Button openLedgerWalletButton;
 
@@ -82,7 +82,7 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     /// </summary>
     private void OpenWallet()
     {
-        OnLedgerLoadStart?.Invoke();
+        OnHardwareWalletLoadStart?.Invoke();
         ledgerWallet.InitializeAddresses();
     }
 
@@ -91,7 +91,7 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
     /// </summary>
     private void OnWalletLoadUnsuccessful()
     {
-        OnLedgerLoadEnd?.Invoke();
+        OnHardwareWalletLoadEnd?.Invoke();
     }
 
     /// <summary>
@@ -107,14 +107,14 @@ public sealed class OpenLedgerWalletMenu : Menu<OpenLedgerWalletMenu>, IPeriodic
         if (string.IsNullOrEmpty(address))
         {
             if (connected)
-                MainThreadExecutor.QueueAction(() => OnLedgerDisconnected?.Invoke());
+                MainThreadExecutor.QueueAction(() => OnHardwareWalletDisconnected?.Invoke());
 
             connected = false;
         }
         else
         {
             if (!connected)
-                MainThreadExecutor.QueueAction(() => OnLedgerConnected?.Invoke());
+                MainThreadExecutor.QueueAction(() => OnHardwareWalletConnected?.Invoke());
 
             connected = true;
         }
