@@ -10,6 +10,8 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 {
 	[SerializeField] private TextMeshProUGUI subText;
 
+	private bool disableEnterButton;
+
 	private Action onFinish;
 
 	private ButtonClickObserver buttonClickObserver;
@@ -54,6 +56,16 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 	}
 
 	/// <summary>
+	/// Disables the ability to hit the enter button and click yes
+	/// </summary>
+	/// <returns> The instance of the class </returns>
+	public GeneralOkCancelPopup DisableEnterButton()
+	{
+		disableEnterButton = false;
+		return this;
+	}
+
+	/// <summary>
 	/// Sets the final action to be called when the popup is destroyed
 	/// </summary>
 	/// <param name="onFinish"> The final action </param>
@@ -70,7 +82,7 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 	/// <param name="clickType"> The ClickType </param>
 	public void EnterButtonPressed(ClickType clickType)
 	{
-		if (clickType != ClickType.Down)
+		if (clickType != ClickType.Down || disableEnterButton)
 			return;
 
 		okButton.Press();

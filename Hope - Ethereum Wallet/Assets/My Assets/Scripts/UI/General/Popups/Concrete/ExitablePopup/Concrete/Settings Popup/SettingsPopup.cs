@@ -93,9 +93,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 		walletName = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()).WalletName;
 
-        deleteWalletButton.onClick.AddListener(() => popupManager.GetPopup<GeneralOkCancelPopup>(true)
-                                                                 .SetSubText($"Are you sure you want to delete wallet '{walletName}'?\nThis cannot be undone!")
-                                                                 .OnOkClicked(() => DeleteWallet(userWalletManager, hopeWalletInfoManager, logoutHandler)));
+		deleteWalletButton.onClick.AddListener(() => popupManager.GetPopup<GeneralOkCancelPopup>(true)
+																 .SetSubText($"Are you sure you want to delete wallet '{walletName}'?\nThis cannot be undone!")
+																 .OnOkClicked(() => DeleteWallet(userWalletManager, hopeWalletInfoManager, logoutHandler))
+																 .DisableEnterButton());
 	}
 
     /// <summary>
@@ -167,8 +168,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     private void DeleteWallet(UserWalletManager userWalletManager, HopeWalletInfoManager hopeWalletInfoManager, LogoutHandler logoutHandler)
     {
         hopeWalletInfoManager.DeleteWalletInfo(hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()));
-        logoutHandler.Logout();
-    }
+		logoutHandler.Logout();
+	}
 
     /// <summary>
     /// Moves to the next input field
