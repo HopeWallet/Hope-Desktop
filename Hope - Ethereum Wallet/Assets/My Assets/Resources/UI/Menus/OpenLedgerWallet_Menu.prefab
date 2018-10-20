@@ -597,7 +597,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -644,7 +644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyWhenClosed: 1
   backButton: {fileID: 114011816171501850}
-  openLedgerWalletButton: {fileID: 114005207103077076}
+  openWalletButton: {fileID: 114005207103077076}
 --- !u!114 &114251184254981024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1161,7 +1161,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -1306,19 +1306,19 @@ MonoBehaviour:
   m_margin: {x: -0.051063538, y: -0.53980446, z: -0.5532303, w: 0.17066383}
   m_textInfo:
     textComponent: {fileID: 114643236082185424}
-    characterCount: 25
+    characterCount: 18
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -1581,17 +1581,17 @@ MonoBehaviour:
   formTitle: {fileID: 1099291146052992}
   line: {fileID: 1796914677723112}
   menuTooltip: {fileID: 0}
+  loadingWalletText: {fileID: 0}
+  awaitingConnectionText: {fileID: 1241543267999148}
+  loadingIcon: {fileID: 1483256693071194}
+  deviceConnectedText: {fileID: 1136455584542856}
+  openWalletButton: {fileID: 1842371670095206}
   backButton: {fileID: 1814733390970646}
   ledgerLogo: {fileID: 1249908733382422}
   step1Text: {fileID: 1047096693189682}
   step2Text: {fileID: 1285252365277484}
   step3Text: {fileID: 1369484255439200}
   step4Text: {fileID: 1362686592542386}
-  awaitingConnectionText: {fileID: 1241543267999148}
-  deviceConnectedText: {fileID: 1136455584542856}
-  loadingLedgerText: {fileID: 1211755166444842}
-  loadingIcon: {fileID: 1483256693071194}
-  openWalletButton: {fileID: 1842371670095206}
 --- !u!222 &222106797205996834
 CanvasRenderer:
   m_ObjectHideFlags: 1

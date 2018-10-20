@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -8,13 +9,15 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
     public event Action OnHardwareWalletLoadStart;
     public event Action OnHardwareWalletLoadEnd;
 
-    public abstract event Action OnHardwareWalletConnected;
-    public abstract event Action OnHardwareWalletDisconnected;
+    public event Action OnHardwareWalletConnected;
+    public event Action OnHardwareWalletDisconnected;
 
     [SerializeField] private Button openWalletButton;
 
     private TWallet hardwareWallet;
     private PeriodicUpdateManager periodicUpdateManager;
+
+    private bool wasConnected;
 
     /// <summary>
     /// The interval in which to recheck if the hardware wallet is plugged in.
@@ -89,5 +92,25 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
         OnHardwareWalletLoadEnd?.Invoke();
     }
 
-    public abstract void PeriodicUpdate();
+    public async void PeriodicUpdate()
+    {
+        bool isConnected = await IsHardwareWalletConnected().ConfigureAwait(false);
+
+        if (!isConnected)
+        {
+            if (wasConnected)
+                MainThreadExecutor.QueueAction(() => OnHardwareWalletDisconnected?.Invoke());
+
+            wasConnected = false;
+        }
+        else
+        {
+            if (!wasConnected)
+                MainThreadExecutor.QueueAction(() => OnHardwareWalletConnected?.Invoke());
+
+            wasConnected = true;
+        }
+    }
+
+    protected abstract Task<bool> IsHardwareWalletConnected();
 }
