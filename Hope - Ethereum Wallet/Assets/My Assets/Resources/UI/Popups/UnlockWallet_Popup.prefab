@@ -567,7 +567,6 @@ MonoBehaviour:
   noSpaces: 0
   placeholderFadeAway: 0
   errorMessage: {fileID: 114635802527267184}
-  Bytes: 
 --- !u!114 &114340383800343060
 MonoBehaviour:
   m_ObjectHideFlags: 1
