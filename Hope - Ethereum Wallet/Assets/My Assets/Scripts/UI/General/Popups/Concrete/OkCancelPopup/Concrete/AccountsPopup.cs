@@ -20,6 +20,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
     [SerializeField] private Transform addressesSection;
     [SerializeField] private Button previousPageButton, nextPageButton;
     [SerializeField] private TextMeshProUGUI pageNumText;
+	[SerializeField] private TooltipItem[] tooltipItems;
 
     private UserWalletManager userWalletManager;
     private EthereumTransactionManager ethereumTransactionManager;
@@ -60,10 +61,21 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         this.tradableAssetNotificationManager = tradableAssetNotificationManager;
         this.lockedPRPSManager = lockedPRPSManager;
         this.lockPRPSManager = lockPRPSManager;
-    }
+
+		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS);
+
+		foreach (TooltipItem tooltip in tooltipItems)
+		{
+			if (showTooltips)
+				tooltip.PopupManager = popupManager;
+			else if (tooltip.infoIcon)
+				tooltip.gameObject.SetActive(false);
+			else
+				tooltip.enabled = false;
+		}
+	}
 
 	public void SetOnCloseAction(Action onClose) => this.onClose = onClose;
-
 
 	protected override void Awake()
     {
