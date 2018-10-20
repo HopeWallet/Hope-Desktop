@@ -166,7 +166,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
     private void DeleteWallet(UserWalletManager userWalletManager, HopeWalletInfoManager hopeWalletInfoManager, LogoutHandler logoutHandler)
     {
-        hopeWalletInfoManager.DeleteWalletInfo(hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress()));
+        var wallets = hopeWalletInfoManager.Wallets;
+        var walletToDelete = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress());
+
+        for (int i = wallets.IndexOf(walletToDelete) + 1; i < wallets.Count; i++)
+            hopeWalletInfoManager.UpdateWalletInfo(wallets[i].WalletNum, new WalletInfo(wallets[i].EncryptedWalletData, wallets[i].WalletName, wallets[i].WalletAddresses, wallets[i].WalletNum - 1));
+
+        hopeWalletInfoManager.DeleteWalletInfo(walletToDelete);
         logoutHandler.Logout();
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class which manages the info for each wallet.
@@ -12,6 +13,11 @@ public sealed class HopeWalletInfoManager
     /// The current wallet count.
     /// </summary>
     public int WalletCount => wallets.Count;
+
+    /// <summary>
+    /// The current list of wallets.
+    /// </summary>
+    public List<WalletInfo> Wallets => wallets.ReadonlyList;
 
     /// <summary>
     /// Initializes the UserWalletInfoManager.
