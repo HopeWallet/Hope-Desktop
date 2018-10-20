@@ -13,14 +13,19 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject passcodeInputField;
 	[SerializeField] private GameObject nextButton;
 
+	private void Awake() => GetComponent<OpenTrezorWalletMenu>().TrezorRequiresPIN += AnimateEnterPINSection;
+
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
 		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating);
+	}
 
+	private void AnimateEnterPINSection()
+	{
 		enterPINText.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		subText.AnimateGraphicAndScale(1f, 1f, 0.275f);
 
@@ -34,7 +39,7 @@ public sealed class OpenTrezorWalletMenuAnimator : MenuAnimator
 		}
 
 		passcodeInputField.AnimateScaleX(1f, 0.375f);
-		nextButton.AnimateGraphicAndScale(1f, 1f, 0.4f, FinishedAnimating);
+		nextButton.AnimateGraphicAndScale(1f, 1f, 0.4f);
 	}
 
 	/// <summary>

@@ -6,4 +6,5 @@ using System.Threading.Tasks;
 
 public sealed class OpenTrezorWalletMenu : Menu<OpenTrezorWalletMenu>
 {
+	public event Action TrezorRequiresPIN;
 }
