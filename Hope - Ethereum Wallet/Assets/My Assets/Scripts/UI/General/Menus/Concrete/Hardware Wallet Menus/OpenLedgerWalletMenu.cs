@@ -1,56 +1,16 @@
 ﻿using Ledger.Net.Connectivity;
 using Nethereum.HdWallet;
 using System;
-using UnityEngine;
-using UnityEngine.UI;
-using Zenject;
 
 /// <summary>
 /// Class used for displaying the menu for opening the ledger wallet.
 /// </summary>
-public sealed class OpenLedgerWalletMenu : OpenHardwareWalletMenu<OpenLedgerWalletMenu>
+public sealed class OpenLedgerWalletMenu : OpenHardwareWalletMenu<OpenLedgerWalletMenu, LedgerWallet>
 {
-    public event Action OnHardwareWalletLoadStart;
-    public event Action OnHardwareWalletLoadEnd;
-
-    public event Action OnHardwareWalletConnected;
-    public event Action OnHardwareWalletDisconnected;
-
-    [SerializeField] private Button openLedgerWalletButton;
-
-    private LedgerWallet ledgerWallet;
-    private PeriodicUpdateManager periodicUpdateManager;
+    public override event Action OnHardwareWalletConnected;
+    public override event Action OnHardwareWalletDisconnected;
 
     private bool connected;
-
-    /// <summary>
-    /// Adds required dependencies.
-    /// </summary>
-    /// <param name="ledgerWallet"> The active LedgerWallet instance. </param>
-    /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
-    [Inject]
-    public void Construct(LedgerWallet ledgerWallet, PeriodicUpdateManager periodicUpdateManager)
-    {
-        this.ledgerWallet = ledgerWallet;
-        this.periodicUpdateManager = periodicUpdateManager;
-    }
-
-    /// <summary>
-    /// Adds the button listener to the open ledger wallet button.
-    /// </summary>
-    private void Start()
-    {
-        openLedgerWalletButton.onClick.AddListener(StartWalletLoad);
-    }
-
-    /// <summary>
-    /// Starts the load of the ledger wallet.
-    /// </summary>
-    private void StartWalletLoad()
-    {
-        OnHardwareWalletLoadStart?.Invoke();
-        ledgerWallet.InitializeAddresses();
-    }
 
     /// <summary>
     /// Checks if the ledger is connected and executes the OnLedgerConnected and OnLedgerDisconnected events accordingly.

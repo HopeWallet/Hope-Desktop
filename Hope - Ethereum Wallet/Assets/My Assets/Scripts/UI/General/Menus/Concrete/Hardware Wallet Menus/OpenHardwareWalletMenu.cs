@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
-public abstract class OpenHardwareWalletMenu<T> : Menu<T>, IPeriodicUpdater where T : Menu<T>
+public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPeriodicUpdater where TMenu : Menu<TMenu> where TWallet : HardwareWallet
 {
     public event Action OnHardwareWalletLoadStart;
     public event Action OnHardwareWalletLoadEnd;
 
-    public event Action OnHardwareWalletConnected;
-    public event Action OnHardwareWalletDisconnected;
+    public abstract event Action OnHardwareWalletConnected;
+    public abstract event Action OnHardwareWalletDisconnected;
 
+    [SerializeField] private Button openWalletButton;
+
+    private TWallet hardwareWallet;
     private PeriodicUpdateManager periodicUpdateManager;
 
     /// <summary>
@@ -23,11 +24,21 @@ public abstract class OpenHardwareWalletMenu<T> : Menu<T>, IPeriodicUpdater wher
     /// <summary>
     /// Adds required dependencies.
     /// </summary>
+    /// <param name="hardwareWallet"> The hardware wallet to load. </param>
     /// <param name="periodicUpdateManager"> The active PeriodicUpdateManager. </param>
     [Inject]
-    public void Construct(PeriodicUpdateManager periodicUpdateManager)
+    public void Construct(TWallet hardwareWallet, PeriodicUpdateManager periodicUpdateManager)
     {
+        this.hardwareWallet = hardwareWallet;
         this.periodicUpdateManager = periodicUpdateManager;
+    }
+
+    /// <summary>
+    /// Adds the button listener to the open ledger wallet button.
+    /// </summary>
+    private void Start()
+    {
+        openWalletButton.onClick.AddListener(StartWalletLoad);
     }
 
     /// <summary>
@@ -37,6 +48,7 @@ public abstract class OpenHardwareWalletMenu<T> : Menu<T>, IPeriodicUpdater wher
     {
         UserWalletManager.OnWalletLoadSuccessful += OnWalletLoadSuccessful;
         UserWalletManager.OnWalletLoadUnsuccessful += OnWalletLoadUnsuccessful;
+
         periodicUpdateManager.AddPeriodicUpdater(this, true);
     }
 
@@ -47,11 +59,21 @@ public abstract class OpenHardwareWalletMenu<T> : Menu<T>, IPeriodicUpdater wher
     {
         UserWalletManager.OnWalletLoadSuccessful -= OnWalletLoadSuccessful;
         UserWalletManager.OnWalletLoadUnsuccessful -= OnWalletLoadUnsuccessful;
+
         periodicUpdateManager.RemovePeriodicUpdater(this);
     }
 
     /// <summary>
-    /// Opens the OpenWalletMenu if the ledger loads successful.
+    /// Starts the load of the hardware wallet.
+    /// </summary>
+    private void StartWalletLoad()
+    {
+        OnHardwareWalletLoadStart?.Invoke();
+        hardwareWallet.InitializeAddresses();
+    }
+
+    /// <summary>
+    /// Opens the OpenWalletMenu if the hardware wallet loads successful.
     /// </summary>
     private void OnWalletLoadSuccessful()
     {
@@ -60,7 +82,7 @@ public abstract class OpenHardwareWalletMenu<T> : Menu<T>, IPeriodicUpdater wher
     }
 
     /// <summary>
-    /// Called if the ledger is not loaded successfully.
+    /// Called if the hardware wallet is not loaded successfully.
     /// </summary>
     private void OnWalletLoadUnsuccessful()
     {
