@@ -10,6 +10,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 	[SerializeField] private GameObject enterPINText;
 	[SerializeField] private GameObject subText;
 	[SerializeField] private Transform keyPadButtons;
+	[SerializeField] private GameObject plugInTrezorText;
 	[SerializeField] private GameObject passcodeInputField;
 	[SerializeField] private GameObject nextButton;
 
@@ -22,6 +23,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 	{
 		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		plugInTrezorText.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		awaitingConnectionText.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
 	}
@@ -43,6 +45,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 		passcodeInputField.AnimateScaleX(0f, 0.3f);
 		nextButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
+		plugInTrezorText.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		awaitingConnectionText.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		deviceConnectedText.AnimateGraphicAndScale(0f, 0f, 0.3f);
