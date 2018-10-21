@@ -1438,6 +1438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdbd6c7c69cc034b9954787b9f3b682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  passcodeInputField: {fileID: 114644934673162484}
+  removeCharacterButton: {fileID: 114198091722951202}
   nextButton: {fileID: 114318437232757922}
   keypadButtons:
   - {fileID: 114609171487002540}
@@ -1449,7 +1451,6 @@ MonoBehaviour:
   - {fileID: 114319442999993130}
   - {fileID: 114673690477357346}
   - {fileID: 114030948183561446}
-  passcodeInputField: {fileID: 114644934673162484}
 --- !u!114 &114541272467560380
 MonoBehaviour:
   m_ObjectHideFlags: 1
