@@ -86,22 +86,33 @@ public sealed class HopeTesting : MonoBehaviour
 
     public string pin;
 
-    private async void Start()
+    private void Start()
     {
-        Instance = this;
-
-        //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
-        //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
-
-        var trezor = TrezorConnector.GetWindowsConnectedLedger(EnterPin);
-
-        if (trezor == null)
-            return;
-
-        //await GetEthereumAddress(trezor);
-        //await GetPublicKey(trezor);
-        await SignTransaction(trezor);
+        var ledger = LedgerConnector.GetWindowsConnectedLedger();
+        ledger.LedgerHidDevice.Disconnected += LedgerDisconnected;
     }
+
+    private void LedgerDisconnected(object sender, EventArgs e)
+    {
+        Debug.Log("DISCONNECTED");
+    }
+
+    //private async void Start()
+    //{
+    //    Instance = this;
+
+    //    //https://www.red-gate.com/simple-talk/dotnet/c-programming/calling-restful-apis-unity3d/
+    //    //HttpWebRequest httpWebRequest = HttpWebRequest.Create("") as HttpWebRequest;
+
+    //    var trezor = TrezorConnector.GetWindowsConnectedLedger(EnterPin);
+
+    //    if (trezor == null)
+    //        return;
+
+    //    //await GetEthereumAddress(trezor);
+    //    //await GetPublicKey(trezor);
+    //    await SignTransaction(trezor);
+    //}
 
     private static async Task SignTransaction(Trezor.Net.TrezorManager trezor)
     {

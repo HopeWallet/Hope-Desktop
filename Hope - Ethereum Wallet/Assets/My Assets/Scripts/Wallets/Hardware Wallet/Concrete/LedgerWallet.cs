@@ -5,9 +5,7 @@ using Ledger.Net;
 using Ledger.Net.Connectivity;
 using Ledger.Net.Requests;
 using Ledger.Net.Responses;
-using Nethereum.Hex.HexConvertors.Extensions;
-using Nethereum.JsonRpc.UnityClient;
-using Nethereum.Signer;
+using Nethereum.HdWallet;
 using Transaction = Nethereum.Signer.Transaction;
 
 /// <summary>
@@ -41,44 +39,28 @@ public sealed class LedgerWallet : HardwareWallet
         return new ExtendedPublicKeyDataHolder { publicKeyData = pubKeyResponse.PublicKeyData, chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray() };
     }
 
-    /// <summary>
-    /// Signs a transaction using the Ledger wallet.
-    /// </summary>
-    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
-    /// <param name="transaction"> The Transaction object containing all the data to sign. </param>
-    /// <param name="path"> The path of the address signing the transaction. </param>
-    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
+    protected override async Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
+        var address = ledgerManager == null
+            ? null
+            : (await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false))?.Address;
 
-        if (ledgerManager == null)
-            return;
+        // Don't sign transaction if app is not Ethereum, or if the address doesn't match the with address of the opened Ledger wallet.
+        if (string.IsNullOrEmpty(address) || !address.EqualsIgnoreCase(addresses[1][0]))
+            return null;
 
         var addressIndex = path.Count(c => c == '/') - 1;
         var derivationData = Helpers.GetDerivationPathData(path);
 
         var request = new EthereumAppSignTransactionRequest(derivationData.Concat(transaction.GetRLPEncoded()).ToArray());
+
+        onSignatureRequestSent?.Invoke();
+
         var response = await ledgerManager.SendRequestAsync<EthereumAppSignTransactionResponse, EthereumAppSignTransactionRequest>(request).ConfigureAwait(false);
-
         if (!response.IsSuccess)
-            return;
+            return new SignedTransactionDataHolder();
 
-        var transactionChainId = new TransactionChainId(
-            transaction.Nonce,
-            transaction.GasPrice,
-            transaction.GasLimit,
-            transaction.ReceiveAddress,
-            transaction.Value,
-            transaction.Data,
-            new byte[] { (byte)ethereumNetworkSettings.networkType },
-            response.SignatureR,
-            response.SignatureS,
-            new byte[] { (byte)response.SignatureV });
-
-        MainThreadExecutor.QueueAction(() =>
-        {
-            onTransactionSigned?.Invoke(new TransactionSignedUnityRequest(transactionChainId.GetRLPEncoded().ToHex(), ethereumNetworkManager.CurrentNetwork.NetworkUrl));
-            popupManager.CloseAllPopups();
-        });
+        return new SignedTransactionDataHolder { signed = true, v = response.SignatureV, r = response.SignatureR, s = response.SignatureS };
     }
 }

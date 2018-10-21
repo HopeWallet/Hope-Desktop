@@ -13,7 +13,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 	[SerializeField] private GameObject passcodeInputField;
 	[SerializeField] private GameObject nextButton;
 
-	private void Start() => GetComponent<OpenTrezorWalletMenu>().TrezorRequiresPIN += AnimateEnterPINSection;
+	private void Start() => GetComponent<OpenTrezorWalletMenu>().TrezorPINSectionOpening += AnimateEnterPINSection;
 
 	/// <summary>
 	/// Animates the unique elements of this form into view

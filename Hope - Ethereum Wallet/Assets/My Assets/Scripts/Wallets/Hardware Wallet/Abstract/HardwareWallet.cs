@@ -27,6 +27,8 @@ public abstract class HardwareWallet : IWallet
 
     protected const string EXTENDED_PUBLIC_KEY_PATH = "m/44'/60'/0'";
 
+    private bool signingTransaction;
+
     /// <summary>
     /// Initializes the HardwareWallet instance.
     /// </summary>
@@ -106,21 +108,59 @@ public abstract class HardwareWallet : IWallet
         string path,
         params object[] displayInput) where T : ConfirmTransactionPopupBase<T>
     {
-        popupManager.GetPopup<T>(true).SetConfirmationValues(null, gasLimit, gasPrice, displayInput);
+        if (signingTransaction)
+            return;
 
-        TransactionUtils.GetAddressTransactionCount(addressFrom).OnSuccess(txCount =>
+        signingTransaction = true;
+
+        TransactionUtils.GetAddressTransactionCount(addressFrom).OnSuccess(async txCount =>
         {
-            byte[] nonceBytes = txCount.ToBytesForRLPEncoding();
-            byte[] gasPriceBytes = gasPrice.ToBytesForRLPEncoding();
-            byte[] gasLimitBytes = gasLimit.ToBytesForRLPEncoding();
-            byte[] addressBytes = addressTo.HexToByteArray();
-            byte[] valueBytes = value.ToBytesForRLPEncoding();
-            byte[] dataBytes = data.HexToByteArray();
+            var transaction = new Transaction(
+                txCount.ToBytesForRLPEncoding(),
+                gasPrice.ToBytesForRLPEncoding(),
+                gasLimit.ToBytesForRLPEncoding(),
+                addressTo.HexToByteArray(),
+                value.ToBytesForRLPEncoding(),
+                data.HexToByteArray(),
+                new byte[] { 0 },
+                new byte[] { 0 },
+                (byte)ethereumNetworkSettings.networkType);
 
-            SignTransaction(
-                onTransactionSigned,
-                new Transaction(nonceBytes, gasPriceBytes, gasLimitBytes, addressBytes, valueBytes, dataBytes, new byte[] { 0 }, new byte[] { 0 }, (byte)ethereumNetworkSettings.networkType),
-                path);
+            var signedTransactionData = await GetSignedTransactionData(
+                transaction,
+                path,
+                () => MainThreadExecutor.QueueAction(() => popupManager.GetPopup<T>(true).SetConfirmationValues(null, gasLimit, gasPrice, displayInput))).ConfigureAwait(false);
+
+            signingTransaction = false;
+
+            if (signedTransactionData == null)
+            {
+                return;
+            }
+
+            else if (!signedTransactionData.signed)
+            {
+                MainThreadExecutor.QueueAction(() => popupManager.CloseActivePopup());
+                return;
+            }
+
+            var transactionChainId = new TransactionChainId(
+                transaction.Nonce,
+                transaction.GasPrice,
+                transaction.GasLimit,
+                transaction.ReceiveAddress,
+                transaction.Value,
+                transaction.Data,
+                new byte[] { (byte)ethereumNetworkSettings.networkType },
+                signedTransactionData.r,
+                signedTransactionData.s,
+                new byte[] { (byte)signedTransactionData.v });
+
+            MainThreadExecutor.QueueAction(() =>
+            {
+                onTransactionSigned?.Invoke(new TransactionSignedUnityRequest(transactionChainId.GetRLPEncoded().ToHex(), ethereumNetworkManager.CurrentNetwork.NetworkUrl));
+                popupManager.CloseAllPopups();
+            });
         });
     }
 
@@ -134,15 +174,20 @@ public abstract class HardwareWallet : IWallet
     /// </summary>
     protected void WalletLoadUnsuccessful() => OnWalletLoadUnsuccessful?.Invoke();
 
+    /// <summary>
+    /// Abstract method used for retrieving the public key data from the hardware wallet.
+    /// </summary>
+    /// <returns> Task returning the ExtendedPublicKeyDataHolder instance. </returns>
     protected abstract Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData();
 
     /// <summary>
-    /// Abstract method used for signing a transaction using this hardware wallet.
+    /// Abstract method used for getting the signed transaction data from the hardware wallet.
     /// </summary>
-    /// <param name="onTransactionSigned"> Action to call once the transaction has been signed. </param>
     /// <param name="transaction"> The Transaction object containing all the data to sign. </param>
     /// <param name="path"> The path of the address signing the transaction. </param>
-    protected abstract void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path);
+    /// <param name="onSignatureRequestSent"> Action to call once the request for a transaction signature has been sent. </param>
+    /// <returns> Task returning the SignedTransactionDataHolder instance. </returns>
+    protected abstract Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent);
 
     /// <summary>
     /// Class holding the data needed to create the extended public key (xpub).
@@ -151,5 +196,16 @@ public abstract class HardwareWallet : IWallet
     {
         public byte[] publicKeyData;
         public byte[] chainCodeData;
+    }
+
+    /// <summary>
+    /// Class holding the data of a signed transaction.
+    /// </summary>
+    protected class SignedTransactionDataHolder
+    {
+        public bool signed;
+        public uint v;
+        public byte[] r;
+        public byte[] s;
     }
 }

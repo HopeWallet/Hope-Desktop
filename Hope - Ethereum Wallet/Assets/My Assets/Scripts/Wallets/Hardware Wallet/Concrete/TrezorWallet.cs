@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NBitcoin;
 using Nethereum.JsonRpc.UnityClient;
+using Nethereum.Signer;
 using Trezor.Net.Contracts.Bitcoin;
 using Transaction = Nethereum.Signer.Transaction;
 
@@ -29,6 +30,11 @@ public sealed class TrezorWallet : HardwareWallet
         return new ExtendedPublicKeyDataHolder { publicKeyData = publicKeyResponse.Node.PublicKey, chainCodeData = publicKeyResponse.Node.ChainCode };
     }
 
+    protected override Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<string> EnterPin()
     {
         while (HopeTesting.Instance.pin.Length < 4)
@@ -37,9 +43,5 @@ public sealed class TrezorWallet : HardwareWallet
         }
 
         return HopeTesting.Instance.pin;
-    }
-
-    protected override async void SignTransaction(Action<TransactionSignedUnityRequest> onTransactionSigned, Transaction transaction, string path)
-    {
     }
 }

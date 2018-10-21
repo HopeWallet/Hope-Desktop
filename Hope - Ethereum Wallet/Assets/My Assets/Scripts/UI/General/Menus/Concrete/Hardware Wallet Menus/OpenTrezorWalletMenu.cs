@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-public sealed class OpenTrezorWalletMenu : Menu<OpenTrezorWalletMenu>
+public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWalletMenu, TrezorWallet>
 {
-	public event Action TrezorRequiresPIN;
+	public event Action TrezorPINSectionOpening;
+
+    protected override Task<bool> IsHardwareWalletConnected()
+    {
+        throw new NotImplementedException();
+    }
 }
