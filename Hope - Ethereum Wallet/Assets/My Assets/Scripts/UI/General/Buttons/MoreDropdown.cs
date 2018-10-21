@@ -24,21 +24,32 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 
 	private bool dropdownOpen, hovering, popupIsOpen;
 
-    /// <summary>
-    /// Sets the popupManager
-    /// </summary>
-    /// <param name="popupManager"> The active PopupManager </param>
-    [Inject]
+	/// <summary>
+	/// Sets the popupManager
+	/// </summary>
+	/// <param name="popupManager"> The active PopupManager </param>
+	[Inject]
     public void Construct(LogoutHandler logoutHandler, PopupManager popupManager)
     {
         this.logoutHandler = logoutHandler;
         this.popupManager = popupManager;
-    }
 
-    /// <summary>
-    /// Sets the button listeners
-    /// </summary>
-    private void Awake()
+		logoutHandler.LoggedOut += () =>
+		{
+			if (dropdownOpen)
+			{
+				dropdownOpen = false;
+				clickedImage.SetActive(false);
+				moreButton.transition = Selectable.Transition.SpriteSwap;
+				AnimateDropdownOut();
+			}
+		};
+	}
+
+	/// <summary>
+	/// Sets the button listeners
+	/// </summary>
+	private void Awake()
 	{
 		moreButton = transform.GetComponent<Button>();
 		clickedImage = transform.GetChild(0).gameObject;
@@ -140,11 +151,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 				popupManager
 					.GetPopup<GeneralOkCancelPopup>()
 					.SetSubText("Are you sure you want to logout?")
-					.OnOkClicked(() =>
-                    {
-                        ToggleDropdown();
-                        logoutHandler.Logout();
-                    })
+					.OnOkClicked(logoutHandler.Logout)
 					.OnFinish(PopupClosed);
 				break;
 		}

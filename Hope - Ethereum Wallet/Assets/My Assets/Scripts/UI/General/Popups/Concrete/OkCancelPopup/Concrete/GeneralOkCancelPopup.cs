@@ -61,7 +61,7 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 	/// <returns> The instance of the class </returns>
 	public GeneralOkCancelPopup DisableEnterButton()
 	{
-		disableEnterButton = false;
+		disableEnterButton = true;
 		return this;
 	}
 
