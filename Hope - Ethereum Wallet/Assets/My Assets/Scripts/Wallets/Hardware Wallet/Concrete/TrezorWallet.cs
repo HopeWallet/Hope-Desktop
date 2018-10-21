@@ -8,7 +8,6 @@ public sealed class TrezorWallet : HardwareWallet
 {
     private readonly UIManager uiManager;
 
-    private string pin;
     private bool advance;
 
     public TrezorWallet(
@@ -49,12 +48,7 @@ public sealed class TrezorWallet : HardwareWallet
     {
         var trezorMenu = uiManager.ActiveMenu as OpenTrezorWalletMenu;
         trezorMenu.OpenPINSection();
-
-        trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(() =>
-        {
-            pin = trezorMenu.TrezorPINSection.PinText;
-            advance = true;
-        });
+        trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(() => advance = true);
 
         while (!advance)
         {
@@ -63,6 +57,6 @@ public sealed class TrezorWallet : HardwareWallet
 
         advance = true;
 
-        return pin;
+        return trezorMenu.TrezorPINSection.PinText;
     }
 }

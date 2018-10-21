@@ -8,7 +8,7 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
 
     public TrezorPINSection TrezorPINSection { get; private set; }
 
-    private void Awake()
+    protected override void OnAwake()
     {
         TrezorPINSection = GetComponentInChildren<TrezorPINSection>();
     }

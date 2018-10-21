@@ -10,7 +10,7 @@ public sealed class TrezorPINSection : MonoBehaviour
 
     public Button NextButton => nextButton;
 
-    public string PinText => passcodeInputField.Text;
+    public string PinText { get; private set; } = string.Empty;
 
     private void Awake()
     {
@@ -29,6 +29,7 @@ public sealed class TrezorPINSection : MonoBehaviour
     private void OnKeypadButtonClicked(int index)
     {
         passcodeInputField.Text += (index + 1).ToString();
+        PinText += (index + 1).ToString();
 
         if (!nextButton.interactable)
             nextButton.interactable = true;
@@ -38,13 +39,15 @@ public sealed class TrezorPINSection : MonoBehaviour
     {
         passcodeInputField.Text = string.Empty;
         nextButton.interactable = false;
+        nextButton.onClick.RemoveAllListeners();
     }
 
     private void OnRemoveCharacterClicked()
     {
         passcodeInputField.Text = passcodeInputField.Text.LimitEnd(passcodeInputField.Text.Length - 1);
+        PinText = PinText.LimitEnd(PinText.Length - 1);
 
-        if (passcodeInputField.Text.Length == 0)
+        if (PinText.Length == 0)
             nextButton.interactable = false;
     }
 }
