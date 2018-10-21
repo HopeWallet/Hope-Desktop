@@ -21,7 +21,9 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 	protected override void AnimateUniqueElementsIn()
 	{
 		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
-		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating);
+		trezorLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		awaitingConnectionText.AnimateGraphicAndScale(1f, 1f, 0.3f);
+		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
 	}
 
 	/// <summary>

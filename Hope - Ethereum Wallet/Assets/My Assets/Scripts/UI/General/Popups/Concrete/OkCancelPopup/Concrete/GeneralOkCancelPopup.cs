@@ -82,7 +82,7 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 	/// <param name="clickType"> The ClickType </param>
 	public void EnterButtonPressed(ClickType clickType)
 	{
-		if (clickType != ClickType.Down || disableEnterButton)
+		if (disableEnterButton || clickType != ClickType.Down)
 			return;
 
 		okButton.Press();

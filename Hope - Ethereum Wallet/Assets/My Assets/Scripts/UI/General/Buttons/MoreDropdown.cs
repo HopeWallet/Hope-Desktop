@@ -42,7 +42,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	{
 		moreButton = transform.GetComponent<Button>();
 		clickedImage = transform.GetChild(0).gameObject;
-		moreButton.onClick.AddListener(MoreButtonClicked);
+		moreButton.onClick.AddListener(ToggleDropdown);
 
 		for (int i = 0; i < subButtons.Length; i++)
 			SetButtonListener(i);
@@ -54,7 +54,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	private void Update()
 	{
         if (dropdownOpen && !popupIsOpen && (!hovering && Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape)))
-			MoreButtonClicked();
+			ToggleDropdown();
 	}
 
 	/// <summary>
@@ -76,9 +76,9 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	public void OnPointerExit(PointerEventData eventData) => hovering = false;
 
 	/// <summary>
-	/// More button is clicked
+	/// Toggles the dropdown in or out of view
 	/// </summary>
-	private void MoreButtonClicked()
+	private void ToggleDropdown()
 	{
 		clickedImage.SetActive(!clickedImage.activeInHierarchy);
 		moreButton.transition = clickedImage.activeInHierarchy ? Selectable.Transition.None : Selectable.Transition.SpriteSwap;
@@ -142,7 +142,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 					.SetSubText("Are you sure you want to logout?")
 					.OnOkClicked(() =>
                     {
-                        MoreButtonClicked();
+                        ToggleDropdown();
                         logoutHandler.Logout();
                     })
 					.OnFinish(PopupClosed);
