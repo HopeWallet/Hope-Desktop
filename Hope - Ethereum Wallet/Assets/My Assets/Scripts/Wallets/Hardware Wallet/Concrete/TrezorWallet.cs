@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NBitcoin;
+using Trezor.Net;
 using Trezor.Net.Contracts.Bitcoin;
+using Trezor.Net.Contracts.Common;
+using UnityEngine.Events;
 using Transaction = Nethereum.Signer.Transaction;
 
 public sealed class TrezorWallet : HardwareWallet
@@ -25,8 +28,21 @@ public sealed class TrezorWallet : HardwareWallet
         if (trezorManager == null)
             return null;
 
-        var publicKeyRequest = new GetPublicKey{ AddressNs = KeyPath.Parse(EXTENDED_PUBLIC_KEY_PATH).Indexes, ShowDisplay = false };
-        var publicKeyResponse = await trezorManager.SendMessageAsync<PublicKey, GetPublicKey>(publicKeyRequest).ConfigureAwait(false);
+        var publicKeyRequest = new GetPublicKey { AddressNs = KeyPath.Parse(EXTENDED_PUBLIC_KEY_PATH).Indexes, ShowDisplay = false };
+        var publicKeyResponse = (PublicKey)null;
+
+        while (publicKeyResponse == null)
+        {
+            try
+            {
+                publicKeyResponse = await trezorManager.SendMessageAsync<PublicKey, GetPublicKey>(publicKeyRequest).ConfigureAwait(false);
+            }
+            catch (FailureException<Failure> failure)
+            {
+                publicKeyResponse = null;
+                advance = false;
+            }
+        }
 
         if (publicKeyResponse == null)
             return null;
@@ -46,17 +62,20 @@ public sealed class TrezorWallet : HardwareWallet
 
     private async Task<string> GetExtendedPublicKeyDataEnterPin()
     {
+        var advanceAction = new UnityAction(() => advance = true);
+
         var trezorMenu = uiManager.ActiveMenu as OpenTrezorWalletMenu;
         trezorMenu.OpenPINSection();
-        trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(() => advance = true);
+        trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(advanceAction);
 
         while (!advance)
         {
             await Task.Delay(100);
         }
 
-        advance = true;
+        advance = false;
 
+        trezorMenu.TrezorPINSection.NextButton.onClick.RemoveListener(advanceAction);
         return trezorMenu.TrezorPINSection.PinText;
     }
 }

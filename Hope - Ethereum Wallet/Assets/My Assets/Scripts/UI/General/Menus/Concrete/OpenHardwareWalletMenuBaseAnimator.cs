@@ -26,7 +26,7 @@ public abstract class OpenHardwareWalletMenuBaseAnimator<THardwareWalletMenu, TH
 	/// Changes the loading status of the hardware wallet
 	/// </summary>
 	/// <param name="loadingWallet"> Whether the wallet is loading or not </param>
-	protected virtual void ChangeLoadStatus(bool loadingWallet)
+	protected void ChangeLoadStatus(bool loadingWallet)
 	{
 		Animating = loadingWallet;
 		SwitchObjects(loadingWallet ? deviceConnectedText : loadingWalletText, loadingWallet ? loadingWalletText : awaitingConnectionText);

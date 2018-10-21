@@ -28,6 +28,9 @@ public sealed class TrezorPINSection : MonoBehaviour
 
     private void OnKeypadButtonClicked(int index)
     {
+        if (passcodeInputField.Text.Length != PinText.Length)
+            PinText = string.Empty;
+
         passcodeInputField.Text += (index + 1).ToString();
         PinText += (index + 1).ToString();
 
@@ -39,13 +42,12 @@ public sealed class TrezorPINSection : MonoBehaviour
     {
         passcodeInputField.Text = string.Empty;
         nextButton.interactable = false;
-        nextButton.onClick.RemoveAllListeners();
     }
 
     private void OnRemoveCharacterClicked()
     {
         passcodeInputField.Text = passcodeInputField.Text.LimitEnd(passcodeInputField.Text.Length - 1);
-        PinText = PinText.LimitEnd(PinText.Length - 1);
+        PinText = passcodeInputField.Text.Length == 0 ? string.Empty : PinText.LimitEnd(passcodeInputField.Text.Length);
 
         if (PinText.Length == 0)
             nextButton.interactable = false;

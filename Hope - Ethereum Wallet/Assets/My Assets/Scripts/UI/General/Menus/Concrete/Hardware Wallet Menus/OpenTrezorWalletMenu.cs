@@ -6,6 +6,11 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
 {
 	public event Action TrezorPINSectionOpening;
 
+    public event Action IncorrectPIN;
+    public event Action CheckingPIN;
+
+    private bool pinSectionOpen;
+
     public TrezorPINSection TrezorPINSection { get; private set; }
 
     protected override void OnAwake()
@@ -15,7 +20,20 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
 
     public void OpenPINSection()
     {
-        TrezorPINSectionOpening?.Invoke();
+        if (pinSectionOpen)
+        {
+            pinSectionOpen = true;
+            TrezorPINSectionOpening?.Invoke();
+        }
+        else
+        {
+            IncorrectPIN?.Invoke();
+        }
+    }
+
+    public void CheckPIN()
+    {
+        CheckingPIN?.Invoke();
     }
 
     protected override async Task<bool> IsHardwareWalletConnected()
