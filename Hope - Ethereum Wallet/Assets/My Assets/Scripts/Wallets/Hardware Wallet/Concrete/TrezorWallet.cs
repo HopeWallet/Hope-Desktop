@@ -37,7 +37,7 @@ public sealed class TrezorWallet : HardwareWallet
 
     private async Task<string> EnterPin()
     {
-        while (HopeTesting.Instance.pin.Length < 4)
+        while (HopeTesting.Instance.pin?.Length < 4)
         {
             await Task.Delay(100);
         }

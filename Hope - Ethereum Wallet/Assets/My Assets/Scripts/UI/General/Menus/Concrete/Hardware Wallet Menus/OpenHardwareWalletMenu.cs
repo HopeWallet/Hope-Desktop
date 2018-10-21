@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPeriodicUpdater where TMenu : Menu<TMenu> where TWallet : HardwareWallet
+public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPeriodicUpdater
+
+    where TMenu : Menu<TMenu>
+
+    where TWallet : HardwareWallet
 {
     public event Action OnHardwareWalletLoadStart;
     public event Action OnHardwareWalletLoadEnd;
@@ -22,7 +26,7 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
     /// <summary>
     /// The interval in which to recheck if the hardware wallet is plugged in.
     /// </summary>
-    public float UpdateInterval => 2f;
+    public float UpdateInterval => 1f;
 
     /// <summary>
     /// Adds required dependencies.
@@ -52,7 +56,7 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
         UserWalletManager.OnWalletLoadSuccessful += OnWalletLoadSuccessful;
         UserWalletManager.OnWalletLoadUnsuccessful += OnWalletLoadUnsuccessful;
 
-        periodicUpdateManager.AddPeriodicUpdater(this, true);
+        periodicUpdateManager.AddPeriodicUpdater(this);
     }
 
     /// <summary>
