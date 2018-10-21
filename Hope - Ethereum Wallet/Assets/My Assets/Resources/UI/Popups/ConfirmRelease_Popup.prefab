@@ -380,7 +380,6 @@ MonoBehaviour:
   purposeNameText: {fileID: 1765765551280640}
   prpsIcon: {fileID: 1443103127301912}
   transactionInIcon: {fileID: 1117576457482314}
-  currentPRPSText: {fileID: 0}
   additionPRPSText: {fileID: 1183896772427544}
   confirmButton: {fileID: 1148789383739594}
   cancelButton: {fileID: 1025471889626986}
@@ -876,7 +875,6 @@ MonoBehaviour:
   confirmText: {fileID: 1752764039514480}
   exitButton: {fileID: 1201296234609034}
   questionText: {fileID: 114774452015815722}
-  currentPurposeBalanceText: {fileID: 0}
   releaseAmountText: {fileID: 114823542448614978}
 --- !u!114 &114774452015815722
 MonoBehaviour:
