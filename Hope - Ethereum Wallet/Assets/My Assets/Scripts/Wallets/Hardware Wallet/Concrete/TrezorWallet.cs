@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NBitcoin;
-using Nethereum.JsonRpc.UnityClient;
-using Nethereum.Signer;
 using Trezor.Net.Contracts.Bitcoin;
 using Transaction = Nethereum.Signer.Transaction;
 
 public sealed class TrezorWallet : HardwareWallet
 {
+    private readonly UIManager uiManager;
+
     public TrezorWallet(
         EthereumNetworkManager ethereumNetworkManager,
         EthereumNetworkManager.Settings ethereumNetworkSettings,
-        PopupManager popupManager) : base(ethereumNetworkManager, ethereumNetworkSettings, popupManager)
+        PopupManager popupManager,
+        UIManager uiManager) : base(ethereumNetworkManager, ethereumNetworkSettings, popupManager)
     {
+        this.uiManager = uiManager;
     }
 
     protected override async Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData()
     {
-        var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(EnterPin);
+        var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(GetExtendedPublicKeyDataEnterPin);
         if (trezorManager == null)
             return null;
 
@@ -35,7 +37,12 @@ public sealed class TrezorWallet : HardwareWallet
         throw new NotImplementedException();
     }
 
-    private async Task<string> EnterPin()
+    private async Task<string> GetSignedTransactionDataEnterPin()
+    {
+        return null;
+    }
+
+    private async Task<string> GetExtendedPublicKeyDataEnterPin()
     {
         while (HopeTesting.Instance.pin?.Length < 4)
         {

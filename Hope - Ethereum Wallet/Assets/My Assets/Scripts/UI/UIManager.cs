@@ -29,6 +29,11 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	public Type ActiveMenuType => menus.Count > 0 ? menus.Peek().GetType() : null;
 
+    /// <summary>
+    /// The active opened menu.
+    /// </summary>
+    public Menu ActiveMenu => menus.Count > 0 ? menus.Peek() : null;
+
 	/// <summary>
 	/// Initializes the UIManager with all the required dependencies.
 	/// </summary>
