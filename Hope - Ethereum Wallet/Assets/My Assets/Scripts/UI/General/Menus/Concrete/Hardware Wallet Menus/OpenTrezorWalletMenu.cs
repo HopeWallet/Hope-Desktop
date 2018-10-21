@@ -4,9 +4,9 @@ using Trezor.Net;
 
 public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWalletMenu, TrezorWallet>
 {
-	public event Action TrezorPINSectionOpening;
+    public event Action TrezorPINSectionOpening;
+    public event Action ReloadPINSection;
 
-    public event Action IncorrectPIN;
     public event Action CheckingPIN;
 
     private bool pinSectionOpen;
@@ -18,22 +18,23 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
         TrezorPINSection = GetComponentInChildren<TrezorPINSection>();
     }
 
-    public void OpenPINSection()
+    public void UpdatePINSection()
     {
-        if (pinSectionOpen)
+        if (!pinSectionOpen)
         {
             pinSectionOpen = true;
-            TrezorPINSectionOpening?.Invoke();
+
+            MainThreadExecutor.QueueAction(() => TrezorPINSectionOpening?.Invoke());
         }
         else
         {
-            IncorrectPIN?.Invoke();
+            MainThreadExecutor.QueueAction(() => ReloadPINSection?.Invoke());
         }
     }
 
     public void CheckPIN()
     {
-        CheckingPIN?.Invoke();
+        MainThreadExecutor.QueueAction(() => CheckingPIN?.Invoke());
     }
 
     protected override async Task<bool> IsHardwareWalletConnected()

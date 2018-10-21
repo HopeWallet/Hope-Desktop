@@ -23,7 +23,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
 
         trezorMenu.TrezorPINSectionOpening += AnimateEnterPINSection;
         trezorMenu.CheckingPIN += () => UpdatePINSection(true);
-        trezorMenu.IncorrectPIN += () => UpdatePINSection(false);
+        trezorMenu.ReloadPINSection += () => UpdatePINSection(false);
     }
 
     /// <summary>

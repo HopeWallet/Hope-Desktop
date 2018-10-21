@@ -65,7 +65,7 @@ public sealed class TrezorWallet : HardwareWallet
         var advanceAction = new UnityAction(() => advance = true);
 
         var trezorMenu = uiManager.ActiveMenu as OpenTrezorWalletMenu;
-        trezorMenu.OpenPINSection();
+        trezorMenu.UpdatePINSection();
         trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(advanceAction);
 
         while (!advance)
@@ -75,7 +75,9 @@ public sealed class TrezorWallet : HardwareWallet
 
         advance = false;
 
+        trezorMenu.CheckPIN();
         trezorMenu.TrezorPINSection.NextButton.onClick.RemoveListener(advanceAction);
+
         return trezorMenu.TrezorPINSection.PinText;
     }
 }
