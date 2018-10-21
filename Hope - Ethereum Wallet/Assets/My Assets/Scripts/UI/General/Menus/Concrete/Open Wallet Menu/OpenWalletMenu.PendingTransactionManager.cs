@@ -38,14 +38,15 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
 
-        /// <summary>
-        /// Sets the necessary variables needed for the pending transaction section
-        /// </summary>
-        /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
-        /// <param name="userWalletManager"> The active UserWalletManager. </param>
-        /// <param name="pendingTransactionSection"> The parent transform of the pending transaction section </param>
-        /// <param name="walletLogo"> The active wallet logo button</param>
-        public PendingTransactionManager(
+		/// <summary>
+		/// Sets the necessary variables needed for the pending transaction section
+		/// </summary>
+		/// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
+		/// <param name="userWalletManager"> The active UserWalletManager. </param>
+		/// <param name="pendingTransactionSection"> The parent transform of the pending transaction section. </param>
+		/// <param name="walletLogo"> The active wallet logo button. </param>
+		/// /// <param name="logoutHandler"> The active LogoiutHandler. </param>
+		public PendingTransactionManager(
             EthereumPendingTransactionManager ethereumPendingTransactionManager,
             UserWalletManager userWalletManager,
             Transform pendingTransactionSection,
@@ -66,7 +67,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             checkmarkIconObject = pendingTransactionSection.GetChild(4).gameObject;
             triangle = pendingTransactionSection.GetChild(5).gameObject;
             exitButton = pendingTransactionSection.GetChild(6).GetComponent<Button>();
-            exitButton.onClick.AddListener(() => TransactionPopupExited());
+            exitButton.onClick.AddListener(TransactionPopupExited);
             logoAnimator = walletLogo.GetComponent<LoadingIconAnimator>();
 
             SetSprite(ref loadingIconSprite, "Loading_Icon");
@@ -79,7 +80,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             ethereumPendingTransactionManager.OnTransactionSuccessful += OnTransactionSuccessful;
             ethereumPendingTransactionManager.OnTransactionUnsuccessful += OnTransactionUnsuccessful;
             AccountsPopup.OnAccountChanged += _ => AccountChanged();
-        }
+		}
 
         public void Reset()
         {

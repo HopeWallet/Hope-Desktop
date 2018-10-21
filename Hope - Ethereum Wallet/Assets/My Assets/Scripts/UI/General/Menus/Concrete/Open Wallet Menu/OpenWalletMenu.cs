@@ -39,6 +39,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private CurrencyManager currencyManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
     private UserWalletManager userWalletManager;
+	private LogoutHandler logoutHandler;
 
     private IdleTimeoutManager idleTimeoutManager;
 	private PendingTransactionManager pendingTransactionManager;
@@ -59,7 +60,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         CurrencyManager currencyManager,
         HopeWalletInfoManager hopeWalletInfoManager,
         UserWalletManager userWalletManager,
-        PopupManager popupManager)
+        PopupManager popupManager,
+		LogoutHandler logoutHandler)
     {
         this.ethereumTransactionManager = ethereumTransactionManager;
         this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
@@ -72,8 +74,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         this.currencyManager = currencyManager;
         this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.userWalletManager = userWalletManager;
+		this.logoutHandler = logoutHandler;
 
-        walletAccountText.GetComponent<Button>().onClick.AddListener
+		walletAccountText.GetComponent<Button>().onClick.AddListener
 			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().ResetButton));
     }
 

@@ -20,12 +20,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         /// <summary>
         /// Sets the UIManager and starts the idle time couroutine
         /// </summary>
-        /// <param name="uiManager"></param>
+        /// <param name="uiManager"> The active UIManager </param>
         public IdleTimeoutManager(UIManager uiManager)
         {
             this.uiManager = uiManager;
 
-            CheckIfIdle().StartCoroutine();
+			CheckIfIdle().StartCoroutine();
         }
 
         public void Stop()
