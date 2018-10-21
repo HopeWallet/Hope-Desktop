@@ -46,7 +46,7 @@ public sealed class LedgerWallet : HardwareWallet
             ? null
             : (await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false))?.Address;
 
-        // Don't sign transaction if app is not Ethereum, or if the address doesn't match the with address of the opened Ledger wallet.
+        // Don't sign transaction if app is not Ethereum, or if the first address doesn't match the first address of the opened Ledger wallet.
         if (string.IsNullOrEmpty(address) || !address.EqualsIgnoreCase(addresses[1][0]))
             return null;
 

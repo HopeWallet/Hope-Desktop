@@ -312,6 +312,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224074915742182192}
+  - component: {fileID: 114669209054567648}
   m_Layer: 0
   m_Name: EnterPIN_Section
   m_TagString: Untagged
@@ -2519,6 +2520,29 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114669209054567648
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1486058537400648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cdbd6c7c69cc034b9954787b9f3b682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextButton: {fileID: 114522889226503378}
+  keypadButtons:
+  - {fileID: 114163179962810842}
+  - {fileID: 114499952330572792}
+  - {fileID: 114189222448455630}
+  - {fileID: 114490337032912444}
+  - {fileID: 114351830779203454}
+  - {fileID: 114291741571290868}
+  - {fileID: 114593826759906840}
+  - {fileID: 114942923943645010}
+  - {fileID: 114622448202503606}
+  passcodeInputField: {fileID: 114485184195943610}
 --- !u!114 &114672964056289714
 MonoBehaviour:
   m_ObjectHideFlags: 1
