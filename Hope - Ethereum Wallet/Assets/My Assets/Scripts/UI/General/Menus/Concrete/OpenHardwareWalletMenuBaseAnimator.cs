@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
-public abstract class OpenHardwareWalletMenuBaseAnimator : MenuAnimator
+public abstract class OpenHardwareWalletMenuBaseAnimator<THardwareWalletMenu, THardwareWallet> : MenuAnimator
+
+    where THardwareWalletMenu : OpenHardwareWalletMenu<THardwareWalletMenu, THardwareWallet>
+
+    where THardwareWallet : HardwareWallet
 {
 	[SerializeField] protected GameObject loadingWalletText;
 	[SerializeField] protected GameObject awaitingConnectionText;
@@ -8,17 +12,15 @@ public abstract class OpenHardwareWalletMenuBaseAnimator : MenuAnimator
 	[SerializeField] protected GameObject loadingIcon;
 	[SerializeField] protected GameObject openWalletButton;
 
-
 	private void Awake()
 	{
-		var walletMenuClass = transform.GetComponent<OpenLedgerWalletMenu>();
+		var walletMenuClass = transform.GetComponent<THardwareWalletMenu>();
 
 		walletMenuClass.OnHardwareWalletConnected += () => ChangeWalletStatus(true);
 		walletMenuClass.OnHardwareWalletDisconnected += () => ChangeWalletStatus(false);
 		walletMenuClass.OnHardwareWalletLoadStart += () => ChangeLoadStatus(true);
 		walletMenuClass.OnHardwareWalletLoadEnd += () => ChangeLoadStatus(false);
 	}
-
 
 	/// <summary>
 	/// Changes the loading status of the hardware wallet

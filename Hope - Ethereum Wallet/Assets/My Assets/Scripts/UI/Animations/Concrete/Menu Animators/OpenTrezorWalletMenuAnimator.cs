@@ -3,7 +3,7 @@
 /// <summary>
 /// The animator class of the OpenTrezorWalletMenu
 /// </summary>
-public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAnimator
+public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAnimator<OpenTrezorWalletMenu, TrezorWallet>
 {
 	[SerializeField] private GameObject backButton;
 	[SerializeField] private GameObject trezorLogo;

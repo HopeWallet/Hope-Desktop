@@ -3,7 +3,7 @@
 /// <summary>
 /// The animator class of the OpenLedgerWalletMenu
 /// </summary>
-public sealed class OpenLedgerWalletMenuAnimator : OpenHardwareWalletMenuBaseAnimator
+public sealed class OpenLedgerWalletMenuAnimator : OpenHardwareWalletMenuBaseAnimator<OpenLedgerWalletMenu, LedgerWallet>
 {
 	[SerializeField] private GameObject backButton;
 	[SerializeField] private GameObject ledgerLogo;

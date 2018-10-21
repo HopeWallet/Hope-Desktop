@@ -129,7 +129,7 @@ public abstract class HardwareWallet : IWallet
             var signedTransactionData = await GetSignedTransactionData(
                 transaction,
                 path,
-                () => MainThreadExecutor.QueueAction(() => popupManager.GetPopup<T>(true).SetConfirmationValues(null, gasLimit, gasPrice, displayInput))).ConfigureAwait(false);
+                () => MainThreadExecutor.QueueAction(() => popupManager.GetPopup<T>(true)?.SetConfirmationValues(null, gasLimit, gasPrice, displayInput))).ConfigureAwait(false);
 
             signingTransaction = false;
 
@@ -192,7 +192,7 @@ public abstract class HardwareWallet : IWallet
     /// <summary>
     /// Class holding the data needed to create the extended public key (xpub).
     /// </summary>
-    protected class ExtendedPublicKeyDataHolder
+    protected sealed class ExtendedPublicKeyDataHolder
     {
         public byte[] publicKeyData;
         public byte[] chainCodeData;
@@ -201,7 +201,7 @@ public abstract class HardwareWallet : IWallet
     /// <summary>
     /// Class holding the data of a signed transaction.
     /// </summary>
-    protected class SignedTransactionDataHolder
+    protected sealed class SignedTransactionDataHolder
     {
         public bool signed;
         public uint v;

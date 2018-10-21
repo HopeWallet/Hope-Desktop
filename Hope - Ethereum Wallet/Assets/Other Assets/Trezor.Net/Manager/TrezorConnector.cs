@@ -8,7 +8,7 @@ public static class TrezorConnector
     private const int USAGE_PAGE = -256;
     private const int USAGE = 1;
 
-    public static TrezorManager GetWindowsConnectedLedger(EnterPinArgs enterPinCallback)
+    public static TrezorManager GetWindowsConnectedTrezor(EnterPinArgs enterPinCallback)
     {
         List<HidDevice> devices = new List<HidDevice>();
         devices.AddRange(HidDevices.Enumerate(TrezorManager.TrezorVendorId, TrezorManager.TrezorProductId));

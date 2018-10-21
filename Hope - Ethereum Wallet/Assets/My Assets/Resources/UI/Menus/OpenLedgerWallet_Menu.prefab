@@ -1583,8 +1583,8 @@ MonoBehaviour:
   menuTooltip: {fileID: 0}
   loadingWalletText: {fileID: 0}
   awaitingConnectionText: {fileID: 1241543267999148}
-  loadingIcon: {fileID: 1483256693071194}
   deviceConnectedText: {fileID: 1136455584542856}
+  loadingIcon: {fileID: 1483256693071194}
   openWalletButton: {fileID: 1842371670095206}
   backButton: {fileID: 1814733390970646}
   ledgerLogo: {fileID: 1249908733382422}

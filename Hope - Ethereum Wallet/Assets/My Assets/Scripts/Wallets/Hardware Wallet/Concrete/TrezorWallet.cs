@@ -17,7 +17,7 @@ public sealed class TrezorWallet : HardwareWallet
 
     protected override async Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData()
     {
-        var trezorManager = TrezorConnector.GetWindowsConnectedLedger(EnterPin);
+        var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(EnterPin);
         if (trezorManager == null)
             return null;
 

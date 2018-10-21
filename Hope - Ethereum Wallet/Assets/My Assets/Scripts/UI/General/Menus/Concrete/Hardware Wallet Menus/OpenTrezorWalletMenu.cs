@@ -5,8 +5,10 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
 {
 	public event Action TrezorPINSectionOpening;
 
-    protected override Task<bool> IsHardwareWalletConnected()
+    protected override async Task<bool> IsHardwareWalletConnected()
     {
-        throw new NotImplementedException();
+        var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(null);
+
+        return trezorManager != null;
     }
 }
