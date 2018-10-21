@@ -117,17 +117,14 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
         {
             if (wasConnected)
                 MainThreadExecutor.QueueAction(() => OnHardwareWalletDisconnected?.Invoke());
-
-            wasConnected = false;
         }
         else
         {
             if (!wasConnected)
                 MainThreadExecutor.QueueAction(() => OnHardwareWalletConnected?.Invoke());
-
-            wasConnected = true;
         }
 
+        wasConnected = isConnected;
         isPolling = false;
     }
 
