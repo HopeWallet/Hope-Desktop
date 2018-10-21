@@ -21,7 +21,8 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
     private TWallet hardwareWallet;
     private PeriodicUpdateManager periodicUpdateManager;
 
-    private bool wasConnected;
+    private bool wasConnected, 
+                 isPolling;
 
     /// <summary>
     /// The interval in which to recheck if the hardware wallet is plugged in.
@@ -98,6 +99,11 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
 
     public async void PeriodicUpdate()
     {
+        if (isPolling)
+            return;
+
+        isPolling = true;
+
         bool isConnected = await IsHardwareWalletConnected().ConfigureAwait(false);
 
         if (!isConnected)
@@ -114,6 +120,8 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
 
             wasConnected = true;
         }
+
+        isPolling = false;
     }
 
     protected abstract Task<bool> IsHardwareWalletConnected();

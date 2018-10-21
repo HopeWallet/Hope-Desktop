@@ -64,9 +64,9 @@ public abstract class HardwareWallet : IWallet
         addresses[0] = new string[50];
         addresses[1] = new string[50];
 
-        var data = await GetExtendedPublicKeyData();
+        var data = await GetExtendedPublicKeyData().ConfigureAwait(false);
 
-        if (data == null)
+        if (data == null || data.chainCodeData.Length != 32)
         {
             MainThreadExecutor.QueueAction(WalletLoadUnsuccessful);
             return;

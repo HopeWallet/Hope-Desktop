@@ -1581,7 +1581,7 @@ MonoBehaviour:
   formTitle: {fileID: 1099291146052992}
   line: {fileID: 1796914677723112}
   menuTooltip: {fileID: 0}
-  loadingWalletText: {fileID: 0}
+  loadingWalletText: {fileID: 1211755166444842}
   awaitingConnectionText: {fileID: 1241543267999148}
   deviceConnectedText: {fileID: 1136455584542856}
   loadingIcon: {fileID: 1483256693071194}

@@ -1,4 +1,5 @@
-﻿using Ledger.Net.Connectivity;
+﻿using Ledger.Net;
+using Ledger.Net.Connectivity;
 using Nethereum.HdWallet;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ public sealed class OpenLedgerWalletMenu : OpenHardwareWalletMenu<OpenLedgerWall
 {
     protected override async Task<bool> IsHardwareWalletConnected()
     {
-        var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
+        var ledgerManager = await Task<LedgerManager>.Factory.StartNew(LedgerConnector.GetWindowsConnectedLedger).ConfigureAwait(false);
         var address = ledgerManager == null
             ? null
             : (await ledgerManager.GetPublicKeyResponse(Wallet.ELECTRUM_LEDGER_PATH.Replace("x", "0"), false, false).ConfigureAwait(false))?.Address;
