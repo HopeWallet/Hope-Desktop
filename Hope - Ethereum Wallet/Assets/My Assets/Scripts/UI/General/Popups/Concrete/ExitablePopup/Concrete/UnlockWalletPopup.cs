@@ -1,5 +1,4 @@
-﻿using Hope.Random.Strings;
-using Hope.Security.ProtectedTypes.Types;
+﻿using Hope.Security.ProtectedTypes.Types;
 using System;
 using System.Collections;
 using TMPro;
