@@ -85,6 +85,7 @@ public sealed class OpenTrezorWalletMenuAnimator : OpenHardwareWalletMenuBaseAni
         loadingIcon.AnimateGraphicAndScale(0f, 0f, 0.3f);
         deviceConnectedText.AnimateGraphicAndScale(0f, 0f, 0.3f);
         openWalletButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
+        loadingWalletText.AnimateGraphicAndScale(0f, 0f, 0.3f);
 
         float duration = 0.3f;
 		for (int i = 0; i < 9; i++)

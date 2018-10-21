@@ -8,6 +8,9 @@ public sealed class TrezorWallet : HardwareWallet
 {
     private readonly UIManager uiManager;
 
+    private string pin;
+    private bool advance;
+
     public TrezorWallet(
         EthereumNetworkManager ethereumNetworkManager,
         EthereumNetworkManager.Settings ethereumNetworkSettings,
@@ -44,11 +47,22 @@ public sealed class TrezorWallet : HardwareWallet
 
     private async Task<string> GetExtendedPublicKeyDataEnterPin()
     {
-        while (HopeTesting.Instance.pin?.Length < 4)
+        var trezorMenu = uiManager.ActiveMenu as OpenTrezorWalletMenu;
+        trezorMenu.OpenPINSection();
+
+        trezorMenu.TrezorPINSection.NextButton.onClick.AddListener(() =>
+        {
+            pin = trezorMenu.TrezorPINSection.PinText;
+            advance = true;
+        });
+
+        while (!advance)
         {
             await Task.Delay(100);
         }
 
-        return HopeTesting.Instance.pin;
+        advance = true;
+
+        return pin;
     }
 }

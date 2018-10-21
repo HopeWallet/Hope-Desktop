@@ -6,16 +6,16 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
 {
 	public event Action TrezorPINSectionOpening;
 
-    private TrezorPINSection trezorPinSection;
+    public TrezorPINSection TrezorPINSection { get; private set; }
 
     private void Awake()
     {
-        trezorPinSection = GetComponentInChildren<TrezorPINSection>();
+        TrezorPINSection = GetComponentInChildren<TrezorPINSection>();
     }
 
     public void OpenPINSection()
     {
-
+        TrezorPINSectionOpening?.Invoke();
     }
 
     protected override async Task<bool> IsHardwareWalletConnected()
