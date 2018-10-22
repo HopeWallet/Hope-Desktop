@@ -10,10 +10,14 @@ public sealed class TrezorPINSection : MonoBehaviour
 
     public Button NextButton => nextButton;
 
+    public HopeInputField PINInputField => passcodeInputField;
+
     public string PinText { get; private set; } = string.Empty;
 
     private void Awake()
     {
+        passcodeInputField.Error = false;
+
         for (int i = 0; i < keypadButtons.Length; i++)
             AssignKeypadListener(i);
 
@@ -31,6 +35,7 @@ public sealed class TrezorPINSection : MonoBehaviour
         if (passcodeInputField.Text.Length != PinText.Length)
             PinText = string.Empty;
 
+        passcodeInputField.Error = false;
         passcodeInputField.Text += (index + 1).ToString();
         PinText += (index + 1).ToString();
 
@@ -40,7 +45,6 @@ public sealed class TrezorPINSection : MonoBehaviour
 
     private void OnNextClicked()
     {
-        passcodeInputField.Text = string.Empty;
         nextButton.interactable = false;
     }
 

@@ -9,6 +9,8 @@ using Transaction = Nethereum.Signer.Transaction;
 
 public sealed class TrezorWallet : HardwareWallet
 {
+    public event Action PINIncorrect;
+
     private readonly UIManager uiManager;
 
     private bool advance;
@@ -37,8 +39,10 @@ public sealed class TrezorWallet : HardwareWallet
             {
                 publicKeyResponse = await trezorManager.SendMessageAsync<PublicKey, GetPublicKey>(publicKeyRequest).ConfigureAwait(false);
             }
-            catch (FailureException<Failure> failure)
+            catch (FailureException<Failure>)
             {
+                MainThreadExecutor.QueueAction(() => PINIncorrect?.Invoke());
+
                 publicKeyResponse = null;
                 advance = false;
             }

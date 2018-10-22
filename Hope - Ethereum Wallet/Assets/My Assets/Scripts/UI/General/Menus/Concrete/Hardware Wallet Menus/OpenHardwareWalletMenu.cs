@@ -53,7 +53,7 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
     /// <summary>
     /// Adds the periodic updater and subscribes the UserWalletManager events.
     /// </summary>
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         UserWalletManager.OnWalletLoadSuccessful += OnWalletLoadSuccessful;
         UserWalletManager.OnWalletLoadUnsuccessful += OnWalletLoadUnsuccessful;
@@ -64,7 +64,7 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
     /// <summary>
     /// Removes the periodic updater and unsubscribes all UserWalletManager events.
     /// </summary>
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         UserWalletManager.OnWalletLoadSuccessful -= OnWalletLoadSuccessful;
         UserWalletManager.OnWalletLoadUnsuccessful -= OnWalletLoadUnsuccessful;
