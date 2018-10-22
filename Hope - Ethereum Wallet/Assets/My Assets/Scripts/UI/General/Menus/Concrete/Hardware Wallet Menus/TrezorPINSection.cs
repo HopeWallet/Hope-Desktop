@@ -24,7 +24,7 @@ public sealed class TrezorPINSection : MonoBehaviour
         nextButton.onClick.AddListener(OnNextClicked);
         removeCharacterButton.onClick.AddListener(OnRemoveCharacterClicked);
     }
-	
+
 	private void PasscodeInputFieldChanged(string text)
 	{
 		passcodeInputField.Error = string.IsNullOrEmpty(text);

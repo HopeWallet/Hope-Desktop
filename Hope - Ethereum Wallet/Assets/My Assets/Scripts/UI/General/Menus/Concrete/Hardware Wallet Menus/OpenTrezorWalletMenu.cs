@@ -69,6 +69,5 @@ public sealed class OpenTrezorWalletMenu : OpenHardwareWalletMenu<OpenTrezorWall
     {
         TrezorPINSection.PINInputField.Error = true;
 		TrezorPINSection.PINInputField.UpdateVisuals();
-		TrezorPINSection.PINInputField.Text = string.Empty;
 	}
 }
