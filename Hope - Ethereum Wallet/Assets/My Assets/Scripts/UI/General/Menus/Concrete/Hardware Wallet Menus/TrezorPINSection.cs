@@ -28,7 +28,7 @@ public sealed class TrezorPINSection : MonoBehaviour
 	private void PasscodeInputFieldChanged(string text)
 	{
 		passcodeInputField.Error = string.IsNullOrEmpty(text);
-		nextButton.interactable = string.IsNullOrEmpty(text);
+		nextButton.interactable = !passcodeInputField.Error;
 	}
 
     private void AssignKeypadListener(int index)
