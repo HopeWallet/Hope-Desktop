@@ -16,7 +16,7 @@ public sealed class TrezorPINSection : MonoBehaviour
 
     private void Awake()
     {
-        passcodeInputField.Error = false;
+		passcodeInputField.OnInputUpdated += PasscodeInputFieldChanged;
 
         for (int i = 0; i < keypadButtons.Length; i++)
             AssignKeypadListener(i);
@@ -24,6 +24,12 @@ public sealed class TrezorPINSection : MonoBehaviour
         nextButton.onClick.AddListener(OnNextClicked);
         removeCharacterButton.onClick.AddListener(OnRemoveCharacterClicked);
     }
+	
+	private void PasscodeInputFieldChanged(string text)
+	{
+		passcodeInputField.Error = string.IsNullOrEmpty(text);
+		nextButton.interactable = string.IsNullOrEmpty(text);
+	}
 
     private void AssignKeypadListener(int index)
     {
