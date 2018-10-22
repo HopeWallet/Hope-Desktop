@@ -23,11 +23,15 @@ public sealed class ContactsManager
         ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
         UserWalletManager.OnWalletLoadSuccessful += () =>
         {
-            var walletAddress = userWalletManager.GetWalletAddress();
-            var info = userWalletInfoManager.GetWalletInfo(walletAddress);
+			var walletAddress = userWalletManager.GetWalletAddress().ToLower();
 
-            if (!string.IsNullOrEmpty(info?.WalletName))
-                AddContact(walletAddress, info.WalletName);
+			if (!ContactList.Contains(walletAddress))
+			{
+				var info = userWalletInfoManager.GetWalletInfo(walletAddress);
+
+				if (!string.IsNullOrEmpty(info?.WalletName))
+					AddContact(walletAddress, info.WalletName);
+			}
         };
     }
 

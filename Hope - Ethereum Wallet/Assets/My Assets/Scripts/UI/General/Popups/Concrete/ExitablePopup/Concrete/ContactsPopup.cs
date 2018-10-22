@@ -52,6 +52,11 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		searchBar.OnInputUpdated += SearchBarChanged;
 
 		AddContactButtons();
+
+		if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS))
+			confirmButton.GetComponent<TooltipItem>().PopupManager = popupManager;
+		else
+			confirmButton.GetComponent<TooltipItem>().enabled = false;
 	}
 
 	/// <summary>
