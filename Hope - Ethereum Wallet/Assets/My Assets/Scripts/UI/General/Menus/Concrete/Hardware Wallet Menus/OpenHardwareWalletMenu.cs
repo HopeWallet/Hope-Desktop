@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
+/// <summary>
+/// Base class used in menus which open hardware wallets.
+/// </summary>
+/// <typeparam name="TMenu"> The concrete hardware wallet menu class. </typeparam>
+/// <typeparam name="TWallet"> The type of HardwareWallet. </typeparam>
 public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPeriodicUpdater
 
     where TMenu : Menu<TMenu>
@@ -104,6 +109,9 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
         wasConnected = false;
     }
 
+    /// <summary>
+    /// Checks if the hardware wallet is connected and invokes any required events.
+    /// </summary>
     public async void PeriodicUpdate()
     {
         if (isPolling || initializing)
@@ -128,5 +136,9 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
         isPolling = false;
     }
 
+    /// <summary>
+    /// Abstract method used to check if the hardware wallet is connected.
+    /// </summary>
+    /// <returns> Task returning a bool representing the connected status. </returns>
     protected abstract Task<bool> IsHardwareWalletConnected();
 }

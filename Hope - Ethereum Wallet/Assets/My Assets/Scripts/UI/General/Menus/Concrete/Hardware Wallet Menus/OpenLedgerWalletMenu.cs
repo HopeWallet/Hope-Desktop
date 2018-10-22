@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 /// </summary>
 public sealed class OpenLedgerWalletMenu : OpenHardwareWalletMenu<OpenLedgerWalletMenu, LedgerWallet>
 {
+    /// <summary>
+    /// Checks if the ledger is currently connected and on the Ethereum application.
+    /// </summary>
+    /// <returns> Task returning the current connection status. </returns>
     protected override async Task<bool> IsHardwareWalletConnected()
     {
         var ledgerManager = await Task<LedgerManager>.Factory.StartNew(LedgerConnector.GetWindowsConnectedLedger).ConfigureAwait(false);
