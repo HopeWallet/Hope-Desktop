@@ -4,6 +4,7 @@ using NBitcoin;
 using Trezor.Net;
 using Trezor.Net.Contracts.Bitcoin;
 using Trezor.Net.Contracts.Common;
+using Trezor.Net.Contracts.Ethereum;
 using UnityEngine.Events;
 using Transaction = Nethereum.Signer.Transaction;
 
@@ -54,14 +55,41 @@ public sealed class TrezorWallet : HardwareWallet
         return new ExtendedPublicKeyDataHolder { publicKeyData = publicKeyResponse.Node.PublicKey, chainCodeData = publicKeyResponse.Node.ChainCode };
     }
 
-    protected override Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
+    protected override async Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
     {
-        throw new NotImplementedException();
+        var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(GetSignedTransactionDataEnterPin);
+        if (trezorManager == null)
+            return null;
+
+        var signedTransactionRequest = new EthereumSignTx
+        {
+            Nonce = transaction.Nonce,
+            AddressNs = KeyPath.Parse(path).Indexes,
+            GasPrice = transaction.GasPrice,
+            GasLimit = transaction.GasLimit,
+            To = transaction.ReceiveAddress,
+            Value = transaction.Value,
+            DataInitialChunk = transaction.Data,
+            DataLength = (uint)transaction.Data.Length,
+            ChainId = (uint)ethereumNetworkSettings.networkType
+        };
+
+        var signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest).ConfigureAwait(false);
+        if (signedTransactionResponse == null)
+            return new SignedTransactionDataHolder();
+
+        return new SignedTransactionDataHolder
+        {
+            signed = true,
+            v = signedTransactionResponse.SignatureV,
+            r = signedTransactionResponse.SignatureR,
+            s = signedTransactionResponse.SignatureS
+        };
     }
 
     private async Task<string> GetSignedTransactionDataEnterPin()
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     private async Task<string> GetExtendedPublicKeyDataEnterPin()
