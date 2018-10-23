@@ -51,7 +51,8 @@ public sealed class PopupManager
 		AboutPopup.Factory aboutPopupFactory,
         ConfirmReleasePopup.Factory confirmReleasePopupFactory,
 		TransactionWarningPopup.Factory transactionWarningPopupFactory,
-		HopeUpdatePopup.Factory hopeUpdatePopupFactory)
+		HopeUpdatePopup.Factory hopeUpdatePopupFactory,
+        EnterTrezorPINPopup.Factory enterTrezorPinPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
 							   addTokenPopupFactory,
@@ -75,7 +76,8 @@ public sealed class PopupManager
 							   aboutPopupFactory,
                                confirmReleasePopupFactory,
 							   transactionWarningPopupFactory,
-							   hopeUpdatePopupFactory);
+							   hopeUpdatePopupFactory,
+                               enterTrezorPinPopupFactory);
     }
 
     /// <summary>

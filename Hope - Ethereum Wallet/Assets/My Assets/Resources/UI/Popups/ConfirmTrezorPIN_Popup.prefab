@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 223622637401587310}
   - component: {fileID: 114629555676128612}
   - component: {fileID: 114950837365908010}
+  - component: {fileID: 114042552159768996}
   m_Layer: 0
   m_Name: ConfirmTrezorPIN_Popup
   m_TagString: Untagged
@@ -626,6 +627,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114042552159768996
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1077229760039810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f9bf04583739c41a68b410d72a44ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exitButton: {fileID: 0}
 --- !u!114 &114050874635246202
 MonoBehaviour:
   m_ObjectHideFlags: 1
