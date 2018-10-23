@@ -12,14 +12,18 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject unlockButton;
 	[SerializeField] private GameObject homeButton;
 	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject lockedOutSection;
 
 	/// <summary>
 	/// Sets the necessary events
 	/// </summary>
 	private void Start()
 	{
-		GetComponent<ReEnterPasswordMenu>().OnPasswordVerificationStarted += VerifyingPassword;
-		GetComponent<ReEnterPasswordMenu>().OnPasswordEnteredIncorrect += PasswordIncorrect;
+		ReEnterPasswordMenu reEnterPasswordMenu = GetComponent<ReEnterPasswordMenu>();
+
+		reEnterPasswordMenu.OnPasswordVerificationStarted += VerifyingPassword;
+		reEnterPasswordMenu.OnPasswordEnteredIncorrect += PasswordIncorrect;
+		reEnterPasswordMenu.AnimateLockedOutSection += AnimateLockedOutSection;
 	}
 
 	/// <summary>
@@ -46,6 +50,7 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 		plainBackground.AnimateGraphic(0f, 0.2f);
 		messageText.AnimateGraphicAndScale(0f, 0f, 0.2f);
 		passwordInputField.gameObject.AnimateScale(0f, 0.2f);
+		lockedOutSection.AnimateGraphicAndScale(0f, 0f, 0.2f);
 		homeButton.AnimateGraphicAndScale(0f, 0f, 0.2f);
 		unlockButton.AnimateGraphicAndScale(0f, 0f, 0.2f, FinishedAnimating);
 	}
@@ -86,5 +91,17 @@ public sealed class ReEnterPasswordMenuAnimator : MenuAnimator
 				Animating = false;
 			});
 		}
+	}
+
+	/// <summary>
+	/// Animates the locked out section in or out of view
+	/// </summary>
+	/// <param name="userLockedOut"> Whether the locked out section should be shown or not </param>
+	private void AnimateLockedOutSection(bool userLockedOut)
+	{
+		if (userLockedOut)
+			passwordInputField.gameObject.AnimateScaleX(0f, 0.15f, () => lockedOutSection.AnimateScale(1f, 0.15f));
+		else
+			lockedOutSection.gameObject.AnimateScale(0f, 0.15f, () => passwordInputField.gameObject.AnimateScaleX(1f, 0.15f));
 	}
 }

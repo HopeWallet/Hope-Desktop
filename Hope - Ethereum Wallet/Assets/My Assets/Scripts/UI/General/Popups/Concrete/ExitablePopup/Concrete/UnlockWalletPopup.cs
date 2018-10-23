@@ -19,7 +19,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	[SerializeField] private TextMeshProUGUI formTitle;
 	[SerializeField] private HopeInputField passwordField;
 	[SerializeField] private Button unlockWalletButton;
-
 	[SerializeField] private TextMeshProUGUI timerText;
 
 	private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
