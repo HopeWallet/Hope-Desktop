@@ -1,10 +1,13 @@
-﻿using Zenject;
+﻿using System;
+using Zenject;
 
 public sealed class EnterTrezorPINPopup : ExitablePopupComponent<EnterTrezorPINPopup>
 {
-    private TrezorWallet trezorWallet;
+    public event Action ReloadPINSection;
 
-    private bool pinSectionOpen;
+    public event Action CheckingPIN;
+
+    private TrezorWallet trezorWallet;
 
     public TrezorPINSection TrezorPINSection { get; private set; }
 

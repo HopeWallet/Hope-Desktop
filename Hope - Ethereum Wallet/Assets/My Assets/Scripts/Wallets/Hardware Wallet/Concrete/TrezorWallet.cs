@@ -74,7 +74,7 @@ public sealed class TrezorWallet : HardwareWallet
             ChainId = (uint)ethereumNetworkSettings.networkType
         };
 
-        var signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest).ConfigureAwait(false);
+        var signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent).ConfigureAwait(false);
         if (signedTransactionResponse == null)
             return new SignedTransactionDataHolder();
 
@@ -89,7 +89,16 @@ public sealed class TrezorWallet : HardwareWallet
 
     private async Task<string> GetSignedTransactionDataEnterPin()
     {
-        throw new NotImplementedException();
+        EnterTrezorPINPopup popup = null;
+        MainThreadExecutor.QueueAction(() => popup = popupManager.GetPopup<EnterTrezorPINPopup>(true));
+
+        while (popup == null)
+        {
+            await Task.Delay(10000);
+            break;
+        }
+
+        return "1234";
     }
 
     private async Task<string> GetExtendedPublicKeyDataEnterPin()

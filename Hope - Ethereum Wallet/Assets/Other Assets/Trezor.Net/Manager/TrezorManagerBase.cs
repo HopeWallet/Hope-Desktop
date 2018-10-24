@@ -98,7 +98,7 @@ namespace Trezor.Net
         /// <typeparam name="TWriteMessage">The result type</typeparam>
         /// <param name="message">The message</param>
         /// <returns>The result</returns>
-        public async Task<TReadMessage> SendMessageAsync<TReadMessage, TWriteMessage>(TWriteMessage message)
+        public async Task<TReadMessage> SendMessageAsync<TReadMessage, TWriteMessage>(TWriteMessage message, Action onMessageSending = null)
         {
             await _Lock.WaitAsync();
 
@@ -121,6 +121,7 @@ namespace Trezor.Net
 
                     else if (IsButtonRequest(response))
                     {
+                        onMessageSending?.Invoke();
                         response = await ButtonAckAsync();
 
                         if (response is TReadMessage)
