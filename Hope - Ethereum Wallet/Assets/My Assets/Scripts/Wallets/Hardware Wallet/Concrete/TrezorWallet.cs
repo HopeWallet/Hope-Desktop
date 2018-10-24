@@ -81,6 +81,7 @@ public sealed class TrezorWallet : HardwareWallet
             {
                 signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent)
                                                                .ConfigureAwait(false);
+                break;
             }
             catch (FailureException<Failure>)
             {
