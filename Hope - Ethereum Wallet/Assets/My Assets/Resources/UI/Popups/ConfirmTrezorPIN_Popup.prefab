@@ -2283,6 +2283,7 @@ MonoBehaviour:
   keyPadButtons: {fileID: 4836764079639732}
   passcodeInputField: {fileID: 1604037607540192}
   confirmButton: {fileID: 1823471757162212}
+  loadingPinIcon: {fileID: 0}
 --- !u!114 &114954379278273606
 MonoBehaviour:
   m_ObjectHideFlags: 1

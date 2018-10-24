@@ -61,6 +61,7 @@ public sealed class TrezorWallet : HardwareWallet
         if (trezorManager == null)
             return null;
 
+        var signedTransactionResponse = (EthereumTxRequest)null;
         var signedTransactionRequest = new EthereumSignTx
         {
             Nonce = transaction.Nonce,
@@ -74,7 +75,16 @@ public sealed class TrezorWallet : HardwareWallet
             ChainId = (uint)ethereumNetworkSettings.networkType
         };
 
-        var signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent).ConfigureAwait(false);
+        try
+        {
+            signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent)
+                                                           .ConfigureAwait(false);
+        }
+        catch (FailureException<Failure>)
+        {
+            UnityEngine.Debug.Log("PIN? => " + trezorManager.PinRequest);
+        }
+
         if (signedTransactionResponse == null)
             return new SignedTransactionDataHolder();
 

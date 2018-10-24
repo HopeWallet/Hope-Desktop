@@ -41,6 +41,8 @@ namespace Trezor.Net
 
         #region Public Properties
         public ICoinUtility CoinUtility { get; set; }
+
+        public bool? PinRequest { get; private set; }
         #endregion
 
         #region Public Abstract Properties
@@ -110,6 +112,8 @@ namespace Trezor.Net
                 {
                     if (IsPinMatrixRequest(response))
                     {
+                        PinRequest = true;
+
                         var pin = await _EnterPinCallback.Invoke();
                         response = await PinMatrixAckAsync(pin);
 
@@ -121,6 +125,8 @@ namespace Trezor.Net
 
                     else if (IsButtonRequest(response))
                     {
+                        PinRequest = false;
+
                         onMessageSending?.Invoke();
                         response = await ButtonAckAsync();
 
@@ -132,6 +138,8 @@ namespace Trezor.Net
 
                     else if (response is TReadMessage)
                     {
+                        PinRequest = false;
+
                         return (TReadMessage)response;
                     }
                 }
