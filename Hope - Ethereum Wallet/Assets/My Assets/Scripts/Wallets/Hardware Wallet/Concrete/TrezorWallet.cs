@@ -75,14 +75,18 @@ public sealed class TrezorWallet : HardwareWallet
             ChainId = (uint)ethereumNetworkSettings.networkType
         };
 
-        try
+        while (true)
         {
-            signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent)
-                                                           .ConfigureAwait(false);
-        }
-        catch (FailureException<Failure>)
-        {
-            UnityEngine.Debug.Log("PIN? => " + trezorManager.PinRequest);
+            try
+            {
+                signedTransactionResponse = await trezorManager.SendMessageAsync<EthereumTxRequest, EthereumSignTx>(signedTransactionRequest, onSignatureRequestSent)
+                                                               .ConfigureAwait(false);
+            }
+            catch (FailureException<Failure>)
+            {
+                if (trezorManager.PinRequest.HasValue && trezorManager.PinRequest == false)
+                    break;
+            }
         }
 
         if (signedTransactionResponse == null)
@@ -99,16 +103,30 @@ public sealed class TrezorWallet : HardwareWallet
 
     private async Task<string> GetSignedTransactionDataEnterPin()
     {
-        EnterTrezorPINPopup popup = null;
+        var popup = (EnterTrezorPINPopup)null;
         MainThreadExecutor.QueueAction(() => popup = popupManager.GetPopup<EnterTrezorPINPopup>(true));
 
         while (popup == null)
         {
-            await Task.Delay(10000);
-            break;
+            await Task.Delay(100);
         }
 
-        return "1234";
+        var advanceAction = new UnityAction(() => advance = true);
+
+        popup.ReEnterPIN();
+        popup.TrezorPINSection.NextButton.onClick.AddListener(advanceAction);
+
+        while (!advance)
+        {
+            await Task.Delay(100);
+        }
+
+        advance = false;
+
+        popup.CheckPIN();
+        popup.TrezorPINSection.NextButton.onClick.RemoveListener(advanceAction);
+
+        return popup.TrezorPINSection.PinText;
     }
 
     private async Task<string> GetExtendedPublicKeyDataEnterPin()
