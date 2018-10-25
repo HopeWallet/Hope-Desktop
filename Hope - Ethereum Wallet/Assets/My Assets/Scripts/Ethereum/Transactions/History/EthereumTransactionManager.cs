@@ -102,7 +102,7 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater, IDi
     /// <param name="address"> The address of the asset to find transactions for. </param>
     /// <param name="transactionType"> The type of transactions to filter for. </param>
     /// <returns> The valid list of transactions. </returns>
-    public List<TransactionInfo> GetTransactionsByAddressAndType(string address, TransactionInfo.TransactionType transactionType) 
+    public List<TransactionInfo> GetTransactionsByAddressAndType(string address, TransactionInfo.TransactionType transactionType)
         => transactionsByAddress.ContainsKey(address) ? transactionsByAddress[address].Where(transaction => transaction.Type == transactionType).ToList() : null;
 
     /// <summary>
@@ -193,6 +193,9 @@ public sealed class EthereumTransactionManager : IPeriodicUpdater, IUpdater, IDi
     /// <param name="asset"> The asset to scrape transactions for. </param>
     private void AddAssetToScrape(TradableAsset asset)
     {
+        if (asset?.AssetAddress == null)
+            return;
+
         if (asset is EtherAsset)
             QueueEther(userWalletManager.GetWalletAddress());
         else
