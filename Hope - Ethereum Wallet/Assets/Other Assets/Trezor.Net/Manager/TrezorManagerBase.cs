@@ -117,8 +117,8 @@ namespace Trezor.Net
 
                         var pin = await _EnterPinCallback.Invoke();
 
-                        if (string.IsNullOrEmpty(pin))
-                            throw new FailureException<Failure>("Invalid Pin ", new Failure() { Message = "Please try again" });
+                        //if (string.IsNullOrEmpty(pin))
+                        //    throw new FailureException<Failure>("Invalid Pin ", new Failure() { Message = "Please try again" });
 
                         response = await PinMatrixAckAsync(pin);
 

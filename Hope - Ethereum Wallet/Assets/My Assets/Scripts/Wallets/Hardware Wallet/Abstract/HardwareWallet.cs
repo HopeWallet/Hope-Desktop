@@ -115,6 +115,8 @@ public abstract class HardwareWallet : IWallet
 
         TransactionUtils.GetAddressTransactionCount(addressFrom).OnSuccess(async txCount =>
         {
+            var currentPopupType = popupManager.ActivePopupType;
+
             var transaction = new Transaction(
                 txCount.ToBytesForRLPEncoding(),
                 gasPrice.ToBytesForRLPEncoding(),
@@ -137,10 +139,11 @@ public abstract class HardwareWallet : IWallet
             {
                 return;
             }
-
             else if (!signedTransactionData.signed)
             {
-                MainThreadExecutor.QueueAction(() => popupManager.CloseActivePopup());
+                if (currentPopupType != popupManager.ActivePopupType)
+                    MainThreadExecutor.QueueAction(() => popupManager.CloseActivePopup());
+
                 return;
             }
 
