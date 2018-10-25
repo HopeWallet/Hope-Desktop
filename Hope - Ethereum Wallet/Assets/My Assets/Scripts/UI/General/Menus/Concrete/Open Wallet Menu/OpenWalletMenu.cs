@@ -98,7 +98,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
             SetUpWalletType(hopeLogo);
-            idleTimeoutManager = new IdleTimeoutManager(uiManager);
+            idleTimeoutManager = new IdleTimeoutManager(uiManager, popupManager);
         }
         else if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Ledger)
         {

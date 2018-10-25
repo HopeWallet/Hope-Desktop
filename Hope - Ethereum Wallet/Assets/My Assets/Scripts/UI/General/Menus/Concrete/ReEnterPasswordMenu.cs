@@ -51,7 +51,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
         DynamicDataCache dynamicDataCache,
         ButtonClickObserver buttonClickObserver)
     {
-        this.walletPasswordVerification = walletPasswordVerification;
+		this.walletPasswordVerification = walletPasswordVerification;
         this.logoutHandler = logoutHandler;
         this.dynamicDataCache = dynamicDataCache;
         this.buttonClickObserver = buttonClickObserver;
@@ -170,7 +170,9 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     {
         (dynamicDataCache.GetData("pass") as ProtectedString)?.SetValue(password);
 
-        OnPasswordEnteredCorrect?.Invoke();
+		SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+
+		OnPasswordEnteredCorrect?.Invoke();
         uiManager.CloseMenu();
     }
 

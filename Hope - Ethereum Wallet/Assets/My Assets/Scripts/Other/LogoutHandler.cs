@@ -4,8 +4,6 @@
 /// </summary>
 public sealed class LogoutHandler
 {
-	public event Action LoggedOut;
-
     private readonly UIManager uiManager;
 	private readonly PopupManager popupManager;
     private readonly DisposableComponentManager disposableComponentManager;
@@ -35,7 +33,6 @@ public sealed class LogoutHandler
     /// </summary>
     public void Logout()
     {
-		LoggedOut?.Invoke();
 		dynamicDataCache.ClearAllData();
         disposableComponentManager.Dispose();
 		popupManager.CloseAllPopups();

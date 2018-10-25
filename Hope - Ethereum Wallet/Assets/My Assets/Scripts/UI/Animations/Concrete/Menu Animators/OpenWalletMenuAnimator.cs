@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zenject;
 
 /// <summary>
@@ -6,6 +7,8 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenuAnimator : MenuAnimator
 {
+	public event Action animateOut;
+
 	[SerializeField] private GameObject sideBar1;
 	[SerializeField] private GameObject sideBar2;
 	[SerializeField] private GameObject bottomBar;
@@ -22,6 +25,9 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[SerializeField] private Transform assetListTransform;
 	[SerializeField] private Transform transactionListTransform;
 	[SerializeField] private Transform transactionTabsTransform;
+
+	[SerializeField] private GameObject loadingStatusText;
+	[SerializeField] private GameObject loadingIcon;
 
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
@@ -42,6 +48,9 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	private void Animate()
 	{
+		loadingStatusText.AnimateGraphic(1f, 0.2f);
+		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
+
 		topBar.AnimateGraphic(1f, 0.2f, () => AnimateList(topBar.transform, 0, 6, true));
 		sideBar1.AnimateGraphic(1f, 0.2f, () => sideBar1.transform.GetChild(0).gameObject.AnimateScale(1f, 0.2f));
 		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateList(assetListTransform, 0, 7, true));
@@ -81,23 +90,30 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
+		float duration = 1f;
+
+		animateOut.Invoke();
+
 		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
 		AnimateList(topBar.transform, 0, 6, false);
 		AnimateList(assetListTransform, 0, 7, false);
 		AnimateList(transactionListTransform, 0, 4, false);
 		AnimateList(transactionTabsTransform, 0, 3, false);
 
-		topBar.AnimateGraphic(0f, 0.4f);
-		sideBar1.AnimateGraphic(0f, 0.4f);
-		sideBar2.AnimateGraphic(0f, 0.4f);
-		bottomBar.AnimateGraphic(0f, 0.4f);
+		topBar.AnimateGraphic(0f, duration);
+		sideBar1.AnimateGraphic(0f, duration);
+		sideBar2.AnimateGraphic(0f, duration);
+		bottomBar.AnimateGraphic(0f, duration);
 
-		walletNameText.AnimateGraphicAndScale(0f, 0f, 0.4f);
-		walletAccountText.AnimateGraphicAndScale(0f, 0f, 0.4f);
-		walletLine.AnimateScaleX(0f, 0.4f);
-		assetImage.AnimateGraphicAndScale(0f, 0f, 0.4f);
-		currentAssetName.AnimateGraphicAndScale(0f, 0f, 0.4f);
-		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, 0.4f);
-		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, 0.4f, FinishedAnimating);
+		loadingStatusText.AnimateGraphic(0f, duration);
+		loadingIcon.AnimateGraphicAndScale(0f, 0f, duration);
+
+		walletNameText.AnimateGraphicAndScale(0f, 0f, duration);
+		walletAccountText.AnimateGraphicAndScale(0f, 0f, duration);
+		walletLine.AnimateScaleX(0f, duration);
+		assetImage.AnimateGraphicAndScale(0f, 0f, duration);
+		currentAssetName.AnimateGraphicAndScale(0f, 0f, duration);
+		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, duration);
+		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, duration, FinishedAnimating);
 	}
 }

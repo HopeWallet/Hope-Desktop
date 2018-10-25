@@ -17,6 +17,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	[SerializeField] private GameObject moreDropdown;
 	[SerializeField] private GameObject box;
 	[SerializeField] private GameObject triangle;
+	[SerializeField] private OpenWalletMenuAnimator openWalletMenuAnimator;
 	[SerializeField] private Button[] subButtons;
 
     private LogoutHandler logoutHandler;
@@ -27,6 +28,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <summary>
 	/// Sets the popupManager
 	/// </summary>
+	/// <param name="logoutHandler"> The active LogoutHandler </param>
 	/// <param name="popupManager"> The active PopupManager </param>
 	[Inject]
     public void Construct(LogoutHandler logoutHandler, PopupManager popupManager)
@@ -34,15 +36,10 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
         this.logoutHandler = logoutHandler;
         this.popupManager = popupManager;
 
-		logoutHandler.LoggedOut += () =>
+		openWalletMenuAnimator.animateOut += () =>
 		{
 			if (dropdownOpen)
-			{
-				dropdownOpen = false;
-				clickedImage.SetActive(false);
-				moreButton.transition = Selectable.Transition.SpriteSwap;
-				AnimateDropdownOut();
-			}
+				ToggleDropdown();
 		};
 	}
 

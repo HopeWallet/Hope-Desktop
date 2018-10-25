@@ -11,19 +11,22 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
 
         private readonly UIManager uiManager;
+		private readonly PopupManager popupManager;
 
         private Vector3 previousMousePosition;
         private int currentIdleTime;
 
         private bool stopped;
 
-        /// <summary>
-        /// Sets the UIManager and starts the idle time couroutine
-        /// </summary>
-        /// <param name="uiManager"> The active UIManager </param>
-        public IdleTimeoutManager(UIManager uiManager)
+		/// <summary>
+		/// Sets the UIManager and starts the idle time couroutine
+		/// </summary>
+		/// <param name="uiManager"> The active UIManager </param>
+		/// <param name="popupManager"></param>
+		public IdleTimeoutManager(UIManager uiManager, PopupManager popupManager)
         {
             this.uiManager = uiManager;
+			this.popupManager = popupManager;
 
 			CheckIfIdle().StartCoroutine();
         }
@@ -47,7 +50,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
                 {
                     if ((currentIdleTime / 60) == SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME))
                     {
-                        uiManager.OpenMenu<ReEnterPasswordMenu>();
+						popupManager.CloseAllPopups();
+						uiManager.OpenMenu<ReEnterPasswordMenu>();
                         currentIdleTime = 0;
                     }
                     else
