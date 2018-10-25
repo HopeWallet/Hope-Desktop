@@ -72,7 +72,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		}
 		else
 		{
-			listTransform.GetChild(index)?.gameObject.AnimateScale(1f, 0.15f, () => AnimateList(listTransform, ++index, maxAnimationLimit, animateIn));
+			listTransform.GetChild(index)?.gameObject.AnimateScale(animateIn ? 1f : 0f, animateIn ? 0.15f : 0.05f, () => AnimateList(listTransform, ++index, maxAnimationLimit, animateIn));
 		}
 	}
 
@@ -81,23 +81,23 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.15f);
+		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
 		AnimateList(topBar.transform, 0, 6, false);
 		AnimateList(assetListTransform, 0, 7, false);
 		AnimateList(transactionListTransform, 0, 4, false);
 		AnimateList(transactionTabsTransform, 0, 3, false);
 
-		topBar.AnimateGraphic(0f, 0.5f);
-		sideBar1.AnimateGraphic(0f, 0.5f);
-		sideBar2.AnimateGraphic(0f, 0.5f);
-		bottomBar.AnimateGraphic(0f, 0.5f);
+		topBar.AnimateGraphic(0f, 0.4f);
+		sideBar1.AnimateGraphic(0f, 0.4f);
+		sideBar2.AnimateGraphic(0f, 0.4f);
+		bottomBar.AnimateGraphic(0f, 0.4f);
 
-		walletNameText.AnimateGraphicAndScale(0f, 0f, 0.5f);
-		walletAccountText.AnimateGraphicAndScale(0f, 0f, 0.5f);
-		walletLine.AnimateScaleX(0f, 0.5f);
-		assetImage.AnimateGraphicAndScale(0f, 0f, 0.5f);
-		currentAssetName.AnimateGraphicAndScale(0f, 0f, 0.5f);
-		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, 0.5f);
-		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, 0.5f, FinishedAnimating);
+		walletNameText.AnimateGraphicAndScale(0f, 0f, 0.4f);
+		walletAccountText.AnimateGraphicAndScale(0f, 0f, 0.4f);
+		walletLine.AnimateScaleX(0f, 0.4f);
+		assetImage.AnimateGraphicAndScale(0f, 0f, 0.4f);
+		currentAssetName.AnimateGraphicAndScale(0f, 0f, 0.4f);
+		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, 0.4f);
+		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, 0.4f, FinishedAnimating);
 	}
 }
