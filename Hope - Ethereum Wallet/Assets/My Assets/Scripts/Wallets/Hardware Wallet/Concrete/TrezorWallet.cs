@@ -14,7 +14,8 @@ public sealed class TrezorWallet : HardwareWallet
 
     private readonly UIManager uiManager;
 
-    private bool advance;
+    private bool advance,
+                 forceCancel;
 
     public TrezorWallet(
         EthereumNetworkManager ethereumNetworkManager,
@@ -85,8 +86,16 @@ public sealed class TrezorWallet : HardwareWallet
             }
             catch (FailureException<Failure>)
             {
-                if (trezorManager.PinRequest.HasValue && trezorManager.PinRequest == false)
+                if (forceCancel)
+                {
+                    forceCancel = false;
                     break;
+                }
+
+                if (trezorManager.PinRequest.HasValue && trezorManager.PinRequest == false)
+                {
+                    break;
+                }
             }
         }
 
@@ -119,6 +128,14 @@ public sealed class TrezorWallet : HardwareWallet
 
         while (!advance)
         {
+            if (popupManager.ActivePopupType != typeof(EnterTrezorPINPopup))
+            {
+                forceCancel = true;
+                advance = false;
+
+                return string.Empty;
+            }
+
             await Task.Delay(100);
         }
 

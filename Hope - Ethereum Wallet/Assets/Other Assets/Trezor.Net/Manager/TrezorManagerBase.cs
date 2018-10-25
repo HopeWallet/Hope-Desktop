@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Trezor.Net.Contracts.Common;
 
 namespace Trezor.Net
 {
@@ -115,6 +116,10 @@ namespace Trezor.Net
                         PinRequest = true;
 
                         var pin = await _EnterPinCallback.Invoke();
+
+                        if (string.IsNullOrEmpty(pin))
+                            throw new FailureException<Failure>("Invalid Pin ", new Failure() { Message = "Please try again" });
+
                         response = await PinMatrixAckAsync(pin);
 
                         if (response is TReadMessage)
