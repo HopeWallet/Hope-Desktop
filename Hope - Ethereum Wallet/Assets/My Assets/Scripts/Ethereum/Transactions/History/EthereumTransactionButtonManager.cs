@@ -12,10 +12,13 @@ using TransactionType = TransactionInfo.TransactionType;
 /// </summary>
 public sealed class EthereumTransactionButtonManager : IDisposable
 {
+	public event Action transactionButtonsAdded;
+
     private readonly Settings settings;
     private readonly TradableAssetManager tradableAssetManager;
     private readonly EthereumTransactionManager transactionManager;
     private readonly TransactionInfoButton.Factory buttonFactory;
+	private readonly ButtonAnimator buttonAnimator;
 
     private readonly List<TransactionInfoButton> transactionButtons = new List<TransactionInfoButton>();
 
@@ -26,27 +29,30 @@ public sealed class EthereumTransactionButtonManager : IDisposable
 
     public const int MAX_TRANSACTIONS_PER_PAGE = 50;
 
-    /// <summary>
-    /// Initializes the EthereumTransactionButtonManager by assigning the settings.
-    /// </summary>
-    /// <param name="settings"> The settings of this manager. </param>
-    /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
-    /// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
-    /// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
-    /// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
-    public EthereumTransactionButtonManager(
+	/// <summary>
+	/// Initializes the EthereumTransactionButtonManager by assigning the settings.
+	/// </summary>
+	/// <param name="settings"> The settings of this manager. </param>
+	/// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
+	/// <param name="tradableAssetManager"> The TradableAssetManager to retrieve the current asset from. </param>
+	/// <param name="transactionManager"> The EthereumTransactionManager to use to get the current transaction list. </param>
+	/// <param name="buttonFactory"> The TransactionInfoButton factory. </param>
+	/// <param name="buttonAnimator"> The active ButtonAnimator. </param> 
+	public EthereumTransactionButtonManager(
         Settings settings,
         DisposableComponentManager disposableComponentManager,
         TradableAssetManager tradableAssetManager,
         EthereumTransactionManager transactionManager,
-        TransactionInfoButton.Factory buttonFactory)
+        TransactionInfoButton.Factory buttonFactory,
+		ButtonAnimator buttonAnimator)
     {
         this.settings = settings;
         this.tradableAssetManager = tradableAssetManager;
         this.transactionManager = transactionManager;
         this.buttonFactory = buttonFactory;
+		this.buttonAnimator = buttonAnimator;
 
-        disposableComponentManager.AddDisposable(this);
+		disposableComponentManager.AddDisposable(this);
 
         transactionManager.OnTransactionsAdded += ProcessTransactions;
 
@@ -144,7 +150,10 @@ public sealed class EthereumTransactionButtonManager : IDisposable
 
         for (int i = transactionList.Count - 1; i >= 0; i--)
             SetTransactionButton(transactionList[i], transactionList.Count - i - 1);
-    }
+
+		transactionButtonsAdded?.Invoke();
+
+	}
 
     /// <summary>
     /// Gets the button for a transaction at a given index. Creates a new one if it doesn't exist already.
