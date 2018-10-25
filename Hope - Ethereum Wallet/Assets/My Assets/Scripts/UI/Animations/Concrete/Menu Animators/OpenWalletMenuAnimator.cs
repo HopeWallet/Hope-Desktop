@@ -90,7 +90,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		float duration = 1f;
+		float duration = 0.4f;
 
 		animateOut.Invoke();
 
