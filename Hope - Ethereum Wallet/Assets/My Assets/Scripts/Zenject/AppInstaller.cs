@@ -90,6 +90,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<LedgerWallet>().AsSingle().NonLazy();
         Container.Bind<TrezorWallet>().AsSingle().NonLazy();
         Container.Bind<HopeWalletInfoManager>().AsSingle().NonLazy();
+        Container.Bind<WalletVersionManager>().AsSingle().NonLazy();
 
         Container.Bind<TokenContractManager>().AsSingle().NonLazy();
         Container.Bind<TokenListManager>().AsSingle().NonLazy();

@@ -8,6 +8,7 @@ using Zenject;
 //[CreateAssetMenu(menuName = "Hope/App Settings")]
 public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstaller>
 {
+    public WalletVersionManager.Settings versionSettings;
     public DebugManager.Settings debugSettings;
     public Settings playerPrefSettings;
     public UserWalletManager.Settings walletSettings;
@@ -28,6 +29,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
         Container.BindInstance(playerPrefSettings.notificationSettings).AsSingle().NonLazy();
         Container.BindInstance(playerPrefSettings.currencySettings).AsSingle().NonLazy();
 
+        Container.BindInstance(versionSettings).AsSingle().NonLazy();
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
         Container.BindInstance(walletSettings).AsSingle().NonLazy();
         Container.BindInstance(ethereumNetworkSettings).AsSingle().NonLazy();

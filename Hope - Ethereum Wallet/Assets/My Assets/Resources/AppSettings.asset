@@ -11,6 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba5f71360239f54a959a2aab8da6c3f, type: 3}
   m_Name: AppSettings
   m_EditorClassIdentifier: 
+  versionSettings:
+    version: v1.0
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:
@@ -20,13 +22,7 @@ MonoBehaviour:
     contactsSettings:
       contactsPrefName: Contacts
     walletPrefSettings:
-      walletDataPrefName: wallet
-      walletNamePrefName: wallet_name
-      walletPasswordPrefName: wallet_password
-      walletCountPrefName: wallet_count
-      walletHashLvlPrefName: wallet_hash
       walletInfoPrefName: wallet_info
-      walletEncryptionEntropy: sdfOH$OUH$OHUOUGSFDNUOUAOBUfbfgd
     tokenContractSettings:
       tokenPrefName: Token_
     tokenListSettings:
