@@ -452,6 +452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   okButton: {fileID: 114867606065474896}
   cancelButton: {fileID: 114435716118772650}
+  updateAvailableText: {fileID: 114388085912872578}
 --- !u!222 &222112673520532554
 CanvasRenderer:
   m_ObjectHideFlags: 1

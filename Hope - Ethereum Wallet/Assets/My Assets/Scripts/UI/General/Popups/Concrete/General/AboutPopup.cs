@@ -1,13 +1,23 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 {
 	[SerializeField] private TextMeshProUGUI currentVersionText, latestVersionText;
 	[SerializeField] private Button downloadUpdateButton, websiteButton, githubButton, redditButton, discordButton;
 
-	private float currentVersion = 1.05f, latestVersion = 1.07f;
+    private WalletVersionManager walletVersionManager;
+
+    private const string WEBSITE_URL = "http://www.hopewallet.io/";
+    private const string GITHUB_URL = "https://github.com/HopeWallet/";
+
+    [Inject]
+    public void Construct(WalletVersionManager walletVersionManager)
+    {
+        this.walletVersionManager = walletVersionManager;
+    }
 
 	/// <summary>
 	/// Checks if there is a new hope version available
@@ -16,18 +26,18 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 	{
 		base.Awake();
 
-		currentVersionText.text = "Current Hope version: (v " + currentVersion.ToString("0.00") + ")";
+		currentVersionText.text = $"Current Hope version: (v{walletVersionManager.CurrentWalletVersion})";
 
-		bool upToDate = latestVersion == currentVersion;
+		bool upToDate = !walletVersionManager.NewVersionExists;
 
-		latestVersionText.text = !upToDate ? "New Hope version available! (v " + latestVersion.ToString("0.00") + ")" : "Software is up to date!";
+		latestVersionText.text = !upToDate ? $"New Hope version available! (v{walletVersionManager.LatestWalletVersion})" : "Wallet is up to date!";
 		downloadUpdateButton.gameObject.SetActive(!upToDate);
 
 		if (!upToDate)
-			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
+			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL(walletVersionManager.LatestWalletVersionUrl));
 
-		websiteButton.onClick.AddListener(() => Application.OpenURL("http://www.hopewallet.io/"));
-		githubButton.onClick.AddListener(() => Application.OpenURL("https://github.com/HopeWallet/"));
+		websiteButton.onClick.AddListener(() => Application.OpenURL(WEBSITE_URL));
+		githubButton.onClick.AddListener(() => Application.OpenURL(GITHUB_URL));
 	}
 
 	/// <summary>

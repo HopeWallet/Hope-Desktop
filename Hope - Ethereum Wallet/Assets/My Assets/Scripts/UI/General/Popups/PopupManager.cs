@@ -138,7 +138,7 @@ public sealed class PopupManager
     /// <typeparam name="TPopup"> The type of the popup. </typeparam>
     /// <param name="stackPopups"> Whether this popup should stack on top of the last popup. </param>
     /// <returns> The popup created or retrieved. </returns>
-    public TPopup GetPopup<TPopup>(bool stackPopups = false) where TPopup : FactoryPopup<TPopup>
+    public TPopup GetPopup<TPopup>(bool stackPopups = true) where TPopup : FactoryPopup<TPopup>
     {
         var popupsOfType = activePopups.Where(popup => popup.Key.GetType() == typeof(TPopup));
 
