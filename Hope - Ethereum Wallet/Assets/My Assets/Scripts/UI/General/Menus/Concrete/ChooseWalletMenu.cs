@@ -13,18 +13,18 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
 
     private UserWalletManager userWalletManager;
-    private HopeWalletInfoManager.Settings walletSettings;
+    private HopeWalletInfoManager walletInfoManager;
 
     /// <summary>
     /// Adds the required wallet dependencies.
     /// </summary>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="walletSettings"> The pref settings for the UserWallet. </param>
+    /// <param name="walletInfoManager"> The avtive HopeWalletInfoManager. </param>
     [Inject]
-    public void Construct(UserWalletManager userWalletManager, HopeWalletInfoManager.Settings walletSettings)
+    public void Construct(UserWalletManager userWalletManager, HopeWalletInfoManager walletInfoManager)
     {
         this.userWalletManager = userWalletManager;
-        this.walletSettings = walletSettings;
+        this.walletInfoManager = walletInfoManager;
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     {
         userWalletManager.SetWalletType(UserWalletManager.WalletType.Hope);
 
-        if (SecurePlayerPrefs.HasKey(walletSettings.walletCountPrefName) && SecurePlayerPrefs.GetInt(walletSettings.walletCountPrefName) > 0)
+        if (walletInfoManager.WalletCount > 0)
             uiManager.OpenMenu<WalletListMenu>();
         else
             uiManager.OpenMenu<CreateWalletMenu>();

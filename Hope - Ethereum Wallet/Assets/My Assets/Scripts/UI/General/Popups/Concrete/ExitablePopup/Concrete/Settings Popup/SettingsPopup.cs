@@ -42,7 +42,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	private UserWalletManager userWalletManager;
     private UserWalletManager.Settings userWalletManagerSettings;
     private HopeWalletInfoManager hopeWalletInfoManager;
-    private HopeWalletInfoManager.Settings walletSettings;
     private WalletPasswordVerification walletPasswordVerification;
     private ContactsManager contactsManager;
     private DynamicDataCache dynamicDataCache;
@@ -56,7 +55,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// </summary>
     /// <param name="userWalletManager"> The active UserWalletManager </param>
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
-    /// <param name="walletSettings"> The active HopeWalletInfoManager.Settings. </param>
     /// <param name="userWalletManagerSettings"> The active UserWalletManager.Settings. </param>
     /// <param name="walletPasswordVerification"> An instance of WalletPasswordVerification. </param>
     /// <param name="contactsManager"> The active ContactsManager. </param>
@@ -68,7 +66,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     public void Construct(
         UserWalletManager userWalletManager,
         HopeWalletInfoManager hopeWalletInfoManager,
-        HopeWalletInfoManager.Settings walletSettings,
         UserWalletManager.Settings userWalletManagerSettings,
         WalletPasswordVerification walletPasswordVerification,
         ContactsManager contactsManager,
@@ -80,7 +77,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		this.userWalletManager = userWalletManager;
         this.userWalletManagerSettings = userWalletManagerSettings;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
-        this.walletSettings = walletSettings;
         this.walletPasswordVerification = walletPasswordVerification;
         this.contactsManager = contactsManager;
         this.dynamicDataCache = dynamicDataCache;

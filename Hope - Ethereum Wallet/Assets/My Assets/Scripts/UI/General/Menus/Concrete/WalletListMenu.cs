@@ -17,7 +17,6 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	private WalletButton.Factory walletButtonFactory;
     private DynamicDataCache dynamicDataCache;
 	private HopeWalletInfoManager hopeWalletInfoManager;
-	private HopeWalletInfoManager.Settings walletSettings;
     private Settings settings;
 
     /// <summary>
@@ -31,20 +30,17 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
     /// <param name="walletButtonFactory"> The factory for creating WalletButtons. </param>
     /// <param name="dynamicDataCache"> The active ByteDataCache. </param>
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager. </param>
-    /// <param name="walletSettings"> The settings for the UserWallet. </param> 
     /// <param name="settings"> The settings of this menu. </param>
     [Inject]
     public void Construct(
         WalletButton.Factory walletButtonFactory,
         DynamicDataCache dynamicDataCache,
 		HopeWalletInfoManager hopeWalletInfoManager,
-        HopeWalletInfoManager.Settings walletSettings,
         Settings settings)
     {
         this.walletButtonFactory = walletButtonFactory;
         this.dynamicDataCache = dynamicDataCache;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
-        this.walletSettings = walletSettings;
         this.settings = settings;
     }
 

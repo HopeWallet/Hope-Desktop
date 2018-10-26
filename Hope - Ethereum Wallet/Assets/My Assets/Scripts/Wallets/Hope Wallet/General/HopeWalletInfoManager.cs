@@ -54,8 +54,6 @@ public sealed class HopeWalletInfoManager
     /// <param name="passwordHash"> The pbkdf2 password hash of the password used to encrypt the wallet. </param>
     public void AddWalletInfo(string walletName, string[][] walletAddresses, string[] encryptionHashes, string encryptedSeed, string passwordHash)
     {
-        SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count + 1);
-
         var encryptedWalletData = new WalletInfo.EncryptedDataContainer(encryptionHashes, encryptedSeed, passwordHash);
         var walletInfo = new WalletInfo(encryptedWalletData, walletName, (string[][])walletAddresses.Clone(), wallets.Count + 1);
 
@@ -98,7 +96,6 @@ public sealed class HopeWalletInfoManager
             return;
 
         wallets.RemoveAt(walletNum - 1);
-        SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count);
     }
 
     /// <summary>
@@ -107,8 +104,7 @@ public sealed class HopeWalletInfoManager
     /// <param name="walletInfo"> The WalletInfo object to delete. </param>
     public void DeleteWalletInfo(WalletInfo walletInfo)
     {
-        if (wallets.Remove(walletInfo))
-            SecurePlayerPrefs.SetInt(walletSettings.walletCountPrefName, wallets.Count);
+        wallets.Remove(walletInfo);
     }
 
     /// <summary>
@@ -117,13 +113,6 @@ public sealed class HopeWalletInfoManager
     [Serializable]
     public sealed class Settings
     {
-        [RandomizeText] public string walletDataPrefName;
-        [RandomizeText] public string walletNamePrefName;
-        [RandomizeText] public string walletPasswordPrefName;
-        [RandomizeText] public string walletCountPrefName;
-        [RandomizeText] public string walletHashLvlPrefName;
         [RandomizeText] public string walletInfoPrefName;
-
-        [RandomizeText] public string walletEncryptionEntropy;
     }
 }
