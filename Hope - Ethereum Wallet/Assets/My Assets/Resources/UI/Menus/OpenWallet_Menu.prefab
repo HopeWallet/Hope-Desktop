@@ -2208,6 +2208,7 @@ MonoBehaviour:
   transactionTabsTransform: {fileID: 224950740150149568}
   loadingStatusText: {fileID: 1984117271159812}
   loadingIcon: {fileID: 1859220304818552}
+  transactionPagesSection: {fileID: 1214977154125236}
 --- !u!114 &114121923202464452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6076,12 +6077,12 @@ MonoBehaviour:
   moreDropdown: {fileID: 1446825561524088}
   box: {fileID: 1298048586131144}
   triangle: {fileID: 1566684316900536}
+  openWalletMenuAnimator: {fileID: 114121064316673466}
   subButtons:
   - {fileID: 114258460906311682}
   - {fileID: 114186183603902124}
   - {fileID: 114709578776823426}
   - {fileID: 114631997620217972}
-  openWalletMenuAnimator: {fileID: 114121064316673466}
 --- !u!114 &114726680827523912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9395,7 +9396,7 @@ RectTransform:
   m_GameObject: {fileID: 1214977154125236}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children:
   - {fileID: 224844867101194562}
   - {fileID: 224370396783682564}

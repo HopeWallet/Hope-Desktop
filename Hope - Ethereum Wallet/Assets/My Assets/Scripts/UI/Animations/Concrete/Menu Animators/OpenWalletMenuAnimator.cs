@@ -28,11 +28,12 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 	[SerializeField] private GameObject loadingStatusText;
 	[SerializeField] private GameObject loadingIcon;
+	[SerializeField] private GameObject transactionPagesSection;
 
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
 	{
-		ethereumTransactionButtonManager.transactionButtonsAdded += () => AnimateList(transactionListTransform, 0, 4, true);
+		ethereumTransactionButtonManager.transactionButtonsAdded += () => AnimateListIn(transactionListTransform, 0, 4, true);
 	}
 
 	/// <summary>
@@ -50,11 +51,12 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	{
 		loadingStatusText.AnimateGraphic(1f, 0.2f);
 		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		transactionPagesSection.AnimateScale(1f, 0.2f);
 
-		topBar.AnimateGraphic(1f, 0.2f, () => AnimateList(topBar.transform, 0, 6, true));
+		topBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(topBar.transform, 0, 6, true));
 		sideBar1.AnimateGraphic(1f, 0.2f, () => sideBar1.transform.GetChild(0).gameObject.AnimateScale(1f, 0.2f));
-		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateList(assetListTransform, 0, 7, true));
-		bottomBar.AnimateGraphic(1f, 0.2f, () => AnimateList(transactionTabsTransform, 0, 3, true));
+		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateListIn(assetListTransform, 0, 7, true));
+		bottomBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(transactionTabsTransform, 0, 3, true));
 
 		walletNameText.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		walletAccountText.AnimateGraphicAndScale(1f, 1f, 0.25f);
@@ -66,39 +68,19 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	}
 
 	/// <summary>
-	/// Animates a given list in the open wallet menu
-	/// </summary>
-	/// <param name="listTransform"> The list parent transform </param>
-	/// <param name="index"> The current index of the child being animated in the hiearchy </param>
-	/// <param name="maxAnimationLimit"> The max index to animate to before setting all of the rest of the child object scales </param>
-	/// <param name="animateIn"> Whether the child objects should be animated in or out </param>
-	private void AnimateList(Transform listTransform, int index, int maxAnimationLimit, bool animateIn)
-	{
-		if (index == maxAnimationLimit)
-		{
-			for (int i = index; i < listTransform.childCount; i++)
-				listTransform.GetChild(i).transform.localScale = new Vector2(1f, 1f);
-		}
-		else
-		{
-			listTransform.GetChild(index)?.gameObject.AnimateScale(animateIn ? 1f : 0f, animateIn ? 0.15f : 0.05f, () => AnimateList(listTransform, ++index, maxAnimationLimit, animateIn));
-		}
-	}
-
-	/// <summary>
 	/// Animate the unique elements of the form out of view
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		float duration = 0.4f;
+		float duration = 0.35f;
 
 		animateOut.Invoke();
 
 		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
-		AnimateList(topBar.transform, 0, 6, false);
-		AnimateList(assetListTransform, 0, 7, false);
-		AnimateList(transactionListTransform, 0, 4, false);
-		AnimateList(transactionTabsTransform, 0, 3, false);
+		AnimateListOut(topBar.transform);
+		AnimateListOut(assetListTransform);
+		AnimateListOut(transactionListTransform);
+		AnimateListOut(transactionTabsTransform);
 
 		topBar.AnimateGraphic(0f, duration);
 		sideBar1.AnimateGraphic(0f, duration);
@@ -107,6 +89,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 		loadingStatusText.AnimateGraphic(0f, duration);
 		loadingIcon.AnimateGraphicAndScale(0f, 0f, duration);
+		transactionPagesSection.AnimateScale(0f, duration);
 
 		walletNameText.AnimateGraphicAndScale(0f, 0f, duration);
 		walletAccountText.AnimateGraphicAndScale(0f, 0f, duration);
@@ -115,5 +98,38 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		currentAssetName.AnimateGraphicAndScale(0f, 0f, duration);
 		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, duration);
 		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, duration, FinishedAnimating);
+	}
+
+	/// <summary>
+	/// Animates a given list in the open wallet menu
+	/// </summary>
+	/// <param name="listTransform"> The list parent transform </param>
+	/// <param name="index"> The current index of the child being animated in the hiearchy </param>
+	/// <param name="maxAnimationLimit"> The max index to animate to before setting all of the rest of the child object scales </param>
+	/// <param name="animateIn"> Whether the child objects should be animated in or out </param>
+	private void AnimateListIn(Transform listTransform, int index, int maxAnimationLimit, bool animateIn)
+	{
+		if (listTransform.childCount == 0)
+			return;
+
+		if (index == maxAnimationLimit)
+		{
+			for (int i = index; i < listTransform.childCount; i++)
+				listTransform.GetChild(i).transform.localScale = new Vector2(1f, 1f);
+		}
+		else
+		{
+			listTransform.GetChild(index)?.gameObject.AnimateScale(animateIn ? 1f : 0f, animateIn ? 0.15f : 0.05f, () => AnimateListIn(listTransform, ++index, maxAnimationLimit, animateIn));
+		}
+	}
+
+	/// <summary>
+	/// Animates a list out of view
+	/// </summary>
+	/// <param name="transform"> The parent transform of the list </param>
+	private void AnimateListOut(Transform transform)
+	{
+		for (int i = 0; i < transform.childCount; i++)
+			transform.GetChild(i).gameObject.AnimateScale(0f, 0.35f);
 	}
 }
