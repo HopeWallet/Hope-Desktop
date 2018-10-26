@@ -10,10 +10,11 @@ using Object = UnityEngine.Object;
 public sealed class TradableAssetButtonManager : IDisposable
 {
     public event Action<ITradableAssetButton> OnActiveButtonChanged;
-	public event Action<GameObject> buttonAdded;
+
+	public event Action<ITradableAssetButton> OnTradableAssetButtonCreated;
+    public event Action<ITradableAssetButton> OnTradableAssetButtonRemoved;
 
     private readonly TokenContractManager tokenContractManager;
-	private readonly ButtonAnimator buttonAnimator;
 
 	private readonly EtherAssetButton.Factory etherAssetButtonFactory;
     private readonly ERC20TokenAssetButton.Factory erc20TokenButtonFactory;
@@ -35,13 +36,11 @@ public sealed class TradableAssetButtonManager : IDisposable
         EtherAssetButton.Factory etherAssetButtonFactory,
         DisposableComponentManager disposableComponentManager,
         TokenContractManager tokenContractManager,
-        TradableAssetManager tradableAssetManager,
-		ButtonAnimator buttonAnimator)
+        TradableAssetManager tradableAssetManager)
     {
         this.erc20TokenButtonFactory = erc20TokenButtonFactory;
         this.etherAssetButtonFactory = etherAssetButtonFactory;
         this.tokenContractManager = tokenContractManager;
-		this.buttonAnimator = buttonAnimator;
 
 		disposableComponentManager.AddDisposable(this);
 
@@ -105,9 +104,9 @@ public sealed class TradableAssetButtonManager : IDisposable
         assetButtons.Add(assetButton);
 		SortButtons();
 
-		buttonAnimator.AnimateNewButton(assetButton.Button.gameObject);
-
         OptimizedScrollview.GetScrollview("asset_scrollview")?.Refresh();
+
+        OnTradableAssetButtonCreated?.Invoke(assetButton);
     }
 
     /// <summary>
@@ -126,7 +125,7 @@ public sealed class TradableAssetButtonManager : IDisposable
                     assetButtons[0].ButtonLeftClicked();
 
                 assetButtons.Remove(assetButton);
-                Object.Destroy(assetButton.transform.parent.gameObject);
+                OnTradableAssetButtonRemoved?.Invoke(assetButton);
                 return;
             }
         }
