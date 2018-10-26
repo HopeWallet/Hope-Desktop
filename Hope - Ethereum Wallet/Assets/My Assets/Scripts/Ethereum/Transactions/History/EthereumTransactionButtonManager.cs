@@ -12,7 +12,7 @@ using TransactionType = TransactionInfo.TransactionType;
 /// </summary>
 public sealed class EthereumTransactionButtonManager : IDisposable
 {
-	public event Action<TransactionInfoButton> OnTransactionButtonCreated;
+    public event Action OnTransactionListCreated;
 
     private readonly Settings settings;
     private readonly TradableAssetManager tradableAssetManager;
@@ -146,6 +146,8 @@ public sealed class EthereumTransactionButtonManager : IDisposable
 
         for (int i = transactionList.Count - 1; i >= 0; i--)
             SetTransactionButton(transactionList[i], transactionList.Count - i - 1);
+
+        OnTransactionListCreated?.Invoke();
 	}
 
     /// <summary>
@@ -157,12 +159,7 @@ public sealed class EthereumTransactionButtonManager : IDisposable
     private void SetTransactionButton(TransactionInfo transactionInfo, int index)
     {
         if (index >= transactionButtons.Count)
-        {
-            var transactionButton = buttonFactory.Create();
-            transactionButtons.Add(transactionButton.SetButtonInfo(transactionInfo));
-
-            OnTransactionButtonCreated?.Invoke(transactionButton);
-        }
+            transactionButtons.Add(buttonFactory.Create().SetButtonInfo(transactionInfo));
 
         transactionButtons[index].SetButtonInfo(transactionInfo);
     }

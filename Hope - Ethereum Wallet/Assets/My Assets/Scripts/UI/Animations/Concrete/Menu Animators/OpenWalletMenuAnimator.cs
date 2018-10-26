@@ -33,7 +33,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
 	{
-		ethereumTransactionButtonManager.transactionButtonsAdded += () => AnimateListIn(transactionListTransform, 0, 4, true);
+		ethereumTransactionButtonManager.OnTransactionListCreated += () => AnimateListIn(transactionListTransform, 0, 4, true);
 	}
 
 	/// <summary>
