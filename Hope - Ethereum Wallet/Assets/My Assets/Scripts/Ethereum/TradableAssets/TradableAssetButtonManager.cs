@@ -10,10 +10,12 @@ using Object = UnityEngine.Object;
 public sealed class TradableAssetButtonManager : IDisposable
 {
     public event Action<ITradableAssetButton> OnActiveButtonChanged;
+	public event Action<GameObject> buttonAdded;
 
     private readonly TokenContractManager tokenContractManager;
+	private readonly ButtonAnimator buttonAnimator;
 
-    private readonly EtherAssetButton.Factory etherAssetButtonFactory;
+	private readonly EtherAssetButton.Factory etherAssetButtonFactory;
     private readonly ERC20TokenAssetButton.Factory erc20TokenButtonFactory;
 
     private readonly List<ITradableAssetButton> assetButtons = new List<ITradableAssetButton>();
@@ -33,13 +35,15 @@ public sealed class TradableAssetButtonManager : IDisposable
         EtherAssetButton.Factory etherAssetButtonFactory,
         DisposableComponentManager disposableComponentManager,
         TokenContractManager tokenContractManager,
-        TradableAssetManager tradableAssetManager)
+        TradableAssetManager tradableAssetManager,
+		ButtonAnimator buttonAnimator)
     {
         this.erc20TokenButtonFactory = erc20TokenButtonFactory;
         this.etherAssetButtonFactory = etherAssetButtonFactory;
         this.tokenContractManager = tokenContractManager;
+		this.buttonAnimator = buttonAnimator;
 
-        disposableComponentManager.AddDisposable(this);
+		disposableComponentManager.AddDisposable(this);
 
         tradableAssetManager.OnTradableAssetAdded += AddAssetButton;
         tradableAssetManager.OnTradableAssetRemoved += RemoveButton;
@@ -99,7 +103,9 @@ public sealed class TradableAssetButtonManager : IDisposable
         }
 
         assetButtons.Add(assetButton);
-        SortButtons();
+		SortButtons();
+
+		buttonAnimator.AnimateNewButton(assetButton.Button.gameObject);
 
         OptimizedScrollview.GetScrollview("asset_scrollview")?.Refresh();
     }
