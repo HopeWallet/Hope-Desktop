@@ -39,8 +39,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 	private WalletNameSection walletNameSection;
 	private PasswordSection passwordSection;
 
-	private UserWalletManager userWalletManager;
-    private UserWalletManager.Settings userWalletManagerSettings;
+    private PlayerPrefPasswordDerivation playerPrefPasswordDerivation;
+    private UserWalletManager userWalletManager;
     private HopeWalletInfoManager hopeWalletInfoManager;
     private WalletPasswordVerification walletPasswordVerification;
     private ContactsManager contactsManager;
@@ -53,6 +53,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// <summary>
     /// Sets the necessary dependencies
     /// </summary>
+    /// <param name="playerPrefPasswordDerivation"> The active PlayerPrefPasswordDerivation. </param>
     /// <param name="userWalletManager"> The active UserWalletManager </param>
     /// <param name="hopeWalletInfoManager"> The active HopeWalletInfoManager </param>
     /// <param name="userWalletManagerSettings"> The active UserWalletManager.Settings. </param>
@@ -64,9 +65,9 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// <param name="logoutHandler"> The active LogoutHandler. </param>
     [Inject]
     public void Construct(
+        PlayerPrefPasswordDerivation playerPrefPasswordDerivation,
         UserWalletManager userWalletManager,
         HopeWalletInfoManager hopeWalletInfoManager,
-        UserWalletManager.Settings userWalletManagerSettings,
         WalletPasswordVerification walletPasswordVerification,
         ContactsManager contactsManager,
         DynamicDataCache dynamicDataCache,
@@ -74,8 +75,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         CurrencyManager currencyManager,
         LogoutHandler logoutHandler)
     {
-		this.userWalletManager = userWalletManager;
-        this.userWalletManagerSettings = userWalletManagerSettings;
+        this.playerPrefPasswordDerivation = playerPrefPasswordDerivation;
+        this.userWalletManager = userWalletManager;
 		this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.walletPasswordVerification = walletPasswordVerification;
         this.contactsManager = contactsManager;
@@ -114,7 +115,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
 			walletNameSection = new WalletNameSection(hopeWalletInfoManager, walletPasswordVerification, contactsManager, dynamicDataCache, userWalletManager, settingsPopupAnimator, currentPasswordSection, changeWalletNameSection, currentPasswordloadingIcon, currentPasswordField, currentWalletNameField, newWalletNameField, nextButton, saveWalletNameButton, hopeOnlyCategoryButtons);
 
-			passwordSection = new PasswordSection(userWalletManagerSettings, userWalletManager, hopeWalletInfoManager, dynamicDataCache, settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton, newPasswordLoadingIcon);
+			passwordSection = new PasswordSection(playerPrefPasswordDerivation, userWalletManager, hopeWalletInfoManager, dynamicDataCache, settingsPopupAnimator, newPasswordField, confirmPasswordField, savePasswordButton, newPasswordLoadingIcon);
 		}
 		else
         {

@@ -11,7 +11,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     public WalletVersionManager.Settings versionSettings;
     public DebugManager.Settings debugSettings;
     public Settings playerPrefSettings;
-    public UserWalletManager.Settings walletSettings;
     public EthereumNetworkManager.Settings ethereumNetworkSettings;
     public UIManager.Settings uiSettings;
     public SmartContractManager.Settings contractManagerSettings;
@@ -25,7 +24,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
 
         Container.BindInstance(versionSettings).AsSingle().NonLazy();
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
-        Container.BindInstance(walletSettings).AsSingle().NonLazy();
         Container.BindInstance(ethereumNetworkSettings).AsSingle().NonLazy();
         Container.BindInstance(uiSettings).AsSingle().NonLazy();
 

@@ -38,7 +38,7 @@ public sealed class UserWalletManager : IDisposable
     /// <summary>
     /// Initializes the UserWallet given the settings to apply.
     /// </summary>
-    /// <param name="settings"> The settings to initialize the wallet with. </param>
+    /// <param name="playerPrefPasswordDerivation"> The active PlayerPrefPasswordDerivation. </param>
     /// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
     /// <param name="disposableComponentManager"> The active DisposableComponentManager. </param>
     /// <param name="popupManager"> The PopupManager to assign to the wallet. </param>
@@ -48,7 +48,7 @@ public sealed class UserWalletManager : IDisposable
     /// <param name="trezorWallet"> The active TrezorWallet. </param>
     /// <param name="userWalletInfoManager"> The active UserWalletInfoManager. </param>
     public UserWalletManager(
-        Settings settings,
+        PlayerPrefPasswordDerivation playerPrefPasswordDerivation,
         EthereumPendingTransactionManager ethereumPendingTransactionManager,
         DisposableComponentManager disposableComponentManager,
         PopupManager popupManager,
@@ -66,7 +66,7 @@ public sealed class UserWalletManager : IDisposable
 
         disposableComponentManager.AddDisposable(this);
 
-        hopeWallet = new HopeWallet(settings.safePassword, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager);
+        hopeWallet = new HopeWallet(playerPrefPasswordDerivation, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager);
         activeWallet = hopeWallet;
 
         ledgerWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
@@ -252,14 +252,5 @@ public sealed class UserWalletManager : IDisposable
         Ledger,
         Trezor,
         Hope
-    }
-
-    /// <summary>
-    /// Class which contains all settings related to the wallet storage/loading/unlocking.
-    /// </summary>
-    [Serializable]
-    public class Settings
-    {
-        public PlayerPrefPasswordDerivation safePassword;
     }
 }

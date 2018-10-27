@@ -54,6 +54,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
 
         Container.Bind<SecurePlayerPrefs>().AsSingle().NonLazy();
         Container.Bind<SecurePlayerPrefsAsync>().AsSingle().NonLazy();
+        Container.Bind<PlayerPrefPasswordDerivation>().AsSingle().NonLazy();
 
         Container.Bind<DynamicDataCache>().AsSingle().NonLazy();
 

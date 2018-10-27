@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
@@ -11,16 +10,24 @@ using NBitcoin;
 /// <summary>
 /// Class which derives a password by hashing a password with many different pieces of data saved to the PlayerPrefs.
 /// </summary>
-[Serializable]
-public class PlayerPrefPasswordDerivation : ScriptableObject
+public sealed class PlayerPrefPasswordDerivation
 {
-    [SerializeField] public string[] keys;
-
     private readonly Dictionary<string, byte[]> prefDictionary = new Dictionary<string, byte[]>();
+
+    private readonly string key;
 
     private int prefCounter;
 
-    private const int PASSWORD_LENGTH = 16;
+    private const int PREF_COUNT = 16;
+    private const int PASSWORD_LENGTH = 32;
+
+    public PlayerPrefPasswordDerivation()
+    {
+        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.PLAYER_PREF_PASS_DERIVATION_KEY))
+            SecurePlayerPrefs.SetString(PlayerPrefConstants.PLAYER_PREF_PASS_DERIVATION_KEY, RandomString.Secure.Blake2.GetString(64));
+
+        key = SecurePlayerPrefs.GetString(PlayerPrefConstants.PLAYER_PREF_PASS_DERIVATION_KEY);
+    }
 
     /// <summary>
     /// Derives a password to use to encrypt data given the starting password (seed).
@@ -30,12 +37,16 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
     public byte[] Derive(byte[] startingPassword)
     {
         byte[] derivedSeed = RandomBytes.Secure.Blake2.GetBytes(startingPassword, 128).Concat(startingPassword).ToArray().SHA3_512();
-        for (int i = 0; i < keys.Length; i++)
+        string tempKey = key;
+
+        for (int i = 0; i < PREF_COUNT; i++)
         {
+            tempKey = (tempKey + i.ToString()).Keccak_256();
+
             byte[] last = derivedSeed.SHA3_512();
             byte[] newBytes = RandomBytes.Secure.Blake2.GetBytes(32);
 
-            prefDictionary.AddOrReplace(keys[i], newBytes);
+            prefDictionary.AddOrReplace(tempKey, newBytes);
             derivedSeed = last.Concat(newBytes).ToArray().Keccak_512();
 
             last.ClearBytes();
@@ -54,11 +65,14 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
     public byte[] Restore(byte[] startingPassword)
     {
         byte[] derivedSeed = RandomBytes.Secure.Blake2.GetBytes(startingPassword, 128).Concat(startingPassword).ToArray().SHA3_512();
+        string tempKey = key;
 
-        for (int i = 0; i < keys.Length; i++)
+        for (int i = 0; i < PREF_COUNT; i++)
         {
+            tempKey = (tempKey + i.ToString()).Keccak_256();
+
             byte[] last = derivedSeed.SHA3_512();
-            byte[] newBytes = prefDictionary[keys[i]];
+            byte[] newBytes = prefDictionary[tempKey];
 
             derivedSeed = last.Concat(newBytes).ToArray().Keccak_512();
 
@@ -101,7 +115,15 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
         if (prefDictionary.Count > 0)
             prefDictionary.Clear();
 
-        keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).Keccak_256()).GetBase64Bytes()));
+        string tempKey = key;
+
+        for (int i = 0; i < PREF_COUNT; i++)
+        {
+            tempKey = (tempKey + i.ToString()).Keccak_256();
+            prefDictionary.Add(tempKey, SecurePlayerPrefs.GetString((tempKey + "_" + walletNum).Keccak_256()).GetBase64Bytes());
+        }
+
+        //keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).Keccak_256()).GetBase64Bytes()));
     }
 
     /// <summary>
@@ -115,7 +137,7 @@ public class PlayerPrefPasswordDerivation : ScriptableObject
 
         prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletNum).Keccak_256(), prefDictionary[key].GetBase64String(), () =>
         {
-            if (++prefCounter >= keys.Length)
+            if (++prefCounter >= PREF_COUNT)
                 onPrefsGenerated?.Invoke();
         }));
     }

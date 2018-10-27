@@ -16,10 +16,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         private readonly Button saveButton;
         private readonly GameObject loadingIcon;
 
+        private readonly PlayerPrefPasswordDerivation playerPrefPasswordDerivation;
         private readonly WalletEncryptor walletEncryptor;
         private readonly WalletDecryptor walletDecryptor;
         private readonly HopeWalletInfoManager hopeWalletInfoManager;
-        private readonly UserWalletManager.Settings userWalletManagerSettings;
         private readonly DynamicDataCache dynamicDataCache;
 
         private readonly WalletInfo walletInfo;
@@ -27,7 +27,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         private readonly SettingsPopupAnimator settingsPopupAnimator;
 
         public PasswordSection(
-            UserWalletManager.Settings userWalletManagerSettings,
+            PlayerPrefPasswordDerivation playerPrefPasswordDerivation,
             UserWalletManager userWalletManager,
             HopeWalletInfoManager hopeWalletInfoManager,
             DynamicDataCache dynamicDataCache,
@@ -37,7 +37,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
             Button saveButton,
             GameObject loadingIcon)
         {
-            this.userWalletManagerSettings = userWalletManagerSettings;
+            this.playerPrefPasswordDerivation = playerPrefPasswordDerivation;
             this.hopeWalletInfoManager = hopeWalletInfoManager;
             this.dynamicDataCache = dynamicDataCache;
             this.settingsPopupAnimator = settingsPopupAnimator;
@@ -46,8 +46,8 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
             this.saveButton = saveButton;
             this.loadingIcon = loadingIcon;
 
-            walletEncryptor = new WalletEncryptor(userWalletManagerSettings.safePassword, dynamicDataCache);
-            walletDecryptor = new WalletDecryptor(userWalletManagerSettings.safePassword, dynamicDataCache);
+            walletEncryptor = new WalletEncryptor(playerPrefPasswordDerivation, dynamicDataCache);
+            walletDecryptor = new WalletDecryptor(playerPrefPasswordDerivation, dynamicDataCache);
             walletInfo = hopeWalletInfoManager.GetWalletInfo(userWalletManager.GetWalletAddress());
 
             newPasswordField.OnInputUpdated += _ => PasswordsUpdated();
@@ -98,7 +98,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
                     walletInfo.WalletAddresses,
                     walletInfo.WalletNum));
 
-            userWalletManagerSettings.safePassword.SetupPlayerPrefs(walletInfo.WalletNum, () =>
+            playerPrefPasswordDerivation.SetupPlayerPrefs(walletInfo.WalletNum, () =>
             {
                 MainThreadExecutor.QueueAction(() =>
                 {
