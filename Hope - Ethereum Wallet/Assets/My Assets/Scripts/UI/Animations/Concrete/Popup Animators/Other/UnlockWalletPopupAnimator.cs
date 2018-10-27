@@ -32,7 +32,7 @@ public class UnlockWalletPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(unlockWalletPopup.WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT) + 1) == 0)
+		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(unlockWalletPopup.WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT) + 1) == 0)
 		{
 			lockedOutSection.AnimateScale(1f, 0.15f);
 			unlockWalletPopup.LockedOut = true;

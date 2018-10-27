@@ -7,8 +7,6 @@ public sealed class CurrencyManager
 {
     public event Action OnCurrencyChanged;
 
-    private readonly Settings settings;
-
     private readonly string[] euroTypes = new string[] { "ca", "ca-ES-valencia", "de", "de-de", "el", "es", "es-ES", "et", "eu", "fi", "fr", "fr-FR", "ga", "it", "it-it", "lb", "lt", "lv", "mt", "nl", "nl-BE", "pt-PT", "sk", "sl" };
     private readonly string[] poundTypes = new string[] { "cy", "en-GB", "gd-Latn" };
     private readonly string[] rupeeTypes = new string[] { "as", "bn-IN", "hi", "kn", "kok", "ml", "mr", "or", "ta", "te" };
@@ -16,20 +14,18 @@ public sealed class CurrencyManager
 
     public CurrencyType ActiveCurrency { get; private set; }
 
-    public CurrencyManager(Settings settings)
+    public CurrencyManager()
     {
-        this.settings = settings;
+        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_CURRENCY))
+            SecurePlayerPrefs.SetInt(PlayerPrefConstants.SETTING_CURRENCY, (int)CurrencyType.USD);
 
-        if (!SecurePlayerPrefs.HasKey(settings.prefName))
-            SecurePlayerPrefs.SetInt(settings.prefName, (int)CurrencyType.USD);
-
-        ActiveCurrency = (CurrencyType)SecurePlayerPrefs.GetInt(settings.prefName);
+        ActiveCurrency = (CurrencyType)SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_CURRENCY);
     }
 
     public void SwitchActiveCurrency(CurrencyType newActiveCurrency)
     {
         ActiveCurrency = newActiveCurrency;
-        SecurePlayerPrefs.SetInt(settings.prefName, (int)newActiveCurrency);
+        SecurePlayerPrefs.SetInt(PlayerPrefConstants.SETTING_CURRENCY, (int)newActiveCurrency);
 
         OnCurrencyChanged?.Invoke();
     }
@@ -140,11 +136,5 @@ public sealed class CurrencyManager
         TWD,
         USD,
         ZAR
-    }
-
-    [Serializable]
-    public sealed class Settings
-    {
-        [RandomizeText] public string prefName;
     }
 }

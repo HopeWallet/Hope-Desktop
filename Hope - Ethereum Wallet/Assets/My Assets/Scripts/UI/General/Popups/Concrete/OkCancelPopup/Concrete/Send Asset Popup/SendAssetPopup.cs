@@ -137,7 +137,7 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		contactsButton.onClick.AddListener(() => { popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this); contactsButton.interactable = false; });
 		buttonClickObserver.SubscribeObservable(this);
 
-		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS);
+		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS);
 
 		foreach (TooltipItem tooltip in tooltipItems)
 		{

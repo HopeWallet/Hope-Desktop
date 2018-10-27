@@ -3,23 +3,30 @@
 /// </summary>
 public static class PlayerPrefConstants
 {
-    public const string START_ON_PREVIOUS_ACCOUNT = "start on last account";
-    public const string PREVIOUS_ACCOUNT_NUM = "previous_account_num_";
-    public const string PREVIOUS_DERIVATION_PATH = "previous_derivation_path_";
+    public const string SAVED_TOKEN_CONTRACTS = "saved_token_contracts";
+    public const string CACHED_TOKEN_LIST = "cached_token_list";
+    public const string CONTACT_LIST = "contact_list";
+    public const string ASSET_NOTIFICATIONS = "asset_notifications";
 
-    public const string COUNTDOWN_TIMER = "countdown timer";
-    public const string SHOW_TOOLTIPS = "show tooltips";
-    public const string UPDATE_NOTIFICATIONS = "update notification";
-    public const string REQUIRE_PASSWORD_FOR_TRANSACTION = "password required for transaction";
+    public const string SETTING_CURRENCY = "currency";
 
-    public const string IDLE_TIMEOUT = "idle timeout";
-    public const string IDLE_TIME = "idle time";
+    public const string SETTING_START_ON_PREVIOUS_ACCOUNT = "start_on_previous_account";
+    public const string SETTING_PREVIOUS_ACCOUNT_NUM = "previous_account_num";
+    public const string SETTING_PREVIOUS_DERIVATION_PATH = "previous_derivation_path";
 
-    public const string LOGIN_ATTEMPTS_LIMIT = "limit login attempts";
-    public const string MAX_LOGIN_ATTEMPTS = "max login attempts";
-    public const string CURRENT_LOGIN_ATTEMPT = "current login attempt";
-    public const string LAST_FAILED_LOGIN_ATTEMPT = "last failed login attempt";
+    public const string SETTING_COUNTDOWN_TIMER = "countdown_timer";
+    public const string SETTING_SHOW_TOOLTIPS = "show_tooltips";
+    public const string SETTING_UPDATE_NOTIFICATIONS = "update_notifications";
+    public const string SETTING_REQUIRE_PASSWORD_FOR_TRANSACTION = "password_required_for_transaction";
 
-    public const string TWO_FACTOR_AUTH_ENABLED = "two-factor authentication";
-    public const string TWO_FACTOR_AUTH_SETUP = "2FA is set up";
+    public const string SETTING_IDLE_TIMEOUT = "idle_timeout";
+    public const string SETTING_IDLE_TIME = "idle_time";
+
+    public const string SETTING_LOGIN_ATTEMPTS_LIMIT = "limit_login_attempts";
+    public const string SETTING_MAX_LOGIN_ATTEMPTS = "max_login_attempts";
+    public const string SETTING_CURRENT_LOGIN_ATTEMPT = "current_login_attempt";
+    public const string SETTING_LAST_FAILED_LOGIN_ATTEMPT = "last_failed_login_attempt";
+
+    public const string SETTING_TWO_FACTOR_AUTH_ENABLED = "two-factor_authentication";
+    public const string SETTING_TWO_FACTOR_AUTH_SETUP = "two-factor_authentication_setup";
 }

@@ -1,4 +1,5 @@
 ﻿using Hope.Random.Bytes;
+using Hope.Random.Strings;
 using Hope.Security.HashGeneration;
 using System;
 using UnityEngine;
@@ -65,7 +66,10 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <returns> The seed name of the PlayerPref. </returns>
         private static string GetSeedName()
         {
-            return settings.securePlayerPrefSeed.SHA3_512();
+            return (Environment.MachineName.SHA3_256()
+                   + Environment.OSVersion.Platform.ToString().SHA3_256()
+                   + RandomString.Secure.SHA3.GetString(Environment.ProcessorCount.ToString(), 16).SHA3_256()
+                   + settings.securePlayerPrefSeed.SHA3_256()).SHA3_512();
         }
 
         /// <summary>

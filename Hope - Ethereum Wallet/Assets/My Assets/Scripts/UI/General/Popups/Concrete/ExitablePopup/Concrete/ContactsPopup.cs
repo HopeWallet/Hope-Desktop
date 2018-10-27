@@ -53,7 +53,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 
 		AddContactButtons();
 
-		if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS))
+		if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS))
 			confirmButton.GetComponent<TooltipItem>().PopupManager = popupManager;
 		else
 			confirmButton.GetComponent<TooltipItem>().enabled = false;

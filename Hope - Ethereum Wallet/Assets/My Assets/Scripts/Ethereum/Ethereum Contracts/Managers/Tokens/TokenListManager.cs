@@ -1,9 +1,6 @@
 ﻿using Hope.Utils.Ethereum;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
 using UnityEngine;
 
 public sealed class TokenListManager
@@ -19,10 +16,9 @@ public sealed class TokenListManager
         UserWalletManager userWalletManager,
         PRPS prps,
         DUBI dubi,
-        Settings settings,
         EthereumNetworkManager.Settings networkSettings)
     {
-        addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(settings.tokenListPrefName, (int)networkSettings.networkType);
+        addableTokens = new SecurePlayerPrefList<AddableTokenInfo>(PlayerPrefConstants.CACHED_TOKEN_LIST, (int)networkSettings.networkType);
 
         InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
 
@@ -123,11 +119,5 @@ public sealed class TokenListManager
             tokenContractManager.AddToken(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
             tokenContractManager.AddToken(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
         }
-    }
-
-    [Serializable]
-    public sealed class Settings
-    {
-        [RandomizeText] public string tokenListPrefName;
     }
 }

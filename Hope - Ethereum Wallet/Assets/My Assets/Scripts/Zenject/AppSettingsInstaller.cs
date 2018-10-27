@@ -22,12 +22,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     public override void InstallBindings()
     {
         Container.BindInstance(playerPrefSettings.securePlayerPrefSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.contactsSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.tokenContractSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.tokenListSettings).AsSingle().NonLazy();
         Container.BindInstance(playerPrefSettings.walletPrefSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.notificationSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.currencySettings).AsSingle().NonLazy();
 
         Container.BindInstance(versionSettings).AsSingle().NonLazy();
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
@@ -54,12 +49,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     public sealed class Settings
     {
         public SecurePlayerPrefs.Settings securePlayerPrefSettings;
-        public ContactsManager.Settings contactsSettings;
         public HopeWalletInfoManager.Settings walletPrefSettings;
-        public TokenContractManager.Settings tokenContractSettings;
-        public TokenListManager.Settings tokenListSettings;
-        public TradableAssetNotificationManager.Settings notificationSettings;
-
-        public CurrencyManager.Settings currencySettings;
     }
 }

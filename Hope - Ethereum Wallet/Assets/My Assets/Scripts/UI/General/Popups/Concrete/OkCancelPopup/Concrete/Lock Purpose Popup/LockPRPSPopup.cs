@@ -99,7 +99,7 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 			maxText.color = UIColors.LightGrey;
 		}
 
-		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS);
+		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS);
 
 		foreach (TooltipItem tooltip in tooltipItems)
 		{

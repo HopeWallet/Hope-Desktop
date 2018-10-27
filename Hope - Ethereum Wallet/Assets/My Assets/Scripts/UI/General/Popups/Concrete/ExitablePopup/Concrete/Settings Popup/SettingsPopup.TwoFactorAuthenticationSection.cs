@@ -50,7 +50,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		/// </summary>
 		private void SetUpVisuals()
 		{
-			bool setUp2FA = !SecurePlayerPrefs.GetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_SETUP);
+			bool setUp2FA = !SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_TWO_FACTOR_AUTH_SETUP);
 
 			twoFactorAuthenticationCheckbox.transform.localScale = setUp2FA ? Vector2.zero : Vector2.one;
 			setUpSection.transform.localScale = setUp2FA ? Vector2.one : Vector2.zero;
@@ -64,7 +64,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 			}
 			else
 			{
-				twoFactorAuthenticationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_ENABLED, boolean);
+				twoFactorAuthenticationCheckbox.OnCheckboxClicked += boolean => SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_TWO_FACTOR_AUTH_ENABLED, boolean);
 				twoFactorAuthenticationCheckbox.transform.localScale = Vector2.one;
 				setUpSection.transform.localScale = Vector2.zero;
 			}
@@ -87,7 +87,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 		{
 			//If code in the input field is correct:
 			setUpSection.AnimateScale(0f, 0.15f, () => twoFactorAuthenticationCheckbox.gameObject.AnimateScale(1f, 0.15f));
-			SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_ENABLED, true);
+			SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_TWO_FACTOR_AUTH_ENABLED, true);
 
 			//Else 
 			//confirmButton.interactable = false;

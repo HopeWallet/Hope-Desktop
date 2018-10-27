@@ -40,7 +40,7 @@ public abstract class MenuAnimator : UIAnimator
 
 		if (menuTooltip != null)
 		{
-			if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS))
+			if (SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS))
 			{
 				for (int i = 0; i < 3; i++)
 					menuTooltip.transform.GetChild(i).gameObject.AnimateGraphic(animateIn ? 1f : 0f, 0.3f);

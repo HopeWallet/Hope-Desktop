@@ -1,6 +1,4 @@
-﻿using System;
-
-public sealed class ContactsManager
+﻿public sealed class ContactsManager
 {
     /// <summary>
     /// The list of contacts
@@ -17,10 +15,9 @@ public sealed class ContactsManager
     public ContactsManager(
         UserWalletManager userWalletManager,
         HopeWalletInfoManager userWalletInfoManager,
-        Settings settings,
         EthereumNetworkManager.Settings networkSettings)
     {
-        ContactList = new SecurePlayerPrefList<ContactInfo>(settings.contactsPrefName, (int)networkSettings.networkType);
+        ContactList = new SecurePlayerPrefList<ContactInfo>(PlayerPrefConstants.CONTACT_LIST, (int)networkSettings.networkType);
         UserWalletManager.OnWalletLoadSuccessful += () =>
         {
 			var walletAddress = userWalletManager.GetWalletAddress().ToLower();
@@ -57,14 +54,5 @@ public sealed class ContactsManager
     public void EditContact(string previousAddress, string newContactAddress, string newContactName)
     {
         ContactList[previousAddress] = new ContactInfo(newContactAddress.ToLower(), newContactName);
-    }
-
-    /// <summary>
-    /// Class which contains the pref settings for the ContactManager.
-    /// </summary>
-    [Serializable]
-    public sealed class Settings
-    {
-        [RandomizeText] public string contactsPrefName;
     }
 }

@@ -9,7 +9,6 @@ public sealed class TradableAssetNotificationManager : IDisposable
     private SecurePlayerPrefList<AddressTransactionCount> transactionsByAddress;
     private Dictionary<string, int?> notificationsByAddress = new Dictionary<string, int?>();
 
-    private readonly Settings settings;
     private readonly EthereumNetworkManager.Settings networkSettings;
 
     private readonly UserWalletManager userWalletManager;
@@ -18,7 +17,6 @@ public sealed class TradableAssetNotificationManager : IDisposable
     private readonly PRPS prpsContract;
 
     public TradableAssetNotificationManager(
-        Settings settings,
         EthereumNetworkManager.Settings networkSettings,
         DisposableComponentManager disposableComponentManager,
         UserWalletManager userWalletManager,
@@ -27,7 +25,6 @@ public sealed class TradableAssetNotificationManager : IDisposable
         LockedPRPSManager lockedPrpsManager,
         PRPS prpsContract)
     {
-        this.settings = settings;
         this.networkSettings = networkSettings;
         this.userWalletManager = userWalletManager;
         this.ethereumTransactionManager = ethereumTransactionManager;
@@ -52,7 +49,7 @@ public sealed class TradableAssetNotificationManager : IDisposable
 
     public void LoadNewNotificationList()
     {
-        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(settings.prefName, (int)networkSettings.networkType + userWalletManager.GetWalletAddress());
+        transactionsByAddress = new SecurePlayerPrefList<AddressTransactionCount>(PlayerPrefConstants.ASSET_NOTIFICATIONS, (int)networkSettings.networkType + userWalletManager.GetWalletAddress());
 
         foreach (var address in notificationsByAddress.Keys.ToList())
             notificationsByAddress[address] = null;
@@ -122,11 +119,5 @@ public sealed class TradableAssetNotificationManager : IDisposable
             this.address = address;
             this.transactionCount = transactionCount;
         }
-    }
-
-    [Serializable]
-    public sealed class Settings
-    {
-        [RandomizeText] public string prefName;
     }
 }

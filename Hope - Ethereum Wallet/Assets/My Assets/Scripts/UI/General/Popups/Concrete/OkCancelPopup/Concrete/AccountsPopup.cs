@@ -62,7 +62,7 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         this.lockedPRPSManager = lockedPRPSManager;
         this.lockPRPSManager = lockPRPSManager;
 
-		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS);
+		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS);
 
 		foreach (TooltipItem tooltip in tooltipItems)
 		{

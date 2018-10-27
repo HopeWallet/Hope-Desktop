@@ -74,14 +74,14 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
 
         passwordField.OnInputUpdated += PasswordFieldChanged;
 
-		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT))
+		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
 			return;
 
-		if (!SecurePlayerPrefs.HasKey(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+		if (!SecurePlayerPrefs.HasKey(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT))
+			SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 
-		if (!SecurePlayerPrefs.HasKey(walletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetString(walletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
+		if (!SecurePlayerPrefs.HasKey(walletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT))
+			SecurePlayerPrefs.SetString(walletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
 
 		TimerChecker().StartCoroutine();
 	}
@@ -107,7 +107,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     /// </summary>
     private void SetMessageText()
     {
-        int idleTime = SecurePlayerPrefs.GetInt(PlayerPrefConstants.IDLE_TIME);
+        int idleTime = SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_IDLE_TIME);
         string minuteWord = idleTime == 1 ? " minute." : " minutes.";
 
         messageText.text = $"You have been idle for {idleTime}{minuteWord}{Environment.NewLine} Please re-enter your password or go back to the main menu.";
@@ -118,8 +118,8 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
 	/// </summary>
 	private void UpdatePlaceHolderText()
 	{
-		int currentLoginAttempt = SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT);
-		int attemptsLeft = SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS) - currentLoginAttempt + 1;
+		int currentLoginAttempt = SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT);
+		int attemptsLeft = SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS) - currentLoginAttempt + 1;
 
 		if (currentLoginAttempt != 1)
 		{
@@ -170,7 +170,7 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     {
         (dynamicDataCache.GetData("pass") as ProtectedString)?.SetValue(password);
 
-		SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+		SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 
 		OnPasswordEnteredCorrect?.Invoke();
         uiManager.CloseMenu();
@@ -183,13 +183,13 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
     {
         OnPasswordEnteredIncorrect?.Invoke();
 
-		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT))
+		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
 			return;
 
-		SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT) + 1);
-		SecurePlayerPrefs.SetString(walletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
+		SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT) + 1);
+		SecurePlayerPrefs.SetString(walletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
 
-		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT) + 1) == 0)
+		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT) + 1) == 0)
 		{
 			lockedOut = true;
 			AnimateLockedOutSection?.Invoke(true);
@@ -209,11 +209,11 @@ public sealed class ReEnterPasswordMenu : Menu<ReEnterPasswordMenu>, IEnterButto
 	{
 		long currentTime, lastFailedAttempt;
 		long.TryParse(DateTimeUtils.GetCurrentUnixTime().ToString(), out currentTime);
-		long.TryParse(SecurePlayerPrefs.GetString(walletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT), out lastFailedAttempt);
+		long.TryParse(SecurePlayerPrefs.GetString(walletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT), out lastFailedAttempt);
 
 		if ((currentTime - lastFailedAttempt) >= 300)
 		{
-			SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+			SecurePlayerPrefs.SetInt(walletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 			passwordField.SetPlaceholderText("Password");
 
 			if (lockedOut)

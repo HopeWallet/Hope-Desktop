@@ -137,13 +137,13 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
             currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.COUNTDOWN_TIMER, countdownTimerCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SHOW_TOOLTIPS, showTooltipsCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS, updateNotificationCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION, PasswordForTransactionCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.IDLE_TIMEOUT, idleTimeoutTimeCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT, loginAttemptsCheckbox.IsToggledOn);
-        SecurePlayerPrefs.SetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT, startupAccountCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_COUNTDOWN_TIMER, countdownTimerCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS, showTooltipsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS, updateNotificationCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_REQUIRE_PASSWORD_FOR_TRANSACTION, PasswordForTransactionCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_IDLE_TIMEOUT, idleTimeoutTimeCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT, loginAttemptsCheckbox.IsToggledOn);
+        SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT, startupAccountCheckbox.IsToggledOn);
 
         buttonClickObserver.UnsubscribeObservable(this);
         MoreDropdown.PopupClosed?.Invoke();
@@ -154,11 +154,11 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// </summary>
     private void SetCurrentSettings()
 	{
-		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.COUNTDOWN_TIMER));
-		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SHOW_TOOLTIPS));
-		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS));
-		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT));
-		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION));
+		countdownTimerCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_COUNTDOWN_TIMER));
+		showTooltipsCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS));
+		updateNotificationCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS));
+		startupAccountCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT));
+		PasswordForTransactionCheckbox.SetValue(SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_REQUIRE_PASSWORD_FOR_TRANSACTION));
 	}
 
     private void DeleteWallet(UserWalletManager userWalletManager, HopeWalletInfoManager hopeWalletInfoManager, LogoutHandler logoutHandler)

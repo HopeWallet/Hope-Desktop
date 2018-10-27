@@ -149,13 +149,13 @@ public sealed class UserWalletManager : IDisposable
                 break;
         }
 
-        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT))
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT))
         {
-            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
-                walletAccount = SecurePlayerPrefs.GetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString());
+            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
+                walletAccount = SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString());
 
-            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
-                walletPath = SecurePlayerPrefs.GetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString());
+            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
+                walletPath = SecurePlayerPrefs.GetString(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString());
         }
 
         SetWalletAccount(walletAccount);
@@ -193,7 +193,7 @@ public sealed class UserWalletManager : IDisposable
 
         WalletPath = newPath;
 
-        SecurePlayerPrefs.SetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString(), WalletPath);
+        SecurePlayerPrefs.SetString(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString(), WalletPath);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public sealed class UserWalletManager : IDisposable
     {
         AccountNumber = Math.Abs(newAccountNumber) > 49 ? 49 : Math.Abs(newAccountNumber);
 
-        SecurePlayerPrefs.SetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString(), AccountNumber);
+        SecurePlayerPrefs.SetInt(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString(), AccountNumber);
     }
 
     /// <summary>
@@ -232,14 +232,14 @@ public sealed class UserWalletManager : IDisposable
     /// </summary>
     private void GetPreviousAccount()
     {
-        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT) || !SecurePlayerPrefs.GetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT))
+        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT) || !SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT))
             return;
 
-        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
-            SetWalletAccount(SecurePlayerPrefs.GetInt(PlayerPrefConstants.PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()));
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
+            SetWalletAccount(SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()));
 
-        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
-            SetWalletPath(SecurePlayerPrefs.GetString(PlayerPrefConstants.PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()));
+        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
+            SetWalletPath(SecurePlayerPrefs.GetString(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()));
 
         UnityEngine.Debug.Log(AccountNumber + " " + WalletPath);
     }

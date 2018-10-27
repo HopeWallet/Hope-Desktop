@@ -25,13 +25,11 @@ public sealed class TokenContractManager
     /// <summary>
     /// Initializes the TokenContractManager by creating all collections and getting the settings.
     /// </summary>
-    /// <param name="settings"> The settings to use with this TokenContractManager. </param>
     /// <param name="popupManager"> The active PopupManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     /// <param name="networkSettings"> The current EthereumNetworkManager settings. </param>
-    public TokenContractManager(Settings settings,
-        PopupManager popupManager,
+    public TokenContractManager(PopupManager popupManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager,
         EthereumNetworkManager.Settings networkSettings)
@@ -40,7 +38,7 @@ public sealed class TokenContractManager
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
 
-        tokens = new SecurePlayerPrefList<TokenInfo>(settings.tokenPrefName, (int)networkSettings.networkType);
+        tokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.SAVED_TOKEN_CONTRACTS, (int)networkSettings.networkType);
     }
 
     /// <summary>
@@ -144,14 +142,5 @@ public sealed class TokenContractManager
             OnTokenAdded?.Invoke(tradableAsset);
 
         onUpdateFinished?.Invoke();
-    }
-
-    /// <summary>
-    /// Class which contains the settings for the TokenContractManager.
-    /// </summary>
-    [Serializable]
-    public class Settings
-    {
-        [RandomizeText] public string tokenPrefName;
     }
 }

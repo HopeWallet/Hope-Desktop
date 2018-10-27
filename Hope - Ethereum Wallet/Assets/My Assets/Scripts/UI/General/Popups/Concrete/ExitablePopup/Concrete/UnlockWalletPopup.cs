@@ -81,14 +81,14 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		unlockWalletButton.onClick.AddListener(CheckPassword);
 
-		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT))
+		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
 			return;
 
-		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT))
+			SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 
-		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
+		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT))
+			SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
 
 		UpdatePlaceHolderText();
 		TimerChecker().StartCoroutine();
@@ -146,7 +146,7 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
         else
             dynamicDataCache.SetData("pass", new ProtectedString(password));
 
-        SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+        SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 
 		userWalletManager.UnlockWallet();
 	}
@@ -158,13 +158,13 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		OnPasswordEnteredIncorrect?.Invoke();
 
-		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT))
+		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
 			return;
 
-		SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT) + 1);
-		SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
+		SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT) + 1);
+		SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
 
-		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT) + 1) == 0)
+		if ((SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS) - SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT) + 1) == 0)
 		{
 			LockedOut = true;
 			AnimateLockedOutSection?.Invoke(true);
@@ -180,8 +180,8 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// </summary>
 	private void UpdatePlaceHolderText()
 	{
-		int currentLoginAttempt = SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT);
-		int attemptsLeft = SecurePlayerPrefs.GetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS) - currentLoginAttempt + 1;
+		int currentLoginAttempt = SecurePlayerPrefs.GetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT);
+		int attemptsLeft = SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS) - currentLoginAttempt + 1;
 
 		if (currentLoginAttempt != 1)
 		{
@@ -228,11 +228,11 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		long currentTime, lastFailedAttempt;
 		long.TryParse(DateTimeUtils.GetCurrentUnixTime().ToString(), out currentTime);
-		long.TryParse(SecurePlayerPrefs.GetString(WalletName + PlayerPrefConstants.LAST_FAILED_LOGIN_ATTEMPT), out lastFailedAttempt);
+		long.TryParse(SecurePlayerPrefs.GetString(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT), out lastFailedAttempt);
 
 		if ((currentTime - lastFailedAttempt) >= 300)
 		{
-			SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.CURRENT_LOGIN_ATTEMPT, 1);
+			SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 			passwordField.SetPlaceholderText("Password");
 
 			if (LockedOut)

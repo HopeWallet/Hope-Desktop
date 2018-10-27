@@ -87,22 +87,22 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	private void SetDefaultSettings()
 	{
-		if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.COUNTDOWN_TIMER))
+		if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_COUNTDOWN_TIMER))
 			return;
 
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.COUNTDOWN_TIMER, true);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SHOW_TOOLTIPS, true);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS, true);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.START_ON_PREVIOUS_ACCOUNT, false);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_COUNTDOWN_TIMER, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT, false);
 
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.REQUIRE_PASSWORD_FOR_TRANSACTION, true);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.IDLE_TIMEOUT, true);
-		SecurePlayerPrefs.SetInt(PlayerPrefConstants.IDLE_TIME, 5);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.LOGIN_ATTEMPTS_LIMIT, true);
-		SecurePlayerPrefs.SetInt(PlayerPrefConstants.MAX_LOGIN_ATTEMPTS, 5);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_REQUIRE_PASSWORD_FOR_TRANSACTION, true);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_IDLE_TIMEOUT, true);
+		SecurePlayerPrefs.SetInt(PlayerPrefConstants.SETTING_IDLE_TIME, 5);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT, true);
+		SecurePlayerPrefs.SetInt(PlayerPrefConstants.SETTING_MAX_LOGIN_ATTEMPTS, 5);
 
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_ENABLED, false);
-		SecurePlayerPrefs.SetBool(PlayerPrefConstants.TWO_FACTOR_AUTH_SETUP, false);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_TWO_FACTOR_AUTH_ENABLED, false);
+		SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_TWO_FACTOR_AUTH_SETUP, false);
 	}
 
 	/// <summary>
