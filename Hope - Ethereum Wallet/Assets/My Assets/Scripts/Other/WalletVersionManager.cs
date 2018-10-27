@@ -1,6 +1,9 @@
 ﻿using System;
 using UniRx;
 
+/// <summary>
+/// Class which manages the version of the current wallet with the latest version uploaded online.
+/// </summary>
 public sealed class WalletVersionManager
 {
     private const string GITHUB_RELEASES_LINK = "https://api.github.com/repos/HopeWallet/Hope.Security/releases";
@@ -8,14 +11,31 @@ public sealed class WalletVersionManager
     private readonly Settings versionSettings;
     private readonly PopupManager popupManager;
 
-    public string CurrentWalletVersion { get; private set; }
+    /// <summary>
+    /// The current local wallet version.
+    /// </summary>
+    public string LocalVersion { get; private set; }
 
-    public string LatestWalletVersion { get; private set; }
+    /// <summary>
+    /// The latest wallet version.
+    /// </summary>
+    public string LatestVersion { get; private set; }
 
-    public string LatestWalletVersionUrl { get; private set; }
+    /// <summary>
+    /// The url to the latest wallet version.
+    /// </summary>
+    public string LatestVersionUrl { get; private set; }
 
+    /// <summary>
+    /// Whether a newer wallet version than the local version exists.
+    /// </summary>
     public bool NewVersionExists { get; private set; }
 
+    /// <summary>
+    /// Initializes the WalletVersionManager and gets the latest version uploaded.
+    /// </summary>
+    /// <param name="versionSettings"> The Settings of the WalletVersionManager including the current version and the pref containing the current version. </param>
+    /// <param name="popupManager"> The active PopupManager. </param>
     public WalletVersionManager(Settings versionSettings, PopupManager popupManager)
     {
         this.versionSettings = versionSettings;
@@ -25,25 +45,33 @@ public sealed class WalletVersionManager
                   .Subscribe(results => OnReleasesPageDownloaded(results[0]));
     }
 
+    /// <summary>
+    /// Called when the releases page is downloaded, and the latest wallet version is retrieved.
+    /// Opens the HopeUpdatePopup if the local wallet version does not match the latest uploaded version.
+    /// </summary>
+    /// <param name="releasesJson"> The json string containing the latest wallet version. </param>
     private void OnReleasesPageDownloaded(string releasesJson)
     {
         var currentRelease = JsonUtils.DeserializeDynamicCollection(releasesJson)[0];
 
-        LatestWalletVersionUrl = (string)currentRelease.html_url;
-        LatestWalletVersion = ((string)currentRelease.tag_name).TrimStart('v');
+        LatestVersionUrl = (string)currentRelease.html_url;
+        LatestVersion = ((string)currentRelease.tag_name).TrimStart('v');
 
         if (!SecurePlayerPrefs.HasKey(versionSettings.versionPrefKey))
         {
             SecurePlayerPrefs.SetString(versionSettings.versionPrefKey, versionSettings.version);
         }
 
-        if ((NewVersionExists = !(CurrentWalletVersion = SecurePlayerPrefs.GetString(versionSettings.versionPrefKey).TrimStart('v')).EqualsIgnoreCase(LatestWalletVersion))
+        if ((NewVersionExists = !(LocalVersion = SecurePlayerPrefs.GetString(versionSettings.versionPrefKey).TrimStart('v')).EqualsIgnoreCase(LatestVersion))
             && SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS))
         {
             popupManager.GetPopup<HopeUpdatePopup>();
         }
     }
 
+    /// <summary>
+    /// Class used to contain the settings related to the WalletVersionManager.
+    /// </summary>
     [Serializable]
     public sealed class Settings
     {

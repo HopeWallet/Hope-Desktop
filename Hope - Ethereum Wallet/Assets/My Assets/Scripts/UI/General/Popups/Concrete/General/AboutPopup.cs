@@ -26,15 +26,15 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 	{
 		base.Awake();
 
-		currentVersionText.text = $"Current Hope version: (v{walletVersionManager.CurrentWalletVersion})";
+		currentVersionText.text = $"Current Hope version: (v{walletVersionManager.LocalVersion})";
 
 		bool upToDate = !walletVersionManager.NewVersionExists;
 
-		latestVersionText.text = !upToDate ? $"New Hope version available! (v{walletVersionManager.LatestWalletVersion})" : "Wallet is up to date!";
+		latestVersionText.text = !upToDate ? $"New Hope version available! (v{walletVersionManager.LatestVersion})" : "Wallet is up to date!";
 		downloadUpdateButton.gameObject.SetActive(!upToDate);
 
 		if (!upToDate)
-			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL(walletVersionManager.LatestWalletVersionUrl));
+			downloadUpdateButton.onClick.AddListener(() => Application.OpenURL(walletVersionManager.LatestVersionUrl));
 
 		websiteButton.onClick.AddListener(() => Application.OpenURL(WEBSITE_URL));
 		githubButton.onClick.AddListener(() => Application.OpenURL(GITHUB_URL));
