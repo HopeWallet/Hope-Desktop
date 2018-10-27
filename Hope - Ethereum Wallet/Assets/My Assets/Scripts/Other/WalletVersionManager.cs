@@ -35,7 +35,8 @@ public sealed class WalletVersionManager
         if (!SecurePlayerPrefs.HasKey(versionSettings.versionPrefKey))
             SecurePlayerPrefs.SetString(versionSettings.versionPrefKey, versionSettings.version);
         else if (NewVersionExists = !(CurrentWalletVersion = SecurePlayerPrefs.GetString(versionSettings.versionPrefKey).TrimStart('v')).EqualsIgnoreCase(LatestWalletVersion))
-            popupManager.GetPopup<HopeUpdatePopup>();
+            if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.UPDATE_NOTIFICATIONS) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.UPDATE_NOTIFICATIONS))
+                popupManager.GetPopup<HopeUpdatePopup>();
     }
 
     [Serializable]
