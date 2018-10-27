@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 /// <summary>
 /// Class which manages the info for each wallet.
@@ -7,7 +6,6 @@ using System.Collections.Generic;
 public sealed class HopeWalletInfoManager
 {
     private readonly SecurePlayerPrefList<WalletInfo> wallets;
-    private readonly Settings walletSettings;
 
     /// <summary>
     /// The current wallet count.
@@ -22,12 +20,9 @@ public sealed class HopeWalletInfoManager
     /// <summary>
     /// Initializes the UserWalletInfoManager.
     /// </summary>
-    /// <param name="walletSettings"> The settings of the UserWallet. </param>
-    public HopeWalletInfoManager(Settings walletSettings)
+    public HopeWalletInfoManager()
     {
-        this.walletSettings = walletSettings;
-
-        wallets = new SecurePlayerPrefList<WalletInfo>(walletSettings.walletInfoPrefName);
+        wallets = new SecurePlayerPrefList<WalletInfo>(PlayerPrefConstants.WALLET_INFO);
     }
 
     /// <summary>
@@ -105,14 +100,5 @@ public sealed class HopeWalletInfoManager
     public void DeleteWalletInfo(WalletInfo walletInfo)
     {
         wallets.Remove(walletInfo);
-    }
-
-    /// <summary>
-    /// Class which holds general wallet settings.
-    /// </summary>
-    [Serializable]
-    public sealed class Settings
-    {
-        [RandomizeText] public string walletInfoPrefName;
     }
 }

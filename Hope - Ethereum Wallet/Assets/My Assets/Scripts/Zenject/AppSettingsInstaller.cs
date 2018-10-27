@@ -22,7 +22,6 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     public override void InstallBindings()
     {
         Container.BindInstance(playerPrefSettings.securePlayerPrefSettings).AsSingle().NonLazy();
-        Container.BindInstance(playerPrefSettings.walletPrefSettings).AsSingle().NonLazy();
 
         Container.BindInstance(versionSettings).AsSingle().NonLazy();
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
@@ -49,6 +48,5 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     public sealed class Settings
     {
         public SecurePlayerPrefs.Settings securePlayerPrefSettings;
-        public HopeWalletInfoManager.Settings walletPrefSettings;
     }
 }

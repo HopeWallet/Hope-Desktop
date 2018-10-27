@@ -3,6 +3,7 @@
 /// </summary>
 public static class PlayerPrefConstants
 {
+    public const string WALLET_INFO = "wallet_info";
     public const string SAVED_TOKEN_CONTRACTS = "saved_token_contracts";
     public const string CACHED_TOKEN_LIST = "cached_token_list";
     public const string CONTACT_LIST = "contact_list";
