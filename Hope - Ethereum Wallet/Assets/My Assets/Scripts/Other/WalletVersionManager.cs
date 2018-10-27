@@ -3,7 +3,7 @@ using UniRx;
 
 public sealed class WalletVersionManager
 {
-    private const string GITHUB_RELEASES_LINK = "https://api.github.com/repos/HopeWallet/Hope.Security/releases";
+    private const string GITHUB_RELEASES_LINK = /*"https://api.github.com/repos/HopeWallet/Hope.Security/releases"*/"https://api.github.com/repos/ThatSlyGuy/TestRepo/releases";
 
     private readonly Settings versionSettings;
     private readonly PopupManager popupManager;
@@ -32,9 +32,9 @@ public sealed class WalletVersionManager
         LatestWalletVersionUrl = (string)currentRelease.html_url;
         LatestWalletVersion = ((string)currentRelease.tag_name).TrimStart('v');
 
-        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.VERSION_PREF))
-            SecurePlayerPrefs.SetString(PlayerPrefConstants.VERSION_PREF, versionSettings.version);
-        else if (NewVersionExists = !(CurrentWalletVersion = SecurePlayerPrefs.GetString(PlayerPrefConstants.VERSION_PREF).TrimStart('v')).EqualsIgnoreCase(LatestWalletVersion))
+        if (!SecurePlayerPrefs.HasKey(versionSettings.versionPrefKey))
+            SecurePlayerPrefs.SetString(versionSettings.versionPrefKey, versionSettings.version);
+        else if (NewVersionExists = !(CurrentWalletVersion = SecurePlayerPrefs.GetString(versionSettings.versionPrefKey).TrimStart('v')).EqualsIgnoreCase(LatestWalletVersion))
             popupManager.GetPopup<HopeUpdatePopup>();
     }
 
@@ -42,5 +42,6 @@ public sealed class WalletVersionManager
     public sealed class Settings
     {
         public string version;
+        [RandomizeText] public string versionPrefKey;
     }
 }
