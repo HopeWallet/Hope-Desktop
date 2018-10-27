@@ -17,23 +17,10 @@ MonoBehaviour:
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:
-    securePlayerPrefSettings:
-      securePlayerPrefSeed: TEST
-      securePlayerPrefDataEntropy: vw4OHOUH$%UOSsdnsdfOUVUWE
-    contactsSettings:
-      contactsPrefName: Contacts
-    walletPrefSettings:
-      walletInfoPrefName: wallet_info
-    tokenContractSettings:
-      tokenPrefName: Token_
-    tokenListSettings:
-      tokenListPrefName: TokenList
-    notificationSettings:
-      prefName: notifications
-    currencySettings:
-      prefName: currency
-  walletSettings:
-    safePassword: {fileID: 11400000, guid: be7a9a793faaf3749809b4186df15336, type: 2}
+    defaultPlayerPrefsSettings: {fileID: 11400000, guid: 2b28bf3b33c733d49a65405f47983f96,
+      type: 2}
+    securedPlayerPrefsSettings: {fileID: 11400000, guid: 0d20e042511e8e44a80b1203e14a4f51,
+      type: 2}
   ethereumNetworkSettings:
     networkType: 4
   uiSettings:

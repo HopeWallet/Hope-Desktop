@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
+using System;
 using System.Reflection;
 using Zenject;
 
@@ -20,7 +21,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     /// </summary>
     public override void InstallBindings()
     {
-        Container.BindInstance(playerPrefSettings.securePlayerPrefSettings).AsSingle().NonLazy();
+        Container.BindInstance(playerPrefSettings.securedPlayerPrefsSettings ?? playerPrefSettings.defaultPlayerPrefsSettings).AsSingle().NonLazy();
 
         Container.BindInstance(versionSettings).AsSingle().NonLazy();
         Container.BindInstance(debugSettings).AsSingle().NonLazy();
@@ -45,6 +46,7 @@ public class AppSettingsInstaller : ScriptableObjectInstaller<AppSettingsInstall
     [Serializable]
     public sealed class Settings
     {
-        public SecurePlayerPrefs.Settings securePlayerPrefSettings;
+        public SecurePlayerPrefsSettings defaultPlayerPrefsSettings;
+        public SecurePlayerPrefsSettings securedPlayerPrefsSettings;
     }
 }

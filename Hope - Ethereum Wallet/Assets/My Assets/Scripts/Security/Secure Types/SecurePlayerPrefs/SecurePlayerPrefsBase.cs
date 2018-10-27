@@ -13,16 +13,19 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
     {
         protected static DataEncryptor dataEncryptor;
 
-        private static Settings settings;
+        private static string hashedSeed;
+        private static string hashedEntropy;
 
         /// <summary>
         /// Initializes the <see cref="SecurePlayerPrefsBase"/> by getting the base player pref value.
         /// </summary>
         /// <param name="prefSettings"> The Settings for the SecurePlayerPrefs. </param>
-        protected SecurePlayerPrefsBase(Settings prefSettings)
+        protected SecurePlayerPrefsBase(SecurePlayerPrefsSettings prefSettings)
         {
-            settings = prefSettings;
-            dataEncryptor = new DataEncryptor(settings.securePlayerPrefDataEntropy, GetSeedName(), RandomBytes.Secure.SHA3.GetBytes(GetSeedName(), 64).GetBase64String());
+            hashedSeed = prefSettings.securePlayerPrefSeed.Blake2_512();
+            hashedEntropy = prefSettings.securePlayerPrefDataEntropy.Blake2_512();
+
+            dataEncryptor = new DataEncryptor(hashedEntropy, GetSeedName(), RandomBytes.Secure.SHA3.GetBytes(GetSeedName(), 64).GetBase64String());
 
             EnsureSeedCreation();
         }
@@ -69,17 +72,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
             return (Environment.MachineName.SHA3_256()
                    + Environment.OSVersion.Platform.ToString().SHA3_256()
                    + RandomString.Secure.SHA3.GetString(Environment.ProcessorCount.ToString(), 16).SHA3_256()
-                   + settings.securePlayerPrefSeed.SHA3_256()).SHA3_512();
-        }
-
-        /// <summary>
-        /// Class which holds the SecurePlayerPrefs settings.
-        /// </summary>
-        [Serializable]
-        public sealed class Settings
-        {
-            [RandomizeText] public string securePlayerPrefSeed;
-            [RandomizeText] public string securePlayerPrefDataEntropy;
+                   + hashedSeed.SHA3_256()).SHA3_512();
         }
     }
 }

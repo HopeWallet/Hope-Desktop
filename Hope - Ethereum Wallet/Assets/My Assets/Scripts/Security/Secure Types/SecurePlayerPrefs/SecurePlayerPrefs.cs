@@ -11,7 +11,7 @@ public sealed class SecurePlayerPrefs : SecurePlayerPrefsBase
     /// Initializes the SecurePlayerPrefs.
     /// </summary>
     /// <param name="settings"> The Settings to use with the SecurePlayerPrefs. </param>
-    public SecurePlayerPrefs(Settings settings) : base(settings)
+    public SecurePlayerPrefs(SecurePlayerPrefsSettings settings) : base(settings)
     {
     }
 

@@ -21,6 +21,9 @@ public sealed class PlayerPrefPasswordDerivation
     private const int PREF_COUNT = 16;
     private const int PASSWORD_LENGTH = 32;
 
+    /// <summary>
+    /// Initializes the PlayerPrefPasswordDerivation with the initial key.
+    /// </summary>
     public PlayerPrefPasswordDerivation()
     {
         if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.PLAYER_PREF_PASS_DERIVATION_KEY))

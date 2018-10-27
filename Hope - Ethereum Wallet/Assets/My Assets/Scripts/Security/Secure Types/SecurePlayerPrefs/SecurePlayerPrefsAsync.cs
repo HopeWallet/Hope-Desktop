@@ -13,7 +13,7 @@ public sealed class SecurePlayerPrefsAsync : SecurePlayerPrefsBase
     /// Initializes the SecurePlayerPrefsAsync.
     /// </summary>
     /// <param name="settings"> The Settings to use with the SecurePlayerPrefsAsync. </param>
-    public SecurePlayerPrefsAsync(Settings settings) : base(settings)
+    public SecurePlayerPrefsAsync(SecurePlayerPrefsSettings settings) : base(settings)
     {
     }
 
