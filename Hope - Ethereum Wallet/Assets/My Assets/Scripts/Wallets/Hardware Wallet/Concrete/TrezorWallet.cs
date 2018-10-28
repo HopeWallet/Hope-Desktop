@@ -8,6 +8,9 @@ using Trezor.Net.Contracts.Ethereum;
 using UnityEngine.Events;
 using Transaction = Nethereum.Signer.Transaction;
 
+/// <summary>
+/// Class which manages the Trezor hardware wallet.
+/// </summary>
 public sealed class TrezorWallet : HardwareWallet
 {
     public event Action PINIncorrect;
@@ -17,6 +20,13 @@ public sealed class TrezorWallet : HardwareWallet
     private bool advance,
                  forceCancel;
 
+    /// <summary>
+    /// Initializes the TrezorWallet by passing all info to the base HardwareWallet class.
+    /// </summary>
+    /// <param name="ethereumNetworkManager"> The active EthereumNetworkManager. </param>
+    /// <param name="ethereumNetworkSettings"> The settings for the EthereumNetworkManager. </param>
+    /// <param name="popupManager"> The active PopupManager. </param>
+    /// <param name="uiManager"> The active UIManager. </param>
     public TrezorWallet(
         EthereumNetworkManager ethereumNetworkManager,
         EthereumNetworkManager.Settings ethereumNetworkSettings,
@@ -26,6 +36,10 @@ public sealed class TrezorWallet : HardwareWallet
         this.uiManager = uiManager;
     }
 
+    /// <summary>
+    /// Gets the public key data from the Trezor wallet.
+    /// </summary>
+    /// <returns> Task returning the ExtendedPublicKeyDataHolder instance. </returns>
     protected override async Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData()
     {
         var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(GetExtendedPublicKeyDataEnterPin);
@@ -56,6 +70,13 @@ public sealed class TrezorWallet : HardwareWallet
         return new ExtendedPublicKeyDataHolder { publicKeyData = publicKeyResponse.Node.PublicKey, chainCodeData = publicKeyResponse.Node.ChainCode };
     }
 
+    /// <summary>
+    /// Gets the signed transaction data from the Trezor wallet.
+    /// </summary>
+    /// <param name="transaction"> The transaction to sign. </param>
+    /// <param name="path"> The path of the address to sign the transaction with. </param>
+    /// <param name="onSignatureRequestSent"> Action to call once the signature request has been sent. </param>
+    /// <returns> Task returning the SignedTransactionDataHolder instance. </returns>
     protected override async Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
     {
         var trezorManager = TrezorConnector.GetWindowsConnectedTrezor(GetSignedTransactionDataEnterPin);
@@ -111,6 +132,10 @@ public sealed class TrezorWallet : HardwareWallet
         };
     }
 
+    /// <summary>
+    /// Enter pin callback for when the Trezor is requested a transaction signature.
+    /// </summary>
+    /// <returns> Task returning the pin string. </returns>
     private async Task<string> GetSignedTransactionDataEnterPin()
     {
         var popup = (EnterTrezorPINPopup)null;
@@ -147,6 +172,10 @@ public sealed class TrezorWallet : HardwareWallet
         return popup.TrezorPINSection.PinText;
     }
 
+    /// <summary>
+    /// Enter pin callback for when the Trezor is requested the public key data.
+    /// </summary>
+    /// <returns> Task returning the pin string. </returns>
     private async Task<string> GetExtendedPublicKeyDataEnterPin()
     {
         var advanceAction = new UnityAction(() => advance = true);

@@ -26,6 +26,10 @@ public sealed class LedgerWallet : HardwareWallet
     {
     }
 
+    /// <summary>
+    /// Gets the public key data from the Ledger wallet.
+    /// </summary>
+    /// <returns> Task returning the ExtendedPublicKeyDataHolder instance. </returns>
     protected override async Task<ExtendedPublicKeyDataHolder> GetExtendedPublicKeyData()
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
@@ -39,6 +43,13 @@ public sealed class LedgerWallet : HardwareWallet
         return new ExtendedPublicKeyDataHolder { publicKeyData = pubKeyResponse.PublicKeyData, chainCodeData = pubKeyResponse.ExtraData.Take(32).ToArray() };
     }
 
+    /// <summary>
+    /// Gets the signed transaction data from the Ledger wallet.
+    /// </summary>
+    /// <param name="transaction"> The transaction to sign. </param>
+    /// <param name="path"> The path of the address to sign the transaction with. </param>
+    /// <param name="onSignatureRequestSent"> Action to call once the signature request has been sent. </param>
+    /// <returns> Task returning the SignedTransactionDataHolder instance. </returns>
     protected override async Task<SignedTransactionDataHolder> GetSignedTransactionData(Transaction transaction, string path, Action onSignatureRequestSent)
     {
         var ledgerManager = LedgerConnector.GetWindowsConnectedLedger();
