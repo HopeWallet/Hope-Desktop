@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   versionSettings:
-    version: v1.12
+    version: v2.02
     versionPrefKey: wallet_version
   debugSettings:
     displayNethereumDebugStatements: 0

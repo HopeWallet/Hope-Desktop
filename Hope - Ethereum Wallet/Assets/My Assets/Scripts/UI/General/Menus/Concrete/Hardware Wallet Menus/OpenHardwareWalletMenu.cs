@@ -23,7 +23,7 @@ public abstract class OpenHardwareWalletMenu<TMenu, TWallet> : Menu<TMenu>, IPer
 
     [SerializeField] private Button openWalletButton;
 
-    private TWallet hardwareWallet;
+    protected TWallet hardwareWallet;
     private PeriodicUpdateManager periodicUpdateManager;
 
     private bool wasConnected,
