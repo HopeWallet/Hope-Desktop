@@ -50,11 +50,6 @@ public sealed class CreateMnemonicMenu : Menu<CreateMnemonicMenu>, ITabButtonObs
     }
 
     /// <summary>
-    /// Opens the exit confirmation popup and enables the note text
-    /// </summary>
-    protected override void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>(true)?.SetDetails(true);
-
-    /// <summary>
     /// Generates the mnemonic words and sets the initial text fields to the text.
     /// </summary>
     [SecureCallEnd]

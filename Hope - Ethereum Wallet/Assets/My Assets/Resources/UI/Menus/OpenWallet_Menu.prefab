@@ -2209,6 +2209,10 @@ MonoBehaviour:
   loadingStatusText: {fileID: 1984117271159812}
   loadingIcon: {fileID: 1859220304818552}
   transactionPagesSection: {fileID: 1214977154125236}
+  walletLogos:
+  - {fileID: 1786046507803426}
+  - {fileID: 1294630037599322}
+  - {fileID: 1434107064194580}
 --- !u!114 &114121923202464452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3009,7 +3013,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Sending...
+  m_text: Unplugged!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 226927170d4801d4694e97f0a042e13f, type: 2}
   m_sharedMaterial: {fileID: 21222899864675928, guid: 226927170d4801d4694e97f0a042e13f,
@@ -3086,11 +3090,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:

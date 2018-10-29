@@ -156,6 +156,9 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	private void Update()
 	{
 		okButton.interactable = !Gas.Error && !addressField.Error && !amountField.Error;
+
+		if (okButton.interactable && tooltipItems[1].Active)
+			tooltipItems[1].CloseInfoPopup();
 	}
 
 	/// <summary>

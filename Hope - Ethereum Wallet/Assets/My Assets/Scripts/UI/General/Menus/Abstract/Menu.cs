@@ -41,22 +41,6 @@ public abstract class Menu<T> : Menu where T : Menu<T>
 	protected virtual void OnBackPressed() => uiManager.CloseMenu();
 
 	/// <summary>
-	/// Opens up the exit confirmation popup before closing.
-	/// </summary>
-	public void OnApplicationQuit()
-	{
-		if (popupManager.ActivePopupType != typeof(ExitConfirmationPopup))
-			Application.CancelQuit();
-
-		OpenExitConfirmationPopup();
-	}
-
-	/// <summary>
-	/// Opens up the exit confirmation popup.
-	/// </summary>
-	protected virtual void OpenExitConfirmationPopup() => popupManager.GetPopup<ExitConfirmationPopup>()?.SetDetails(false);
-
-	/// <summary>
 	/// Class used for creating menus dynamically.
 	/// </summary>
 	public class Factory : Factory<T>

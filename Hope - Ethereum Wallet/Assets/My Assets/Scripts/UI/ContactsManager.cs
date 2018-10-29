@@ -1,4 +1,6 @@
-﻿public sealed class ContactsManager
+﻿using UnityEngine;
+
+public sealed class ContactsManager
 {
     /// <summary>
     /// The list of contacts
@@ -20,14 +22,14 @@
         ContactList = new SecurePlayerPrefList<ContactInfo>(PlayerPrefConstants.CONTACT_LIST, (int)networkSettings.networkType);
         UserWalletManager.OnWalletLoadSuccessful += () =>
         {
-			var walletAddress = userWalletManager.GetWalletAddress().ToLower();
+			var walletAddress = userWalletManager.GetWalletAddress();
 
-			if (!ContactList.Contains(walletAddress))
+			if (!ContactList.Contains(walletAddress.ToLower()))
 			{
 				var info = userWalletInfoManager.GetWalletInfo(walletAddress);
 
 				if (!string.IsNullOrEmpty(info?.WalletName))
-					AddContact(walletAddress, info.WalletName);
+					AddContact(walletAddress.ToLower(), info.WalletName);
 			}
         };
     }

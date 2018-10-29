@@ -9,6 +9,6 @@ public class HelpPopupAnimator : PopupAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		comingSoonText.AnimateGraphicAndScale(1f, 1f, 0.2f);
+		comingSoonText.AnimateGraphicAndScale(1f, 1f, 0.2f, FinishedAnimating);
 	}
 }

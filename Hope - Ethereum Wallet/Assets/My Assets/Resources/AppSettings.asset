@@ -19,8 +19,7 @@ MonoBehaviour:
   playerPrefSettings:
     defaultPlayerPrefsSettings: {fileID: 11400000, guid: 2b28bf3b33c733d49a65405f47983f96,
       type: 2}
-    securedPlayerPrefsSettings: {fileID: 11400000, guid: 0d20e042511e8e44a80b1203e14a4f51,
-      type: 2}
+    securedPlayerPrefsSettings: {fileID: 0}
   ethereumNetworkSettings:
     networkType: 4
   uiSettings:
@@ -52,7 +51,7 @@ MonoBehaviour:
       - {fileID: 1120657717184104, guid: b13e683ad7d232746a6a33077e53025e, type: 2}
       - {fileID: 1969784055072106, guid: 36113900b49532343b21804c391dfbf5, type: 2}
       - {fileID: 1287467929406062, guid: 6869d0a1bd0c9e940a4ba540d81ce3e2, type: 2}
-      - {fileID: 1108669729117044, guid: 0241c9f30f541024b8573290c8e85955, type: 2}
+      - {fileID: 1970297254638880, guid: 81a7ea79b67c85c4881cd0ebee0c4b79, type: 2}
       - {fileID: 1364737141961984, guid: 56a531c57a4831a43a98f6f5e61c7b57, type: 2}
       - {fileID: 1911524679015626, guid: 43c64668eaffd2e4ab277098efa1c283, type: 2}
       - {fileID: 1890875510333406, guid: 96c655e600abb1248a641dc4abf8d3ab, type: 2}
@@ -73,7 +72,6 @@ MonoBehaviour:
       - {fileID: 1019245568806750, guid: 9b1d97d924580f44a8f513b7797510b2, type: 2}
       - {fileID: 1911524679015626, guid: 7d2eb97eaeaaf1e4c993ec080dbe6400, type: 2}
       - {fileID: 1077229760039810, guid: 07a8ce101ed6d5d489c3526f7fb49d23, type: 2}
-      - {fileID: 1970297254638880, guid: 81a7ea79b67c85c4881cd0ebee0c4b79, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0xe4D688Bb2d5B7F546052cB6Fef3aEd8af8AF6511

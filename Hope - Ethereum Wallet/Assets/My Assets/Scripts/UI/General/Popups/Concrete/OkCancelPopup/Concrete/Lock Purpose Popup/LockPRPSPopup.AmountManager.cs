@@ -23,6 +23,8 @@ public sealed partial class LockPRPSPopup
 								  dubiBalanceText,
 								  dubiRewardText;
 
+		private readonly TooltipItem buttonTooltipItem;
+
 		/// <summary>
 		/// Whether the amount input field is empty or not.
 		/// </summary>
@@ -47,13 +49,15 @@ public sealed partial class LockPRPSPopup
 		/// <param name="prpsBalanceText"> Text component used for displaying the current purpose balance. </param>
 		/// <param name="dubiBalanceText"> Text component used for displaying the current dubi balance. </param>
 		/// <param name="dubiRewardText"> Text component used for displaying the dubi reward. </param>
+		/// <param name="buttonTooltipItem"> The lock button tooltip item </param>
 		public AmountManager(
 			LockPRPSManager lockPRPSManager,
 			Toggle maxToggle,
 			HopeInputField amountInputField,
 			TMP_Text prpsBalanceText,
 			TMP_Text dubiBalanceText,
-			TMP_Text dubiRewardText)
+			TMP_Text dubiRewardText,
+			TooltipItem buttonTooltipItem)
 		{
 			this.lockPRPSManager = lockPRPSManager;
 			this.maxToggle = maxToggle;
@@ -61,6 +65,7 @@ public sealed partial class LockPRPSPopup
 			this.prpsBalanceText = prpsBalanceText;
 			this.dubiBalanceText = dubiBalanceText;
 			this.dubiRewardText = dubiRewardText;
+			this.buttonTooltipItem = buttonTooltipItem;
 
 			lockPRPSManager.OnAmountsUpdated += BalancesUpdated;
 
@@ -116,9 +121,12 @@ public sealed partial class LockPRPSPopup
 			bool exceedsBalance = AmountToLock > MaxSendableAmount;
 
 			amountInputField.Error = emptyField || exceedsBalance || AmountToLock < 0.0000000000000001m;
-			
+
 			if (!emptyField)
 				amountInputField.errorMessage.text = exceedsBalance ? "Exceeds PRPS balance" : "Invalid amount";
+
+			if (!amountInputField.Error && buttonTooltipItem.Active)
+				buttonTooltipItem.CloseInfoPopup();
 
 			OnLockAmountChanged?.Invoke();
         }

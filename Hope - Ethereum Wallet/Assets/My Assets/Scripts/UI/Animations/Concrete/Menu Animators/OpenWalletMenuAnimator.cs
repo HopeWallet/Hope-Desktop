@@ -30,6 +30,8 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject loadingIcon;
 	[SerializeField] private GameObject transactionPagesSection;
 
+	[SerializeField] private GameObject[] walletLogos;
+
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
 	{
@@ -81,6 +83,15 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		AnimateListOut(assetListTransform);
 		AnimateListOut(transactionListTransform);
 		AnimateListOut(transactionTabsTransform);
+
+		foreach (GameObject logo in walletLogos)
+		{
+			if (logo.activeInHierarchy)
+			{
+				logo.GetComponent<LoadingIconAnimator>().enabled = false;
+				logo.AnimateColor(new Color(1f, 1f, 1f, 1f), 1.25f);
+			}
+		}
 
 		topBar.AnimateGraphic(0f, duration);
 		sideBar1.AnimateGraphic(0f, duration);

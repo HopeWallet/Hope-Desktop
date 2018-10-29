@@ -7,6 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+	public bool Active { get; private set; }
+
 	private static int clickId;
 
 	public string infoTitle;
@@ -59,7 +61,11 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	/// <summary>
 	/// Animates the info popup out and then closes the popup
 	/// </summary>
-	private void CloseInfoPopup() => PopupManager.GetPopup<TooltipPopup>()?.Animator?.AnimateDisable(() => PopupManager.KillActivePopup(typeof(TooltipPopup)));
+	public void CloseInfoPopup()
+	{
+		PopupManager.GetPopup<TooltipPopup>()?.Animator?.AnimateDisable(() => PopupManager.KillActivePopup(typeof(TooltipPopup)));
+		Active = false;
+	}
 
 	/// <summary>
 	/// Animates the icon
@@ -80,6 +86,9 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	private void OpenPopup(int currentId)
 	{
 		if (currentId == clickId)
+		{
 			PopupManager.GetPopup<TooltipPopup>(true).SetUIElements(infoTitle, infoText, transform.position, itemWidth / 2, infoIcon);
+			Active = true;
+		}
 	}
 }
