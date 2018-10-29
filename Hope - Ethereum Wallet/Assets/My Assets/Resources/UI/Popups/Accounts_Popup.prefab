@@ -1035,7 +1035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Wallet Accounts
-  infoText: Message to be created on google doc...
+  infoText: Switch the active account of your wallet.
   itemWidth: 26
   infoIcon: 1
 --- !u!114 &114121284234781724
@@ -1590,8 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Unable To Unlock
-  infoText: The address you have selected is the address you are already currently
-    on.
+  infoText: You are already on this account.
   itemWidth: 200
   infoIcon: 0
 --- !u!114 &114254595739638916

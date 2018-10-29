@@ -2134,8 +2134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Unable to Send
-  infoText: Make sure all possible inputs are filled in correctly, and are not providing
-    any errors.
+  infoText: Fill all the input fields and ensure there are no errors!
   itemWidth: 150
   infoIcon: 0
 --- !u!114 &114185239684127186
@@ -5012,8 +5011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Transaction Speed
-  infoText: This is where you can set your gas price. The greater the gas price, the
-    faster the transaction will go through, and vice versa.
+  infoText: Set the speed of your transaction. A cheaper transaction will be slower,
+    while a more expensive transaction will be quite fast.
   itemWidth: 20
   infoIcon: 1
 --- !u!114 &114889482639603250

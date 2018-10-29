@@ -1309,8 +1309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Unable to Lock
-  infoText: Make sure all possible inputs are filled in correctly, and are not providing
-    any errors.
+  infoText: Fill all the input fields and ensure there are no errors!
   itemWidth: 250
   infoIcon: 0
 --- !u!114 &114178843159023534
@@ -1553,7 +1552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Lock Purpose
-  infoText: Message to be created on google doc...
+  infoText: Lock your PRPS for 3, 6, or 12 months and receive DUBI back as a reward!
   itemWidth: 26
   infoIcon: 1
 --- !u!114 &114205761862148918
@@ -2706,8 +2705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoTitle: Transaction Speed
-  infoText: This is where you can set your gas price. The greater the gas price, the
-    faster the transaction will go through, and vice versa.
+  infoText: Set the speed of your transaction. A cheaper transaction will be slower,
+    while a more expensive transaction will be quite fast.
   itemWidth: 20
   infoIcon: 1
 --- !u!114 &114492802312943286

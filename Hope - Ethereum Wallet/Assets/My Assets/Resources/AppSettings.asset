@@ -17,10 +17,8 @@ MonoBehaviour:
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:
-    defaultPlayerPrefsSettings: {fileID: 11400000, guid: 2b28bf3b33c733d49a65405f47983f96,
-      type: 2}
-    securedPlayerPrefsSettings: {fileID: 11400000, guid: 0d20e042511e8e44a80b1203e14a4f51,
-      type: 2}
+    defaultPlayerPrefsSettings: {fileID: 0}
+    securedPlayerPrefsSettings: {fileID: 0}
   ethereumNetworkSettings:
     networkType: 4
   uiSettings:
@@ -73,6 +71,7 @@ MonoBehaviour:
       - {fileID: 1019245568806750, guid: 9b1d97d924580f44a8f513b7797510b2, type: 2}
       - {fileID: 1911524679015626, guid: 7d2eb97eaeaaf1e4c993ec080dbe6400, type: 2}
       - {fileID: 1077229760039810, guid: 07a8ce101ed6d5d489c3526f7fb49d23, type: 2}
+      - {fileID: 1970297254638880, guid: 81a7ea79b67c85c4881cd0ebee0c4b79, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0xe4D688Bb2d5B7F546052cB6Fef3aEd8af8AF6511
