@@ -19,8 +19,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         private readonly GameObject pendingTransactionSection;
         private readonly GameObject triangle;
         private readonly TextMeshProUGUI pendingTransactionText, transactionHashText;
-        private readonly Button copyButton, walletLogo, exitButton;
-        private readonly GameObject checkmarkIconObject;
+        private readonly Button viewOnBrowserButton, walletLogo, exitButton;
         private readonly Image statusIcon;
 
         private readonly Sprite loadingIconSprite, checkmarkIconSprite, errorIconSprite;
@@ -30,7 +29,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         private readonly LoadingIconAnimator logoAnimator;
 
         private string transactionHash;
-        private bool animatingIcon;
+		private bool onMainNetwork;
 
         public bool PendingTransaction { get; private set; }
 
@@ -50,7 +49,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             EthereumPendingTransactionManager ethereumPendingTransactionManager,
             UserWalletManager userWalletManager,
             Transform pendingTransactionSection,
-            Button walletLogo)
+            Button walletLogo,
+			bool onMainNetwork)
         {
             this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
             this.userWalletManager = userWalletManager;
@@ -63,10 +63,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             pendingTransactionText = pendingTransactionSection.GetChild(1).GetComponent<TextMeshProUGUI>();
             pendingTransactionTextAnimator = pendingTransactionText.GetComponent<LoadingTextAnimator>();
             transactionHashText = pendingTransactionSection.GetChild(2).GetComponent<TextMeshProUGUI>();
-            copyButton = pendingTransactionSection.GetChild(3).GetComponent<Button>();
-            checkmarkIconObject = pendingTransactionSection.GetChild(4).gameObject;
-            triangle = pendingTransactionSection.GetChild(5).gameObject;
-            exitButton = pendingTransactionSection.GetChild(6).GetComponent<Button>();
+            viewOnBrowserButton = pendingTransactionSection.GetChild(3).GetComponent<Button>();
+            triangle = pendingTransactionSection.GetChild(4).gameObject;
+            exitButton = pendingTransactionSection.GetChild(5).GetComponent<Button>();
             exitButton.onClick.AddListener(TransactionPopupExited);
             logoAnimator = walletLogo.GetComponent<LoadingIconAnimator>();
 
@@ -74,9 +73,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             SetSprite(ref checkmarkIconSprite, "Checkmark_Icon");
             SetSprite(ref errorIconSprite, "Error_Icon");
 
-            copyButton.onClick.AddListener(CopyButtonClicked);
+            viewOnBrowserButton.onClick.AddListener(ViewOnBrowserClicked);
+			this.onMainNetwork = onMainNetwork;
 
-            ethereumPendingTransactionManager.OnNewTransactionPending += TransactionStarted;
+			ethereumPendingTransactionManager.OnNewTransactionPending += TransactionStarted;
             ethereumPendingTransactionManager.OnTransactionSuccessful += OnTransactionSuccessful;
             ethereumPendingTransactionManager.OnTransactionUnsuccessful += OnTransactionUnsuccessful;
             AccountsPopup.OnAccountChanged += _ => AccountChanged();
@@ -101,24 +101,12 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
         }
 
-        /// <summary>
-        /// Copy button is clicked and copies the transaction hash to the clipboard
-        /// </summary>
-        private void CopyButtonClicked()
-        {
-            ClipboardUtils.CopyToClipboard(transactionHash);
+		/// <summary>
+		/// viewOnBrowserButton is clicked and opens up the etherscan page on their browser
+		/// </summary>
+		private void ViewOnBrowserClicked() => Application.OpenURL((onMainNetwork ? "https://etherscan.io/tx/" : "https://rinkeby.etherscan.io/tx/") + transactionHash);
 
-            if (!animatingIcon)
-            {
-                animatingIcon = true;
-                checkmarkIconObject.transform.localScale = new Vector3(0, 0, 1);
-
-                checkmarkIconObject.AnimateGraphicAndScale(1f, 1f, 0.15f);
-                CoroutineUtils.ExecuteAfterWait(0.6f, () => checkmarkIconObject.AnimateGraphic(0f, 0.25f, () => animatingIcon = false));
-            }
-        }
-
-        private void AccountChanged()
+		private void AccountChanged()
         {
             var address = userWalletManager.GetWalletAddress();
             var pendingTransaction = ethereumPendingTransactionManager.GetPendingTransaction(address);
@@ -187,7 +175,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             statusIcon.gameObject.AnimateGraphic(value, 0.3f, () => { if (!animateIn) statusIcon.gameObject.SetActive(false); });
             pendingTransactionText.gameObject.AnimateGraphic(value, 0.3f);
             transactionHashText.gameObject.AnimateGraphic(value, 0.4f);
-            copyButton.gameObject.AnimateGraphic(value, 0.4f);
+            viewOnBrowserButton.gameObject.AnimateGraphic(value, 0.4f);
 
             walletLogo.interactable = !animateIn;
 
@@ -219,7 +207,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             statusIconAnimator.enabled = true;
 
             this.transactionHash = transactionHash;
-            transactionHashText.text = transactionHash.LimitEnd(12, "...");
+            transactionHashText.text = transactionHash.LimitEnd(17, "...");
 
             pendingTransactionText.text = message;
             pendingTransactionTextAnimator.enabled = true;
