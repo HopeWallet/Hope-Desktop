@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,8 +8,6 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-	public Action ResetButton { get; private set; }
-
 	private TextMeshProUGUI text;
 	private Button button;
 
@@ -23,8 +20,17 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	{
 		text = GetComponent<TextMeshProUGUI>();
 		button = GetComponent<Button>();
-		ResetButton = () => { clicked = false; text.fontSize /= 1.1f; text.fontStyle = FontStyles.Normal; };
 	}
+
+    /// <summary>
+    /// Resets the button.
+    /// </summary>
+    public void ResetButton()
+    {
+        clicked = false;
+        text.fontSize /= 1.1f;
+        text.fontStyle = FontStyles.Normal;
+    }
 
 	/// <summary>
 	/// pointer hovers over the text button

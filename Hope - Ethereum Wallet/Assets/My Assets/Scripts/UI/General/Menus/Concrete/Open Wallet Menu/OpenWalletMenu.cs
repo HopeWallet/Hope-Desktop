@@ -28,6 +28,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	[SerializeField] private Transform pendingTransactionSection;
 	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
 
+    private EthereumNetworkManager.Settings ethereumNetworkSettings;
     private EthereumTransactionManager ethereumTransactionManager;
     private EthereumPendingTransactionManager ethereumPendingTransactionManager;
     private TokenContractManager tokenContractManager;
@@ -44,15 +45,13 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private IdleTimeoutManager idleTimeoutManager;
 	private PendingTransactionManager pendingTransactionManager;
 
-	private bool onMainNetwork;
-
     private const int MAX_ASSET_NAME_LENGTH = 36;
     private const int MAX_ASSET_BALANCE_LENGTH = 54;
 
 	[Inject]
 	public void Construct(
 		EthereumTransactionManager ethereumTransactionManager,
-		EthereumNetworkManager.Settings ethereumNetworkManagerSettings,
+		EthereumNetworkManager.Settings ethereumNetworkSettings,
         EthereumPendingTransactionManager ethereumPendingTransactionManager,
         TokenContractManager tokenContractManager,
         TradableAssetManager tradableAssetManager,
@@ -63,9 +62,9 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         CurrencyManager currencyManager,
         HopeWalletInfoManager hopeWalletInfoManager,
         UserWalletManager userWalletManager,
-        PopupManager popupManager,
 		LogoutHandler logoutHandler)
     {
+        this.ethereumNetworkSettings = ethereumNetworkSettings;
         this.ethereumTransactionManager = ethereumTransactionManager;
         this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
         this.tokenContractManager = tokenContractManager;
@@ -78,11 +77,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.userWalletManager = userWalletManager;
 		this.logoutHandler = logoutHandler;
-
-		onMainNetwork = ethereumNetworkManagerSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet;
-
-		walletAccountText.GetComponent<Button>().onClick.AddListener
-			(() => popupManager.GetPopup<AccountsPopup>().SetOnCloseAction(walletAccountText.GetComponent<TextButton>().ResetButton));
     }
 
 	private void Update()
@@ -136,7 +130,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     private void SetUpWalletType(Button walletLogo)
 	{
 		walletLogo.gameObject.SetActive(true);
-		pendingTransactionManager = new PendingTransactionManager(ethereumPendingTransactionManager, userWalletManager, pendingTransactionSection, walletLogo, onMainNetwork);
+		pendingTransactionManager = new PendingTransactionManager(ethereumNetworkSettings, ethereumPendingTransactionManager, userWalletManager, pendingTransactionSection, walletLogo);
 	}
 
     /// <summary>
@@ -173,6 +167,8 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         new PriceManager(currencyManager, tradableAssetPriceManager, tradableAssetManager, netWorthText);
         new TransactionTabManager(tradableAssetManager, ethereumTransactionManager, transactionTabs);
         new TransactionPageManager(tradableAssetManager, ethereumTransactionManager, pagesSection);
+
+        walletAccountText.GetComponent<Button>().onClick.AddListener(() => popupManager.GetPopup<AccountsPopup>().OnPopupClose(walletAccountText.GetComponent<TextButton>().ResetButton));
     }
 
 	/// <summary>

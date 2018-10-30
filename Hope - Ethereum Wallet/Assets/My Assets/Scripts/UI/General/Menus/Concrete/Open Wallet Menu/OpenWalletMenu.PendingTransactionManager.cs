@@ -15,6 +15,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         private readonly UserWalletManager userWalletManager;
         private readonly EthereumPendingTransactionManager ethereumPendingTransactionManager;
+        private readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
 
         private readonly GameObject pendingTransactionSection;
         private readonly GameObject triangle;
@@ -29,29 +30,33 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         private readonly LoadingIconAnimator logoAnimator;
 
         private string transactionHash;
-		private bool onMainNetwork;
+
+        private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
+
+        private const string ETHERSCAN_HASH_URL = "https://etherscan.io/tx/";
+        private const string RINKEBY_ETHERSCAN_HASH_URL = "https://rinkeby.etherscan.io/tx/";
 
         public bool PendingTransaction { get; private set; }
 
         public bool PendingTransactionSectionOpen { get; private set; }
 
-        private readonly Color FLAT_WHITE = new Color(1f, 1f, 1f, 1f);
-
 		/// <summary>
 		/// Sets the necessary variables needed for the pending transaction section
 		/// </summary>
+        /// <param name="ethereumNetworkSettings"> The active ethereum network settings. </param>
 		/// <param name="ethereumPendingTransactionManager"> The active EthereumPendingTransactionManager. </param>
 		/// <param name="userWalletManager"> The active UserWalletManager. </param>
 		/// <param name="pendingTransactionSection"> The parent transform of the pending transaction section. </param>
 		/// <param name="walletLogo"> The active wallet logo button. </param>
 		/// /// <param name="logoutHandler"> The active LogoiutHandler. </param>
 		public PendingTransactionManager(
+            EthereumNetworkManager.Settings ethereumNetworkSettings,
             EthereumPendingTransactionManager ethereumPendingTransactionManager,
             UserWalletManager userWalletManager,
             Transform pendingTransactionSection,
-            Button walletLogo,
-			bool onMainNetwork)
+            Button walletLogo)
         {
+            this.ethereumNetworkSettings = ethereumNetworkSettings;
             this.ethereumPendingTransactionManager = ethereumPendingTransactionManager;
             this.userWalletManager = userWalletManager;
 
@@ -74,7 +79,6 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             SetSprite(ref errorIconSprite, "Error_Icon");
 
             viewOnBrowserButton.onClick.AddListener(ViewOnBrowserClicked);
-			this.onMainNetwork = onMainNetwork;
 
 			ethereumPendingTransactionManager.OnNewTransactionPending += TransactionStarted;
             ethereumPendingTransactionManager.OnTransactionSuccessful += OnTransactionSuccessful;
@@ -101,12 +105,17 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
             targetSprite = Sprite.Create(loadedTexture, new Rect(0f, 0f, loadedTexture.width, loadedTexture.height), new Vector2(0.5f, 0.5f));
         }
 
-		/// <summary>
-		/// viewOnBrowserButton is clicked and opens up the etherscan page on their browser
-		/// </summary>
-		private void ViewOnBrowserClicked() => Application.OpenURL((onMainNetwork ? "https://etherscan.io/tx/" : "https://rinkeby.etherscan.io/tx/") + transactionHash);
+        /// <summary>
+        /// Opens up etherscan to view the info of the transaction hash.
+        /// </summary>
+        private void ViewOnBrowserClicked()
+        {
+            Application.OpenURL((ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet
+                ? ETHERSCAN_HASH_URL
+                : RINKEBY_ETHERSCAN_HASH_URL) + transactionHash);
+        }
 
-		private void AccountChanged()
+        private void AccountChanged()
         {
             var address = userWalletManager.GetWalletAddress();
             var pendingTransaction = ethereumPendingTransactionManager.GetPendingTransaction(address);

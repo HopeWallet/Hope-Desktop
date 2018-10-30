@@ -13,8 +13,6 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 
     public event Action<string[], int, int> OnPageChanged;
 
-	private Action onClose;
-
     [SerializeField] private IconButtons addressesCategories;
     [SerializeField] private Transform addressesSection;
     [SerializeField] private Button previousPageButton, nextPageButton;
@@ -74,8 +72,6 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
 		}
 	}
 
-	public void SetOnCloseAction(Action onClose) => this.onClose = onClose;
-
 	protected override void Awake()
     {
         base.Awake();
@@ -85,13 +81,6 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         AssignAddresses();
         InitializePageAndCategories();
     }
-
-	protected override void OnDestroy()
-	{
-        base.OnDestroy();
-
-		onClose();
-	}
 
 	private void InitializePageAndCategories()
     {
