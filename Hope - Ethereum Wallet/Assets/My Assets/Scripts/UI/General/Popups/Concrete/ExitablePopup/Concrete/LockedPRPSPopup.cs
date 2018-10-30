@@ -53,11 +53,12 @@ public sealed class LockedPRPSPopup : ExitablePopupComponent<LockedPRPSPopup>
         lockedPRPSManager.OnLockedPRPSUpdated += UpdateList;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         lockedPRPSManager.OnLockedPRPSUpdated -= UpdateList;
         lockedPRPSItems.ForEach(item => item.EndButtonUpdates());
-        TopBarButtons.popupClosed?.Invoke();
     }
 
     private void SwitchUnlockDateSection(bool previousButtonPressed)

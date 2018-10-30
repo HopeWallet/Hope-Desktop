@@ -73,7 +73,7 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
                         tokenListManager.UpdateToken(ButtonInfo.AssetAddress, false, true);
                         tokenContractManager.RemoveToken(ButtonInfo.AssetAddress);
                     })
-			        .OnFinish(PopupClosed);
+			        .OnPopupClose(PopupClosed);
 	}
 
 	/// <summary>

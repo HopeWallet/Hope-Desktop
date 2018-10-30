@@ -39,9 +39,4 @@ public sealed class AboutPopup : ExitablePopupComponent<AboutPopup>
 		websiteButton.onClick.AddListener(() => Application.OpenURL(WEBSITE_URL));
 		githubButton.onClick.AddListener(() => Application.OpenURL(GITHUB_URL));
 	}
-
-	/// <summary>
-	/// Calls the PopupClosed action
-	/// </summary>
-	private void OnDestroy() => MoreDropdown.PopupClosed?.Invoke();
 }

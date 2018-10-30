@@ -81,9 +81,9 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 	/// <summary>
 	/// Sets the contact button to interactable again after the contacts popup has been destroyed
 	/// </summary>
-	private void OnDestroy()
+	protected override void OnDestroy()
 	{
-		sendAssetPopup.contactsClosed?.Invoke();
+        base.OnDestroy();
 
 		if (!sendAssetPopup.Address.addressField.Error)
 			sendAssetPopup.Address.CheckIfSavedContact(sendAssetPopup.Address.addressField.Text);

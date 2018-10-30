@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class TokenListButton : MonoBehaviour
+public sealed class AddTokenButton : MonoBehaviour
 {
-	public static Action popupClosed;
-
 	private Button button;
 
 	private PopupManager popupManager;
@@ -32,8 +29,7 @@ public class TokenListButton : MonoBehaviour
 	/// </summary>
 	private void ButtonClicked()
 	{
-		popupManager.GetPopup<ModifyTokensPopup>();
+		popupManager.GetPopup<AddTokenPopup>().OnPopupClose(() => button.interactable = true);
 		button.interactable = false;
-		popupClosed = () => button.interactable = true;
 	}
 }

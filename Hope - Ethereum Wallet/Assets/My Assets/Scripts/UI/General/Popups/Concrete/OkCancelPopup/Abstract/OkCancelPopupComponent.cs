@@ -61,5 +61,4 @@ public abstract class OkCancelPopupComponent<T> : FactoryPopup<T> where T : Fact
     /// Used for parent classes.
     /// </summary>
     protected virtual void OnCancelClicked() { }
-
 }

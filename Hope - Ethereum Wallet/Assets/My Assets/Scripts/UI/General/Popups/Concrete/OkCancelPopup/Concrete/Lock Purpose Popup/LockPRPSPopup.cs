@@ -14,8 +14,8 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 {
 	[SerializeField]
 	private Button threeMonthsButton,
-									sixMonthsButton,
-									twelveMonthsButton;
+				   sixMonthsButton,
+				   twelveMonthsButton;
 
 	[SerializeField] private HopeInputField amountInputField;
 
@@ -23,10 +23,10 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 
 	[SerializeField]
 	private TMP_Text transactionFeeText,
-									  prpsBalanceText,
-									  dubiBalanceText,
-									  dubiRewardText,
-									  maxText;
+					 prpsBalanceText,
+				     dubiBalanceText,
+					 dubiRewardText,
+					 maxText;
 
 	[SerializeField] private Toggle maxToggle;
 
@@ -115,14 +115,13 @@ public sealed partial class LockPRPSPopup : OkCancelPopupComponent<LockPRPSPopup
 	/// <summary>
 	/// Closes all the managers for the LockPRPSPopup and the ether balance observer.
 	/// </summary>
-	private void OnDestroy()
+	protected override void OnDestroy()
 	{
+        base.OnDestroy();
+
 		Gas.Stop();
 		Amount.Stop();
 		Time.Stop();
-
-		if (popupManager.ActivePopupType != typeof(LockedPRPSPopup))
-			TopBarButtons.popupClosed?.Invoke();
 
 		etherBalanceObserver.UnsubscribeObservable(this);
 		buttonClickObserver.UnsubscribeObservable(this);

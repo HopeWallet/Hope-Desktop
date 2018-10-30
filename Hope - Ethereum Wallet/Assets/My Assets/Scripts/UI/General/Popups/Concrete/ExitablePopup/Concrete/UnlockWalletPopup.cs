@@ -14,8 +14,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	public event Action OnPasswordEnteredIncorrect;
 	public event Action<bool> AnimateLockedOutSection;
 
-	private Action popupClosed;
-
 	[SerializeField] private TextMeshProUGUI formTitle;
 	[SerializeField] private HopeInputField passwordField;
 	[SerializeField] private Button unlockWalletButton;
@@ -66,11 +64,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// Sets the wallet name and popupClosed action
 	/// </summary>
 	/// <param name="walletName"> The wallet name </param>
-	/// <param name="popupClosed"> The finishing action </param>
-	public void SetVariables(string walletName, Action popupClosed)
+	public void SetWalletInfo(string walletName)
 	{
-		this.WalletName = walletName;
-		this.popupClosed = popupClosed;
+		WalletName = walletName;
 		formTitle.text = $"Unlock <size=90%>'{walletName.LimitEnd(17, "...")}'</size>";
 	}
 
@@ -110,7 +106,6 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		UserWalletManager.OnWalletLoadSuccessful -= OnWalletLoad;
 		buttonClickObserver.UnsubscribeObservable(this);
-		popupClosed?.Invoke();
 	}
 
 	/// <summary>

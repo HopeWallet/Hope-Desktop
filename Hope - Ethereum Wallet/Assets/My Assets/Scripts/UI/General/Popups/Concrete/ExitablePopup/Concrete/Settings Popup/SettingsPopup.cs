@@ -133,8 +133,10 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
     /// <summary>
     /// Switches currency if needed
     /// </summary>
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (currencyManager.ActiveCurrency != (CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton)
             currencyManager.SwitchActiveCurrency((CurrencyManager.CurrencyType)defaultCurrencyOptions.PreviouslyActiveButton);
 
@@ -147,7 +149,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
         SecurePlayerPrefs.SetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT, startupAccountCheckbox.IsToggledOn);
 
         buttonClickObserver.UnsubscribeObservable(this);
-        MoreDropdown.PopupClosed?.Invoke();
     }
 
     /// <summary>
@@ -172,7 +173,6 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
         hopeWalletInfoManager.DeleteWalletInfo(walletToDelete);
 		logoutHandler.Logout();
-		MoreDropdown.PopupClosed?.Invoke();
 	}
 
     /// <summary>

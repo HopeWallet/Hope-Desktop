@@ -10,11 +10,9 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 {
 	[SerializeField] private TextMeshProUGUI subText;
 
-	private bool disableEnterButton;
+    private ButtonClickObserver buttonClickObserver;
 
-	private Action onFinish;
-
-	private ButtonClickObserver buttonClickObserver;
+    private bool disableEnterButton;
 
 	/// <summary>
 	/// Sets the required dependency and subscribes this button click observer
@@ -65,22 +63,11 @@ public sealed class GeneralOkCancelPopup : OkCancelPopupComponent<GeneralOkCance
 		return this;
 	}
 
-	/// <summary>
-	/// Sets the final action to be called when the popup is destroyed
-	/// </summary>
-	/// <param name="onFinish"> The final action </param>
-	public void OnFinish(Action onFinish) => this.onFinish = onFinish;
-
-	/// <summary>
-	/// Calls the onFinish action if it has been set
-	/// </summary>
-	private void OnDestroy() => onFinish?.Invoke();
-
-	/// <summary>
-	/// User has hit the enter button
-	/// </summary>
-	/// <param name="clickType"> The ClickType </param>
-	public void EnterButtonPressed(ClickType clickType)
+    /// <summary>
+    /// User has hit the enter button
+    /// </summary>
+    /// <param name="clickType"> The ClickType </param>
+    public void EnterButtonPressed(ClickType clickType)
 	{
 		if (popupManager.AnimatingPopup || disableEnterButton || clickType != ClickType.Down)
 			return;

@@ -49,11 +49,8 @@ public sealed class ReceiveAssetPopup : ExitablePopupComponent<ReceiveAssetPopup
 		copyButton.onClick.AddListener(CopyAddressClicked);
     }
 
-	private void OnDestroy() => TopBarButtons.popupClosed?.Invoke();
-
-	/// <summary>
-	/// Copies the user's main wallet address to the clipboard.
-	/// </summary>
-	private void CopyAddressClicked() => ClipboardUtils.CopyToClipboard(userWalletManager.GetWalletAddress());
-
+    /// <summary>
+    /// Copies the user's main wallet address to the clipboard.
+    /// </summary>
+    private void CopyAddressClicked() => ClipboardUtils.CopyToClipboard(userWalletManager.GetWalletAddress());
 }

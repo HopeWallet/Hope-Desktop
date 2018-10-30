@@ -1,5 +1,4 @@
-﻿using Hope.Utils.Ethereum;
-using Nethereum.HdWallet;
+﻿using Nethereum.HdWallet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,8 +86,10 @@ public sealed class AccountsPopup : OkCancelPopupComponent<AccountsPopup>
         InitializePageAndCategories();
     }
 
-	private void OnDestroy()
+	protected override void OnDestroy()
 	{
+        base.OnDestroy();
+
 		onClose();
 	}
 

@@ -12,21 +12,20 @@ using Zenject;
 public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPopup>, ITabButtonObservable, IEnterButtonObservable
 {
 	public event Action<bool> AnimateAdvancedMode;
-	public Action contactsClosed;
 
 	[SerializeField]
 	private HopeInputField addressField,
-											amountField,
-											gasLimitField,
-											gasPriceField;
+						   amountField,
+						   gasLimitField,
+						   gasPriceField;
 
 	[SerializeField]
 	private TMP_Text assetBalance,
-									  assetSymbol,
-									  transactionFee,
-									  contactName,
-									  currencyText,
-									  oppositeCurrencyAmountText;
+				     assetSymbol,
+					 transactionFee,
+					 contactName,
+					 currencyText,
+					 oppositeCurrencyAmountText;
 
 	[SerializeField] private GameObject maxText;
 
@@ -124,8 +123,6 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 		advancedModeSelectableFields.AddRange(simpleModeSelectableFields);
 		advancedModeSelectableFields.Add(gasLimitField.InputFieldBase);
 		advancedModeSelectableFields.Add(gasPriceField.InputFieldBase);
-
-		contactsClosed = () => contactsButton.interactable = true;
 	}
 
 	/// <summary>
@@ -133,8 +130,17 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// </summary>
 	protected override void OnStart()
 	{
-		advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
-		contactsButton.onClick.AddListener(() => { popupManager.GetPopup<ContactsPopup>(true).SetSendAssetPopup(this); contactsButton.interactable = false; });
+        contactsButton.onClick.AddListener(() =>
+        {
+            var popup = popupManager.GetPopup<ContactsPopup>(true);
+            popup.SetSendAssetPopup(this);
+            popup.OnPopupClose(() => contactsButton.interactable = true);
+
+            contactsButton.interactable = false;
+        });
+
+        advancedModeToggle.transform.GetComponent<Toggle>().AddToggleListener(AdvancedModeClicked);
+
 		buttonClickObserver.SubscribeObservable(this);
 
 		bool showTooltips = SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_SHOW_TOOLTIPS);
@@ -179,13 +185,14 @@ public sealed partial class SendAssetPopup : OkCancelPopupComponent<SendAssetPop
 	/// <summary>
 	/// Destroys the AssetManager and GasManager.
 	/// </summary>
-	private void OnDestroy()
+	protected override void OnDestroy()
 	{
+        base.OnDestroy();
+
 		Asset.Destroy();
 		Gas.Destroy();
 
 		buttonClickObserver.UnsubscribeObservable(this);
-		TopBarButtons.popupClosed?.Invoke();
 
 		ethereumTransactionButtonManager.Refresh();
 	}

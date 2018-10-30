@@ -2,15 +2,12 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Zenject;
-using System;
 
 /// <summary>
 /// Manages the More button dropdown
 /// </summary>
 public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public static Action PopupClosed { get; private set; }
-
 	private Button moreButton;
 	private GameObject clickedImage;
 
@@ -129,28 +126,32 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
 	/// <param name="num"> The number of the button in the dropdown hiearchy </param>
 	private void DropdownButtonClicked(int num)
 	{
-		popupIsOpen = true;
-		subButtons[num].interactable = false;
-		PopupClosed = () => { subButtons[num].interactable = true; popupIsOpen = false; };
+        PopupBase popup = null;
 
 		switch (num)
 		{
 			case 0:
-				popupManager.GetPopup<HelpPopup>();
+				popup = popupManager.GetPopup<HelpPopup>();
 				break;
 			case 1:
-				popupManager.GetPopup<AboutPopup>();
+				popup = popupManager.GetPopup<AboutPopup>();
 				break;
 			case 2:
-				popupManager.GetPopup<SettingsPopup>();
+				popup = popupManager.GetPopup<SettingsPopup>();
 				break;
 			case 3:
-				popupManager
-					.GetPopup<GeneralOkCancelPopup>()
-					.SetSubText("Are you sure you want to logout?")
-					.OnOkClicked(logoutHandler.Logout)
-					.OnFinish(PopupClosed);
+				popup = popupManager
+                            .GetPopup<GeneralOkCancelPopup>()
+					        .SetSubText("Are you sure you want to logout?")
+					        .OnOkClicked(logoutHandler.Logout);
 				break;
 		}
-	}
+
+        if (popup == null)
+            return;
+
+        popupIsOpen = true;
+        subButtons[num].interactable = false;
+        popup.OnPopupClose(() => { subButtons[num].interactable = true; popupIsOpen = false; });
+    }
 }
