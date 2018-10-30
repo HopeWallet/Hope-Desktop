@@ -3199,8 +3199,8 @@ GameObject:
   - component: {fileID: 566209489}
   - component: {fileID: 566209488}
   - component: {fileID: 566209487}
-  - component: {fileID: 566209486}
   - component: {fileID: 566209485}
+  - component: {fileID: 566209486}
   m_Layer: 5
   m_Name: TokenList_Button
   m_TagString: Untagged
@@ -3243,13 +3243,12 @@ MonoBehaviour:
 --- !u!114 &566209486
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114220883896625360, guid: f8ccba69336d4004c976f9c7d2f97c87,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 566209483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 32e177eda4a32914da2ecdb72af0b65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &566209487
@@ -6662,7 +6661,7 @@ Prefab:
     - target: {fileID: 224801781838125012, guid: d8f8f0502b424744f90627b25ee94f2a,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224801781838125012, guid: d8f8f0502b424744f90627b25ee94f2a,
         type: 2}

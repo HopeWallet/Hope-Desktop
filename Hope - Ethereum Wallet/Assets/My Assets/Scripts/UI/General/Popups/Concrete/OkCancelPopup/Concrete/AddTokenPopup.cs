@@ -18,6 +18,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private TextMeshProUGUI tokenName;
 
     private TokenListManager tokenListManager;
+    private TokenContractManager tokenContractManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
 
@@ -32,15 +33,18 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// Injects dependencies into this popup.
     /// </summary>
     /// <param name="tokenListManager"> The active TokenListManager. </param>
+    /// <param name="tokenContractManager"> The active TokenContractManager. </param>
     /// <param name="tradableAssetImageManager"> The active TradableAssetImageManager. </param>
     /// <param name="userWalletManager"> The active UserWalletManager. </param>
     [Inject]
     public void Construct(
         TokenListManager tokenListManager,
+        TokenContractManager tokenContractManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager)
     {
         this.tokenListManager = tokenListManager;
+        this.tokenContractManager = tokenContractManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
     }
@@ -65,7 +69,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         else
             tokenListManager.UpdateToken(addressField.Text, true, true);
 
-        popupManager.GetPopup<ModifyTokensPopup>().UpdateTokens(tokenListManager.GetToken(addressField.Text));
+        tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
     }
 
     private void OnSymbolChanged()
