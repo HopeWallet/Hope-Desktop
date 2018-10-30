@@ -11,6 +11,8 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 {
 	public event Action ResetGameObjects;
 
+	[SerializeField] private GameObject addTokenButton;
+
 	[SerializeField] private GameObject sideBar1;
 	[SerializeField] private GameObject sideBar2;
 	[SerializeField] private GameObject bottomBar;
@@ -61,6 +63,8 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		loadingIcon.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		transactionPagesSection.AnimateScale(1f, 0.2f);
 
+		addTokenButton.AnimateScale(1f, 0.2f);
+
 		topBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(topBar.transform, 0, 6, true));
 		sideBar1.AnimateGraphic(1f, 0.2f, () => sideBar1.transform.GetChild(0).gameObject.AnimateScale(1f, 0.2f));
 		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateListIn(assetListTransform, 0, 7, true));
@@ -81,6 +85,8 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	protected override void AnimateUniqueElementsOut()
 	{
 		ResetGameObjects.Invoke();
+
+		addTokenButton.transform.localScale = new Vector2(0f, 0f);
 
 		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
 		AnimateListOut(topBar.transform);
