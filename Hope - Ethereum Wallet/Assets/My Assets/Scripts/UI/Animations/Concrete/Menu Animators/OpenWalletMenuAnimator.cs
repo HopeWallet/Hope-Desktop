@@ -43,7 +43,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
 	{
-		ethereumTransactionButtonManager.OnTransactionListCreated += () => AnimateListIn(transactionListTransform, 0, 4, true);
+		ethereumTransactionButtonManager.OnTransactionListCreated += () => AnimateListIn(transactionListTransform, 0, 4);
 	}
 
 	/// <summary>
@@ -65,10 +65,10 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 		addTokenButton.AnimateScale(1f, 0.2f);
 
-		topBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(topBar.transform, 0, 6, true));
+		topBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(topBar.transform, 0, 6));
 		sideBar1.AnimateGraphic(1f, 0.2f, () => sideBar1.transform.GetChild(0).gameObject.AnimateScale(1f, 0.2f));
-		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateListIn(assetListTransform, 0, 7, true));
-		bottomBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(transactionTabsTransform, 0, 3, true));
+		sideBar2.AnimateGraphic(1f, 0.2f, () => AnimateListIn(assetListTransform, 0, 7));
+		bottomBar.AnimateGraphic(1f, 0.2f, () => AnimateListIn(transactionTabsTransform, 0, 3));
 
 		walletNameText.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		walletAccountText.AnimateGraphicAndScale(1f, 1f, 0.25f);
@@ -129,8 +129,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// <param name="listTransform"> The list parent transform </param>
 	/// <param name="index"> The current index of the child being animated in the hiearchy </param>
 	/// <param name="maxAnimationLimit"> The max index to animate to before setting all of the rest of the child object scales </param>
-	/// <param name="animateIn"> Whether the child objects should be animated in or out </param>
-	private void AnimateListIn(Transform listTransform, int index, int maxAnimationLimit, bool animateIn)
+	private void AnimateListIn(Transform listTransform, int index, int maxAnimationLimit)
 	{
 		if (listTransform.childCount == 0)
 			return;
@@ -142,7 +141,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		}
 		else
 		{
-			listTransform.GetChild(index)?.gameObject.AnimateScale(animateIn ? 1f : 0f, animateIn ? 0.15f : 0.05f, () => AnimateListIn(listTransform, ++index, maxAnimationLimit, animateIn));
+			listTransform.GetChild(index)?.gameObject.AnimateScale(1f, 0.15f, () => AnimateListIn(listTransform, ++index, maxAnimationLimit));
 		}
 	}
 
