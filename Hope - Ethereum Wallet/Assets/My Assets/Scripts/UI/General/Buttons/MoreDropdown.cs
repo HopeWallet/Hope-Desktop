@@ -36,7 +36,7 @@ public sealed class MoreDropdown : MonoBehaviour, IPointerEnterHandler, IPointer
         this.logoutHandler = logoutHandler;
         this.popupManager = popupManager;
 
-		openWalletMenuAnimator.animateOut += () =>
+		openWalletMenuAnimator.ResetGameObjects += () =>
 		{
 			if (dropdownOpen)
 				ToggleDropdown();

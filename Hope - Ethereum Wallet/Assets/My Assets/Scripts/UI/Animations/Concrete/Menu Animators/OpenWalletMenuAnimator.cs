@@ -1,5 +1,7 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 /// <summary>
@@ -7,7 +9,7 @@ using Zenject;
 /// </summary>
 public sealed class OpenWalletMenuAnimator : MenuAnimator
 {
-	public event Action animateOut;
+	public event Action ResetGameObjects;
 
 	[SerializeField] private GameObject sideBar1;
 	[SerializeField] private GameObject sideBar2;
@@ -32,6 +34,10 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 	[SerializeField] private GameObject[] walletLogos;
 
+	/// <summary>
+	/// Assigns the necessary event to the animation
+	/// </summary>
+	/// <param name="ethereumTransactionButtonManager"> The active EthereumTransactionButtonManager </param>
 	[Inject]
 	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
 	{
@@ -74,9 +80,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		float duration = 0.35f;
-
-		animateOut.Invoke();
+		ResetGameObjects.Invoke();
 
 		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
 		AnimateListOut(topBar.transform);
@@ -93,22 +97,24 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 			}
 		}
 
-		topBar.AnimateGraphic(0f, duration);
-		sideBar1.AnimateGraphic(0f, duration);
-		sideBar2.AnimateGraphic(0f, duration);
-		bottomBar.AnimateGraphic(0f, duration);
+		topBar.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+		sideBar1.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+		sideBar2.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+		bottomBar.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
 
-		loadingStatusText.AnimateGraphic(0f, duration);
-		loadingIcon.AnimateGraphicAndScale(0f, 0f, duration);
-		transactionPagesSection.AnimateScale(0f, duration);
+		loadingStatusText.GetComponent<TextMeshProUGUI>().color = new Color(1f, 1f, 1f, 0f);
+		ResetObjectValues(loadingIcon, false);
+		transactionPagesSection.transform.localScale = new Vector2(0f, 0f);
 
-		walletNameText.AnimateGraphicAndScale(0f, 0f, duration);
-		walletAccountText.AnimateGraphicAndScale(0f, 0f, duration);
-		walletLine.AnimateScaleX(0f, duration);
-		assetImage.AnimateGraphicAndScale(0f, 0f, duration);
-		currentAssetName.AnimateGraphicAndScale(0f, 0f, duration);
-		currentAssetBalance.AnimateGraphicAndScale(0f, 0f, duration);
-		currentTokenNetWorth.AnimateGraphicAndScale(0f, 0f, duration, FinishedAnimating);
+		ResetObjectValues(walletNameText, true);
+		ResetObjectValues(walletAccountText, true);
+		ResetObjectValues(walletLine, true);
+		ResetObjectValues(assetImage, true);
+		ResetObjectValues(currentAssetName, true);
+		ResetObjectValues(currentAssetBalance, true);
+		ResetObjectValues(currentTokenNetWorth, true);
+
+		FinishedAnimating();
 	}
 
 	/// <summary>
@@ -141,6 +147,22 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	private void AnimateListOut(Transform transform)
 	{
 		for (int i = 0; i < transform.childCount; i++)
-			transform.GetChild(i).gameObject.AnimateScale(0f, 0.35f);
+			transform.GetChild(i).transform.localScale = new Vector2(0f, 0f);
+	}
+
+	/// <summary>
+	/// Resets the object's values to the original state
+	/// </summary>
+	/// <param name="gameObject"> The GameObject being reset </param>
+	/// <param name="resetColor"> If the color should be reset as well </param>
+	private void ResetObjectValues(GameObject gameObject, bool resetColor)
+	{
+		gameObject.transform.localScale = new Vector2(0f, 0f);
+
+		if (resetColor)
+		{
+			Graphic graphicComponent = gameObject.GetComponent<Graphic>();
+			graphicComponent.color = new Color(graphicComponent.color.r, graphicComponent.color.g, graphicComponent.color.g, 0f);
+		}
 	}
 }
