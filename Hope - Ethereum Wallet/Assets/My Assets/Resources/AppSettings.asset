@@ -72,6 +72,7 @@ MonoBehaviour:
       - {fileID: 1019245568806750, guid: 9b1d97d924580f44a8f513b7797510b2, type: 2}
       - {fileID: 1911524679015626, guid: 7d2eb97eaeaaf1e4c993ec080dbe6400, type: 2}
       - {fileID: 1077229760039810, guid: 07a8ce101ed6d5d489c3526f7fb49d23, type: 2}
+      - {fileID: 1153694355340360, guid: e88ff50593c62784b93b0a29bafe9c48, type: 2}
   contractManagerSettings:
     hodlerSettings:
       mainnetAddress: 0xe4D688Bb2d5B7F546052cB6Fef3aEd8af8AF6511

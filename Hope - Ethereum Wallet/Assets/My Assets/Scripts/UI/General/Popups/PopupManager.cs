@@ -52,7 +52,8 @@ public sealed class PopupManager
 		TransactionWarningPopup.Factory transactionWarningPopupFactory,
 		HopeUpdatePopup.Factory hopeUpdatePopupFactory,
         EnterTrezorPINPopup.Factory enterTrezorPinPopupFactory,
-		HelpPopup.Factory helpPopupFactory)
+		HelpPopup.Factory helpPopupFactory,
+		MarketPopup.Factory marketPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
 							   addTokenPopupFactory,
@@ -77,7 +78,8 @@ public sealed class PopupManager
 							   transactionWarningPopupFactory,
 							   hopeUpdatePopupFactory,
                                enterTrezorPinPopupFactory,
-							   helpPopupFactory);
+							   helpPopupFactory,
+							   marketPopupFactory);
     }
 
     /// <summary>

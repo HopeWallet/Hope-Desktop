@@ -46,6 +46,7 @@ public sealed class TopBarButtons : MonoBehaviour
 	private void ButtonClicked(int index)
 	{
         PopupBase popup = null;
+
 		switch (index)
 		{
 			case 0:
@@ -55,7 +56,7 @@ public sealed class TopBarButtons : MonoBehaviour
 					popup = popupManager.GetPopup<LockPRPSPopup>();
 				break;
 			case 1:
-				//Open market 
+					popup = popupManager.GetPopup<MarketPopup>();
 				break;
 			case 2:
 				    popup = popupManager.GetPopup<SendAssetPopup>();
@@ -64,9 +65,6 @@ public sealed class TopBarButtons : MonoBehaviour
 				    popup = popupManager.GetPopup<ReceiveAssetPopup>();
 				break;
 		}
-
-        if (popup == null)
-            return;
 
 		buttons[index].interactable = false;
         popup.OnPopupClose(() => buttons[index].interactable = true);
