@@ -246,5 +246,5 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// <para> <see cref="InvalidToken"/> - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available. </para>
     /// <para> <see cref="ValidToken"/> - The entered address was searched for and found, therefore the image and symbol text can be displayed. </para>
     /// </summary>
-    public enum Status { Loading, NoTokenFound, InvalidToken, ValidToken };
+    public enum Status { Loading, NoTokenFound, InvalidToken, ValidToken, MultipleTokensFound };
 }
