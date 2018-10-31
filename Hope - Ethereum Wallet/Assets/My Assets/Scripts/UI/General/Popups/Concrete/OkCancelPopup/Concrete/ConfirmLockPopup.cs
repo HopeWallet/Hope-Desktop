@@ -63,15 +63,6 @@ public sealed class ConfirmLockPopup : ConfirmTransactionPopupBase<ConfirmLockPo
     protected override void OnOkClicked()
     {
         if (!tradableAssetManager.TradableAssets.Any(pair => pair.Value.AssetAddress.EqualsIgnoreCase(dubiContract.ContractAddress)))
-        {
-            if (tokenListManager.ContainsToken(dubiContract.ContractAddress))
-                tokenListManager.UpdateToken(dubiContract.ContractAddress, true, true);
-            else
-                tokenListManager.AddToken(dubiContract.ContractAddress, "Decentralized Universal Basic Income", "DUBI", 18, true, true);
-
-            tokenListManager.OldTokenList.Clear();
-
-            tokenContractManager.AddAndUpdateToken(tokenListManager.GetToken(dubiContract.ContractAddress).TokenInfo);
-        }
+            tokenContractManager.AddAndUpdateToken(tokenListManager.GetToken(dubiContract.ContractAddress));
     }
 }

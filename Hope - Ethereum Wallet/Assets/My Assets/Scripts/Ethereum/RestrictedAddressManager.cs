@@ -30,6 +30,6 @@ public class RestrictedAddressManager
     public bool IsRestrictedAddress(string address)
     {
         return constantRestrictedAddresses.ContainsIgnoreCase(address)
-				|| tokenListManager.TokenList.Select(token => token.TokenInfo.Address).ContainsIgnoreCase(address);
+				|| tokenListManager.TokenList.Select(token => token.Address).ContainsIgnoreCase(address);
     }
 }

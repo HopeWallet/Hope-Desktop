@@ -64,10 +64,10 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnOkClicked()
     {
-        if (!tokenListManager.ContainsToken(addressField.Text))
-            tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, true, true);
-        else
-            tokenListManager.UpdateToken(addressField.Text, true, true);
+        //if (!tokenListManager.ContainsToken(addressField.Text))
+        //    tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, true, true);
+        //else
+        //    tokenListManager.UpdateToken(addressField.Text, true, true);
 
         tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
     }
@@ -133,8 +133,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         if (!existsInTokenList)
             return;
 
-        AddableTokenInfo addableToken = tokenListManager.GetToken(addressField.Text);
-        TokenInfo tokenInfo = addableToken.TokenInfo;
+        TokenInfo tokenInfo = tokenListManager.GetToken(addressField.Text);
         name = tokenInfo.Name;
 		symbol = tokenInfo.Symbol;
 		decimals = tokenInfo.Decimals;
@@ -230,7 +229,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
             else
             {
                 tokenName.text = symbol;
-                tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, false, false);
+                tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value);
 
                 OnStatusChanged?.Invoke(Status.ValidToken);
 
