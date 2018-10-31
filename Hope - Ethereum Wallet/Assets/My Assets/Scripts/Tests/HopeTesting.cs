@@ -80,8 +80,72 @@ using System.Net;
 using Trezor.Net.Contracts.Ethereum;
 using Trezor.Net.Contracts.Bitcoin;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public sealed class HopeTesting : MonoBehaviour
 {
+    public sealed class Token
+    {
+        public string address;
+        public string name;
+        public string symbol;
+        public long decimals;
+    }
+
+    public TextAsset json;
+
+    private readonly List<Token> tokens = new List<Token>();
+
+    private const int COUNT = 1000;
+
+    private static int counter;
+
+#if UNITY_EDITOR
+    [ContextMenu("SAVE")]
+    public void Save()
+    {
+        File.WriteAllText(Application.dataPath + "/tokens.txt", JsonUtils.Serialize(tokens));
+        AssetDatabase.Refresh();
+    }
+#endif
+
+    private void Start()
+    {
+        //var text = json.text;
+        //var jArray = JsonUtils.DeserializeDynamicCollection(text);
+
+        //for (int i = 0; i < jArray.Count; i++)
+        //    Scan((string)jArray[i].address);
+
+        SimpleContractQueries.QueryBytesOutput<ERC20.Queries.Name>("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", null).OnSuccess(name => UnityEngine.Debug.Log(Encoding.ASCII.GetString(FromHex(name.Value.ToHex()))));
+    }
+
+    public byte[] FromHex(string hex)
+    {
+        hex = hex.Replace("-", "");
+        byte[] raw = new byte[hex.Length / 2];
+        for (int i = 0; i < raw.Length; i++)
+        {
+            raw[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+        }
+        return raw;
+    }
+
+    private void Scan(string address)
+    {
+        ERC20 erc20 = new ERC20(address);
+        erc20.OnInitializationSuccessful(() =>
+        {
+            tokens.Add(new Token { address = erc20.ContractAddress, name = erc20.Name, symbol = erc20.Symbol, decimals = erc20.Decimals ?? 18 });
+            //UnityEngine.Debug.Log(++counter + " => " + erc20.Symbol);
+            //UnityEngine.Debug.Log(erc20.ContractAddress + " " + erc20.Name + " " + erc20.Symbol + " " + erc20.Decimals);
+        });
+
+        erc20.OnInitializationUnsuccessful(() => UnityEngine.Debug.Log("UNSUCCESSFUL => " + erc20.ContractAddress));
+    }
+
     //public string code;
 
     //private string previousCode;
