@@ -86,21 +86,37 @@ using UnityEditor;
 
 public sealed class HopeTesting : MonoBehaviour
 {
+    public Image image;
+
+    [Serializable]
     public sealed class Token
     {
         public string address;
         public string name;
         public string symbol;
-        public long decimals;
+        public int? decimals;
+
+        //public TokenImage tokenImage;
+    }
+
+    [Serializable]
+    public sealed class TokenImage
+    {
+        public int width;
+        public int height;
+        public TextureFormat textureFormat;
+        public string rawData;
     }
 
     public TextAsset json;
+    public TextAsset newTextAsset;
 
     private readonly List<Token> tokens = new List<Token>();
 
-    private const int COUNT = 1000;
+    private int counter = 0;
 
-    private static int counter;
+    [Inject]
+    private TradableAssetImageManager tradableAssetImageManager;
 
 #if UNITY_EDITOR
     [ContextMenu("SAVE")]
@@ -111,6 +127,22 @@ public sealed class HopeTesting : MonoBehaviour
     }
 #endif
 
+    [ContextMenu("Load")]
+    public void LoadData()
+    {
+        var text = newTextAsset.text;
+        var jArray = JsonUtils.DeserializeDynamicCollection(text);
+
+        var tokenImage = jArray[0].tokenImage;
+
+        var rawData = ((string)tokenImage.rawData).GetBase64Bytes();
+        Texture2D texture = new Texture2D((int)tokenImage.width, (int)tokenImage.height, (TextureFormat)tokenImage.textureFormat, false);
+        texture.LoadRawTextureData(rawData);
+        texture.Apply();
+
+        image.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new UnityEngine.Vector2(0.5f, 0.5f));
+    }
+
     private void Start()
     {
         //var text = json.text;
@@ -119,7 +151,35 @@ public sealed class HopeTesting : MonoBehaviour
         //for (int i = 0; i < jArray.Count; i++)
         //    Scan((string)jArray[i].address);
 
-        SimpleContractQueries.QueryBytesOutput<ERC20.Queries.Name>("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", null).OnSuccess(name => UnityEngine.Debug.Log(Encoding.ASCII.GetString(FromHex(name.Value.ToHex()))));
+        //tradableAssetImageManager.LoadImage("PRPS", img =>
+        //{
+        //    //img.texture.GetRawTextureData().GetBase64String().Log();
+
+        //    img.texture.width.Log();
+        //    img.texture.height.Log();
+        //    img.texture.format.Log();
+
+        //    File.WriteAllText(Application.dataPath + "/prps.txt", img.texture.GetRawTextureData().GetBase64String());
+        //    AssetDatabase.Refresh();
+
+        //    //Texture2D texture = new Texture2D(img.texture.width, img.texture.height, img.texture.format, false);
+        //    //texture.LoadRawTextureData(img.texture.GetRawTextureData().GetBase64String().GetBase64Bytes());
+        //    //texture.Apply();
+
+        //    //image.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new UnityEngine.Vector2(0.5f, 0.5f));
+        //});
+        //tradableAssetImageManager.LoadImage("SFDOHSDFOUHSUOH", img =>
+        //{
+        //    defaultImage = img;
+        //    //Scan("0xa4e8c3ec456107ea67d3075bf9e3df3a75823db0");
+        //    //Scan("0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2");
+
+        //var text = json.text;
+        //var jArray = JsonUtils.DeserializeDynamicCollection(text);
+
+        //for (int i = 0; i < jArray.Count; i++)
+        //    Scan((string)jArray[i].address);
+        //});
     }
 
     public byte[] FromHex(string hex)
@@ -135,15 +195,93 @@ public sealed class HopeTesting : MonoBehaviour
 
     private void Scan(string address)
     {
-        ERC20 erc20 = new ERC20(address);
-        erc20.OnInitializationSuccessful(() =>
+        Token token = new Token { address = address };
+        SimpleContractQueries.QueryStringOutput<ERC20.Queries.Name>(address, null).OnSuccess(name =>
         {
-            tokens.Add(new Token { address = erc20.ContractAddress, name = erc20.Name, symbol = erc20.Symbol, decimals = erc20.Decimals ?? 18 });
-            //UnityEngine.Debug.Log(++counter + " => " + erc20.Symbol);
-            //UnityEngine.Debug.Log(erc20.ContractAddress + " " + erc20.Name + " " + erc20.Symbol + " " + erc20.Decimals);
+            if (string.IsNullOrEmpty(token.symbol) && !string.IsNullOrEmpty(name.Value))
+                token.symbol = name.Value;
+            if (!string.IsNullOrEmpty(name.Value))
+                token.name = name.Value;
+            UpdateToken(token);
         });
+        SimpleContractQueries.QueryStringOutput<ERC20.Queries.Symbol>(address, null).OnSuccess(symbol =>
+        {
+            if (string.IsNullOrEmpty(token.name) && !string.IsNullOrEmpty(symbol.Value))
+                token.name = symbol.Value;
+            if (!string.IsNullOrEmpty(symbol.Value))
+                token.symbol = symbol.Value;
+            UpdateToken(token);
+        });
+        SimpleContractQueries.QueryUInt256Output<ERC20.Queries.Decimals>(address, null).OnSuccess(decimals =>
+        {
+            token.decimals = (int?)decimals.Value;
+            UpdateToken(token);
+        });
+        SimpleContractQueries.QueryBytesOutput<ERC20.Queries.Name>(address, null).OnSuccess(name =>
+        {
+            string strName = null;
+            if (!IsEmpty(name.Value))
+            {
+                strName = Encoding.ASCII.GetString(FromHex(name.Value.ToHex().TrimEnd('0')));
+                if (string.IsNullOrEmpty(token.symbol) && !string.IsNullOrEmpty(strName))
+                    token.symbol = strName;
+                if (!string.IsNullOrEmpty(strName))
+                    token.name = strName;
+            }
+            UpdateToken(token);
+        });
+        SimpleContractQueries.QueryBytesOutput<ERC20.Queries.Symbol>(address, null).OnSuccess(symbol =>
+        {
+            string strSymbol = null;
+            if (!IsEmpty(symbol.Value))
+            {
+                strSymbol = Encoding.ASCII.GetString(FromHex(symbol.Value.ToHex().TrimEnd('0')));
+                if (string.IsNullOrEmpty(token.name) && !string.IsNullOrEmpty(strSymbol))
+                    token.name = strSymbol;
+                if (!string.IsNullOrEmpty(strSymbol))
+                    token.symbol = strSymbol;
+            }
 
-        erc20.OnInitializationUnsuccessful(() => UnityEngine.Debug.Log("UNSUCCESSFUL => " + erc20.ContractAddress));
+            UpdateToken(token);
+        });
+    }
+
+    private bool IsEmpty(byte[] array)
+    {
+        if (array == null)
+            return true;
+
+        for (int i = 0; i < array.Length - 1; i++)
+        {
+            if (array[i] != 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    private void UpdateToken(Token token)
+    {
+        if (!string.IsNullOrEmpty(token.symbol) && !string.IsNullOrEmpty(token.name) && token.decimals.HasValue)
+        {
+            //if (token.tokenImage == null)
+            //{
+            //    tradableAssetImageManager.LoadImage(token.symbol, img =>
+            //    {
+            //        if (img != defaultImage)
+            //        {
+            //            token.tokenImage = new TokenImage { width = img.texture.width, height = img.texture.height, textureFormat = img.texture.format, rawData = img.texture.GetRawTextureData().GetBase64String() };
+            //        }
+            //    });
+            //}
+
+            if (tokens.Contains(token))
+                return;
+
+            tokens.Add(token);
+
+            UnityEngine.Debug.Log(++counter);
+        }
     }
 
     //public string code;
