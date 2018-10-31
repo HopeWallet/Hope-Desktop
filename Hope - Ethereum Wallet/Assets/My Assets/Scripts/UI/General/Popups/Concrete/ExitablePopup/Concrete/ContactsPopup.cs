@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Zenject;
 using System.Linq;
 using System;
+using UnityEngine.EventSystems;
 
 public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 {
@@ -49,6 +50,7 @@ public sealed class ContactsPopup : ExitablePopupComponent<ContactsPopup>
 		addContactButton.onClick.AddListener(AddContact);
 		confirmButton.onClick.AddListener(ConfirmButtonClicked);
 		sortByDropdown.onValueChanged.AddListener(ListOrderChanged);
+
 		searchBar.OnInputUpdated += SearchBarChanged;
 
 		AddContactButtons();

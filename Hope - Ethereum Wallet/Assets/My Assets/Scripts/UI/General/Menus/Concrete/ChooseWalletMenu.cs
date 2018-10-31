@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -11,31 +12,47 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
     public static event Action OnAppLoaded;
 
 	[SerializeField] private Button ledgerButton, trezorButton, hopeButton;
+	[SerializeField] private TMP_Dropdown networkSettingDropdown;
 
     private UserWalletManager userWalletManager;
     private HopeWalletInfoManager walletInfoManager;
+	private EthereumNetworkManager.Settings ethereumNetworkSettings;
 
-    /// <summary>
-    /// Adds the required wallet dependencies.
-    /// </summary>
-    /// <param name="userWalletManager"> The active UserWalletManager. </param>
-    /// <param name="walletInfoManager"> The avtive HopeWalletInfoManager. </param>
-    [Inject]
-    public void Construct(UserWalletManager userWalletManager, HopeWalletInfoManager walletInfoManager)
+	/// <summary>
+	/// Adds the required wallet dependencies.
+	/// </summary>
+	/// <param name="userWalletManager"> The active UserWalletManager. </param>
+	/// <param name="walletInfoManager"> The avtive HopeWalletInfoManager. </param>
+	/// <param name="ethereumNetworkSettings"> The avtive EthereumNetworkManager.Settings. </param>
+	[Inject]
+    public void Construct(
+		UserWalletManager userWalletManager,
+		HopeWalletInfoManager walletInfoManager,
+		EthereumNetworkManager.Settings ethereumNetworkSettings)
     {
         this.userWalletManager = userWalletManager;
         this.walletInfoManager = walletInfoManager;
-    }
+		this.ethereumNetworkSettings = ethereumNetworkSettings;
 
-    /// <summary>
-    /// Adds the button listeners on start.
-    /// </summary>
-    private void Start()
-    {
-        ledgerButton.onClick.AddListener(OpenLedgerWallet);
+		ethereumNetworkSettings.networkType = EthereumNetworkManager.NetworkType.Mainnet;
+	}
+
+	/// <summary>
+	/// Adds the button listeners on start.
+	/// </summary>
+	private void Start()
+	{
+		ledgerButton.onClick.AddListener(OpenLedgerWallet);
 		trezorButton.onClick.AddListener(OpenTrezorWallet);
 		hopeButton.onClick.AddListener(OpenHopeWallet);
-    }
+		networkSettingDropdown.onValueChanged.AddListener((value) =>
+		{
+			if (value == 0)
+				ethereumNetworkSettings.networkType = EthereumNetworkManager.NetworkType.Mainnet;
+			else
+				ethereumNetworkSettings.networkType = EthereumNetworkManager.NetworkType.Rinkeby;
+		});
+	}
 
     private void OnEnable()
     {
