@@ -153,4 +153,19 @@ public static class SimpleContractQueries
     {
         return ContractUtils.QueryContract<TFunc, Bool>(contractAddress, senderAddress, functionInput);
     }
+
+    /// <summary>
+    /// Queries a contract function which returns a <see cref="Bytes"/> type.
+    /// </summary>
+    /// <typeparam name="TFunc"> The <see cref="ContractFunction"/> to execute which will return a <see cref="Bytes"/> type. </typeparam>
+    /// <param name="contractAddress"> The contract address of the function to execute. </param>
+    /// <param name="senderAddress"> The address sending the query. </param>
+    /// <param name="functionInput"> The input parameters to pass to the <see cref="ContractFunction"/>. </param>
+    public static EthCallPromise<Bytes> QueryBytesOutput<TFunc>(
+        string contractAddress,
+        string senderAddress,
+        params object[] functionInput) where TFunc : ContractFunction
+    {
+        return ContractUtils.QueryContract<TFunc, Bytes>(contractAddress, senderAddress, functionInput);
+    }
 }

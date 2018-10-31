@@ -867,6 +867,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff9efd7a0b8d9b640bf81278f04e292e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 0}
+  json: {fileID: 4900000, guid: 57171d9da1ad7724f904dedc4aa9e185, type: 3}
+  newTextAsset: {fileID: 4900000, guid: 6c8068f2b87ff42459f0734d66335c20, type: 3}
 --- !u!224 &1421075210 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224321212801133812, guid: f8ccba69336d4004c976f9c7d2f97c87,
