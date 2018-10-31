@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 114868781102304962}
   - component: {fileID: 114152441811511418}
   m_Layer: 5
-  m_Name: TokenList
+  m_Name: TokenList_Section
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2663,6 +2663,7 @@ MonoBehaviour:
   invalidTokenSection: {fileID: 1324449946490254}
   validTokenSection: {fileID: 1073783746036986}
   addTokenButton: {fileID: 1859560297000552}
+  tokenListSection: {fileID: 1555704503602202}
 --- !u!114 &114846603924138022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4018,7 +4019,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2940.3032}
+  m_AnchoredPosition: {x: 0, y: 5241.411}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1.0075}
 --- !u!224 &224923867527536194

@@ -12,6 +12,7 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 	[SerializeField] private GameObject invalidTokenSection;
 	[SerializeField] private GameObject validTokenSection;
 	[SerializeField] private GameObject addTokenButton;
+	[SerializeField] private GameObject tokenListSection;
 
 	private AddTokenPopup.Status previousStatus;
 
@@ -58,6 +59,9 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 			case AddTokenPopup.Status.ValidToken:
 				ChangeStatus(validToken: true);
 				break;
+			case AddTokenPopup.Status.MultipleTokensFound:
+				ChangeStatus(tokenList: true);
+				break;
 		}
 
 		previousStatus = tokenPopupStatus;
@@ -70,12 +74,14 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 	/// <param name="noTokenFound"> Whether the noTokenFoundSection should appear </param>
 	/// <param name="invalidToken"> Whether the invalidTokenSection should appear </param>
 	/// <param name="validToken"> Whether the validTokenSection should appear </param>
-	private void ChangeStatus(bool loading = false, bool noTokenFound = false, bool invalidToken = false, bool validToken = false)
+	/// <param name="tokenList"> Whether the tokenList should appear </param>
+	private void ChangeStatus(bool loading = false, bool noTokenFound = false, bool invalidToken = false, bool validToken = false, bool tokenList = false)
 	{
 		AnimateSection(loadingIcon, loading);
 		AnimateSection(noTokenFoundSection, noTokenFound);
 		AnimateSection(invalidTokenSection, invalidToken);
 		AnimateSection(validTokenSection, validToken);
+		AnimateSection(tokenListSection, tokenList);
 	}
 
 	/// <summary>
