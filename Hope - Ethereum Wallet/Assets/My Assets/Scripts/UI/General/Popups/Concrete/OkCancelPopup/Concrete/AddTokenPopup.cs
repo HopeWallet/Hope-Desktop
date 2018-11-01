@@ -4,7 +4,9 @@ using TMPro;
 using Zenject;
 using UnityEngine;
 using System;
+using System.Linq;
 using static ERC20.Queries;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class which is manages the popup for adding a token to the list of tokens.
@@ -17,15 +19,22 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenName;
 
+    private readonly List<AddableTokenButton> addableTokens = new List<AddableTokenButton>();
+
     private TokenListManager tokenListManager;
     private TokenContractManager tokenContractManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
+    private AddableTokenButton.Factory addableTokenButtonFactory;
 
     new private string name;
     private string symbol;
     private int? decimals;
     private dynamic balance;
+
+    private bool isInvalidAddress;
+
+    private const int MAX_TOKEN_COUNT = 10;
 
     /// <summary> 
     /// Injects dependencies into this popup.
@@ -39,12 +48,14 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         TokenListManager tokenListManager,
         TokenContractManager tokenContractManager,
         TradableAssetImageManager tradableAssetImageManager,
-        UserWalletManager userWalletManager)
+        UserWalletManager userWalletManager,
+        AddableTokenButton.Factory addableTokenButtonFactory)
     {
         this.tokenListManager = tokenListManager;
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
+        this.addableTokenButtonFactory = addableTokenButtonFactory;
     }
 
     /// <summary>
@@ -92,26 +103,48 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     private void OnAddressChanged()
     {
-        addressField.Error = !AddressUtils.IsValidEthereumAddress(addressField.Text);
+        isInvalidAddress = !AddressUtils.IsValidEthereumAddress(addressField.Text);
 
-		if (addressField.Error)
-			CheckForInvalidAddress();
+		if (isInvalidAddress)
+			CheckInvalidAddress();
 		else
-			CheckForValidAddress();
+			CheckValidAddress();
 	}
 
-    private void CheckForInvalidAddress()
+    private void CheckInvalidAddress()
     {
-		if (!addressField.Error)
+		if (!isInvalidAddress)
 			return;
 
-        OnStatusChanged?.Invoke(Status.NoTokenFound);
-        okButton.interactable = false;
+        var loweredText = addressField.Text.ToLower();
+        var possibleTokens = tokenListManager.TokenList.Where(token => token.Name.ToLower().Contains(loweredText) || token.Symbol.ToLower().StartsWith(loweredText)).ToList();
+
+        if (possibleTokens.Count == 0)
+        {
+            OnStatusChanged?.Invoke(Status.NoTokenFound);
+            okButton.interactable = false;
+        }
+        else if (possibleTokens.Count > MAX_TOKEN_COUNT)
+        {
+            OnStatusChanged?.Invoke(Status.TooManyResults);
+            okButton.interactable = false;
+        }
+        else
+        {
+            DisplayAddableTokens(possibleTokens);
+        }
     }
 
-    private void CheckForValidAddress()
+    private void DisplayAddableTokens(List<TokenInfo> addableTokens)
     {
-        if (addressField.Error)
+        addableTokens.Sort((t1, t2) => t1.Symbol.CompareTo(t2.Symbol));
+
+        OnStatusChanged?.Invoke(Status.MultipleTokensFound);
+    }
+
+    private void CheckValidAddress()
+    {
+        if (isInvalidAddress)
             return;
 
         addressField.InputFieldBase.interactable = false;
@@ -166,7 +199,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         erc20.OnInitializationUnsuccessful(() =>
         {
             SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), userWalletManager.GetWalletAddress())
-                                 .OnSuccess(balance => CheckStatus(null, null, null, balance))
+                                 .OnSuccess(balance => CheckStatus(null, null, null, balance.Value))
                                  .OnError(_ => CheckStatus(null, null, null, null));
         });
     }
@@ -222,5 +255,5 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// <para> <see cref="InvalidToken"/> - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available. </para>
     /// <para> <see cref="ValidToken"/> - The entered address was searched for and found, therefore the image and symbol text can be displayed. </para>
     /// </summary>
-    public enum Status { Loading, NoTokenFound, InvalidToken, ValidToken, MultipleTokensFound };
+    public enum Status { Loading, NoTokenFound, InvalidToken, ValidToken, TooManyResults, MultipleTokensFound };
 }
