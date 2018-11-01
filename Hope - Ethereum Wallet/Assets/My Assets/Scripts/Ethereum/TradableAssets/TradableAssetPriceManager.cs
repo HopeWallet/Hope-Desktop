@@ -52,6 +52,9 @@ public sealed class TradableAssetPriceManager : IPeriodicUpdater
 
     private void UpdatePrice(TradableAsset tradableAsset)
     {
+        if (tradableAsset == null)
+            return;
+
         OnPriceUpdateStarted?.Invoke();
 
         coinMarketCapDataManager.GetCoinPrice(tradableAsset.AssetSymbol)

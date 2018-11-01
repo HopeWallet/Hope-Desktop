@@ -19,15 +19,15 @@ namespace Hope.Utils.Ethereum
         /// </summary>
         public enum GasPriceTarget { Slow, Standard, Fast };
 
-        private static EthereumNetwork EthereumNetwork;
+        private static EthereumNetworkManager EthereumNetworkManager;
 
         /// <summary>
         /// Initializes the <see cref="GasUtils"/> by assigning the reference to the active network.
         /// </summary>
-        /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
+        /// <param name="ethereumNetworkManager"> The active <see cref="global::EthereumNetworkManager"/>. </param>
         public GasUtils(EthereumNetworkManager ethereumNetworkManager)
         {
-            EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+            EthereumNetworkManager = ethereumNetworkManager;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Hope.Utils.Ethereum
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
         private static IEnumerator _EstimateGasLimitCoroutine(EthCallPromise<BigInteger> promise, CallInput callInput, bool overEstimate)
         {
-            var request = new EthEstimateGasUnityRequest(EthereumNetwork.NetworkUrl);
+            var request = new EthEstimateGasUnityRequest(EthereumNetworkManager.CurrentNetwork.NetworkUrl);
             yield return request.SendRequest(callInput);
 
             promise.Build(request, () => overEstimate ? (request.Result.Value * 100 / 90) : request.Result.Value);
@@ -139,7 +139,7 @@ namespace Hope.Utils.Ethereum
         /// <returns> The time taken to retrieve the estimated gas limit. </returns>
         private static IEnumerator _EstimateGasPriceCoroutine(EthCallPromise<BigInteger> promise, GasPriceTarget gasPriceTarget)
         {
-            var request = new EthGasPriceUnityRequest(EthereumNetwork.NetworkUrl);
+            var request = new EthGasPriceUnityRequest(EthereumNetworkManager.CurrentNetwork.NetworkUrl);
             yield return request.SendRequest();
 
             promise.Build(request, () => ModifyGasPrice(gasPriceTarget, request.Result.Value));

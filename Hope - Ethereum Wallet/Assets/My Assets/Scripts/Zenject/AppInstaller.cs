@@ -49,6 +49,7 @@ public sealed class AppInstaller : MonoInstaller<AppInstaller>
         Container.Bind<ContractUtils>().AsSingle().NonLazy();
         Container.Bind<GasUtils>().AsSingle().NonLazy();
         Container.Bind<EthUtils>().AsSingle().NonLazy();
+        Container.Bind<TransactionUtils>().AsSingle().NonLazy();
 
         Container.Bind<MainThreadExecutor>().AsSingle().NonLazy();
 

@@ -13,7 +13,7 @@ namespace Hope.Utils.Ethereum
     /// </summary>
     public class ContractUtils
     {
-        private static EthereumNetwork EthereumNetwork;
+        private static EthereumNetworkManager EthereumNetworkManager;
         private static EthereumPendingTransactionManager EthereumPendingTransactionManager;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Hope.Utils.Ethereum
         /// <param name="ethereumPendingTransactionManager"> The active <see cref="EthereumPendingTransactionManager"/>. </param>
         public ContractUtils(EthereumNetworkManager ethereumNetworkManager, EthereumPendingTransactionManager ethereumPendingTransactionManager)
         {
-            EthereumNetwork = ethereumNetworkManager.CurrentNetwork;
+            EthereumNetworkManager = ethereumNetworkManager;
             EthereumPendingTransactionManager = ethereumPendingTransactionManager;
         }
 
@@ -81,7 +81,7 @@ namespace Hope.Utils.Ethereum
             var promise = new EthTransactionPromise(EthereumPendingTransactionManager, transactionInput.From, message);
             yield return signedUnityRequest.SignAndSendTransaction(transactionInput);
 
-            promise.Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetwork.NetworkUrl);
+            promise.Build(signedUnityRequest, () => signedUnityRequest.Result, () => EthereumNetworkManager.CurrentNetwork.NetworkUrl);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Hope.Utils.Ethereum
             string senderAddress,
             params object[] functionInput) where TFunc : ContractFunction where TOut : IFunctionOutputDTO, new()
         {
-            var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetwork.NetworkUrl, senderAddress);
+            var queryRequest = new QueryUnityRequest<TFunc, TOut>(EthereumNetworkManager.CurrentNetwork.NetworkUrl, senderAddress);
             yield return queryRequest.Query(ContractFunction.CreateFunction<TFunc>(functionInput), contractAddress);
 
             promise.Build(queryRequest, () => queryRequest.Result);

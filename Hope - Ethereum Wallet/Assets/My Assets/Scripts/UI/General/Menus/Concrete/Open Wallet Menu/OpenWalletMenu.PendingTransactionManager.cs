@@ -88,6 +88,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 
         public void Reset()
         {
+            viewOnBrowserButton.onClick.RemoveAllListeners();
             ethereumPendingTransactionManager.OnNewTransactionPending -= TransactionStarted;
             ethereumPendingTransactionManager.OnTransactionSuccessful -= OnTransactionSuccessful;
             ethereumPendingTransactionManager.OnTransactionUnsuccessful -= OnTransactionUnsuccessful;

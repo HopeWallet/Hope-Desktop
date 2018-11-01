@@ -10,8 +10,19 @@ namespace Hope.Utils.Ethereum
     /// <summary>
     /// Class which extends the nethereum unity transactions to allow for more actions on successful transactions and unsuccessful ones.
     /// </summary>
-    public static class TransactionUtils
+    public class TransactionUtils
     {
+        private static EthereumNetworkManager EthereumNetworkManager;
+
+        /// <summary>
+        /// Initializes the <see cref="TransactionUtils"/> by assigning the reference to the active network.
+        /// </summary>
+        /// <param name="ethereumNetworkManager"> The active <see cref="global::EthereumNetworkManager"/>. </param>
+        public TransactionUtils(EthereumNetworkManager ethereumNetworkManager)
+        {
+            EthereumNetworkManager = ethereumNetworkManager;
+        }
+
         /// <summary>
         /// Gets the transaction count of an Ethereum address.
         /// </summary>
@@ -48,7 +59,7 @@ namespace Hope.Utils.Ethereum
             if (!AddressUtils.IsValidEthereumAddress(address))
                 throw new ArgumentException("Expected valid Ethereum address.");
 
-            var request = new EthGetTransactionCountUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+            var request = new EthGetTransactionCountUnityRequest(EthereumNetworkManager.CurrentNetwork.NetworkUrl);
             yield return request.SendRequest(address, BlockParameter.CreateLatest());
 
             promise.Build(request, () => request.Result.Value);
@@ -65,7 +76,7 @@ namespace Hope.Utils.Ethereum
             if (!AddressUtils.IsValidTransactionHash(txHash))
                 throw new ArgumentException("Expected valid Ethereum transaction hash.");
 
-            var request = new EthGetTransactionByHashUnityRequest(EthereumNetworkManager.Instance.CurrentNetwork.NetworkUrl);
+            var request = new EthGetTransactionByHashUnityRequest(EthereumNetworkManager.CurrentNetwork.NetworkUrl);
             yield return request.SendRequest(txHash);
 
             promise.Build(request, () => request.Result);
