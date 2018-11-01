@@ -1,5 +1,4 @@
-﻿using Hope.Utils.Ethereum;
-using System.Linq;
+﻿using System.Linq;
 
 /// <summary>
 /// Class which manages the restricted addresses which cannot have tokens/eth sent to and cannot have contacts created from.
@@ -29,7 +28,6 @@ public class RestrictedAddressManager
     /// <returns> True if the address is restricted and cannot be used. </returns>
     public bool IsRestrictedAddress(string address)
     {
-        return constantRestrictedAddresses.ContainsIgnoreCase(address)
-				|| tokenListManager.TokenList.Select(token => token.Address).ContainsIgnoreCase(address);
+        return constantRestrictedAddresses.ContainsIgnoreCase(address = address.ToLower()) || tokenListManager.TokenList.Select(token => token.Address).ContainsIgnoreCase(address);
     }
 }

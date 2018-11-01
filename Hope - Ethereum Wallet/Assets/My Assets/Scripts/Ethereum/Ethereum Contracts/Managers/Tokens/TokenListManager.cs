@@ -1,5 +1,4 @@
-﻿using Hope.Utils.Ethereum;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,8 +7,6 @@ public sealed class TokenListManager
     private readonly SecurePlayerPrefList<TokenInfo> addableTokens;
 
     public List<TokenInfo> TokenList => addableTokens.ToList();
-
-    public List<TokenInfo> OldTokenList { get; } = new List<TokenInfo>();
 
     public TokenListManager(
         TokenContractManager tokenContractManager,
@@ -31,7 +28,6 @@ public sealed class TokenListManager
             return;
 
         addableTokens.Add(new TokenInfo(address, name, symbol, decimals));
-        OldTokenList.Add(new TokenInfo(address, name, symbol, decimals));
     }
 
     //public void UpdateToken(string address, bool enabled, bool listed)
@@ -93,34 +89,32 @@ public sealed class TokenListManager
         if (addableTokens.Count > 0)
             return;
 
-        //if (ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet)
-        //{
-        //    var defaultTokenList = Resources.Load("Data/default_token_list") as TextAsset;
-        //    var deserializedData = JsonUtils.DeserializeDynamicCollection(defaultTokenList.text);
+        addableTokens.Add(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
+        addableTokens.Add(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
+        tokenContractManager.AddToken(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
+        tokenContractManager.AddToken(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
 
-        //    for (int i = 0; i < deserializedData.Count; i++)
-        //    {
-        //        var obj = deserializedData[i];
+        if (ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet)
+        {
+            var defaultTokenList = Resources.Load("Data/tokens") as TextAsset;
+            var deserializedData = JsonUtils.DeserializeDynamicCollection(defaultTokenList.text);
 
-        //        var address = (string)obj.address;
-        //        var symbol = (string)obj.symbol;
-        //        var name = (string)obj.name;
-        //        var decimals = (int)obj.decimals;
+            for (int i = 0; i < deserializedData.Count; i++)
+            {
+                var obj = deserializedData[i];
 
-        //        var isEnabled = address.EqualsIgnoreCase(prps.ContractAddress) || address.EqualsIgnoreCase(dubi.ContractAddress);
+                var address = (string)obj.address;
+                var symbol = (string)obj.symbol;
+                var name = (string)obj.name;
+                var decimals = (int)obj.decimals;
 
-        //        addableTokens.Add(new AddableTokenInfo(address.ToLower(), name, symbol, decimals, isEnabled, true));
+                var isEnabled = address.EqualsIgnoreCase(prps.ContractAddress) || address.EqualsIgnoreCase(dubi.ContractAddress);
 
-        //        if (isEnabled)
-        //            tokenContractManager.AddToken(new TokenInfo(address.ToLower(), name, symbol, decimals));
-        //    }
-        //}
-        //else
-        //{
-            addableTokens.Add(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
-            addableTokens.Add(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
-            tokenContractManager.AddToken(new TokenInfo(prps.ContractAddress.ToLower(), "Purpose", "PRPS", 18));
-            tokenContractManager.AddToken(new TokenInfo(dubi.ContractAddress.ToLower(), "Decentralized Universal Basic Income", "DUBI", 18));
-        //}
+                addableTokens.Add(new TokenInfo(address.ToLower(), name, symbol, decimals));
+
+                if (isEnabled)
+                    tokenContractManager.AddToken(new TokenInfo(address.ToLower(), name, symbol, decimals));
+            }
+        }
     }
 }
