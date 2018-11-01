@@ -14,19 +14,16 @@ public sealed class TradableAssetImageManager
     private readonly Sprite defaultSprite;
     private readonly Vector2 pivot;
 
-    private readonly CoinMarketCapDataManager coinList;
-
-    private readonly string imagePath;
+    private readonly CoinMarketCapDataManager coinMarketCapDataManager;
 
     /// <summary>
     /// Initializes the TradableAssetManager by getting the default sprite and initializing the dictionary.
     /// </summary>
-    /// <param name="coinList"> Class which contains the list of CoinMarketCap coins with all the ids for image lookup. </param>
-    public TradableAssetImageManager(CoinMarketCapDataManager coinList)
+    /// <param name="coinMarketCapDataManager"> Class which contains the list of CoinMarketCap coins with all the ids for image lookup. </param>
+    public TradableAssetImageManager(CoinMarketCapDataManager coinMarketCapDataManager)
     {
-        this.coinList = coinList;
+        this.coinMarketCapDataManager = coinMarketCapDataManager;
 
-        imagePath = Application.streamingAssetsPath + "/";
         pivot = new Vector2(0.5f, 0.5f);
         defaultSprite = CreateSprite(Resources.Load("UI/Graphics/Textures/Icons/AssetLogos/DEFAULT") as Texture2D);
     }
@@ -41,13 +38,7 @@ public sealed class TradableAssetImageManager
         if (LoadFromDictionary(assetSymbol, onImageReceived) || LoadFromResources(assetSymbol, onImageReceived))
             return;
 
-        LoadFromFiles(assetSymbol, image =>
-        {
-            if (image == null)
-                LoadFromWeb(assetSymbol, onImageReceived);
-            else
-                onImageReceived?.Invoke(image);
-        });
+        LoadFromWeb(assetSymbol, onImageReceived);
     }
 
     /// <summary>
@@ -57,35 +48,7 @@ public sealed class TradableAssetImageManager
     /// <param name="onImageReceived"> Action to call once the image has been received. </param>
     private void LoadFromWeb(string assetSymbol, Action<Sprite> onImageReceived)
     {
-        _DownloadImage(assetSymbol, image =>
-        {
-            if (image != null)
-                SaveImageFile(image, assetSymbol);
-
-            SaveImageToDictionary(image, assetSymbol, onImageReceived);
-        }).StartCoroutine();
-    }
-
-    /// <summary>
-    /// Loads the asset image from the Resources folder if it exists.
-    /// </summary>
-    /// <param name="assetSymbol"> The symbol of the asset to load the image for. </param>
-    /// <param name="onImageReceived"> Action to call once the image has been received. </param>
-    private void LoadFromFiles(string assetSymbol, Action<Sprite> onImageReceived)
-    {
-        if (!File.Exists(GetFilePath(assetSymbol)))
-        {
-            onImageReceived?.Invoke(null);
-            return;
-        }
-
-        _LoadFromStreamingAssets(assetSymbol, image =>
-        {
-            if (image != null)
-                SaveImageToDictionary(image, assetSymbol, onImageReceived);
-            else
-                onImageReceived?.Invoke(null);
-        }).StartCoroutine();
+        _DownloadImage(assetSymbol, image => SaveImageToDictionary(image, assetSymbol, onImageReceived)).StartCoroutine();
     }
 
     /// <summary>
@@ -150,20 +113,6 @@ public sealed class TradableAssetImageManager
     }
 
     /// <summary>
-    /// Gets the file path for an asset given its symbol.
-    /// </summary>
-    /// <param name="assetSymbol"> The symbol of the asset to get the file path for. </param>
-    /// <returns> The file path for the asset's image. </returns>
-    private string GetFilePath(string assetSymbol) => imagePath + assetSymbol.ToUpper() + ".png";
-
-    /// <summary>
-    /// Saves an image to the streaming assets folder.
-    /// </summary>
-    /// <param name="image"> The image to save. </param>
-    /// <param name="assetSymbol"> The symbol of the asset which will be saved. </param>
-    private void SaveImageFile(Texture2D image, string assetSymbol) => File.WriteAllBytes(GetFilePath(assetSymbol), image.EncodeToPNG());
-
-    /// <summary>
     /// Coroutine which downloads an image from livecoinwatch images given the symbol of the asset.
     /// </summary>
     /// <param name="assetSymbol"> The symbol of the asset image to download. </param>
@@ -172,7 +121,7 @@ public sealed class TradableAssetImageManager
     private IEnumerator _DownloadImage(string assetSymbol, Action<Texture2D> onTextureReceived)
     {
         UnityWebRequest webRequest = null;
-        int? assetId = coinList.GetCoinID(assetSymbol);
+        int? assetId = coinMarketCapDataManager.GetCoinID(assetSymbol);
 
         if (assetId.HasValue)
         {
@@ -181,19 +130,5 @@ public sealed class TradableAssetImageManager
         }
 
         onTextureReceived?.Invoke(webRequest?.isNetworkError != false || webRequest.isHttpError ? null : DownloadHandlerTexture.GetContent(webRequest));
-    }
-
-    /// <summary>
-    /// Coroutine which loads an image from the streaming assets folder.
-    /// </summary>
-    /// <param name="assetSymbol"> The symbol of the asset to load from streaming assets. </param>
-    /// <param name="onTextureReceived"> Action to call once the image has been loaded from the streaming assets. </param>
-    /// <returns> Waits for the image to be loaded from the streaming assets. </returns>
-    private IEnumerator _LoadFromStreamingAssets(string assetSymbol, Action<Texture2D> onTextureReceived)
-    {
-        var www = new WWW("file://" + GetFilePath(assetSymbol));
-        yield return www;
-
-        onTextureReceived?.Invoke(!string.IsNullOrEmpty(www.error) ? null : www.texture);
     }
 }

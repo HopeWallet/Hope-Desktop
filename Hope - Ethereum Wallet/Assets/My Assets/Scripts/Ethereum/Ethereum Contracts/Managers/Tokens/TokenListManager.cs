@@ -26,20 +26,6 @@ public sealed class TokenListManager
         addableTokens.Add(new TokenInfo(address, name, symbol, decimals));
     }
 
-    //public void UpdateToken(string address, bool enabled, bool listed)
-    //{
-    //    if (!addableTokens.Contains(address = address.ToLower()))
-    //        return;
-
-    //    AddableTokenInfo currentToken = addableTokens[address];
-    //    TokenInfo tokenInfo = currentToken.TokenInfo;
-
-    //    if (!OldTokenList.Select(token => token.TokenInfo.Address.ToLower()).Contains(address))
-    //        OldTokenList.Add(new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, currentToken.Enabled, currentToken.Listed));
-
-    //    addableTokens[address] = new AddableTokenInfo(address, tokenInfo.Name, tokenInfo.Symbol, tokenInfo.Decimals, enabled, listed);
-    //}
-
     public bool ContainsToken(string address)
     {
         return addableTokens.Contains(address.ToLower());

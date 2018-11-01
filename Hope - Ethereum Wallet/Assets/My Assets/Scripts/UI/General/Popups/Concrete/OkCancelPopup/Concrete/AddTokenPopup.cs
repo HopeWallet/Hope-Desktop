@@ -164,78 +164,68 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
 		string addressText = addressField.Text;
 
-		SimpleContractQueries.QueryStringOutput<Name>(addressText, null).OnSuccess(output => NameQueryCompleted(output.Value));
-        SimpleContractQueries.QueryStringOutput<Symbol>(addressText, null).OnSuccess(output => SymbolQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<Decimals>(addressText, null).OnSuccess(output => DecimalsQueryCompleted(output.Value));
-        SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), userWalletManager.GetWalletAddress()).OnSuccess(output => BalanceQueryCompleted(output.Value));
-    }
+        ERC20 erc20 = new ERC20(addressText);
 
-    private void NameQueryCompleted(string value)
-    {
-        name = string.IsNullOrEmpty(value) ? name : value;
-        CheckLoadStatus(ref updatedName);
-    }
-
-    private void SymbolQueryCompleted(string value)
-    {
-        symbol = string.IsNullOrEmpty(value) ? string.Empty : value;
-        name = string.IsNullOrEmpty(name) ? symbol : name;
-
-        tradableAssetImageManager.LoadImage(symbol, LogoQueryCompleted);
-
-        CheckLoadStatus(ref updatedSymbol);
-    }
-
-    private void DecimalsQueryCompleted(dynamic value)
-    {
-        decimals = value == null ? (int?)null : (int)value;
-        CheckLoadStatus(ref updatedDecimals);
-    }
-
-    private void BalanceQueryCompleted(dynamic value)
-    {
-        balance = value;
-        CheckLoadStatus(ref updatedBalance);
-    }
-
-    private void LogoQueryCompleted(Sprite value)
-    {
-        tokenIcon.sprite = value;
-        CheckLoadStatus(ref updatedLogo);
-    }
-
-    private void CheckLoadStatus(ref bool updatingVar)
-    {
-        updatingVar = true;
-
-        if (updatedName && updatedSymbol && updatedDecimals && updatedLogo && updatedBalance)
+        erc20.OnInitializationSuccessful(() =>
         {
-			addressField.InputFieldBase.interactable = true;
-
-			if (balance == null)
+            tradableAssetImageManager.LoadImage(erc20.Symbol, img =>
             {
-                OnStatusChanged?.Invoke(Status.NoTokenFound);
-            }
-            else if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
-            {
-                decimalsField.Text = string.Empty;
-                symbolField.Text = string.Empty;
+                tokenIcon.sprite = img;
 
-                OnStatusChanged?.Invoke(Status.InvalidToken);
-				symbolField.InputFieldBase.ActivateInputField();
+                CheckStatus(erc20.Symbol, erc20.Name, erc20.Decimals, 0);
+            });
+        });
 
-                okButton.interactable = false;
-            }
-            else
-            {
-                tokenName.text = symbol;
-                tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value);
+        erc20.OnInitializationUnsuccessful(() =>
+        {
+            SimpleContractQueries.QueryUInt256Output<BalanceOf>(addressText, userWalletManager.GetWalletAddress(), userWalletManager.GetWalletAddress())
+                                 .OnSuccess(balance => CheckStatus(null, null, null, balance))
+                                 .OnError(_ => CheckStatus(null, null, null, null));
+        });
+    }
 
-                OnStatusChanged?.Invoke(Status.ValidToken);
+    private void CheckStatus(string symbol, string name, int? decimals, dynamic balance)
+    {
+        addressField.InputFieldBase.interactable = true;
 
-                okButton.interactable = true;
-            }
-        }
+        this.symbol = symbol;
+        this.name = name;
+        this.decimals = decimals;
+        this.balance = balance;
+
+        if (balance == null)
+            NoTokenFound();
+        else if (string.IsNullOrEmpty(symbol) || !decimals.HasValue)
+            InvalidTokenFound();
+        else
+            ValidTokenFound();
+    }
+
+    private void NoTokenFound()
+    {
+        OnStatusChanged?.Invoke(Status.NoTokenFound);
+        okButton.interactable = false;
+    }
+
+    private void InvalidTokenFound()
+    {
+        decimalsField.Text = string.Empty;
+        symbolField.Text = string.Empty;
+
+        OnStatusChanged?.Invoke(Status.InvalidToken);
+        symbolField.InputFieldBase.ActivateInputField();
+
+        okButton.interactable = false;
+    }
+
+    private void ValidTokenFound()
+    {
+        tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? " (" + symbol + ")" : "");
+        tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value);
+
+        OnStatusChanged?.Invoke(Status.ValidToken);
+
+        okButton.interactable = true;
     }
 
     /// <summary>

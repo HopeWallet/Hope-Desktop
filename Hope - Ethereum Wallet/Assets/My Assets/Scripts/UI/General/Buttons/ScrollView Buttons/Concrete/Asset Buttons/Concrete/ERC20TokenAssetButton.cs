@@ -64,12 +64,9 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 		removingAssetPopupOpen = true;
 		removeButtonComponent.interactable = false;
 		popupManager.GetPopup<GeneralOkCancelPopup>()
-			        .SetSubText("<size=90%>Are you sure you want to remove " + symbolText.text + "?</size>\n<size=80%>You can add this back at any time.</size>")
-			        .OnOkClicked(() =>
-                    {
-                        tokenContractManager.RemoveToken(ButtonInfo.AssetAddress);
-                    })
-			        .OnPopupClose(PopupClosed);
+			        .SetSubText($"<size=90%>Are you sure you want to remove {symbolText.text}?</size>\n<size=80%>You can add this back at any time.</size>")
+			        .OnOkClicked(() => tokenContractManager.RemoveToken(ButtonInfo.AssetAddress.ToLower()))
+                    .OnPopupClose(PopupClosed);
 	}
 
 	/// <summary>
