@@ -49,7 +49,19 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     [Serializable]
     public class Settings
     {
+        public event Action<NetworkType> OnNetworkChanged;
+
         public NetworkType networkType;
+
+        /// <summary>
+        /// Changes the network type to another network.
+        /// </summary>
+        /// <param name="networkType"> The new ethereum network type. </param>
+        public void ChangeNetwork(NetworkType networkType)
+        {
+            this.networkType = networkType;
+            OnNetworkChanged?.Invoke(networkType);
+        }
     }
 
     /// <summary>

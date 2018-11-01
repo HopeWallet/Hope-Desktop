@@ -5,7 +5,7 @@ public sealed class ContactsManager
     /// <summary>
     /// The list of contacts
     /// </summary>
-    public SecurePlayerPrefList<ContactInfo> ContactList { get; }
+    public SecurePlayerPrefList<ContactInfo> ContactList { get; private set; }
 
     /// <summary>
     /// Adds contact under the newly created wallet name and address
@@ -19,10 +19,11 @@ public sealed class ContactsManager
         HopeWalletInfoManager userWalletInfoManager,
         EthereumNetworkManager.Settings networkSettings)
     {
-        ContactList = new SecurePlayerPrefList<ContactInfo>(PlayerPrefConstants.CONTACT_LIST, (int)networkSettings.networkType);
         UserWalletManager.OnWalletLoadSuccessful += () =>
         {
-			var walletAddress = userWalletManager.GetWalletAddress();
+            ContactList = new SecurePlayerPrefList<ContactInfo>(PlayerPrefConstants.CONTACT_LIST, (int)networkSettings.networkType);
+
+            var walletAddress = userWalletManager.GetWalletAddress();
 
 			if (!ContactList.Contains(walletAddress.ToLower()))
 			{

@@ -15,7 +15,7 @@ public sealed class TokenContractManager
     private readonly TradableAssetImageManager tradableAssetImageManager;
     private readonly UserWalletManager userWalletManager;
 
-    private readonly SecurePlayerPrefList<TokenInfo> tokens;
+    private SecurePlayerPrefList<TokenInfo> tokens;
 
     /// <summary>
     /// The list of token info.
@@ -39,6 +39,7 @@ public sealed class TokenContractManager
         this.userWalletManager = userWalletManager;
 
         tokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.SAVED_TOKEN_CONTRACTS, (int)networkSettings.networkType);
+        networkSettings.OnNetworkChanged += network => tokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.SAVED_TOKEN_CONTRACTS, (int)network);
     }
 
     /// <summary>

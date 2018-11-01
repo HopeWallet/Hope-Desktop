@@ -4,22 +4,18 @@ using UnityEngine;
 
 public sealed class TokenListManager
 {
-    private readonly SecurePlayerPrefList<TokenInfo> addableTokens;
+    private SecurePlayerPrefList<TokenInfo> addableTokens;
 
     public List<TokenInfo> TokenList => addableTokens.ToList();
 
     public TokenListManager(
         TokenContractManager tokenContractManager,
-        UserWalletManager userWalletManager,
         PRPS prps,
         DUBI dubi,
-        EthereumNetworkManager.Settings networkSettings)
+        EthereumNetworkManager.Settings ethereumNetworkSettings)
     {
-        addableTokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.CACHED_TOKEN_LIST, (int)networkSettings.networkType);
-
-        InitializeDefaultTokenList(tokenContractManager, prps, dubi, networkSettings);
-
-        //UserWalletManager.OnWalletLoadSuccessful += () => ScanForNewTokens(tokenContractManager, userWalletManager);
+        Initialize(tokenContractManager, prps, dubi, ethereumNetworkSettings);
+        ethereumNetworkSettings.OnNetworkChanged += _ => Initialize(tokenContractManager, prps, dubi, ethereumNetworkSettings);
     }
 
     public void AddToken(string address, string name, string symbol, int decimals)
@@ -83,6 +79,12 @@ public sealed class TokenListManager
     //        });
     //    }
     //}
+
+    private void Initialize(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)
+    {
+        addableTokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.CACHED_TOKEN_LIST, (int)ethereumNetworkSettings.networkType);
+        InitializeDefaultTokenList(tokenContractManager, prps, dubi, ethereumNetworkSettings);
+    }
 
     private void InitializeDefaultTokenList(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)
     {

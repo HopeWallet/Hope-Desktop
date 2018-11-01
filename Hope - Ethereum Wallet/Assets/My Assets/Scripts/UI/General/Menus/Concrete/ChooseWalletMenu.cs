@@ -45,7 +45,7 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 		ledgerButton.onClick.AddListener(OpenLedgerWallet);
 		trezorButton.onClick.AddListener(OpenTrezorWallet);
 		hopeButton.onClick.AddListener(OpenHopeWallet);
-		networkSettingDropdown.onValueChanged.AddListener((value) => ethereumNetworkSettings.networkType = value == 0 ? EthereumNetworkManager.NetworkType.Mainnet : EthereumNetworkManager.NetworkType.Rinkeby);
+		networkSettingDropdown.onValueChanged.AddListener((value) => ethereumNetworkSettings.ChangeNetwork(value == 0 ? EthereumNetworkManager.NetworkType.Mainnet : EthereumNetworkManager.NetworkType.Rinkeby));
 	}
 
 	private void OnEnable()
