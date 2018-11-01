@@ -3,10 +3,15 @@
 /// </summary>
 public abstract class StaticSmartContract
 {
+    private readonly EthereumNetworkManager.Settings ethereumNetworkSettings;
+    private readonly SettingsBase settings;
+
     /// <summary>
     /// The address of this smart contract.
     /// </summary>
-    public string ContractAddress { get; }
+    public string ContractAddress => ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet
+        ? settings.mainnetAddress.ToLower()
+        : settings.rinkebyAddress.ToLower();
 
     /// <summary>
     /// Initializes the <see cref="StaticSmartContract"/> by assigning the references to the required settings.
@@ -15,7 +20,8 @@ public abstract class StaticSmartContract
     /// <param name="settings"> The settings of this smart contract. </param>
     protected StaticSmartContract(EthereumNetworkManager.Settings ethereumNetworkSettings, SettingsBase settings)
     {
-        ContractAddress = ethereumNetworkSettings.networkType == EthereumNetworkManager.NetworkType.Mainnet ? settings.mainnetAddress.ToLower() : settings.rinkebyAddress.ToLower();
+        this.ethereumNetworkSettings = ethereumNetworkSettings;
+        this.settings = settings;
     }
 
     /// <summary>
