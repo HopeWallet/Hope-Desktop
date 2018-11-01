@@ -16,8 +16,8 @@ public sealed class ChooseWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		networkTypeText.AnimateGraphicAndScale(1f, 1f, 0.3f);
-		networkTypeDropdown.AnimateScaleX(1f, 0.35f);
+		networkTypeText.AnimateScale(1f, 0.3f);
+		networkTypeDropdown.AnimateScale(1f, 0.3f);
 		ledgerButton.AnimateGraphicAndScale(1f, 1f, 0.25f);
 		trezorButton.AnimateGraphicAndScale(1f, 1f, 0.3f);
 		hopeButton.AnimateGraphicAndScale(1f, 1f, 0.35f, FinishedAnimating);
@@ -28,7 +28,7 @@ public sealed class ChooseWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		networkTypeText.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		networkTypeText.AnimateScale(0f, 0.3f);
 		networkTypeDropdown.AnimateScaleX(0f, 0.3f);
 		ledgerButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
 		trezorButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
