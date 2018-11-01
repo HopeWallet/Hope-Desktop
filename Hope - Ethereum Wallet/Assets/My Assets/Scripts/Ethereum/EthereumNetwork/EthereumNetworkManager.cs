@@ -13,7 +13,7 @@ public sealed class EthereumNetworkManager : InjectableSingleton<EthereumNetwork
     /// <summary>
     /// Gets the currently active network.
     /// </summary>
-    public EthereumNetwork CurrentNetwork { get { return GetCurrentNetwork(); } }
+    public EthereumNetwork CurrentNetwork => GetCurrentNetwork();
 
     /// <summary>
     /// Initializes the network manager by setting up the different networks.

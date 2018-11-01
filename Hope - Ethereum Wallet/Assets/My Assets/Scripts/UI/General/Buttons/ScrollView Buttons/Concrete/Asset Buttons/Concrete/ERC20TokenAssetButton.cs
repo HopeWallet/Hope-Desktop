@@ -12,7 +12,6 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 	private Button removeButtonComponent;
 
     private TokenContractManager tokenContractManager;
-    private TokenListManager tokenListManager;
 
 	private bool hovering, removingAssetPopupOpen;
 
@@ -30,12 +29,10 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
     /// Adds the required dependencies.
     /// </summary>
     /// <param name="tokenContractManager"> The active TokenContractManager. </param>
-    /// <param name="tokenListManager"> The active TokenListManager. </param>
     [Inject]
-    public void Construct(TokenContractManager tokenContractManager, TokenListManager tokenListManager)
+    public void Construct(TokenContractManager tokenContractManager)
     {
         this.tokenContractManager = tokenContractManager;
-        this.tokenListManager = tokenListManager;
     }
 
     /// <summary>
@@ -70,7 +67,6 @@ public sealed class ERC20TokenAssetButton : TradableAssetButton<ERC20TokenAssetB
 			        .SetSubText("<size=90%>Are you sure you want to remove " + symbolText.text + "?</size>\n<size=80%>You can add this back at any time.</size>")
 			        .OnOkClicked(() =>
                     {
-                        tokenListManager.UpdateToken(ButtonInfo.AssetAddress, false, true);
                         tokenContractManager.RemoveToken(ButtonInfo.AssetAddress);
                     })
 			        .OnPopupClose(PopupClosed);
