@@ -27,8 +27,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private int? decimals;
     private dynamic balance;
 
-    private bool updatedName, updatedSymbol, updatedDecimals, updatedBalance, updatedLogo;
-
     /// <summary> 
     /// Injects dependencies into this popup.
     /// </summary>
@@ -64,11 +62,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnOkClicked()
     {
-        //if (!tokenListManager.ContainsToken(addressField.Text))
-        //    tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value, true, true);
-        //else
-        //    tokenListManager.UpdateToken(addressField.Text, true, true);
-
         tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
     }
 
@@ -138,7 +131,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 		symbol = tokenInfo.Symbol;
 		decimals = tokenInfo.Decimals;
 
-		tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? " (" + symbol + ")" : "");
+		tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? $" ({symbol})" : "");
 		tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
 
         OnStatusChanged?.Invoke(Status.ValidToken);
@@ -151,12 +144,6 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     {
         if (existsInTokenList)
             return;
-
-        updatedName = false;
-        updatedSymbol = false;
-        updatedDecimals = false;
-        updatedLogo = false;
-        updatedBalance = false;
 
         addressField.InputFieldBase.interactable = false;
 
@@ -220,7 +207,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
     private void ValidTokenFound()
     {
-        tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? " (" + symbol + ")" : "");
+        tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? $" ({symbol})" : "");
         tokenListManager.AddToken(addressField.Text, name, symbol, decimals.Value);
 
         OnStatusChanged?.Invoke(Status.ValidToken);
