@@ -18,6 +18,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private HopeInputField addressField, symbolField, decimalsField;
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenName;
+    [SerializeField] private Transform addableTokenSpawnTransform;
 
     private readonly List<AddableTokenButton> addableTokens = new List<AddableTokenButton>();
 
