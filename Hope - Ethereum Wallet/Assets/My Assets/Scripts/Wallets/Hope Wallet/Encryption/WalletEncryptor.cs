@@ -60,7 +60,7 @@ public sealed class WalletEncryptor : SecureObject
 
         byte[] derivedPassword = playerPrefPassword.Derive(password);
 
-        using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), walletNum, derivedPassword)))
+        using (var dataEncryptor = new DataEncryptor(new AdvancedSecureRandom(new Blake2bDigest(512), derivedPassword)))
         {
             byte[] hash1 = RandomBytes.Secure.Blake2.GetBytes(512);
             byte[] hash2 = RandomBytes.Secure.Blake2.GetBytes(1024);

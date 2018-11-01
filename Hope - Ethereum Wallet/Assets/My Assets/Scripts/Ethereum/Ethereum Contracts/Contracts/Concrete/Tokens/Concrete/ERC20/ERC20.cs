@@ -17,11 +17,11 @@ public sealed partial class ERC20 : Token
     /// <param name="name"> The name of this ERC20 token. </param>
     /// <param name="symbol"> The symbol of this ERC20 token. </param>
     /// <param name="decimals"> The decimal count of this ERC20 token. </param>
-    public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress, name, symbol, decimals)
+    public ERC20(string contractAddress, string name, string symbol, int decimals) : base(contractAddress.ToLower(), name, symbol, decimals)
     {
     }
 
-    public ERC20(string contractAddress) : base(contractAddress)
+    public ERC20(string contractAddress) : base(contractAddress.ToLower())
     {
 
     }

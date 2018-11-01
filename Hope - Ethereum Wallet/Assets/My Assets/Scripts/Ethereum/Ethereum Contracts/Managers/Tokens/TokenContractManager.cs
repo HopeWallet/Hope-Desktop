@@ -79,8 +79,8 @@ public sealed class TokenContractManager
     /// <param name="tokenAddress"> The contract address of the token to remove. </param>
     public void RemoveToken(string tokenAddress)
     {
-        tokens.Remove(tokenAddress);
-        OnTokenRemoved?.Invoke(tokenAddress);
+        if (tokens.Remove(tokenAddress = tokenAddress.ToLower()))
+            OnTokenRemoved?.Invoke(tokenAddress);
     }
 
     /// <summary>

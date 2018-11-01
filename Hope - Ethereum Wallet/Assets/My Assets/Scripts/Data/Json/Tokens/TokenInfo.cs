@@ -35,9 +35,9 @@ public sealed class TokenInfo
     /// <param name="decimals"> The number of decimal places of the token. </param>
     public TokenInfo(string address, string name, string symbol, int decimals)
     {
-        this.Address = address;
-        this.Name = name;
-        this.Symbol = symbol;
-        this.Decimals = decimals;
+        Address = address.ToLower();
+        Name = name;
+        Symbol = symbol;
+        Decimals = decimals;
     }
 }
