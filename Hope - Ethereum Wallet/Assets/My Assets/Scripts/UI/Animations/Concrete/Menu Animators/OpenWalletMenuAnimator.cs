@@ -72,7 +72,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 		walletNameText.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		walletAccountText.AnimateGraphicAndScale(1f, 1f, 0.25f);
-		walletLine.AnimateScaleX(1f, 0.3f);
+		walletLine.AnimateScale(1f, 0.3f);
 		assetImage.AnimateGraphicAndScale(1f, 1f, 0.35f);
 		currentAssetName.AnimateGraphicAndScale(1f, 1f, 0.4f);
 		currentAssetBalance.AnimateGraphicAndScale(1f, 1f, 0.45f);
