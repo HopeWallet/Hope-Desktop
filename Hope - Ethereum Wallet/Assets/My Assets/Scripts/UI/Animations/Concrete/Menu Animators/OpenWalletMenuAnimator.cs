@@ -27,7 +27,6 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject currentTokenNetWorth;
 
 	[SerializeField] private Transform assetListTransform;
-	[SerializeField] private Transform transactionListTransform;
 	[SerializeField] private Transform transactionTabsTransform;
 
 	[SerializeField] private GameObject loadingStatusText;
@@ -35,16 +34,6 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject transactionPagesSection;
 
 	[SerializeField] private GameObject[] walletLogos;
-
-	/// <summary>
-	/// Assigns the necessary event to the animation
-	/// </summary>
-	/// <param name="ethereumTransactionButtonManager"> The active EthereumTransactionButtonManager </param>
-	[Inject]
-	public void Construct(EthereumTransactionButtonManager ethereumTransactionButtonManager)
-	{
-		ethereumTransactionButtonManager.OnTransactionListCreated += () => AnimateListIn(transactionListTransform, 0, 4);
-	}
 
 	/// <summary>
 	/// Waits a small amount of time and then animates the elements in
@@ -91,7 +80,6 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 		sideBar1.transform.GetChild(0).gameObject.AnimateScale(0f, 0.05f);
 		AnimateListOut(topBar.transform);
 		AnimateListOut(assetListTransform);
-		AnimateListOut(transactionListTransform);
 		AnimateListOut(transactionTabsTransform);
 
 		foreach (GameObject logo in walletLogos)
@@ -114,7 +102,7 @@ public sealed class OpenWalletMenuAnimator : MenuAnimator
 
 		ResetObjectValues(walletNameText, true);
 		ResetObjectValues(walletAccountText, true);
-		ResetObjectValues(walletLine, true);
+		ResetObjectValues(walletLine, false);
 		ResetObjectValues(assetImage, true);
 		ResetObjectValues(currentAssetName, true);
 		ResetObjectValues(currentAssetBalance, true);
