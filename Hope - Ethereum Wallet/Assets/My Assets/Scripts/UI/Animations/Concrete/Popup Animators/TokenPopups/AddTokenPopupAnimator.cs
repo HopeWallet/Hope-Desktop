@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 	private Dictionary<AddTokenPopup.Status, Tuple<string, string>> textInfo;
 
 	private AddTokenPopup.Status previousStatus;
+	private GameObject previousSection;
 
 	/// <summary>
 	/// Initializes the button listeners
@@ -24,6 +26,7 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 	private void Awake()
 	{
 		previousStatus = AddTokenPopup.Status.NoTokenFound;
+		previousSection = sections[0];
 		GetComponent<AddTokenPopup>().OnStatusChanged += OnStatusChanged;
 
 		textInfo = new Dictionary<AddTokenPopup.Status, Tuple<string, string>>();
@@ -62,23 +65,50 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 		if (!(previousStatus == AddTokenPopup.Status.NoTokenFound && tokenPopupStatus == AddTokenPopup.Status.TooManyTokensFound)
 			&& !(previousStatus == AddTokenPopup.Status.TooManyTokensFound && tokenPopupStatus == AddTokenPopup.Status.NoTokenFound))
 		{
+			//switch (tokenPopupStatus)
+			//{
+			//	case AddTokenPopup.Status.NoTokenFound:
+			//	case AddTokenPopup.Status.TooManyTokensFound:
+			//		ChangeStatus(textSection: true);
+			//		break;
+			//	case AddTokenPopup.Status.MultipleTokensFound:
+			//		ChangeStatus(multipleTokensFound: true);
+			//		break;
+			//	case AddTokenPopup.Status.InvalidToken:
+			//		ChangeStatus(invalidToken: true);
+			//		break;
+			//	case AddTokenPopup.Status.ValidToken:
+			//		ChangeStatus(validToken: true);
+			//		break;
+			//	case AddTokenPopup.Status.Loading:
+			//		ChangeStatus(loading: true);
+			//		break;
+			//}
+
+			previousSection.SetActive(false);
+
 			switch (tokenPopupStatus)
 			{
 				case AddTokenPopup.Status.NoTokenFound:
 				case AddTokenPopup.Status.TooManyTokensFound:
-					ChangeStatus(textSection: true);
+					sections[0].SetActive(true);
+					previousSection = sections[0];
 					break;
 				case AddTokenPopup.Status.MultipleTokensFound:
-					ChangeStatus(multipleTokensFound: true);
+					sections[1].SetActive(true);
+					previousSection = sections[1];
 					break;
 				case AddTokenPopup.Status.InvalidToken:
-					ChangeStatus(invalidToken: true);
+					sections[2].SetActive(true);
+					previousSection = sections[2];
 					break;
 				case AddTokenPopup.Status.ValidToken:
-					ChangeStatus(validToken: true);
+					sections[3].SetActive(true);
+					previousSection = sections[3];
 					break;
 				case AddTokenPopup.Status.Loading:
-					ChangeStatus(loading: true);
+					loadingIcon.SetActive(true);
+					previousSection = loadingIcon;
 					break;
 			}
 		}
