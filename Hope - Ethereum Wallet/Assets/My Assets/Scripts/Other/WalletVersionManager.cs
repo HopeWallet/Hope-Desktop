@@ -6,7 +6,7 @@ using UniRx;
 /// </summary>
 public sealed class WalletVersionManager
 {
-    private const string GITHUB_RELEASES_LINK = "https://api.github.com/repos/HopeWallet/Hope.Security/releases";
+    private const string GITHUB_RELEASES_LINK = "https://api.github.com/repos/HopeWallet/Hope-Desktop/releases";
 
     private readonly Settings versionSettings;
     private readonly PopupManager popupManager;
@@ -52,7 +52,12 @@ public sealed class WalletVersionManager
     /// <param name="releasesJson"> The json string containing the latest wallet version. </param>
     private void OnReleasesPageDownloaded(string releasesJson)
     {
-        var currentRelease = JsonUtils.DeserializeDynamicCollection(releasesJson)[0];
+        var releases = JsonUtils.DeserializeDynamicCollection(releasesJson);
+
+        if (releases == null || releases.Count == 0)
+            return;
+
+        var currentRelease = releases[0];
 
         LatestVersionUrl = (string)currentRelease.html_url;
         LatestVersion = ((string)currentRelease.tag_name).TrimStart('v');
