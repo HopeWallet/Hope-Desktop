@@ -28,6 +28,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private UserWalletManager userWalletManager;
     private AddableTokenButton.Factory addableTokenButtonFactory;
 
+    private AddableTokenButton activelySelectedButton;
+
     new private string name;
     private string symbol;
     private int? decimals;
@@ -36,6 +38,22 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     private bool isInvalidAddress;
 
     private const int MAX_TOKEN_COUNT = 10;
+
+    /// <summary>
+    /// The actively selected AddableTokenButton.
+    /// </summary>
+    public AddableTokenButton ActivelySelectedButton
+    {
+        get
+        {
+            return activelySelectedButton;
+        }
+        set
+        {
+            activelySelectedButton = value;
+            okButton.interactable = activelySelectedButton != null;
+        }
+    }
 
     /// <summary> 
     /// Injects dependencies into this popup.
@@ -76,17 +94,20 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     /// </summary>
     protected override void OnOkClicked()
     {
-        tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
+        if (ActivelySelectedButton == null)
+            tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
+        else
+            tokenContractManager.AddAndUpdateToken(ActivelySelectedButton.ButtonInfo);
     }
 
     private void OnSymbolChanged()
     {
-		string text = symbolField.Text;
+        string text = symbolField.Text;
 
-		symbol = text;
-		name = text;
+        symbol = text;
+        name = text;
 
-		symbolField.Error = string.IsNullOrEmpty(text);
+        symbolField.Error = string.IsNullOrEmpty(text);
         okButton.interactable = !symbolField.Error && !decimalsField.Error;
     }
 
@@ -96,8 +117,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         int.TryParse(decimalsField.Text, out newDecimals);
         decimals = newDecimals;
 
-		decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value > 36;
-		okButton.interactable = !decimalsField.Error && !symbolField.Error;
+        decimalsField.Error = !string.IsNullOrEmpty(decimalsField.Text) && decimals.Value > 36;
+        okButton.interactable = !decimalsField.Error && !symbolField.Error;
     }
 
     /// <summary>
@@ -108,19 +129,21 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     {
         isInvalidAddress = !AddressUtils.IsValidEthereumAddress(addressField.Text);
 
-		if (isInvalidAddress)
-			CheckInvalidAddress();
-		else
-			CheckValidAddress();
-	}
+        if (isInvalidAddress)
+            CheckInvalidAddress();
+        else
+            CheckValidAddress();
+    }
 
     private void CheckInvalidAddress()
     {
-		if (!isInvalidAddress)
-			return;
+        if (!isInvalidAddress)
+            return;
 
         var loweredText = addressField.Text.ToLower();
         var possibleTokens = tokenListManager.TokenList.Where(token => token.Name.ToLower().Contains(loweredText) || token.Symbol.ToLower().StartsWith(loweredText)).ToList();
+
+        ActivelySelectedButton?.Toggle();
 
         if (string.IsNullOrEmpty(loweredText) || possibleTokens.Count == 0)
         {
@@ -184,11 +207,11 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         TokenInfo tokenInfo = tokenListManager.GetToken(addressField.Text);
         name = tokenInfo.Name;
-		symbol = tokenInfo.Symbol;
-		decimals = tokenInfo.Decimals;
+        symbol = tokenInfo.Symbol;
+        decimals = tokenInfo.Decimals;
 
-		tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? $" ({symbol})" : "");
-		tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
+        tokenName.text = name.LimitEnd(40, "...") + (!string.IsNullOrEmpty(symbol) ? $" ({symbol})" : "");
+        tradableAssetImageManager.LoadImage(symbol, icon => tokenIcon.sprite = icon);
 
         OnStatusChanged?.Invoke(Status.ValidToken);
 
@@ -205,7 +228,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
 
         OnStatusChanged?.Invoke(Status.Loading);
 
-		string addressText = addressField.Text;
+        string addressText = addressField.Text;
 
         ERC20 erc20 = new ERC20(addressText);
 

@@ -110,7 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tokenDisplayText: {fileID: 114595588080882932}
   tokenBalanceText: {fileID: 114092155895601742}
-  button: {fileID: 114567370340532972}
   tokenIcon: {fileID: 114941697685283666}
 --- !u!114 &114088740726235292
 MonoBehaviour:
