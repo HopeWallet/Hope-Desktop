@@ -115,7 +115,7 @@ public sealed class CreateMnemonicMenuAnimator : MenuAnimator
 	/// Initializes the randomized list of words and starts the series of random word animations
 	/// </summary>
 	[SecureCallEnd]
-	[ReflectionProtect]
+	//[ReflectionProtect]
 	private void StartWordAnimation()
 	{
         mnemonicWords = WalletUtils.GetMnemonicWords(dynamicDataCache.GetData("mnemonic"));

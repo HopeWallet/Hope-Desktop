@@ -15,7 +15,7 @@ public abstract class SecureObject
     /// </summary>
     /// <returns> The runtime and base hashcode of this object. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(int))]
+    //[ReflectionProtect(typeof(int))]
     public override int GetHashCode()
     {
         return IsSecureCall() ? base.GetHashCode() + RuntimeHelpers.GetHashCode(this) : RandomInt.Fast.GetInt();
@@ -27,7 +27,7 @@ public abstract class SecureObject
     /// </summary>
     /// <returns> The string representation of this object. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(int))]
+    //[ReflectionProtect(typeof(int))]
     public override string ToString()
     {
         return IsSecureCall() ? base.ToString() : RandomBytes.Fast.GetBytes(16).GetBase64String();
@@ -39,7 +39,7 @@ public abstract class SecureObject
     /// </summary>
     /// <returns> The type of this object. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(Type))]
+    //[ReflectionProtect(typeof(Type))]
     public new Type GetType()
     {
         return IsSecureCall() ? base.GetType() : null;
@@ -49,7 +49,7 @@ public abstract class SecureObject
     /// Checks if the caller methods are secure.
     /// </summary>
     /// <returns> True if the line of methods calling this method are secure. </returns>
-    [ReflectionProtect(typeof(bool))]
+    //[ReflectionProtect(typeof(bool))]
     protected bool IsSecureCall()
     {
         var methods = RuntimeMethodSearcher.WalkUntil<SecureCallEndAttribute>();

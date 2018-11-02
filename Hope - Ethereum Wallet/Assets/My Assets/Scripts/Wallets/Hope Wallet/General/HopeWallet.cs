@@ -62,7 +62,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// Unlocks a wallet if the password is correct.
     /// </summary>
     [SecureCaller]
-    [ReflectionProtect]
+    //[ReflectionProtect]
     public void Unlock()
     {
         Load(walletUnlocker);
@@ -72,7 +72,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// Creates a new wallet.
     /// </summary>
     [SecureCaller]
-    [ReflectionProtect]
+    //[ReflectionProtect]
     public void Create()
     {
         Load(walletCreator);
@@ -83,7 +83,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// </summary>
     /// <param name="walletLoader"> The wallet loader to use, whether it is the <see cref="WalletCreator"/> or <see cref="WalletUnlocker"/>. </param>
     [SecureCaller]
-    [ReflectionProtect]
+    //[ReflectionProtect]
     private void Load(WalletLoaderBase walletLoader)
     {
         walletLoader.Load(addresses, OnWalletLoadSuccessful);
@@ -95,7 +95,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// <param name="plainBytes"> The plain text password to encrypt. </param>
     /// <returns> The encrypted password as a byte[]. </returns>
     [SecureCallEnd]
-    [ReflectionProtect(typeof(string))]
+    //[ReflectionProtect(typeof(string))]
     private byte[] GetEncryptedPass(byte[] plainBytes)
     {
         return passwordEncryptor.Encrypt(plainBytes);
@@ -115,7 +115,7 @@ public sealed class HopeWallet : SecureObject, IWallet
     /// <param name="path"> The path of the wallet to sign the transaction with. </param>
     /// <param name="displayInput"> The display input that goes along with the transaction request. </param>
     [SecureCallEnd]
-    [ReflectionProtect]
+    //[ReflectionProtect]
     public void SignTransaction<T>(
         Action<TransactionSignedUnityRequest> onTransactionSigned,
         BigInteger gasLimit,
