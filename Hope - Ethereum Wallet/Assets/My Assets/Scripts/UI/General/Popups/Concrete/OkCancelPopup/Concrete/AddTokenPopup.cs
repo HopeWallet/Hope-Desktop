@@ -67,6 +67,8 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         addressField.OnInputUpdated += _ => OnAddressChanged();
         symbolField.OnInputUpdated += _ => OnSymbolChanged();
         decimalsField.OnInputUpdated += _ => OnDecimalsChanged();
+
+        addressField.Error = false;
     }
 
     /// <summary>
@@ -120,7 +122,7 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         var loweredText = addressField.Text.ToLower();
         var possibleTokens = tokenListManager.TokenList.Where(token => token.Name.ToLower().Contains(loweredText) || token.Symbol.ToLower().StartsWith(loweredText)).ToList();
 
-        if (possibleTokens.Count == 0)
+        if (string.IsNullOrEmpty(loweredText) || possibleTokens.Count == 0)
         {
             OnStatusChanged?.Invoke(Status.NoTokenFound);
             okButton.interactable = false;
@@ -136,9 +138,29 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         }
     }
 
-    private void DisplayAddableTokens(List<TokenInfo> addableTokens)
+    private void DisplayAddableTokens(List<TokenInfo> newTokenList)
     {
-        addableTokens.Sort((t1, t2) => t1.Symbol.CompareTo(t2.Symbol));
+        newTokenList.Sort((t1, t2) => t1.Symbol.CompareTo(t2.Symbol));
+
+        for (int i = newTokenList.Count; i < addableTokens.Count; i++)
+            addableTokens[i].transform.parent.gameObject.SetActive(false);
+
+        for (int i = 0; i < newTokenList.Count; i++)
+        {
+            if (i < addableTokens.Count)
+            {
+                addableTokens[i].transform.parent.gameObject.SetActive(true);
+                addableTokens[i].SetButtonInfo(newTokenList[i]);
+            }
+            else
+            {
+                var newTokenButton = addableTokenButtonFactory.Create();
+                newTokenButton.SetButtonInfo(newTokenList[i]);
+                newTokenButton.transform.parent.parent = addableTokenSpawnTransform;
+                newTokenButton.transform.parent.localScale = Vector3.one;
+                addableTokens.Add(newTokenButton);
+            }
+        }
 
         OnStatusChanged?.Invoke(Status.MultipleTokensFound);
     }

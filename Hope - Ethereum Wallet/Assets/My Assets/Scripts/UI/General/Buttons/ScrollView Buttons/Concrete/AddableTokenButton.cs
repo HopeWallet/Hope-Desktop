@@ -6,6 +6,8 @@ using Zenject;
 public sealed class AddableTokenButton : InfoButton<AddableTokenButton, TokenInfo>
 {
     [SerializeField] private TMP_Text tokenDisplayText;
+    [SerializeField] private TMP_Text tokenBalanceText;
+    [SerializeField] private Button button;
     [SerializeField] private Image tokenIcon;
 
     private TradableAssetImageManager tradableAssetImageManager;

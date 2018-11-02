@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tokenDisplayText: {fileID: 114595588080882932}
+  tokenBalanceText: {fileID: 114092155895601742}
+  button: {fileID: 114567370340532972}
   tokenIcon: {fileID: 114941697685283666}
 --- !u!114 &114088740726235292
 MonoBehaviour:
@@ -478,7 +480,7 @@ RectTransform:
   m_GameObject: {fileID: 1996144101987366}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224584516287482976}
   m_Father: {fileID: 0}
