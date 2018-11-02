@@ -13,6 +13,8 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, TokenInf
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
 
+    private TokenInfo previousTokenInfo;
+
     [Inject]
     public void Construct(TradableAssetImageManager tradableAssetImageManager, PopupManager popupManager, UserWalletManager userWalletManager)
     {
@@ -42,6 +44,10 @@ public sealed class AddableTokenButton : InfoButton<AddableTokenButton, TokenInf
 
     protected override void OnValueUpdated(TokenInfo info)
     {
+        if (info.Address.EqualsIgnoreCase(previousTokenInfo?.Address))
+            return;
+
+        previousTokenInfo = info;
         tokenBalanceText.text = "-";
         tokenDisplayText.text = info.Name.LimitEnd(55, "...") + " (" + info.Symbol + ")";
         tradableAssetImageManager.LoadImage(info.Symbol, icon => tokenIcon.sprite = icon);
