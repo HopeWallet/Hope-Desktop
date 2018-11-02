@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// The animator class of the AddTokenPopup
@@ -51,8 +49,6 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 	/// <param name="tokenPopupStatus"> The AddTokenPopup status </param>
 	private void OnStatusChanged(AddTokenPopup.Status tokenPopupStatus)
 	{
-		tokenPopupStatus.Log();
-
 		if (tokenPopupStatus == previousStatus)
 			return;
 
@@ -65,26 +61,6 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 		if (!(previousStatus == AddTokenPopup.Status.NoTokenFound && tokenPopupStatus == AddTokenPopup.Status.TooManyTokensFound)
 			&& !(previousStatus == AddTokenPopup.Status.TooManyTokensFound && tokenPopupStatus == AddTokenPopup.Status.NoTokenFound))
 		{
-			//switch (tokenPopupStatus)
-			//{
-			//	case AddTokenPopup.Status.NoTokenFound:
-			//	case AddTokenPopup.Status.TooManyTokensFound:
-			//		ChangeStatus(textSection: true);
-			//		break;
-			//	case AddTokenPopup.Status.MultipleTokensFound:
-			//		ChangeStatus(multipleTokensFound: true);
-			//		break;
-			//	case AddTokenPopup.Status.InvalidToken:
-			//		ChangeStatus(invalidToken: true);
-			//		break;
-			//	case AddTokenPopup.Status.ValidToken:
-			//		ChangeStatus(validToken: true);
-			//		break;
-			//	case AddTokenPopup.Status.Loading:
-			//		ChangeStatus(loading: true);
-			//		break;
-			//}
-
 			previousSection.SetActive(false);
 
 			switch (tokenPopupStatus)
@@ -114,35 +90,5 @@ public sealed class AddTokenPopupAnimator : PopupAnimator
 		}
 
 		previousStatus = tokenPopupStatus;
-	}
-
-	/// <summary>
-	/// Changes the sections according to their booleans
-	/// </summary>
-	/// <param name="textSection"> Whether the noTokenFoundSection should appear </param>
-	/// <param name="multipleTokensFound"> Whether the tokenList should appear </param>
-	/// <param name="invalidToken"> Whether the invalidTokenSection should appear </param>
-	/// <param name="validToken"> Whether the validTokenSection should appear </param>
-	/// <param name="loading"> Whether the loading icon should appear </param>
-	private void ChangeStatus(bool textSection = false, bool multipleTokensFound = false, bool invalidToken = false, bool validToken = false, bool loading = false)
-	{
-		AnimateSection(sections[0], textSection);
-		AnimateSection(sections[1], multipleTokensFound);
-		AnimateSection(sections[2], invalidToken);
-		AnimateSection(sections[3], validToken);
-		AnimateSection(loadingIcon, loading);
-	}
-
-	/// <summary>
-	/// Animates a section in if the boolean states, or makes the section disappear otherwise
-	/// </summary>
-	/// <param name="section"> The section being modified </param>
-	/// <param name="animateIn"> Whether animating section in or not </param>
-	private void AnimateSection(GameObject section, bool animateIn)
-	{
-		if (section == loadingIcon && animateIn)
-			loadingIcon.SetActive(true);
-
-		section.AnimateGraphicAndScale(animateIn ? 1f : 0f, animateIn ? 1f : 0f, animateIn ? 0.2f : 0.1f, () => { if (section == loadingIcon) loadingIcon.SetActive(false); });
 	}
 }
