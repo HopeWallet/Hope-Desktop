@@ -30,7 +30,7 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
         [SecureCaller]
-        [ReflectionProtect(typeof(byte[]))]
+        //[ReflectionProtect(typeof(byte[]))]
         protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
         {
             byte[] encryptedData = aes.Encrypt(data, entropy?.Length > 0 ? entropy : randomEntropy);
@@ -46,7 +46,7 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
         /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
         [SecureCaller]
-        [ReflectionProtect(typeof(byte[]))]
+        //[ReflectionProtect(typeof(byte[]))]
         protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
         {
             ProtectedMemory.Unprotect(encryptedData, MemoryProtectionScope.SameProcess);

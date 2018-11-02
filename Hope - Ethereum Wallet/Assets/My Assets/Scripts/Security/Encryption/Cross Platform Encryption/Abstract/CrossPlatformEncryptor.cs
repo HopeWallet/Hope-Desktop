@@ -89,7 +89,7 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
     /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(byte[]))]
+    //[ReflectionProtect(typeof(byte[]))]
     protected byte[] InternalEncrypt(byte[] data, byte[] entropy)
     {
         if (data == null || data.Length == 0)
@@ -108,7 +108,7 @@ public abstract class CrossPlatformEncryptor<TWinEncryptor, TOtherEncryptor> : A
     /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
     /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(byte[]))]
+    //[ReflectionProtect(typeof(byte[]))]
     protected byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
     {
         if (encryptedData == null || encryptedData.Length == 0)

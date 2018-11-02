@@ -89,7 +89,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         /// <returns> Returns the DisposableData of this <see cref="ProtectedType"/>. </returns>
         [SecureCaller]
-        [ReflectionProtect(typeof(DisposableData<string>))]
+        //[ReflectionProtect(typeof(DisposableData<string>))]
         public DisposableDataPromise<TType> CreateDisposableData()
         {
             DisposableDataPromise<TType> promise = new DisposableDataPromise<TType>();
@@ -115,7 +115,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         /// <param name="value"> The new value to set the <see cref="ProtectedType"/> to. </param>
         [SecureCallEnd]
-        [ReflectionProtect]
+        //[ReflectionProtect]
         public void SetValue(TType value)
         {
             SetValue(GetBytes(value));
@@ -126,7 +126,7 @@ namespace Hope.Security.ProtectedTypes.Types.Base
         /// </summary>
         /// <param name="byteValue"> The byte value to set this <see cref="ProtectedType"/>. </param>
         [SecureCallEnd]
-        [ReflectionProtect]
+        //[ReflectionProtect]
         public void SetValue(byte[] byteValue)
         {
             if (disposableData?.Disposed == false)

@@ -79,7 +79,7 @@ public sealed class ConfirmMnemonicMenu : WalletLoadMenuBase<ConfirmMnemonicMenu
     /// Gets the words that need to be confirmed.
     /// </summary>
     [SecureCallEnd]
-    [ReflectionProtect]
+    //[ReflectionProtect]
     private void GetConfirmationWords()
     {
         string[] correctWords;

@@ -21,7 +21,7 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="data"> The <see langword="byte"/>[] data to encrypt. </param>
         /// <param name="entropy"> The additional entropy to apply to the encryption. </param>
         /// <returns> The encrypted <see langword="byte"/>[] data. </returns>
-        [ReflectionProtect(typeof(byte[]))]
+        //[ReflectionProtect(typeof(byte[]))]
         protected override byte[] InternalEncrypt(byte[] data, byte[] entropy)
         {
             return ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser);
@@ -33,7 +33,7 @@ namespace Hope.Security.Encryption.DPAPI
         /// <param name="encryptedData"> The encrypted <see langword="byte"/>[] data to decrypt. </param>
         /// <param name="entropy"> The additional entropy to use to decrypt the data. </param>
         /// <returns> The decrypted <see langword="byte"/>[] data. </returns>
-        [ReflectionProtect(typeof(byte[]))]
+        //[ReflectionProtect(typeof(byte[]))]
         protected override byte[] InternalDecrypt(byte[] encryptedData, byte[] entropy)
         {
             return ProtectedData.Unprotect(encryptedData, entropy, DataProtectionScope.CurrentUser);

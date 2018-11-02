@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   versionSettings:
-    version: v0.8
+    version: v0.1
     versionPrefKey: wallet_version
   debugSettings:
     displayNethereumDebugStatements: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
       type: 2}
     securedPlayerPrefsSettings: {fileID: 0}
   ethereumNetworkSettings:
-    networkType: 4
+    networkType: 1
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}

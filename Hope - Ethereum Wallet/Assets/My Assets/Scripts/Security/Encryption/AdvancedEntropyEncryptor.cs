@@ -154,7 +154,7 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
     /// <param name="additionalEntropy"> The additional <see langword="byte"/>[] data to add to our entropy formulation. </param>
     /// <returns> The <see langword="byte"/>[] data which can be used as our encryption entropy. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(byte[]))]
+    //[ReflectionProtect(typeof(byte[]))]
     protected byte[] GetAdvancedEntropyHash(byte[] additionalEntropy)
     {
         byte[] hashBytes = new byte[0];
@@ -179,7 +179,7 @@ public abstract class AdvancedEntropyEncryptor : SecureObject, IDisposable
     /// <param name="additionalEntropy"> The additional <see langword="byte"/>[] data to add to our entropy formulation. </param>
     /// <returns> The list of <see langword="byte"/>[] data to formulate our entropy. </returns>
     [SecureCaller]
-    [ReflectionProtect(typeof(List<byte[]>))]
+    //[ReflectionProtect(typeof(List<byte[]>))]
     private List<byte[]> GetEncryptionByteData(byte[] additionalEntropy)
     {
         List<byte[]> protectors = new List<byte[]>();
