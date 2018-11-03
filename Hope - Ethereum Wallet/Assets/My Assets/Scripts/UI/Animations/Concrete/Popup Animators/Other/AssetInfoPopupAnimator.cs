@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// The animator class of the MarketPopup
+/// The animator class of the AssetInfoPopup
 /// </summary>
-public class MarketPopupAnimator : PopupAnimator
+public class AssetInfoPopupAnimator : PopupAnimator
 {
 	[SerializeField] private GameObject comingSoonText;
 

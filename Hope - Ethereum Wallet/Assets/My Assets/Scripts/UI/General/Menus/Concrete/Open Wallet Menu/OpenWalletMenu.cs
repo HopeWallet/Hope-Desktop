@@ -28,7 +28,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	[SerializeField] private Transform pendingTransactionSection;
 	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
 
-    private EthereumNetworkManager.Settings ethereumNetworkSettings;
+	private AssetInfoButton assetImageButtonComponent;
+
+
+	private EthereumNetworkManager.Settings ethereumNetworkSettings;
     private EthereumTransactionManager ethereumTransactionManager;
     private EthereumPendingTransactionManager ethereumPendingTransactionManager;
     private TokenContractManager tokenContractManager;
@@ -92,7 +95,10 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
     {
         tokenContractManager.StartTokenLoad(OpenMenu);
 
-        UpdateWalletName();
+		assetImage.GetComponent<Button>().onClick.AddListener(AssetImageClicked);
+		assetImageButtonComponent = assetImage.GetComponent<AssetInfoButton>();
+
+		UpdateWalletName();
 
         if (userWalletManager.ActiveWalletType == UserWalletManager.WalletType.Hope)
         {
@@ -112,6 +118,16 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         AccountChanged(userWalletManager.AccountNumber);
         ReloadNetWorth();
     }
+
+	/// <summary>
+	/// The asset image has been clicked
+	/// </summary>
+	private void AssetImageClicked()
+	{
+		AssetInfoPopup popup = popupManager.GetPopup<AssetInfoPopup>(true);
+		popup.SetDetails(tradableAssetManager.ActiveTradableAsset.AssetSymbol);
+		popup.OnPopupClose(assetImageButtonComponent.ResetButton);
+	}
 
     /// <summary>
     /// Updates the wallet name text.

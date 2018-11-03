@@ -33,7 +33,7 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
 
 	/// <summary>
-	/// pointer hovers over the text button
+	/// Pointer hovers over the text button
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerEnter(PointerEventData eventData)
@@ -48,7 +48,7 @@ public sealed class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	}
 
 	/// <summary>
-	/// pointer leaves the text button
+	/// Pointer leaves the text button
 	/// </summary>
 	/// <param name="eventData"> The PointerEventData </param>
 	public void OnPointerExit(PointerEventData eventData)

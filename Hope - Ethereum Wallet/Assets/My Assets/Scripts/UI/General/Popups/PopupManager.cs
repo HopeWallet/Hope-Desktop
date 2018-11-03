@@ -52,7 +52,7 @@ public sealed class PopupManager
 		HopeUpdatePopup.Factory hopeUpdatePopupFactory,
         EnterTrezorPINPopup.Factory enterTrezorPinPopupFactory,
 		HelpPopup.Factory helpPopupFactory,
-		MarketPopup.Factory marketPopupFactory)
+		AssetInfoPopup.Factory assetInfoPopupFactory)
     {
         factoryPopups.AddItems(loadingPopupFactory,
 							   addTokenPopupFactory,
@@ -77,7 +77,7 @@ public sealed class PopupManager
 							   hopeUpdatePopupFactory,
                                enterTrezorPinPopupFactory,
 							   helpPopupFactory,
-							   marketPopupFactory);
+							   assetInfoPopupFactory);
     }
 
     /// <summary>

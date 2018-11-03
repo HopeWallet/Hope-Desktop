@@ -56,12 +56,9 @@ public sealed class TopBarButtons : MonoBehaviour
 					popup = popupManager.GetPopup<LockPRPSPopup>();
 				break;
 			case 1:
-					popup = popupManager.GetPopup<MarketPopup>();
-				break;
-			case 2:
 				    popup = popupManager.GetPopup<SendAssetPopup>();
 				break;
-			case 3:
+			case 2:
 				    popup = popupManager.GetPopup<ReceiveAssetPopup>();
 				break;
 		}
