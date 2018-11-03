@@ -15,7 +15,9 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
                                             password1Field,
                                             password2Field;
 
-    private DynamicDataCache dynamicDataCache;
+	public bool ComingFromChooseWalletMenu { get; private set; }
+
+	private DynamicDataCache dynamicDataCache;
     private HopeWalletInfoManager hopeWalletInfoManager;
     private ButtonClickObserver buttonClickObserver;
 
@@ -35,6 +37,9 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
         this.dynamicDataCache = dynamicDataCache;
         this.hopeWalletInfoManager = hopeWalletInfoManager;
         this.buttonClickObserver = buttonClickObserver;
+
+		if (hopeWalletInfoManager.WalletCount == 0)
+			ComingFromChooseWalletMenu = true;
     }
 
     /// <summary>

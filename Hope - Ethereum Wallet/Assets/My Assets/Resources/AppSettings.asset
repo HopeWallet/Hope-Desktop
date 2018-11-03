@@ -22,7 +22,7 @@ MonoBehaviour:
     securedPlayerPrefsSettings: {fileID: 11400000, guid: 31e44a7cdfd4e104aa56383d97392d62,
       type: 2}
   ethereumNetworkSettings:
-    networkType: 1
+    networkType: 4
   uiSettings:
     generalSettings:
       blurMaterial: {fileID: 2100000, guid: a74179ef17dc08040bb4ffb0a88101de, type: 2}
@@ -64,7 +64,7 @@ MonoBehaviour:
       - {fileID: 1005287853241454, guid: f7d43cddbe4f15a4fb24f33a58a45ac1, type: 2}
       - {fileID: 1792955184907624, guid: 1967757afcd281a4481096f1e87c28b0, type: 2}
       - {fileID: 1619475451905056, guid: bf1ebbd4b3fb165408caea03f358f28b, type: 2}
-      - {fileID: 1153694355340360, guid: e88ff50593c62784b93b0a29bafe9c48, type: 2}
+      - {fileID: 1367376114401940, guid: a91ed62ddd5716f4cb315b89cd6c8bca, type: 2}
       - {fileID: 1200313821591180, guid: adf7f14f77ea5e345b2d0780878f84fa, type: 2}
       - {fileID: 1626687375279500, guid: c66b8f84e1c289d40871f0f61e96ffd3, type: 2}
       - {fileID: 1535748500373604, guid: 67ab6b3e8cbfe4047816e960ad313165, type: 2}

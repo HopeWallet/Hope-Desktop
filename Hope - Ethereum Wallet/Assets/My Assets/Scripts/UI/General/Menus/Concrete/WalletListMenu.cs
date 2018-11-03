@@ -91,7 +91,7 @@ public sealed class WalletListMenu : Menu<WalletListMenu>
 	/// </summary>
 	private void CreateNewWallet()
     {
-        uiManager.OpenMenu<CreateWalletMenu>();
+		uiManager.OpenMenu<CreateWalletMenu>();
     }
 
     /// <summary>

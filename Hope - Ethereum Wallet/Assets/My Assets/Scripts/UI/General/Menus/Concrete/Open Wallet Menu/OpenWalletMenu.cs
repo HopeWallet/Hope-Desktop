@@ -28,7 +28,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
 	[SerializeField] private Transform pendingTransactionSection;
 	[SerializeField] private Button hopeLogo, ledgerLogo, trezorLogo;
 
-	private AssetInfoButton assetImageButtonComponent;
+	private ImageButton assetImageButtonComponent;
 
 
 	private EthereumNetworkManager.Settings ethereumNetworkSettings;
@@ -96,7 +96,7 @@ public sealed partial class OpenWalletMenu : Menu<OpenWalletMenu>
         tokenContractManager.StartTokenLoad(OpenMenu);
 
 		assetImage.GetComponent<Button>().onClick.AddListener(AssetImageClicked);
-		assetImageButtonComponent = assetImage.GetComponent<AssetInfoButton>();
+		assetImageButtonComponent = assetImage.GetComponent<ImageButton>();
 
 		UpdateWalletName();
 

@@ -2,7 +2,10 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AssetInfoButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+/// <summary>
+/// Class that manages the visual feedback of image buttons
+/// </summary>
+public class ImageButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 	private Transform myTransform;
 	private Button button;
