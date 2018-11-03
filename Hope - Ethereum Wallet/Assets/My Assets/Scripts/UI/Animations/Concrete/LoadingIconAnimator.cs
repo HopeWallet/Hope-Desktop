@@ -55,7 +55,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
 	/// <param name="isGray"> Checks what the current color state is </param>
 	private void AnimateColor(bool isGray)
     {
-        if (this.enabled)
+        if (gameObject.activeInHierarchy && this.enabled)
             image.DOColor(isGray ? LIGHT_COLOR : UIColors.LightGrey, 1.25f).OnComplete(() => AnimateColor(!isGray));
     }
 
@@ -64,7 +64,7 @@ public class LoadingIconAnimator : MonoBehaviour, IUpdater
     /// </summary>
     public void UpdaterUpdate()
     {
-        if (this.enabled && !pulsateOnly)
+        if (gameObject.activeInHierarchy && this.enabled && !pulsateOnly)
             iconTransform.DOLocalRotate(ICON_ROTATION, 0.01f, RotateMode.LocalAxisAdd);
     }
 }

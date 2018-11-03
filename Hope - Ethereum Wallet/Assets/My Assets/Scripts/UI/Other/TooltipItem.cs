@@ -63,6 +63,9 @@ public sealed class TooltipItem : MonoBehaviour, IPointerEnterHandler, IPointerE
 	/// </summary>
 	public void CloseInfoPopup()
 	{
+		if (!infoIcon && button.interactable)
+			return;
+
 		PopupManager.GetPopup<TooltipPopup>()?.Animator?.AnimateDisable(() => PopupManager.KillActivePopup(typeof(TooltipPopup)));
 		Active = false;
 	}
