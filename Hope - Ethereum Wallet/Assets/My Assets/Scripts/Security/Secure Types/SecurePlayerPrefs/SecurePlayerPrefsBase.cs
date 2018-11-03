@@ -22,6 +22,7 @@ namespace Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base
         /// <param name="prefSettings"> The Settings for the SecurePlayerPrefs. </param>
         protected SecurePlayerPrefsBase(SecurePlayerPrefsSettings prefSettings)
         {
+            prefSettings.securePlayerPrefSeed.Log();
             hashedSeed = prefSettings.securePlayerPrefSeed.Blake2_512();
             hashedEntropy = prefSettings.securePlayerPrefDataEntropy.Blake2_512();
 
