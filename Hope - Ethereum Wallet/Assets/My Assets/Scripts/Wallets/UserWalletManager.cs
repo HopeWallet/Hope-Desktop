@@ -228,23 +228,6 @@ public sealed class UserWalletManager : IDisposable
     }
 
     /// <summary>
-    /// Gets the previous loaded account and wallet path if the setting is enabled.
-    /// </summary>
-    private void GetPreviousAccount()
-    {
-        if (!SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT) || !SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_START_ON_PREVIOUS_ACCOUNT))
-            return;
-
-        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()))
-            SetWalletAccount(SecurePlayerPrefs.GetInt(PlayerPrefConstants.SETTING_PREVIOUS_ACCOUNT_NUM + ActiveWalletType.ToString()));
-
-        if (SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()))
-            SetWalletPath(SecurePlayerPrefs.GetString(PlayerPrefConstants.SETTING_PREVIOUS_DERIVATION_PATH + ActiveWalletType.ToString()));
-
-        UnityEngine.Debug.Log(AccountNumber + " " + WalletPath);
-    }
-
-    /// <summary>
     /// Enum representing the type of the wallet.
     /// </summary>
     public enum WalletType
