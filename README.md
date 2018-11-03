@@ -19,8 +19,7 @@ In Hope, there are currently a small list of supported altruistic cryptocurrenci
 ## PRPS/DUBI
 
 <p align="center">
-  <img src="Hope - Ethereum Wallet/Images/PRPS.jpg?raw=true" alt="Hope" align="center" width="400px" height="400px"/>
-  <img src="Hope - Ethereum Wallet/Images/DUBI.jpg?raw=true" alt="Hope" align="right" width="400px" height="400px"/>
+  <img src="Hope - Ethereum Wallet/Images/PRPS-DUBI.jpg?raw=true" alt="Hope" align="center" width="750px" height="375px"/>
 </p>
 
 Purpose (PRPS) and Decentralized Universal Basic Income (DUBI) are cryptocurrencies created by popular internet philanthropist and charity activist, [Athene](https://en.wikipedia.org/wiki/Bachir_Boumaaza). The creator has a history of raising money for charity and awareness for serious worldwide issues. He has worked closely together with [Save the Children](https://www.savethechildren.org/us/about-us/media-and-news/ambassadors/athene) and has helped raise over [$24 million dollars](https://www.gamingforgood.net/c/about) for various charity projects.
