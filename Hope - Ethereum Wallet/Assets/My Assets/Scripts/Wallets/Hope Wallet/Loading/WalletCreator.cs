@@ -32,7 +32,7 @@ public sealed class WalletCreator : WalletLoaderBase
         byte[] seed = (byte[])dynamicDataCache.GetData("seed");
 
         AssignAddresses(new Wallet(seed, Wallet.DEFAULT_PATH).GetAddresses(50), new Wallet(seed, Wallet.ELECTRUM_LEDGER_PATH).GetAddresses(50));
-        walletEncryptor.EncryptWallet(seed, password, hopeWalletInfoManager.WalletCount + 1, FinalizeWalletCreation);
+        walletEncryptor.EncryptWallet(seed, password, FinalizeWalletCreation);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public sealed class WalletCreator : WalletLoaderBase
     private void FinalizeWalletCreation(string[] encryptionHashes, string passwordHash, string encryptedSeed)
     {
         hopeWalletInfoManager.AddWalletInfo(dynamicDataCache.GetData("name"), addresses, encryptionHashes, encryptedSeed, passwordHash);
-        playerPrefPassword.SetupPlayerPrefs(hopeWalletInfoManager.WalletCount, onWalletLoaded);
+        playerPrefPassword.SetupPlayerPrefs(addresses[0][0], onWalletLoaded);
 
         ((byte[])dynamicDataCache.GetData("seed")).ClearBytes();
         dynamicDataCache.SetData("seed", null);

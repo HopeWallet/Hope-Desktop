@@ -36,13 +36,12 @@ public sealed class WalletDecryptor : SecureObject
     {
         MainThreadExecutor.QueueAction(() =>
         {
-            playerPrefPassword.PopulatePrefDictionary(walletInfo.WalletNum);
+            playerPrefPassword.PopulatePrefDictionary(walletInfo.WalletAddresses[0][0]);
 
             Task.Factory.StartNew(() => AsyncDecryptWallet(
                 walletInfo.EncryptedWalletData.EncryptionHashes,
                 walletInfo.EncryptedWalletData.EncryptedSeed,
                 password,
-                walletInfo.WalletNum,
                 onWalletDecrypted));
         });
     }
@@ -53,13 +52,11 @@ public sealed class WalletDecryptor : SecureObject
     /// <param name="hashes"> Different hash levels used for multi level encryption of the wallet seed. </param>
     /// <param name="encryptedSeed"> The encrypted seed of the wallet. </param>
     /// <param name="password"> The user's password to the wallet. </param>
-    /// <param name="walletNum"> The number of the wallet to decrypt. </param>
     /// <param name="onWalletDecrypted"> Action called once the wallet has been decrypted, passing the <see langword="byte"/>[] seed of the wallet. </param>
     private void AsyncDecryptWallet(
         string[] hashes,
         string encryptedSeed,
         byte[] password,
-        int walletNum,
         Action<byte[]> onWalletDecrypted)
     {
         byte[] derivedPassword = playerPrefPassword.Restore(password);

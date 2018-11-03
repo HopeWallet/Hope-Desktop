@@ -34,11 +34,10 @@ public sealed class WalletEncryptor : SecureObject
     /// </summary>
     /// <param name="seed"> The <see langword="byte"/>[] seed of the wallet. </param>
     /// <param name="password"> The password of the user. </param>
-    /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action to call once the wallet has been encrypted. Passing the array of hashes used to encrypt the wallet, the salted password hash, and encrypted seed. </param>
-    public void EncryptWallet(byte[] seed, byte[] password, int walletNum, Action<string[], string, string> onWalletEncrypted)
+    public void EncryptWallet(byte[] seed, byte[] password, Action<string[], string, string> onWalletEncrypted)
     {
-        Task.Factory.StartNew(() => AsyncEncryptWallet(seed, password, walletNum, onWalletEncrypted));
+        Task.Factory.StartNew(() => AsyncEncryptWallet(seed, password, onWalletEncrypted));
     }
 
     /// <summary>
@@ -46,12 +45,10 @@ public sealed class WalletEncryptor : SecureObject
     /// </summary>
     /// <param name="seed"> The <see langword="byte"/>[] seed to encrypt. </param>
     /// <param name="password"> The base password to use for encryption, retrieved from the user input. </param>
-    /// <param name="walletNum"> The number of the wallet to encrypt. </param>
     /// <param name="onWalletEncrypted"> Action called once the wallet has been encrypted. </param>
     private void AsyncEncryptWallet(
         byte[] seed,
         byte[] password,
-        int walletNum,
         Action<string[], string, string> onWalletEncrypted)
     {
         string[] encryptedHashes = null;

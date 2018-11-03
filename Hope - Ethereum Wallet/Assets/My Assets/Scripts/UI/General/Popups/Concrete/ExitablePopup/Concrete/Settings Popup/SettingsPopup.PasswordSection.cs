@@ -85,7 +85,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
 
             promise.OnSuccess(disposableData =>
                 walletDecryptor.DecryptWallet(walletInfo, (byte[])disposableData.ByteValue.Clone(), seed =>
-                    walletEncryptor.EncryptWallet(seed, confirmPasswordField.InputFieldBytes, walletInfo.WalletNum, OnNewWalletEncrypted)));
+                    walletEncryptor.EncryptWallet(seed, confirmPasswordField.InputFieldBytes, OnNewWalletEncrypted)));
         }
 
         private void OnNewWalletEncrypted(string[] hashes, string passwordHash, string encryptedSeed)
@@ -98,7 +98,7 @@ public sealed partial class SettingsPopup : ExitablePopupComponent<SettingsPopup
                     walletInfo.WalletAddresses,
                     walletInfo.WalletNum));
 
-            playerPrefPasswordDerivation.SetupPlayerPrefs(walletInfo.WalletNum, () =>
+            playerPrefPasswordDerivation.SetupPlayerPrefs(walletInfo.WalletAddresses[0][0], () =>
             {
                 MainThreadExecutor.QueueAction(() =>
                 {
