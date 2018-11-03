@@ -333,8 +333,10 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>, IEnte
 		if (clickType != ClickType.Down)
 			return;
 
-		if (InputFieldUtils.GetActiveInputField() == decimalsField.InputFieldBase && okButton.interactable)
+		if (invalidTokenSection.activeInHierarchy && InputFieldUtils.GetActiveInputField() == decimalsField.InputFieldBase && okButton.interactable)
 			okButton.Press();
+		else if (invalidTokenSection.activeInHierarchy)
+			selectableFields.MoveToNextSelectable();
 	}
 
 	/// <summary>
