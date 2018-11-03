@@ -48,6 +48,9 @@ public sealed class ChooseWalletMenu : Menu<ChooseWalletMenu>
 		networkSettingDropdown.onValueChanged.AddListener((value) => ethereumNetworkSettings.ChangeNetwork(value == 0 ? EthereumNetworkManager.NetworkType.Mainnet : EthereumNetworkManager.NetworkType.Rinkeby));
 	}
 
+    /// <summary>
+    /// Invokes the OnAppLoaded event.
+    /// </summary>
 	private void OnEnable()
 	{
 		OnAppLoaded?.Invoke();
