@@ -90,10 +90,10 @@ public sealed class PlayerPrefPasswordDerivation
     /// <summary>
     /// Sets the player pref values to correspond with the dictionary.
     /// </summary>
-    /// <param name="walletNum"> The wallet number to setup the player prefs for. </param>
+    /// <param name="walletAddress"> The wallet address to set the PlayerPrefs up for. </param>
     /// <param name="onPrefsSetup"> Action to call once all the PlayerPrefs were setup. </param>
     /// <param name="generateSpoofKeys"> Whether spoof player pref keys should be created. </param>
-    public void SetupPlayerPrefs(int walletNum, Action onPrefsSetup, bool generateSpoofKeys = true)
+    public void SetupPlayerPrefs(string walletAddress, Action onPrefsSetup, bool generateSpoofKeys = true)
     {
         if (prefDictionary == null)
         {
@@ -104,41 +104,40 @@ public sealed class PlayerPrefPasswordDerivation
         if (generateSpoofKeys)
             GenerateSpoofKeys();
 
-        GenerateCorrectKeys(walletNum, onPrefsSetup);
+        GenerateCorrectKeys(walletAddress = walletAddress.ToLower(), onPrefsSetup);
         prefDictionary.Clear();
     }
 
     /// <summary>
     /// Takes the player prefs saved in the registry and moves them into a dictionary.
     /// </summary>
-    /// <param name="walletNum"> The wallet number to get the PlayerPrefs for. </param>
+    /// <param name="walletAddress"> The wallet address to set the PlayerPrefs up for. </param>
     /// <returns> The dictionary of player prefs. </returns>
-    public void PopulatePrefDictionary(int walletNum)
+    public void PopulatePrefDictionary(string walletAddress)
     {
         if (prefDictionary.Count > 0)
             prefDictionary.Clear();
 
+        walletAddress = walletAddress.ToLower();
         string tempKey = key;
 
         for (int i = 0; i < PREF_COUNT; i++)
         {
             tempKey = (tempKey + i.ToString()).Keccak_256();
-            prefDictionary.Add(tempKey, SecurePlayerPrefs.GetString((tempKey + "_" + walletNum).Keccak_256()).GetBase64Bytes());
+            prefDictionary.Add(tempKey, SecurePlayerPrefs.GetString((tempKey + "_" + walletAddress).Keccak_256()).GetBase64Bytes());
         }
-
-        //keys.SafeForEach(key => prefDictionary.Add(key, SecurePlayerPrefs.GetString((key + "_" + walletNum).Keccak_256()).GetBase64Bytes()));
     }
 
     /// <summary>
     /// Generates the correct PlayerPref keys for the given wallet number.
     /// </summary>
-    /// <param name="walletNum"> The wallet number to generate the PlayerPrefs for. </param>
+    /// <param name="walletAddress"> The wallet address to set the PlayerPrefs up for. </param>
     /// <param name="onPrefsGenerated"> The action to call once all PlayerPrefs have been generated. </param>
-    private void GenerateCorrectKeys(int walletNum, Action onPrefsGenerated)
+    private void GenerateCorrectKeys(string walletAddress, Action onPrefsGenerated)
     {
         prefCounter = 0;
 
-        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletNum).Keccak_256(), prefDictionary[key].GetBase64String(), () =>
+        prefDictionary.Keys.ForEach(key => SecurePlayerPrefsAsync.SetString((key + "_" + walletAddress).Keccak_256(), prefDictionary[key].GetBase64String(), () =>
         {
             if (++prefCounter >= PREF_COUNT)
                 onPrefsGenerated?.Invoke();
