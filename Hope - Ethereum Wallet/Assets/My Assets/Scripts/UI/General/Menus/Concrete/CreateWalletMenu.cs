@@ -15,6 +15,8 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
                                             password1Field,
                                             password2Field;
 
+	[SerializeField] private GameObject hopeLogo;
+
 	public bool ComingFromChooseWalletMenu { get; private set; }
 
 	private DynamicDataCache dynamicDataCache;
@@ -67,10 +69,26 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
         nextButton.onClick.AddListener(CreateWalletNameAndPass);
     }
 
-    /// <summary>
-    /// Sets up the wallet name and password and opens the next menu.
-    /// </summary>
-    private void CreateWalletNameAndPass()
+
+	/// <summary>
+	/// Animates the back button and hope logo out if the user goes back to the ChooseWalletMenu
+	/// </summary>
+	protected override void OnBackPressed()
+	{
+		base.OnBackPressed();
+
+		if (ComingFromChooseWalletMenu)
+		{
+			backButton.gameObject.AnimateGraphicAndScale(0f, 0f, 0.3f);
+			hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
+		}
+	}
+
+
+	/// <summary>
+	/// Sets up the wallet name and password and opens the next menu.
+	/// </summary>
+	private void CreateWalletNameAndPass()
     {
         dynamicDataCache.SetData("pass", new ProtectedString(password1Field.InputFieldBytes));
         dynamicDataCache.SetData("name", walletNameField.Text);
@@ -134,7 +152,7 @@ public sealed class CreateWalletMenu : Menu<CreateWalletMenu>, IEnterButtonObser
     /// Checks if passwords match, are above 7 characters, and all fields are filled in
     /// </summary>
     private void SetButtonInteractable() => nextButton.interactable = !walletNameField.Error && !password1Field.Error && !password2Field.Error;
-	
+
 	/// <summary>
 	/// Moves to the next input field
 	/// </summary>

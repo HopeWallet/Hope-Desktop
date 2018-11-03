@@ -2028,6 +2028,7 @@ MonoBehaviour:
   walletNameField: {fileID: 114733959693888730}
   password1Field: {fileID: 114847041827421048}
   password2Field: {fileID: 114975599293786198}
+  hopeLogo: {fileID: 1816731909116160}
 --- !u!114 &114767721293164210
 MonoBehaviour:
   m_ObjectHideFlags: 1

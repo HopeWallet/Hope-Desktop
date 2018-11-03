@@ -15,16 +15,12 @@ public class WalletListMenuAnimator : MenuAnimator
 
     private WalletListMenu walletListMenu;
 
-    private void Awake()
-    {
-        walletListMenu = GetComponent<WalletListMenu>();
-        backButton.GetComponent<Button>().onClick.AddListener(() => { backButton.AnimateGraphicAndScale(0f, 0f, 0.3f); hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f); });
-    }
+	private void Awake() => walletListMenu = GetComponent<WalletListMenu>();
 
-    /// <summary>
-    /// Animates the unique elements of this form into view
-    /// </summary>
-    protected override void AnimateUniqueElementsIn()
+	/// <summary>
+	/// Animates the unique elements of this form into view
+	/// </summary>
+	protected override void AnimateUniqueElementsIn()
     {
 		backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
 		hopeLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);

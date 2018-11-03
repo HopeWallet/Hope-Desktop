@@ -13,12 +13,16 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	[SerializeField] private GameObject hopeLogo;
 	[SerializeField] private GameObject backButton;
 
+	private CreateWalletMenu createWalletMenu;
+
+	private void Awake() => createWalletMenu = GetComponent<CreateWalletMenu>();
+
 	/// <summary>
 	/// Animates the unique elements of this form into view
 	/// </summary>
 	protected override void AnimateUniqueElementsIn()
 	{
-		if (GetComponent<CreateWalletMenu>().ComingFromChooseWalletMenu)
+		if (createWalletMenu.ComingFromChooseWalletMenu)
 		{
 			backButton.AnimateGraphicAndScale(1f, 1f, 0.2f);
 			hopeLogo.AnimateGraphicAndScale(1f, 1f, 0.2f);
@@ -44,12 +48,6 @@ public sealed class CreateWalletMenuAnimator : MenuAnimator
 	/// </summary>
 	protected override void AnimateUniqueElementsOut()
 	{
-		if (GetComponent<CreateWalletMenu>().ComingFromChooseWalletMenu)
-		{
-			backButton.AnimateGraphicAndScale(0f, 0f, 0.3f);
-			hopeLogo.AnimateGraphicAndScale(0f, 0f, 0.3f);
-		}
-
 		walletNameField.AnimateScale(0f, 0.3f);
 		password1Field.AnimateScale(0f, 0.3f);
 		password2Field.AnimateScale(0f, 0.3f);
