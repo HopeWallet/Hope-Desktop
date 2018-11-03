@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Hope - Ethereum Wallet/Images/Hope_Background.jpg?raw=true" alt="Hope" align="center" width="785px" height="328px"/>
+</p>
+
 # Introduction
 
 The Hope Ethereum Wallet is a not-for-profit wallet built to support philanthropic and charitable cryptocurrencies. The wallet is a fully functional Ethereum wallet which allows for the transfer of Ether as well as any ERC20 token. Any user can simply create a wallet by importing a mnemonic passphrase, create a new one, or simply open their wallet with a Ledger or Trezor hardware wallet. 
@@ -13,6 +17,11 @@ As for the wallet itself, there will never be any mechanism, functionality, feat
 In Hope, there are currently a small list of supported altruistic cryptocurrencies. 
 
 ## PRPS/DUBI
+
+<p align="center">
+  <img src="Hope - Ethereum Wallet/Images/PRPS.jpg?raw=true" alt="Hope" align="center" width="400px" height="400px"/>
+  <img src="Hope - Ethereum Wallet/Images/DUBI.jpg?raw=true" alt="Hope" align="right" width="400px" height="400px"/>
+</p>
 
 Purpose (PRPS) and Decentralized Universal Basic Income (DUBI) are cryptocurrencies created by popular internet philanthropist and charity activist, [Athene](https://en.wikipedia.org/wiki/Bachir_Boumaaza). The creator has a history of raising money for charity and awareness for serious worldwide issues. He has worked closely together with [Save the Children](https://www.savethechildren.org/us/about-us/media-and-news/ambassadors/athene) and has helped raise over [$24 million dollars](https://www.gamingforgood.net/c/about) for various charity projects.
 
