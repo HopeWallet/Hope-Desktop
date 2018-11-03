@@ -10,24 +10,24 @@ public sealed class WalletTransactionSigner
     private readonly MemoryEncryptor passwordEncryptor;
     private readonly WalletDecryptor walletDecryptor;
     private readonly HopeWalletInfoManager hopeWalletInfoManager;
-    private readonly EthereumNetwork ethereumNetwork;
+    private readonly EthereumNetworkManager ethereumNetworkManager;
 
     /// <summary>
     /// Initializes the <see cref="WalletTransactionSigner"/> by assigning all references.
     /// </summary>
     /// <param name="playerPrefPassword"> The <see cref="PlayerPrefPasswordDerivation"/> instance to assign to the <see cref="WalletDecryptor"/>. </param>
     /// <param name="dynamicDataCache"> The active <see cref="DynamicDataCache"/> to assign to the <see cref="WalletDecryptor"/>. </param>
-    /// <param name="ethereumNetwork"> The active <see cref="EthereumNetwork"/>. </param>
+    /// <param name="ethereumNetworkManager"> The active <see cref="EthereumNetworkManager"/>. </param>
     /// <param name="passwordEncryptor"> The <see cref="MemoryEncryptor"/> instance used to encrypt the password. </param>
     /// <param name="hopeWalletInfoManager"> The active <see cref="HopeWalletInfoManager"/>. </param>
     public WalletTransactionSigner(
         PlayerPrefPasswordDerivation playerPrefPassword,
         DynamicDataCache dynamicDataCache,
-        EthereumNetwork ethereumNetwork,
+        EthereumNetworkManager ethereumNetworkManager,
         MemoryEncryptor passwordEncryptor,
         HopeWalletInfoManager hopeWalletInfoManager)
     {
-        this.ethereumNetwork = ethereumNetwork;
+        this.ethereumNetworkManager = ethereumNetworkManager;
         this.passwordEncryptor = passwordEncryptor;
         this.hopeWalletInfoManager = hopeWalletInfoManager;
 
@@ -47,7 +47,10 @@ public sealed class WalletTransactionSigner
         var plainTextBytes = passwordEncryptor.Decrypt(encryptedPasswordBytes);
         walletDecryptor.DecryptWallet(hopeWalletInfoManager.GetWalletInfo(walletAddress), plainTextBytes, seed =>
         {
-            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(new Wallet(seed, path).GetAccount(walletAddress), ethereumNetwork.NetworkUrl);
+            TransactionSignedUnityRequest request = new TransactionSignedUnityRequest(
+                new Wallet(seed, path).GetAccount(walletAddress),
+                ethereumNetworkManager.CurrentNetwork.NetworkUrl);
+
             MainThreadExecutor.QueueAction(() => onRequestReceived?.Invoke(request));
             ClearData(seed, plainTextBytes);
         });

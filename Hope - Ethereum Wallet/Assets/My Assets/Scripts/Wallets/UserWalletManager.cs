@@ -6,7 +6,7 @@ using System.Numerics;
 /// <summary>
 /// Class for managing the ethereum wallet of the user.
 /// </summary>
-public sealed class UserWalletManager : IDisposable
+public sealed class UserWalletManager
 {
     public static event Action OnWalletLoadSuccessful;
     public static event Action OnWalletLoadUnsuccessful;
@@ -50,7 +50,6 @@ public sealed class UserWalletManager : IDisposable
     public UserWalletManager(
         PlayerPrefPasswordDerivation playerPrefPasswordDerivation,
         EthereumPendingTransactionManager ethereumPendingTransactionManager,
-        DisposableComponentManager disposableComponentManager,
         PopupManager popupManager,
         EthereumNetworkManager ethereumNetworkManager,
         DynamicDataCache dynamicDataCache,
@@ -64,9 +63,7 @@ public sealed class UserWalletManager : IDisposable
         this.ledgerWallet = ledgerWallet;
         this.trezorWallet = trezorWallet;
 
-        disposableComponentManager.AddDisposable(this);
-
-        hopeWallet = new HopeWallet(playerPrefPasswordDerivation, popupManager, ethereumNetworkManager.CurrentNetwork, dynamicDataCache, userWalletInfoManager);
+        hopeWallet = new HopeWallet(playerPrefPasswordDerivation, popupManager, ethereumNetworkManager, dynamicDataCache, userWalletInfoManager);
         activeWallet = hopeWallet;
 
         ledgerWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
@@ -75,15 +72,6 @@ public sealed class UserWalletManager : IDisposable
         trezorWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
         hopeWallet.OnWalletLoadSuccessful += () => OnWalletLoadSuccessful?.Invoke();
         hopeWallet.OnWalletLoadUnsuccessful += () => OnWalletLoadUnsuccessful?.Invoke();
-    }
-
-    /// <summary>
-    /// Resets the wallet account and path.
-    /// </summary>
-    public void Dispose()
-    {
-        //SetWalletAccount(0);
-        //SetWalletPath(Wallet.DEFAULT_PATH);
     }
 
     /// <summary>

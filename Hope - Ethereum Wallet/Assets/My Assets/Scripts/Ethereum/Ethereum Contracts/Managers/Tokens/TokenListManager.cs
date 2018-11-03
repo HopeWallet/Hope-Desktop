@@ -36,36 +36,6 @@ public sealed class TokenListManager
         return !ContainsToken(address = address.ToLower()) ? null : addableTokens[address];
     }
 
-    //private void ScanForNewTokens(TokenContractManager tokenContractManager, UserWalletManager userWalletManager)
-    //{
-    //    var asset = Resources.Load("Data/tokens") as TextAsset;
-    //    var text = asset.text;
-
-    //    var deserializedData = JsonUtils.DeserializeDynamicCollection(text);
-    //    var count = (int)deserializedData.Count;
-    //    for (int i = 0; i < count; i++)
-    //    {
-    //        var data = deserializedData[i];
-    //        var address = (string)data.address;
-
-    //        if (addableTokens.Contains(address.ToLower()))
-    //            continue;
-
-    //        ContractUtils.QueryContract<ERC20.Queries.BalanceOf, SimpleOutputs.UInt256>((string)data.address, null, userWalletManager.GetWalletAddress()).OnSuccess(balance =>
-    //        {
-    //            if (balance.Value > 0)
-    //            {
-    //                ERC20 token = new ERC20(address);
-    //                token.OnInitializationSuccessful(() =>
-    //                {
-    //                    addableTokens.Add(new AddableTokenInfo(address.ToLower(), token.Name, token.Symbol, token.Decimals.Value, true, true));
-    //                    tokenContractManager.AddAndUpdateToken(new TokenInfo(address.ToLower(), token.Name, token.Symbol, token.Decimals.Value));
-    //                });
-    //            }
-    //        });
-    //    }
-    //}
-
     private void Initialize(TokenContractManager tokenContractManager, PRPS prps, DUBI dubi, EthereumNetworkManager.Settings ethereumNetworkSettings)
     {
         addableTokens = new SecurePlayerPrefList<TokenInfo>(PlayerPrefConstants.CACHED_TOKEN_LIST, (int)ethereumNetworkSettings.networkType);
