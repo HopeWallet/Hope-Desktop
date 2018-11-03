@@ -11,7 +11,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Class which is manages the popup for adding a token to the list of tokens.
 /// </summary>
-public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
+public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>, IEnterButtonObservable, ITabButtonObservable
 {
     public event Action<Status> OnStatusChanged;
 
@@ -19,14 +19,18 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
     [SerializeField] private Image tokenIcon;
     [SerializeField] private TextMeshProUGUI tokenName;
     [SerializeField] private Transform addableTokenSpawnTransform;
+	[SerializeField] private GameObject invalidTokenSection;
 
     private readonly List<AddableTokenButton> addableTokens = new List<AddableTokenButton>();
+
+	private List<Selectable> selectableFields = new List<Selectable>();
 
     private TokenListManager tokenListManager;
     private TokenContractManager tokenContractManager;
     private TradableAssetImageManager tradableAssetImageManager;
     private UserWalletManager userWalletManager;
     private AddableTokenButton.Factory addableTokenButtonFactory;
+	private ButtonClickObserver buttonClickObserver;
 
     private AddableTokenButton activelySelectedButton;
 
@@ -68,14 +72,22 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         TokenContractManager tokenContractManager,
         TradableAssetImageManager tradableAssetImageManager,
         UserWalletManager userWalletManager,
-        AddableTokenButton.Factory addableTokenButtonFactory)
+        AddableTokenButton.Factory addableTokenButtonFactory,
+		ButtonClickObserver buttonClickObserver)
     {
         this.tokenListManager = tokenListManager;
         this.tokenContractManager = tokenContractManager;
         this.tradableAssetImageManager = tradableAssetImageManager;
         this.userWalletManager = userWalletManager;
         this.addableTokenButtonFactory = addableTokenButtonFactory;
-    }
+		this.buttonClickObserver = buttonClickObserver;
+
+		buttonClickObserver.SubscribeObservable(this);
+
+		selectableFields.Add(addressField.InputFieldBase);
+		selectableFields.Add(symbolField.InputFieldBase);
+		selectableFields.Add(decimalsField.InputFieldBase);
+	}
 
     /// <summary>
     /// Gets the input field in the children and makes sure the ok button is disabled.
@@ -89,10 +101,15 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         addressField.Error = false;
     }
 
-    /// <summary>
-    /// Start the token add process via the ContractManager.
-    /// </summary>
-    protected override void OnOkClicked()
+	/// <summary>
+	/// Unsubscribes the button click observer
+	/// </summary>
+	private void OnDisable() => buttonClickObserver.UnsubscribeObservable(this);
+
+	/// <summary>
+	/// Start the token add process via the ContractManager.
+	/// </summary>
+	protected override void OnOkClicked()
     {
         if (ActivelySelectedButton == null)
             tokenContractManager.AddAndUpdateToken(new TokenInfo(addressField.Text, name, symbol, decimals.Value));
@@ -294,12 +311,38 @@ public sealed class AddTokenPopup : OkCancelPopupComponent<AddTokenPopup>
         okButton.interactable = true;
     }
 
-    /// <summary>
-    /// The status of the AddTokenPopup.
-    /// <para> <see cref="Loading"/> - The entered address is being searched for the name/symbol/decimals. </para>
-    /// <para> <see cref="NoTokenFound"/> - The entered address is not a full length address and cannot be searched for. </para>
-    /// <para> <see cref="InvalidToken"/> - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available. </para>
-    /// <para> <see cref="ValidToken"/> - The entered address was searched for and found, therefore the image and symbol text can be displayed. </para>
-    /// </summary>
-    public enum Status { NoTokenFound, MultipleTokensFound, TooManyTokensFound, InvalidToken, ValidToken, Loading };
+	/// <summary>
+	/// Moves to the next input field
+	/// </summary>
+	/// <param name="clickType"> The tab button ClickType </param>
+	public void TabButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		if (invalidTokenSection.activeInHierarchy)
+			selectableFields.MoveToNextSelectable();
+	}
+
+	/// <summary>
+	/// Clicks the send button if on the last input field 
+	/// </summary>
+	/// <param name="clickType"> The enter button ClickType </param>
+	public void EnterButtonPressed(ClickType clickType)
+	{
+		if (clickType != ClickType.Down)
+			return;
+
+		if (InputFieldUtils.GetActiveInputField() == decimalsField.InputFieldBase && okButton.interactable)
+			okButton.Press();
+	}
+
+	/// <summary>
+	/// The status of the AddTokenPopup.
+	/// <para> <see cref="Loading"/> - The entered address is being searched for the name/symbol/decimals. </para>
+	/// <para> <see cref="NoTokenFound"/> - The entered address is not a full length address and cannot be searched for. </para>
+	/// <para> <see cref="InvalidToken"/> - The entered address was searched for but cannot be verified as a valid address, therefore the fields for Symbol and Decimals needs to be available. </para>
+	/// <para> <see cref="ValidToken"/> - The entered address was searched for and found, therefore the image and symbol text can be displayed. </para>
+	/// </summary>
+	public enum Status { NoTokenFound, MultipleTokensFound, TooManyTokensFound, InvalidToken, ValidToken, Loading };
 }

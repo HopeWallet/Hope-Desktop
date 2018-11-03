@@ -2402,6 +2402,7 @@ MonoBehaviour:
   tokenIcon: {fileID: 114963866160689284}
   tokenName: {fileID: 114414847472529698}
   addableTokenSpawnTransform: {fileID: 224906470529474858}
+  invalidTokenSection: {fileID: 1324449946490254}
 --- !u!114 &114709884941586742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2779,7 +2780,7 @@ MonoBehaviour:
   placeholder: {fileID: 1592551736564754}
   eye: {fileID: 0}
   errorIcon: {fileID: 1656602818210242}
-  noSpaces: 1
+  noSpaces: 0
   placeholderFadeAway: 0
   errorMessage: {fileID: 114971444265548862}
 --- !u!114 &114940984720043948
@@ -3495,7 +3496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 123}
+  m_AnchoredPosition: {x: 0, y: 118.2}
   m_SizeDelta: {x: 645, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224128520601046566

@@ -19,7 +19,7 @@ MonoBehaviour:
   playerPrefSettings:
     defaultPlayerPrefsSettings: {fileID: 11400000, guid: 2b28bf3b33c733d49a65405f47983f96,
       type: 2}
-    securedPlayerPrefsSettings: {fileID: 11400000, guid: 0d20e042511e8e44a80b1203e14a4f51,
+    securedPlayerPrefsSettings: {fileID: 11400000, guid: 31e44a7cdfd4e104aa56383d97392d62,
       type: 2}
   ethereumNetworkSettings:
     networkType: 1
