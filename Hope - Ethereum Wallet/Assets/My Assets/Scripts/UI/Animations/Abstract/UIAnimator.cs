@@ -21,16 +21,16 @@ public abstract class UIAnimator : MonoBehaviour
 		protected set { ChangeAnimationState(value); }
 	}
 
-	/// <summary>
-	/// Starts to animate in
-	/// </summary>
-	private void OnEnable() => AnimateEnable();
+    /// <summary>
+    /// Starts to animate in
+    /// </summary>
+    protected virtual void OnEnable() => AnimateEnable();
 
-	/// <summary>
-	/// Animates the form in
-	/// </summary>
-	/// <param name="onAnimationFinished"> The action to be called after the animation finishes </param>
-	public void AnimateEnable(Action onAnimationFinished = null)
+    /// <summary>
+    /// Animates the form in
+    /// </summary>
+    /// <param name="onAnimationFinished"> The action to be called after the animation finishes </param>
+    public void AnimateEnable(Action onAnimationFinished = null)
 	{
 		this.onAnimationFinished = onAnimationFinished;
 

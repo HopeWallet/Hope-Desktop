@@ -66,9 +66,9 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	/// <param name="walletName"> The wallet name </param>
 	public void SetWalletInfo(string walletName)
 	{
-		WalletName = walletName;
-		formTitle.text = $"Unlock <size=90%>'{walletName.LimitEnd(17, "...")}'</size>";
-	}
+        WalletName = walletName;
+        formTitle.text = $"Unlock <size=90%>'{walletName.LimitEnd(17, "...")}'</size>";
+    }
 
 	/// <summary>
 	/// Adds the button listener and sets up the limit login attempts feature if the setting is enabled
@@ -77,18 +77,18 @@ public sealed class UnlockWalletPopup : ExitablePopupComponent<UnlockWalletPopup
 	{
 		unlockWalletButton.onClick.AddListener(CheckPassword);
 
-		if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
-			return;
+        if (!SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_LOGIN_ATTEMPTS_LIMIT))
+            return;
 
-		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
+        if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT))
+            SecurePlayerPrefs.SetInt(WalletName + PlayerPrefConstants.SETTING_CURRENT_LOGIN_ATTEMPT, 1);
 
-		if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT))
-			SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
+        if (!SecurePlayerPrefs.HasKey(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT))
+            SecurePlayerPrefs.SetString(WalletName + PlayerPrefConstants.SETTING_LAST_FAILED_LOGIN_ATTEMPT, DateTimeUtils.GetCurrentUnixTime().ToString());
 
-		UpdatePlaceHolderText();
-		TimerChecker().StartCoroutine();
-	}
+        UpdatePlaceHolderText();
+        TimerChecker().StartCoroutine();
+    }
 
 	/// <summary>
 	/// Adds the OnWalletLoad method to the UserWallet.OnWalletLoadSuccessful event.

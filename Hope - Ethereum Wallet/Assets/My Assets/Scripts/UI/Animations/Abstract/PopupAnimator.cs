@@ -15,9 +15,9 @@ public abstract class PopupAnimator : UIAnimator
 	/// <summary>
 	/// Sets the current starting position given by the current mouse position at the time of the click
 	/// </summary>
-	private void OnEnable()
+	protected override void OnEnable()
 	{
-		if (popupContainer != null)
+        if (popupContainer != null)
 		{
 			Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 			Vector2 updatedPosition = new Vector2(GetUpdatedValue(Screen.width / 2, currentMousePosition.x), GetUpdatedValue(Screen.height / 2, currentMousePosition.y));
@@ -25,7 +25,9 @@ public abstract class PopupAnimator : UIAnimator
 			popupContainer.transform.localPosition = updatedPosition;
 			startingPosition = updatedPosition;
 		}
-	}
+
+        base.OnEnable();
+    }
 
 	/// <summary>
 	/// Gets the updates position of the form compared to the mouse click

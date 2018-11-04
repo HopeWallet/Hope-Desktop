@@ -33,7 +33,11 @@ public class OfficialBuildCreator : EditorWindow
         buildPath = (Resources.Load("Data/build_path") as TextAsset)?.text;
 
         appSettings.playerPrefSettings.securedPlayerPrefsSettings = securePlayerPrefsSettings;
-        appSettings.versionSettings.version = version;
+
+        if (!appSettings.versionSettings.version.EqualsIgnoreCase(version))
+            appSettings.versionSettings.version = version;
+
+        AssetDatabase.Refresh();
 
         EnsureValidDirectory();
 
@@ -48,6 +52,8 @@ public class OfficialBuildCreator : EditorWindow
         BuildPipeline.BuildPlayer(options);
 
         appSettings.playerPrefSettings.securedPlayerPrefsSettings = null;
+
+        AssetDatabase.Refresh();
     }
 
     private void EnsureValidDirectory()
