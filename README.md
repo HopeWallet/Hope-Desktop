@@ -1,3 +1,5 @@
+### Note: This readme is a work in progress
+
 <p align="center">
   <img src="Hope - Ethereum Wallet/Images/Hope_Background.jpg?raw=true" alt="Hope" align="center" width="785px" height="328px"/>
 </p>
@@ -27,5 +29,3 @@ Purpose (PRPS) and Decentralized Universal Basic Income (DUBI) are cryptocurrenc
 Recently, Athene has set his goals more worldwide and ambitious. He has created PRPS and DUBI with the goal of providing Universal Basic Income in impoverished regions around the world. In a pilot program together with Save the Children, the tokens will first be used and distributed in small regions in an attempt to aid poverty. These pilot programs are estimated to begin in early 2019.
 
 The integration within the wallet has to do with the ability to lock PRPS and receive DUBI. Users can lock their PRPS in a smart contract for 3, 6, or 12 months, and receive DUBI back as interest. More information on the tokens can be found on the [following document](https://drive.google.com/file/d/1gLmfsXtj2-wDaTj4IAwr0OCEo1f6Gmy9/view).
-
-This readme is currently a work in progress... all feedback is welcome.
