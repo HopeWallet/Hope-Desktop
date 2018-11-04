@@ -62,12 +62,7 @@ public sealed class WalletVersionManager
         LatestVersionUrl = (string)currentRelease.html_url;
         LatestVersion = ((string)currentRelease.tag_name).TrimStart('v');
 
-        if (!SecurePlayerPrefs.HasKey(versionSettings.versionPrefKey))
-        {
-            SecurePlayerPrefs.SetString(versionSettings.versionPrefKey, versionSettings.version);
-        }
-
-        if ((NewVersionExists = !(LocalVersion = SecurePlayerPrefs.GetString(versionSettings.versionPrefKey).TrimStart('v')).EqualsIgnoreCase(LatestVersion))
+        if ((NewVersionExists = !(LocalVersion = versionSettings.version.TrimStart('v')).EqualsIgnoreCase(LatestVersion))
             && SecurePlayerPrefs.HasKey(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS) && SecurePlayerPrefs.GetBool(PlayerPrefConstants.SETTING_UPDATE_NOTIFICATIONS))
         {
             popupManager.GetPopup<HopeUpdatePopup>();
@@ -81,6 +76,5 @@ public sealed class WalletVersionManager
     public sealed class Settings
     {
         public string version;
-        [RandomizeText] public string versionPrefKey;
     }
 }

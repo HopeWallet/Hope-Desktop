@@ -1,12 +1,16 @@
 ﻿using Hope.Security.ProtectedTypes.SecurePlayerPrefs.Base;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class OfficialBuildCreator : EditorWindow
 {
     private string version,
                    buildPath;
+
+    private static AppSettingsInstaller AppSettings;
+    private static SecurePlayerPrefsSettings SecurePlayerPrefsSettings;
 
     [MenuItem("Window/Official Build Creator")]
     public static void Init()
@@ -26,34 +30,37 @@ public class OfficialBuildCreator : EditorWindow
             CreateBuild();
     }
 
+    [PostProcessBuild(1)]
+    private static void RestorePlayerPrefSettings(BuildTarget buildTarget, string result)
+    {
+        AppSettings.playerPrefSettings.securedPlayerPrefsSettings = null;
+        AssetDatabase.Refresh();
+    }
+
     private void CreateBuild()
     {
-        var appSettings = Resources.Load("AppSettings") as AppSettingsInstaller;
-        var securePlayerPrefsSettings = Resources.Load("Settings/SecuredPlayerPrefsSettings") as SecurePlayerPrefsSettings;
+        AppSettings = Resources.Load("AppSettings") as AppSettingsInstaller;
+        SecurePlayerPrefsSettings = Resources.Load("Settings/SecuredPlayerPrefsSettings") as SecurePlayerPrefsSettings;
         buildPath = (Resources.Load("Data/build_path") as TextAsset)?.text;
 
-        appSettings.playerPrefSettings.securedPlayerPrefsSettings = securePlayerPrefsSettings;
+        EnsureValidDirectory();
 
-        if (!appSettings.versionSettings.version.EqualsIgnoreCase(version))
-            appSettings.versionSettings.version = version;
+        AppSettings.playerPrefSettings.securedPlayerPrefsSettings = SecurePlayerPrefsSettings;
+
+        if (!AppSettings.versionSettings.version.EqualsIgnoreCase(version))
+            AppSettings.versionSettings.version = version;
 
         AssetDatabase.Refresh();
-
-        EnsureValidDirectory();
 
         BuildPlayerOptions options = new BuildPlayerOptions
         {
             options = BuildOptions.None,
             target = BuildTarget.StandaloneWindows64,
             targetGroup = BuildTargetGroup.Standalone,
-            locationPathName = $@"{GetBuildPath()}\Hope {version}.exe"
+            locationPathName = $@"{GetBuildPath()}\Hope-{version}.exe"
         };
 
         BuildPipeline.BuildPlayer(options);
-
-        appSettings.playerPrefSettings.securedPlayerPrefsSettings = null;
-
-        AssetDatabase.Refresh();
     }
 
     private void EnsureValidDirectory()

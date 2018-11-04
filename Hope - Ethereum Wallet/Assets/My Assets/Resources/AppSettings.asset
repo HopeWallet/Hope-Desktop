@@ -12,15 +12,13 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   versionSettings:
-    version: v0.1
-    versionPrefKey: wallet_version
+    version: v0.1.0
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:
     defaultPlayerPrefsSettings: {fileID: 11400000, guid: 2b28bf3b33c733d49a65405f47983f96,
       type: 2}
-    securedPlayerPrefsSettings: {fileID: 11400000, guid: 0d20e042511e8e44a80b1203e14a4f51,
-      type: 2}
+    securedPlayerPrefsSettings: {fileID: 0}
   ethereumNetworkSettings:
     networkType: 1
   uiSettings:
