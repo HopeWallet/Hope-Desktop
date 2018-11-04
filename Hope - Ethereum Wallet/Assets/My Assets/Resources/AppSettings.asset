@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   versionSettings:
-    version: v0.1.0
+    version: v0.1.1
   debugSettings:
     displayNethereumDebugStatements: 0
   playerPrefSettings:

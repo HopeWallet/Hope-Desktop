@@ -124,20 +124,4 @@ public sealed class HopeTesting : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
     }
-
-    private void AnonymousStuff()
-    {
-        var thing = new { Name = "Something", Age = 50 };
-        var things = new[] { new { Name = "Something1", Age = 25 }, new { Name = "Something2", Age = 35 } };
-
-        dynamic obj = new ExpandoObject();
-        obj.Stuff = new ExpandoObject[20];
-        obj.Stuff[0].Something = "wow";
-        obj.Name = "MyName";
-        obj.Age = 22;
-
-        Debug.Log(obj.Name);
-
-    }
-
 }
