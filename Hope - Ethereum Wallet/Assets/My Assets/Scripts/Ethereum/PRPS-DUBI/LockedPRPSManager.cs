@@ -140,7 +140,8 @@ public sealed class LockedPRPSManager : IPeriodicUpdater, IDisposable
         {
             UpdateItemInfo(item, lockedTimeStamp);
             lockedItems.Add(item);
-            lockedItems.Sort((i1, i2) => i1.LockedTimeStamp.CompareTo(i2.LockedTimeStamp));
+            lockedItems.Sort((i1, i2) => i2.LockedTimeStamp.CompareTo(i1.LockedTimeStamp));
+            lockedItems.Sort((i1, i2) => i1.Unlockable && i2.Unlockable ? 0 : i1.Unlockable ? -1 : i2.Unlockable ? 1 : 0);
             UsedIds.Add(item.Id);
         }
         else

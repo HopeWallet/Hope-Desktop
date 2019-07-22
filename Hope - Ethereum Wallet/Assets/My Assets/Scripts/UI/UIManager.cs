@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	private void Awake()
 	{
+        SetFps();
 		SetScreenResolution();
 	}
 
@@ -116,11 +117,19 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 		Screen.SetResolution(screenWidth, screenHeight, false, 120);
 	}
 
-	/// <summary>
-	/// Closes the active popup if one is open, if not, calls the back button on the active menu.
-	/// </summary>
-	/// <param name="clickType"> The ClickType of the escape button press. </param>
-	public void EscapeButtonPressed(ClickType clickType)
+    /// <summary>
+    /// Sets the application fps.
+    /// </summary>
+    private void SetFps()
+    {
+        Application.targetFrameRate = 60;
+    }
+
+    /// <summary>
+    /// Closes the active popup if one is open, if not, calls the back button on the active menu.
+    /// </summary>
+    /// <param name="clickType"> The ClickType of the escape button press. </param>
+    public void EscapeButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)
 			return;
