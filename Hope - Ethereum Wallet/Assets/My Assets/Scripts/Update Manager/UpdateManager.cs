@@ -6,8 +6,8 @@ using Zenject;
 /// </summary>
 public class UpdateManager : ITickable, ILateTickable
 {
-    private List<IUpdater> updaters = new List<IUpdater>();
-    private List<ILateUpdater> lateUpdaters = new List<ILateUpdater>();
+    private readonly List<IUpdater> updaters = new List<IUpdater>();
+    private readonly List<ILateUpdater> lateUpdaters = new List<ILateUpdater>();
 
     /// <summary>
     /// Updates all IUpdaters.

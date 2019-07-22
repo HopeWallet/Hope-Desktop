@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public abstract class UIAnimator : MonoBehaviour
 {
+    public static bool IsAnimatingUI;
+
 	[SerializeField] private bool animateOnEnable;
 
 	[SerializeField] private GameObject blocker;
@@ -79,5 +81,6 @@ public abstract class UIAnimator : MonoBehaviour
 			blocker.SetActive(state);
 
 		animating = state;
+        IsAnimatingUI = state;
 	}
 }

@@ -29,10 +29,10 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	public Type ActiveMenuType => menus.Count > 0 ? menus.Peek().GetType() : null;
 
-    /// <summary>
-    /// The active opened menu.
-    /// </summary>
-    public Menu ActiveMenu => menus.Count > 0 ? menus.Peek() : null;
+	/// <summary>
+	/// The active opened menu.
+	/// </summary>
+	public Menu ActiveMenu => menus.Count > 0 ? menus.Peek() : null;
 
 	/// <summary>
 	/// Initializes the UIManager with all the required dependencies.
@@ -59,7 +59,6 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 	/// </summary>
 	private void Awake()
 	{
-        SetFps();
 		SetScreenResolution();
 	}
 
@@ -117,19 +116,11 @@ public class UIManager : MonoBehaviour, IEscapeButtonObservable
 		Screen.SetResolution(screenWidth, screenHeight, false, 120);
 	}
 
-    /// <summary>
-    /// Sets the application fps.
-    /// </summary>
-    private void SetFps()
-    {
-        Application.targetFrameRate = 60;
-    }
-
-    /// <summary>
-    /// Closes the active popup if one is open, if not, calls the back button on the active menu.
-    /// </summary>
-    /// <param name="clickType"> The ClickType of the escape button press. </param>
-    public void EscapeButtonPressed(ClickType clickType)
+	/// <summary>
+	/// Closes the active popup if one is open, if not, calls the back button on the active menu.
+	/// </summary>
+	/// <param name="clickType"> The ClickType of the escape button press. </param>
+	public void EscapeButtonPressed(ClickType clickType)
 	{
 		if (clickType != ClickType.Down)
 			return;

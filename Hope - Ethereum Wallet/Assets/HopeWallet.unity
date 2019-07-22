@@ -695,6 +695,7 @@ GameObject:
   - component: {fileID: 1404536059}
   - component: {fileID: 1404536058}
   - component: {fileID: 1404536061}
+  - component: {fileID: 1404536063}
   - component: {fileID: 1404536062}
   m_Layer: 0
   m_Name: SceneContext
@@ -784,6 +785,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff9efd7a0b8d9b640bf81278f04e292e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1404536063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1404536057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5cc68ac882027548be5417fcfa7b8cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &1421075210 stripped
